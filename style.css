@@ -1100,6 +1100,75 @@ body.filters-open .filters-backdrop {
     position: relative;
 }
 
+.close-modal {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: white;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.close-modal:hover {
+    transform: scale(1.06);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 11050;
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(10px);
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.lightbox img {
+    max-width: min(1100px, 92vw);
+    max-height: 86vh;
+    border-radius: 18px;
+    box-shadow: 0 30px 120px rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    object-fit: contain;
+    background: #050505;
+}
+
+.close-lightbox {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+    z-index: 11060;
+}
+
+.close-lightbox:hover {
+    transform: scale(1.06);
+    background: rgba(255, 255, 255, 0.12);
+}
+
 /* --- Branded Markers --- */
 .property-marker-icon {
     background: transparent;

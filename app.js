@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function formatPrice(price) {
         const number = Number(price);
-        if (!Number.isFinite(number)) {
+        if (!Number.isFinite(number) || number <= 0) {
             return 'Price on request';
         }
         return new Intl.NumberFormat('en-IE', {
