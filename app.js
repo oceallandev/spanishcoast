@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const rawProperties = Array.isArray(propertyData) ? propertyData : [];
+    const businessItems = Array.isArray(window.businessData) ? window.businessData : [];
+    const vehicleItems = Array.isArray(window.vehicleData) ? window.vehicleData : [];
     const TORREVIEJA_COORDS = { lat: 37.978, lon: -0.683 };
     const MAX_DISTANCE_FROM_TORREVIEJA_KM = 100;
     const DISPLAY_BOUNDS = {
@@ -75,8 +77,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let map;
     let markersGroup;
     const markerMap = new Map();
+    let propertiesInitialized = false;
+    let activeSection = 'home';
 
     // --- DOM Elements ---
+    const homeSection = document.getElementById('home-section');
+    const propertiesSection = document.getElementById('properties-section');
+    const businessesSection = document.getElementById('businesses-section');
+    const vehiclesSection = document.getElementById('vehicles-section');
+    const navLinks = document.querySelectorAll('.nav-link[data-section]');
+    const sectionJumpButtons = document.querySelectorAll('[data-section-jump]');
+    const businessGrid = document.getElementById('business-grid');
+    const vehicleGrid = document.getElementById('vehicle-grid');
+
     const propertyGrid = document.getElementById('property-grid');
     const cityButtonsContainer = document.getElementById('city-buttons');
     const resultsCount = document.getElementById('results-count');
@@ -311,6 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function buildPropertyLink(reference) {
         const url = new URL(window.location.href);
+        url.searchParams.set('section', 'properties');
         if (reference) {
             url.searchParams.set('ref', reference);
         }
@@ -322,12 +336,114 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         const url = new URL(window.location.href);
+        url.searchParams.set('section', 'properties');
         if (reference) {
             url.searchParams.set('ref', reference);
         } else {
             url.searchParams.delete('ref');
         }
-        window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
+        window.history.replaceState({}, '', url.toString());
+    }
+
+    function setActiveNavLink(sectionKey) {
+        navLinks.forEach((button) => {
+            button.classList.toggle('active', button.dataset.section === sectionKey);
+        });
+    }
+
+    function showSection(sectionKey) {
+        const mapping = {
+            home: homeSection,
+            properties: propertiesSection,
+            businesses: businessesSection,
+            vehicles: vehiclesSection
+        };
+
+        Object.entries(mapping).forEach(([key, el]) => {
+            if (!el) return;
+            el.classList.toggle('active', key === sectionKey);
+        });
+    }
+
+    function ensurePropertiesInitialized() {
+        if (propertiesInitialized) {
+            return;
+        }
+        initMap();
+        generateCityButtons();
+        filterProperties();
+        applyRefFromUrl();
+        propertiesInitialized = true;
+    }
+
+    function setActiveSection(sectionKey, { pushUrl = true } = {}) {
+        const next = ['home', 'properties', 'businesses', 'vehicles'].includes(sectionKey)
+            ? sectionKey
+            : 'home';
+
+        activeSection = next;
+        document.body.dataset.section = next;
+        setActiveNavLink(next);
+        showSection(next);
+
+        if (pushUrl && window.history && typeof window.history.pushState === 'function') {
+            const url = new URL(window.location.href);
+            url.searchParams.set('section', next);
+            if (next !== 'properties') {
+                url.searchParams.delete('ref');
+            }
+            window.history.pushState({}, '', url.toString());
+        }
+
+        if (next === 'properties') {
+            ensurePropertiesInitialized();
+            if (map && typeof map.invalidateSize === 'function') {
+                window.setTimeout(() => map.invalidateSize(), 220);
+            }
+        }
+    }
+
+    function renderEmptyCard(message) {
+        return `
+            <div class="catalog-card">
+                <div class="catalog-content">
+                    <h3>Coming soon</h3>
+                    <div class="catalog-meta">${escapeHtml(message)}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    function renderCatalogs() {
+        if (businessGrid) {
+            if (businessItems.length === 0) {
+                businessGrid.innerHTML = renderEmptyCard('Add your business listings to window.businessData and they will appear here.');
+            } else {
+                businessGrid.innerHTML = businessItems.map((item) => `
+                    <div class="catalog-card">
+                        <div class="catalog-content">
+                            <h3>${escapeHtml(toText(item.title, 'Business'))}</h3>
+                            <div class="catalog-meta">${escapeHtml(toText(item.location, 'Costa Blanca South'))}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        if (vehicleGrid) {
+            if (vehicleItems.length === 0) {
+                vehicleGrid.innerHTML = renderEmptyCard('Add your vehicle inventory to window.vehicleData and it will appear here.');
+            } else {
+                vehicleGrid.innerHTML = vehicleItems.map((item) => `
+                    <div class="catalog-card">
+                        <div class="catalog-content">
+                            <h3>${escapeHtml(toText(item.title, 'Vehicle'))}</h3>
+                            <div class="catalog-meta">${escapeHtml(toText(item.category, 'Cars & Boats'))}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
     }
 
     function applyRefFromUrl() {
@@ -423,7 +539,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const matchesRef = loweredRef === '' || ref.includes(loweredRef);
             const matchesCity = matchesDestination(property, selectedCity);
-            const matchesType = selectedType === 'all' || toText(property.type) === selectedType;
+            const typeNorm = normalize(property.type);
+            let matchesType = true;
+            if (selectedType !== 'all') {
+                const selectedNorm = normalize(selectedType);
+                if (selectedNorm === 'apartment') {
+                    matchesType = typeNorm.includes('apartment') || typeNorm.includes('apartamento');
+                } else if (selectedNorm === 'penthouse') {
+                    matchesType = typeNorm.includes('penthouse');
+                } else if (selectedNorm === 'town house') {
+                    matchesType = typeNorm.includes('town house') || typeNorm.includes('casa');
+                } else {
+                    matchesType = typeNorm === selectedNorm || typeNorm.includes(selectedNorm);
+                }
+            }
 
             const matchesSearch = loweredSearch === ''
                 || town.includes(loweredSearch)
@@ -509,7 +638,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="card-content">
                     <div class="card-ref">${toText(property.ref)}</div>
-                    <h3>${town} Residence</h3>
+                    <h3>${type} in ${town}</h3>
                     <div class="location">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                         ${town}, ${province}
@@ -573,6 +702,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const builtArea = builtAreaFor(property);
         const propertyLink = buildPropertyLink(reference);
         const dossierSubject = encodeURIComponent(`Request Dossier - ${reference || `${town} ${type}`}`);
+        const shareTitle = `${reference || 'Property'} - ${town}, ${province}`;
+        const shareTextRaw = `Check this ${type}${reference ? ` (${reference})` : ''} in ${town}: ${propertyLink}`;
+        const shareText = encodeURIComponent(shareTextRaw);
+        const shareUrl = encodeURIComponent(propertyLink);
+        const whatsappShare = `https://wa.me/?text=${shareText}`;
+        const telegramShare = `https://t.me/share/url?url=${shareUrl}&text=${shareText}`;
+        const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
+        const linkedInShare = `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`;
         const dossierBody = encodeURIComponent(
             `Hello Spanish Coast Properties,\n\nPlease send me full details for this property.\n\nReference: ${reference || 'N/A'}\nType: ${type}\nLocation: ${town}, ${province}\nPrice: ${formatPrice(property.price)}\nProperty link: ${propertyLink}\n\nThank you.`
         );
@@ -629,12 +766,58 @@ document.addEventListener('DOMContentLoaded', () => {
                         <a href="tel:+34624867866" class="cta-button">Call Now</a>
                         <a href="${dossierMailto}" class="cta-button">Request Dossier</a>
                     </div>
+                    <div class="share-row" aria-label="Share">
+                        <button type="button" class="share-btn" data-share="native">📲 Share</button>
+                        <button type="button" class="share-btn" data-share="copy">📋 Copy link</button>
+                        <a class="share-btn" href="${whatsappShare}" target="_blank" rel="noopener">💬 WhatsApp</a>
+                        <a class="share-btn" href="${telegramShare}" target="_blank" rel="noopener">✈️ Telegram</a>
+                        <a class="share-btn" href="${facebookShare}" target="_blank" rel="noopener">📣 Facebook</a>
+                        <a class="share-btn" href="${linkedInShare}" target="_blank" rel="noopener">🔗 LinkedIn</a>
+                    </div>
                 </div>
             </div>
         `;
 
         modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
+
+        const shareNativeBtn = modalDetails.querySelector('[data-share="native"]');
+        const shareCopyBtn = modalDetails.querySelector('[data-share="copy"]');
+
+        if (shareNativeBtn) {
+            shareNativeBtn.addEventListener('click', async () => {
+                if (navigator.share) {
+                    try {
+                        await navigator.share({ title: shareTitle, text: shareTextRaw, url: propertyLink });
+                        return;
+                    } catch (error) {
+                        // Fall back to copy.
+                    }
+                }
+                if (shareCopyBtn) {
+                    shareCopyBtn.click();
+                }
+            });
+        }
+
+        if (shareCopyBtn) {
+            shareCopyBtn.addEventListener('click', async () => {
+                const original = shareCopyBtn.textContent;
+                try {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        await navigator.clipboard.writeText(propertyLink);
+                    } else {
+                        window.prompt('Copy link:', propertyLink);
+                    }
+                    shareCopyBtn.textContent = '✅ Copied';
+                    window.setTimeout(() => {
+                        shareCopyBtn.textContent = original;
+                    }, 1400);
+                } catch (error) {
+                    window.prompt('Copy link:', propertyLink);
+                }
+            });
+        }
 
         const thumbs = document.querySelectorAll('.thumb');
         const mainImg = document.getElementById('main-gallery-img');
@@ -804,6 +987,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Event Listeners ---
+    navLinks.forEach((button) => {
+        button.addEventListener('click', () => {
+            setActiveSection(button.dataset.section);
+        });
+    });
+
+    sectionJumpButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            setActiveSection(button.dataset.sectionJump);
+        });
+    });
+
+    window.addEventListener('popstate', () => {
+        const url = new URL(window.location.href);
+        const ref = toText(url.searchParams.get('ref')).trim();
+        const section = toText(url.searchParams.get('section')).trim();
+        const next = ref ? 'properties' : (section || 'home');
+        setActiveSection(next, { pushUrl: false });
+    });
+
     if (refSearchInput) {
         refSearchInput.addEventListener('input', (event) => {
             refQuery = toText(event.target.value).trim();
@@ -844,6 +1047,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (mainLogoImg) {
         mainLogoImg.addEventListener('click', () => {
+            if (activeSection !== 'properties') {
+                setActiveSection('home');
+                return;
+            }
+
             selectedCity = 'all';
             selectedType = 'all';
             searchQuery = '';
@@ -911,8 +1119,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Initialization ---
-    initMap();
-    generateCityButtons();
-    filterProperties();
-    applyRefFromUrl();
+    renderCatalogs();
+
+    const initialUrl = new URL(window.location.href);
+    const initialRef = toText(initialUrl.searchParams.get('ref')).trim();
+    const initialSection = toText(initialUrl.searchParams.get('section')).trim();
+    const startSection = initialRef ? 'properties' : (initialSection || 'home');
+
+    setActiveSection(startSection, { pushUrl: false });
 });
