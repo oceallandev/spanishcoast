@@ -4,7 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spanish Coast Properties | Exclusive Mediterranean Living</title>
+    <title>Spanish Coast Properties | Costa Blanca South Properties, Businesses, Vehicles</title>
+    <meta name="description"
+        content="Spanish Coast Properties: buy, sell, rent, manage, and maintain properties in Costa Blanca South. We also broker businesses for sale and vehicles (cars and boats), with end-to-end support.">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Spanish Coast Properties">
+    <meta property="og:description"
+        content="Browse Costa Blanca South properties, businesses for sale, and vehicles. Buy, sell, rent, manage, and maintain with one trusted team.">
+    <meta property="og:url" content="https://oceallandev.github.io/spanishcoast/">
+    <meta property="og:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Spanish Coast Properties">
+    <meta name="twitter:description"
+        content="Costa Blanca South properties, businesses for sale, and vehicles. Buy, sell, rent, manage, and maintain.">
+    <meta name="twitter:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,20 +40,25 @@
     <div class="bg-mesh"></div>
     <!-- Debug Error Handler -->
     <script>
-        window.onerror = function (msg, url, line, col, error) {
-            var debugDiv = document.createElement('div');
-            debugDiv.style.position = 'fixed';
-            debugDiv.style.top = '0';
-            debugDiv.style.left = '0';
-            debugDiv.style.width = '100%';
-            debugDiv.style.backgroundColor = 'red';
-            debugDiv.style.color = 'white';
-            debugDiv.style.padding = '10px';
-            debugDiv.style.zIndex = '10000';
-            debugDiv.innerHTML = '<strong>JS Error:</strong> ' + msg + '<br>Line: ' + line + '<br>Url: ' + url;
-            document.body.appendChild(debugDiv);
-            return false;
-        };
+        (function () {
+            var params = new URLSearchParams(window.location.search);
+            var debug = params.get('debug') === '1';
+            if (!debug) return;
+            window.onerror = function (msg, url, line, col, error) {
+                var debugDiv = document.createElement('div');
+                debugDiv.style.position = 'fixed';
+                debugDiv.style.top = '0';
+                debugDiv.style.left = '0';
+                debugDiv.style.width = '100%';
+                debugDiv.style.backgroundColor = 'red';
+                debugDiv.style.color = 'white';
+                debugDiv.style.padding = '10px';
+                debugDiv.style.zIndex = '10000';
+                debugDiv.innerHTML = '<strong>JS Error:</strong> ' + msg + '<br>Line: ' + line + '<br>Url: ' + url;
+                document.body.appendChild(debugDiv);
+                return false;
+            };
+        })();
     </script>
 
     <header class="main-header glass sticky">
@@ -59,16 +81,18 @@
 
             <div class="search-pill-container">
                 <div class="search-pill glass">
-                    <div class="pill-section reference">
-                        <label>Ref</label>
-                        <input type="text" id="ref-search" placeholder="SCP-XXXX">
+                    <div class="pill-advanced" id="pill-advanced">
+                        <div class="pill-section reference">
+                            <label>Ref</label>
+                            <input type="text" id="ref-search" placeholder="SCP-XXXX">
+                        </div>
+                        <div class="pill-divider"></div>
+                        <div class="pill-section location">
+                            <label>Location</label>
+                            <input type="text" id="search" placeholder="Search destinations">
+                        </div>
+                        <div class="pill-divider"></div>
                     </div>
-                    <div class="pill-divider"></div>
-                    <div class="pill-section location">
-                        <label>Location</label>
-                        <input type="text" id="search" placeholder="Search destinations">
-                    </div>
-                    <div class="pill-divider"></div>
                     <div class="pill-section type">
                         <label>Type</label>
                         <select id="type-filter">
@@ -131,12 +155,18 @@
                             <option value="parking">With Parking</option>
                         </select>
                     </div>
+                    <button id="toggle-advanced-btn" class="more-trigger" type="button" aria-expanded="false">
+                        More
+                    </button>
                     <button id="apply-filters" class="search-trigger">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"
                             stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8"></circle>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                         </svg>
+                    </button>
+                    <button id="close-filters-btn" class="close-filters-btn" type="button" aria-label="Close filters">
+                        ✕
                     </button>
                 </div>
             </div>
@@ -146,10 +176,13 @@
                     <div class="contact-label">Contact Us</div>
                     <a href="tel:+34624867866" class="phone-number">+34 624 867 866</a>
                 </div>
+                <button id="open-filters-btn" class="open-filters-btn" type="button">🔎 Filters</button>
                 <button id="toggle-map-btn" class="toggle-map-btn">🗺️ Map</button>
             </div>
         </div>
     </header>
+
+    <div id="filters-backdrop" class="filters-backdrop" aria-hidden="true"></div>
 
     <main class="site-main" id="site-main">
         <section class="page-section home-section" id="home-section" aria-label="Home">
@@ -232,6 +265,10 @@
                 <div class="content-section">
                     <div class="results-header">
                         <h2>Found <span id="results-count">0</span> properties in Costa Blanca South</h2>
+                        <p class="results-subtitle">
+                            Handpicked listings focused on Guardamar del Segura, Torrevieja, Orihuela Costa, Ciudad Quesada,
+                            and Pilar de la Horadada, with map-safe coordinates and shareable detail links.
+                        </p>
                     </div>
 
                     <div id="property-grid" class="property-grid">
@@ -248,7 +285,10 @@
         <section class="page-section catalog-section" id="businesses-section" aria-label="Businesses">
             <div class="catalog-hero">
                 <h2>Businesses for Sale</h2>
-                <p>We will add your business listings here, with the same clean cards and shareable detail links.</p>
+                <p>
+                    Acquire or sell a business in Costa Blanca South with support that goes beyond a listing.
+                    We help with due diligence, contracts, and documentation changes so you can move forward with confidence.
+                </p>
                 <div class="service-tags">
                     <span class="tag">Buy & Sell</span>
                     <span class="tag">Management</span>
@@ -265,7 +305,10 @@
         <section class="page-section catalog-section" id="vehicles-section" aria-label="Vehicles">
             <div class="catalog-hero">
                 <h2>Vehicles</h2>
-                <p>Cars and boats, for sale or rent. Add your inventory and we will render it here.</p>
+                <p>
+                    Cars and boats for sale or rent. We can also manage bookings, handovers, and practical paperwork,
+                    so your fleet stays easy for customers and efficient for you.
+                </p>
                 <div class="service-tags">
                     <span class="tag">Cars</span>
                     <span class="tag">Boats</span>
@@ -279,6 +322,37 @@
             </div>
         </section>
     </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h3>Spanish Coast Properties</h3>
+                <p>
+                    Professional support across Costa Blanca South: properties, businesses for sale, and vehicles.
+                    Buy, sell, rent, manage, and maintain with one team.
+                </p>
+            </div>
+            <div class="footer-col">
+                <h4>Services</h4>
+                <ul class="footer-links">
+                    <li>Property Buy & Sell</li>
+                    <li>Rentals</li>
+                    <li>Management & Maintenance</li>
+                    <li>Business Transfers</li>
+                    <li>Vehicle Sales & Rentals</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <ul class="footer-links">
+                    <li><a href="tel:+34624867866">+34 624 867 866</a></li>
+                    <li><a href="mailto:info@spanishcoastproperties.com">info@spanishcoastproperties.com</a></li>
+                    <li>Torrevieja, Alicante</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties. All rights reserved.</div>
+    </footer>
 
     <!-- Property Modal -->
     <div id="property-modal" class="modal">
@@ -294,9 +368,22 @@
         <img id="lightbox-img" src="" alt="Full vision view">
     </div>
 
-    <script src="data.js?v=20260207k"></script>
-    <script src="catalog.js?v=20260207k"></script>
-    <script src="app.js?v=20260207k"></script>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Spanish Coast Properties",
+            "url": "https://oceallandev.github.io/spanishcoast/",
+            "email": "info@spanishcoastproperties.com",
+            "telephone": "+34 624 867 866",
+            "areaServed": "Costa Blanca South",
+            "sameAs": []
+        }
+    </script>
+
+    <script src="data.js?v=20260207l"></script>
+    <script src="catalog.js?v=20260207l"></script>
+    <script src="app.js?v=20260207l"></script>
 </body>
 
 </html>

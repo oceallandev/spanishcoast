@@ -116,6 +116,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeLightbox = document.querySelector('.close-lightbox');
 
     const mainLogoImg = document.getElementById('main-logo-img');
+    const searchPill = document.querySelector('.search-pill');
+    const toggleAdvancedBtn = document.getElementById('toggle-advanced-btn');
+    const openFiltersBtn = document.getElementById('open-filters-btn');
+    const closeFiltersBtn = document.getElementById('close-filters-btn');
+    const filtersBackdrop = document.getElementById('filters-backdrop');
+    const footerYear = document.getElementById('footer-year');
 
     const animationObserver = 'IntersectionObserver' in window
         ? new IntersectionObserver((entries) => {
@@ -383,6 +389,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         activeSection = next;
         document.body.dataset.section = next;
+        if (next !== 'properties') {
+            document.body.classList.remove('filters-open');
+        }
         setActiveNavLink(next);
         showSection(next);
 
@@ -987,6 +996,43 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Event Listeners ---
+    if (footerYear) {
+        footerYear.textContent = String(new Date().getFullYear());
+    }
+
+    if (toggleAdvancedBtn && searchPill) {
+        toggleAdvancedBtn.addEventListener('click', () => {
+            const next = !searchPill.classList.contains('advanced-open');
+            searchPill.classList.toggle('advanced-open', next);
+            toggleAdvancedBtn.setAttribute('aria-expanded', next ? 'true' : 'false');
+        });
+    }
+
+    const openFilters = () => {
+        if (activeSection !== 'properties') return;
+        document.body.classList.add('filters-open');
+        if (searchPill) {
+            searchPill.classList.add('advanced-open');
+        }
+        if (toggleAdvancedBtn) {
+            toggleAdvancedBtn.setAttribute('aria-expanded', 'true');
+        }
+    };
+
+    const closeFilters = () => {
+        document.body.classList.remove('filters-open');
+    };
+
+    if (openFiltersBtn) {
+        openFiltersBtn.addEventListener('click', openFilters);
+    }
+    if (closeFiltersBtn) {
+        closeFiltersBtn.addEventListener('click', closeFilters);
+    }
+    if (filtersBackdrop) {
+        filtersBackdrop.addEventListener('click', closeFilters);
+    }
+
     navLinks.forEach((button) => {
         button.addEventListener('click', () => {
             setActiveSection(button.dataset.section);
@@ -1030,6 +1076,7 @@ document.addEventListener('DOMContentLoaded', () => {
             poolFilter = poolFilterEl ? poolFilterEl.value : 'any';
             parkingFilter = parkingFilterEl ? parkingFilterEl.value : 'any';
             filterProperties();
+            closeFilters();
         });
     }
 
