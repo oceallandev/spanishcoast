@@ -444,8 +444,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function setActiveNavLink(sectionKey) {
-        navLinks.forEach((button) => {
-            button.classList.toggle('active', button.dataset.section === sectionKey);
+        navLinks.forEach((link) => {
+            link.classList.toggle('active', link.dataset.section === sectionKey);
         });
     }
 
@@ -1261,14 +1261,11 @@ document.addEventListener('DOMContentLoaded', () => {
         filtersBackdrop.addEventListener('click', closeFilters);
     }
 
-    navLinks.forEach((button) => {
-        button.addEventListener('click', () => {
-            setActiveSection(button.dataset.section);
-        });
-    });
-
+    // Navigation is handled by real links now (separate pages). Keep SPA fallback for
+    // any elements that still use data-section-jump.
     sectionJumpButtons.forEach((button) => {
-        button.addEventListener('click', () => {
+        button.addEventListener('click', (event) => {
+            event.preventDefault();
             setActiveSection(button.dataset.sectionJump);
         });
     });
@@ -1422,7 +1419,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const initialUrl = new URL(window.location.href);
     const initialRef = toText(initialUrl.searchParams.get('ref')).trim();
     const initialSection = toText(initialUrl.searchParams.get('section')).trim();
-    const startSection = initialRef ? 'properties' : (initialSection || 'home');
+    const path = toText(window.location.pathname).toLowerCase();
+    const inferredSection = path.endsWith('properties.html')
+        ? 'properties'
+        : path.endsWith('businesses.html')
+            ? 'businesses'
+            : path.endsWith('vehicles.html')
+                ? 'vehicles'
+                : 'home';
+    const startSection = initialRef ? 'properties' : (initialSection || inferredSection || 'home');
 
     setActiveSection(startSection, { pushUrl: false });
 });
