@@ -732,7 +732,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const exactMatch = currentProperties.find((property) => normalize(property.ref) === normalize(reference));
         if (exactMatch) {
-            openPropertyModal(exactMatch);
+            const propertyId = propertyIdFor(exactMatch);
+            if (!propertyId || imageOkCache.get(propertyId) !== false) {
+                openPropertyModal(exactMatch);
+            }
         }
     }
 
@@ -938,23 +941,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 return false;
             }
 
-            // Only show listings with at least one working image.
+            // Never show a listing with no image URLs at all.
+            const imageCandidates = imageUrlsFor(property);
+            if (!imageCandidates.length) {
+                return false;
+            }
+
+            // Hide only when we know images are broken. Otherwise show immediately and verify in background.
             const propertyId = propertyIdFor(property);
             const cached = propertyId ? imageOkCache.get(propertyId) : undefined;
-            if (cached === true) {
-                return true;
-            }
             if (cached === false) {
                 return false;
             }
 
-            if (imageChecksStarted < IMAGE_CHECK_MAX_PER_FILTER) {
-                ensureImageChecked(property, imageUrlsFor(property));
+            if (cached !== true && imageChecksStarted < IMAGE_CHECK_MAX_PER_FILTER) {
+                ensureImageChecked(property, imageCandidates);
                 imageChecksStarted += 1;
             }
 
-            // Hide until verified.
-            return false;
+            return true;
         });
 
         renderLimit = 60;
@@ -997,10 +1002,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (imageCheckInFlight.size > 0 || imageCheckQueue.length > 0) {
-                propertyGrid.innerHTML = '<p style="color:#94a3b8">Loading listings (verifying images)...</p>';
-            } else {
-                propertyGrid.innerHTML = '<p style="color:#94a3b8">No properties found for these filters.</p>';
+                // Do not block usage while images are being verified; just show "no results" if filters are strict.
             }
+            propertyGrid.innerHTML = '<p style="color:#94a3b8">No properties found for these filters.</p>';
             return;
         }
 
@@ -1013,7 +1017,10 @@ document.addEventListener('DOMContentLoaded', () => {
             card.dataset.propertyId = propertyId;
 
             const imageCandidates = imageUrlsFor(property);
-            const imageUrl = imageCandidates.length > 0 ? imageCandidates[0] : PLACEHOLDER_IMAGE;
+            if (!imageCandidates.length) {
+                return;
+            }
+            const imageUrl = imageCandidates[0];
 
             const type = toText(property.type, 'Property');
             const reference = toText(property.ref).trim();
@@ -1049,6 +1056,10 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
 
             card.addEventListener('click', () => {
+                const pid = propertyIdFor(property);
+                if (pid && imageOkCache.get(pid) === false) {
+                    return;
+                }
                 openPropertyModal(property);
             });
 
@@ -1060,6 +1071,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         imageOkCache.set(pid, false);
                         scheduleReFilterAfterImageCheck();
                     }
+                    card.style.display = 'none';
                 }
             });
 
@@ -1108,8 +1120,16 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const propertyId = propertyIdFor(property);
+        if (propertyId && imageOkCache.get(propertyId) === false) {
+            return;
+        }
+
         const images = imageUrlsFor(property);
-        const galleryImages = images.length > 0 ? images : [PLACEHOLDER_IMAGE];
+        if (!images.length) {
+            return;
+        }
+        const galleryImages = images;
         const features = featuresFor(property);
 
         currentGalleryImages = galleryImages;
@@ -1146,12 +1166,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const descriptionHtml = formatDescriptionHtml(description);
         updateBrowserRefParam(reference);
 
+        const modalTitle = escapeHtml(`${type} in ${town}`);
+
         modalDetails.innerHTML = `
             <div class="modal-body">
                 <div class="modal-info">
                     <div class="card-badge">${type}</div>
                     <div class="modal-ref">${reference || 'Ref unavailable'}</div>
-                    <h2>${town} Coastal Sanctuary</h2>
+                    <h2>${modalTitle}</h2>
                     <div class="location">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                         ${town}, ${province}
@@ -1306,7 +1328,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (currentGalleryImages.length > 1) {
                     updateGallery(currentGalleryIndex + 1);
                 } else {
-                    mainImg.src = PLACEHOLDER_IMAGE;
+                    if (propertyId) {
+                        imageOkCache.set(propertyId, false);
+                        scheduleReFilterAfterImageCheck();
+                    }
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
                 }
             });
         }
