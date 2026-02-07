@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const EARTH_RADIUS_KM = 6371;
     const numberFormat = new Intl.NumberFormat('en-IE', { maximumFractionDigits: 0 });
     const PLACEHOLDER_IMAGE = 'assets/placeholder.png';
+    const IMAGE_CHECK_TIMEOUT_MS = 4500;
+    const IMAGE_CHECK_MAX_IN_FLIGHT = 8;
+    const IMAGE_CHECK_MAX_PER_FILTER = 36;
 
     function toRadians(value) {
         return value * (Math.PI / 180);
@@ -226,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return unique;
     }
 
-    function attachImageFallback(imgEl, urls) {
+    function attachImageFallback(imgEl, urls, { onAllFailed } = {}) {
         if (!imgEl) return;
         const candidates = Array.isArray(urls) ? urls.filter(Boolean) : [];
         let idx = 0;
@@ -242,10 +245,109 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             imgEl.src = PLACEHOLDER_IMAGE;
             imgEl.removeEventListener('error', onError);
+            if (typeof onAllFailed === 'function') {
+                onAllFailed();
+            }
         };
 
         const onError = () => tryNext();
         imgEl.addEventListener('error', onError);
+    }
+
+    const imageOkCache = new Map(); // propertyId -> boolean
+    const imageCheckQueue = [];
+    const imageCheckInFlight = new Set(); // propertyId
+    let imageReFilterTimer = null;
+
+    function scheduleReFilterAfterImageCheck() {
+        if (imageReFilterTimer) {
+            return;
+        }
+        imageReFilterTimer = window.setTimeout(() => {
+            imageReFilterTimer = null;
+            filterProperties();
+        }, 80);
+    }
+
+    function propertyIdFor(property) {
+        const id = idKey(property && property.id);
+        return id || idKey(property && property.ref);
+    }
+
+    function checkImageUrlOnce(url, { referrerPolicy } = {}) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            if (referrerPolicy) {
+                img.referrerPolicy = referrerPolicy;
+            }
+
+            const timer = window.setTimeout(() => resolve(false), IMAGE_CHECK_TIMEOUT_MS);
+
+            img.onload = () => {
+                window.clearTimeout(timer);
+                const w = Number(img.naturalWidth) || 0;
+                const h = Number(img.naturalHeight) || 0;
+                resolve(w >= 40 && h >= 40);
+            };
+            img.onerror = () => {
+                window.clearTimeout(timer);
+                resolve(false);
+            };
+
+            img.src = url;
+        });
+    }
+
+    async function checkAnyImageLoads(urls) {
+        const candidates = Array.isArray(urls) ? urls.filter(Boolean) : [];
+        for (const url of candidates) {
+            // Try "no-referrer" first (common hotlink-protection requirement).
+            if (await checkImageUrlOnce(url, { referrerPolicy: 'no-referrer' })) return true;
+            // Fallback to default behavior (some hosts behave the opposite).
+            if (await checkImageUrlOnce(url, {})) return true;
+        }
+        return false;
+    }
+
+    function drainImageQueue() {
+        while (imageCheckInFlight.size < IMAGE_CHECK_MAX_IN_FLIGHT && imageCheckQueue.length > 0) {
+            const task = imageCheckQueue.shift();
+            if (!task) return;
+            const { propertyId, urls } = task;
+            if (!propertyId) continue;
+            if (imageOkCache.has(propertyId)) continue;
+            if (imageCheckInFlight.has(propertyId)) continue;
+
+            imageCheckInFlight.add(propertyId);
+            checkAnyImageLoads(urls)
+                .then((ok) => {
+                    imageOkCache.set(propertyId, Boolean(ok));
+                })
+                .catch(() => {
+                    imageOkCache.set(propertyId, false);
+                })
+                .finally(() => {
+                    imageCheckInFlight.delete(propertyId);
+                    scheduleReFilterAfterImageCheck();
+                    drainImageQueue();
+                });
+        }
+    }
+
+    function ensureImageChecked(property, urls) {
+        const propertyId = propertyIdFor(property);
+        if (!propertyId) return;
+        if (imageOkCache.has(propertyId)) return;
+        if (imageCheckInFlight.has(propertyId)) return;
+
+        const candidates = Array.isArray(urls) ? urls.filter(Boolean) : [];
+        if (candidates.length === 0) {
+            imageOkCache.set(propertyId, false);
+            return;
+        }
+
+        imageCheckQueue.push({ propertyId, urls: candidates.slice(0, 6) });
+        drainImageQueue();
     }
 
     function priceNumber(property) {
@@ -759,6 +861,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function filterProperties() {
         const loweredSearch = normalize(searchQuery);
         const loweredRef = normalize(refQuery);
+        let imageChecksStarted = 0;
 
         currentProperties = allProperties.filter((property) => {
             const ref = normalize(property.ref);
@@ -821,7 +924,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 || features.includes('garage')
                 || features.includes('carport');
 
-            return matchesRef
+            const passesCoreFilters = matchesRef
                 && matchesCity
                 && matchesType
                 && matchesSearch
@@ -830,6 +933,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 && matchesBaths
                 && matchesPool
                 && matchesParking;
+
+            if (!passesCoreFilters) {
+                return false;
+            }
+
+            // Only show listings with at least one working image.
+            const propertyId = propertyIdFor(property);
+            const cached = propertyId ? imageOkCache.get(propertyId) : undefined;
+            if (cached === true) {
+                return true;
+            }
+            if (cached === false) {
+                return false;
+            }
+
+            if (imageChecksStarted < IMAGE_CHECK_MAX_PER_FILTER) {
+                ensureImageChecked(property, imageUrlsFor(property));
+                imageChecksStarted += 1;
+            }
+
+            // Hide until verified.
+            return false;
         });
 
         renderLimit = 60;
@@ -860,7 +985,22 @@ document.addEventListener('DOMContentLoaded', () => {
         resultsCount.textContent = String(currentProperties.length);
 
         if (currentProperties.length === 0) {
-            propertyGrid.innerHTML = '<p style="color:#94a3b8">No properties found for these filters.</p>';
+            const refExact = normalize(refQuery);
+            if (refExact) {
+                const candidate = allProperties.find((property) => normalize(property.ref) === refExact);
+                const pid = candidate ? propertyIdFor(candidate) : '';
+                const cached = pid ? imageOkCache.get(pid) : undefined;
+                if (cached === false) {
+                    propertyGrid.innerHTML = '<p style="color:#94a3b8">This listing is hidden because its images are unavailable.</p>';
+                    return;
+                }
+            }
+
+            if (imageCheckInFlight.size > 0 || imageCheckQueue.length > 0) {
+                propertyGrid.innerHTML = '<p style="color:#94a3b8">Loading listings (verifying images)...</p>';
+            } else {
+                propertyGrid.innerHTML = '<p style="color:#94a3b8">No properties found for these filters.</p>';
+            }
             return;
         }
 
@@ -913,7 +1053,15 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const cardImg = card.querySelector('.card-img-wrapper img');
-            attachImageFallback(cardImg, imageCandidates);
+            attachImageFallback(cardImg, imageCandidates, {
+                onAllFailed: () => {
+                    const pid = propertyIdFor(property);
+                    if (pid) {
+                        imageOkCache.set(pid, false);
+                        scheduleReFilterAfterImageCheck();
+                    }
+                }
+            });
 
             card.addEventListener('mouseenter', () => {
                 setCardActive(propertyId, true);
@@ -1185,7 +1333,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (img) {
                 img.setAttribute('referrerpolicy', 'no-referrer');
                 img.setAttribute('decoding', 'async');
-                attachImageFallback(img, [img.getAttribute('src')]);
+                attachImageFallback(img, [img.getAttribute('src')], {
+                    onAllFailed: () => {
+                        const pid = propertyIdFor(property);
+                        if (pid) {
+                            imageOkCache.set(pid, false);
+                            scheduleReFilterAfterImageCheck();
+                        }
+                    }
+                });
             }
         });
 
