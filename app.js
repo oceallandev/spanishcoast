@@ -819,34 +819,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function focusMarker(propertyId) {
-        if (!map || !markersGroup) {
-            return;
-        }
-        const marker = markerMap.get(idKey(propertyId));
-        if (!marker || typeof marker.getLatLng !== 'function') {
-            return;
-        }
-
-        // With clustering enabled, the marker may not be visible yet. This ensures it becomes visible.
-        if (typeof markersGroup.zoomToShowLayer === 'function') {
-            try {
-                markersGroup.zoomToShowLayer(marker, () => {
-                    if (typeof map.panTo === 'function') {
-                        map.panTo(marker.getLatLng(), { animate: true, duration: 0.35 });
-                    }
-                });
-                return;
-            } catch (error) {
-                // Fall through to panTo.
-            }
-        }
-
-        if (typeof map.panTo === 'function') {
-            map.panTo(marker.getLatLng(), { animate: true, duration: 0.35 });
-        }
-    }
-
     function eurPerSqmFor(property) {
         const built = builtAreaFor(property);
         const mode = listingModeFor(property);
@@ -1078,9 +1050,6 @@ document.addEventListener('DOMContentLoaded', () => {
             card.addEventListener('mouseenter', () => {
                 setCardActive(propertyId, true);
                 setMarkerActive(propertyId, true);
-                if (isMapVisible()) {
-                    focusMarker(propertyId);
-                }
             });
 
             card.addEventListener('mouseleave', () => {
