@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
     const EARTH_RADIUS_KM = 6371;
     const numberFormat = new Intl.NumberFormat('en-IE', { maximumFractionDigits: 0 });
+    const PLACEHOLDER_IMAGE = 'assets/placeholder.png';
 
     function toRadians(value) {
         return value * (Math.PI / 180);
@@ -179,6 +180,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function featuresFor(property) {
         return Array.isArray(property && property.features) ? property.features : [];
+    }
+
+    function normalizeImageUrl(value) {
+        const url = toText(value).trim();
+        if (!url) return '';
+        // Avoid mixed-content blocks on https pages.
+        const httpsUrl = url.startsWith('http://') ? `https://${url.slice('http://'.length)}` : url;
+        try {
+            // Encode spaces and other unsafe characters while keeping the URL readable.
+            return encodeURI(httpsUrl);
+        } catch (error) {
+            return httpsUrl;
+        }
+    }
+
+    function imageUrlsFor(property) {
+        const candidates = [];
+        const images = property && property.images;
+        if (Array.isArray(images)) {
+            images.forEach((img) => candidates.push(img));
+        } else if (typeof images === 'string') {
+            images
+                .split(/[,\n]/g)
+                .map((item) => item.trim())
+                .filter(Boolean)
+                .forEach((img) => candidates.push(img));
+        }
+
+        // Some feeds use different keys; try a few common ones.
+        ['image', 'image_url', 'imageUrl', 'main_image', 'mainImage', 'photo', 'photo_url', 'thumbnail'].forEach((key) => {
+            const val = property && property[key];
+            if (val) candidates.push(val);
+        });
+
+        const unique = [];
+        const seen = new Set();
+        candidates.forEach((raw) => {
+            const normalized = normalizeImageUrl(raw);
+            if (!normalized) return;
+            if (seen.has(normalized)) return;
+            seen.add(normalized);
+            unique.push(normalized);
+        });
+        return unique;
+    }
+
+    function attachImageFallback(imgEl, urls) {
+        if (!imgEl) return;
+        const candidates = Array.isArray(urls) ? urls.filter(Boolean) : [];
+        let idx = 0;
+
+        imgEl.setAttribute('referrerpolicy', 'no-referrer');
+        imgEl.setAttribute('decoding', 'async');
+
+        const tryNext = () => {
+            idx += 1;
+            if (idx < candidates.length) {
+                imgEl.src = candidates[idx];
+                return;
+            }
+            imgEl.src = PLACEHOLDER_IMAGE;
+            imgEl.removeEventListener('error', onError);
+        };
+
+        const onError = () => tryNext();
+        imgEl.addEventListener('error', onError);
     }
 
     function priceNumber(property) {
@@ -805,9 +872,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const propertyId = idKey(property.id);
             card.dataset.propertyId = propertyId;
 
-            const imageUrl = Array.isArray(property.images) && property.images.length > 0
-                ? property.images[0]
-                : 'assets/placeholder.png';
+            const imageCandidates = imageUrlsFor(property);
+            const imageUrl = imageCandidates.length > 0 ? imageCandidates[0] : PLACEHOLDER_IMAGE;
 
             const type = toText(property.type, 'Property');
             const reference = toText(property.ref).trim();
@@ -821,7 +887,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             card.innerHTML = `
                 <div class="card-img-wrapper">
-                    <img src="${imageUrl}" alt="${type}" loading="lazy" onerror="this.src='assets/placeholder.png'">
+                    <img src="${imageUrl}" alt="${type}" loading="lazy">
                     <div class="card-badge">${type}</div>
                     <div class="card-status ${listingMode}">${listingMode === 'rent' ? 'For Rent' : 'For Sale'}</div>
                 </div>
@@ -845,6 +911,9 @@ document.addEventListener('DOMContentLoaded', () => {
             card.addEventListener('click', () => {
                 openPropertyModal(property);
             });
+
+            const cardImg = card.querySelector('.card-img-wrapper img');
+            attachImageFallback(cardImg, imageCandidates);
 
             card.addEventListener('mouseenter', () => {
                 setCardActive(propertyId, true);
@@ -891,12 +960,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const images = Array.isArray(property.images) && property.images.length > 0
-            ? property.images
-            : ['assets/placeholder.png'];
+        const images = imageUrlsFor(property);
+        const galleryImages = images.length > 0 ? images : [PLACEHOLDER_IMAGE];
         const features = featuresFor(property);
 
-        currentGalleryImages = images;
+        currentGalleryImages = galleryImages;
         currentGalleryIndex = 0;
 
         const type = toText(property.type, 'Property');
@@ -951,15 +1019,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="modal-gallery">
                     <div class="gallery-main">
                         <button class="nav-arrow prev" id="prev-img">❮</button>
-                        <img id="main-gallery-img" src="${images[0]}" alt="Property View" onerror="this.src='assets/placeholder.png'">
+                        <img id="main-gallery-img" src="${galleryImages[0]}" alt="Property View">
                         <button class="nav-arrow next" id="next-img">❯</button>
                     </div>
                     <div class="gallery-thumbs-container">
                         <button class="thumb-nav prev" id="prev-thumbs">❮</button>
                         <div class="gallery-thumbs">
-                            ${images.map((img, index) => `
+                            ${galleryImages.map((img, index) => `
                                 <div class="thumb ${index === 0 ? 'active' : ''}" data-index="${index}">
-                                    <img src="${img}" alt="Thumbnail ${index + 1}" onerror="this.src='assets/placeholder.png'">
+                                    <img src="${img}" alt="Thumbnail ${index + 1}" loading="lazy">
                                 </div>
                             `).join('')}
                         </div>
@@ -1082,6 +1150,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const nextThumbsBtn = document.getElementById('next-thumbs');
         const thumbsList = document.querySelector('.gallery-thumbs');
 
+        if (mainImg) {
+            mainImg.setAttribute('referrerpolicy', 'no-referrer');
+            mainImg.setAttribute('decoding', 'async');
+            mainImg.addEventListener('error', () => {
+                // If a host blocks hotlinking, try the next image before giving up.
+                if (currentGalleryImages.length > 1) {
+                    updateGallery(currentGalleryIndex + 1);
+                } else {
+                    mainImg.src = PLACEHOLDER_IMAGE;
+                }
+            });
+        }
+
         function updateGallery(index) {
             if (!mainImg || !thumbs.length || !currentGalleryImages.length) {
                 return;
@@ -1099,6 +1180,13 @@ document.addEventListener('DOMContentLoaded', () => {
             thumb.addEventListener('click', () => {
                 updateGallery(Number(thumb.dataset.index));
             });
+
+            const img = thumb.querySelector('img');
+            if (img) {
+                img.setAttribute('referrerpolicy', 'no-referrer');
+                img.setAttribute('decoding', 'async');
+                attachImageFallback(img, [img.getAttribute('src')]);
+            }
         });
 
         if (prevImgBtn) {
