@@ -971,6 +971,33 @@ body.filters-open .filters-backdrop {
     background: #111;
 }
 
+.card-status {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    margin-top: 2.35rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    color: white;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.card-status.rent {
+    border-color: rgba(56, 189, 248, 0.4);
+    background: rgba(14, 165, 233, 0.18);
+}
+
+.card-status.sale {
+    border-color: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.08);
+}
+
 .card-img-wrapper img {
     width: 100%;
     height: 100%;

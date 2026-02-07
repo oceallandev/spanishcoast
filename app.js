@@ -182,6 +182,78 @@ document.addEventListener('DOMContentLoaded', () => {
         return Number.isFinite(number) ? number : NaN;
     }
 
+    function parseEuroAmount(text) {
+        const match = toText(text).match(/€\s*([\d.,]+)/);
+        if (!match) return null;
+        const raw = match[1];
+        const normalized = raw.replace(/\./g, '').replace(/,/g, '');
+        const number = Number(normalized);
+        return Number.isFinite(number) ? number : null;
+    }
+
+    function rentPriceFromDescription(description) {
+        const text = toText(description);
+        const monthly = text.match(/Monthly\s+rent\s*:\s*€\s*[\d.,]+/i);
+        if (monthly) {
+            return parseEuroAmount(monthly[0]);
+        }
+        const rentAlt = text.match(/\bRent\b[^€]{0,24}€\s*[\d.,]+/i);
+        if (rentAlt) {
+            return parseEuroAmount(rentAlt[0]);
+        }
+        return null;
+    }
+
+    function listingModeFor(property) {
+        const salePrice = Number(property && property.price);
+        if (Number.isFinite(salePrice) && salePrice > 0) {
+            return 'sale';
+        }
+        const text = normalize(property && property.description);
+        if (text.includes('available for rent') || text.includes('for rent') || text.includes('monthly rent')) {
+            return 'rent';
+        }
+        const rentPrice = rentPriceFromDescription(property && property.description);
+        return rentPrice ? 'rent' : 'sale';
+    }
+
+    function listingPriceNumber(property) {
+        const salePrice = Number(property && property.price);
+        if (Number.isFinite(salePrice) && salePrice > 0) {
+            return salePrice;
+        }
+        const rentPrice = rentPriceFromDescription(property && property.description);
+        return rentPrice ?? NaN;
+    }
+
+    function formatListingPrice(property) {
+        const mode = listingModeFor(property);
+        const number = listingPriceNumber(property);
+        if (!Number.isFinite(number)) {
+            return 'Price on request';
+        }
+        const formatted = formatPrice(number);
+        if (mode === 'rent') {
+            return `${formatted} / month`;
+        }
+        return formatted;
+    }
+
+    function formatListingMarkerText(property) {
+        const mode = listingModeFor(property);
+        const number = listingPriceNumber(property);
+        if (!Number.isFinite(number)) {
+            return mode === 'rent' ? 'Rent' : 'N/A';
+        }
+        if (mode === 'rent') {
+            if (number >= 1000) {
+                return `${(number / 1000).toFixed(1).replace('.0', '')}k/mo`;
+            }
+            return `${Math.round(number)}€/mo`;
+        }
+        return formatMarkerPrice(number);
+    }
+
     function formatPrice(price) {
         const number = Number(price);
         if (!Number.isFinite(number)) {
@@ -572,11 +644,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function eurPerSqmFor(property) {
         const built = builtAreaFor(property);
-        const price = priceNumber(property);
+        const mode = listingModeFor(property);
+        const price = listingPriceNumber(property);
         if (!Number.isFinite(price) || price <= 0 || built <= 0) {
             return null;
         }
         const perSqm = Math.round(price / built);
+        if (mode === 'rent') {
+            return `€${numberFormat.format(perSqm)}/m2/mo`;
+        }
         return `€${numberFormat.format(perSqm)}/m2`;
     }
 
@@ -691,11 +767,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const baths = Number(property.baths) || 0;
             const builtArea = builtAreaFor(property);
             const eurPerSqm = eurPerSqmFor(property);
+            const listingMode = listingModeFor(property);
 
             card.innerHTML = `
                 <div class="card-img-wrapper">
                     <img src="${imageUrl}" alt="${type}" loading="lazy" onerror="this.src='assets/placeholder.png'">
                     <div class="card-badge">${type}</div>
+                    <div class="card-status ${listingMode}">${listingMode === 'rent' ? 'For Rent' : 'For Sale'}</div>
                 </div>
                 <div class="card-content">
                     <div class="card-ref">${toText(property.ref)}</div>
@@ -704,7 +782,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                         ${town}, ${province}
                     </div>
-                    <div class="price">${formatPrice(property.price)}</div>
+                    <div class="price">${formatListingPrice(property)}</div>
                     <div class="specs">
                         <div class="spec-item">🛏️ Beds ${beds}</div>
                         <div class="spec-item">🛁 Baths ${baths}</div>
@@ -766,7 +844,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const builtArea = builtAreaFor(property);
         const eurPerSqm = eurPerSqmFor(property);
         const propertyLink = buildPropertyLink(reference);
-        const dossierSubject = encodeURIComponent(`Request Dossier - ${reference || `${town} ${type}`}`);
+        const dossierSubject = encodeURIComponent(`Request to visit - ${reference || `${town} ${type}`}`);
         const shareTitle = `${reference || 'Property'} - ${town}, ${province}`;
         const shareTextRaw = `Check this ${type}${reference ? ` (${reference})` : ''} in ${town}: ${propertyLink}`;
         const shareText = encodeURIComponent(shareTextRaw);
@@ -776,7 +854,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
         const linkedInShare = `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`;
         const dossierBody = encodeURIComponent(
-            `Hello Spanish Coast Properties,\n\nPlease send me full details for this property.\n\nReference: ${reference || 'N/A'}\nType: ${type}\nLocation: ${town}, ${province}\nPrice: ${formatPrice(property.price)}\nProperty link: ${propertyLink}\n\nThank you.`
+            `Hello Spanish Coast Properties,\n\nI would like to request a visit for this property.\n\nReference: ${reference || 'N/A'}\nType: ${type}\nLocation: ${town}, ${province}\nPrice: ${formatListingPrice(property)}\nProperty link: ${propertyLink}\n\nPreferred dates/times:\n1) \n2) \n\nThank you.`
         );
         const dossierMailto = `mailto:info@spanishcoastproperties.com?subject=${dossierSubject}&body=${dossierBody}`;
         const descriptionHtml = formatDescriptionHtml(description);
@@ -838,7 +916,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="modal-cta">
                         <a href="tel:+34624867866" class="cta-button">Call Now</a>
-                        <a href="${dossierMailto}" class="cta-button">Request Dossier</a>
+                        <a href="${dossierMailto}" class="cta-button">Request to visit</a>
                     </div>
                     <div class="share-row" aria-label="Share">
                         <button type="button" class="share-btn" data-share="native">📲 Share</button>
@@ -1008,14 +1086,14 @@ document.addEventListener('DOMContentLoaded', () => {
         updateActiveCityButton(selectedCity);
     }
 
-    function createMarkerIcon(price) {
+    function createMarkerIcon(property) {
         if (typeof L === 'undefined' || typeof L.divIcon !== 'function') {
             return undefined;
         }
 
         return L.divIcon({
             className: 'marker-container',
-            html: `<div class="branded-marker">${formatMarkerPrice(price)}</div>`,
+            html: `<div class="branded-marker">${escapeHtml(formatListingMarkerText(property))}</div>`,
             iconSize: [76, 28],
             iconAnchor: [38, 14]
         });
@@ -1070,7 +1148,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const marker = L.marker([latitude, longitude], {
-                icon: createMarkerIcon(property.price),
+                icon: createMarkerIcon(property),
                 title: toText(property.ref, toText(property.town, 'Property'))
             });
 
