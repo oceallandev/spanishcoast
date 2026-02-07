@@ -701,7 +701,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const description = normalize(property.description);
             const features = featuresFor(property).join(' ').toLowerCase();
 
-            const propertyPrice = priceNumber(property);
+            const propertyPrice = listingPriceNumber(property);
             const propertyBeds = Number(property.beds) || 0;
             const propertyBaths = Number(property.baths) || 0;
 
@@ -1336,9 +1336,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    if (priceFilter) {
+        priceFilter.addEventListener('input', (event) => {
+            const raw = toText(event.target.value).trim();
+            maxPrice = raw === '' ? 'any' : raw;
+            scheduleFilter();
+        });
+    }
+
     function syncFiltersFromControls() {
         selectedType = typeFilter ? typeFilter.value : 'all';
-        maxPrice = priceFilter ? priceFilter.value : 'any';
+        if (!priceFilter) {
+            maxPrice = 'any';
+        } else {
+            const raw = toText(priceFilter.value).trim();
+            maxPrice = raw === '' ? 'any' : raw;
+        }
         minBeds = bedsFilter ? Number(bedsFilter.value) || 0 : 0;
         minBaths = bathsFilter ? Number(bathsFilter.value) || 0 : 0;
         poolFilter = poolFilterEl ? poolFilterEl.value : 'any';
@@ -1404,7 +1417,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (refSearchInput) refSearchInput.value = '';
             if (searchInput) searchInput.value = '';
             if (typeFilter) typeFilter.value = 'all';
-            if (priceFilter) priceFilter.value = 'any';
+            if (priceFilter) priceFilter.value = '';
             if (bedsFilter) bedsFilter.value = '0';
             if (bathsFilter) bathsFilter.value = '0';
             if (poolFilterEl) poolFilterEl.value = 'any';
@@ -1459,6 +1472,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Initialization ---
     renderCatalogs();
+
+    // Build price suggestions (10k increments starting at 50k).
+    const priceSuggestions = document.getElementById('price-suggestions');
+    if (priceSuggestions) {
+        const frag = document.createDocumentFragment();
+        for (let value = 50000; value <= 500000; value += 10000) {
+            const opt = document.createElement('option');
+            opt.value = String(value);
+            frag.appendChild(opt);
+        }
+        [750000, 1000000, 1500000, 2000000].forEach((value) => {
+            const opt = document.createElement('option');
+            opt.value = String(value);
+            frag.appendChild(opt);
+        });
+        priceSuggestions.appendChild(frag);
+    }
 
     const initialUrl = new URL(window.location.href);
     const initialRef = toText(initialUrl.searchParams.get('ref')).trim();

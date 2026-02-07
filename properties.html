@@ -17,7 +17,7 @@
     <meta property="og:url" content="https://oceallandev.github.io/spanishcoast/properties.html">
     <meta property="og:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
 
-    <link rel="stylesheet" href="style.css?v=20260207x">
+    <link rel="stylesheet" href="style.css?v=20260207y">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -114,13 +114,9 @@
                 <div class="pill-divider"></div>
                 <div class="pill-section price">
                     <label>Max Price</label>
-                    <select id="price-filter">
-                        <option value="any">Any Price</option>
-                        <option value="150000">€150k</option>
-                        <option value="300000">€300k</option>
-                        <option value="500000">€500k</option>
-                        <option value="1000000">€1M+</option>
-                    </select>
+                    <input id="price-filter" type="number" inputmode="numeric" step="10000" min="0"
+                        placeholder="Any (e.g. 50000)" list="price-suggestions" />
+                    <datalist id="price-suggestions"></datalist>
                 </div>
                 <div class="pill-divider"></div>
                 <div class="pill-section specs">
@@ -248,10 +244,10 @@
         <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
     </footer>
 
-    <script defer src="data.js?v=20260207x"></script>
-    <script defer src="catalog.js?v=20260207x"></script>
-    <script defer src="app.js?v=20260207x"></script>
-    <script defer src="site.js?v=20260207x"></script>
+    <script defer src="data.js?v=20260207y"></script>
+    <script defer src="catalog.js?v=20260207y"></script>
+    <script defer src="app.js?v=20260207y"></script>
+    <script defer src="site.js?v=20260207y"></script>
 </body>
 
 </html>
