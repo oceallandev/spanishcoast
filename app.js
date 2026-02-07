@@ -1252,14 +1252,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function syncFiltersFromControls() {
+        selectedType = typeFilter ? typeFilter.value : 'all';
+        maxPrice = priceFilter ? priceFilter.value : 'any';
+        minBeds = bedsFilter ? Number(bedsFilter.value) || 0 : 0;
+        minBaths = bathsFilter ? Number(bathsFilter.value) || 0 : 0;
+        poolFilter = poolFilterEl ? poolFilterEl.value : 'any';
+        parkingFilter = parkingFilterEl ? parkingFilterEl.value : 'any';
+    }
+
+    [typeFilter, priceFilter, bedsFilter, bathsFilter, poolFilterEl, parkingFilterEl].forEach((el) => {
+        if (!el) return;
+        el.addEventListener('change', () => {
+            syncFiltersFromControls();
+            filterProperties();
+        });
+    });
+
     if (applyBtn) {
         applyBtn.addEventListener('click', () => {
-            selectedType = typeFilter ? typeFilter.value : 'all';
-            maxPrice = priceFilter ? priceFilter.value : 'any';
-            minBeds = bedsFilter ? Number(bedsFilter.value) || 0 : 0;
-            minBaths = bathsFilter ? Number(bathsFilter.value) || 0 : 0;
-            poolFilter = poolFilterEl ? poolFilterEl.value : 'any';
-            parkingFilter = parkingFilterEl ? parkingFilterEl.value : 'any';
+            syncFiltersFromControls();
             filterProperties();
             closeFilters();
         });
@@ -1267,12 +1279,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (toggleMapBtn && mapSection) {
         toggleMapBtn.addEventListener('click', () => {
+            // Ensure map reflects the current filter controls (even if user didn't press Apply).
+            syncFiltersFromControls();
+            filterProperties();
+
             mapSection.classList.toggle('active');
             const mapIsOpen = mapSection.classList.contains('active');
             toggleMapBtn.textContent = mapIsOpen ? '📋 List' : '🗺️ Map';
 
             if (map && typeof map.invalidateSize === 'function') {
-                window.setTimeout(() => map.invalidateSize(), 240);
+                window.setTimeout(() => {
+                    map.invalidateSize();
+                    // Cluster/layout recalculation after size change.
+                    updateMapMarkers();
+                }, 240);
             }
         });
     }
