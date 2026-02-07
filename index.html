@@ -22,21 +22,13 @@
     <meta name="twitter:description"
         content="Costa Blanca South properties, businesses for sale, and vehicles. Buy, sell, rent, manage, and maintain.">
     <meta name="twitter:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
-    <link rel="stylesheet" href="style.css?v=20260207v">
+    <link rel="stylesheet" href="style.css?v=20260207w">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Leaflet.js for Maps -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
-    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 </head>
 
-<body>
+<body data-section="home">
     <div class="bg-mesh"></div>
     <!-- Debug Error Handler -->
     <script>
@@ -76,6 +68,7 @@
                     <a class="nav-link" data-section="properties" href="properties.html">Properties</a>
                     <a class="nav-link" data-section="businesses" href="businesses.html">Businesses</a>
                     <a class="nav-link" data-section="vehicles" href="vehicles.html">Vehicles</a>
+                    <a class="nav-link" data-section="services" href="services.html">Services</a>
                 </nav>
             </div>
 
@@ -84,114 +77,33 @@
                     <div class="contact-label">Contact Us</div>
                     <a href="tel:+34624867866" class="phone-number">+34 624 867 866</a>
                 </div>
-                <button id="open-filters-btn" class="open-filters-btn" type="button">🔎 Filters</button>
-                <button id="toggle-map-btn" class="toggle-map-btn">🗺️ Map</button>
+                <button id="mobile-menu-btn" class="mobile-menu-btn" type="button" aria-expanded="false">Menu</button>
+                <a class="header-cta" href="tel:+34624867866">Call</a>
             </div>
         </div>
     </header>
 
-    <div class="search-pill-container" id="filters-bar" aria-label="Property filters">
-        <div class="search-pill glass">
-            <div class="pill-scroll" id="pill-scroll">
-                <div class="pill-advanced" id="pill-advanced">
-                    <div class="pill-section reference">
-                        <label>Ref</label>
-                        <input type="text" id="ref-search" placeholder="SCP-XXXX">
-                    </div>
-                    <div class="pill-divider"></div>
-                    <div class="pill-section location">
-                        <label>Location</label>
-                        <input type="text" id="search" placeholder="Search destinations">
-                    </div>
-                    <div class="pill-divider"></div>
-                </div>
-
-                <div class="pill-section type">
-                    <label>Type</label>
-                    <select id="type-filter">
-                        <option value="all">Any Type</option>
-                        <option value="Apartment">Apartment</option>
-                        <option value="Villa">Villa</option>
-                        <option value="Town House">Town House</option>
-                        <option value="Commercial">Commercial</option>
-                        <option value="Land">Land</option>
-                        <option value="Penthouse">Penthouse</option>
-                    </select>
-                </div>
-                <div class="pill-divider"></div>
-                <div class="pill-section price">
-                    <label>Max Price</label>
-                    <select id="price-filter">
-                        <option value="any">Any Price</option>
-                        <option value="150000">€150k</option>
-                        <option value="300000">€300k</option>
-                        <option value="500000">€500k</option>
-                        <option value="1000000">€1M+</option>
-                    </select>
-                </div>
-                <div class="pill-divider"></div>
-                <div class="pill-section specs">
-                    <label>Beds</label>
-                    <select id="beds-filter">
-                        <option value="0">Any</option>
-                        <option value="1">1+</option>
-                        <option value="2">2+</option>
-                        <option value="3">3+</option>
-                        <option value="4">4+</option>
-                    </select>
-                </div>
-                <div class="pill-divider"></div>
-                <div class="pill-section specs">
-                    <label>Baths</label>
-                    <select id="baths-filter">
-                        <option value="0">Any</option>
-                        <option value="1">1+</option>
-                        <option value="2">2+</option>
-                        <option value="3">3+</option>
-                    </select>
-                </div>
-                <div class="pill-divider"></div>
-                <div class="pill-section amenity">
-                    <label>Pool</label>
-                    <select id="pool-filter">
-                        <option value="any">Any</option>
-                        <option value="pool">With Pool</option>
-                        <option value="private">Private Pool</option>
-                        <option value="communal">Communal Pool</option>
-                    </select>
-                </div>
-                <div class="pill-divider"></div>
-                <div class="pill-section amenity">
-                    <label>Parking</label>
-                    <select id="parking-filter">
-                        <option value="any">Any</option>
-                        <option value="parking">With Parking</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="pill-actions">
-                <button id="toggle-advanced-btn" class="more-trigger" type="button" aria-expanded="false">
-                    More
-                </button>
-                <button id="apply-filters" class="search-trigger" aria-label="Apply filters">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                </button>
-                <button id="close-filters-btn" class="close-filters-btn" type="button" aria-label="Close filters">
-                    ✕
-                </button>
-            </div>
+    <div id="mobile-menu-backdrop" class="mobile-menu-backdrop" aria-hidden="true"></div>
+    <aside id="mobile-menu" class="mobile-menu" aria-hidden="true">
+        <div class="mobile-menu-head">
+            <div class="mobile-menu-title">Spanish Coast Properties</div>
+            <button id="mobile-menu-close" class="mobile-menu-close" type="button">✕</button>
         </div>
-    </div>
-
-    <div id="filters-backdrop" class="filters-backdrop" aria-hidden="true"></div>
+        <nav class="mobile-menu-links" aria-label="Mobile menu">
+            <a href="index.html">Home</a>
+            <a href="properties.html">Properties</a>
+            <a href="businesses.html">Businesses</a>
+            <a href="vehicles.html">Vehicles</a>
+            <a href="services.html">Services</a>
+        </nav>
+        <div class="mobile-menu-foot">
+            <a class="cta-button" href="mailto:info@spanishcoastproperties.com">Email</a>
+            <a class="cta-button" href="tel:+34624867866">Call</a>
+        </div>
+    </aside>
 
     <main class="site-main" id="site-main">
-        <section class="page-section home-section" id="home-section" aria-label="Home">
+        <section class="home-section" id="home-section" aria-label="Home">
             <div class="hero">
                 <div class="hero-inner">
                     <div class="hero-badge">Costa Blanca South</div>
@@ -256,77 +168,6 @@
                     <a class="cta-button" href="mailto:info@spanishcoastproperties.com?subject=Inquiry%20-%20Spanish%20Coast%20Properties">Email</a>
                 </div>
             </div>
-        </section>
-
-        <section class="page-section properties-section" id="properties-section" aria-label="Properties">
-            <div class="city-bar glass">
-                <div class="city-bar-inner">
-                    <div id="city-buttons" class="city-chips scroll-x">
-                        <!-- Chips injected here -->
-                    </div>
-                </div>
-            </div>
-
-            <div class="app-layout">
-                <div class="content-section">
-                    <div class="results-header">
-                        <h2>Found <span id="results-count">0</span> properties in Costa Blanca South</h2>
-                        <p class="results-subtitle">
-                            Handpicked listings focused on Guardamar del Segura, Torrevieja, Orihuela Costa, Ciudad Quesada,
-                            and Pilar de la Horadada, with map-safe coordinates and shareable detail links.
-                        </p>
-                    </div>
-
-                    <div id="property-grid" class="property-grid">
-                        <!-- Properties injected here -->
-                    </div>
-                </div>
-
-                <div id="map-section" class="map-section">
-                    <div id="map"></div>
-                </div>
-            </div>
-        </section>
-
-        <section class="page-section catalog-section" id="businesses-section" aria-label="Businesses">
-            <div class="catalog-hero">
-                <h2>Businesses for Sale</h2>
-                <p>
-                    Acquire or sell a business in Costa Blanca South with support that goes beyond a listing.
-                    We help with due diligence, contracts, and documentation changes so you can move forward with confidence.
-                </p>
-                <div class="service-tags">
-                    <span class="tag">Buy & Sell</span>
-                    <span class="tag">Management</span>
-                    <span class="tag">Legal Advice</span>
-                    <span class="tag">Contracts</span>
-                    <span class="tag">Documentation</span>
-                </div>
-            </div>
-            <div class="catalog-grid" id="business-grid">
-                <!-- Businesses injected here -->
-            </div>
-        </section>
-
-        <section class="page-section catalog-section" id="vehicles-section" aria-label="Vehicles">
-            <div class="catalog-hero">
-                <h2>Vehicles</h2>
-                <p>
-                    Cars and boats for sale or rent. We can also manage bookings, handovers, and practical paperwork,
-                    so your fleet stays easy for customers and efficient for you.
-                </p>
-                <div class="service-tags">
-                    <span class="tag">Cars</span>
-                    <span class="tag">Boats</span>
-                    <span class="tag">Buy & Sell</span>
-                    <span class="tag">Rent</span>
-                    <span class="tag">Management</span>
-                </div>
-            </div>
-            <div class="catalog-grid" id="vehicle-grid">
-                <!-- Vehicles injected here -->
-            </div>
-        </section>
     </main>
 
     <footer class="site-footer">
@@ -387,9 +228,7 @@
         }
     </script>
 
-    <script src="data.js?v=20260207v"></script>
-    <script src="catalog.js?v=20260207v"></script>
-    <script src="app.js?v=20260207v"></script>
+    <script defer src="site.js?v=20260207w"></script>
 </body>
 
 </html>

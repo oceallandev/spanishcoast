@@ -421,10 +421,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function buildPropertyLink(reference) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('section', 'properties');
+        // Always generate a stable, shareable URL for this listing.
+        const url = new URL('properties.html', window.location.href);
         if (reference) {
             url.searchParams.set('ref', reference);
+        } else {
+            url.searchParams.delete('ref');
         }
         return url.toString();
     }
@@ -434,7 +436,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         const url = new URL(window.location.href);
-        url.searchParams.set('section', 'properties');
         if (reference) {
             url.searchParams.set('ref', reference);
         } else {
@@ -646,6 +647,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function focusMarker(propertyId) {
+        if (!map || !markersGroup) {
+            return;
+        }
+        const marker = markerMap.get(idKey(propertyId));
+        if (!marker || typeof marker.getLatLng !== 'function') {
+            return;
+        }
+
+        // With clustering enabled, the marker may not be visible yet. This ensures it becomes visible.
+        if (typeof markersGroup.zoomToShowLayer === 'function') {
+            try {
+                markersGroup.zoomToShowLayer(marker, () => {
+                    if (typeof map.panTo === 'function') {
+                        map.panTo(marker.getLatLng(), { animate: true, duration: 0.35 });
+                    }
+                });
+                return;
+            } catch (error) {
+                // Fall through to panTo.
+            }
+        }
+
+        if (typeof map.panTo === 'function') {
+            map.panTo(marker.getLatLng(), { animate: true, duration: 0.35 });
+        }
+    }
+
     function eurPerSqmFor(property) {
         const built = builtAreaFor(property);
         const mode = listingModeFor(property);
@@ -781,6 +810,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 : 'assets/placeholder.png';
 
             const type = toText(property.type, 'Property');
+            const reference = toText(property.ref).trim();
             const town = toText(property.town, 'Unknown Area');
             const province = toText(property.province, 'Alicante');
             const beds = Number(property.beds) || 0;
@@ -796,7 +826,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="card-status ${listingMode}">${listingMode === 'rent' ? 'For Rent' : 'For Sale'}</div>
                 </div>
                 <div class="card-content">
-                    <div class="card-ref">${toText(property.ref)}</div>
+                    <div class="card-ref">${reference || 'Reference unavailable'}</div>
                     <h3>${type} in ${town}</h3>
                     <div class="location">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
@@ -819,6 +849,9 @@ document.addEventListener('DOMContentLoaded', () => {
             card.addEventListener('mouseenter', () => {
                 setCardActive(propertyId, true);
                 setMarkerActive(propertyId, true);
+                if (isMapVisible()) {
+                    focusMarker(propertyId);
+                }
             });
 
             card.addEventListener('mouseleave', () => {
@@ -875,6 +908,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const baths = Number(property.baths) || 0;
         const builtArea = builtAreaFor(property);
         const eurPerSqm = eurPerSqmFor(property);
+        const latitude = Number(property.latitude);
+        const longitude = Number(property.longitude);
+        const googleMapsUrl = Number.isFinite(latitude) && Number.isFinite(longitude)
+            ? `https://www.google.com/maps?q=${latitude},${longitude}`
+            : null;
         const propertyLink = buildPropertyLink(reference);
         const dossierSubject = encodeURIComponent(`Request to visit - ${reference || `${town} ${type}`}`);
         const shareTitle = `${reference || 'Property'} - ${town}, ${province}`;
@@ -902,7 +940,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                         ${town}, ${province}
                     </div>
-                    <div class="price">${formatPrice(property.price)}</div>
+                    <div class="price">${formatListingPrice(property)}</div>
                     <div class="modal-specs">
                         <div class="modal-spec-item">🛏️ Beds ${beds}</div>
                         <div class="modal-spec-item">🛁 Baths ${baths}</div>
@@ -932,7 +970,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="mini-map-card">
                         <div class="mini-map-head">
                             <h4>📍 Location</h4>
-                            <a class="mini-map-link" href="https://www.google.com/maps?q=${Number(property.latitude)},${Number(property.longitude)}" target="_blank" rel="noopener">Open in Google Maps</a>
+                            ${googleMapsUrl
+                ? `<a class="mini-map-link" href="${googleMapsUrl}" target="_blank" rel="noopener">Open in Google Maps</a>`
+                : `<span class="mini-map-link mini-map-link--disabled">Map unavailable</span>`}
                         </div>
                         <div id="property-mini-map" class="mini-map"></div>
                         <div class="mini-map-note">Quick view of the area. Zoom in to explore nearby beaches, golf, and amenities.</div>
@@ -1233,6 +1273,10 @@ document.addEventListener('DOMContentLoaded', () => {
             searchPill.classList.toggle('advanced-open', next);
             toggleAdvancedBtn.setAttribute('aria-expanded', next ? 'true' : 'false');
             toggleAdvancedBtn.textContent = next ? 'Less' : 'More';
+            const scrollEl = document.getElementById('pill-scroll');
+            if (scrollEl) {
+                scrollEl.scrollLeft = 0;
+            }
         });
     }
 

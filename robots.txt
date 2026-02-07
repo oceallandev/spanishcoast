@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://oceallandev.github.io/spanishcoast/sitemap.xml
+

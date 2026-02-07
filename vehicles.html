@@ -17,13 +17,13 @@
     <meta property="og:url" content="https://oceallandev.github.io/spanishcoast/vehicles.html">
     <meta property="og:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
 
-    <link rel="stylesheet" href="style.css?v=20260207v">
+    <link rel="stylesheet" href="style.css?v=20260207w">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body data-section="vehicles">
     <div class="bg-mesh"></div>
 
     <header class="main-header glass sticky">
@@ -43,19 +43,35 @@
                     <a class="nav-link" data-section="properties" href="properties.html">Properties</a>
                     <a class="nav-link" data-section="businesses" href="businesses.html">Businesses</a>
                     <a class="nav-link" data-section="vehicles" href="vehicles.html">Vehicles</a>
+                    <a class="nav-link" data-section="services" href="services.html">Services</a>
                 </nav>
             </div>
 
             <div class="header-right">
-                <div class="contact-info">
-                    <div class="contact-label">Contact Us</div>
-                    <a href="tel:+34624867866" class="phone-number">+34 624 867 866</a>
-                </div>
-                <button id="open-filters-btn" class="open-filters-btn" type="button">🔎 Filters</button>
-                <button id="toggle-map-btn" class="toggle-map-btn">🗺️ Map</button>
+                <button id="mobile-menu-btn" class="mobile-menu-btn" type="button" aria-expanded="false">Menu</button>
+                <a class="header-cta" href="tel:+34624867866">Call</a>
             </div>
         </div>
     </header>
+
+    <div id="mobile-menu-backdrop" class="mobile-menu-backdrop" aria-hidden="true"></div>
+    <aside id="mobile-menu" class="mobile-menu" aria-hidden="true">
+        <div class="mobile-menu-head">
+            <div class="mobile-menu-title">Spanish Coast Properties</div>
+            <button id="mobile-menu-close" class="mobile-menu-close" type="button">✕</button>
+        </div>
+        <nav class="mobile-menu-links" aria-label="Mobile menu">
+            <a href="index.html">Home</a>
+            <a href="properties.html">Properties</a>
+            <a href="businesses.html">Businesses</a>
+            <a href="vehicles.html">Vehicles</a>
+            <a href="services.html">Services</a>
+        </nav>
+        <div class="mobile-menu-foot">
+            <a class="cta-button" href="mailto:info@spanishcoastproperties.com">Email</a>
+            <a class="cta-button" href="tel:+34624867866">Call</a>
+        </div>
+    </aside>
 
     <main class="site-main" id="site-main">
         <section class="page-section catalog-section active" id="vehicles-section" aria-label="Vehicles">
@@ -65,12 +81,24 @@
                     Cars and boats for sale or rent. Add your inventory and we will display it with clean cards and
                     shareable detail links.
                 </p>
+                <p>
+                    For buyers: we shortlist reliable options that match your budget and usage. For owners: we can help
+                    with listings, handovers, and practical management.
+                </p>
                 <div class="service-tags">
                     <span class="tag">Cars</span>
                     <span class="tag">Boats</span>
                     <span class="tag">Buy & Sell</span>
                     <span class="tag">Rent</span>
                     <span class="tag">Management</span>
+                </div>
+            </div>
+            <div class="catalog-hero">
+                <h3>Fast Requests</h3>
+                <p>Tell us what you want and when you need it. We respond with options and the next steps.</p>
+                <div class="simple-cta">
+                    <a class="cta-button" href="mailto:info@spanishcoastproperties.com?subject=Vehicle%20Inquiry%20-%20Cars%20or%20Boats">Email</a>
+                    <a class="cta-button" href="services.html#vehicle-services">See services</a>
                 </div>
             </div>
             <div class="catalog-grid" id="vehicle-grid"></div>
@@ -103,10 +131,9 @@
         <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
     </footer>
 
-    <script src="data.js?v=20260207v"></script>
-    <script src="catalog.js?v=20260207v"></script>
-    <script src="app.js?v=20260207v"></script>
+    <script defer src="catalog.js?v=20260207w"></script>
+    <script defer src="catalog-page.js?v=20260207w"></script>
+    <script defer src="site.js?v=20260207w"></script>
 </body>
 
 </html>
-
