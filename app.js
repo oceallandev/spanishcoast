@@ -126,7 +126,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function normalize(value) {
-        return toText(value).toLowerCase();
+        // Make search/destination matching tolerant of accents (e.g. "Almoradí" vs "almoradi").
+        return toText(value)
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
     }
 
     function builtAreaFor(property) {
@@ -402,8 +406,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function filterProperties() {
-        const loweredSearch = searchQuery.toLowerCase();
-        const loweredRef = refQuery.toLowerCase();
+        const loweredSearch = normalize(searchQuery);
+        const loweredRef = normalize(refQuery);
 
         currentProperties = allProperties.filter((property) => {
             const ref = normalize(property.ref);
