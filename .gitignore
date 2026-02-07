@@ -1,0 +1,9 @@
+.DS_Store
+style.css.bak
+sample.xml
+kyero_feed.xml
+reference_map.csv
+data.json
+keep_synced.sh
+sync_xml.pl
+validate_data.py

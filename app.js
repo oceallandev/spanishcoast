@@ -1,0 +1,882 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const allProperties = Array.isArray(propertyData) ? propertyData : [];
+
+    // --- State Management ---
+    let currentProperties = [...allProperties];
+    let selectedCity = 'all';
+    let selectedType = 'all';
+    let searchQuery = '';
+    let refQuery = '';
+    let maxPrice = 'any';
+    let minBeds = 0;
+    let minBaths = 0;
+    let poolFilter = 'any';
+    let parkingFilter = 'any';
+    let currentGalleryIndex = 0;
+    let currentGalleryImages = [];
+    let map;
+    let markersGroup;
+    const markerMap = new Map();
+
+    // --- DOM Elements ---
+    const propertyGrid = document.getElementById('property-grid');
+    const cityButtonsContainer = document.getElementById('city-buttons');
+    const citySearchInput = document.getElementById('city-search-input');
+    const cityGroupSelect = document.getElementById('city-group-select');
+    const resultsCount = document.getElementById('results-count');
+
+    const refSearchInput = document.getElementById('ref-search');
+    const searchInput = document.getElementById('search');
+    const typeFilter = document.getElementById('type-filter');
+    const priceFilter = document.getElementById('price-filter');
+    const bedsFilter = document.getElementById('beds-filter');
+    const bathsFilter = document.getElementById('baths-filter');
+    const poolFilterEl = document.getElementById('pool-filter');
+    const parkingFilterEl = document.getElementById('parking-filter');
+    const applyBtn = document.getElementById('apply-filters');
+
+    const toggleMapBtn = document.getElementById('toggle-map-btn');
+    const mapSection = document.getElementById('map-section');
+
+    const modal = document.getElementById('property-modal');
+    const modalDetails = document.getElementById('modal-details');
+    const closeModal = document.querySelector('.close-modal');
+
+    const lightbox = document.getElementById('lightbox-modal');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeLightbox = document.querySelector('.close-lightbox');
+
+    const mainLogoImg = document.getElementById('main-logo-img');
+
+    const animationObserver = 'IntersectionObserver' in window
+        ? new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeIn 0.45s ease forwards';
+                    animationObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08 })
+        : { observe: () => {}, unobserve: () => {} };
+
+    function toText(value, fallback = '') {
+        if (typeof value === 'string') {
+            return value;
+        }
+        if (value === null || value === undefined) {
+            return fallback;
+        }
+        return String(value);
+    }
+
+    function normalize(value) {
+        return toText(value).toLowerCase();
+    }
+
+    function builtAreaFor(property) {
+        const built = Number(property && property.surface_area && property.surface_area.built);
+        return Number.isFinite(built) ? built : 0;
+    }
+
+    function featuresFor(property) {
+        return Array.isArray(property && property.features) ? property.features : [];
+    }
+
+    function priceNumber(property) {
+        const number = Number(property && property.price);
+        return Number.isFinite(number) ? number : NaN;
+    }
+
+    function formatPrice(price) {
+        const number = Number(price);
+        if (!Number.isFinite(number)) {
+            return 'Price on request';
+        }
+        return new Intl.NumberFormat('en-IE', {
+            style: 'currency',
+            currency: 'EUR',
+            maximumFractionDigits: 0
+        }).format(number);
+    }
+
+    function formatMarkerPrice(price) {
+        const number = Number(price);
+        if (!Number.isFinite(number)) {
+            return 'N/A';
+        }
+        if (number >= 1000000) {
+            return `${(number / 1000000).toFixed(1).replace('.0', '')}M€`;
+        }
+        return `${Math.round(number / 1000)}k€`;
+    }
+
+    function decodeHtmlEntities(value) {
+        const parser = document.createElement('textarea');
+        parser.innerHTML = toText(value);
+        return parser.value;
+    }
+
+    function escapeHtml(value) {
+        return toText(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function isHeadingLine(line) {
+        if (!line) {
+            return false;
+        }
+        const compact = line.replace(/[^A-Za-z]/g, '');
+        return compact.length > 2
+            && compact.length <= 32
+            && line === line.toUpperCase();
+    }
+
+    function formatDescriptionHtml(rawDescription) {
+        let text = decodeHtmlEntities(rawDescription)
+            .replace(/&#13;/g, '\n')
+            .replace(/\r\n?/g, '\n')
+            .replace(/\u00a0/g, ' ')
+            .trim();
+
+        if (!text) {
+            return '<p>Property details coming soon.</p>';
+        }
+
+        const hardSections = [
+            'IMPORTANT DETAILS',
+            'ECONOMY',
+            'AREA CIUDAD QUESADA',
+            'Separate flat - perfect for guests or rentals',
+            'Private outdoor area with pool and multiple zones'
+        ];
+
+        hardSections.forEach((section) => {
+            const escaped = section.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            text = text.replace(new RegExp(`\\s*${escaped}\\s*`, 'g'), `\n\n${section}\n`);
+        });
+
+        text = text
+            .replace(/([.!?])([A-Z])/g, '$1\n$2')
+            .replace(/([a-z0-9])([A-Z][a-z])/g, '$1 $2')
+            .replace(/:\s*(\d+\s*(?:m|km|GB))/g, ':\n$1')
+            .replace(/(\d+\s*(?:m|km)\s+to\b)/g, '\n$1')
+            .replace(/\n{3,}/g, '\n\n');
+
+        const lines = text
+            .split('\n')
+            .map((line) => line.trim())
+            .filter(Boolean);
+
+        const blocks = [];
+        let listItems = [];
+
+        const flushList = () => {
+            if (listItems.length === 0) {
+                return;
+            }
+            blocks.push(`<ul class="desc-list">${listItems.join('')}</ul>`);
+            listItems = [];
+        };
+
+        lines.forEach((line) => {
+            if (isHeadingLine(line)) {
+                flushList();
+                blocks.push(`<h4 class="desc-heading">${escapeHtml(line)}</h4>`);
+                return;
+            }
+
+            if (/^[-•]\s*/.test(line)) {
+                const item = line.replace(/^[-•]\s*/, '').trim();
+                if (item) {
+                    listItems.push(`<li>${escapeHtml(item)}</li>`);
+                }
+                return;
+            }
+
+            if (/^[A-Za-z][^:]{1,40}:/.test(line) && line.length < 120) {
+                listItems.push(`<li>${escapeHtml(line)}</li>`);
+                return;
+            }
+
+            flushList();
+            blocks.push(`<p>${escapeHtml(line)}</p>`);
+        });
+
+        flushList();
+        return blocks.join('');
+    }
+
+    function buildPropertyLink(reference) {
+        const url = new URL(window.location.href);
+        if (reference) {
+            url.searchParams.set('ref', reference);
+        }
+        return url.toString();
+    }
+
+    function updateBrowserRefParam(reference) {
+        if (!window.history || typeof window.history.replaceState !== 'function') {
+            return;
+        }
+        const url = new URL(window.location.href);
+        if (reference) {
+            url.searchParams.set('ref', reference);
+        } else {
+            url.searchParams.delete('ref');
+        }
+        window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
+    }
+
+    function applyRefFromUrl() {
+        const urlRef = new URLSearchParams(window.location.search).get('ref');
+        const reference = toText(urlRef).trim();
+        if (!reference) {
+            return;
+        }
+
+        refQuery = reference;
+        if (refSearchInput) {
+            refSearchInput.value = reference;
+        }
+        filterProperties();
+
+        const exactMatch = currentProperties.find((property) => normalize(property.ref) === normalize(reference));
+        if (exactMatch) {
+            openPropertyModal(exactMatch);
+        }
+    }
+
+    function updateActiveCityButton(selectedValue) {
+        if (!cityButtonsContainer) {
+            return;
+        }
+        const allButtons = cityButtonsContainer.querySelectorAll('.city-btn');
+        allButtons.forEach((item) => {
+            item.classList.toggle('active', item.dataset.city === selectedValue);
+        });
+    }
+
+    function selectCity(value) {
+        selectedCity = value;
+        updateActiveCityButton(value);
+
+        if (cityGroupSelect) {
+            cityGroupSelect.value = value;
+        }
+
+        filterProperties();
+    }
+
+    function filterCityButtons(query) {
+        if (!cityButtonsContainer) {
+            return;
+        }
+
+        const normalizedQuery = toText(query).trim().toLowerCase();
+        const allButtons = cityButtonsContainer.querySelectorAll('.city-btn');
+        allButtons.forEach((button) => {
+            const cityValue = toText(button.dataset.city);
+            const isAllOption = cityValue === 'all';
+            const matchesQuery = isAllOption || normalizedQuery === '' || cityValue.toLowerCase().includes(normalizedQuery);
+            button.classList.toggle('hidden', !matchesQuery);
+        });
+    }
+
+    function populateCityGroups(towns) {
+        if (!cityGroupSelect) {
+            return;
+        }
+
+        const grouped = towns.reduce((acc, town) => {
+            const initial = town.charAt(0).toUpperCase();
+            const group = /[A-Z]/.test(initial) ? initial : '#';
+            if (!acc[group]) {
+                acc[group] = [];
+            }
+            acc[group].push(town);
+            return acc;
+        }, {});
+
+        const groupOrder = Object.keys(grouped).sort((a, b) => a.localeCompare(b));
+        cityGroupSelect.innerHTML = '';
+
+        const allOption = document.createElement('option');
+        allOption.value = 'all';
+        allOption.textContent = 'All Destinations';
+        cityGroupSelect.appendChild(allOption);
+
+        groupOrder.forEach((groupLabel) => {
+            const group = document.createElement('optgroup');
+            group.label = groupLabel;
+            grouped[groupLabel].forEach((town) => {
+                const option = document.createElement('option');
+                option.value = town;
+                option.textContent = town;
+                group.appendChild(option);
+            });
+            cityGroupSelect.appendChild(group);
+        });
+
+        cityGroupSelect.value = selectedCity;
+    }
+
+    function setMarkerActive(propertyId, isActive) {
+        const marker = markerMap.get(propertyId);
+        if (!marker || typeof marker.getElement !== 'function') {
+            return;
+        }
+        const markerElement = marker.getElement();
+        if (markerElement) {
+            markerElement.classList.toggle('marker-active', isActive);
+        }
+    }
+
+    function filterProperties() {
+        const loweredSearch = searchQuery.toLowerCase();
+        const loweredRef = refQuery.toLowerCase();
+
+        currentProperties = allProperties.filter((property) => {
+            const ref = normalize(property.ref);
+            const town = normalize(property.town);
+            const province = normalize(property.province);
+            const type = normalize(property.type);
+            const description = normalize(property.description);
+            const features = featuresFor(property).join(' ').toLowerCase();
+
+            const propertyPrice = priceNumber(property);
+            const propertyBeds = Number(property.beds) || 0;
+            const propertyBaths = Number(property.baths) || 0;
+
+            const matchesRef = loweredRef === '' || ref.includes(loweredRef);
+            const matchesCity = selectedCity === 'all' || toText(property.town) === selectedCity;
+            const matchesType = selectedType === 'all' || toText(property.type) === selectedType;
+
+            const matchesSearch = loweredSearch === ''
+                || town.includes(loweredSearch)
+                || province.includes(loweredSearch)
+                || type.includes(loweredSearch)
+                || description.includes(loweredSearch);
+
+            const matchesPrice = maxPrice === 'any'
+                || (Number.isFinite(propertyPrice) && propertyPrice <= Number(maxPrice));
+            const matchesBeds = propertyBeds >= minBeds;
+            const matchesBaths = propertyBaths >= minBaths;
+
+            let matchesPool = true;
+            if (poolFilter !== 'any') {
+                if (poolFilter === 'pool') {
+                    matchesPool = features.includes('pool') || features.includes('swimming');
+                }
+                if (poolFilter === 'private') {
+                    matchesPool = features.includes('private pool')
+                        || (features.includes('pool') && features.includes('private'));
+                }
+                if (poolFilter === 'communal') {
+                    matchesPool = features.includes('communal pool')
+                        || features.includes('community pool')
+                        || features.includes('shared pool');
+                }
+            }
+
+            const matchesParking = parkingFilter !== 'parking'
+                || features.includes('parking')
+                || features.includes('garage')
+                || features.includes('carport');
+
+            return matchesRef
+                && matchesCity
+                && matchesType
+                && matchesSearch
+                && matchesPrice
+                && matchesBeds
+                && matchesBaths
+                && matchesPool
+                && matchesParking;
+        });
+
+        renderProperties();
+        updateMapMarkers();
+    }
+
+    function renderProperties() {
+        if (!propertyGrid || !resultsCount) {
+            return;
+        }
+
+        propertyGrid.innerHTML = '';
+        resultsCount.textContent = String(currentProperties.length);
+
+        if (currentProperties.length === 0) {
+            propertyGrid.innerHTML = '<p style="color:#94a3b8">No properties found for these filters.</p>';
+            return;
+        }
+
+        currentProperties.forEach((property, index) => {
+            const card = document.createElement('div');
+            card.className = 'property-card';
+            card.style.animationDelay = `${(index % 6) * 0.08}s`;
+            card.dataset.propertyId = toText(property.id);
+
+            const imageUrl = Array.isArray(property.images) && property.images.length > 0
+                ? property.images[0]
+                : 'assets/placeholder.png';
+
+            const type = toText(property.type, 'Property');
+            const town = toText(property.town, 'Unknown Area');
+            const province = toText(property.province, 'Alicante');
+            const beds = Number(property.beds) || 0;
+            const baths = Number(property.baths) || 0;
+            const builtArea = builtAreaFor(property);
+
+            card.innerHTML = `
+                <div class="card-img-wrapper">
+                    <img src="${imageUrl}" alt="${type}" loading="lazy" onerror="this.src='assets/placeholder.png'">
+                    <div class="card-badge">${type}</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-ref">${toText(property.ref)}</div>
+                    <h3>${town} Residence</h3>
+                    <div class="location">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        ${town}, ${province}
+                    </div>
+                    <div class="price">${formatPrice(property.price)}</div>
+                    <div class="specs">
+                        <div class="spec-item">Beds ${beds}</div>
+                        <div class="spec-item">Baths ${baths}</div>
+                        <div class="spec-item">Area ${builtArea}m2</div>
+                    </div>
+                </div>
+            `;
+
+            card.addEventListener('click', () => {
+                openPropertyModal(property);
+            });
+
+            card.addEventListener('mouseenter', () => {
+                setMarkerActive(property.id, true);
+            });
+
+            card.addEventListener('mouseleave', () => {
+                setMarkerActive(property.id, false);
+            });
+
+            propertyGrid.appendChild(card);
+            animationObserver.observe(card);
+        });
+    }
+
+    function scrollToProperty(propertyId) {
+        const card = document.querySelector(`[data-property-id="${propertyId}"]`);
+        if (!card) {
+            return;
+        }
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.classList.add('highlighted');
+        window.setTimeout(() => card.classList.remove('highlighted'), 1800);
+    }
+
+    function openPropertyModal(property) {
+        if (!modal || !modalDetails) {
+            return;
+        }
+
+        const images = Array.isArray(property.images) && property.images.length > 0
+            ? property.images
+            : ['assets/placeholder.png'];
+        const features = featuresFor(property);
+
+        currentGalleryImages = images;
+        currentGalleryIndex = 0;
+
+        const type = toText(property.type, 'Property');
+        const reference = toText(property.ref).trim();
+        const town = toText(property.town, 'Unknown Area');
+        const province = toText(property.province, 'Alicante');
+        const description = toText(property.description, 'Property details coming soon.');
+        const beds = Number(property.beds) || 0;
+        const baths = Number(property.baths) || 0;
+        const builtArea = builtAreaFor(property);
+        const propertyLink = buildPropertyLink(reference);
+        const dossierSubject = encodeURIComponent(`Request Dossier - ${reference || `${town} ${type}`}`);
+        const dossierBody = encodeURIComponent(
+            `Hello Spanish Coast Properties,\n\nPlease send me full details for this property.\n\nReference: ${reference || 'N/A'}\nType: ${type}\nLocation: ${town}, ${province}\nPrice: ${formatPrice(property.price)}\nProperty link: ${propertyLink}\n\nThank you.`
+        );
+        const dossierMailto = `mailto:info@spanishcoastproperties.com?subject=${dossierSubject}&body=${dossierBody}`;
+        const descriptionHtml = formatDescriptionHtml(description);
+        updateBrowserRefParam(reference);
+
+        modalDetails.innerHTML = `
+            <div class="modal-body">
+                <div class="modal-info">
+                    <div class="card-badge">${type}</div>
+                    <div class="modal-ref">${reference || 'Ref unavailable'}</div>
+                    <h2>${town} Coastal Sanctuary</h2>
+                    <div class="location">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        ${town}, ${province}
+                    </div>
+                    <div class="price">${formatPrice(property.price)}</div>
+                    <div class="modal-specs">
+                        <div class="modal-spec-item">Beds ${beds}</div>
+                        <div class="modal-spec-item">Baths ${baths}</div>
+                        <div class="modal-spec-item">Area ${builtArea}m2</div>
+                    </div>
+                </div>
+                <div class="modal-gallery">
+                    <div class="gallery-main">
+                        <button class="nav-arrow prev" id="prev-img">❮</button>
+                        <img id="main-gallery-img" src="${images[0]}" alt="Property View" onerror="this.src='assets/placeholder.png'">
+                        <button class="nav-arrow next" id="next-img">❯</button>
+                    </div>
+                    <div class="gallery-thumbs-container">
+                        <button class="thumb-nav prev" id="prev-thumbs">❮</button>
+                        <div class="gallery-thumbs">
+                            ${images.map((img, index) => `
+                                <div class="thumb ${index === 0 ? 'active' : ''}" data-index="${index}">
+                                    <img src="${img}" alt="Thumbnail ${index + 1}" onerror="this.src='assets/placeholder.png'">
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="thumb-nav next" id="next-thumbs">❯</button>
+                    </div>
+                </div>
+                <div class="modal-details-section">
+                    <div class="desc">${descriptionHtml}</div>
+                    <div class="features-list">
+                        <h4>Premium Amenities</h4>
+                        <ul>
+                            ${features.length > 0
+                ? features.map((feature) => `<li>${feature}</li>`).join('')
+                : '<li>Premium finishes throughout</li><li>Advanced climate control</li>'}
+                        </ul>
+                    </div>
+                    <div class="modal-cta">
+                        <a href="tel:+34624867866" class="cta-button">Call Now</a>
+                        <a href="${dossierMailto}" class="cta-button">Request Dossier</a>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+
+        const thumbs = document.querySelectorAll('.thumb');
+        const mainImg = document.getElementById('main-gallery-img');
+        const prevImgBtn = document.getElementById('prev-img');
+        const nextImgBtn = document.getElementById('next-img');
+        const prevThumbsBtn = document.getElementById('prev-thumbs');
+        const nextThumbsBtn = document.getElementById('next-thumbs');
+        const thumbsList = document.querySelector('.gallery-thumbs');
+
+        function updateGallery(index) {
+            if (!mainImg || !thumbs.length || !currentGalleryImages.length) {
+                return;
+            }
+            currentGalleryIndex = (index + currentGalleryImages.length) % currentGalleryImages.length;
+            mainImg.src = currentGalleryImages[currentGalleryIndex];
+            thumbs.forEach((thumb) => thumb.classList.remove('active'));
+            if (thumbs[currentGalleryIndex]) {
+                thumbs[currentGalleryIndex].classList.add('active');
+                thumbs[currentGalleryIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+        }
+
+        thumbs.forEach((thumb) => {
+            thumb.addEventListener('click', () => {
+                updateGallery(Number(thumb.dataset.index));
+            });
+        });
+
+        if (prevImgBtn) {
+            prevImgBtn.addEventListener('click', (event) => {
+                event.stopPropagation();
+                updateGallery(currentGalleryIndex - 1);
+            });
+        }
+
+        if (nextImgBtn) {
+            nextImgBtn.addEventListener('click', (event) => {
+                event.stopPropagation();
+                updateGallery(currentGalleryIndex + 1);
+            });
+        }
+
+        if (prevThumbsBtn && thumbsList) {
+            prevThumbsBtn.addEventListener('click', () => {
+                thumbsList.scrollLeft -= 150;
+            });
+        }
+
+        if (nextThumbsBtn && thumbsList) {
+            nextThumbsBtn.addEventListener('click', () => {
+                thumbsList.scrollLeft += 150;
+            });
+        }
+
+        if (mainImg && lightbox && lightboxImg) {
+            mainImg.addEventListener('click', () => {
+                lightboxImg.src = mainImg.src;
+                lightbox.style.display = 'flex';
+            });
+        }
+    }
+
+    function generateCityButtons() {
+        if (!cityButtonsContainer) {
+            return;
+        }
+
+        const towns = [...new Set(allProperties
+            .map((property) => toText(property.town).trim())
+            .filter(Boolean))].sort((a, b) => a.localeCompare(b));
+
+        cityButtonsContainer.innerHTML = '';
+        populateCityGroups(towns);
+
+        const buttonConfig = [{ value: 'all', label: 'All Destinations' }]
+            .concat(towns.map((town) => ({ value: town, label: town })));
+
+        buttonConfig.forEach(({ value, label }) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = `city-btn ${selectedCity === value ? 'active' : ''}`;
+            button.textContent = label;
+            button.dataset.city = value;
+
+            button.addEventListener('click', () => {
+                selectCity(value);
+            });
+
+            cityButtonsContainer.appendChild(button);
+        });
+
+        updateActiveCityButton(selectedCity);
+        filterCityButtons(citySearchInput ? citySearchInput.value : '');
+    }
+
+    function createMarkerIcon(price) {
+        if (typeof L === 'undefined' || typeof L.divIcon !== 'function') {
+            return undefined;
+        }
+
+        return L.divIcon({
+            className: 'marker-container',
+            html: `<div class="branded-marker">${formatMarkerPrice(price)}</div>`,
+            iconSize: [76, 28],
+            iconAnchor: [38, 14]
+        });
+    }
+
+    function initMap() {
+        if (typeof L === 'undefined') {
+            return;
+        }
+
+        const mapElement = document.getElementById('map');
+        if (!mapElement) {
+            return;
+        }
+
+        map = L.map(mapElement, {
+            zoomControl: true,
+            scrollWheelZoom: true
+        }).setView([37.98, -0.69], 9);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        markersGroup = typeof L.markerClusterGroup === 'function'
+            ? L.markerClusterGroup()
+            : L.layerGroup();
+
+        markersGroup.addTo(map);
+    }
+
+    function updateMapMarkers() {
+        if (!map || !markersGroup || typeof L === 'undefined') {
+            return;
+        }
+
+        if (typeof markersGroup.clearLayers === 'function') {
+            markersGroup.clearLayers();
+        }
+
+        markerMap.clear();
+
+        const bounds = [];
+
+        currentProperties.forEach((property) => {
+            const latitude = Number(property.latitude);
+            const longitude = Number(property.longitude);
+            if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+                return;
+            }
+
+            const marker = L.marker([latitude, longitude], {
+                icon: createMarkerIcon(property.price),
+                title: toText(property.ref, toText(property.town, 'Property'))
+            });
+
+            marker.on('click', () => {
+                scrollToProperty(property.id);
+                openPropertyModal(property);
+            });
+
+            markerMap.set(property.id, marker);
+            markersGroup.addLayer(marker);
+            bounds.push([latitude, longitude]);
+        });
+
+        if (bounds.length > 0) {
+            map.fitBounds(bounds, {
+                padding: [24, 24],
+                maxZoom: 13
+            });
+        }
+    }
+
+    // --- Event Listeners ---
+    if (refSearchInput) {
+        refSearchInput.addEventListener('input', (event) => {
+            refQuery = toText(event.target.value).trim();
+            filterProperties();
+        });
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', (event) => {
+            searchQuery = toText(event.target.value).trim();
+            filterProperties();
+        });
+    }
+
+    if (citySearchInput) {
+        citySearchInput.addEventListener('input', (event) => {
+            filterCityButtons(event.target.value);
+        });
+    }
+
+    if (cityGroupSelect) {
+        cityGroupSelect.addEventListener('change', (event) => {
+            const selectedValue = toText(event.target.value, 'all');
+            if (citySearchInput) {
+                citySearchInput.value = '';
+            }
+            filterCityButtons('');
+            selectCity(selectedValue || 'all');
+        });
+    }
+
+    if (applyBtn) {
+        applyBtn.addEventListener('click', () => {
+            selectedType = typeFilter ? typeFilter.value : 'all';
+            maxPrice = priceFilter ? priceFilter.value : 'any';
+            minBeds = bedsFilter ? Number(bedsFilter.value) || 0 : 0;
+            minBaths = bathsFilter ? Number(bathsFilter.value) || 0 : 0;
+            poolFilter = poolFilterEl ? poolFilterEl.value : 'any';
+            parkingFilter = parkingFilterEl ? parkingFilterEl.value : 'any';
+            filterProperties();
+        });
+    }
+
+    if (toggleMapBtn && mapSection) {
+        toggleMapBtn.addEventListener('click', () => {
+            mapSection.classList.toggle('active');
+            const mapIsOpen = mapSection.classList.contains('active');
+            toggleMapBtn.textContent = mapIsOpen ? '📋 List' : '🗺️ Map';
+
+            if (map && typeof map.invalidateSize === 'function') {
+                window.setTimeout(() => map.invalidateSize(), 240);
+            }
+        });
+    }
+
+    if (mainLogoImg) {
+        mainLogoImg.addEventListener('click', () => {
+            selectedCity = 'all';
+            selectedType = 'all';
+            searchQuery = '';
+            refQuery = '';
+            maxPrice = 'any';
+            minBeds = 0;
+            minBaths = 0;
+            poolFilter = 'any';
+            parkingFilter = 'any';
+
+            if (refSearchInput) refSearchInput.value = '';
+            if (searchInput) searchInput.value = '';
+            if (typeFilter) typeFilter.value = 'all';
+            if (priceFilter) priceFilter.value = 'any';
+            if (bedsFilter) bedsFilter.value = '0';
+            if (bathsFilter) bathsFilter.value = '0';
+            if (poolFilterEl) poolFilterEl.value = 'any';
+            if (parkingFilterEl) parkingFilterEl.value = 'any';
+
+            const cityButtons = cityButtonsContainer
+                ? cityButtonsContainer.querySelectorAll('.city-btn')
+                : [];
+            cityButtons.forEach((button) => {
+                button.classList.toggle('active', button.dataset.city === 'all');
+            });
+
+            if (citySearchInput) {
+                citySearchInput.value = '';
+            }
+            if (cityGroupSelect) {
+                cityGroupSelect.value = 'all';
+            }
+            filterCityButtons('');
+            updateBrowserRefParam('');
+            filterProperties();
+        });
+    }
+
+    if (closeModal && modal) {
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+    }
+
+    if (closeLightbox && lightbox) {
+        closeLightbox.addEventListener('click', () => {
+            lightbox.style.display = 'none';
+        });
+    }
+
+    window.addEventListener('click', (event) => {
+        if (modal && event.target === modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        if (lightbox && event.target === lightbox) {
+            lightbox.style.display = 'none';
+        }
+    });
+
+    const mesh = document.querySelector('.bg-mesh');
+    document.addEventListener('mousemove', (event) => {
+        if (!mesh) {
+            return;
+        }
+
+        const x = event.clientX / window.innerWidth;
+        const y = event.clientY / window.innerHeight;
+        mesh.style.transform = `translate(${x * 20}px, ${y * 20}px) scale(1.1)`;
+    });
+
+    // --- Initialization ---
+    initMap();
+    generateCityButtons();
+    filterProperties();
+    applyRefFromUrl();
+});
