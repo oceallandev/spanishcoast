@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { value: 'quesada', label: 'Quesada' }
     ];
     const EARTH_RADIUS_KM = 6371;
+    const numberFormat = new Intl.NumberFormat('en-IE', { maximumFractionDigits: 0 });
 
     function toRadians(value) {
         return value * (Math.PI / 180);
@@ -155,6 +156,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function builtAreaFor(property) {
         const built = Number(property && property.surface_area && property.surface_area.built);
         return Number.isFinite(built) ? built : 0;
+    }
+
+    function idKey(value) {
+        return toText(value).trim();
+    }
+
+    function cssEscape(value) {
+        const text = toText(value);
+        if (window.CSS && typeof window.CSS.escape === 'function') {
+            return window.CSS.escape(text);
+        }
+        // Fallback for simple ids.
+        return text.replace(/"/g, '\\"');
     }
 
     function featuresFor(property) {
@@ -519,15 +533,49 @@ document.addEventListener('DOMContentLoaded', () => {
         return true;
     }
 
-    function setMarkerActive(propertyId, isActive) {
-        const marker = markerMap.get(propertyId);
-        if (!marker || typeof marker.getElement !== 'function') {
+    function setCardActive(propertyId, isActive) {
+        const key = idKey(propertyId);
+        if (!key) {
             return;
         }
-        const markerElement = marker.getElement();
+
+        const card = document.querySelector(`[data-property-id="${cssEscape(key)}"]`);
+        if (!card) {
+            return;
+        }
+
+        if (isActive) {
+            document.querySelectorAll('.property-card.linked-active').forEach((item) => {
+                if (item !== card) {
+                    item.classList.remove('linked-active');
+                }
+            });
+        }
+
+        card.classList.toggle('linked-active', isActive);
+    }
+
+    function setMarkerActive(propertyId, isActive) {
+        const marker = markerMap.get(idKey(propertyId));
+        if (!marker) {
+            return;
+        }
+        const markerElement = typeof marker.getElement === 'function'
+            ? marker.getElement()
+            : marker._icon;
         if (markerElement) {
             markerElement.classList.toggle('marker-active', isActive);
         }
+    }
+
+    function eurPerSqmFor(property) {
+        const built = builtAreaFor(property);
+        const price = priceNumber(property);
+        if (!Number.isFinite(price) || price <= 0 || built <= 0) {
+            return null;
+        }
+        const perSqm = Math.round(price / built);
+        return `€${numberFormat.format(perSqm)}/m2`;
     }
 
     function filterProperties() {
@@ -627,7 +675,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.createElement('div');
             card.className = 'property-card';
             card.style.animationDelay = `${(index % 6) * 0.08}s`;
-            card.dataset.propertyId = toText(property.id);
+            const propertyId = idKey(property.id);
+            card.dataset.propertyId = propertyId;
 
             const imageUrl = Array.isArray(property.images) && property.images.length > 0
                 ? property.images[0]
@@ -639,6 +688,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const beds = Number(property.beds) || 0;
             const baths = Number(property.baths) || 0;
             const builtArea = builtAreaFor(property);
+            const eurPerSqm = eurPerSqmFor(property);
 
             card.innerHTML = `
                 <div class="card-img-wrapper">
@@ -657,6 +707,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="spec-item">🛏️ Beds ${beds}</div>
                         <div class="spec-item">🛁 Baths ${baths}</div>
                         <div class="spec-item">📐 Area ${builtArea}m2</div>
+                        ${eurPerSqm ? `<div class="spec-item">📊 ${eurPerSqm}</div>` : ''}
                     </div>
                 </div>
             `;
@@ -666,11 +717,13 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             card.addEventListener('mouseenter', () => {
-                setMarkerActive(property.id, true);
+                setCardActive(propertyId, true);
+                setMarkerActive(propertyId, true);
             });
 
             card.addEventListener('mouseleave', () => {
-                setMarkerActive(property.id, false);
+                setCardActive(propertyId, false);
+                setMarkerActive(propertyId, false);
             });
 
             propertyGrid.appendChild(card);
@@ -709,6 +762,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const beds = Number(property.beds) || 0;
         const baths = Number(property.baths) || 0;
         const builtArea = builtAreaFor(property);
+        const eurPerSqm = eurPerSqmFor(property);
         const propertyLink = buildPropertyLink(reference);
         const dossierSubject = encodeURIComponent(`Request Dossier - ${reference || `${town} ${type}`}`);
         const shareTitle = `${reference || 'Property'} - ${town}, ${province}`;
@@ -741,6 +795,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="modal-spec-item">🛏️ Beds ${beds}</div>
                         <div class="modal-spec-item">🛁 Baths ${baths}</div>
                         <div class="modal-spec-item">📐 Area ${builtArea}m2</div>
+                        ${eurPerSqm ? `<div class="modal-spec-item">📊 ${eurPerSqm}</div>` : ''}
                     </div>
                 </div>
                 <div class="modal-gallery">
@@ -966,6 +1021,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const bounds = [];
 
         currentProperties.forEach((property) => {
+            const propertyId = idKey(property.id);
             const latitude = Number(property.latitude);
             const longitude = Number(property.longitude);
             if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
@@ -982,7 +1038,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 openPropertyModal(property);
             });
 
-            markerMap.set(property.id, marker);
+            marker.on('mouseover', () => {
+                setMarkerActive(propertyId, true);
+                setCardActive(propertyId, true);
+            });
+            marker.on('mouseout', () => {
+                setMarkerActive(propertyId, false);
+                setCardActive(propertyId, false);
+            });
+
+            markerMap.set(propertyId, marker);
             markersGroup.addLayer(marker);
             bounds.push([latitude, longitude]);
         });
