@@ -77,6 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let minBaths = 0;
     let poolFilter = 'any';
     let parkingFilter = 'any';
+    let maxBeachDistanceMeters = 'any';
+    let seaViewFilter = 'any';
     let currentGalleryIndex = 0;
     let currentGalleryImages = [];
     let map;
@@ -113,6 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const bathsFilter = document.getElementById('baths-filter');
     const poolFilterEl = document.getElementById('pool-filter');
     const parkingFilterEl = document.getElementById('parking-filter');
+    const beachFilterEl = document.getElementById('beach-filter');
+    const seaViewFilterEl = document.getElementById('sea-view-filter');
     const applyBtn = document.getElementById('apply-filters');
 
     const toggleMapBtn = document.getElementById('toggle-map-btn');
@@ -362,6 +366,58 @@ document.addEventListener('DOMContentLoaded', () => {
         const normalized = raw.replace(/\./g, '').replace(/,/g, '');
         const number = Number(normalized);
         return Number.isFinite(number) ? number : null;
+    }
+
+    function parseDistanceToMeters(valueText) {
+        const text = toText(valueText).trim();
+        if (!text) return null;
+        const match = text.match(/([\d.,]+)\s*(m|meter|meters|km)\b/i);
+        if (!match) return null;
+        const raw = match[1];
+        const unit = match[2].toLowerCase();
+        const number = Number(raw.replace(/\./g, '').replace(/,/g, '.'));
+        if (!Number.isFinite(number)) return null;
+        if (unit === 'km') return Math.round(number * 1000);
+        return Math.round(number);
+    }
+
+    function beachDistanceMetersFor(property) {
+        const features = featuresFor(property);
+        for (const feature of features) {
+            const text = toText(feature);
+            const m = text.match(/\bBeach\s*:\s*([\d.,]+)\s*Meters?\b/i);
+            if (m) {
+                const number = Number(m[1].replace(/\./g, '').replace(/,/g, ''));
+                if (Number.isFinite(number)) return Math.round(number);
+            }
+        }
+
+        const description = toText(property && property.description);
+        const seaMatch = description.match(/\bDISTANCE\s+TO\s+THE\s+SEA\s*:\s*([^\n\r<]+)\b/i);
+        if (seaMatch) {
+            const meters = parseDistanceToMeters(seaMatch[1]);
+            if (meters !== null) return meters;
+        }
+
+        const alt = description.match(/\b(?:distance\s+to\s+(?:the\s+)?(?:sea|beach))\b[^0-9]{0,20}([\d.,]+\s*(?:m|km))\b/i);
+        if (alt) {
+            const meters = parseDistanceToMeters(alt[1]);
+            if (meters !== null) return meters;
+        }
+
+        return null;
+    }
+
+    function hasSeaView(property) {
+        const featuresText = normalize(featuresFor(property).join(' '));
+        const descText = normalize(property && property.description);
+        const combined = `${featuresText} ${descText}`;
+        return combined.includes('sea view')
+            || combined.includes('sea views')
+            || combined.includes('ocean view')
+            || combined.includes('vistas al mar')
+            || combined.includes('distant sea views')
+            || combined.includes('seaview');
     }
 
     function rentPriceFromDescription(description) {
@@ -899,6 +955,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 || features.includes('garage')
                 || features.includes('carport');
 
+            const maxBeach = maxBeachDistanceMeters === 'any' ? null : Number(maxBeachDistanceMeters);
+            const distanceMeters = maxBeach ? beachDistanceMetersFor(property) : null;
+            const matchesBeach = maxBeach === null
+                || (Number.isFinite(distanceMeters) && distanceMeters <= maxBeach);
+
+            const matchesSeaView = seaViewFilter === 'any'
+                || (seaViewFilter === 'yes' && hasSeaView(property));
+
             const passesCoreFilters = matchesRef
                 && matchesCity
                 && matchesType
@@ -907,7 +971,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 && matchesBeds
                 && matchesBaths
                 && matchesPool
-                && matchesParking;
+                && matchesParking
+                && matchesBeach
+                && matchesSeaView;
 
             if (!passesCoreFilters) {
                 return false;
@@ -1596,9 +1662,11 @@ document.addEventListener('DOMContentLoaded', () => {
         minBaths = bathsFilter ? Number(bathsFilter.value) || 0 : 0;
         poolFilter = poolFilterEl ? poolFilterEl.value : 'any';
         parkingFilter = parkingFilterEl ? parkingFilterEl.value : 'any';
+        maxBeachDistanceMeters = beachFilterEl ? beachFilterEl.value : 'any';
+        seaViewFilter = seaViewFilterEl ? seaViewFilterEl.value : 'any';
     }
 
-    [typeFilter, priceFilter, bedsFilter, bathsFilter, poolFilterEl, parkingFilterEl].forEach((el) => {
+    [typeFilter, priceFilter, bedsFilter, bathsFilter, poolFilterEl, parkingFilterEl, beachFilterEl, seaViewFilterEl].forEach((el) => {
         if (!el) return;
         el.addEventListener('change', () => {
             syncFiltersFromControls();
@@ -1653,6 +1721,8 @@ document.addEventListener('DOMContentLoaded', () => {
             minBaths = 0;
             poolFilter = 'any';
             parkingFilter = 'any';
+            maxBeachDistanceMeters = 'any';
+            seaViewFilter = 'any';
 
             if (refSearchInput) refSearchInput.value = '';
             if (searchInput) searchInput.value = '';
@@ -1662,6 +1732,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (bathsFilter) bathsFilter.value = '0';
             if (poolFilterEl) poolFilterEl.value = 'any';
             if (parkingFilterEl) parkingFilterEl.value = 'any';
+            if (beachFilterEl) beachFilterEl.value = 'any';
+            if (seaViewFilterEl) seaViewFilterEl.value = 'any';
 
             const cityButtons = cityButtonsContainer
                 ? cityButtonsContainer.querySelectorAll('.city-btn')
