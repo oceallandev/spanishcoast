@@ -9,7 +9,7 @@
     --glass-border: rgba(255, 255, 255, 0.05);
     --header-height: 70px;
     /* Compressed */
-    --city-bar-height: 104px;
+    --city-bar-height: 56px;
     /* Compressed */
 }
 
@@ -303,7 +303,7 @@ body {
     border-bottom: 1px solid var(--glass-border);
     z-index: 1000;
     display: flex;
-    align-items: stretch;
+    align-items: center;
     padding: 0 2rem;
 }
 
@@ -311,50 +311,6 @@ body {
     width: 100%;
     max-width: 1800px;
     margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.destinations-toolbar {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.destinations-label {
-    font-size: 0.72rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-main);
-}
-
-#city-search-input,
-#city-group-select {
-    height: 34px;
-    border: 1px solid var(--glass-border);
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.04);
-    color: var(--text-main);
-    font-family: 'Outfit', sans-serif;
-    font-size: 0.85rem;
-    outline: none;
-}
-
-#city-search-input {
-    width: 220px;
-    padding: 0 0.75rem;
-}
-
-#city-group-select {
-    min-width: 220px;
-    padding: 0 0.7rem;
-}
-
-#city-search-input::placeholder {
-    color: var(--text-dim);
 }
 
 .city-chips {
@@ -385,10 +341,6 @@ body {
 .city-btn.active {
     color: white;
     border-bottom-color: white;
-}
-
-.city-btn.hidden {
-    display: none;
 }
 
 /* --- App Layout --- */
@@ -632,10 +584,6 @@ body {
 
 /* Responsive */
 @media (max-width: 1024px) {
-    :root {
-        --city-bar-height: 116px;
-    }
-
     .header-inner {
         padding: 0 1rem;
     }
@@ -647,19 +595,6 @@ body {
 
     .city-bar {
         padding: 0 1rem;
-    }
-
-    .destinations-toolbar {
-        gap: 0.5rem;
-    }
-
-    #city-search-input {
-        width: 45%;
-    }
-
-    #city-group-select {
-        min-width: 0;
-        width: 45%;
     }
 
     .search-pill-container {
@@ -950,14 +885,24 @@ body {
 
 .desc-list {
     margin: 0.1rem 0 0.5rem;
-    padding-left: 1.1rem;
+    list-style: none;
+    padding-left: 0;
     display: grid;
     gap: 0.45rem;
 }
 
 .desc-list li {
+    position: relative;
+    padding-left: 1.4rem;
     color: #cbd5e1;
     line-height: 1.6;
+}
+
+.desc-list li::before {
+    content: "✨";
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 .features-list h4 {

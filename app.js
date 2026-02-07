@@ -1,5 +1,63 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const allProperties = Array.isArray(propertyData) ? propertyData : [];
+    const rawProperties = Array.isArray(propertyData) ? propertyData : [];
+    const TORREVIEJA_COORDS = { lat: 37.978, lon: -0.683 };
+    const MAX_DISTANCE_FROM_TORREVIEJA_KM = 100;
+    const DISPLAY_BOUNDS = {
+        minLat: 37.84,
+        maxLat: 38.13,
+        minLon: -0.8,
+        maxLon: -0.6
+    };
+    const MAIN_DESTINATIONS = [
+        { value: 'all', label: 'All Destinations' },
+        { value: 'torrevieja', label: 'Torrevieja' },
+        { value: 'orihuela-costa', label: 'Orihuela Costa' },
+        { value: 'guardamar', label: 'Guardamar' },
+        { value: 'quesada', label: 'Quesada' }
+    ];
+    const EARTH_RADIUS_KM = 6371;
+
+    function toRadians(value) {
+        return value * (Math.PI / 180);
+    }
+
+    function distanceKm(lat1, lon1, lat2, lon2) {
+        const dLat = toRadians(lat2 - lat1);
+        const dLon = toRadians(lon2 - lon1);
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+            + Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2))
+            * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return EARTH_RADIUS_KM * c;
+    }
+
+    function isPropertyInDisplayArea(property) {
+        const latitude = Number(property && property.latitude);
+        const longitude = Number(property && property.longitude);
+        if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+            return false;
+        }
+
+        const inBounds = latitude >= DISPLAY_BOUNDS.minLat
+            && latitude <= DISPLAY_BOUNDS.maxLat
+            && longitude >= DISPLAY_BOUNDS.minLon
+            && longitude <= DISPLAY_BOUNDS.maxLon;
+
+        if (!inBounds) {
+            return false;
+        }
+
+        const kmFromTorrevieja = distanceKm(
+            latitude,
+            longitude,
+            TORREVIEJA_COORDS.lat,
+            TORREVIEJA_COORDS.lon
+        );
+
+        return kmFromTorrevieja <= MAX_DISTANCE_FROM_TORREVIEJA_KM;
+    }
+
+    const allProperties = rawProperties.filter(isPropertyInDisplayArea);
 
     // --- State Management ---
     let currentProperties = [...allProperties];
@@ -21,8 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- DOM Elements ---
     const propertyGrid = document.getElementById('property-grid');
     const cityButtonsContainer = document.getElementById('city-buttons');
-    const citySearchInput = document.getElementById('city-search-input');
-    const cityGroupSelect = document.getElementById('city-group-select');
     const resultsCount = document.getElementById('results-count');
 
     const refSearchInput = document.getElementById('ref-search');
@@ -131,8 +187,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const compact = line.replace(/[^A-Za-z]/g, '');
         return compact.length > 2
-            && compact.length <= 32
+            && compact.length <= 80
             && line === line.toUpperCase();
+    }
+
+    function headingEmoji(line) {
+        const upperLine = line.toUpperCase();
+        if (upperLine.includes('IMPORTANT')) return '🛠️';
+        if (upperLine.includes('ECONOMY')) return '💶';
+        if (upperLine.includes('AREA')) return '📍';
+        if (upperLine.includes('DETAIL')) return '📌';
+        if (upperLine.includes('INVEST')) return '📈';
+        if (upperLine.includes('SEPARATE')) return '🏡';
+        if (upperLine.includes('OUTDOOR') || upperLine.includes('POOL')) return '🌴';
+        return '✨';
+    }
+
+    function splitSentenceChunks(line) {
+        return line
+            .split(/(?<=[.!?])\s+(?=[A-Z0-9])/)
+            .map((chunk) => chunk.trim())
+            .filter(Boolean);
     }
 
     function formatDescriptionHtml(rawDescription) {
@@ -159,6 +234,10 @@ document.addEventListener('DOMContentLoaded', () => {
             text = text.replace(new RegExp(`\\s*${escaped}\\s*`, 'g'), `\n\n${section}\n`);
         });
 
+        // If a heading is followed immediately by a sentence without whitespace,
+        // insert a newline so heading detection can pick it up.
+        text = text.replace(/([A-Z][A-Z0-9\\s\\-]{12,})([A-Z][a-z])/g, '$1\n$2');
+
         text = text
             .replace(/([.!?])([A-Z])/g, '$1\n$2')
             .replace(/([a-z0-9])([A-Z][a-z])/g, '$1 $2')
@@ -183,9 +262,17 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         lines.forEach((line) => {
+            if (line.includes('|') && (line.match(/\|/g) || []).length >= 2 && line.length < 200) {
+                const parts = line.split('|').map((part) => part.trim()).filter(Boolean);
+                if (parts.length > 1) {
+                    parts.forEach((part) => listItems.push(`<li>${escapeHtml(part)}</li>`));
+                    return;
+                }
+            }
+
             if (isHeadingLine(line)) {
                 flushList();
-                blocks.push(`<h4 class="desc-heading">${escapeHtml(line)}</h4>`);
+                blocks.push(`<h4 class="desc-heading">${headingEmoji(line)} ${escapeHtml(line)}</h4>`);
                 return;
             }
 
@@ -199,6 +286,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (/^[A-Za-z][^:]{1,40}:/.test(line) && line.length < 120) {
                 listItems.push(`<li>${escapeHtml(line)}</li>`);
+                return;
+            }
+
+            const sentenceChunks = splitSentenceChunks(line);
+            if (line.length > 180 && sentenceChunks.length >= 3) {
+                sentenceChunks.forEach((chunk) => {
+                    listItems.push(`<li>${escapeHtml(chunk)}</li>`);
+                });
                 return;
             }
 
@@ -263,65 +358,36 @@ document.addEventListener('DOMContentLoaded', () => {
     function selectCity(value) {
         selectedCity = value;
         updateActiveCityButton(value);
-
-        if (cityGroupSelect) {
-            cityGroupSelect.value = value;
-        }
-
         filterProperties();
     }
 
-    function filterCityButtons(query) {
-        if (!cityButtonsContainer) {
-            return;
+    function matchesDestination(property, destinationKey) {
+        const town = normalize(property.town);
+        if (destinationKey === 'all') {
+            return true;
         }
-
-        const normalizedQuery = toText(query).trim().toLowerCase();
-        const allButtons = cityButtonsContainer.querySelectorAll('.city-btn');
-        allButtons.forEach((button) => {
-            const cityValue = toText(button.dataset.city);
-            const isAllOption = cityValue === 'all';
-            const matchesQuery = isAllOption || normalizedQuery === '' || cityValue.toLowerCase().includes(normalizedQuery);
-            button.classList.toggle('hidden', !matchesQuery);
-        });
-    }
-
-    function populateCityGroups(towns) {
-        if (!cityGroupSelect) {
-            return;
+        if (destinationKey === 'torrevieja') {
+            return town === 'torrevieja';
         }
-
-        const grouped = towns.reduce((acc, town) => {
-            const initial = town.charAt(0).toUpperCase();
-            const group = /[A-Z]/.test(initial) ? initial : '#';
-            if (!acc[group]) {
-                acc[group] = [];
-            }
-            acc[group].push(town);
-            return acc;
-        }, {});
-
-        const groupOrder = Object.keys(grouped).sort((a, b) => a.localeCompare(b));
-        cityGroupSelect.innerHTML = '';
-
-        const allOption = document.createElement('option');
-        allOption.value = 'all';
-        allOption.textContent = 'All Destinations';
-        cityGroupSelect.appendChild(allOption);
-
-        groupOrder.forEach((groupLabel) => {
-            const group = document.createElement('optgroup');
-            group.label = groupLabel;
-            grouped[groupLabel].forEach((town) => {
-                const option = document.createElement('option');
-                option.value = town;
-                option.textContent = town;
-                group.appendChild(option);
-            });
-            cityGroupSelect.appendChild(group);
-        });
-
-        cityGroupSelect.value = selectedCity;
+        if (destinationKey === 'orihuela-costa') {
+            return [
+                'orihuela costa',
+                'campoamor',
+                'mil palmeras',
+                'punta prima',
+                'playa flamenca',
+                'la zenia',
+                'villamartin',
+                'dehesa de campoamor'
+            ].includes(town);
+        }
+        if (destinationKey === 'guardamar') {
+            return town.includes('guardamar');
+        }
+        if (destinationKey === 'quesada') {
+            return town === 'ciudad quesada' || town === 'rojales';
+        }
+        return true;
     }
 
     function setMarkerActive(propertyId, isActive) {
@@ -352,7 +418,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const propertyBaths = Number(property.baths) || 0;
 
             const matchesRef = loweredRef === '' || ref.includes(loweredRef);
-            const matchesCity = selectedCity === 'all' || toText(property.town) === selectedCity;
+            const matchesCity = matchesDestination(property, selectedCity);
             const matchesType = selectedType === 'all' || toText(property.type) === selectedType;
 
             const matchesSearch = loweredSearch === ''
@@ -446,9 +512,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="price">${formatPrice(property.price)}</div>
                     <div class="specs">
-                        <div class="spec-item">Beds ${beds}</div>
-                        <div class="spec-item">Baths ${baths}</div>
-                        <div class="spec-item">Area ${builtArea}m2</div>
+                        <div class="spec-item">🛏️ Beds ${beds}</div>
+                        <div class="spec-item">🛁 Baths ${baths}</div>
+                        <div class="spec-item">📐 Area ${builtArea}m2</div>
                     </div>
                 </div>
             `;
@@ -522,9 +588,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="price">${formatPrice(property.price)}</div>
                     <div class="modal-specs">
-                        <div class="modal-spec-item">Beds ${beds}</div>
-                        <div class="modal-spec-item">Baths ${baths}</div>
-                        <div class="modal-spec-item">Area ${builtArea}m2</div>
+                        <div class="modal-spec-item">🛏️ Beds ${beds}</div>
+                        <div class="modal-spec-item">🛁 Baths ${baths}</div>
+                        <div class="modal-spec-item">📐 Area ${builtArea}m2</div>
                     </div>
                 </div>
                 <div class="modal-gallery">
@@ -632,17 +698,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const towns = [...new Set(allProperties
-            .map((property) => toText(property.town).trim())
-            .filter(Boolean))].sort((a, b) => a.localeCompare(b));
-
         cityButtonsContainer.innerHTML = '';
-        populateCityGroups(towns);
-
-        const buttonConfig = [{ value: 'all', label: 'All Destinations' }]
-            .concat(towns.map((town) => ({ value: town, label: town })));
-
-        buttonConfig.forEach(({ value, label }) => {
+        MAIN_DESTINATIONS.forEach(({ value, label }) => {
             const button = document.createElement('button');
             button.type = 'button';
             button.className = `city-btn ${selectedCity === value ? 'active' : ''}`;
@@ -657,7 +714,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         updateActiveCityButton(selectedCity);
-        filterCityButtons(citySearchInput ? citySearchInput.value : '');
     }
 
     function createMarkerIcon(price) {
@@ -758,23 +814,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (citySearchInput) {
-        citySearchInput.addEventListener('input', (event) => {
-            filterCityButtons(event.target.value);
-        });
-    }
-
-    if (cityGroupSelect) {
-        cityGroupSelect.addEventListener('change', (event) => {
-            const selectedValue = toText(event.target.value, 'all');
-            if (citySearchInput) {
-                citySearchInput.value = '';
-            }
-            filterCityButtons('');
-            selectCity(selectedValue || 'all');
-        });
-    }
-
     if (applyBtn) {
         applyBtn.addEventListener('click', () => {
             selectedType = typeFilter ? typeFilter.value : 'all';
@@ -827,13 +866,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 button.classList.toggle('active', button.dataset.city === 'all');
             });
 
-            if (citySearchInput) {
-                citySearchInput.value = '';
-            }
-            if (cityGroupSelect) {
-                cityGroupSelect.value = 'all';
-            }
-            filterCityButtons('');
             updateBrowserRefParam('');
             filterProperties();
         });
