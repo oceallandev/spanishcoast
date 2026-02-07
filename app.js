@@ -80,6 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const markerMap = new Map();
     let propertiesInitialized = false;
     let activeSection = 'home';
+    let miniMap = null;
+    let miniMapMarker = null;
 
     // --- DOM Elements ---
     const homeSection = document.getElementById('home-section');
@@ -817,6 +819,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
                 <div class="modal-details-section">
+                    <div class="mini-map-card">
+                        <div class="mini-map-head">
+                            <h4>📍 Location</h4>
+                            <a class="mini-map-link" href="https://www.google.com/maps?q=${Number(property.latitude)},${Number(property.longitude)}" target="_blank" rel="noopener">Open in Google Maps</a>
+                        </div>
+                        <div id="property-mini-map" class="mini-map"></div>
+                        <div class="mini-map-note">Quick view of the area. Zoom in to explore nearby beaches, golf, and amenities.</div>
+                    </div>
                     <div class="desc">${descriptionHtml}</div>
                     <div class="features-list">
                         <h4>Premium Amenities</h4>
@@ -844,6 +854,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
+
+        const miniMapContainer = document.getElementById('property-mini-map');
+        if (miniMapContainer && typeof L !== 'undefined') {
+            const latitude = Number(property.latitude);
+            const longitude = Number(property.longitude);
+            const canRender = Number.isFinite(latitude) && Number.isFinite(longitude);
+
+            if (miniMap) {
+                miniMap.remove();
+                miniMap = null;
+                miniMapMarker = null;
+            }
+
+            if (canRender) {
+                miniMap = L.map(miniMapContainer, {
+                    zoomControl: true,
+                    scrollWheelZoom: false,
+                    dragging: true,
+                    attributionControl: false
+                }).setView([latitude, longitude], 14);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19
+                }).addTo(miniMap);
+
+                miniMapMarker = L.marker([latitude, longitude]).addTo(miniMap);
+                window.setTimeout(() => miniMap.invalidateSize(), 250);
+            } else {
+                miniMapContainer.innerHTML = '<div style="padding:14px;color:#94a3b8">Map unavailable for this listing.</div>';
+            }
+        }
 
         const shareNativeBtn = modalDetails.querySelector('[data-share="native"]');
         const shareCopyBtn = modalDetails.querySelector('[data-share="copy"]');
@@ -1070,6 +1111,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const next = !searchPill.classList.contains('advanced-open');
             searchPill.classList.toggle('advanced-open', next);
             toggleAdvancedBtn.setAttribute('aria-expanded', next ? 'true' : 'false');
+            toggleAdvancedBtn.textContent = next ? 'Less' : 'More';
         });
     }
 
