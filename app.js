@@ -82,6 +82,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeSection = 'home';
     let miniMap = null;
     let miniMapMarker = null;
+    let renderLimit = 60;
+    const RENDER_BATCH = 60;
+    let mapDirty = true;
+    let filterTimer = null;
 
     // --- DOM Elements ---
     const homeSection = document.getElementById('home-section');
@@ -732,8 +736,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 && matchesParking;
         });
 
+        renderLimit = 60;
         renderProperties();
-        updateMapMarkers();
+        mapDirty = true;
+        if (isMapVisible()) {
+            updateMapMarkers();
+            mapDirty = false;
+        }
+    }
+
+    function scheduleFilter(delayMs = 180) {
+        if (filterTimer) {
+            window.clearTimeout(filterTimer);
+        }
+        filterTimer = window.setTimeout(() => {
+            filterProperties();
+            filterTimer = null;
+        }, delayMs);
     }
 
     function renderProperties() {
@@ -749,7 +768,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        currentProperties.forEach((property, index) => {
+        const visible = currentProperties.slice(0, Math.min(renderLimit, currentProperties.length));
+        visible.forEach((property, index) => {
             const card = document.createElement('div');
             card.className = 'property-card';
             card.style.animationDelay = `${(index % 6) * 0.08}s`;
@@ -809,6 +829,18 @@ document.addEventListener('DOMContentLoaded', () => {
             propertyGrid.appendChild(card);
             animationObserver.observe(card);
         });
+
+        if (currentProperties.length > visible.length) {
+            const loadMore = document.createElement('button');
+            loadMore.type = 'button';
+            loadMore.className = 'load-more-btn';
+            loadMore.textContent = `Load more (${visible.length} / ${currentProperties.length})`;
+            loadMore.addEventListener('click', () => {
+                renderLimit = Math.min(currentProperties.length, renderLimit + RENDER_BATCH);
+                renderProperties();
+            });
+            propertyGrid.appendChild(loadMore);
+        }
     }
 
     function scrollToProperty(propertyId) {
@@ -1126,6 +1158,17 @@ document.addEventListener('DOMContentLoaded', () => {
         markersGroup.addTo(map);
     }
 
+    function isMapVisible() {
+        if (!mapSection) {
+            return false;
+        }
+        const isMobile = window.matchMedia && window.matchMedia('(max-width: 1024px)').matches;
+        if (isMobile) {
+            return mapSection.classList.contains('active');
+        }
+        return true;
+    }
+
     function updateMapMarkers() {
         if (!map || !markersGroup || typeof L === 'undefined') {
             return;
@@ -1241,14 +1284,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (refSearchInput) {
         refSearchInput.addEventListener('input', (event) => {
             refQuery = toText(event.target.value).trim();
-            filterProperties();
+            scheduleFilter();
         });
     }
 
     if (searchInput) {
         searchInput.addEventListener('input', (event) => {
             searchQuery = toText(event.target.value).trim();
-            filterProperties();
+            scheduleFilter();
         });
     }
 
@@ -1285,13 +1328,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             mapSection.classList.toggle('active');
             const mapIsOpen = mapSection.classList.contains('active');
+            document.body.classList.toggle('map-open', mapIsOpen);
             toggleMapBtn.textContent = mapIsOpen ? '📋 List' : '🗺️ Map';
 
             if (map && typeof map.invalidateSize === 'function') {
                 window.setTimeout(() => {
                     map.invalidateSize();
-                    // Cluster/layout recalculation after size change.
-                    updateMapMarkers();
+                    if (mapIsOpen && mapDirty) {
+                        updateMapMarkers();
+                        mapDirty = false;
+                    }
                 }, 240);
             }
         });

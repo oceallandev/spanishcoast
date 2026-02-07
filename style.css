@@ -1055,6 +1055,25 @@ body.filters-open .filters-backdrop {
     font-size: 0.85rem;
 }
 
+.load-more-btn {
+    width: 100%;
+    margin-top: 1.1rem;
+    padding: 1rem 1.1rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(248, 250, 252, 0.92);
+    font-weight: 900;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.load-more-btn:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(14, 165, 233, 0.22);
+}
+
 .property-card.linked-active {
     transform: scale(1.01);
     box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.55), 0 28px 80px rgba(0, 0, 0, 0.55);
@@ -1298,6 +1317,16 @@ body.filters-open .filters-backdrop {
         width: 100%;
         height: 100%;
         z-index: 50;
+    }
+}
+
+@media (max-width: 1024px) {
+    body.map-open .city-bar {
+        display: none;
+    }
+
+    body.map-open #filters-bar {
+        display: none;
     }
 }
 
