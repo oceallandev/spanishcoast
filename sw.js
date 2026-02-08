@@ -1,5 +1,5 @@
 /* Minimal same-origin service worker for instant repeat loads on mobile WebKit/Android. */
-const CACHE_NAME = 'scp-cache-20260208c';
+const CACHE_NAME = 'scp-cache-20260208d';
 
 const PRECACHE_PATHS = [
   './',
@@ -102,4 +102,3 @@ self.addEventListener('fetch', (event) => {
     return cached || (await fetchPromise) || new Response('', { status: 504 });
   })());
 });
-

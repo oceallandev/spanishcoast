@@ -98,6 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const RENDER_BATCH = 60;
     let mapDirty = true;
     let filterTimer = null;
+    let loadMoreObserver = null;
+    let loadingMore = false;
+    let renderSequence = 0;
+    const renderedPropertyIds = new Set();
 
     // --- DOM Elements ---
     const homeSection = document.getElementById('home-section');
@@ -1000,7 +1004,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         renderLimit = 60;
-        renderProperties();
+        renderProperties({ reset: true });
         mapDirty = true;
         if (isMapVisible()) {
             updateMapMarkers();
@@ -1018,12 +1022,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }, delayMs);
     }
 
-    function renderProperties() {
+    function renderProperties({ reset = false } = {}) {
         if (!propertyGrid || !resultsCount) {
             return;
         }
 
-        propertyGrid.innerHTML = '';
+        if (reset) {
+            propertyGrid.innerHTML = '';
+            renderedPropertyIds.clear();
+            renderSequence = 0;
+            loadingMore = false;
+            if (loadMoreObserver) {
+                try {
+                    loadMoreObserver.disconnect();
+                } catch (error) {
+                    // ignore
+                }
+                loadMoreObserver = null;
+            }
+        }
         resultsCount.textContent = String(currentProperties.length);
 
         if (currentProperties.length === 0) {
@@ -1044,12 +1061,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const sorted = sortProperties(currentProperties);
         const visible = sorted.slice(0, Math.min(renderLimit, sorted.length));
-        visible.forEach((property, index) => {
+
+        // Remove any prior load-more control before appending cards.
+        const existingLoadMore = propertyGrid.querySelector('.load-more-btn');
+        if (existingLoadMore) {
+            existingLoadMore.remove();
+        }
+
+        visible.forEach((property) => {
+            const pid = propertyIdFor(property);
+            if (!pid) {
+                return;
+            }
+            if (renderedPropertyIds.has(pid)) {
+                return;
+            }
             const card = document.createElement('div');
             card.className = 'property-card';
-            card.style.animationDelay = `${(index % 6) * 0.08}s`;
-            const propertyId = idKey(property.id);
-            card.dataset.propertyId = propertyId;
+            card.style.animationDelay = `${(renderSequence % 6) * 0.08}s`;
+            renderSequence += 1;
+            card.dataset.propertyId = pid;
             card.setAttribute('role', 'button');
             card.setAttribute('tabindex', '0');
 
@@ -1093,7 +1124,6 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
 
             card.addEventListener('click', () => {
-                const pid = propertyIdFor(property);
                 if (pid && imageOkCache.get(pid) === false) {
                     return;
                 }
@@ -1121,17 +1151,18 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             card.addEventListener('mouseenter', () => {
-                setCardActive(propertyId, true);
-                setMarkerActive(propertyId, true);
+                setCardActive(pid, true);
+                setMarkerActive(pid, true);
             });
 
             card.addEventListener('mouseleave', () => {
-                setCardActive(propertyId, false);
-                setMarkerActive(propertyId, false);
+                setCardActive(pid, false);
+                setMarkerActive(pid, false);
             });
 
             propertyGrid.appendChild(card);
             animationObserver.observe(card);
+            renderedPropertyIds.add(pid);
         });
 
         if (sorted.length > visible.length) {
@@ -1140,10 +1171,38 @@ document.addEventListener('DOMContentLoaded', () => {
             loadMore.className = 'load-more-btn';
             loadMore.textContent = `Load more (${visible.length} / ${sorted.length})`;
             loadMore.addEventListener('click', () => {
+                if (loadingMore) return;
+                loadingMore = true;
                 renderLimit = Math.min(sorted.length, renderLimit + RENDER_BATCH);
-                renderProperties();
+                renderProperties({ reset: false });
+                loadingMore = false;
             });
             propertyGrid.appendChild(loadMore);
+
+            // Auto-load on scroll for mobile-first UX, but keep the button for accessibility.
+            if (typeof IntersectionObserver !== 'undefined') {
+                if (!loadMoreObserver) {
+                    loadMoreObserver = new IntersectionObserver((entries) => {
+                        entries.forEach((entry) => {
+                            if (!entry.isIntersecting) return;
+                            if (loadingMore) return;
+                            // Avoid hammering the main thread; defer to next frame.
+                            window.requestAnimationFrame(() => loadMore.click());
+                        });
+                    }, { rootMargin: '600px 0px' });
+                }
+                try {
+                    loadMoreObserver.observe(loadMore);
+                } catch (error) {
+                    // ignore
+                }
+            }
+        } else if (loadMoreObserver) {
+            try {
+                loadMoreObserver.disconnect();
+            } catch (error) {
+                // ignore
+            }
         }
     }
 
@@ -1740,7 +1799,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sortFilterEl.addEventListener('change', (event) => {
             sortMode = toText(event.target.value, 'featured') || 'featured';
             renderLimit = 60;
-            renderProperties();
+            renderProperties({ reset: true });
         });
     }
 
@@ -1880,15 +1939,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const mesh = document.querySelector('.bg-mesh');
-    document.addEventListener('mousemove', (event) => {
-        if (!mesh) {
-            return;
-        }
-
-        const x = event.clientX / window.innerWidth;
-        const y = event.clientY / window.innerHeight;
-        mesh.style.transform = `translate(${x * 20}px, ${y * 20}px) scale(1.1)`;
-    });
+    const prefersReducedMotion = typeof window.matchMedia === 'function'
+        ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        : false;
+    const hasFinePointer = typeof window.matchMedia === 'function'
+        ? window.matchMedia('(pointer: fine)').matches
+        : false;
+    if (mesh && !prefersReducedMotion && hasFinePointer) {
+        document.addEventListener('mousemove', (event) => {
+            const x = event.clientX / window.innerWidth;
+            const y = event.clientY / window.innerHeight;
+            mesh.style.transform = `translate(${x * 20}px, ${y * 20}px) scale(1.1)`;
+        }, { passive: true });
+    }
 
     // --- Initialization ---
     renderCatalogs();
