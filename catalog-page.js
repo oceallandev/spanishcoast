@@ -6,6 +6,7 @@
   const businessTypeFilter = document.getElementById('business-type-filter');
   const businessCountEl = document.getElementById('business-count');
   const businessMapToggleBtn = document.getElementById('business-map-toggle');
+  const businessHeaderMapToggleBtn = document.getElementById('toggle-map-btn');
   const businessMapWrap = document.getElementById('business-map-wrap');
   const businessMapCountEl = document.getElementById('business-map-count');
   const businessMapEl = document.getElementById('business-map');
@@ -36,6 +37,15 @@
     if (!Number.isFinite(n) || n <= 0) return 'Price on request';
     const num = new Intl.NumberFormat('en-IE', { maximumFractionDigits: 0 }).format(n);
     return currency === 'EUR' ? `€${num}` : `${num} ${currency}`;
+  };
+
+  const formatPriceCompact = (price, currency = 'EUR') => {
+    const n = Number(price);
+    if (!Number.isFinite(n) || n <= 0) return '';
+    if (currency !== 'EUR') return formatPrice(price, currency);
+    if (n >= 1_000_000) return `€${(n / 1_000_000).toFixed(1).replace(/\\.0$/, '')}M`;
+    if (n >= 10_000) return `€${Math.round(n / 1000)}k`;
+    return `€${new Intl.NumberFormat('en-IE', { maximumFractionDigits: 0 }).format(n)}`;
   };
 
   const businessCard = (b) => {
@@ -121,7 +131,25 @@
       const ref = toText(b.ref).trim();
       const label = toText(b.businessType || b.title || 'Business');
       const price = formatPrice(b.price, b.currency);
-      const marker = window.L.marker([lat, lon]);
+      const priceCompact = formatPriceCompact(b.price, b.currency);
+      const tag = `${label}${priceCompact ? ` · ${priceCompact}` : ''}`;
+
+      const icon = window.L.divIcon({
+        className: 'biz-marker-icon',
+        html: `
+          <div class="biz-marker">
+            <div class="biz-marker-pin">
+              <img class="biz-marker-logo" src="assets/header-logo.png" alt="">
+            </div>
+            <div class="biz-marker-tag">${esc(tag)}</div>
+          </div>
+        `,
+        iconSize: [44, 44],
+        iconAnchor: [22, 44],
+        popupAnchor: [0, -44]
+      });
+
+      const marker = window.L.marker([lat, lon], { icon });
       marker.bindPopup(`<strong>${esc(label)}</strong><br>${esc(ref)}<br>${esc(price)}`);
       marker.on('click', () => {
         if (ref) window.location.href = `properties.html?ref=${encodeURIComponent(ref)}`;
@@ -140,9 +168,10 @@
   };
 
   const setBusinessMapMode = (next) => {
-    if (!businessMapWrap || !businessMapToggleBtn) return;
+    if (!businessMapWrap) return;
     businessMapWrap.hidden = !next;
-    businessMapToggleBtn.textContent = next ? 'List' : 'Map';
+    if (businessMapToggleBtn) businessMapToggleBtn.textContent = next ? 'List' : 'Map';
+    if (businessHeaderMapToggleBtn) businessHeaderMapToggleBtn.textContent = next ? 'List' : 'Map';
     if (next) {
       // Leaflet needs a layout pass when a hidden container becomes visible.
       setTimeout(() => {
@@ -194,7 +223,11 @@
     const renderBusinesses = () => {
       const kind = businessKindFilter ? toText(businessKindFilter.value, 'all') : 'all';
       const type = businessTypeFilter ? toText(businessTypeFilter.value, 'all') : 'all';
-      const filteredByKind = kind === 'all' ? merged : merged.filter((b) => toText(b.kind, 'business') === kind);
+      // Treat "business" and "traspaso" as the same operation for most users; keep internal "kind"
+      // but do not force filtering by it unless the old select exists.
+      const filteredByKind = businessKindFilter
+        ? (kind === 'all' ? merged : merged.filter((b) => toText(b.kind, 'business') === kind))
+        : merged;
       const filtered = type === 'all'
         ? filteredByKind
         : filteredByKind.filter((b) => norm(b.businessType || b.title) === norm(type));
@@ -224,20 +257,32 @@
       hydrateBusinessTypeOptions();
       businessTypeFilter.addEventListener('change', renderBusinesses);
     }
-    if (businessMapToggleBtn) {
-      businessMapToggleBtn.addEventListener('click', () => {
-        const next = !!businessMapWrap && businessMapWrap.hidden;
-        setBusinessMapMode(next);
-        if (next) {
-          // Ensure the map is rendered with current results.
-          renderBusinesses();
-        }
-      });
-    }
+	    if (businessMapToggleBtn) {
+	      businessMapToggleBtn.addEventListener('click', () => {
+	        const next = !!businessMapWrap && businessMapWrap.hidden;
+	        setBusinessMapMode(next);
+	        if (next) {
+	          // Ensure the map is rendered with current results.
+	          renderBusinesses();
+	        }
+	      });
+	    }
+	    if (businessHeaderMapToggleBtn) {
+	      businessHeaderMapToggleBtn.addEventListener('click', () => {
+	        const next = !!businessMapWrap && businessMapWrap.hidden;
+	        setBusinessMapMode(next);
+	        if (next) {
+	          renderBusinesses();
+	        }
+	      });
+	    }
 
-    setBusinessMapMode(false);
-    renderBusinesses();
-  }
+	    // Desktop: show the map by default so users immediately see it exists.
+	    // Mobile: keep list-first (map is available via the header toggle).
+	    const openByDefault = window.matchMedia && window.matchMedia('(min-width: 1024px)').matches;
+	    setBusinessMapMode(!!openByDefault);
+	    renderBusinesses();
+	  }
 
   if (vehicleGrid) {
     if (vehicleItems.length === 0) {

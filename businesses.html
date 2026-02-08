@@ -18,9 +18,9 @@
     <meta property="og:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
 
     <meta name="theme-color" content="#030712">
-    <link rel="manifest" href="manifest.webmanifest?v=20260208j">
+    <link rel="manifest" href="manifest.webmanifest?v=20260208l">
 
-    <link rel="stylesheet" href="style.css?v=20260208j">
+    <link rel="stylesheet" href="style.css?v=20260208l">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -55,12 +55,13 @@
                 </nav>
             </div>
 
-            <div class="header-right">
-                <button id="mobile-menu-btn" class="mobile-menu-btn" type="button" aria-expanded="false" aria-label="Menu">☰</button>
-                <a class="header-cta" href="tel:+34624867866">Call</a>
-            </div>
-        </div>
-    </header>
+	            <div class="header-right">
+	                <button id="mobile-menu-btn" class="mobile-menu-btn" type="button" aria-expanded="false" aria-label="Menu">☰</button>
+	                <a class="header-cta" href="tel:+34624867866">Call</a>
+	                <button id="toggle-map-btn" class="toggle-map-btn" type="button" aria-label="Toggle map">Map</button>
+	            </div>
+	        </div>
+	    </header>
 
     <div id="mobile-menu-backdrop" class="mobile-menu-backdrop" aria-hidden="true"></div>
     <aside id="mobile-menu" class="mobile-menu" aria-hidden="true">
@@ -83,8 +84,8 @@
 
     <main class="site-main" id="site-main">
         <section class="page-section catalog-section active" id="businesses-section" aria-label="Businesses">
-            <div class="catalog-hero">
-                <h2>Businesses for Sale</h2>
+	            <div class="catalog-hero">
+	                <h2>Businesses for Sale</h2>
                 <p>
                     Explore business opportunities across Costa Blanca South. We support your transaction with contracts,
                     documentation changes, and practical next steps after purchase.
@@ -93,23 +94,21 @@
                     Perfect for entrepreneurs relocating to Spain, investors looking for proven cash-flow, or owners who
                     want a clean exit. We focus on clarity: what is included, what transfers, and what the next step is.
                 </p>
-                <div class="service-tags">
-                    <span class="tag">Buy & Sell</span>
-                    <span class="tag">Management</span>
-                    <span class="tag">Legal Advice</span>
-                    <span class="tag">Contracts</span>
-                    <span class="tag">Documentation</span>
-                </div>
-            </div>
+	                <div class="service-tags" aria-label="Business services">
+	                    <a class="tag" href="business-buy-sell.html">Buy & Sell</a>
+	                    <a class="tag" href="business-management.html">Management</a>
+	                    <a class="tag" href="business-legal-advice.html">Legal Advice</a>
+	                    <a class="tag" href="business-contracts.html">Contracts</a>
+	                    <a class="tag" href="business-documentation.html">Documentation</a>
+	                </div>
+	            </div>
             <div class="catalog-controls glass" aria-label="Business filters">
                 <div class="catalog-controls-left">
                     <div class="results-sort">
-                        <label for="business-kind-filter">Deal</label>
-                        <select id="business-kind-filter">
-                            <option value="all">All</option>
-                            <option value="business">Business</option>
-                            <option value="traspaso">Traspaso</option>
-                        </select>
+                        <label>Deal</label>
+                        <div style="color: rgba(248, 250, 252, 0.92); font-weight: 900; padding: 0.75rem 0.9rem; border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.04);">
+                            Business for sale / Traspaso
+                        </div>
                     </div>
                     <div class="results-sort">
                         <label for="business-type-filter">Business Type</label>
@@ -132,27 +131,40 @@
                 </div>
                 <div id="business-map" class="catalog-map" role="application" aria-label="Businesses map"></div>
             </section>
-            <div class="catalog-hero">
-                <h3>How We Help</h3>
-                <div class="service-tags">
-                    <span class="tag">Screen listings</span>
-                    <span class="tag">Verify key info</span>
-                    <span class="tag">Coordinate lawyers</span>
-                    <span class="tag">Contract review</span>
-                    <span class="tag">Documentation changes</span>
-                </div>
+	            <div class="catalog-hero">
+	                <h3>How We Help</h3>
+	                <div class="service-tags" aria-label="How we help">
+	                    <a class="tag" href="help-screen-listings.html">Screen listings</a>
+	                    <a class="tag" href="help-verify-key-info.html">Verify key info</a>
+	                    <a class="tag" href="help-coordinate-lawyers.html">Coordinate lawyers</a>
+	                    <a class="tag" href="help-contract-review.html">Contract review</a>
+	                    <a class="tag" href="help-documentation-changes.html">Documentation changes</a>
+	                </div>
                 <p style="margin-top:0.8rem">
                     Want a shortlist? Email your budget, preferred area, and sector.
                 </p>
-                <div class="simple-cta">
-                    <a class="cta-button" href="mailto:info@spanishcoastproperties.com?subject=Business%20Inquiry%20-%20Shortlist">Email</a>
-                    <a class="cta-button" href="services.html#business-services">See services</a>
-                    <a class="cta-button"
-                        href="mailto:info@spanishcoastproperties.com?subject=I%20want%20to%20sell%20my%20business&body=Hi%20Spanish%20Coast%20Properties%2C%0A%0AI%20want%20to%20sell%20my%20business.%20Here%20are%20the%20details%3A%0A-%20Business%20type%3A%0A-%20Location%3A%0A-%20Asking%20price%3A%0A-%20Lease%20%2F%20Freehold%3A%0A-%20Reason%20for%20sale%3A%0A-%20Phone%3A%0A%0AThank%20you%21">I want to sell my business</a>
-                </div>
-            </div>
-            <div class="catalog-grid" id="business-grid"></div>
-        </section>
+	                <div class="simple-cta">
+	                    <a class="cta-button" href="mailto:info@spanishcoastproperties.com?subject=Business%20Inquiry%20-%20Shortlist">Email</a>
+	                    <a class="cta-button" href="services.html#business-services">See services</a>
+	                    <a class="cta-button"
+	                        href="mailto:info@spanishcoastproperties.com?subject=I%20want%20to%20sell%20my%20business&body=Hi%20Spanish%20Coast%20Properties%2C%0A%0AI%20want%20to%20sell%20my%20business.%20Here%20are%20the%20details%3A%0A-%20Business%20type%3A%0A-%20Location%3A%0A-%20Asking%20price%3A%0A-%20Lease%20%2F%20Freehold%3A%0A-%20Reason%20for%20sale%3A%0A-%20Phone%3A%0A%0AThank%20you%21">I want to sell my business</a>
+	                </div>
+	            </div>
+
+	            <div class="catalog-hero">
+	                <h3>Work With Us (Verified Collaborators)</h3>
+	                <p>
+	                    Are you an agent, broker, lawyer, or local operator who wants to collaborate? We onboard verified partners
+	                    and can import your XML feed so your listings look consistent and professional inside our app.
+	                </p>
+	                <div class="simple-cta">
+	                    <a class="cta-button" href="collaborate.html">Collaboration options</a>
+	                    <a class="cta-button"
+	                        href="mailto:info@spanishcoastproperties.com?subject=Collaboration%20Request%20-%20Spanish%20Coast%20Properties&body=Hi%20Spanish%20Coast%20Properties%2C%0A%0AI%20would%20like%20to%20collaborate.%0A%0ACompany%20name%3A%0AService%20(type)%3A%0AArea%3A%0AWebsite%3A%0AFeed%20URL%20(if%20any)%3A%0AContact%20name%3A%0APhone%3A%0A%0AThank%20you!">Email us</a>
+	                </div>
+	            </div>
+	            <div class="catalog-grid" id="business-grid"></div>
+	        </section>
     </main>
 
     <footer class="site-footer">
@@ -182,10 +194,10 @@
         <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
     </footer>
 
-    <script defer src="catalog.js?v=20260208j"></script>
-    <script defer src="businesses-data.js?v=20260208j"></script>
-    <script defer src="catalog-page.js?v=20260208j"></script>
-    <script defer src="site.js?v=20260208j"></script>
+    <script defer src="catalog.js?v=20260208l"></script>
+    <script defer src="businesses-data.js?v=20260208l"></script>
+    <script defer src="catalog-page.js?v=20260208l"></script>
+    <script defer src="site.js?v=20260208l"></script>
 </body>
 
 </html>

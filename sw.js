@@ -1,13 +1,25 @@
 /* Minimal same-origin service worker for instant repeat loads on mobile WebKit/Android. */
-const CACHE_NAME = 'scp-cache-20260208j';
+const CACHE_NAME = 'scp-cache-20260208l';
 
 const PRECACHE_PATHS = [
   './',
   './index.html',
   './properties.html',
   './businesses.html',
+  './business-buy-sell.html',
+  './business-management.html',
+  './business-legal-advice.html',
+  './business-contracts.html',
+  './business-documentation.html',
+  './help-screen-listings.html',
+  './help-verify-key-info.html',
+  './help-coordinate-lawyers.html',
+  './help-contract-review.html',
+  './help-documentation-changes.html',
+  './collaborate.html',
   './vehicles.html',
   './services.html',
+  './agents.html',
   './style.css',
   './site.js',
   './catalog.js',

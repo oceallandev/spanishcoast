@@ -83,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let parkingFilter = 'any';
     let maxBeachDistanceMeters = 'any';
     let seaViewFilter = 'any';
+    let operationMode = 'any'; // any | sale | rent_longterm | rent_vacation | new_build | invest
     let sortMode = 'featured';
     let currentGalleryIndex = 0;
     let currentGalleryImages = [];
@@ -124,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const refSearchInput = document.getElementById('ref-search');
     const searchInput = document.getElementById('search');
     const typeFilter = document.getElementById('type-filter');
+    const dealFilterEl = document.getElementById('deal-filter');
     const priceFilter = document.getElementById('price-filter');
     const bedsFilter = document.getElementById('beds-filter');
     const bathsFilter = document.getElementById('baths-filter');
@@ -158,6 +160,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const filtersBackdrop = document.getElementById('filters-backdrop');
     const footerYear = document.getElementById('footer-year');
     let filtersBarResizeTimer = null;
+    let uiCollapsed = false;
+    let uiScrollEl = null;
+
+    function setBodyOverflow(mode) {
+        // Properties page uses a fixed app-layout with its own scroll container;
+        // do not toggle body scrolling or the footer will "peek" into view.
+        if (document.body && document.body.dataset.section === 'properties') {
+            document.body.style.overflow = '';
+            return;
+        }
+        document.body.style.overflow = mode;
+    }
 
     function syncFiltersBarHeight() {
         if (!filtersBar) return;
@@ -171,6 +185,28 @@ document.addEventListener('DOMContentLoaded', () => {
         if (height > 0) {
             document.documentElement.style.setProperty('--filters-bar-height', `${height}px`);
         }
+    }
+
+    function syncViewportHeightVar() {
+        document.documentElement.style.setProperty('--app-vh', `${window.innerHeight}px`);
+    }
+
+    function setUiCollapsed(next) {
+        if (activeSection !== 'properties') return;
+        if (uiCollapsed === next) return;
+        uiCollapsed = next;
+        document.body.classList.toggle('ui-collapsed', next);
+        if (next && searchPill) {
+            // Ensure the collapsed state never keeps an expanded filter row.
+            searchPill.classList.remove('advanced-open');
+            if (toggleAdvancedBtn) {
+                toggleAdvancedBtn.setAttribute('aria-expanded', 'false');
+                toggleAdvancedBtn.textContent = 'More';
+            }
+        }
+        requestAnimationFrame(() => {
+            syncFiltersBarHeight();
+        });
     }
 
     const animationObserver = 'IntersectionObserver' in window
@@ -427,6 +463,83 @@ document.addEventListener('DOMContentLoaded', () => {
         return rentPrice ? 'rent' : 'sale';
     }
 
+    function rentPeriodFor(property) {
+        const text = normalize(property && property.description);
+        if (!text) return 'month';
+        if (text.includes('per night') || text.includes('/night') || text.includes('nightly')) return 'night';
+        if (text.includes('per day') || text.includes('/day') || text.includes('daily')) return 'day';
+        if (text.includes('per week') || text.includes('/week') || text.includes('weekly')) return 'week';
+        // Spanish hints
+        if (text.includes('alquiler vacacional') || text.includes('licencia turistica') || text.includes('turistic')) return 'week';
+        if (text.includes('larga temporada') || text.includes('long term')) return 'month';
+        return 'month';
+    }
+
+    function isVacationRental(property) {
+        const text = normalize(property && property.description);
+        return text.includes('vacation rental')
+            || text.includes('holiday rental')
+            || text.includes('short term')
+            || text.includes('short-term')
+            || text.includes('airbnb')
+            || text.includes('alquiler vacacional')
+            || text.includes('licencia turistica')
+            || text.includes('tourist license')
+            || rentPeriodFor(property) === 'night'
+            || rentPeriodFor(property) === 'day'
+            || rentPeriodFor(property) === 'week';
+    }
+
+    function isLongTermRental(property) {
+        const text = normalize(property && property.description);
+        if (!text) return false;
+        if (text.includes('long term') || text.includes('long-term') || text.includes('larga temporada')) return true;
+        // monthly rent phrasing usually implies long-term
+        if (text.includes('monthly rent')) return true;
+        // If it's rent but not vacation signals, treat as long-term
+        return listingModeFor(property) === 'rent' && !isVacationRental(property);
+    }
+
+    function isNewBuild(property) {
+        const text = normalize(property && property.description);
+        return text.includes('new build')
+            || text.includes('newbuild')
+            || text.includes('off plan')
+            || text.includes('off-plan')
+            || text.includes('key ready')
+            || text.includes('residential complex')
+            || text.includes('developer')
+            || text.includes('obra nueva')
+            || text.includes('promotor');
+    }
+
+    function isInvestmentDeal(property) {
+        const typeNorm = normalize(property && property.type);
+        const text = normalize(property && property.description);
+        if (typeNorm.includes('land') || typeNorm.includes('plot') || typeNorm.includes('parcel')) return true;
+        return text.includes('investment')
+            || text.includes('investor')
+            || text.includes('roi')
+            || text.includes('yield')
+            || text.includes('hotel')
+            || text.includes('hostel')
+            || text.includes('opportunity to build')
+            || text.includes('build your')
+            || text.includes('building plot')
+            || text.includes('plot')
+            || text.includes('land');
+    }
+
+    function operationFor(property) {
+        const mode = listingModeFor(property); // sale | rent
+        if (mode === 'rent') {
+            return isVacationRental(property) ? 'rent_vacation' : 'rent_longterm';
+        }
+        if (isNewBuild(property)) return 'new_build';
+        if (isInvestmentDeal(property)) return 'invest';
+        return 'sale';
+    }
+
     function listingPriceNumber(property) {
         const salePrice = Number(property && property.price);
         if (Number.isFinite(salePrice) && salePrice > 0) {
@@ -444,6 +557,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const formatted = formatPrice(number);
         if (mode === 'rent') {
+            const period = rentPeriodFor(property);
+            if (period === 'night') return `${formatted} / night`;
+            if (period === 'day') return `${formatted} / day`;
+            if (period === 'week') return `${formatted} / week`;
             return `${formatted} / month`;
         }
         return formatted;
@@ -456,10 +573,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return mode === 'rent' ? 'Rent' : 'N/A';
         }
         if (mode === 'rent') {
+            const period = rentPeriodFor(property);
+            const suffix = period === 'night' ? '/nt' : period === 'day' ? '/dy' : period === 'week' ? '/wk' : '/mo';
             if (number >= 1000) {
-                return `${(number / 1000).toFixed(1).replace('.0', '')}k/mo`;
+                return `${(number / 1000).toFixed(1).replace('.0', '')}k${suffix}`;
             }
-            return `${Math.round(number)}€/mo`;
+            return `${Math.round(number)}€${suffix}`;
         }
         return formatMarkerPrice(number);
     }
@@ -680,6 +799,7 @@ document.addEventListener('DOMContentLoaded', () => {
         initMap();
         generateCityButtons();
         filterProperties();
+        applyOperationFromUrl();
         applyRefFromUrl();
         propertiesInitialized = true;
     }
@@ -778,6 +898,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 openPropertyModal(exactMatch, { syncUrl: false });
             }
         }
+    }
+
+    function applyOperationFromUrl() {
+        const op = toText(new URLSearchParams(window.location.search).get('op')).trim();
+        if (!op) return;
+        const allowed = new Set(['any', 'sale', 'rent_longterm', 'rent_vacation', 'new_build', 'invest']);
+        if (!allowed.has(op)) return;
+        operationMode = op;
+        if (dealFilterEl) {
+            dealFilterEl.value = op;
+        }
+        filterProperties();
     }
 
     function updateActiveCityButton(selectedValue) {
@@ -994,9 +1126,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const matchesSeaView = seaViewFilter === 'any'
                 || (seaViewFilter === 'yes' && hasSeaView(property));
 
+            const op = operationFor(property);
+            const matchesOperation = operationMode === 'any' || op === operationMode;
+
             const passesCoreFilters = matchesRef
                 && matchesCity
                 && matchesType
+                && matchesOperation
                 && matchesSearch
                 && matchesPrice
                 && matchesBeds
@@ -1284,6 +1420,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const telegramShare = `https://t.me/share/url?url=${shareUrl}&text=${shareText}`;
         const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
         const linkedInShare = `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`;
+        const xShare = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTitle)}&url=${shareUrl}`;
         const dossierBody = encodeURIComponent(
             `Hello Spanish Coast Properties,\n\nI would like to request a visit for this property.\n\nReference: ${reference || 'N/A'}\nType: ${type}\nLocation: ${town}, ${province}\nPrice: ${formatListingPrice(property)}\nProperty link: ${propertyLink}\n\nPreferred dates/times:\n1) \n2) \n\nThank you.`
         );
@@ -1365,6 +1502,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="share-row" aria-label="Share">
                         <button type="button" class="share-btn" data-share="native">📲 Share</button>
                         <button type="button" class="share-btn" data-share="copy">📋 Copy link</button>
+                        <button type="button" class="share-btn" data-share="instagram">📸 Instagram</button>
+                        <button type="button" class="share-btn" data-share="tiktok">🎵 TikTok</button>
+                        <a class="share-btn" href="${xShare}" target="_blank" rel="noopener">𝕏 X</a>
                         <a class="share-btn share-btn--warn" href="${reportMailto}">🚩 Report issue</a>
                         <a class="share-btn" href="${whatsappShare}" target="_blank" rel="noopener">💬 WhatsApp</a>
                         <a class="share-btn" href="${telegramShare}" target="_blank" rel="noopener">✈️ Telegram</a>
@@ -1377,7 +1517,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modal.style.display = 'block';
         preModalScrollY = window.scrollY || 0;
-        document.body.style.overflow = 'hidden';
+        setBodyOverflow('hidden');
 
         const miniMapContainer = document.getElementById('property-mini-map');
         if (miniMapContainer && typeof L !== 'undefined') {
@@ -1412,6 +1552,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const shareNativeBtn = modalDetails.querySelector('[data-share="native"]');
         const shareCopyBtn = modalDetails.querySelector('[data-share="copy"]');
+        const shareInstagramBtn = modalDetails.querySelector('[data-share="instagram"]');
+        const shareTiktokBtn = modalDetails.querySelector('[data-share="tiktok"]');
 
         if (shareNativeBtn) {
             shareNativeBtn.addEventListener('click', async () => {
@@ -1428,6 +1570,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }
+
+        const shareToSocialApp = (btn, appName) => {
+            if (!btn) return;
+            btn.addEventListener('click', async () => {
+                if (navigator.share) {
+                    try {
+                        await navigator.share({ title: shareTitle, text: shareTextRaw, url: propertyLink });
+                        return;
+                    } catch (error) {
+                        // Fall through to copy.
+                    }
+                }
+                if (shareCopyBtn) {
+                    shareCopyBtn.click();
+                }
+                const original = btn.textContent;
+                btn.textContent = `✅ Copied. Open ${appName}`;
+                window.setTimeout(() => {
+                    btn.textContent = original;
+                }, 1800);
+            });
+        };
+
+        shareToSocialApp(shareInstagramBtn, 'Instagram');
+        shareToSocialApp(shareTiktokBtn, 'TikTok');
 
         if (shareCopyBtn) {
             shareCopyBtn.addEventListener('click', async () => {
@@ -1466,7 +1633,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     markListingImagesBroken(property);
                     modal.style.display = 'none';
-                    document.body.style.overflow = 'auto';
+                    setBodyOverflow('auto');
                 }
             });
         }
@@ -1563,7 +1730,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lightbox.style.display = 'flex';
         setLightboxImage(index);
         // Keep scrolling stable.
-        document.body.style.overflow = 'hidden';
+        setBodyOverflow('hidden');
     }
 
     function closeLightboxModal() {
@@ -1571,7 +1738,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lightbox.style.display = 'none';
         // Restore body scrolling unless property modal is still open.
         if (!isModalOpen()) {
-            document.body.style.overflow = 'auto';
+            setBodyOverflow('auto');
         }
         lightboxTouchStartX = null;
         lightboxTouchStartY = null;
@@ -1592,7 +1759,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isModalOpen()) return;
 
         modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
+        setBodyOverflow('auto');
         // Keep the list position stable after closing (especially on mobile Safari).
         window.setTimeout(() => {
             try {
@@ -1755,13 +1922,17 @@ document.addEventListener('DOMContentLoaded', () => {
         footerYear.textContent = String(new Date().getFullYear());
     }
 
+    syncViewportHeightVar();
     syncFiltersBarHeight();
 
     window.addEventListener('resize', () => {
         if (filtersBarResizeTimer) {
             clearTimeout(filtersBarResizeTimer);
         }
-        filtersBarResizeTimer = setTimeout(syncFiltersBarHeight, 60);
+        filtersBarResizeTimer = setTimeout(() => {
+            syncViewportHeightVar();
+            syncFiltersBarHeight();
+        }, 60);
     });
 
     if (toggleAdvancedBtn && searchPill) {
@@ -1780,6 +1951,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const openFilters = () => {
         if (activeSection !== 'properties') return;
+        setUiCollapsed(false);
         // If map view is open on mobile, close it first. Otherwise the backdrop can appear without the filters.
         if (mapSection && mapSection.classList.contains('active')) {
             mapSection.classList.remove('active');
@@ -1811,6 +1983,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (filtersBackdrop) {
         filtersBackdrop.addEventListener('click', closeFilters);
+    }
+
+    // Auto-collapse top UI on scroll so the results fill the screen.
+    if (propertiesSection) {
+        uiScrollEl = propertiesSection.querySelector('.content-section');
+        if (uiScrollEl) {
+            uiScrollEl.addEventListener('scroll', () => {
+                // Avoid thrash: only toggle after a small threshold.
+                setUiCollapsed(uiScrollEl.scrollTop > 48);
+            }, { passive: true });
+        }
     }
 
     // Navigation is handled by real links now (separate pages). Keep SPA fallback for
@@ -1893,6 +2076,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function syncFiltersFromControls() {
         selectedType = typeFilter ? typeFilter.value : 'all';
+        operationMode = dealFilterEl ? toText(dealFilterEl.value, 'any') : 'any';
         if (!priceFilter) {
             maxPrice = 'any';
         } else {
@@ -1919,12 +2103,14 @@ document.addEventListener('DOMContentLoaded', () => {
         parkingFilter = 'any';
         maxBeachDistanceMeters = 'any';
         seaViewFilter = 'any';
+        operationMode = 'any';
         sortMode = 'featured';
         autoRefFromUrl = '';
 
         if (refSearchInput) refSearchInput.value = '';
         if (searchInput) searchInput.value = '';
         if (typeFilter) typeFilter.value = 'all';
+        if (dealFilterEl) dealFilterEl.value = 'any';
         if (priceFilter) priceFilter.value = '';
         if (bedsFilter) bedsFilter.value = '0';
         if (bathsFilter) bathsFilter.value = '0';
@@ -1948,7 +2134,7 @@ document.addEventListener('DOMContentLoaded', () => {
         filterProperties();
     }
 
-    [typeFilter, priceFilter, bedsFilter, bathsFilter, poolFilterEl, parkingFilterEl, beachFilterEl, seaViewFilterEl].forEach((el) => {
+    [typeFilter, dealFilterEl, priceFilter, bedsFilter, bathsFilter, poolFilterEl, parkingFilterEl, beachFilterEl, seaViewFilterEl].forEach((el) => {
         if (!el) return;
         el.addEventListener('change', () => {
             syncFiltersFromControls();
@@ -1961,6 +2147,11 @@ document.addEventListener('DOMContentLoaded', () => {
             syncFiltersFromControls();
             filterProperties();
             closeFilters();
+            if (uiScrollEl) {
+                // Keep user focus on results after a search.
+                uiScrollEl.scrollTop = 0;
+            }
+            setUiCollapsed(true);
         });
     }
 
@@ -1972,6 +2163,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (toggleMapBtn && mapSection) {
         toggleMapBtn.addEventListener('click', () => {
+            setUiCollapsed(false);
             // Ensure map reflects the current filter controls (even if user didn't press Apply).
             syncFiltersFromControls();
             filterProperties();

@@ -15,6 +15,7 @@
     /* Compressed */
     --shadow-soft: 0 22px 80px rgba(0, 0, 0, 0.45);
     --shadow-card: 0 16px 60px rgba(0, 0, 0, 0.35);
+    --app-vh: 100vh;
 }
 
 * {
@@ -32,6 +33,11 @@ body {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+body[data-section="properties"] {
+    /* Prevent the body from scrolling behind the app layout (avoids footer peeking in). */
+    overflow: hidden;
 }
 
 .site-main {
@@ -302,7 +308,6 @@ body[data-section="properties"] .search-pill-container {
 }
 
 body[data-section="home"] #toggle-map-btn,
-body[data-section="businesses"] #toggle-map-btn,
 body[data-section="vehicles"] #toggle-map-btn {
     display: none;
 }
@@ -457,6 +462,18 @@ body[data-section="vehicles"] .open-filters-btn {
     color: rgba(248, 250, 252, 0.9);
 }
 
+a.tag {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+a.tag:hover {
+    border-color: rgba(14, 165, 233, 0.25);
+    color: rgba(248, 250, 252, 0.98);
+    transform: translateY(-1px);
+}
+
 .home-footer {
     margin-top: 1.3rem;
     padding: 1.4rem;
@@ -589,6 +606,48 @@ body[data-section="vehicles"] .open-filters-btn {
 
 .catalog-map .leaflet-control-attribution {
     display: none;
+}
+
+.biz-marker {
+    position: relative;
+    transform: translateY(-6px);
+}
+
+.biz-marker-pin {
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: rgba(3, 7, 18, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 18px 70px rgba(0, 0, 0, 0.55);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+}
+
+.biz-marker-logo {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
+.biz-marker-tag {
+    position: absolute;
+    top: 46px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    padding: 0.35rem 0.5rem;
+    border-radius: 999px;
+    background: rgba(3, 7, 18, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(248, 250, 252, 0.94);
+    font-weight: 900;
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    max-width: 240px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .business-card-link {
@@ -927,6 +986,7 @@ body.menu-open .mobile-menu {
     padding: 0.55rem 1.2rem;
     align-items: center;
     z-index: 2300;
+    transition: transform 0.22s ease, opacity 0.22s ease;
 }
 
 .search-pill {
@@ -1310,6 +1370,7 @@ body.filters-open .filters-backdrop {
     display: flex;
     align-items: center;
     padding: 0 2rem;
+    transition: transform 0.22s ease, opacity 0.22s ease;
 }
 
 .city-bar-inner {
@@ -1352,7 +1413,28 @@ body.filters-open .filters-backdrop {
 .app-layout {
     display: flex;
     margin-top: calc(var(--header-height) + var(--filters-bar-height) + var(--city-bar-height));
-    height: calc(100vh - var(--header-height) - var(--filters-bar-height) - var(--city-bar-height));
+    height: calc(var(--app-vh, 100vh) - var(--header-height) - var(--filters-bar-height) - var(--city-bar-height));
+}
+
+body[data-section="properties"] .site-footer {
+    display: none;
+}
+
+body[data-section="properties"].ui-collapsed {
+    --filters-bar-height: 0px;
+    --city-bar-height: 0px;
+}
+
+body[data-section="properties"].ui-collapsed #filters-bar {
+    transform: translateY(-120%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+body[data-section="properties"].ui-collapsed .city-bar {
+    transform: translateY(-120%);
+    opacity: 0;
+    pointer-events: none;
 }
 
 .content-section {
@@ -1622,7 +1704,7 @@ body[data-section="properties"].map-open .map-section {
     left: 0;
     right: 0;
     width: 100%;
-    height: calc(100vh - var(--header-height));
+    height: calc(var(--app-vh, 100vh) - var(--header-height));
     z-index: 2600;
     border-left: 0;
     box-shadow: 0 40px 140px rgba(0, 0, 0, 0.65);
@@ -1946,7 +2028,7 @@ body[data-section="properties"].map-open .map-section {
         position: fixed;
         top: var(--header-height);
         width: 100%;
-        height: calc(100vh - var(--header-height));
+        height: calc(var(--app-vh, 100vh) - var(--header-height));
         z-index: 50;
     }
 
@@ -1957,7 +2039,7 @@ body[data-section="properties"].map-open .map-section {
 
     .app-layout {
         margin-top: calc(var(--header-height) + var(--city-bar-height));
-        height: calc(100vh - var(--header-height) - var(--city-bar-height));
+        height: calc(var(--app-vh, 100vh) - var(--header-height) - var(--city-bar-height));
     }
 }
 
