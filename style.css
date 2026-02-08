@@ -252,6 +252,30 @@ body {
     box-shadow: 0 6px 20px rgba(14, 165, 233, 0.5);
 }
 
+@media (max-width: 520px) {
+    .header-inner {
+        gap: 0.75rem;
+    }
+
+    .header-left,
+    .header-right {
+        gap: 0.75rem;
+    }
+
+    /* Override the desktop padding so the Map/List button never clips in portrait. */
+    .toggle-map-btn {
+        height: 40px;
+        min-width: 60px;
+        padding: 0 0.7rem;
+        font-size: 0.85rem;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+    }
+}
+
 body[data-section="home"] .search-pill-container,
 body[data-section="businesses"] .search-pill-container,
 body[data-section="vehicles"] .search-pill-container {

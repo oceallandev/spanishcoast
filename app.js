@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeSection = 'home';
     let miniMap = null;
     let miniMapMarker = null;
+    let preModalScrollY = 0;
     let renderLimit = 60;
     const RENDER_BATCH = 60;
     let mapDirty = true;
@@ -1278,6 +1279,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         modal.style.display = 'block';
+        preModalScrollY = window.scrollY || 0;
         document.body.style.overflow = 'hidden';
 
         const miniMapContainer = document.getElementById('property-mini-map');
@@ -1446,6 +1448,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modal.style.display = 'none';
         document.body.style.overflow = 'auto';
+        // Keep the list position stable after closing (especially on mobile Safari).
+        window.setTimeout(() => {
+            try {
+                window.scrollTo(0, preModalScrollY || 0);
+            } catch (error) {
+                // ignore
+            }
+        }, 0);
 
         if (syncUrl) {
             // If modal was opened via pushState (state.modalRef), go back one entry. Otherwise just clear ref.
@@ -1661,7 +1671,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const url = new URL(window.location.href);
         const ref = toText(url.searchParams.get('ref')).trim();
         const section = toText(url.searchParams.get('section')).trim();
-        const next = ref ? 'properties' : (section || 'home');
+        const path = toText(window.location.pathname).toLowerCase();
+        const inferredSection = path.endsWith('properties.html')
+            ? 'properties'
+            : path.endsWith('businesses.html')
+                ? 'businesses'
+                : path.endsWith('vehicles.html')
+                    ? 'vehicles'
+                    : path.endsWith('services.html')
+                        ? 'services'
+                        : 'home';
+        const next = ref ? 'properties' : (section || inferredSection || 'home');
         setActiveSection(next, { pushUrl: false });
 
         if (next !== 'properties') {
@@ -1896,4 +1916,78 @@ document.addEventListener('DOMContentLoaded', () => {
     const startSection = initialRef ? 'properties' : (initialSection || inferredSection || 'home');
 
     setActiveSection(startSection, { pushUrl: false });
+
+    // Lightweight in-browser smoke tester for mobile/webviews.
+    // Run via `properties.html?qa=1` (or add `&qa=1`).
+    if (initialUrl.searchParams.get('qa') === '1') {
+        setActiveSection('properties', { pushUrl: false });
+        ensurePropertiesInitialized();
+
+        const qaPanel = document.createElement('div');
+        qaPanel.style.cssText = [
+            'position:fixed',
+            'right:12px',
+            'bottom:12px',
+            'z-index:99999',
+            'max-width:340px',
+            'font:12px/1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
+            'color:#e2e8f0',
+            'background:rgba(2,6,23,0.92)',
+            'border:1px solid rgba(148,163,184,0.25)',
+            'border-radius:12px',
+            'padding:10px 12px',
+            'box-shadow:0 20px 70px rgba(0,0,0,0.45)'
+        ].join(';');
+        qaPanel.innerHTML = '<div style="font-weight:800;margin-bottom:6px">SCP Smoke Test</div>';
+        document.body.appendChild(qaPanel);
+
+        const qaLine = (ok, msg) => {
+            const row = document.createElement('div');
+            row.textContent = `${ok ? 'PASS' : 'FAIL'}: ${msg}`;
+            row.style.cssText = `margin:2px 0;color:${ok ? '#86efac' : '#fca5a5'}`;
+            qaPanel.appendChild(row);
+        };
+
+        const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
+
+        (async () => {
+            try {
+                qaLine(Boolean(toggleMapBtn), 'Map/List toggle exists');
+                if (toggleMapBtn) {
+                    const rect = toggleMapBtn.getBoundingClientRect();
+                    qaLine(rect.left >= 0 && rect.right <= window.innerWidth, 'Map/List toggle fits viewport');
+                }
+
+                openFilters();
+                await sleep(100);
+                qaLine(document.body.classList.contains('filters-open'), 'Filters open');
+                closeFilters();
+                await sleep(50);
+                qaLine(!document.body.classList.contains('filters-open'), 'Filters close');
+
+                filterProperties();
+                await sleep(180);
+                const first = currentProperties.find((p) => {
+                    const pid = propertyIdFor(p);
+                    return imageUrlsFor(p).length > 0 && (!pid || imageOkCache.get(pid) !== false);
+                });
+                qaLine(Boolean(first), 'Has at least one viewable listing');
+                if (!first) return;
+
+                openPropertyModal(first, { syncUrl: true, pushUrl: true });
+                await sleep(150);
+                qaLine(isModalOpen(), 'Modal opens');
+
+                closePropertyModal();
+                await sleep(250);
+                qaLine(!isModalOpen(), 'Modal closes');
+                qaLine(Boolean(propertiesSection && propertiesSection.classList.contains('active')), 'Properties section visible');
+
+                const urlNow = new URL(window.location.href);
+                qaLine(!toText(urlNow.searchParams.get('ref')).trim(), 'Ref cleared after close');
+            } catch (error) {
+                qaLine(false, `Exception: ${error && error.message ? error.message : String(error)}`);
+            }
+        })();
+    }
 });
