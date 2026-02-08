@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const rawProperties = Array.isArray(propertyData) ? propertyData : [];
+    const baseProperties = Array.isArray(propertyData) ? propertyData : [];
+    const customProperties = Array.isArray(window.customPropertyData) ? window.customPropertyData : [];
+    const rawProperties = baseProperties.concat(customProperties);
     const businessItems = Array.isArray(window.businessData) ? window.businessData : [];
     const vehicleItems = Array.isArray(window.vehicleData) ? window.vehicleData : [];
     const TORREVIEJA_COORDS = { lat: 37.978, lon: -0.683 };
@@ -472,6 +474,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return override.mode;
         }
 
+        const explicitMode = normalize(property && (property.listing_mode || property.listingMode || property.mode));
+        if (explicitMode === 'sale' || explicitMode === 'rent' || explicitMode === 'traspaso' || explicitMode === 'business') {
+            return explicitMode;
+        }
+
         const salePrice = Number(property && property.price);
         if (Number.isFinite(salePrice) && salePrice > 0) {
             return 'sale';
@@ -492,6 +499,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function rentPeriodFor(property) {
+        const explicit = normalize(property && (property.rent_period || property.rentPeriod));
+        if (explicit === 'night' || explicit === 'day' || explicit === 'week' || explicit === 'month') {
+            return explicit;
+        }
+
         const text = normalize(property && property.description);
         if (!text) return 'month';
         if (text.includes('per night') || text.includes('/night') || text.includes('nightly')) return 'night';
@@ -598,6 +610,14 @@ document.addEventListener('DOMContentLoaded', () => {
             return Number(override.price);
         }
 
+        const mode = listingModeFor(property);
+        if (mode === 'rent') {
+            const explicitRent = Number(property && (property.rent_price || property.rentPrice || property.price_rent));
+            if (Number.isFinite(explicitRent) && explicitRent > 0) {
+                return explicitRent;
+            }
+        }
+
         const salePrice = Number(property && property.price);
         if (Number.isFinite(salePrice) && salePrice > 0) {
             return salePrice;
@@ -654,6 +674,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 return `${(number / 1000).toFixed(1).replace('.0', '')}k${suffix}`;
             }
             return `${Math.round(number)}€${suffix}`;
+        }
+        if (mode === 'traspaso') {
+            return formatMarkerPrice(number);
         }
         return formatMarkerPrice(number);
     }
@@ -844,6 +867,11 @@ document.addEventListener('DOMContentLoaded', () => {
             url.searchParams.delete('ref');
         }
         return url.toString();
+    }
+
+    function sourceUrlFor(property) {
+        const url = toText(property && (property.source_url || property.sourceUrl)).trim();
+        return url || '';
     }
 
     function setBrowserRef(reference, { push = false, state = {} } = {}) {
@@ -1509,7 +1537,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const googleMapsUrl = Number.isFinite(latitude) && Number.isFinite(longitude)
             ? `https://www.google.com/maps?q=${latitude},${longitude}`
             : null;
-        const propertyLink = buildPropertyLink(reference);
+        const sourceUrl = sourceUrlFor(property);
+        const propertyLink = sourceUrl || buildPropertyLink(reference);
         const dossierSubject = encodeURIComponent(`Request to visit - ${reference || `${town} ${type}`}`);
         const shareTitle = `${reference || 'Property'} - ${town}, ${province}`;
         const shareTextRaw = `Check this ${type}${reference ? ` (${reference})` : ''} in ${town}: ${propertyLink}`;

@@ -1,10 +1,11 @@
 /* Minimal same-origin service worker for instant repeat loads on mobile WebKit/Android. */
-const CACHE_NAME = 'scp-cache-20260208o';
+const CACHE_NAME = 'scp-cache-20260208p';
 
 const PRECACHE_PATHS = [
   './',
   './index.html',
   './properties.html',
+  './viewing-trip.html',
   './businesses.html',
   './business-buy-sell.html',
   './business-management.html',
@@ -25,6 +26,7 @@ const PRECACHE_PATHS = [
   './catalog.js',
   './catalog-page.js',
   './app.js',
+  './custom-listings.js',
   './data.js',
   './businesses-data.js',
   './manifest.webmanifest',

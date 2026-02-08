@@ -1458,6 +1458,20 @@ body[data-section="properties"].ui-collapsed .city-bar {
     margin-bottom: 2rem;
 }
 
+.results-cta {
+    display: flex;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    margin-top: 0.9rem;
+    align-items: center;
+}
+
+.results-cta .cta-button {
+    padding: 0.6rem 1rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+}
+
 .results-top {
     display: flex;
     align-items: flex-end;
