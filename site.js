@@ -44,5 +44,13 @@
   window.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeMenu();
   });
-})();
 
+  // PWA: cache static assets for instant repeat loads on mobile WebKit/Android.
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(() => {
+        // Ignore registration failures (e.g. file://).
+      });
+    });
+  }
+})();

@@ -4,6 +4,7 @@
     --primary: #0ea5e9;
     /* Softer Mediterranean Blue */
     --primary-dim: rgba(14, 165, 233, 0.1);
+    --secondary: #38bdf8;
     --text-main: #f8fafc;
     --text-dim: #94a3b8;
     --glass-border: rgba(255, 255, 255, 0.05);
@@ -12,6 +13,8 @@
     --filters-bar-height: 82px;
     --city-bar-height: 56px;
     /* Compressed */
+    --shadow-soft: 0 22px 80px rgba(0, 0, 0, 0.45);
+    --shadow-card: 0 16px 60px rgba(0, 0, 0, 0.35);
 }
 
 * {
@@ -26,6 +29,9 @@ body {
     font-family: 'Outfit', sans-serif;
     overflow-x: hidden;
     line-height: 1.5;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .site-main {
@@ -1314,26 +1320,40 @@ body.filters-open .filters-backdrop {
 
 /* --- Property Cards --- */
 .property-card {
-    background: transparent;
-    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 18px;
     overflow: hidden;
     cursor: pointer;
-    transition: transform 0.3s;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    content-visibility: auto;
+    contain: layout paint style;
+}
+
+.property-card:focus-visible {
+    outline: none;
+    border-color: rgba(14, 165, 233, 0.35);
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.18), var(--shadow-card);
+}
+
+.property-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(14, 165, 233, 0.18);
 }
 
 .card-img-wrapper {
     position: relative;
     aspect-ratio: 4/3;
-    border-radius: 12px;
+    border-radius: 18px 18px 0 0;
     overflow: hidden;
-    background: #111;
+    background: rgba(2, 6, 23, 0.8);
 }
 
 .card-status {
     position: absolute;
     top: 1rem;
-    left: 1rem;
-    margin-top: 2.35rem;
+    right: 1rem;
     padding: 0.35rem 0.6rem;
     border-radius: 999px;
     font-size: 0.75rem;
@@ -1371,22 +1391,25 @@ body.filters-open .filters-backdrop {
     position: absolute;
     top: 1rem;
     left: 1rem;
-    background: rgba(255, 255, 255, 0.9);
-    color: black;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(248, 250, 252, 0.96);
     padding: 0.3rem 0.8rem;
-    border-radius: 12px;
+    border-radius: 999px;
     font-size: 0.7rem;
     font-weight: 800;
     text-transform: uppercase;
+    letter-spacing: 0.08em;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 .card-content {
-    padding: 1rem 0;
+    padding: 1rem 1rem 1.15rem;
 }
 
 .card-content h3 {
     font-size: 1.1rem;
-    font-weight: 700;
+    font-weight: 900;
     margin-bottom: 0.2rem;
 }
 
@@ -1411,6 +1434,16 @@ body.filters-open .filters-backdrop {
     flex-wrap: wrap;
     color: var(--text-dim);
     font-size: 0.85rem;
+}
+
+.spec-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.55rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .load-more-btn {
@@ -1635,9 +1668,22 @@ body.filters-open .filters-backdrop {
 /* Property Card Reference */
 .card-ref {
     font-size: 12px;
-    color: var(--secondary);
+    color: rgba(56, 189, 248, 0.95);
     margin-bottom: 4px;
-    font-weight: 600;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        scroll-behavior: auto !important;
+        transition: none !important;
+        animation: none !important;
+    }
+    .bg-mesh {
+        display: none;
+    }
 }
 
 /* Custom scrollbar for chips */

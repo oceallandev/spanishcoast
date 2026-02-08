@@ -1050,6 +1050,8 @@ document.addEventListener('DOMContentLoaded', () => {
             card.style.animationDelay = `${(index % 6) * 0.08}s`;
             const propertyId = idKey(property.id);
             card.dataset.propertyId = propertyId;
+            card.setAttribute('role', 'button');
+            card.setAttribute('tabindex', '0');
 
             const imageCandidates = imageUrlsFor(property);
             if (!imageCandidates.length) {
@@ -1096,6 +1098,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
                 openPropertyModal(property);
+            });
+
+            card.addEventListener('keydown', (event) => {
+                if (event.key !== 'Enter' && event.key !== ' ') return;
+                event.preventDefault();
+                card.click();
             });
 
             const cardImg = card.querySelector('.card-img-wrapper img');
