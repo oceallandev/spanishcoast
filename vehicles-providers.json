@@ -1,0 +1,17 @@
+{
+  "providers": [
+    {
+      "id": "scp",
+      "name": "Spanish Coast Properties",
+      "logo": "assets/header-logo.png",
+      "phone": "+34624867866",
+      "email": "info@spanishcoastproperties.com",
+      "website": "https://www.spanishcoastproperties.com",
+      "feeds": [
+        { "category": "car", "paths": ["feeds/vehicles/*.xml", "feeds/vehicles/*.json"] },
+        { "category": "boat", "paths": ["feeds/boats/*.xml", "feeds/boats/*.json"] }
+      ]
+    }
+  ]
+}
+
