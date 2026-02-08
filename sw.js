@@ -1,5 +1,5 @@
 /* Minimal same-origin service worker for instant repeat loads on mobile WebKit/Android. */
-const CACHE_NAME = 'scp-cache-20260208t';
+const CACHE_NAME = 'scp-cache-20260208u';
 
 const PRECACHE_PATHS = [
   './',
@@ -93,6 +93,22 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== self.location.origin) return;
 
   const key = cacheKeyFor(req);
+
+  // Config: always prefer network so config changes are picked up quickly.
+  if (url.pathname.endsWith('/config.js')) {
+    event.respondWith((async () => {
+      const cache = await caches.open(CACHE_NAME);
+      try {
+        const fresh = await fetch(req);
+        if (fresh && fresh.ok) cache.put(key, fresh.clone());
+        return fresh;
+      } catch {
+        const cached = await cache.match(key);
+        return cached || new Response('', { status: 504 });
+      }
+    })());
+    return;
+  }
 
   // HTML navigations: network-first, fallback to cache (supports offline).
   if (req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html')) {
