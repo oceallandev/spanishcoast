@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brochure | Spanish Coast Properties</title>
+    <meta name="robots" content="noindex,nofollow">
+
+    <meta name="theme-color" content="#030712">
+    <link rel="stylesheet" href="style.css?v=20260208w">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body class="brochure-body">
+    <div class="brochure-toolbar no-print" role="region" aria-label="Brochure tools">
+        <div class="brochure-toolbar-left">
+            <a class="brochure-pill" href="properties.html">← Back</a>
+            <span id="brochure-ref" class="brochure-pill brochure-pill--muted">Loading…</span>
+        </div>
+        <div class="brochure-toolbar-right">
+            <button id="brochure-toggle-brand" class="brochure-pill" type="button">White-label: Off</button>
+            <button id="brochure-copy-link" class="brochure-pill" type="button">Copy link</button>
+            <a id="brochure-email-link" class="brochure-pill" href="#">Email link</a>
+            <button id="brochure-print" class="brochure-pill brochure-pill--primary" type="button">Download PDF</button>
+        </div>
+    </div>
+
+    <main class="brochure-page" id="brochure-page" aria-label="Property brochure">
+        <header class="brochure-head" id="brochure-head">
+            <div class="brochure-brand" id="brochure-brand">
+                <img src="assets/header-logo.png?v=2" alt="Spanish Coast Properties" class="brochure-logo">
+                <div class="brochure-brand-text">
+                    <div class="brochure-brand-name">Spanish Coast Properties</div>
+                    <div class="brochure-brand-tag">Costa Blanca South</div>
+                </div>
+            </div>
+            <div class="brochure-meta">
+                <div id="brochure-type" class="brochure-type"></div>
+                <div id="brochure-location" class="brochure-location"></div>
+                <div id="brochure-price" class="brochure-price"></div>
+            </div>
+        </header>
+
+        <section class="brochure-hero">
+            <div class="brochure-hero-imgwrap">
+                <img id="brochure-hero-img" alt="Property hero" class="brochure-hero-img">
+            </div>
+            <div class="brochure-hero-stats" id="brochure-stats"></div>
+        </section>
+
+        <section class="brochure-block">
+            <h2>Highlights</h2>
+            <div id="brochure-highlights" class="brochure-highlights"></div>
+        </section>
+
+        <section class="brochure-block">
+            <h2>Description</h2>
+            <div id="brochure-description" class="brochure-description"></div>
+        </section>
+
+        <section class="brochure-block">
+            <h2>Features</h2>
+            <ul id="brochure-features" class="brochure-features"></ul>
+        </section>
+
+        <section class="brochure-block">
+            <h2>Gallery</h2>
+            <div id="brochure-gallery" class="brochure-gallery"></div>
+        </section>
+
+        <footer class="brochure-foot" id="brochure-foot">
+            <div class="brochure-contact">
+                <div class="brochure-contact-title">Book a viewing</div>
+                <div class="brochure-contact-row">
+                    <span>Phone: +34 624 867 866</span>
+                    <span>Email: info@spanishcoastproperties.com</span>
+                </div>
+                <div class="brochure-contact-note">Reference: <span id="brochure-ref-foot"></span></div>
+            </div>
+        </footer>
+    </main>
+
+    <script defer src="data.js?v=20260208w"></script>
+    <script defer src="custom-listings.js?v=20260208w"></script>
+    <script defer src="brochure.js?v=20260208w"></script>
+</body>
+
+</html>
+

@@ -1920,6 +1920,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="modal-cta">
                         <button type="button" class="cta-button cta-button--outline" data-fav-toggle>${isFav ? '♥ Saved' : '♡ Save'}</button>
+                        <a href="brochure.html?ref=${encodeURIComponent(reference || '')}" class="cta-button cta-button--outline" target="_blank" rel="noopener">Brochure (PDF)</a>
                         <a href="tel:+34624867866" class="cta-button">Call Now</a>
                         <a href="${dossierMailto}" class="cta-button">Request to visit</a>
                         ${sourceUrl ? `<a href="${escapeHtml(sourceUrl)}" class="cta-button" target="_blank" rel="noopener">Official page</a>` : ''}
