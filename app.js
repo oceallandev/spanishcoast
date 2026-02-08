@@ -102,6 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let renderLimit = 60;
     const RENDER_BATCH = 60;
     let mapDirty = true;
+    let mapHasUserInteracted = false;
+    let mapLastFitSignature = '';
     let filterTimer = null;
     let loadMoreObserver = null;
     let loadingMore = false;
@@ -1786,6 +1788,9 @@ document.addEventListener('DOMContentLoaded', () => {
             refQuery = '';
             autoRefFromUrl = '';
             if (refSearchInput) refSearchInput.value = '';
+            // Returning from a deep-linked single listing: snap back to a full-results map view.
+            mapHasUserInteracted = false;
+            mapLastFitSignature = '';
             filterProperties();
         }
     }
@@ -1818,11 +1823,22 @@ document.addEventListener('DOMContentLoaded', () => {
             return undefined;
         }
 
+        const markerText = escapeHtml(formatListingMarkerText(property));
+
         return L.divIcon({
             className: 'marker-container',
-            html: `<div class="branded-marker">${escapeHtml(formatListingMarkerText(property))}</div>`,
-            iconSize: [76, 28],
-            iconAnchor: [38, 14]
+            html: `
+                <div class="scp-marker" aria-hidden="true">
+                    <div class="scp-marker-pin">
+                        <img class="scp-marker-logo" src="assets/scp-isotipo.png" alt="">
+                    </div>
+                    <div class="scp-marker-tag">${markerText}</div>
+                </div>
+            `,
+            // Include the tag width so clicks work on the full label.
+            iconSize: [160, 48],
+            // Anchor at the bottom of the pin.
+            iconAnchor: [24, 48]
         });
     }
 
@@ -1851,6 +1867,14 @@ document.addEventListener('DOMContentLoaded', () => {
             : L.layerGroup();
 
         markersGroup.addTo(map);
+
+        // Preserve user zoom/position: once the user pans/zooms, avoid auto-fit snapping back.
+        map.on('movestart', (e) => {
+            if (e && e.originalEvent) mapHasUserInteracted = true;
+        });
+        map.on('zoomstart', (e) => {
+            if (e && e.originalEvent) mapHasUserInteracted = true;
+        });
     }
 
     function isMapVisible() {
@@ -1864,6 +1888,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return true;
     }
 
+    function fitMapToResults() {
+        if (!map || typeof L === 'undefined') return;
+        const bounds = [];
+        currentProperties.forEach((property) => {
+            const latitude = Number(property.latitude);
+            const longitude = Number(property.longitude);
+            if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return;
+            bounds.push([latitude, longitude]);
+        });
+        if (!bounds.length) return;
+        map.fitBounds(bounds, { padding: [40, 40], maxZoom: 11 });
+    }
+
     function updateMapMarkers() {
         if (!map || !markersGroup || typeof L === 'undefined') {
             return;
@@ -1875,6 +1912,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         markerMap.clear();
 
+        // Signature used to decide if we should auto-fit the map. We do NOT want to reset zoom/center
+        // when the results did not change (or after the user has manually interacted with the map).
+        let signatureHash = 0;
+        let signatureCount = 0;
         const bounds = [];
 
         currentProperties.forEach((property) => {
@@ -1883,6 +1924,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const longitude = Number(property.longitude);
             if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
                 return;
+            }
+
+            signatureCount += 1;
+            const sigSeed = `${propertyId}:${latitude.toFixed(5)}:${longitude.toFixed(5)}`;
+            for (let i = 0; i < sigSeed.length; i += 1) {
+                signatureHash = ((signatureHash << 5) - signatureHash + sigSeed.charCodeAt(i)) | 0;
             }
 
             const marker = L.marker([latitude, longitude], {
@@ -1909,11 +1956,16 @@ document.addEventListener('DOMContentLoaded', () => {
             bounds.push([latitude, longitude]);
         });
 
-        if (bounds.length > 0) {
+        const signature = `${signatureCount}:${signatureHash}`;
+        const canAutoFit = !mapHasUserInteracted && signature !== mapLastFitSignature;
+
+        if (bounds.length > 0 && canAutoFit) {
             map.fitBounds(bounds, {
-                padding: [24, 24],
-                maxZoom: 13
+                padding: [40, 40],
+                // Keep context: avoid zooming too far in when there are only a few results.
+                maxZoom: 11
             });
+            mapLastFitSignature = signature;
         }
     }
 
@@ -1932,6 +1984,20 @@ document.addEventListener('DOMContentLoaded', () => {
         filtersBarResizeTimer = setTimeout(() => {
             syncViewportHeightVar();
             syncFiltersBarHeight();
+            // On mobile rotation / viewport changes, Leaflet can render at an odd zoom.
+            // Keep the map experience smooth by snapping back to a full-width "fit results" view.
+            if (map && isMapVisible() && typeof map.invalidateSize === 'function') {
+                window.setTimeout(() => {
+                    try {
+                        map.invalidateSize();
+                    } catch (error) {
+                        // ignore
+                    }
+                    mapHasUserInteracted = false;
+                    mapLastFitSignature = '';
+                    fitMapToResults();
+                }, 180);
+            }
         }, 60);
     });
 
@@ -2131,6 +2197,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         closeFilters();
         closePropertyModal({ syncUrl: false });
+        mapHasUserInteracted = false;
+        mapLastFitSignature = '';
         filterProperties();
     }
 
@@ -2145,6 +2213,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (applyBtn) {
         applyBtn.addEventListener('click', () => {
             syncFiltersFromControls();
+            mapHasUserInteracted = false;
+            mapLastFitSignature = '';
             filterProperties();
             closeFilters();
             if (uiScrollEl) {

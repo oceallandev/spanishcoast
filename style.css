@@ -307,6 +307,15 @@ body[data-section="properties"] .search-pill-container {
     }
 }
 
+/* Prevent iOS Safari from auto-zooming the page when focusing inputs (keeps layout full-width). */
+@media (max-width: 1024px) {
+    body[data-section="properties"] .search-pill input,
+    body[data-section="properties"] .search-pill select,
+    body[data-section="properties"] .search-pill textarea {
+        font-size: 16px;
+    }
+}
+
 body[data-section="home"] #toggle-map-btn,
 body[data-section="vehicles"] #toggle-map-btn {
     display: none;
@@ -1894,6 +1903,54 @@ body[data-section="properties"].map-open .map-section {
     border: none;
 }
 
+.scp-marker {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 10px;
+    pointer-events: auto;
+}
+
+.scp-marker-pin {
+    width: 48px;
+    height: 48px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 2px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+    display: grid;
+    place-items: center;
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.25s ease, border-color 0.25s ease;
+}
+
+.scp-marker-logo {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.22));
+}
+
+.scp-marker-tag {
+    background: rgba(255, 255, 255, 0.96);
+    color: #030712;
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-weight: 900;
+    font-size: 0.9rem;
+    letter-spacing: -0.01em;
+    border: 2px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+    white-space: nowrap;
+}
+
+.marker-container:hover .scp-marker-pin,
+.marker-container:hover .scp-marker-tag {
+    transform: translateY(-4px) scale(1.05);
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
 .branded-marker {
     background: white;
     color: black;
@@ -1944,6 +2001,15 @@ body[data-section="properties"].map-open .map-section {
     background: var(--primary);
     border-color: var(--primary);
     box-shadow: 0 10px 30px rgba(14, 165, 233, 0.55);
+}
+
+.marker-container.marker-active .scp-marker-pin,
+.marker-container.marker-active .scp-marker-tag {
+    transform: translateY(-4px) scale(1.06);
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    box-shadow: 0 16px 44px rgba(14, 165, 233, 0.5);
 }
 
 /* Price Tooltip transition */

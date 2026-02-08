@@ -134,17 +134,17 @@
       const priceCompact = formatPriceCompact(b.price, b.currency);
       const tag = `${label}${priceCompact ? ` · ${priceCompact}` : ''}`;
 
-      const icon = window.L.divIcon({
-        className: 'biz-marker-icon',
-        html: `
-          <div class="biz-marker">
-            <div class="biz-marker-pin">
-              <img class="biz-marker-logo" src="assets/header-logo.png" alt="">
-            </div>
-            <div class="biz-marker-tag">${esc(tag)}</div>
-          </div>
-        `,
-        iconSize: [44, 44],
+	      const icon = window.L.divIcon({
+	        className: 'biz-marker-icon',
+	        html: `
+	          <div class="biz-marker">
+	            <div class="biz-marker-pin">
+	              <img class="biz-marker-logo" src="assets/scp-isotipo.png" alt="">
+	            </div>
+	            <div class="biz-marker-tag">${esc(tag)}</div>
+	          </div>
+	        `,
+	        iconSize: [44, 44],
         iconAnchor: [22, 44],
         popupAnchor: [0, -44]
       });
