@@ -1140,8 +1140,12 @@ body[data-section="properties"] .search-pill.advanced-open .pill-advanced .pill-
     height: 44px;
     padding: 0 0.9rem;
     border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-weight: 900;
     font-size: 0.85rem;
+    line-height: 1;
     cursor: pointer;
     transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
     white-space: nowrap;
@@ -1160,8 +1164,12 @@ body[data-section="properties"] .search-pill.advanced-open .pill-advanced .pill-
     height: 44px;
     padding: 0 0.9rem;
     border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-weight: 900;
     font-size: 0.85rem;
+    line-height: 1;
     cursor: pointer;
     transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
     white-space: nowrap;
