@@ -20,9 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const EARTH_RADIUS_KM = 6371;
     const numberFormat = new Intl.NumberFormat('en-IE', { maximumFractionDigits: 0 });
     const PLACEHOLDER_IMAGE = 'assets/placeholder.png';
-    const IMAGE_CHECK_TIMEOUT_MS = 4500;
-    const IMAGE_CHECK_MAX_IN_FLIGHT = 8;
-    const IMAGE_CHECK_MAX_PER_FILTER = 36;
 
     function toRadians(value) {
         return value * (Math.PI / 180);
@@ -258,100 +255,37 @@ document.addEventListener('DOMContentLoaded', () => {
         imgEl.addEventListener('error', onError);
     }
 
-    const imageOkCache = new Map(); // propertyId -> boolean
-    const imageCheckQueue = [];
-    const imageCheckInFlight = new Set(); // propertyId
-    let imageReFilterTimer = null;
-
-    function scheduleReFilterAfterImageCheck() {
-        if (imageReFilterTimer) {
-            return;
-        }
-        imageReFilterTimer = window.setTimeout(() => {
-            imageReFilterTimer = null;
-            filterProperties();
-        }, 80);
-    }
+    const imageOkCache = new Map(); // propertyId -> boolean (only set to false on definitive failure)
 
     function propertyIdFor(property) {
         const id = idKey(property && property.id);
         return id || idKey(property && property.ref);
     }
 
-    function checkImageUrlOnce(url, { referrerPolicy } = {}) {
-        return new Promise((resolve) => {
-            const img = new Image();
-            if (referrerPolicy) {
-                img.referrerPolicy = referrerPolicy;
-            }
-
-            const timer = window.setTimeout(() => resolve(false), IMAGE_CHECK_TIMEOUT_MS);
-
-            img.onload = () => {
-                window.clearTimeout(timer);
-                const w = Number(img.naturalWidth) || 0;
-                const h = Number(img.naturalHeight) || 0;
-                resolve(w >= 40 && h >= 40);
-            };
-            img.onerror = () => {
-                window.clearTimeout(timer);
-                resolve(false);
-            };
-
-            img.src = url;
-        });
-    }
-
-    async function checkAnyImageLoads(urls) {
-        const candidates = Array.isArray(urls) ? urls.filter(Boolean) : [];
-        for (const url of candidates) {
-            // Try "no-referrer" first (common hotlink-protection requirement).
-            if (await checkImageUrlOnce(url, { referrerPolicy: 'no-referrer' })) return true;
-            // Fallback to default behavior (some hosts behave the opposite).
-            if (await checkImageUrlOnce(url, {})) return true;
-        }
-        return false;
-    }
-
-    function drainImageQueue() {
-        while (imageCheckInFlight.size < IMAGE_CHECK_MAX_IN_FLIGHT && imageCheckQueue.length > 0) {
-            const task = imageCheckQueue.shift();
-            if (!task) return;
-            const { propertyId, urls } = task;
-            if (!propertyId) continue;
-            if (imageOkCache.has(propertyId)) continue;
-            if (imageCheckInFlight.has(propertyId)) continue;
-
-            imageCheckInFlight.add(propertyId);
-            checkAnyImageLoads(urls)
-                .then((ok) => {
-                    imageOkCache.set(propertyId, Boolean(ok));
-                })
-                .catch(() => {
-                    imageOkCache.set(propertyId, false);
-                })
-                .finally(() => {
-                    imageCheckInFlight.delete(propertyId);
-                    scheduleReFilterAfterImageCheck();
-                    drainImageQueue();
-                });
-        }
-    }
-
-    function ensureImageChecked(property, urls) {
-        const propertyId = propertyIdFor(property);
-        if (!propertyId) return;
-        if (imageOkCache.has(propertyId)) return;
-        if (imageCheckInFlight.has(propertyId)) return;
-
-        const candidates = Array.isArray(urls) ? urls.filter(Boolean) : [];
-        if (candidates.length === 0) {
-            imageOkCache.set(propertyId, false);
+    function markListingImagesBroken(property) {
+        const pid = propertyIdFor(property);
+        if (!pid) return;
+        if (imageOkCache.get(pid) === false) {
             return;
         }
+        imageOkCache.set(pid, false);
 
-        imageCheckQueue.push({ propertyId, urls: candidates.slice(0, 6) });
-        drainImageQueue();
+        // Prevent re-adding this listing when "Load more" is clicked.
+        currentProperties = currentProperties.filter((item) => propertyIdFor(item) !== pid);
+        if (resultsCount) {
+            resultsCount.textContent = String(currentProperties.length);
+        }
+
+        // Remove marker immediately (no full re-render).
+        const marker = markerMap.get(pid);
+        if (marker && markersGroup && typeof markersGroup.removeLayer === 'function') {
+            try {
+                markersGroup.removeLayer(marker);
+            } catch (error) {
+                // ignore
+            }
+        }
+        markerMap.delete(pid);
     }
 
     function priceNumber(property) {
@@ -892,7 +826,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function filterProperties() {
         const loweredSearch = normalize(searchQuery);
         const loweredRef = normalize(refQuery);
-        let imageChecksStarted = 0;
 
         currentProperties = allProperties.filter((property) => {
             const ref = normalize(property.ref);
@@ -992,11 +925,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return false;
             }
 
-            if (cached !== true && imageChecksStarted < IMAGE_CHECK_MAX_PER_FILTER) {
-                ensureImageChecked(property, imageCandidates);
-                imageChecksStarted += 1;
-            }
-
             return true;
         });
 
@@ -1039,9 +967,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            if (imageCheckInFlight.size > 0 || imageCheckQueue.length > 0) {
-                // Do not block usage while images are being verified; just show "no results" if filters are strict.
-            }
             propertyGrid.innerHTML = '<p style="color:#94a3b8">No properties found for these filters.</p>';
             return;
         }
@@ -1104,11 +1029,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const cardImg = card.querySelector('.card-img-wrapper img');
             attachImageFallback(cardImg, imageCandidates, {
                 onAllFailed: () => {
-                    const pid = propertyIdFor(property);
-                    if (pid) {
-                        imageOkCache.set(pid, false);
-                        scheduleReFilterAfterImageCheck();
-                    }
+                    markListingImagesBroken(property);
                     card.style.display = 'none';
                 }
             });
@@ -1363,10 +1284,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (currentGalleryImages.length > 1) {
                     updateGallery(currentGalleryIndex + 1);
                 } else {
-                    if (propertyId) {
-                        imageOkCache.set(propertyId, false);
-                        scheduleReFilterAfterImageCheck();
-                    }
+                    markListingImagesBroken(property);
                     modal.style.display = 'none';
                     document.body.style.overflow = 'auto';
                 }
@@ -1397,11 +1315,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 img.setAttribute('decoding', 'async');
                 attachImageFallback(img, [img.getAttribute('src')], {
                     onAllFailed: () => {
-                        const pid = propertyIdFor(property);
-                        if (pid) {
-                            imageOkCache.set(pid, false);
-                            scheduleReFilterAfterImageCheck();
-                        }
+                        markListingImagesBroken(property);
                     }
                 });
             }
@@ -1588,12 +1502,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const openFilters = () => {
         if (activeSection !== 'properties') return;
+        // If map view is open on mobile, close it first. Otherwise the backdrop can appear without the filters.
+        if (mapSection && mapSection.classList.contains('active')) {
+            mapSection.classList.remove('active');
+            document.body.classList.remove('map-open');
+            if (toggleMapBtn) {
+                toggleMapBtn.textContent = '🗺️';
+            }
+        }
         document.body.classList.add('filters-open');
         if (searchPill) {
-            searchPill.classList.add('advanced-open');
+            // Keep filters compact on mobile: do not force "More" open.
+            searchPill.classList.remove('advanced-open');
         }
         if (toggleAdvancedBtn) {
-            toggleAdvancedBtn.setAttribute('aria-expanded', 'true');
+            toggleAdvancedBtn.setAttribute('aria-expanded', searchPill && searchPill.classList.contains('advanced-open') ? 'true' : 'false');
+            toggleAdvancedBtn.textContent = (searchPill && searchPill.classList.contains('advanced-open')) ? 'Less' : 'More';
         }
     };
 
@@ -1687,11 +1611,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // Ensure map reflects the current filter controls (even if user didn't press Apply).
             syncFiltersFromControls();
             filterProperties();
+            closeFilters();
 
             mapSection.classList.toggle('active');
             const mapIsOpen = mapSection.classList.contains('active');
             document.body.classList.toggle('map-open', mapIsOpen);
-            toggleMapBtn.textContent = mapIsOpen ? '📋 List' : '🗺️ Map';
+            toggleMapBtn.textContent = mapIsOpen ? '📋' : '🗺️';
 
             if (map && typeof map.invalidateSize === 'function') {
                 window.setTimeout(() => {
