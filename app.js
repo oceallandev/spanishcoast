@@ -1538,7 +1538,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ? `https://www.google.com/maps?q=${latitude},${longitude}`
             : null;
         const sourceUrl = sourceUrlFor(property);
-        const propertyLink = sourceUrl || buildPropertyLink(reference);
+        const propertyLink = buildPropertyLink(reference);
         const dossierSubject = encodeURIComponent(`Request to visit - ${reference || `${town} ${type}`}`);
         const shareTitle = `${reference || 'Property'} - ${town}, ${province}`;
         const shareTextRaw = `Check this ${type}${reference ? ` (${reference})` : ''} in ${town}: ${propertyLink}`;
@@ -1550,12 +1550,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const linkedInShare = `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`;
         const xShare = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTitle)}&url=${shareUrl}`;
         const dossierBody = encodeURIComponent(
-            `Hello Spanish Coast Properties,\n\nI would like to request a visit for this property.\n\nReference: ${reference || 'N/A'}\nType: ${type}\nLocation: ${town}, ${province}\nPrice: ${formatListingPrice(property)}\nProperty link: ${propertyLink}\n\nPreferred dates/times:\n1) \n2) \n\nThank you.`
+            `Hello Spanish Coast Properties,\n\nI would like to request a visit for this property.\n\nReference: ${reference || 'N/A'}\nType: ${type}\nLocation: ${town}, ${province}\nPrice: ${formatListingPrice(property)}\nApp link: ${propertyLink}${sourceUrl ? `\nOfficial page: ${sourceUrl}` : ''}\n\nPreferred dates/times:\n1) \n2) \n\nThank you.`
         );
         const dossierMailto = `mailto:info@spanishcoastproperties.com?subject=${dossierSubject}&body=${dossierBody}`;
         const reportSubject = encodeURIComponent(`Listing issue report - ${reference || `${town} ${type}`}`);
         const reportBody = encodeURIComponent(
-            `Hello Spanish Coast Properties,\n\nI found an issue with this listing and would like to flag it.\n\nReference: ${reference || 'N/A'}\nLocation: ${town}, ${province}\nProperty link: ${propertyLink}\n\nWhat seems wrong:\n- \n\n(If possible, add a screenshot or describe the problem.)\n\nThank you.`
+            `Hello Spanish Coast Properties,\n\nI found an issue with this listing and would like to flag it.\n\nReference: ${reference || 'N/A'}\nLocation: ${town}, ${province}\nApp link: ${propertyLink}${sourceUrl ? `\nOfficial page: ${sourceUrl}` : ''}\n\nWhat seems wrong:\n- \n\n(If possible, add a screenshot or describe the problem.)\n\nThank you.`
         );
         const reportMailto = `mailto:info@spanishcoastproperties.com?subject=${reportSubject}&body=${reportBody}`;
         const descriptionHtml = formatDescriptionHtml(description);
@@ -1626,6 +1626,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="modal-cta">
                         <a href="tel:+34624867866" class="cta-button">Call Now</a>
                         <a href="${dossierMailto}" class="cta-button">Request to visit</a>
+                        ${sourceUrl ? `<a href="${escapeHtml(sourceUrl)}" class="cta-button" target="_blank" rel="noopener">Official page</a>` : ''}
                     </div>
                     <div class="share-row" aria-label="Share">
                         <button type="button" class="share-btn" data-share="native">📲 Share</button>
