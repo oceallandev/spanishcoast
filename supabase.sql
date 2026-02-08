@@ -1,6 +1,9 @@
 -- Supabase schema for SCP auth + favourites.
 -- Run in Supabase SQL editor (Database -> SQL editor).
 
+-- Needed for gen_random_uuid()
+create extension if not exists pgcrypto;
+
 -- 1) Profiles (role-based access)
 create table if not exists public.profiles (
   user_id uuid primary key references auth.users(id) on delete cascade,
@@ -15,17 +18,8 @@ create policy "profiles: read own"
 on public.profiles for select
 using (auth.uid() = user_id);
 
-create policy "profiles: update own"
-on public.profiles for update
-using (auth.uid() = user_id)
-with check (auth.uid() = user_id);
-
-create policy "profiles: admin read all"
-on public.profiles for select
-using (exists (
-  select 1 from public.profiles p
-  where p.user_id = auth.uid() and p.role = 'admin'
-));
+-- Keep profiles locked down: clients only need to read their own role.
+-- If you later add profile editing, add narrowly-scoped update policies/triggers.
 
 -- Create profile row on signup
 create or replace function public.handle_new_user()
@@ -99,4 +93,3 @@ drop trigger if exists favourites_set_updated_at on public.favourites;
 create trigger favourites_set_updated_at
 before update on public.favourites
 for each row execute procedure public.set_updated_at();
-

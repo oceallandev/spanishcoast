@@ -3,6 +3,8 @@
   const statusHint = document.getElementById('status-hint');
   const signOutBtn = document.getElementById('sign-out-btn');
   const adminLinks = document.getElementById('admin-links');
+  const diagnosticsPanel = document.getElementById('diagnostics');
+  const diagLines = document.getElementById('diag-lines');
 
   const signInForm = document.getElementById('sign-in-form');
   const signInEmail = document.getElementById('sign-in-email');
@@ -22,6 +24,18 @@
 
   const getClient = () => window.scpSupabase || null;
 
+  const addDiag = (level, title, detail) => {
+    if (!diagLines) return;
+    const row = document.createElement('div');
+    row.className = `diag-line ${level === 'ok' ? 'diag-ok' : level === 'warn' ? 'diag-warn' : 'diag-bad'}`;
+    row.innerHTML = `<div><b>${title}</b><div class="muted">${detail || ''}</div></div><div><b>${level.toUpperCase()}</b></div>`;
+    diagLines.appendChild(row);
+  };
+
+  const clearDiag = () => {
+    if (diagLines) diagLines.innerHTML = '';
+  };
+
   async function getRole(client, userId) {
     try {
       const { data, error } = await client.from('profiles').select('role').eq('user_id', userId).maybeSingle();
@@ -40,7 +54,14 @@
       return;
     }
 
-    const { data } = await client.auth.getSession();
+    let data;
+    try {
+      ({ data } = await client.auth.getSession());
+    } catch (error) {
+      setStatus('Auth session failed', error && error.message ? error.message : String(error));
+      if (signOutBtn) signOutBtn.disabled = true;
+      return;
+    }
     const session = data && data.session ? data.session : null;
     const user = session && session.user ? session.user : null;
 
@@ -57,13 +78,83 @@
     if (adminLinks) adminLinks.style.display = role === 'admin' ? 'block' : 'none';
   }
 
+  async function runDiagnostics() {
+    if (!diagnosticsPanel) return;
+    const url = new URL(window.location.href);
+    const qa = url.searchParams.get('qa') === '1';
+    if (!qa) return;
+
+    diagnosticsPanel.style.display = 'block';
+    clearDiag();
+
+    const cfg = window.SCP_CONFIG || {};
+    const supabaseJsLoaded = Boolean(window.supabase && window.supabase.createClient);
+    addDiag(supabaseJsLoaded ? 'ok' : 'bad', 'supabase-js loaded', supabaseJsLoaded ? 'CDN script is available.' : 'The supabase-js CDN did not load.');
+
+    const urlOk = Boolean((cfg.supabaseUrl || '').trim());
+    const keyOk = Boolean((cfg.supabaseAnonKey || '').trim());
+    addDiag(urlOk ? 'ok' : 'bad', 'config: supabaseUrl', urlOk ? cfg.supabaseUrl : 'Missing. Set it in config.js.');
+    addDiag(keyOk ? 'ok' : 'bad', 'config: anon/publishable key', keyOk ? `${String(cfg.supabaseAnonKey).slice(0, 16)}…` : 'Missing. Set it in config.js.');
+
+    const client = getClient();
+    addDiag(client ? 'ok' : 'bad', 'client init', client ? 'window.scpSupabase created.' : 'Supabase client not initialised (check config + CDN).');
+    if (!client) return;
+
+    let session;
+    try {
+      const { data } = await client.auth.getSession();
+      session = data && data.session ? data.session : null;
+      addDiag('ok', 'auth.getSession()', session ? 'Session found.' : 'No session (signed out).');
+    } catch (error) {
+      addDiag('bad', 'auth.getSession()', error && error.message ? error.message : String(error));
+      return;
+    }
+
+    if (!session || !session.user) {
+      addDiag('warn', 'DB checks', 'Sign in first to test database tables and RLS policies.');
+      return;
+    }
+
+    // Check profiles table + trigger.
+    try {
+      const { data, error } = await client.from('profiles').select('role').eq('user_id', session.user.id).maybeSingle();
+      if (error) {
+        addDiag('bad', 'profiles table / RLS', `${error.message || 'Error reading profiles'}. Run supabase.sql and ensure RLS policies exist.`);
+      } else if (!data) {
+        addDiag('warn', 'profile row missing', 'The signup trigger may not have been created. Re-run supabase.sql.');
+      } else {
+        addDiag('ok', 'profiles row', `role=${data.role || ''}`);
+      }
+    } catch (error) {
+      addDiag('bad', 'profiles query exception', error && error.message ? error.message : String(error));
+    }
+
+    // Check favourites table.
+    try {
+      const { error } = await client.from('favourites').select('property_id').limit(1);
+      if (error) {
+        addDiag('bad', 'favourites table / RLS', `${error.message || 'Error reading favourites'}. Run supabase.sql.`);
+      } else {
+        addDiag('ok', 'favourites table', 'Readable for current user.');
+      }
+    } catch (error) {
+      addDiag('bad', 'favourites query exception', error && error.message ? error.message : String(error));
+    }
+
+    addDiag('ok', 'Auth redirect URLs', 'Ensure Supabase Auth settings allow https://oceallandev.github.io/spanishcoast/account.html');
+  }
+
   async function ensureLoaded() {
     // Wait briefly for supabase-init.js.
     if (window.scpSupabase || (window.SCP_CONFIG && window.SCP_CONFIG.supabaseUrl)) {
       await refresh();
+      await runDiagnostics();
       return;
     }
-    window.addEventListener('scp:supabase:ready', () => refresh(), { once: true });
+    window.addEventListener('scp:supabase:ready', async () => {
+      await refresh();
+      await runDiagnostics();
+    }, { once: true });
     setStatus('Connecting...', 'Loading authentication…');
   }
 
@@ -154,4 +245,3 @@
 
   ensureLoaded();
 })();
-
