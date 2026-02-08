@@ -4,28 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agents & Collaborators | Spanish Coast Properties</title>
+    <title>Account | Spanish Coast Properties</title>
     <meta name="description"
-        content="Meet our agents and collaborators in Costa Blanca South. Local guidance, multilingual support, and fast, practical service.">
+        content="Create an account to save favourites, collaborate as a partner agency, and manage visits and conversations with Spanish Coast Properties.">
     <meta name="robots" content="index,follow">
-    <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/agents.html">
-
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Agents & Collaborators | Spanish Coast Properties">
-    <meta property="og:description" content="Meet our agents and collaborators in Costa Blanca South.">
-    <meta property="og:url" content="https://oceallandev.github.io/spanishcoast/agents.html">
-    <meta property="og:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
+    <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/account.html">
 
     <meta name="theme-color" content="#030712">
     <link rel="manifest" href="manifest.webmanifest?v=20260208s">
-
     <link rel="stylesheet" href="style.css?v=20260208s">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script defer src="config.js?v=20260208s"></script>
+    <script defer src="supabase-init.js?v=20260208s"></script>
 </head>
 
-<body data-section="agents">
+<body data-section="account">
     <div class="bg-mesh"></div>
 
     <header class="main-header glass sticky">
@@ -46,7 +43,6 @@
                     <a class="nav-link" data-section="businesses" href="businesses.html">Businesses</a>
                     <a class="nav-link" data-section="vehicles" href="vehicles.html">Vehicles</a>
                     <a class="nav-link" data-section="services" href="services.html">Services</a>
-                    <a class="nav-link" data-section="agents" href="agents.html">Agents</a>
                 </nav>
             </div>
 
@@ -69,7 +65,7 @@
             <a href="businesses.html">Businesses</a>
             <a href="vehicles.html">Vehicles</a>
             <a href="services.html">Services</a>
-            <a href="agents.html">Agents</a>
+            <a href="account.html">Account</a>
         </nav>
         <div class="mobile-menu-foot">
             <a class="cta-button" href="mailto:info@spanishcoastproperties.com">Email</a>
@@ -77,20 +73,75 @@
         </div>
     </aside>
 
-    <main class="site-main" id="site-main">
-        <section class="page-section catalog-section active" aria-label="Agents">
-            <div class="catalog-hero">
-                <h2>Agents & Collaborators</h2>
-                <p>
-                    A tight team of locals and trusted collaborators. Multilingual support, fast answers, and practical steps.
-                </p>
-                <div class="simple-cta">
-                    <a class="cta-button" href="mailto:info@spanishcoastproperties.com?subject=Agent%20Inquiry">Email</a>
-                    <a class="cta-button" href="tel:+34624867866">Call</a>
+    <main class="site-main">
+        <section class="page-section active">
+            <div class="page-hero">
+                <h1>Your Account</h1>
+                <p>Sign in to sync favourites across devices and unlock partner tools.</p>
+            </div>
+
+            <div class="page-grid">
+                <div class="glass panel">
+                    <h2>Sign in</h2>
+                    <form id="sign-in-form" class="form-grid">
+                        <label>
+                            <span>Email</span>
+                            <input id="sign-in-email" type="email" autocomplete="email" required placeholder="you@email.com">
+                        </label>
+                        <label>
+                            <span>Password</span>
+                            <input id="sign-in-password" type="password" autocomplete="current-password" placeholder="Your password">
+                        </label>
+                        <button class="cta-button" type="submit">Sign in</button>
+                    </form>
+
+                    <div class="divider"></div>
+
+                    <h3>Or sign in with a magic link</h3>
+                    <form id="magic-link-form" class="form-grid">
+                        <label>
+                            <span>Email</span>
+                            <input id="magic-email" type="email" autocomplete="email" required placeholder="you@email.com">
+                        </label>
+                        <button class="cta-button" type="submit">Send magic link</button>
+                    </form>
+                    <p class="muted">Check your inbox and click the link to sign in.</p>
+                </div>
+
+                <div class="glass panel">
+                    <h2>Create account</h2>
+                    <form id="sign-up-form" class="form-grid">
+                        <label>
+                            <span>Email</span>
+                            <input id="sign-up-email" type="email" autocomplete="email" required placeholder="you@email.com">
+                        </label>
+                        <label>
+                            <span>Password</span>
+                            <input id="sign-up-password" type="password" autocomplete="new-password" required minlength="8"
+                                placeholder="Minimum 8 characters">
+                        </label>
+                        <button class="cta-button" type="submit">Create account</button>
+                    </form>
+                    <p class="muted">We use your email only for login and service updates you request.</p>
                 </div>
             </div>
 
-            <div class="catalog-grid" id="agents-grid"></div>
+            <div class="glass panel account-status" id="account-status" aria-live="polite">
+                <div class="status-row">
+                    <div>
+                        <div class="status-title">Status</div>
+                        <div class="status-text" id="status-text">Not connected.</div>
+                    </div>
+                    <div class="status-actions">
+                        <a class="cta-button cta-button--outline" href="properties.html">Go to Properties</a>
+                        <button id="sign-out-btn" class="cta-button cta-button--outline" type="button" disabled>Sign out</button>
+                    </div>
+                </div>
+                <div class="muted" id="status-hint"></div>
+                <div class="admin-links" id="admin-links" style="display:none">
+                    <a class="cta-button" href="admin-favourites.html">Admin: Favourites Inbox</a>
+                </div>
+            </div>
         </section>
     </main>
 
@@ -98,7 +149,7 @@
         <div class="footer-inner">
             <div class="footer-col">
                 <h3>Spanish Coast Properties</h3>
-                <p>Local help in Costa Blanca South.</p>
+                <p>Account access for favourites sync and partner collaboration tools.</p>
             </div>
             <div class="footer-col">
                 <h4>Explore</h4>
@@ -108,7 +159,7 @@
                     <li><a href="businesses.html">Businesses</a></li>
                     <li><a href="vehicles.html">Vehicles</a></li>
                     <li><a href="services.html">Services</a></li>
-                    <li><a href="agents.html">Agents</a></li>
+                    <li><a href="account.html">Account</a></li>
                 </ul>
             </div>
             <div class="footer-col">
@@ -122,7 +173,7 @@
         <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
     </footer>
 
-    <script defer src="agents.js?v=20260208s"></script>
+    <script defer src="account.js?v=20260208s"></script>
     <script defer src="site.js?v=20260208s"></script>
 </body>
 

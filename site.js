@@ -11,6 +11,8 @@
     path.endsWith('/businesses.html') || path.endsWith('businesses.html') ? 'businesses' :
     path.endsWith('/vehicles.html') || path.endsWith('vehicles.html') ? 'vehicles' :
     path.includes('/services') || path.endsWith('services.html') ? 'services' :
+    path.endsWith('/account.html') || path.endsWith('account.html') ? 'account' :
+    path.endsWith('/admin-favourites.html') || path.endsWith('admin-favourites.html') ? 'account' :
     'home';
 
   document.body.dataset.section = document.body.dataset.section || section;
@@ -18,6 +20,26 @@
   document.querySelectorAll('.nav-link[data-section]').forEach((link) => {
     link.classList.toggle('active', link.dataset.section === section);
   });
+
+  const ensureNavLink = (containerSelector, { href, text }) => {
+    document.querySelectorAll(containerSelector).forEach((nav) => {
+      if (!nav) return;
+      const existing = Array.from(nav.querySelectorAll('a')).find((a) => (a.getAttribute('href') || '').includes(href));
+      if (existing) return;
+      const a = document.createElement('a');
+      a.href = href;
+      a.textContent = text;
+      if (nav.classList.contains('primary-nav')) {
+        a.className = 'nav-link';
+        a.dataset.section = 'account';
+      }
+      nav.appendChild(a);
+    });
+  };
+
+  // Make Account discoverable without having to update every page header/footer manually.
+  ensureNavLink('.primary-nav', { href: 'account.html', text: 'Account' });
+  ensureNavLink('.mobile-menu-links', { href: 'account.html', text: 'Account' });
 
   const menuBtn = document.getElementById('mobile-menu-btn');
   const menuBackdrop = document.getElementById('mobile-menu-backdrop');

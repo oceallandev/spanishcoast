@@ -2659,6 +2659,147 @@ body[data-section="properties"].map-open .map-section {
     background: rgba(248, 113, 113, 0.12);
 }
 
+/* --- Account / Admin Pages --- */
+.page-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.4rem;
+    padding: 0 2rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+    .page-grid {
+        grid-template-columns: 1fr;
+        padding: 0 1.2rem 1.5rem;
+    }
+}
+
+.panel {
+    padding: 1.3rem 1.35rem;
+}
+
+.form-grid {
+    display: grid;
+    gap: 0.9rem;
+    margin-top: 0.8rem;
+}
+
+.form-grid label span {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(148, 163, 184, 0.95);
+    font-weight: 900;
+    margin-bottom: 0.35rem;
+}
+
+.form-grid input {
+    width: 100%;
+    padding: 0.85rem 0.95rem;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    color: rgba(248, 250, 252, 0.92);
+    outline: none;
+}
+
+.form-grid input:focus {
+    border-color: rgba(14, 165, 233, 0.35);
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.18);
+}
+
+.divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 1.2rem 0;
+}
+
+.muted {
+    color: rgba(148, 163, 184, 0.92);
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+.account-status .status-row {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.status-title {
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    color: rgba(148, 163, 184, 0.95);
+}
+
+.status-text {
+    font-weight: 900;
+    font-size: 1.05rem;
+    margin-top: 0.1rem;
+}
+
+.status-actions {
+    display: flex;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+}
+
+.admin-toolbar {
+    display: flex;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.7rem;
+}
+
+.admin-table-wrap {
+    overflow: auto;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 780px;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 0.8rem 0.85rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: left;
+    color: rgba(226, 232, 240, 0.92);
+    font-size: 0.95rem;
+}
+
+.admin-table th {
+    position: sticky;
+    top: 0;
+    background: rgba(2, 6, 23, 0.9);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.admin-link {
+    color: rgba(56, 189, 248, 0.92);
+    font-weight: 900;
+    text-decoration: none;
+}
+
+.admin-link:hover {
+    text-decoration: underline;
+}
+
 .cta-button {
     flex: 1;
     padding: 1.2rem 2rem;

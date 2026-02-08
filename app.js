@@ -64,6 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let favoriteIds = loadFavoriteIds();
     let favoritesOnly = false;
+    let supabaseClient = null;
+    let supabaseUser = null;
+    let supabaseRole = '';
 
     function refKey(value) {
         return toText(value).trim().toUpperCase();
@@ -1008,6 +1011,126 @@ document.addEventListener('DOMContentLoaded', () => {
         return `mailto:info@spanishcoastproperties.com?subject=${subject}&body=${body}`;
     }
 
+    function getSupabase() {
+        return window.scpSupabase || null;
+    }
+
+    async function supabaseGetRole(client, userId) {
+        try {
+            const { data, error } = await client
+                .from('profiles')
+                .select('role')
+                .eq('user_id', userId)
+                .maybeSingle();
+            if (error) return '';
+            return toText(data && data.role).trim();
+        } catch (error) {
+            return '';
+        }
+    }
+
+    async function supabaseFetchFavorites(client, userId) {
+        try {
+            const { data, error } = await client
+                .from('favourites')
+                .select('property_id')
+                .eq('user_id', userId);
+            if (error) return [];
+            if (!Array.isArray(data)) return [];
+            return data.map((row) => idKey(row && row.property_id)).filter(Boolean);
+        } catch (error) {
+            return [];
+        }
+    }
+
+    async function supabaseUpsertFavorite(client, user, property) {
+        const pid = propertyIdFor(property);
+        if (!pid) return;
+        const reference = toText(property && property.ref).trim();
+        const town = toText(property && property.town).trim();
+        const type = toText(property && property.type).trim();
+        const price = listingPriceNumber(property);
+
+        const payload = {
+            user_id: user.id,
+            user_email: toText(user.email).trim() || null,
+            property_id: pid,
+            property_ref: reference || null,
+            property_link: buildPropertyLink(reference || pid),
+            town: town || null,
+            type: type || null,
+            price: Number.isFinite(price) ? price : null
+        };
+
+        try {
+            await client.from('favourites').upsert(payload, { onConflict: 'user_id,property_id' });
+        } catch (error) {
+            // ignore
+        }
+    }
+
+    async function supabaseDeleteFavorite(client, user, propertyId) {
+        if (!propertyId) return;
+        try {
+            await client
+                .from('favourites')
+                .delete()
+                .eq('user_id', user.id)
+                .eq('property_id', propertyId);
+        } catch (error) {
+            // ignore
+        }
+    }
+
+    async function initSupabaseFavoritesSync() {
+        const client = getSupabase();
+        supabaseClient = client;
+        if (!client) return;
+
+        try {
+            const { data } = await client.auth.getSession();
+            supabaseUser = data && data.session ? data.session.user : null;
+            supabaseRole = supabaseUser ? await supabaseGetRole(client, supabaseUser.id) : '';
+
+            if (supabaseUser) {
+                const localBefore = new Set(Array.from(favoriteIds));
+                const backendIds = await supabaseFetchFavorites(client, supabaseUser.id);
+                const backendSet = new Set(backendIds);
+                const mergedAll = new Set([...backendSet, ...Array.from(localBefore)]);
+                favoriteIds = mergedAll;
+                persistFavoriteIds(favoriteIds);
+                updateFavoritesControls();
+                // Migrate any locally-saved favourites to the backend (best effort).
+                Array.from(localBefore).filter((pid) => !backendSet.has(pid)).forEach((pid) => {
+                    const property = propertyById.get(pid);
+                    if (property) supabaseUpsertFavorite(client, supabaseUser, property);
+                });
+                // Refresh UI in case the user is currently in favourites-only mode.
+                filterProperties();
+            }
+        } catch (error) {
+            // ignore
+        }
+
+        try {
+            client.auth.onAuthStateChange(async (event, session) => {
+                supabaseUser = session && session.user ? session.user : null;
+                supabaseRole = supabaseUser ? await supabaseGetRole(client, supabaseUser.id) : '';
+                if (!supabaseUser) {
+                    updateFavoritesControls();
+                    return;
+                }
+                const backendIds = await supabaseFetchFavorites(client, supabaseUser.id);
+                favoriteIds = new Set([...backendIds, ...Array.from(favoriteIds)]);
+                persistFavoriteIds(favoriteIds);
+                updateFavoritesControls();
+                filterProperties();
+            });
+        } catch (error) {
+            // ignore
+        }
+    }
+
     function sourceUrlFor(property) {
         const url = toText(property && (property.source_url || property.sourceUrl)).trim();
         return url || '';
@@ -1566,6 +1689,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     const nowFav = toggleFavorited(property);
                     updateFavoritesControls();
                     syncFavoriteUiForPid(pid);
+                    if (supabaseClient && supabaseUser) {
+                        if (nowFav) {
+                            supabaseUpsertFavorite(supabaseClient, supabaseUser, property);
+                        } else {
+                            supabaseDeleteFavorite(supabaseClient, supabaseUser, pid);
+                        }
+                    }
                     if (!nowFav && favoritesOnly) {
                         filterProperties();
                     }
@@ -1821,6 +1951,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const nowFav = toggleFavorited(property);
                 updateFavoritesControls();
                 syncFavoriteUiForPid(activeModalPropertyId);
+                if (supabaseClient && supabaseUser) {
+                    if (nowFav) {
+                        supabaseUpsertFavorite(supabaseClient, supabaseUser, property);
+                    } else {
+                        supabaseDeleteFavorite(supabaseClient, supabaseUser, activeModalPropertyId);
+                    }
+                }
                 if (!nowFav && favoritesOnly) {
                     filterProperties();
                 }
@@ -2448,6 +2585,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     updateFavoritesControls();
+    initSupabaseFavoritesSync();
 
     if (favoritesToggleBtn) {
         favoritesToggleBtn.addEventListener('click', () => {
