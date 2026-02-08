@@ -62,6 +62,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const allProperties = rawProperties.filter(isPropertyInDisplayArea);
+    const sourceIndexById = new Map();
+    allProperties.forEach((property, index) => {
+        const pid = idKey(property && property.id) || idKey(property && property.ref);
+        if (pid && !sourceIndexById.has(pid)) {
+            sourceIndexById.set(pid, index);
+        }
+    });
 
     // --- State Management ---
     let currentProperties = [...allProperties];
@@ -76,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let parkingFilter = 'any';
     let maxBeachDistanceMeters = 'any';
     let seaViewFilter = 'any';
+    let sortMode = 'featured';
     let currentGalleryIndex = 0;
     let currentGalleryImages = [];
     let map;
@@ -114,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const parkingFilterEl = document.getElementById('parking-filter');
     const beachFilterEl = document.getElementById('beach-filter');
     const seaViewFilterEl = document.getElementById('sea-view-filter');
+    const sortFilterEl = document.getElementById('sort-filter');
     const applyBtn = document.getElementById('apply-filters');
 
     const toggleMapBtn = document.getElementById('toggle-map-btn');
@@ -823,6 +832,53 @@ document.addEventListener('DOMContentLoaded', () => {
         return `€${numberFormat.format(perSqm)}/m2`;
     }
 
+    function eurPerSqmNumberFor(property) {
+        const built = builtAreaFor(property);
+        const price = listingPriceNumber(property);
+        if (!Number.isFinite(price) || price <= 0 || built <= 0) return NaN;
+        return price / built;
+    }
+
+    function sourceIndexFor(property) {
+        const pid = propertyIdFor(property);
+        const idx = pid ? sourceIndexById.get(pid) : null;
+        return Number.isFinite(idx) ? idx : 0;
+    }
+
+    function compareNullableNumbers(a, b, direction = 1) {
+        const ax = Number.isFinite(a) ? a : Infinity;
+        const bx = Number.isFinite(b) ? b : Infinity;
+        return (ax - bx) * direction;
+    }
+
+    function sortProperties(list) {
+        const mode = toText(sortMode, 'featured');
+        if (mode === 'featured') {
+            return list;
+        }
+        const sorted = list.slice();
+        sorted.sort((pa, pb) => {
+            if (mode === 'date_desc') return sourceIndexFor(pb) - sourceIndexFor(pa);
+            if (mode === 'date_asc') return sourceIndexFor(pa) - sourceIndexFor(pb);
+
+            if (mode === 'price_asc') return compareNullableNumbers(listingPriceNumber(pa), listingPriceNumber(pb), 1);
+            if (mode === 'price_desc') return compareNullableNumbers(listingPriceNumber(pa), listingPriceNumber(pb), -1);
+
+            if (mode === 'beds_desc') return (Number(pb && pb.beds) || 0) - (Number(pa && pa.beds) || 0);
+            if (mode === 'area_desc') return builtAreaFor(pb) - builtAreaFor(pa);
+
+            if (mode === 'eur_sqm_asc') return compareNullableNumbers(eurPerSqmNumberFor(pa), eurPerSqmNumberFor(pb), 1);
+
+            if (mode === 'beach_asc') {
+                const da = beachDistanceMetersFor(pa);
+                const db = beachDistanceMetersFor(pb);
+                return compareNullableNumbers(da, db, 1);
+            }
+            return 0;
+        });
+        return sorted;
+    }
+
     function filterProperties() {
         const loweredSearch = normalize(searchQuery);
         const loweredRef = normalize(refQuery);
@@ -971,7 +1027,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const visible = currentProperties.slice(0, Math.min(renderLimit, currentProperties.length));
+        const sorted = sortProperties(currentProperties);
+        const visible = sorted.slice(0, Math.min(renderLimit, sorted.length));
         visible.forEach((property, index) => {
             const card = document.createElement('div');
             card.className = 'property-card';
@@ -1048,13 +1105,13 @@ document.addEventListener('DOMContentLoaded', () => {
             animationObserver.observe(card);
         });
 
-        if (currentProperties.length > visible.length) {
+        if (sorted.length > visible.length) {
             const loadMore = document.createElement('button');
             loadMore.type = 'button';
             loadMore.className = 'load-more-btn';
-            loadMore.textContent = `Load more (${visible.length} / ${currentProperties.length})`;
+            loadMore.textContent = `Load more (${visible.length} / ${sorted.length})`;
             loadMore.addEventListener('click', () => {
-                renderLimit = Math.min(currentProperties.length, renderLimit + RENDER_BATCH);
+                renderLimit = Math.min(sorted.length, renderLimit + RENDER_BATCH);
                 renderProperties();
             });
             propertyGrid.appendChild(loadMore);
@@ -1571,6 +1628,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const raw = toText(event.target.value).trim();
             maxPrice = raw === '' ? 'any' : raw;
             scheduleFilter();
+        });
+    }
+
+    if (sortFilterEl) {
+        sortMode = toText(sortFilterEl.value, 'featured') || 'featured';
+        sortFilterEl.addEventListener('change', (event) => {
+            sortMode = toText(event.target.value, 'featured') || 'featured';
+            renderLimit = 60;
+            renderProperties();
         });
     }
 

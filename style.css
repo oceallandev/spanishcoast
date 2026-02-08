@@ -59,7 +59,8 @@ body {
     height: var(--header-height);
     display: flex;
     align-items: center;
-    padding: 0 2rem;
+    padding-left: max(2rem, env(safe-area-inset-left));
+    padding-right: max(2rem, env(safe-area-inset-right));
     position: fixed;
     top: 0;
     width: 100%;
@@ -69,7 +70,8 @@ body {
 
 @media (max-width: 520px) {
     .main-header {
-        padding: 0 1rem;
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
     }
 
     .header-right {
@@ -84,8 +86,12 @@ body {
     .mobile-menu-btn,
     .open-filters-btn,
     .toggle-map-btn {
-        padding: 0.55rem 0.8rem;
-        font-size: 0.85rem;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        border-radius: 999px;
+        justify-content: center;
+        font-size: 1.05rem;
     }
 }
 
@@ -969,6 +975,10 @@ body.filters-open .filters-backdrop {
         left: 0;
         right: 0;
         padding: 0 1rem;
+        height: auto;
+        align-items: flex-start;
+        max-height: calc(100vh - var(--header-height) - 0.8rem);
+        overflow: auto;
         z-index: 2500;
     }
 
@@ -1173,6 +1183,61 @@ body.filters-open .filters-backdrop {
 
 .results-header {
     margin-bottom: 2rem;
+}
+
+.results-top {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.results-copy {
+    min-width: min(620px, 100%);
+}
+
+.results-sort {
+    display: grid;
+    gap: 0.35rem;
+    justify-items: end;
+    min-width: 220px;
+}
+
+.results-sort label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: rgba(148, 163, 184, 0.95);
+}
+
+.results-sort select {
+    width: 100%;
+    max-width: 320px;
+    padding: 0.7rem 0.9rem;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(248, 250, 252, 0.92);
+    font-weight: 900;
+    outline: none;
+}
+
+.results-sort select:focus {
+    border-color: rgba(14, 165, 233, 0.35);
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.18);
+}
+
+@media (max-width: 520px) {
+    .results-sort {
+        justify-items: start;
+        width: 100%;
+    }
+
+    .results-sort select {
+        max-width: 100%;
+    }
 }
 
 .results-header h2 {
