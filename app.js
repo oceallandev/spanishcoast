@@ -26,6 +26,44 @@ document.addEventListener('DOMContentLoaded', () => {
         // Feed correction: this is a "traspaso" (business transfer) with monthly rent.
         'SCP-1424': { mode: 'traspaso', price: 50000, monthlyRent: 572 }
     };
+    const FAVORITES_STORAGE_KEY = 'scp:favourites:v1';
+
+    function storageAvailable() {
+        try {
+            if (!window.localStorage) return false;
+            const testKey = '__scp_test__';
+            window.localStorage.setItem(testKey, '1');
+            window.localStorage.removeItem(testKey);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    function loadFavoriteIds() {
+        if (!storageAvailable()) return new Set();
+        try {
+            const raw = window.localStorage.getItem(FAVORITES_STORAGE_KEY);
+            if (!raw) return new Set();
+            const parsed = JSON.parse(raw);
+            if (!Array.isArray(parsed)) return new Set();
+            return new Set(parsed.map((v) => idKey(v)).filter(Boolean));
+        } catch (error) {
+            return new Set();
+        }
+    }
+
+    function persistFavoriteIds(favSet) {
+        if (!storageAvailable()) return;
+        try {
+            window.localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(Array.from(favSet)));
+        } catch (error) {
+            // ignore
+        }
+    }
+
+    let favoriteIds = loadFavoriteIds();
+    let favoritesOnly = false;
 
     function refKey(value) {
         return toText(value).trim().toUpperCase();
@@ -79,10 +117,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const allProperties = rawProperties.filter(isPropertyInDisplayArea);
     const sourceIndexById = new Map();
+    const propertyById = new Map();
     allProperties.forEach((property, index) => {
         const pid = idKey(property && property.id) || idKey(property && property.ref);
         if (pid && !sourceIndexById.has(pid)) {
             sourceIndexById.set(pid, index);
+        }
+        if (pid && !propertyById.has(pid)) {
+            propertyById.set(pid, property);
         }
     });
 
@@ -110,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeSection = 'home';
     let miniMap = null;
     let miniMapMarker = null;
+    let activeModalPropertyId = '';
     let preModalScrollY = 0;
     let lightboxIndex = 0;
     let lightboxTouchStartX = null;
@@ -176,6 +219,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const openFiltersBtn = document.getElementById('open-filters-btn');
     const closeFiltersBtn = document.getElementById('close-filters-btn');
     const filtersBackdrop = document.getElementById('filters-backdrop');
+    const favoritesToggleBtn = document.getElementById('favorites-toggle');
+    const favoritesSendBtn = document.getElementById('favorites-send');
     const footerYear = document.getElementById('footer-year');
     let filtersBarResizeTimer = null;
     let uiCollapsed = false;
@@ -361,6 +406,45 @@ document.addEventListener('DOMContentLoaded', () => {
     function propertyIdFor(property) {
         const id = idKey(property && property.id);
         return id || idKey(property && property.ref);
+    }
+
+    function setFavButtonState(btn, isFav, { compact = false } = {}) {
+        if (!btn) return;
+        btn.classList.toggle('is-fav', Boolean(isFav));
+        btn.setAttribute('aria-pressed', isFav ? 'true' : 'false');
+        if (compact) {
+            btn.textContent = isFav ? '♥' : '♡';
+            btn.title = isFav ? 'Remove from saved' : 'Save listing';
+        } else {
+            btn.textContent = isFav ? '♥ Saved' : '♡ Save';
+        }
+    }
+
+    function syncFavoriteUiForPid(pid) {
+        if (!pid) return;
+        const isFav = favoriteIds.has(pid);
+        document.querySelectorAll(`[data-property-id="${cssEscape(pid)}"] .fav-btn`).forEach((btn) => {
+            setFavButtonState(btn, isFav, { compact: true });
+        });
+        if (modalDetails && activeModalPropertyId === pid) {
+            const modalFavBtn = modalDetails.querySelector('[data-fav-toggle]');
+            if (modalFavBtn) {
+                setFavButtonState(modalFavBtn, isFav, { compact: false });
+            }
+        }
+    }
+
+    function updateFavoritesControls() {
+        const count = favoriteIds.size;
+        if (favoritesToggleBtn) {
+            favoritesToggleBtn.classList.toggle('active', favoritesOnly);
+            favoritesToggleBtn.setAttribute('aria-pressed', favoritesOnly ? 'true' : 'false');
+            favoritesToggleBtn.textContent = `Saved (${count})${favoritesOnly ? ' · Showing' : ''}`;
+        }
+        if (favoritesSendBtn) {
+            favoritesSendBtn.disabled = count === 0;
+            favoritesSendBtn.classList.toggle('disabled', count === 0);
+        }
     }
 
     function markListingImagesBroken(property) {
@@ -869,6 +953,61 @@ document.addEventListener('DOMContentLoaded', () => {
         return url.toString();
     }
 
+    function favoriteIdFor(property) {
+        return propertyIdFor(property);
+    }
+
+    function isFavorited(property) {
+        const pid = favoriteIdFor(property);
+        return Boolean(pid && favoriteIds.has(pid));
+    }
+
+    function setFavorited(property, nextValue) {
+        const pid = favoriteIdFor(property);
+        if (!pid) return false;
+        const has = favoriteIds.has(pid);
+        const shouldHave = Boolean(nextValue);
+        if (has === shouldHave) return has;
+        if (shouldHave) {
+            favoriteIds.add(pid);
+        } else {
+            favoriteIds.delete(pid);
+        }
+        persistFavoriteIds(favoriteIds);
+        return shouldHave;
+    }
+
+    function toggleFavorited(property) {
+        return setFavorited(property, !isFavorited(property));
+    }
+
+    function buildFavoritesMailto() {
+        const subject = encodeURIComponent('My saved listings');
+        const lines = [];
+        lines.push('Hello Spanish Coast Properties,');
+        lines.push('');
+        lines.push('Here are the listings I saved in the app:');
+        lines.push('');
+
+        const favIds = Array.from(favoriteIds);
+        favIds.forEach((pid) => {
+            const property = propertyById.get(pid);
+            const reference = toText(property && property.ref).trim() || pid;
+            const title = `${toText(property && property.type, 'Listing')} in ${toText(property && property.town, '')}`.trim();
+            const link = buildPropertyLink(reference);
+            lines.push(`- ${reference}${title ? ` (${title})` : ''}: ${link}`);
+        });
+
+        lines.push('');
+        lines.push('My name:');
+        lines.push('My phone/email:');
+        lines.push('');
+        lines.push('Thank you.');
+
+        const body = encodeURIComponent(lines.join('\n'));
+        return `mailto:info@spanishcoastproperties.com?subject=${subject}&body=${body}`;
+    }
+
     function sourceUrlFor(property) {
         const url = toText(property && (property.source_url || property.sourceUrl)).trim();
         return url || '';
@@ -1281,6 +1420,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 return false;
             }
 
+            if (favoritesOnly) {
+                const favId = propertyIdFor(property);
+                if (!favId || !favoriteIds.has(favId)) {
+                    return false;
+                }
+            }
+
             return true;
         });
 
@@ -1385,12 +1531,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 : listingMode === 'traspaso'
                     ? 'Traspaso'
                     : 'For Sale';
+            const isFav = favoriteIds.has(pid);
 
             card.innerHTML = `
                 <div class="card-img-wrapper">
                     <img src="${imageUrl}" alt="${type}" loading="lazy">
                     <div class="card-badge">${type}</div>
                     <div class="card-status ${listingMode}">${listingLabel}</div>
+                    <button type="button" class="fav-btn ${isFav ? 'is-fav' : ''}" aria-label="Save listing" aria-pressed="${isFav ? 'true' : 'false'}">${isFav ? '♥' : '♡'}</button>
                 </div>
                 <div class="card-content">
                     <div class="card-ref">${reference || 'Reference unavailable'}</div>
@@ -1408,6 +1556,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             `;
+
+            const favBtn = card.querySelector('.fav-btn');
+            if (favBtn) {
+                setFavButtonState(favBtn, isFav, { compact: true });
+                favBtn.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    const nowFav = toggleFavorited(property);
+                    updateFavoritesControls();
+                    syncFavoriteUiForPid(pid);
+                    if (!nowFav && favoritesOnly) {
+                        filterProperties();
+                    }
+                });
+            }
 
             card.addEventListener('click', () => {
                 if (pid && imageOkCache.get(pid) === false) {
@@ -1539,6 +1702,8 @@ document.addEventListener('DOMContentLoaded', () => {
             : null;
         const sourceUrl = sourceUrlFor(property);
         const propertyLink = buildPropertyLink(reference);
+        activeModalPropertyId = propertyId || '';
+        const isFav = Boolean(propertyId && favoriteIds.has(propertyId));
         const dossierSubject = encodeURIComponent(`Request to visit - ${reference || `${town} ${type}`}`);
         const shareTitle = `${reference || 'Property'} - ${town}, ${province}`;
         const shareTextRaw = `Check this ${type}${reference ? ` (${reference})` : ''} in ${town}: ${propertyLink}`;
@@ -1624,6 +1789,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </ul>
                     </div>
                     <div class="modal-cta">
+                        <button type="button" class="cta-button cta-button--outline" data-fav-toggle>${isFav ? '♥ Saved' : '♡ Save'}</button>
                         <a href="tel:+34624867866" class="cta-button">Call Now</a>
                         <a href="${dossierMailto}" class="cta-button">Request to visit</a>
                         ${sourceUrl ? `<a href="${escapeHtml(sourceUrl)}" class="cta-button" target="_blank" rel="noopener">Official page</a>` : ''}
@@ -1647,6 +1813,19 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.style.display = 'block';
         preModalScrollY = window.scrollY || 0;
         setBodyOverflow('hidden');
+
+        const modalFavBtn = modalDetails.querySelector('[data-fav-toggle]');
+        if (modalFavBtn) {
+            setFavButtonState(modalFavBtn, isFav, { compact: false });
+            modalFavBtn.addEventListener('click', () => {
+                const nowFav = toggleFavorited(property);
+                updateFavoritesControls();
+                syncFavoriteUiForPid(activeModalPropertyId);
+                if (!nowFav && favoritesOnly) {
+                    filterProperties();
+                }
+            });
+        }
 
         const miniMapContainer = document.getElementById('property-mini-map');
         if (miniMapContainer && typeof L !== 'undefined') {
@@ -1889,6 +2068,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modal.style.display = 'none';
         setBodyOverflow('auto');
+        activeModalPropertyId = '';
         // Keep the list position stable after closing (especially on mobile Safari).
         window.setTimeout(() => {
             try {
@@ -2267,6 +2447,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    updateFavoritesControls();
+
+    if (favoritesToggleBtn) {
+        favoritesToggleBtn.addEventListener('click', () => {
+            favoritesOnly = !favoritesOnly;
+            updateFavoritesControls();
+            filterProperties();
+            if (uiScrollEl) {
+                uiScrollEl.scrollTop = 0;
+            }
+        });
+    }
+
+    if (favoritesSendBtn) {
+        favoritesSendBtn.addEventListener('click', () => {
+            if (favoriteIds.size === 0) return;
+            window.location.href = buildFavoritesMailto();
+        });
+    }
+
     function syncFiltersFromControls() {
         selectedType = typeFilter ? typeFilter.value : 'all';
         operationMode = dealFilterEl ? toText(dealFilterEl.value, 'any') : 'any';
@@ -2298,6 +2498,7 @@ document.addEventListener('DOMContentLoaded', () => {
         seaViewFilter = 'any';
         operationMode = 'any';
         sortMode = 'featured';
+        favoritesOnly = false;
         autoRefFromUrl = '';
 
         if (refSearchInput) refSearchInput.value = '';
@@ -2326,6 +2527,7 @@ document.addEventListener('DOMContentLoaded', () => {
         closePropertyModal({ syncUrl: false });
         mapHasUserInteracted = false;
         mapLastFitSignature = '';
+        updateFavoritesControls();
         filterProperties();
     }
 

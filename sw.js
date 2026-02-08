@@ -1,5 +1,5 @@
 /* Minimal same-origin service worker for instant repeat loads on mobile WebKit/Android. */
-const CACHE_NAME = 'scp-cache-20260208q';
+const CACHE_NAME = 'scp-cache-20260208r';
 
 const PRECACHE_PATHS = [
   './',

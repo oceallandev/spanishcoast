@@ -18,8 +18,8 @@
     <meta property="og:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
 
     <meta name="theme-color" content="#030712">
-    <link rel="manifest" href="manifest.webmanifest?v=20260208q">
-    <link rel="stylesheet" href="style.css?v=20260208q">
+    <link rel="manifest" href="manifest.webmanifest?v=20260208r">
+    <link rel="stylesheet" href="style.css?v=20260208r">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -235,25 +235,33 @@
 	                                    Filter listings and switch to map view to see only the exact results.
 	                                </p>
 	                            </div>
-	                            <div class="results-sort">
-	                                <label for="sort-filter">Sort</label>
-	                                <select id="sort-filter">
-	                                    <option value="featured">Featured</option>
-	                                    <option value="date_desc">Date added (newest)</option>
-	                                    <option value="date_asc">Date added (oldest)</option>
-	                                    <option value="price_asc">Price (low to high)</option>
-	                                    <option value="price_desc">Price (high to low)</option>
-	                                    <option value="beds_desc">Beds (high to low)</option>
-	                                    <option value="area_desc">Area (high to low)</option>
-	                                    <option value="eur_sqm_asc">€/m2 (low to high)</option>
-	                                    <option value="beach_asc">Beach distance (near to far)</option>
-	                                </select>
-	                            </div>
+	                        <div class="results-sort">
+	                            <label for="sort-filter">Sort</label>
+	                            <select id="sort-filter">
+	                                <option value="featured">Featured</option>
+	                                <option value="date_desc">Date added (newest)</option>
+	                                <option value="date_asc">Date added (oldest)</option>
+	                                <option value="price_asc">Price (low to high)</option>
+	                                <option value="price_desc">Price (high to low)</option>
+	                                <option value="beds_desc">Beds (high to low)</option>
+	                                <option value="area_desc">Area (high to low)</option>
+	                                <option value="eur_sqm_asc">€/m2 (low to high)</option>
+	                                <option value="beach_asc">Beach distance (near to far)</option>
+	                            </select>
 	                        </div>
-	                        <div class="results-cta">
-	                            <a class="cta-button" href="viewing-trip.html">Plan a viewing trip (2-7 days)</a>
-	                            <a class="cta-button" href="tel:+34624867866">Call</a>
-	                            <a class="cta-button" href="mailto:info@spanishcoastproperties.com?subject=Viewing%20Trip%20Package%20-%20Inquiry">Email</a>
+	                        <div class="results-actions">
+	                            <button id="favorites-toggle" class="favorites-toggle" type="button" aria-pressed="false">
+	                                Saved (0)
+	                            </button>
+	                            <button id="favorites-send" class="favorites-send" type="button" disabled>
+	                                Send saved
+	                            </button>
+	                        </div>
+	                    </div>
+	                    <div class="results-cta">
+	                        <a class="cta-button" href="viewing-trip.html">Plan a viewing trip (2-7 days)</a>
+	                        <a class="cta-button" href="tel:+34624867866">Call</a>
+	                        <a class="cta-button" href="mailto:info@spanishcoastproperties.com?subject=Viewing%20Trip%20Package%20-%20Inquiry">Email</a>
 	                        </div>
 	                    </div>
                     <div id="property-grid" class="property-grid"></div>
@@ -307,11 +315,11 @@
         <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
     </footer>
 
-    <script defer src="data.js?v=20260208q"></script>
-    <script defer src="catalog.js?v=20260208q"></script>
-    <script defer src="custom-listings.js?v=20260208q"></script>
-    <script defer src="app.js?v=20260208q"></script>
-    <script defer src="site.js?v=20260208q"></script>
+    <script defer src="data.js?v=20260208r"></script>
+    <script defer src="catalog.js?v=20260208r"></script>
+    <script defer src="custom-listings.js?v=20260208r"></script>
+    <script defer src="app.js?v=20260208r"></script>
+    <script defer src="site.js?v=20260208r"></script>
 </body>
 
 </html>
