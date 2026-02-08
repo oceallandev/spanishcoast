@@ -150,12 +150,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const lightboxCaption = document.getElementById('lightbox-caption');
 
     const mainLogoImg = document.getElementById('main-logo-img');
+    const filtersBar = document.getElementById('filters-bar');
     const searchPill = document.querySelector('.search-pill');
     const toggleAdvancedBtn = document.getElementById('toggle-advanced-btn');
     const openFiltersBtn = document.getElementById('open-filters-btn');
     const closeFiltersBtn = document.getElementById('close-filters-btn');
     const filtersBackdrop = document.getElementById('filters-backdrop');
     const footerYear = document.getElementById('footer-year');
+    let filtersBarResizeTimer = null;
+
+    function syncFiltersBarHeight() {
+        if (!filtersBar) return;
+        // Mobile layout uses an overlay filters modal; keep city bar pinned under the header.
+        if (window.matchMedia && window.matchMedia('(max-width: 1024px)').matches) {
+            document.documentElement.style.removeProperty('--filters-bar-height');
+            return;
+        }
+
+        const height = Math.ceil(filtersBar.getBoundingClientRect().height);
+        if (height > 0) {
+            document.documentElement.style.setProperty('--filters-bar-height', `${height}px`);
+        }
+    }
 
     const animationObserver = 'IntersectionObserver' in window
         ? new IntersectionObserver((entries) => {
@@ -1739,6 +1755,15 @@ document.addEventListener('DOMContentLoaded', () => {
         footerYear.textContent = String(new Date().getFullYear());
     }
 
+    syncFiltersBarHeight();
+
+    window.addEventListener('resize', () => {
+        if (filtersBarResizeTimer) {
+            clearTimeout(filtersBarResizeTimer);
+        }
+        filtersBarResizeTimer = setTimeout(syncFiltersBarHeight, 60);
+    });
+
     if (toggleAdvancedBtn && searchPill) {
         toggleAdvancedBtn.addEventListener('click', () => {
             const next = !searchPill.classList.contains('advanced-open');
@@ -1749,6 +1774,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (scrollEl) {
                 scrollEl.scrollLeft = 0;
             }
+            requestAnimationFrame(syncFiltersBarHeight);
         });
     }
 

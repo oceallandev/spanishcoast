@@ -520,9 +520,23 @@ body[data-section="vehicles"] .open-filters-btn {
     border: 1px solid rgba(255, 255, 255, 0.08);
     background: rgba(255, 255, 255, 0.02);
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
     gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.catalog-controls-left,
+.catalog-controls-right {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.catalog-controls-right {
+    margin-left: auto;
+    justify-content: flex-end;
 }
 
 .catalog-count {
@@ -531,6 +545,50 @@ body[data-section="vehicles"] .open-filters-btn {
     letter-spacing: 0.04em;
     text-transform: uppercase;
     font-size: 0.78rem;
+}
+
+.catalog-map-wrap {
+    max-width: 1800px;
+    margin: 0 auto 1.1rem;
+    padding: 1.2rem;
+    border-radius: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.catalog-map-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.9rem;
+}
+
+.catalog-map-title {
+    font-weight: 900;
+    color: rgba(248, 250, 252, 0.96);
+    letter-spacing: -0.01em;
+}
+
+.catalog-map-sub {
+    color: rgba(148, 163, 184, 0.92);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.78rem;
+}
+
+.catalog-map {
+    height: min(66vh, 620px);
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.catalog-map .leaflet-control-attribution {
+    display: none;
 }
 
 .business-card-link {
@@ -864,7 +922,8 @@ body.menu-open .mobile-menu {
     left: 0;
     right: 0;
     top: var(--header-height);
-    height: var(--filters-bar-height);
+    height: auto;
+    min-height: var(--filters-bar-height);
     padding: 0.55rem 1.2rem;
     align-items: center;
     z-index: 2300;
@@ -916,6 +975,31 @@ body.menu-open .mobile-menu {
 
 .search-pill.advanced-open .pill-advanced {
     display: flex;
+}
+
+body[data-section="properties"] .search-pill.advanced-open {
+    overflow: visible;
+    align-items: flex-start;
+}
+
+body[data-section="properties"] .search-pill.advanced-open .pill-scroll {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    row-gap: 0.55rem;
+}
+
+body[data-section="properties"] .search-pill.advanced-open .pill-advanced {
+    flex: 1 0 100%;
+    width: 100%;
+    flex-wrap: wrap;
+    order: 999;
+    padding-top: 0.45rem;
+    margin-top: 0.15rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body[data-section="properties"] .search-pill.advanced-open .pill-advanced .pill-divider {
+    display: none;
 }
 
 .search-pill:hover {
@@ -1056,6 +1140,10 @@ body.filters-open .filters-backdrop {
 }
 
 @media (max-width: 1024px) {
+    :root {
+        --filters-bar-height: 0px;
+    }
+
     body[data-section="properties"] .open-filters-btn {
         display: inline-flex;
         align-items: center;

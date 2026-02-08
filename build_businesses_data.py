@@ -88,18 +88,28 @@ def guess_title(desc_norm: str, fallback_type: str) -> str:
     low = desc_norm.lower()
     if "language school" in low:
         return "Language School"
+    if "pizzeria" in low or re.search(r"\bpizza\b", low):
+        return "Pizzeria"
     if "restaurant" in low:
         return "Restaurant"
+    if "peluquer" in low or "hairdresser" in low or "hairdresser's" in low:
+        return "Hair Salon (Peluqueria)"
     if "salon" in low or "beauty" in low or "manicure" in low or "pedicure" in low or "barber" in low:
         return "Beauty Salon"
     if re.search(r"\bbar\b", low):
         return "Bar"
     if "cafe" in low or "café" in low:
         return "Cafe"
+    if "bakery" in low or "panader" in low:
+        return "Bakery"
+    if "supermarket" in low:
+        return "Supermarket"
     if "shop" in low or "store" in low:
         return "Shop"
     if "hotel" in low or "hostel" in low:
         return "Hotel / Hostel"
+    if "gym" in low or "fitness" in low:
+        return "Gym / Fitness"
     if "clinic" in low or "dental" in low:
         return "Clinic"
     if "office" in low:
@@ -161,6 +171,8 @@ def main() -> None:
         currency = str(item.get("currency", "") or "EUR").strip()
         images = item.get("images", []) or []
         hero = images[0] if isinstance(images, list) and images else ""
+        lat = item.get("latitude", None)
+        lon = item.get("longitude", None)
 
         out.append(
             {
@@ -168,12 +180,15 @@ def main() -> None:
                 "ref": ref,
                 "kind": kind,  # "business" | "traspaso"
                 "title": title,
+                "businessType": title,
                 "town": town,
                 "province": province,
                 "price": price,
                 "currency": currency,
                 "image": hero,
                 "description": desc_norm[:420],
+                "latitude": lat,
+                "longitude": lon,
             }
         )
 

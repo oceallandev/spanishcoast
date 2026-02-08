@@ -18,12 +18,17 @@
     <meta property="og:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
 
     <meta name="theme-color" content="#030712">
-    <link rel="manifest" href="manifest.webmanifest?v=20260208h">
+    <link rel="manifest" href="manifest.webmanifest?v=20260208j">
 
-    <link rel="stylesheet" href="style.css?v=20260208h">
+    <link rel="stylesheet" href="style.css?v=20260208j">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 
 <body data-section="businesses">
@@ -97,16 +102,36 @@
                 </div>
             </div>
             <div class="catalog-controls glass" aria-label="Business filters">
-                <div class="results-sort">
-                    <label for="business-kind-filter">Type</label>
-                    <select id="business-kind-filter">
-                        <option value="all">All</option>
-                        <option value="business">Business</option>
-                        <option value="traspaso">Traspaso</option>
-                    </select>
+                <div class="catalog-controls-left">
+                    <div class="results-sort">
+                        <label for="business-kind-filter">Deal</label>
+                        <select id="business-kind-filter">
+                            <option value="all">All</option>
+                            <option value="business">Business</option>
+                            <option value="traspaso">Traspaso</option>
+                        </select>
+                    </div>
+                    <div class="results-sort">
+                        <label for="business-type-filter">Business Type</label>
+                        <select id="business-type-filter">
+                            <option value="all">All</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="catalog-count" id="business-count" aria-label="Business count"></div>
+                <div class="catalog-controls-right">
+                    <button id="business-map-toggle" class="view-toggle-btn" type="button" aria-label="Toggle map">
+                        Map
+                    </button>
+                    <div class="catalog-count" id="business-count" aria-label="Business count"></div>
+                </div>
             </div>
+            <section class="catalog-map-wrap glass" id="business-map-wrap" aria-label="Businesses map" hidden>
+                <div class="catalog-map-head">
+                    <div class="catalog-map-title">Businesses on the map</div>
+                    <div class="catalog-map-sub" id="business-map-count"></div>
+                </div>
+                <div id="business-map" class="catalog-map" role="application" aria-label="Businesses map"></div>
+            </section>
             <div class="catalog-hero">
                 <h3>How We Help</h3>
                 <div class="service-tags">
@@ -122,6 +147,8 @@
                 <div class="simple-cta">
                     <a class="cta-button" href="mailto:info@spanishcoastproperties.com?subject=Business%20Inquiry%20-%20Shortlist">Email</a>
                     <a class="cta-button" href="services.html#business-services">See services</a>
+                    <a class="cta-button"
+                        href="mailto:info@spanishcoastproperties.com?subject=I%20want%20to%20sell%20my%20business&body=Hi%20Spanish%20Coast%20Properties%2C%0A%0AI%20want%20to%20sell%20my%20business.%20Here%20are%20the%20details%3A%0A-%20Business%20type%3A%0A-%20Location%3A%0A-%20Asking%20price%3A%0A-%20Lease%20%2F%20Freehold%3A%0A-%20Reason%20for%20sale%3A%0A-%20Phone%3A%0A%0AThank%20you%21">I want to sell my business</a>
                 </div>
             </div>
             <div class="catalog-grid" id="business-grid"></div>
@@ -155,10 +182,10 @@
         <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
     </footer>
 
-    <script defer src="catalog.js?v=20260208h"></script>
-    <script defer src="businesses-data.js?v=20260208h"></script>
-    <script defer src="catalog-page.js?v=20260208h"></script>
-    <script defer src="site.js?v=20260208h"></script>
+    <script defer src="catalog.js?v=20260208j"></script>
+    <script defer src="businesses-data.js?v=20260208j"></script>
+    <script defer src="catalog-page.js?v=20260208j"></script>
+    <script defer src="site.js?v=20260208j"></script>
 </body>
 
 </html>
