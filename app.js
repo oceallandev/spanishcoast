@@ -20,6 +20,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const EARTH_RADIUS_KM = 6371;
     const numberFormat = new Intl.NumberFormat('en-IE', { maximumFractionDigits: 0 });
     const PLACEHOLDER_IMAGE = 'assets/placeholder.png';
+    const LISTING_OVERRIDES_BY_REF = {
+        // Feed correction: this is a "traspaso" (business transfer) with monthly rent.
+        'SCP-1424': { mode: 'traspaso', price: 50000, monthlyRent: 572 }
+    };
+
+    function refKey(value) {
+        return toText(value).trim().toUpperCase();
+    }
+
+    function listingOverrideFor(property) {
+        const key = refKey(property && property.ref);
+        if (!key) return null;
+        return LISTING_OVERRIDES_BY_REF[key] || null;
+    }
 
     function toRadians(value) {
         return value * (Math.PI / 180);
@@ -453,11 +467,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function listingModeFor(property) {
+        const override = listingOverrideFor(property);
+        if (override && override.mode) {
+            return override.mode;
+        }
+
         const salePrice = Number(property && property.price);
         if (Number.isFinite(salePrice) && salePrice > 0) {
             return 'sale';
         }
         const text = normalize(property && property.description);
+        const isTransfer = text.includes('traspaso')
+            || text.includes('being transferred')
+            || text.includes('is being transferred')
+            || text.includes('is transferred');
+        if (isTransfer) {
+            return 'traspaso';
+        }
         if (text.includes('available for rent') || text.includes('for rent') || text.includes('monthly rent')) {
             return 'rent';
         }
@@ -469,7 +495,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const text = normalize(property && property.description);
         if (!text) return 'month';
         if (text.includes('per night') || text.includes('/night') || text.includes('nightly')) return 'night';
-        if (text.includes('per day') || text.includes('/day') || text.includes('daily')) return 'day';
+        // Avoid matching "opens daily" or similar phrases that are not about rental periods.
+        if (text.includes('per day') || text.includes('/day') || text.includes('daily rent') || text.includes('daily rate')) return 'day';
         if (text.includes('per week') || text.includes('/week') || text.includes('weekly')) return 'week';
         // Spanish hints
         if (text.includes('alquiler vacacional') || text.includes('licencia turistica') || text.includes('turistic')) return 'week';
@@ -504,15 +531,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function isNewBuild(property) {
         const text = normalize(property && property.description);
-        return text.includes('new build')
+        if (!text) return false;
+
+        // Strong negative signals for resale listings.
+        if (text.includes('resale') || text.includes('resale property') || text.includes('second-hand') || text.includes('second hand')
+            || text.includes('reventa') || text.includes('segunda mano')) {
+            return false;
+        }
+
+        const positive = text.includes('new build')
             || text.includes('newbuild')
+            || text.includes('obra nueva')
             || text.includes('off plan')
             || text.includes('off-plan')
-            || text.includes('key ready')
-            || text.includes('residential complex')
-            || text.includes('developer')
-            || text.includes('obra nueva')
+            || text.includes('under construction')
+            || text.includes('from the developer')
+            || text.includes('direct from the developer')
             || text.includes('promotor');
+
+        // If the description includes a build/completion year, ensure it is recent enough.
+        const yearMatch = text.match(/\b(?:year built|built in|completed in|construction)\s*(?:in|:)?\s*(19\d{2}|20\d{2})\b/i);
+        if (yearMatch) {
+            const year = Number(yearMatch[1]);
+            const currentYear = new Date().getFullYear();
+            // "New build" generally means very recent stock; keep a conservative window.
+            if (Number.isFinite(year) && year < currentYear - 4) {
+                return false;
+            }
+            // If recent year is present and no resale flags, accept as new build.
+            if (Number.isFinite(year) && year >= currentYear - 4) {
+                return true;
+            }
+        }
+
+        return positive;
     }
 
     function isInvestmentDeal(property) {
@@ -541,10 +593,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function listingPriceNumber(property) {
+        const override = listingOverrideFor(property);
+        if (override && Number.isFinite(Number(override.price)) && Number(override.price) > 0) {
+            return Number(override.price);
+        }
+
         const salePrice = Number(property && property.price);
         if (Number.isFinite(salePrice) && salePrice > 0) {
             return salePrice;
         }
+
+        // Try to parse a traspaso/transfer price from description if present.
+        const text = toText(property && property.description);
+        const transferMatch = text.match(/\b(?:traspaso|transfer(?:red)?|being transferred)\b[^€\d]{0,40}€\s*([\d.,]+)/i);
+        if (transferMatch) {
+            const parsed = parseEuroAmount(`€ ${transferMatch[1]}`);
+            if (Number.isFinite(parsed) && parsed > 0) {
+                return parsed;
+            }
+        }
+
         const rentPrice = rentPriceFromDescription(property && property.description);
         return rentPrice ?? NaN;
     }
@@ -562,6 +630,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (period === 'day') return `${formatted} / day`;
             if (period === 'week') return `${formatted} / week`;
             return `${formatted} / month`;
+        }
+        if (mode === 'traspaso') {
+            const override = listingOverrideFor(property);
+            if (override && Number.isFinite(Number(override.monthlyRent)) && Number(override.monthlyRent) > 0) {
+                return `${formatted} (Traspaso) + ${formatPrice(Number(override.monthlyRent))} / month rent`;
+            }
+            return `${formatted} (Traspaso)`;
         }
         return formatted;
     }
@@ -656,6 +731,21 @@ document.addEventListener('DOMContentLoaded', () => {
             .replace(/\r\n?/g, '\n')
             .replace(/\u00a0/g, ' ')
             .trim();
+
+        // Strip feed-injected "Read more/less" toggles and any embedded JS source.
+        if (text) {
+            // Some feeds append raw JS (document.getElementById / addEventListener) directly to the description.
+            const jsStart = text.search(/(?:const\s+toggleBtn\s*=|document\.getElementById\(|toggleBtn\.addEventListener|readLessBtn\.addEventListener)/i);
+            if (jsStart !== -1) {
+                text = text.slice(0, jsStart).trim();
+            }
+            // Remove the literal tokens, but keep spacing sane.
+            text = text
+                .replace(/\bRead more\b/gi, '\n')
+                .replace(/\bRead less\b/gi, '\n')
+                .replace(/\n{3,}/g, '\n\n')
+                .trim();
+        }
 
         if (!text) {
             return '<p>Property details coming soon.</p>';
@@ -1262,12 +1352,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const builtArea = builtAreaFor(property);
             const eurPerSqm = eurPerSqmFor(property);
             const listingMode = listingModeFor(property);
+            const listingLabel = listingMode === 'rent'
+                ? 'For Rent'
+                : listingMode === 'traspaso'
+                    ? 'Traspaso'
+                    : 'For Sale';
 
             card.innerHTML = `
                 <div class="card-img-wrapper">
                     <img src="${imageUrl}" alt="${type}" loading="lazy">
                     <div class="card-badge">${type}</div>
-                    <div class="card-status ${listingMode}">${listingMode === 'rent' ? 'For Rent' : 'For Sale'}</div>
+                    <div class="card-status ${listingMode}">${listingLabel}</div>
                 </div>
                 <div class="card-content">
                     <div class="card-ref">${reference || 'Reference unavailable'}</div>

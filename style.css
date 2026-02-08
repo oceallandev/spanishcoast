@@ -2171,6 +2171,7 @@ body[data-section="properties"].map-open .map-section {
 }
 
 .modal-info .card-badge {
+    position: static;
     display: inline-block;
     width: fit-content;
     padding: 0.5rem 1.2rem;
