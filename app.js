@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let parkingFilter = 'any';
     let maxBeachDistanceMeters = 'any';
     let seaViewFilter = 'any';
-    let operationMode = 'any'; // any | sale | rent_longterm | rent_vacation | new_build | invest
+    let operationMode = 'any'; // any | sale | rent_longterm | rent_vacation
     let sortMode = 'featured';
     let currentGalleryIndex = 0;
     let currentGalleryImages = [];
@@ -537,8 +537,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (mode === 'rent') {
             return isVacationRental(property) ? 'rent_vacation' : 'rent_longterm';
         }
-        if (isNewBuild(property)) return 'new_build';
-        if (isInvestmentDeal(property)) return 'invest';
         return 'sale';
     }
 
@@ -905,7 +903,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function applyOperationFromUrl() {
         const op = toText(new URLSearchParams(window.location.search).get('op')).trim();
         if (!op) return;
-        const allowed = new Set(['any', 'sale', 'rent_longterm', 'rent_vacation', 'new_build', 'invest']);
+        const allowed = new Set(['any', 'sale', 'rent_longterm', 'rent_vacation']);
         if (!allowed.has(op)) return;
         operationMode = op;
         if (dealFilterEl) {
@@ -1077,7 +1075,11 @@ document.addEventListener('DOMContentLoaded', () => {
             let matchesType = true;
             if (selectedType !== 'all') {
                 const selectedNorm = normalize(selectedType);
-                if (selectedNorm === 'apartment') {
+                if (selectedNorm === 'new build') {
+                    matchesType = isNewBuild(property);
+                } else if (selectedNorm === 'investment') {
+                    matchesType = isInvestmentDeal(property);
+                } else if (selectedNorm === 'apartment') {
                     matchesType = typeNorm.includes('apartment') || typeNorm.includes('apartamento');
                 } else if (selectedNorm === 'penthouse') {
                     matchesType = typeNorm.includes('penthouse');
@@ -1128,7 +1130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const matchesSeaView = seaViewFilter === 'any'
                 || (seaViewFilter === 'yes' && hasSeaView(property));
 
-            const op = operationFor(property);
+            const op = operationFor(property); // sale | rent_longterm | rent_vacation
             const matchesOperation = operationMode === 'any' || op === operationMode;
 
             const passesCoreFilters = matchesRef
