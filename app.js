@@ -124,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const seaViewFilterEl = document.getElementById('sea-view-filter');
     const sortFilterEl = document.getElementById('sort-filter');
     const applyBtn = document.getElementById('apply-filters');
+    const clearFiltersBtn = document.getElementById('clear-filters-btn');
 
     const toggleMapBtn = document.getElementById('toggle-map-btn');
     const mapSection = document.getElementById('map-section');
@@ -239,15 +240,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return unique;
     }
 
-    function attachImageFallback(imgEl, urls, { onAllFailed } = {}) {
+    function attachImageFallback(imgEl, urls, { onAllFailed, delayMs = 120, maxAttempts = null } = {}) {
         if (!imgEl) return;
-        const candidates = Array.isArray(urls) ? urls.filter(Boolean) : [];
+        let candidates = Array.isArray(urls) ? urls.filter(Boolean) : [];
+        if (Number.isFinite(maxAttempts) && maxAttempts > 0) {
+            candidates = candidates.slice(0, Math.floor(maxAttempts));
+        }
         let idx = 0;
+        let scheduled = null;
 
         imgEl.setAttribute('referrerpolicy', 'no-referrer');
         imgEl.setAttribute('decoding', 'async');
 
         const tryNext = () => {
+            scheduled = null;
             idx += 1;
             if (idx < candidates.length) {
                 imgEl.src = candidates[idx];
@@ -260,7 +266,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        const onError = () => tryNext();
+        const onError = () => {
+            // Avoid tight error loops which cause visible flicker on mobile.
+            if (scheduled) return;
+            scheduled = window.setTimeout(tryNext, delayMs);
+        };
         imgEl.addEventListener('error', onError);
     }
 
@@ -599,18 +609,21 @@ document.addEventListener('DOMContentLoaded', () => {
         return url.toString();
     }
 
-    function updateBrowserRefParam(reference) {
-        if (!window.history || typeof window.history.replaceState !== 'function') {
-            return;
-        }
+    function setBrowserRef(reference, { push = false, state = {} } = {}) {
+        if (!window.history) return;
+        const fn = push ? window.history.pushState : window.history.replaceState;
+        if (typeof fn !== 'function') return;
+
         const url = new URL(window.location.href);
         if (reference) {
             url.searchParams.set('ref', reference);
         } else {
             url.searchParams.delete('ref');
         }
-        window.history.replaceState({}, '', url.toString());
+        fn.call(window.history, state || {}, '', url.toString());
     }
+
+    let autoRefFromUrl = '';
 
     function setActiveNavLink(sectionKey) {
         navLinks.forEach((link) => {
@@ -723,6 +736,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        autoRefFromUrl = reference;
         refQuery = reference;
         if (refSearchInput) {
             refSearchInput.value = reference;
@@ -733,7 +747,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (exactMatch) {
             const propertyId = propertyIdFor(exactMatch);
             if (!propertyId || imageOkCache.get(propertyId) !== false) {
-                openPropertyModal(exactMatch);
+                openPropertyModal(exactMatch, { syncUrl: false });
             }
         }
     }
@@ -1085,9 +1099,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const cardImg = card.querySelector('.card-img-wrapper img');
             attachImageFallback(cardImg, imageCandidates, {
+                maxAttempts: 3,
                 onAllFailed: () => {
                     markListingImagesBroken(property);
-                    card.style.display = 'none';
+                    card.classList.add('listing-removed');
+                    window.setTimeout(() => {
+                        if (card && card.parentNode) {
+                            card.parentNode.removeChild(card);
+                        }
+                    }, 260);
                 }
             });
 
@@ -1128,7 +1148,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.setTimeout(() => card.classList.remove('highlighted'), 1800);
     }
 
-    function openPropertyModal(property) {
+    function openPropertyModal(property, { syncUrl = true, pushUrl = true } = {}) {
         if (!modal || !modalDetails) {
             return;
         }
@@ -1177,7 +1197,11 @@ document.addEventListener('DOMContentLoaded', () => {
         );
         const dossierMailto = `mailto:info@spanishcoastproperties.com?subject=${dossierSubject}&body=${dossierBody}`;
         const descriptionHtml = formatDescriptionHtml(description);
-        updateBrowserRefParam(reference);
+        if (syncUrl) {
+            // Use pushState so browser Back closes the modal. If modal is already open, replace instead.
+            const shouldPush = Boolean(pushUrl) && !isModalOpen();
+            setBrowserRef(reference, { push: shouldPush, state: { modalRef: reference } });
+        }
 
         const modalTitle = escapeHtml(`${type} in ${town}`);
 
@@ -1412,6 +1436,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function isModalOpen() {
+        return Boolean(modal && modal.style.display === 'block');
+    }
+
+    function closePropertyModal({ syncUrl = true } = {}) {
+        if (!modal) return;
+        if (!isModalOpen()) return;
+
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+
+        if (syncUrl) {
+            // If modal was opened via pushState (state.modalRef), go back one entry. Otherwise just clear ref.
+            const currentState = window.history && window.history.state;
+            const url = new URL(window.location.href);
+            const hasRef = Boolean(toText(url.searchParams.get('ref')).trim());
+            if (currentState && currentState.modalRef && hasRef) {
+                window.history.back();
+            } else {
+                setBrowserRef('', { push: false, state: {} });
+            }
+        }
+
+        // If the current ref filter was injected via URL deep link, clear it on close so the user sees all listings.
+        if (autoRefFromUrl && normalize(refQuery) === normalize(autoRefFromUrl)) {
+            refQuery = '';
+            autoRefFromUrl = '';
+            if (refSearchInput) refSearchInput.value = '';
+            filterProperties();
+        }
+    }
+
     function generateCityButtons() {
         if (!cityButtonsContainer) {
             return;
@@ -1564,7 +1620,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mapSection.classList.remove('active');
             document.body.classList.remove('map-open');
             if (toggleMapBtn) {
-                toggleMapBtn.textContent = '🗺️';
+                toggleMapBtn.textContent = 'Map';
             }
         }
         document.body.classList.add('filters-open');
@@ -1607,11 +1663,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const section = toText(url.searchParams.get('section')).trim();
         const next = ref ? 'properties' : (section || 'home');
         setActiveSection(next, { pushUrl: false });
+
+        if (next !== 'properties') {
+            closePropertyModal({ syncUrl: false });
+            return;
+        }
+
+        if (!ref) {
+            closePropertyModal({ syncUrl: false });
+            return;
+        }
+
+        // Open modal for this ref without forcing filter state unless it came from a deep link.
+        const match = allProperties.find((property) => normalize(property.ref) === normalize(ref));
+        if (match) {
+            openPropertyModal(match, { syncUrl: false, pushUrl: false });
+        }
     });
 
     if (refSearchInput) {
         refSearchInput.addEventListener('input', (event) => {
-            refQuery = toText(event.target.value).trim();
+            const next = toText(event.target.value).trim();
+            refQuery = next;
+            if (autoRefFromUrl && normalize(next) !== normalize(autoRefFromUrl)) {
+                autoRefFromUrl = '';
+            }
             scheduleFilter();
         });
     }
@@ -1656,6 +1732,47 @@ document.addEventListener('DOMContentLoaded', () => {
         seaViewFilter = seaViewFilterEl ? seaViewFilterEl.value : 'any';
     }
 
+    function resetAllFilters() {
+        selectedCity = 'all';
+        selectedType = 'all';
+        searchQuery = '';
+        refQuery = '';
+        maxPrice = 'any';
+        minBeds = 0;
+        minBaths = 0;
+        poolFilter = 'any';
+        parkingFilter = 'any';
+        maxBeachDistanceMeters = 'any';
+        seaViewFilter = 'any';
+        sortMode = 'featured';
+        autoRefFromUrl = '';
+
+        if (refSearchInput) refSearchInput.value = '';
+        if (searchInput) searchInput.value = '';
+        if (typeFilter) typeFilter.value = 'all';
+        if (priceFilter) priceFilter.value = '';
+        if (bedsFilter) bedsFilter.value = '0';
+        if (bathsFilter) bathsFilter.value = '0';
+        if (poolFilterEl) poolFilterEl.value = 'any';
+        if (parkingFilterEl) parkingFilterEl.value = 'any';
+        if (beachFilterEl) beachFilterEl.value = 'any';
+        if (seaViewFilterEl) seaViewFilterEl.value = 'any';
+        if (sortFilterEl) sortFilterEl.value = 'featured';
+
+        updateActiveCityButton('all');
+        setBrowserRef('', { push: false, state: {} });
+
+        if (mapSection && mapSection.classList.contains('active')) {
+            mapSection.classList.remove('active');
+            document.body.classList.remove('map-open');
+            if (toggleMapBtn) toggleMapBtn.textContent = 'Map';
+        }
+
+        closeFilters();
+        closePropertyModal({ syncUrl: false });
+        filterProperties();
+    }
+
     [typeFilter, priceFilter, bedsFilter, bathsFilter, poolFilterEl, parkingFilterEl, beachFilterEl, seaViewFilterEl].forEach((el) => {
         if (!el) return;
         el.addEventListener('change', () => {
@@ -1672,6 +1789,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    if (clearFiltersBtn) {
+        clearFiltersBtn.addEventListener('click', () => {
+            resetAllFilters();
+        });
+    }
+
     if (toggleMapBtn && mapSection) {
         toggleMapBtn.addEventListener('click', () => {
             // Ensure map reflects the current filter controls (even if user didn't press Apply).
@@ -1682,7 +1805,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mapSection.classList.toggle('active');
             const mapIsOpen = mapSection.classList.contains('active');
             document.body.classList.toggle('map-open', mapIsOpen);
-            toggleMapBtn.textContent = mapIsOpen ? '📋' : '🗺️';
+            toggleMapBtn.textContent = mapIsOpen ? 'List' : 'Map';
 
             if (map && typeof map.invalidateSize === 'function') {
                 window.setTimeout(() => {
@@ -1702,46 +1825,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 setActiveSection('home');
                 return;
             }
-
-            selectedCity = 'all';
-            selectedType = 'all';
-            searchQuery = '';
-            refQuery = '';
-            maxPrice = 'any';
-            minBeds = 0;
-            minBaths = 0;
-            poolFilter = 'any';
-            parkingFilter = 'any';
-            maxBeachDistanceMeters = 'any';
-            seaViewFilter = 'any';
-
-            if (refSearchInput) refSearchInput.value = '';
-            if (searchInput) searchInput.value = '';
-            if (typeFilter) typeFilter.value = 'all';
-            if (priceFilter) priceFilter.value = '';
-            if (bedsFilter) bedsFilter.value = '0';
-            if (bathsFilter) bathsFilter.value = '0';
-            if (poolFilterEl) poolFilterEl.value = 'any';
-            if (parkingFilterEl) parkingFilterEl.value = 'any';
-            if (beachFilterEl) beachFilterEl.value = 'any';
-            if (seaViewFilterEl) seaViewFilterEl.value = 'any';
-
-            const cityButtons = cityButtonsContainer
-                ? cityButtonsContainer.querySelectorAll('.city-btn')
-                : [];
-            cityButtons.forEach((button) => {
-                button.classList.toggle('active', button.dataset.city === 'all');
-            });
-
-            updateBrowserRefParam('');
-            filterProperties();
+            resetAllFilters();
         });
     }
 
     if (closeModal && modal) {
         closeModal.addEventListener('click', () => {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
+            closePropertyModal();
         });
     }
 
@@ -1753,8 +1843,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('click', (event) => {
         if (modal && event.target === modal) {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
+            closePropertyModal();
         }
 
         if (lightbox && event.target === lightbox) {

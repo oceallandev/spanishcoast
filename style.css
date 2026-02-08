@@ -74,6 +74,10 @@ body {
         padding-right: max(1rem, env(safe-area-inset-right));
     }
 
+    .brand-info {
+        display: none;
+    }
+
     .header-right {
         gap: 0.6rem;
     }
@@ -84,14 +88,27 @@ body {
     }
 
     .mobile-menu-btn,
-    .open-filters-btn,
-    .toggle-map-btn {
+    .open-filters-btn {
         width: 40px;
         height: 40px;
         padding: 0;
         border-radius: 999px;
         justify-content: center;
         font-size: 1.05rem;
+    }
+
+    .toggle-map-btn {
+        height: 40px;
+        min-width: 66px;
+        padding: 0 0.75rem;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 900;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 
@@ -926,6 +943,26 @@ body.menu-open .mobile-menu {
     border-color: rgba(14, 165, 233, 0.25);
 }
 
+.clear-trigger {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(248, 250, 252, 0.92);
+    height: 44px;
+    padding: 0 0.9rem;
+    border-radius: 999px;
+    font-weight: 900;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    white-space: nowrap;
+}
+
+.clear-trigger:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(248, 113, 113, 0.35);
+}
+
 .open-filters-btn {
     display: none;
     background: rgba(255, 255, 255, 0.06);
@@ -1628,13 +1665,20 @@ body.filters-open .filters-backdrop {
 }
 
 @media (max-width: 1024px) {
-    body.map-open .city-bar {
+    body.map-open:not(.filters-open) .city-bar {
         display: none;
     }
 
-    body.map-open #filters-bar {
+    body.map-open:not(.filters-open) #filters-bar {
         display: none;
     }
+}
+
+.property-card.listing-removed {
+    opacity: 0;
+    transform: scale(0.985);
+    transition: opacity 0.22s ease, transform 0.22s ease;
+    pointer-events: none;
 }
 
 @keyframes fadeIn {
