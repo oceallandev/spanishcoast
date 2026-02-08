@@ -94,6 +94,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let miniMap = null;
     let miniMapMarker = null;
     let preModalScrollY = 0;
+    let lightboxIndex = 0;
+    let lightboxTouchStartX = null;
+    let lightboxTouchStartY = null;
+    let lightboxTouchStartTime = 0;
     let renderLimit = 60;
     const RENDER_BATCH = 60;
     let mapDirty = true;
@@ -141,6 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const lightbox = document.getElementById('lightbox-modal');
     const lightboxImg = document.getElementById('lightbox-img');
     const closeLightbox = document.querySelector('.close-lightbox');
+    const lightboxPrevBtn = document.querySelector('.lightbox-nav.prev');
+    const lightboxNextBtn = document.querySelector('.lightbox-nav.next');
+    const lightboxCaption = document.getElementById('lightbox-caption');
 
     const mainLogoImg = document.getElementById('main-logo-img');
     const searchPill = document.querySelector('.search-pill');
@@ -1235,6 +1242,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         currentGalleryImages = galleryImages;
         currentGalleryIndex = 0;
+        lightboxIndex = 0;
 
         const type = toText(property.type, 'Property');
         const reference = toText(property.ref).trim();
@@ -1264,6 +1272,11 @@ document.addEventListener('DOMContentLoaded', () => {
             `Hello Spanish Coast Properties,\n\nI would like to request a visit for this property.\n\nReference: ${reference || 'N/A'}\nType: ${type}\nLocation: ${town}, ${province}\nPrice: ${formatListingPrice(property)}\nProperty link: ${propertyLink}\n\nPreferred dates/times:\n1) \n2) \n\nThank you.`
         );
         const dossierMailto = `mailto:info@spanishcoastproperties.com?subject=${dossierSubject}&body=${dossierBody}`;
+        const reportSubject = encodeURIComponent(`Listing issue report - ${reference || `${town} ${type}`}`);
+        const reportBody = encodeURIComponent(
+            `Hello Spanish Coast Properties,\n\nI found an issue with this listing and would like to flag it.\n\nReference: ${reference || 'N/A'}\nLocation: ${town}, ${province}\nProperty link: ${propertyLink}\n\nWhat seems wrong:\n- \n\n(If possible, add a screenshot or describe the problem.)\n\nThank you.`
+        );
+        const reportMailto = `mailto:info@spanishcoastproperties.com?subject=${reportSubject}&body=${reportBody}`;
         const descriptionHtml = formatDescriptionHtml(description);
         if (syncUrl) {
             // Use pushState so browser Back closes the modal. If modal is already open, replace instead.
@@ -1336,6 +1349,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="share-row" aria-label="Share">
                         <button type="button" class="share-btn" data-share="native">📲 Share</button>
                         <button type="button" class="share-btn" data-share="copy">📋 Copy link</button>
+                        <a class="share-btn share-btn--warn" href="${reportMailto}">🚩 Report issue</a>
                         <a class="share-btn" href="${whatsappShare}" target="_blank" rel="noopener">💬 WhatsApp</a>
                         <a class="share-btn" href="${telegramShare}" target="_blank" rel="noopener">✈️ Telegram</a>
                         <a class="share-btn" href="${facebookShare}" target="_blank" rel="noopener">📣 Facebook</a>
@@ -1499,10 +1513,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (mainImg && lightbox && lightboxImg) {
             mainImg.addEventListener('click', () => {
-                lightboxImg.src = mainImg.src;
-                lightbox.style.display = 'flex';
+                openLightboxAt(currentGalleryIndex);
             });
         }
+    }
+
+    function updateLightboxCaption() {
+        if (!lightboxCaption) return;
+        const total = Array.isArray(currentGalleryImages) ? currentGalleryImages.length : 0;
+        if (!total) {
+            lightboxCaption.textContent = '';
+            return;
+        }
+        lightboxCaption.textContent = `${lightboxIndex + 1} / ${total}`;
+    }
+
+    function setLightboxImage(index) {
+        if (!lightboxImg || !Array.isArray(currentGalleryImages) || currentGalleryImages.length === 0) return;
+        const total = currentGalleryImages.length;
+        lightboxIndex = ((index % total) + total) % total;
+        lightboxImg.classList.add('lightbox-fade');
+        window.setTimeout(() => {
+            if (!lightboxImg) return;
+            lightboxImg.src = currentGalleryImages[lightboxIndex];
+            lightboxImg.classList.remove('lightbox-fade');
+            updateLightboxCaption();
+        }, 70);
+    }
+
+    function openLightboxAt(index) {
+        if (!lightbox || !lightboxImg) return;
+        if (!Array.isArray(currentGalleryImages) || currentGalleryImages.length === 0) return;
+        lightbox.style.display = 'flex';
+        setLightboxImage(index);
+        // Keep scrolling stable.
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightboxModal() {
+        if (!lightbox) return;
+        lightbox.style.display = 'none';
+        // Restore body scrolling unless property modal is still open.
+        if (!isModalOpen()) {
+            document.body.style.overflow = 'auto';
+        }
+        lightboxTouchStartX = null;
+        lightboxTouchStartY = null;
+        lightboxTouchStartTime = 0;
+    }
+
+    function stepLightbox(delta) {
+        if (!lightbox || lightbox.style.display !== 'flex') return;
+        setLightboxImage(lightboxIndex + delta);
     }
 
     function isModalOpen() {
@@ -1924,7 +1986,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (closeLightbox && lightbox) {
         closeLightbox.addEventListener('click', () => {
-            lightbox.style.display = 'none';
+            closeLightboxModal();
         });
     }
 
@@ -1934,8 +1996,66 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (lightbox && event.target === lightbox) {
-            lightbox.style.display = 'none';
+            closeLightboxModal();
         }
+    });
+
+    if (lightboxPrevBtn) {
+        lightboxPrevBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            stepLightbox(-1);
+        });
+    }
+
+    if (lightboxNextBtn) {
+        lightboxNextBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            stepLightbox(1);
+        });
+    }
+
+    if (lightbox) {
+        lightbox.addEventListener('touchstart', (event) => {
+            if (!event.touches || event.touches.length !== 1) return;
+            const t = event.touches[0];
+            lightboxTouchStartX = t.clientX;
+            lightboxTouchStartY = t.clientY;
+            lightboxTouchStartTime = Date.now();
+        }, { passive: true });
+
+        lightbox.addEventListener('touchend', (event) => {
+            if (lightboxTouchStartX === null || lightboxTouchStartY === null) return;
+            const t = event.changedTouches && event.changedTouches[0];
+            if (!t) return;
+            const dx = t.clientX - lightboxTouchStartX;
+            const dy = t.clientY - lightboxTouchStartY;
+            const dt = Date.now() - lightboxTouchStartTime;
+
+            lightboxTouchStartX = null;
+            lightboxTouchStartY = null;
+            lightboxTouchStartTime = 0;
+
+            // Horizontal swipe to change photo.
+            if (dt > 900) return;
+            if (Math.abs(dx) < 42) return;
+            if (Math.abs(dx) < Math.abs(dy)) return;
+
+            if (dx < 0) stepLightbox(1);
+            else stepLightbox(-1);
+        }, { passive: true });
+    }
+
+    window.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            if (lightbox && lightbox.style.display === 'flex') {
+                closeLightboxModal();
+            }
+            return;
+        }
+
+        if (!lightbox || lightbox.style.display !== 'flex') return;
+        if (event.key === 'ArrowLeft') stepLightbox(-1);
+        if (event.key === 'ArrowRight') stepLightbox(1);
     });
 
     const mesh = document.querySelector('.bg-mesh');

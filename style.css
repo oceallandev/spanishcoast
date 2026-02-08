@@ -1590,6 +1590,12 @@ body.filters-open .filters-backdrop {
     border: 1px solid rgba(255, 255, 255, 0.08);
     object-fit: contain;
     background: #050505;
+    transition: opacity 160ms ease;
+    touch-action: pan-y;
+}
+
+.lightbox img.lightbox-fade {
+    opacity: 0.25;
 }
 
 .close-lightbox {
@@ -1614,6 +1620,80 @@ body.filters-open .filters-backdrop {
 .close-lightbox:hover {
     transform: scale(1.06);
     background: rgba(255, 255, 255, 0.12);
+}
+
+.lightbox-nav {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 46px;
+    height: 46px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: rgba(248, 250, 252, 0.96);
+    font-weight: 900;
+    font-size: 1.25rem;
+    cursor: pointer;
+    z-index: 11060;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.lightbox-nav:hover {
+    transform: translateY(-50%) scale(1.06);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.lightbox-nav.prev {
+    left: 18px;
+}
+
+.lightbox-nav.next {
+    right: 18px;
+}
+
+.lightbox-caption {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 18px;
+    padding: 0.55rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(2, 6, 23, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(226, 232, 240, 0.92);
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    z-index: 11060;
+    max-width: min(92vw, 720px);
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+@media (max-width: 520px) {
+    .lightbox {
+        padding: 1rem;
+    }
+
+    .lightbox-nav {
+        width: 42px;
+        height: 42px;
+    }
+
+    .lightbox-nav.prev {
+        left: 10px;
+    }
+
+    .lightbox-nav.next {
+        right: 10px;
+    }
+
+    .lightbox-caption {
+        bottom: 12px;
+    }
 }
 
 /* --- Branded Markers --- */
@@ -2211,6 +2291,16 @@ body.filters-open .filters-backdrop {
     transform: translateY(-2px);
     background: rgba(255, 255, 255, 0.06);
     border-color: rgba(14, 165, 233, 0.2);
+}
+
+.share-btn--warn {
+    border-color: rgba(248, 113, 113, 0.28);
+    background: rgba(248, 113, 113, 0.08);
+}
+
+.share-btn--warn:hover {
+    border-color: rgba(248, 113, 113, 0.5);
+    background: rgba(248, 113, 113, 0.12);
 }
 
 .cta-button {
