@@ -208,8 +208,31 @@
       return;
     }
 
-    const base = Array.isArray(window.propertyData) ? window.propertyData : [];
-    const custom = Array.isArray(window.customPropertyData) ? window.customPropertyData : [];
+    // data.js defines `const propertyData = [...]` (global lexical binding), which is not on `window`.
+    // custom-listings.js uses `window.customPropertyData`.
+    const base = (() => {
+      try {
+        // Prefer explicit window binding if it exists.
+        if (Array.isArray(window.propertyData)) return window.propertyData;
+        // Fallback to global lexical binding.
+        // eslint-disable-next-line no-undef
+        if (typeof propertyData !== 'undefined' && Array.isArray(propertyData)) return propertyData;
+      } catch {
+        // ignore
+      }
+      return [];
+    })();
+
+    const custom = (() => {
+      try {
+        if (Array.isArray(window.customPropertyData)) return window.customPropertyData;
+        // eslint-disable-next-line no-undef
+        if (typeof customPropertyData !== 'undefined' && Array.isArray(customPropertyData)) return customPropertyData;
+      } catch {
+        // ignore
+      }
+      return [];
+    })();
     const all = base.concat(custom);
     const match = all.find((p) => normalize(p && p.ref) === normalize(ref));
 
@@ -332,4 +355,3 @@
 
   window.addEventListener('DOMContentLoaded', init);
 })();
-

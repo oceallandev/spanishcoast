@@ -36,20 +36,34 @@
     if (diagLines) diagLines.innerHTML = '';
   };
 
-  async function getRole(client, userId) {
+  async function getRoleInfo(client, userId) {
     try {
       const { data, error } = await client.from('profiles').select('role').eq('user_id', userId).maybeSingle();
-      if (error) return '';
-      return (data && data.role) ? String(data.role) : '';
+      if (error) return { role: '', error: error.message || String(error) };
+      return { role: (data && data.role) ? String(data.role) : '', error: '' };
     } catch {
-      return '';
+      return { role: '', error: 'profiles lookup failed' };
     }
   }
 
   async function refresh() {
     const client = getClient();
     if (!client) {
-      setStatus('Supabase is not configured.', 'Fill `config.js` with your Supabase URL + anon key.');
+      const cfg = window.SCP_CONFIG || {};
+      const url = (cfg.supabaseUrl || '').trim();
+      const key = (cfg.supabaseAnonKey || '').trim();
+      const status = window.scpSupabaseStatus || null;
+
+      if (!url || !key) {
+        setStatus('Supabase is not configured.', 'Fill `config.js` with your Supabase URL + anon/publishable key.');
+      } else if (status && status.error) {
+        setStatus('Supabase init failed', String(status.error));
+      } else if (status && status.enabled === false) {
+        setStatus('Supabase is not ready', 'The Supabase client did not initialise. Check the Diagnostics (?qa=1).');
+      } else {
+        setStatus('Connecting...', 'Initialising authentication…');
+      }
+
       if (signOutBtn) signOutBtn.disabled = true;
       return;
     }
@@ -72,8 +86,14 @@
       return;
     }
 
-    const role = await getRole(client, user.id);
-    setStatus(`Signed in as ${user.email || 'user'}${role ? ` (${role})` : ''}`, 'Your favourites will sync to this account on the Properties page.');
+    const roleInfo = await getRoleInfo(client, user.id);
+    const role = roleInfo && roleInfo.role ? roleInfo.role : '';
+    const roleSuffix = role ? ` (${role})` : '';
+    const roleHint = !role && roleInfo && roleInfo.error ? ` Role unavailable: ${roleInfo.error}` : '';
+    setStatus(
+      `Signed in as ${user.email || 'user'}${roleSuffix}`,
+      `Your favourites will sync to this account on the Properties page.${roleHint}`
+    );
     if (signOutBtn) signOutBtn.disabled = false;
     if (adminLinks) adminLinks.style.display = role === 'admin' ? 'block' : 'none';
   }
@@ -141,21 +161,28 @@
       addDiag('bad', 'favourites query exception', error && error.message ? error.message : String(error));
     }
 
-    addDiag('ok', 'Auth redirect URLs', 'Ensure Supabase Auth settings allow https://oceallandev.github.io/spanishcoast/account.html');
+    const redirectTo = `${window.location.origin}${window.location.pathname}`;
+    addDiag('ok', 'Auth redirect URL', `Add ${redirectTo} to Supabase Auth Redirect URLs (needed for email confirm + magic links).`);
   }
 
   async function ensureLoaded() {
-    // Wait briefly for supabase-init.js.
-    if (window.scpSupabase || (window.SCP_CONFIG && window.SCP_CONFIG.supabaseUrl)) {
+    // Prefer immediate refresh if the client is already initialised.
+    if (window.scpSupabase) {
       await refresh();
       await runDiagnostics();
       return;
     }
+
+    // Otherwise, listen for the init event (it may fire after this script runs).
     window.addEventListener('scp:supabase:ready', async () => {
       await refresh();
       await runDiagnostics();
     }, { once: true });
+
+    // Also run once now to show a useful status even if init already failed.
     setStatus('Connecting...', 'Loading authentication…');
+    await refresh();
+    await runDiagnostics();
   }
 
   if (signInForm) {

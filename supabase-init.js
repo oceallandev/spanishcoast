@@ -7,6 +7,7 @@
 
   const ready = (enabled, error) => {
     try {
+      window.scpSupabaseStatus = { enabled: Boolean(enabled), error: error || null };
       window.dispatchEvent(new CustomEvent('scp:supabase:ready', { detail: { enabled, error: error || null } }));
     } catch {
       // ignore
@@ -39,4 +40,3 @@
     ready(false, error && error.message ? error.message : String(error));
   }
 })();
-
