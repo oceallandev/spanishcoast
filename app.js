@@ -654,6 +654,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function isNewBuild(property) {
+        // Prefer explicit feed flags when available. Some feeds are inconsistent (e.g. new_build=0),
+        // so we only treat explicit TRUE as authoritative and still fall back to heuristics otherwise.
+        try {
+            const explicit = property && (property.new_build ?? property.newBuild ?? property.is_new_build ?? property.isNewBuild);
+            if (explicit === true || explicit === '1' || explicit === 1) return true;
+        } catch (error) {
+            // ignore
+        }
+
         const text = normalize(property && property.description);
         if (!text) return false;
 
@@ -1342,6 +1351,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         initMap();
         generateCityButtons();
+        syncFiltersFromControls();
         filterProperties();
         applyOperationFromUrl();
         applyRefFromUrl();
@@ -3538,7 +3548,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const initialRef = toText(initialUrl.searchParams.get('ref')).trim();
     const initialSection = toText(initialUrl.searchParams.get('section')).trim();
     const path = toText(window.location.pathname).toLowerCase();
-    const inferredSection = path.endsWith('properties.html')
+    const inferredSection = (path.endsWith('properties.html') || path.endsWith('new-builds.html'))
         ? 'properties'
         : path.endsWith('businesses.html')
             ? 'businesses'

@@ -10,6 +10,7 @@
 
   const path = (window.location.pathname || '').toLowerCase();
   const section =
+    path.endsWith('/new-builds.html') || path.endsWith('new-builds.html') ? 'newbuilds' :
     path.endsWith('/properties.html') || path.endsWith('properties.html') ? 'properties' :
     path.endsWith('/businesses.html') || path.endsWith('businesses.html') ? 'businesses' :
     path.endsWith('/vehicles.html') || path.endsWith('vehicles.html') ? 'vehicles' :
@@ -25,7 +26,7 @@
     link.classList.toggle('active', link.dataset.section === section);
   });
 
-  const ensureNavLink = (containerSelector, { href, text }) => {
+  const ensureNavLink = (containerSelector, { href, text, section, afterHref }) => {
     document.querySelectorAll(containerSelector).forEach((nav) => {
       if (!nav) return;
       const existing = Array.from(nav.querySelectorAll('a')).find((a) => (a.getAttribute('href') || '').includes(href));
@@ -35,14 +36,30 @@
       a.textContent = text;
       if (nav.classList.contains('primary-nav')) {
         a.className = 'nav-link';
-        a.dataset.section = 'account';
+        if (section) a.dataset.section = section;
       }
-      nav.appendChild(a);
+      if (afterHref) {
+        const anchors = Array.from(nav.querySelectorAll('a'));
+        const after = anchors.find((el) => (el.getAttribute('href') || '').includes(afterHref)) || null;
+        if (after && after.nextSibling) {
+          nav.insertBefore(a, after.nextSibling);
+        } else if (after) {
+          nav.appendChild(a);
+        } else {
+          nav.appendChild(a);
+        }
+      } else {
+        nav.appendChild(a);
+      }
     });
   };
 
+  // Make New Builds discoverable without having to update every page header/footer manually.
+  ensureNavLink('.primary-nav', { href: 'new-builds.html', text: t('nav.new_builds') || 'New Builds', section: 'newbuilds', afterHref: 'properties.html' });
+  ensureNavLink('.mobile-menu-links', { href: 'new-builds.html', text: t('nav.new_builds') || 'New Builds', afterHref: 'properties.html' });
+
   // Make Account discoverable without having to update every page header/footer manually.
-  ensureNavLink('.primary-nav', { href: 'account.html', text: t('nav.account') || 'Account' });
+  ensureNavLink('.primary-nav', { href: 'account.html', text: t('nav.account') || 'Account', section: 'account' });
   ensureNavLink('.mobile-menu-links', { href: 'account.html', text: t('nav.account') || 'Account' });
 
   // Apply translations for nav labels without requiring every page to be edited.
@@ -55,6 +72,7 @@
 
   setLinkText('.primary-nav .nav-link[data-section=\"home\"]', t('nav.home') || 'Home');
   setLinkText('.primary-nav .nav-link[data-section=\"properties\"]', t('nav.properties') || 'Properties');
+  setLinkText('.primary-nav .nav-link[data-section=\"newbuilds\"]', t('nav.new_builds') || 'New Builds');
   setLinkText('.primary-nav .nav-link[data-section=\"businesses\"]', t('nav.businesses') || 'Businesses');
   setLinkText('.primary-nav .nav-link[data-section=\"vehicles\"]', t('nav.vehicles') || 'Vehicles');
   setLinkText('.primary-nav .nav-link[data-section=\"services\"]', t('nav.services') || 'Services');
@@ -63,6 +81,7 @@
   // Mobile menu uses plain <a> tags.
   setLinkText('.mobile-menu-links a[href=\"index.html\"]', t('nav.home') || 'Home');
   setLinkText('.mobile-menu-links a[href=\"properties.html\"]', t('nav.properties') || 'Properties');
+  setLinkText('.mobile-menu-links a[href=\"new-builds.html\"]', t('nav.new_builds') || 'New Builds');
   setLinkText('.mobile-menu-links a[href=\"businesses.html\"]', t('nav.businesses') || 'Businesses');
   setLinkText('.mobile-menu-links a[href=\"vehicles.html\"]', t('nav.vehicles') || 'Vehicles');
   setLinkText('.mobile-menu-links a[href=\"services.html\"]', t('nav.services') || 'Services');

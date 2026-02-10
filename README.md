@@ -53,6 +53,25 @@ Admin UI:
 Tip:
 - If you need to re-assign all SCP refs for the Inmovilla feed, run the importer once with `--reset-ref-map`.
 
+## Import New Builds / Developers XML (Kyero v3 / RedSp)
+
+If you have a Kyero v3 XML export (for example from RedSp), you can import it as "new builds" listings:
+
+```bash
+python3 import_redsp_kyero_v3.py \
+  --xml "/path/to/redsp1-kyero_v3.xml" \
+  --source "redsp1"
+```
+
+This generates:
+- `newbuilds-listings.js` (public, committed): new build listings merged into the Properties catalog (and brochure).
+- `private/redsp1/ref_map.json` (private, gitignored): stable SCP ref allocator state.
+- `private/redsp1/listing_ref_map.sql` (private, gitignored): Supabase upsert to map original refs -> SCP refs.
+
+Supabase:
+1. Run `supabase.sql` (creates `listing_ref_map` + RLS).
+2. Import the generated `private/redsp1/listing_ref_map.sql` (or chunked SQL files under `private/redsp1/sql_chunks/`).
+
 ## Sync WooCommerce Shop Products (Smart Devices)
 
 The app includes a shop page (`shop.html`) that renders products from a local file:

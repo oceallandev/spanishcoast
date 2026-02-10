@@ -81,6 +81,7 @@
 
       'nav.home': 'Home',
       'nav.properties': 'Properties',
+      'nav.new_builds': 'New Builds',
       'nav.businesses': 'Businesses',
       'nav.vehicles': 'Vehicles',
       'nav.services': 'Services',
@@ -164,6 +165,7 @@
 
       'nav.home': 'Inicio',
       'nav.properties': 'Propiedades',
+      'nav.new_builds': 'Obra Nueva',
       'nav.businesses': 'Negocios',
       'nav.vehicles': 'Vehículos',
       'nav.services': 'Servicios',
