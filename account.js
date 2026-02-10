@@ -36,6 +36,20 @@
     if (diagLines) diagLines.innerHTML = '';
   };
 
+  const withTimeout = async (promise, ms, label) => {
+    let t;
+    try {
+      return await Promise.race([
+        promise,
+        new Promise((_, reject) => {
+          t = window.setTimeout(() => reject(new Error(`${label || 'Request'} timed out after ${ms}ms`)), ms);
+        })
+      ]);
+    } finally {
+      if (t) window.clearTimeout(t);
+    }
+  };
+
   async function getRoleInfo(client, userId) {
     try {
       const { data, error } = await client.from('profiles').select('role').eq('user_id', userId).maybeSingle();
@@ -195,12 +209,17 @@
       if (!email || !password) return;
 
       setStatus('Signing in…');
-      const { error } = await client.auth.signInWithPassword({ email, password });
-      if (error) {
-        setStatus('Sign-in failed', error.message || 'Please try again.');
-        return;
+      try {
+        const { error } = await withTimeout(client.auth.signInWithPassword({ email, password }), 15000, 'Sign-in');
+        if (error) {
+          setStatus('Sign-in failed', error.message || 'Please try again.');
+          return;
+        }
+        await refresh();
+        await runDiagnostics();
+      } catch (error) {
+        setStatus('Sign-in failed', (error && error.message) ? error.message : String(error));
       }
-      await refresh();
     });
   }
 
@@ -215,17 +234,22 @@
 
       setStatus('Creating account…');
       const redirectTo = `${window.location.origin}${window.location.pathname}`;
-      const { error } = await client.auth.signUp({
-        email,
-        password,
-        options: { emailRedirectTo: redirectTo }
-      });
-      if (error) {
-        setStatus('Sign-up failed', error.message || 'Please try again.');
-        return;
+      try {
+        const { error } = await withTimeout(client.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: redirectTo }
+        }), 15000, 'Sign-up');
+        if (error) {
+          setStatus('Sign-up failed', error.message || 'Please try again.');
+          return;
+        }
+        setStatus('Check your email', 'Confirm your email address to finish creating your account.');
+        await refresh();
+        await runDiagnostics();
+      } catch (error) {
+        setStatus('Sign-up failed', (error && error.message) ? error.message : String(error));
       }
-      setStatus('Check your email', 'Confirm your email address to finish creating your account.');
-      await refresh();
     });
   }
 
@@ -238,15 +262,19 @@
       if (!email) return;
       setStatus('Sending magic link…');
       const redirectTo = `${window.location.origin}${window.location.pathname}`;
-      const { error } = await client.auth.signInWithOtp({
-        email,
-        options: { emailRedirectTo: redirectTo }
-      });
-      if (error) {
-        setStatus('Failed to send link', error.message || 'Please try again.');
-        return;
+      try {
+        const { error } = await withTimeout(client.auth.signInWithOtp({
+          email,
+          options: { emailRedirectTo: redirectTo }
+        }), 15000, 'Magic link');
+        if (error) {
+          setStatus('Failed to send link', error.message || 'Please try again.');
+          return;
+        }
+        setStatus('Link sent', 'Check your inbox and click the sign-in link.');
+      } catch (error) {
+        setStatus('Failed to send link', (error && error.message) ? error.message : String(error));
       }
-      setStatus('Link sent', 'Check your inbox and click the sign-in link.');
     });
   }
 
@@ -262,11 +290,17 @@
 
   const client = getClient();
   if (client) {
-    client.auth.onAuthStateChange(() => refresh());
+    client.auth.onAuthStateChange(async () => {
+      await refresh();
+      await runDiagnostics(); // keep ?qa=1 panel in sync after signing in/out
+    });
   } else {
     window.addEventListener('scp:supabase:ready', () => {
       const c = getClient();
-      if (c) c.auth.onAuthStateChange(() => refresh());
+      if (c) c.auth.onAuthStateChange(async () => {
+        await refresh();
+        await runDiagnostics();
+      });
     }, { once: true });
   }
 

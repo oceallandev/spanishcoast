@@ -68,6 +68,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let supabaseUser = null;
     let supabaseRole = '';
 
+    // Allow deep-linking into "Saved" view from account.html.
+    try {
+        const p = new URLSearchParams(window.location.search);
+        const saved = (p.get('saved') || p.get('favourites') || p.get('favorites') || '').trim();
+        if (saved === '1' || saved.toLowerCase() === 'true' || saved.toLowerCase() === 'yes') {
+            favoritesOnly = true;
+        }
+    } catch (error) {
+        // ignore
+    }
+
     function refKey(value) {
         return toText(value).trim().toUpperCase();
     }
