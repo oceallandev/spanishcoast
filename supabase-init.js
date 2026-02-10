@@ -75,8 +75,37 @@
 
   try {
     // Some browsers/extensions can cause AbortSignal-related failures inside Supabase auth
-    // initialisation (e.g. Web Locks timing out). Use an in-page lock and a safe fetch wrapper
-    // to avoid aborting the whole session check.
+    // (commonly surfaced as: "signal is aborted without reason"). This most often comes from
+    // Web Locks / AbortSignal timeouts. We patch defensively so auth.getSession() stays stable.
+
+    // Best-effort patch: strip AbortSignal from Web Locks requests.
+    try {
+      const locks = (typeof navigator !== 'undefined' && navigator && navigator.locks) ? navigator.locks : null;
+      if (locks && typeof locks.request === 'function' && !locks.request.__scpPatched) {
+        const origRequest = locks.request.bind(locks);
+        const wrapped = (name, options, callback) => {
+          // Signature overloads:
+          // - request(name, callback)
+          // - request(name, options, callback)
+          if (typeof options === 'function') {
+            return origRequest(name, options);
+          }
+          const opts = (options && Object.prototype.toString.call(options) === '[object Object]')
+            ? { ...options }
+            : options;
+          if (opts && typeof opts === 'object' && 'signal' in opts) {
+            try { delete opts.signal; } catch { /* ignore */ }
+          }
+          return origRequest(name, opts, callback);
+        };
+        wrapped.__scpPatched = true;
+        locks.request = wrapped;
+      }
+    } catch {
+      // ignore
+    }
+
+    // Use an in-page lock as a fallback when the SDK supports it.
     let lockChain = Promise.resolve();
     const pageLock = async (...args) => {
       const fn = args && args.length ? args[args.length - 1] : null;
@@ -87,14 +116,15 @@
       return p;
     };
 
+    // Strip AbortSignal from fetch requests used by Supabase. If a browser/extension aborts the
+    // signal incorrectly, dropping it is safer than hard-failing auth/session checks.
     const safeFetch = nativeFetch
       ? (input, init) => {
         try {
-          const opts = init && typeof init === 'object' ? init : undefined;
-          if (opts && opts.signal && opts.signal.aborted) {
-            // If the signal is already aborted, drop it instead of failing immediately.
-            const { signal, ...rest } = opts;
-            return nativeFetch(input, rest);
+          const isPlain = init && Object.prototype.toString.call(init) === '[object Object]';
+          const opts = isPlain ? { ...init } : init;
+          if (opts && typeof opts === 'object' && 'signal' in opts) {
+            try { delete opts.signal; } catch { /* ignore */ }
           }
           return nativeFetch(input, opts);
         } catch {
