@@ -4,17 +4,49 @@
   const cfg = window.SCP_CONFIG || {};
   const url = (cfg.supabaseUrl || '').trim();
   const anonKey = (cfg.supabaseAnonKey || '').trim();
-  let safeStorage;
-  try {
-    safeStorage = window.localStorage;
-  } catch {
-    safeStorage = undefined;
+  const getStorage = (key) => {
+    try {
+      return window && window[key] ? window[key] : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const storageWritable = (storage) => {
+    if (!storage) return false;
+    try {
+      const k = '__scp_storage_test__';
+      storage.setItem(k, '1');
+      storage.removeItem(k);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  let safeStorage = null;
+  let safeStorageType = '';
+  const ls = getStorage('localStorage');
+  if (storageWritable(ls)) {
+    safeStorage = ls;
+    safeStorageType = 'localStorage';
+  } else {
+    const ss = getStorage('sessionStorage');
+    if (storageWritable(ss)) {
+      safeStorage = ss;
+      safeStorageType = 'sessionStorage';
+    }
   }
 
   const ready = (enabled, error) => {
     try {
-      window.scpSupabaseStatus = { enabled: Boolean(enabled), error: error || null };
-      window.dispatchEvent(new CustomEvent('scp:supabase:ready', { detail: { enabled, error: error || null } }));
+      const status = {
+        enabled: Boolean(enabled),
+        error: error || null,
+        storage: safeStorageType || 'none'
+      };
+      window.scpSupabaseStatus = status;
+      window.dispatchEvent(new CustomEvent('scp:supabase:ready', { detail: status }));
     } catch {
       // ignore
     }
@@ -34,7 +66,7 @@
 
   try {
     const auth = {
-      persistSession: true,
+      persistSession: Boolean(safeStorage),
       autoRefreshToken: true,
       detectSessionInUrl: true
     };
