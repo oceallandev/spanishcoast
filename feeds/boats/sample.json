@@ -1,0 +1,28 @@
+[
+  {
+    "id": "SCP-BOAT-001",
+    "title": "Beneteau Flyer 8 (2021)",
+    "deal": "rent",
+    "price": 390,
+    "pricePeriod": "day",
+    "currency": "EUR",
+    "location": "Marina Salinas, Torrevieja",
+    "latitude": 37.9739,
+    "longitude": -0.6843,
+    "images": ["assets/placeholder.png"],
+    "description": "Skipper optional. Half-day or full-day. Fuel policy explained upfront."
+  },
+  {
+    "id": "SCP-BOAT-002",
+    "title": "Zodiac Medline 7.5 (2019)",
+    "deal": "sale",
+    "price": 34500,
+    "currency": "EUR",
+    "location": "Guardamar del Segura, Alicante",
+    "latitude": 38.0901,
+    "longitude": -0.6517,
+    "images": ["assets/placeholder.png"],
+    "description": "Well maintained RIB. Great for coastal days and island hops. Viewing by appointment."
+  }
+]
+

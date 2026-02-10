@@ -4,16 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehicles | Spanish Coast Properties</title>
+    <title>Boats | Spanish Coast Properties</title>
     <meta name="description"
-        content="Cars and boats for sale or rent in Costa Blanca South. We can also help with management, handovers and practical paperwork.">
+        content="Boats for sale or rent in Costa Blanca South. Filter by deal, provider and marina, browse on the map, and request details fast.">
     <meta name="robots" content="index,follow">
-    <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/vehicles.html">
+    <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/boats.html">
 
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Vehicles | Spanish Coast Properties">
-    <meta property="og:description" content="Explore cars and boats for sale or rent in Costa Blanca South.">
-    <meta property="og:url" content="https://oceallandev.github.io/spanishcoast/vehicles.html">
+    <meta property="og:title" content="Boats | Spanish Coast Properties">
+    <meta property="og:description" content="Explore boats for sale or rent in Costa Blanca South.">
+    <meta property="og:url" content="https://oceallandev.github.io/spanishcoast/boats.html">
     <meta property="og:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
 
     <meta name="theme-color" content="#030712">
@@ -33,7 +33,7 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 
-<body data-section="vehicles">
+<body data-section="vehicles" data-vehicle-category="boat">
     <div class="bg-mesh"></div>
 
     <header class="main-header glass sticky">
@@ -86,84 +86,31 @@
     </aside>
 
     <main class="site-main" id="site-main">
-        <section class="page-section catalog-section active" id="vehicles-section" aria-label="Vehicles">
+        <section class="page-section catalog-section active" aria-label="Boats">
             <div class="catalog-hero">
-                <h2>Vehicles in Costa Blanca South</h2>
+                <h2>Boats in Costa Blanca South</h2>
                 <p>
-                    Cars and boats for sale or rent, with a simple process and local coordination. Tell us your budget,
-                    usage, dates, and must-haves, and we will come back with realistic options.
-                </p>
-                <p>
-                    For buyers: we shortlist reliable options and set expectations clearly. For owners: we can help with
-                    listings, handovers, and practical management so you are not chasing messages all day.
+                    Boats for sale or rent, with a simple process and local coordination. Tell us your budget, dates, and
+                    must-haves, and we will come back with realistic options.
                 </p>
                 <div class="service-tags">
                     <a class="tag" href="cars.html">Cars</a>
-                    <a class="tag" href="boats.html">Boats</a>
+                    <span class="tag">Boats</span>
                     <a class="tag" href="vehicle-buy-sell.html">Buy & Sell</a>
                     <a class="tag" href="vehicle-rentals.html">Rent</a>
                     <a class="tag" href="vehicle-management.html">Management</a>
                 </div>
                 <div class="simple-cta">
-                    <a class="cta-button" href="vehicle-add.html?category=car">Sell a car</a>
-                    <a class="cta-button cta-button--outline" href="vehicle-add.html?category=boat">Sell a boat</a>
-                    <a class="cta-button cta-button--outline" href="vehicle-import-xml.html">Dealer XML import</a>
+                    <a class="cta-button" href="vehicle-add.html?category=boat">Sell your boat</a>
+                    <a class="cta-button cta-button--outline" href="vehicle-import-xml.html?category=boat">Dealer XML import</a>
                 </div>
                 <div class="muted" style="margin-top:0.6rem;">
-                    For cars, we work with different local car companies and can request up to 3 quotations, so you can compare options and choose confidently.
+                    Send clean details and photos, and we can publish a verified listing and coordinate viewings and handover steps.
                 </div>
             </div>
 
-            <div class="catalog-hero">
-                <h3>Vehicle Services</h3>
-                <p>
-                    Choose the service you need first, then browse listings. We keep the steps simple and fast so you can
-                    move from "I'm interested" to "sorted" without endless back-and-forth.
-                </p>
-                <div class="service-grid">
-                    <a class="service-card" href="vehicle-buy-sell.html">
-                        <h3>Buy & Sell</h3>
-                        <p>Shortlist options, coordinate viewings, and keep the handover and steps clean.</p>
-                    </a>
-                    <a class="service-card" href="vehicle-rentals.html">
-                        <h3>Rent</h3>
-                        <p>Clear pricing, realistic expectations, and smooth pickup and handover.</p>
-                    </a>
-                    <a class="service-card" href="vehicle-management.html">
-                        <h3>Management</h3>
-                        <p>Listings, handovers, and practical support for owners of cars and boats.</p>
-                    </a>
-                </div>
-            </div>
-
-            <div class="catalog-hero">
-                <h3>Owners & Dealers</h3>
-                <p>
-                    Want to sell a vehicle or onboard a dealership feed? Use the tools below and we will review and publish
-                    verified listings.
-                </p>
-                <div class="service-grid">
-                    <a class="service-card" href="vehicle-add.html">
-                        <h3>List a vehicle</h3>
-                        <p>Submit details for a car or boat you want to sell (or rent). We review and publish.</p>
-                    </a>
-                    <a class="service-card" href="vehicle-import-xml.html">
-                        <h3>Dealer XML import</h3>
-                        <p>Upload your XML/JSON feed to validate it and generate a clean import file.</p>
-                    </a>
-                </div>
-            </div>
-
-            <div class="catalog-controls glass" id="filters-bar" aria-label="Vehicle filters">
+            <div class="catalog-controls glass" id="filters-bar" aria-label="Boat filters">
                 <div class="catalog-controls-left">
-                    <div class="results-sort">
-                        <label for="vehicle-category-filter">Category</label>
-                        <select id="vehicle-category-filter">
-                            <option value="any">Any</option>
-                            <option value="car">Cars</option>
-                            <option value="boat">Boats</option>
-                        </select>
-                    </div>
                     <div class="results-sort">
                         <label for="vehicle-deal-filter">Deal</label>
                         <select id="vehicle-deal-filter">
@@ -180,7 +127,7 @@
                     </div>
                     <div class="results-sort">
                         <label for="vehicle-location-filter">Location</label>
-                        <input id="vehicle-location-filter" type="text" placeholder="Town, marina, pickup area">
+                        <input id="vehicle-location-filter" type="text" placeholder="Marina, town">
                     </div>
                     <div class="results-sort">
                         <label for="vehicle-price-filter">Max price</label>
@@ -204,56 +151,13 @@
                 </div>
             </div>
 
-            <section class="catalog-map-wrap glass vehicle-map-wrap" id="vehicle-map-section" aria-label="Vehicles map">
+            <section class="catalog-map-wrap glass vehicle-map-wrap" id="vehicle-map-section" aria-label="Boats map">
                 <div class="catalog-map-head">
-                    <div class="catalog-map-title">Vehicles on the map</div>
+                    <div class="catalog-map-title">Boats on the map</div>
                     <div class="catalog-map-sub">Tap a pin to open details</div>
                 </div>
-                <div id="vehicle-map" class="catalog-map" role="application" aria-label="Vehicles map"></div>
+                <div id="vehicle-map" class="catalog-map" role="application" aria-label="Boats map"></div>
             </section>
-
-            <div class="catalog-hero">
-                <h3>Fast Requests (What To Send)</h3>
-                <p>
-                    Email a short message and we will reply with a shortlist and the next step. The more specific you
-                    are, the faster we can respond.
-                </p>
-                <div class="service-tags">
-                    <span class="tag">Budget</span>
-                    <span class="tag">Dates</span>
-                    <span class="tag">Seats / berths</span>
-                    <span class="tag">Insurance preference</span>
-                    <span class="tag">Automatic / manual</span>
-                    <span class="tag">Pickup area</span>
-                </div>
-                <div class="simple-cta">
-                    <a class="cta-button"
-                        href="mailto:info@spanishcoastproperties.com?subject=Vehicle%20Inquiry%20-%20Cars%20or%20Boats&body=Hello%20Spanish%20Coast%20Properties%2C%0A%0AI%20am%20interested%20in%3A%20Cars%20%2F%20Boats%0A%0ABudget%3A%20%0ADates%3A%20%0ALocation%20(preferred%20pickup%20area)%3A%20%0AMust-haves%3A%20%0ANice-to-haves%3A%20%0A%0AThank%20you.">Email</a>
-                    <a class="cta-button" href="services.html#vehicle-services">See services</a>
-                </div>
-            </div>
-
-            <div class="catalog-hero">
-                <h3>Frequently Asked Questions</h3>
-                <p>
-                    Quick answers for common questions. If you have a special case, email us and we will guide you on
-                    the best route.
-                </p>
-                <div class="service-grid">
-                    <div class="service-card" role="note">
-                        <h3>How fast can you respond?</h3>
-                        <p>Usually same day. Include your dates, budget, and pickup area to speed it up.</p>
-                    </div>
-                    <div class="service-card" role="note">
-                        <h3>Do you help with paperwork?</h3>
-                        <p>Yes. We support practical handovers and documentation steps (and coordinate specialists if required).</p>
-                    </div>
-                    <div class="service-card" role="note">
-                        <h3>Can I rent long-term?</h3>
-                        <p>Yes. Ask for monthly pricing and we will share options available in Costa Blanca South.</p>
-                    </div>
-                </div>
-            </div>
 
             <div class="property-grid" id="vehicle-grid"></div>
         </section>
@@ -263,7 +167,7 @@
         <div class="footer-inner">
             <div class="footer-col">
                 <h3>Spanish Coast Properties</h3>
-                <p>Vehicles for sale or rent in Costa Blanca South.</p>
+                <p>Boats for sale or rent in Costa Blanca South.</p>
             </div>
             <div class="footer-col">
                 <h4>Explore</h4>
@@ -296,7 +200,7 @@
     <div id="vehicle-lightbox" class="lightbox" aria-hidden="true">
         <span class="close-lightbox close-vehicle-lightbox" role="button" tabindex="0" aria-label="Close lightbox">&times;</span>
         <button type="button" class="lightbox-nav vehicle-lightbox-nav prev" aria-label="Previous image">❮</button>
-        <img id="vehicle-lightbox-img" src="" alt="Vehicle photo">
+        <img id="vehicle-lightbox-img" src="" alt="Boat photo">
         <button type="button" class="lightbox-nav vehicle-lightbox-nav next" aria-label="Next image">❯</button>
         <div id="vehicle-lightbox-caption" class="lightbox-caption"></div>
     </div>

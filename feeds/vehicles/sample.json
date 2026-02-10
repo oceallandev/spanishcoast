@@ -1,0 +1,28 @@
+[
+  {
+    "id": "SCP-CAR-001",
+    "title": "SEAT Leon FR 2020 (Automatic)",
+    "deal": "sale",
+    "price": 17900,
+    "currency": "EUR",
+    "location": "Torrevieja, Alicante",
+    "latitude": 37.9787,
+    "longitude": -0.6822,
+    "images": ["assets/placeholder.png"],
+    "description": "Automatic. Petrol. 45k km. Full service history. Ready to drive."
+  },
+  {
+    "id": "SCP-CAR-002",
+    "title": "Citroen C3 2021 (Rental)",
+    "deal": "rent",
+    "price": 38,
+    "pricePeriod": "day",
+    "currency": "EUR",
+    "location": "Ciudad Quesada, Alicante",
+    "latitude": 38.0742,
+    "longitude": -0.7251,
+    "images": ["assets/placeholder.png"],
+    "description": "Daily rental. Delivery/pickup available. Insurance options on request."
+  }
+]
+

@@ -341,8 +341,7 @@ body[data-section="properties"] .search-pill-container {
     }
 }
 
-body[data-section="home"] #toggle-map-btn,
-body[data-section="vehicles"] #toggle-map-btn {
+body[data-section="home"] #toggle-map-btn {
     display: none;
 }
 

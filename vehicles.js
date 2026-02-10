@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <a class="business-card-link" href="#" data-vehicle-open="${esc(id)}" aria-label="View vehicle details">
           <div class="card-img-wrapper">
             <img src="${esc(img)}" alt="${esc(title)}" loading="lazy" referrerpolicy="no-referrer"
-              onerror="this.onerror=null;this.closest('.property-card')?.classList.add('listing-removed')">
+              onerror="this.onerror=null;this.src='assets/placeholder.png'">
             <div class="card-badge">${esc(category)}</div>
             <div class="card-status">${esc(deal)}</div>
           </div>
