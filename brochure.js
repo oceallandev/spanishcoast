@@ -355,16 +355,218 @@
         ? Math.round(distanceKm(lat, lon, alc.lat, alc.lon))
         : 0;
 
-      const cards = [
-        { k: 'Area', v: `${town}, ${province}` },
-        { k: 'Why it works', v: pickAreaCopy(town) },
-        approxAirport ? { k: 'Airport', v: `Approx. ${approxAirport} km to ${alc.name}` } : null,
-        { k: 'Everyday', v: 'Supermarkets, cafes, healthcare, and transport options are typically close by (depending on exact location).' }
-      ].filter(Boolean);
+      const formatKm = (km) => {
+        const n = Number(km);
+        if (!Number.isFinite(n) || n <= 0) return '';
+        if (n < 1) return `${Math.round(n * 1000)} m`;
+        if (n < 10) return `${n.toFixed(1)} km`;
+        return `${Math.round(n)} km`;
+      };
 
-      areaEl.innerHTML = cards
-        .map((c) => `<div class="brochure-area-card"><div class="brochure-area-k">${escapeHtml(c.k)}</div><div class="brochure-area-v">${escapeHtml(c.v)}</div></div>`)
-        .join('');
+      const walkMins = (km) => {
+        const n = Number(km);
+        if (!Number.isFinite(n) || n <= 0) return '';
+        // 4.8 km/h walking speed.
+        const mins = Math.round((n / 4.8) * 60);
+        if (mins < 3) return '';
+        if (mins > 60) return '';
+        return `${mins} min walk`;
+      };
+
+      const driveMins = (km) => {
+        const n = Number(km);
+        if (!Number.isFinite(n) || n <= 0) return '';
+        // Very rough urban average; avoid showing for tiny distances.
+        const mins = Math.round((n / 35) * 60);
+        if (mins < 5) return '';
+        if (mins > 90) return '';
+        return `${mins} min drive`;
+      };
+
+      const nearbyCacheKey = (() => {
+        if (!Number.isFinite(lat) || !Number.isFinite(lon)) return '';
+        const latKey = (Math.round(lat * 1000) / 1000).toFixed(3);
+        const lonKey = (Math.round(lon * 1000) / 1000).toFixed(3);
+        return `scp:area:v2:${latKey},${lonKey}`;
+      })();
+
+      const readCache = () => {
+        try {
+          if (!nearbyCacheKey || !window.localStorage) return null;
+          const raw = window.localStorage.getItem(nearbyCacheKey);
+          if (!raw) return null;
+          const parsed = JSON.parse(raw);
+          if (!parsed || typeof parsed !== 'object') return null;
+          // 7 days.
+          if (!parsed.ts || (Date.now() - Number(parsed.ts)) > (7 * 24 * 60 * 60 * 1000)) return null;
+          return parsed;
+        } catch {
+          return null;
+        }
+      };
+
+      const writeCache = (payload) => {
+        try {
+          if (!nearbyCacheKey || !window.localStorage) return;
+          window.localStorage.setItem(nearbyCacheKey, JSON.stringify({ ...payload, ts: Date.now() }));
+        } catch {
+          // ignore
+        }
+      };
+
+      const haversineKm = (aLat, aLon, bLat, bLon) => {
+        if (!Number.isFinite(aLat) || !Number.isFinite(aLon) || !Number.isFinite(bLat) || !Number.isFinite(bLon)) return NaN;
+        return distanceKm(aLat, aLon, bLat, bLon);
+      };
+
+      const elCenter = (el) => {
+        if (!el) return null;
+        if (Number.isFinite(el.lat) && Number.isFinite(el.lon)) return { lat: el.lat, lon: el.lon };
+        if (el.center && Number.isFinite(el.center.lat) && Number.isFinite(el.center.lon)) return { lat: el.center.lat, lon: el.center.lon };
+        return null;
+      };
+
+      const nearestOf = (elements, predicate) => {
+        let best = null;
+        let bestKm = Infinity;
+        (elements || []).forEach((el) => {
+          if (!predicate(el)) return;
+          const c = elCenter(el);
+          if (!c) return;
+          const km = haversineKm(lat, lon, c.lat, c.lon);
+          if (!Number.isFinite(km)) return;
+          if (km < bestKm) {
+            bestKm = km;
+            best = el;
+          }
+        });
+        return best ? { el: best, km: bestKm } : null;
+      };
+
+      const buildItems = (nearby) => {
+        const base = [
+          { icon: '📍', label: 'Area', value: `${town}, ${province}` },
+          approxAirport ? { icon: '✈️', label: 'Airport (ALC)', value: `~${formatKm(approxAirport)} (${driveMins(approxAirport) || 'approx.'})` } : null
+        ].filter(Boolean);
+
+        const items = Array.isArray(nearby) ? nearby : [];
+        base.push(...items);
+
+        return base;
+      };
+
+      const render = (items, note) => {
+        const lead = pickAreaCopy(town);
+        const list = (items || []).map((it) => {
+          const v = toText(it.value);
+          const meta = toText(it.meta);
+          return `
+            <li class="brochure-area-item">
+              <span class="brochure-area-ic" aria-hidden="true">${escapeHtml(it.icon || '•')}</span>
+              <span class="brochure-area-txt">
+                <span class="brochure-area-label">${escapeHtml(it.label || '')}</span>
+                <span class="brochure-area-val">${escapeHtml(v)}</span>
+                ${meta ? `<span class="brochure-area-meta">${escapeHtml(meta)}</span>` : ``}
+              </span>
+            </li>
+          `;
+        }).join('');
+
+        areaEl.innerHTML = `
+          <div class="brochure-area-lead">${escapeHtml(lead)}</div>
+          <ul class="brochure-area-list">${list}</ul>
+          <div class="brochure-area-footnote">${escapeHtml(note || 'Distances are approximate (straight-line). Sources: OpenStreetMap contributors.')}</div>
+        `;
+      };
+
+      const fallbackItems = buildItems([
+        { icon: '🛒', label: 'Shops', value: 'Nearby supermarkets and daily services (varies by exact street)' },
+        { icon: '🏫', label: 'Schools', value: 'Local schools in the area (varies by exact street)' },
+        { icon: '🌳', label: 'Parks', value: 'Green spaces and promenades nearby (varies by exact street)' }
+      ]);
+
+      // Initial render: immediate, then enhance with OSM if possible.
+      render(fallbackItems, 'Loading nearby amenities…');
+
+      const cached = readCache();
+      if (cached && Array.isArray(cached.items)) {
+        render(buildItems(cached.items), cached.note || 'Distances are approximate (straight-line). Sources: OpenStreetMap contributors.');
+      }
+
+      const fetchOsmNearby = async () => {
+        if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+        if (!window.fetch) return null;
+
+        // Overpass API: may be slow/unavailable. We keep this best-effort.
+        const query = [
+          '[out:json][timeout:20];',
+          '(',
+          `nwr(around:5000,${lat},${lon})["amenity"="school"];`,
+          `nwr(around:3000,${lat},${lon})["leisure"="park"];`,
+          `nwr(around:3000,${lat},${lon})["shop"="supermarket"];`,
+          `nwr(around:3000,${lat},${lon})["amenity"="pharmacy"];`,
+          `nwr(around:8000,${lat},${lon})["natural"="beach"];`,
+          `nwr(around:2000,${lat},${lon})["highway"="bus_stop"];`,
+          `nwr(around:15000,${lat},${lon})["leisure"="golf_course"];`,
+          ');',
+          'out center tags;'
+        ].join('\n');
+
+        const ctrl = window.AbortController ? new AbortController() : null;
+        const t = window.setTimeout(() => { try { if (ctrl) ctrl.abort(); } catch { } }, 12000);
+        try {
+          const res = await fetch('https://overpass-api.de/api/interpreter', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+            body: `data=${encodeURIComponent(query)}`,
+            signal: ctrl ? ctrl.signal : undefined
+          });
+          if (!res.ok) return null;
+          const json = await res.json();
+          const elements = json && Array.isArray(json.elements) ? json.elements : [];
+
+          const school = nearestOf(elements, (el) => el.tags && el.tags.amenity === 'school');
+          const park = nearestOf(elements, (el) => el.tags && el.tags.leisure === 'park');
+          const supermarket = nearestOf(elements, (el) => el.tags && el.tags.shop === 'supermarket');
+          const pharmacy = nearestOf(elements, (el) => el.tags && el.tags.amenity === 'pharmacy');
+          const beach = nearestOf(elements, (el) => el.tags && (el.tags.natural === 'beach' || el.tags.place === 'beach'));
+          const bus = nearestOf(elements, (el) => el.tags && el.tags.highway === 'bus_stop');
+          const golf = nearestOf(elements, (el) => el.tags && el.tags.leisure === 'golf_course');
+
+          const mk = (icon, label, hit) => {
+            if (!hit) return null;
+            const km = hit.km;
+            const dist = formatKm(km);
+            const meta = km <= 3 ? (walkMins(km) || '') : (driveMins(km) || '');
+            const name = hit.el && hit.el.tags && hit.el.tags.name ? String(hit.el.tags.name) : '';
+            return { icon, label, value: `~${dist}`, meta: name ? name : meta };
+          };
+
+          const items = [
+            mk('🏖️', 'Beach', beach),
+            mk('🛒', 'Supermarket', supermarket),
+            mk('💊', 'Pharmacy', pharmacy),
+            mk('🌳', 'Park', park),
+            mk('🏫', 'School', school),
+            mk('🚌', 'Bus stop', bus),
+            mk('⛳', 'Golf', golf)
+          ].filter(Boolean);
+
+          return { items, note: 'Distances are approximate (straight-line). Data: OpenStreetMap contributors.' };
+        } catch {
+          return null;
+        } finally {
+          window.clearTimeout(t);
+        }
+      };
+
+      // Fetch and enhance in the background.
+      (async () => {
+        const out = await fetchOsmNearby();
+        if (!out || !Array.isArray(out.items) || !out.items.length) return;
+        writeCache(out);
+        render(buildItems(out.items), out.note);
+      })();
     }
 
     if (descEl) {

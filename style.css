@@ -2987,31 +2987,80 @@ body[data-section="properties"].map-open .map-section {
 }
 
 .brochure-area {
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    background: linear-gradient(180deg, rgba(2, 6, 23, 0.55), rgba(255, 255, 255, 0.03));
+    padding: 1rem;
+}
+
+.brochure-area-lead {
+    font-weight: 900;
+    color: rgba(248, 250, 252, 0.96);
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+}
+
+.brochure-area-list {
+    list-style: none;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.7rem;
+    gap: 0.55rem 0.75rem;
+    padding: 0;
+    margin: 0;
 }
 
-.brochure-area-card {
-    padding: 0.9rem 0.95rem;
+.brochure-area-item {
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    gap: 0.7rem;
+    align-items: start;
+    padding: 0.75rem 0.85rem;
     border-radius: 16px;
     border: 1px solid rgba(255, 255, 255, 0.10);
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.04);
 }
 
-.brochure-area-k {
+.brochure-area-ic {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(14, 165, 233, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    font-size: 1.05rem;
+}
+
+.brochure-area-label {
+    display: block;
     font-size: 0.75rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: rgba(148, 163, 184, 0.95);
+    color: rgba(148, 163, 184, 0.98);
     font-weight: 900;
-    margin-bottom: 0.35rem;
 }
 
-.brochure-area-v {
+.brochure-area-val {
+    display: block;
+    font-weight: 900;
+    color: rgba(248, 250, 252, 0.96);
+    margin-top: 0.18rem;
+}
+
+.brochure-area-meta {
+    display: block;
     color: rgba(226, 232, 240, 0.92);
-    line-height: 1.55;
     font-weight: 800;
+    margin-top: 0.18rem;
+    line-height: 1.35;
+}
+
+.brochure-area-footnote {
+    margin-top: 0.8rem;
+    color: rgba(148, 163, 184, 0.98);
+    font-weight: 800;
+    font-size: 0.92rem;
 }
 
 .brochure-highlight {
@@ -3126,7 +3175,7 @@ body[data-section="properties"].map-open .map-section {
     .brochure-highlights {
         grid-template-columns: 1fr;
     }
-    .brochure-area {
+    .brochure-area-list {
         grid-template-columns: 1fr;
     }
     .brochure-features {
@@ -3181,11 +3230,36 @@ body[data-section="properties"].map-open .map-section {
 
     .brochure-stat,
     .brochure-highlight,
-    .brochure-area-card,
+    .brochure-area-item,
     .brochure-features li {
         background: #f8fafc !important;
         border-color: #e2e8f0 !important;
         color: #0b1220 !important;
+    }
+
+    .brochure-area {
+        border-color: #e2e8f0 !important;
+        background: white !important;
+        padding: 0.75rem !important;
+    }
+
+    .brochure-area-ic {
+        background: #e0f2fe !important;
+        border-color: #bae6fd !important;
+    }
+
+    .brochure-area-label {
+        color: #334155 !important;
+    }
+
+    .brochure-area-val,
+    .brochure-area-lead,
+    .brochure-area-meta {
+        color: #0b1220 !important;
+    }
+
+    .brochure-area-footnote {
+        color: #475569 !important;
     }
 
     .brochure-description li::before {
