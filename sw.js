@@ -1,5 +1,5 @@
 /* Minimal same-origin service worker for instant repeat loads on mobile WebKit/Android. */
-const CACHE_NAME = 'scp-cache-20260210c';
+const CACHE_NAME = 'scp-cache-20260210d';
 
 const PRECACHE_PATHS = [
   './',
@@ -49,8 +49,11 @@ function cacheKeyFor(request) {
   try {
     const url = new URL(request.url);
     if (url.origin !== self.location.origin) return request;
-    // Ignore cache-busting query strings (we already version the cache name).
-    return new Request(url.origin + url.pathname, {
+    // Keep query strings for versioned static assets (we use ?v=...).
+    // For navigations like properties.html?ref=... we already do network-first.
+    const keepSearch = /\.(js|css|webmanifest)$/i.test(url.pathname);
+    const keyUrl = url.origin + url.pathname + (keepSearch ? url.search : '');
+    return new Request(keyUrl, {
       method: request.method,
       headers: request.headers,
       mode: request.mode,

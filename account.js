@@ -5,6 +5,7 @@
   const adminLinks = document.getElementById('admin-links');
   const diagnosticsPanel = document.getElementById('diagnostics');
   const diagLines = document.getElementById('diag-lines');
+  const clearCacheBtn = document.getElementById('clear-offline-cache');
 
   const signInForm = document.getElementById('sign-in-form');
   const signInEmail = document.getElementById('sign-in-email');
@@ -285,6 +286,36 @@
       setStatus('Signing out…');
       await client.auth.signOut();
       await refresh();
+    });
+  }
+
+  if (clearCacheBtn) {
+    clearCacheBtn.addEventListener('click', async () => {
+      setStatus('Clearing offline cache…', 'This will refresh the page.');
+      try {
+        if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(regs.map((r) => r.unregister()));
+        }
+      } catch {
+        // ignore
+      }
+      try {
+        if (window.caches && caches.keys) {
+          const keys = await caches.keys();
+          await Promise.all(keys.filter((k) => k.startsWith('scp-cache-')).map((k) => caches.delete(k)));
+        }
+      } catch {
+        // ignore
+      }
+      try {
+        // Fresh navigation to ensure we load new SW + assets.
+        const url = new URL(window.location.href);
+        url.searchParams.set('v', String(Date.now()));
+        window.location.replace(url.toString());
+      } catch {
+        window.location.reload();
+      }
     });
   }
 
