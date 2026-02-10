@@ -141,9 +141,14 @@
   // PWA: cache static assets for instant repeat loads on mobile WebKit/Android.
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js').catch(() => {
-        // Ignore registration failures (e.g. file://).
-      });
+      navigator.serviceWorker.register('sw.js')
+        .then((reg) => {
+          // Force an update check every load so GitHub Pages/CDN caching doesn't leave users on an old SW.
+          try { reg.update(); } catch { /* ignore */ }
+        })
+        .catch(() => {
+          // Ignore registration failures (e.g. file://).
+        });
     });
   }
 })();

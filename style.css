@@ -2223,6 +2223,69 @@ body[data-section="properties"].map-open .map-section {
 }
 
 /* Property Card Reference */
+.card-ref-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
+    margin-bottom: 4px;
+}
+
+.card-ref-row .card-ref {
+    margin-bottom: 0;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.card-orig-ref {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    color: rgba(148, 163, 184, 0.95);
+    margin-left: 0.4rem;
+}
+
+.ref-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.22rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    background: rgba(14, 165, 233, 0.10);
+    color: rgba(186, 230, 253, 0.98);
+    font-family: 'Outfit', sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.ref-chip:hover {
+    border-color: rgba(56, 189, 248, 0.45);
+    background: rgba(14, 165, 233, 0.14);
+}
+
+.ref-chip:active {
+    transform: translateY(1px);
+}
+
+.ref-chip[disabled] {
+    opacity: 0.6;
+    cursor: default;
+    transform: none;
+}
+
+.ref-chip--small {
+    font-size: 10px;
+    padding: 0.18rem 0.45rem;
+}
+
 .card-ref {
     font-size: 12px;
     color: rgba(56, 189, 248, 0.95);
@@ -2371,6 +2434,18 @@ body[data-section="properties"].map-open .map-section {
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: #bae6fd;
+}
+
+.modal-ref-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.modal-ref-row .modal-ref {
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 .modal-info h2 {

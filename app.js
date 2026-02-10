@@ -1061,6 +1061,37 @@ document.addEventListener('DOMContentLoaded', () => {
         return ['admin', 'partner', 'agency_admin', 'agent', 'developer', 'collaborator'].includes(r);
     }
 
+    function originalRefSourceLabel(source) {
+        const s = toText(source).trim().toLowerCase();
+        if (!s) return '';
+        if (s.includes('inmovilla')) return 'IMV';
+        if (s.includes('idealista')) return 'IDE';
+        if (s.includes('kyero')) return 'KYERO';
+        if (s.includes('thinkspain')) return 'THINK';
+        const up = s.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        if (!up) return '';
+        return up.length <= 8 ? up : up.slice(0, 8);
+    }
+
+    async function copyTextToClipboard(text) {
+        const v = toText(text);
+        if (!v.trim()) return false;
+        try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(v);
+                return true;
+            }
+        } catch {
+            // ignore
+        }
+        try {
+            window.prompt('Copy:', v);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
     async function supabaseMaybeGetOriginalRef(client, userId, scpRef) {
         const ref = toText(scpRef).trim();
         if (!ref) return null;
@@ -1195,6 +1226,23 @@ document.addEventListener('DOMContentLoaded', () => {
 	        throw lastErr || new Error('Failed to read session');
 	    }
 
+	    function refreshOriginalRefButtonsUi() {
+	        const allowed = Boolean(supabaseClient && supabaseUser) && isPrivilegedRole(supabaseRole);
+	        const buttons = document.querySelectorAll('button[data-action="show-original-ref"]');
+	        buttons.forEach((btn) => {
+	            const ref = toText(btn.dataset.scpRef).trim();
+	            const ok = allowed && ref && !ref.toLowerCase().includes('unavailable');
+	            btn.style.display = ok ? 'inline-flex' : 'none';
+	        });
+	        if (!allowed) {
+	            document.querySelectorAll('[data-card-original-ref]').forEach((span) => {
+	                span.style.display = 'none';
+	                span.textContent = '';
+	                span.dataset.originalRef = '';
+	            });
+	        }
+	    }
+
 	    async function initSupabaseFavoritesSync() {
 	        const client = getSupabase();
 	        supabaseClient = client;
@@ -1204,6 +1252,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	            const { data } = await supabaseGetSessionSafe(client);
 	            supabaseUser = data && data.session ? data.session.user : null;
 	            supabaseRole = supabaseUser ? await supabaseGetRole(client, supabaseUser.id) : '';
+	            refreshOriginalRefButtonsUi();
 
 	            if (supabaseUser) {
                 const localBefore = new Set(Array.from(favoriteIds));
@@ -1230,6 +1279,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 supabaseUser = session && session.user ? session.user : null;
                 supabaseRole = supabaseUser ? await supabaseGetRole(client, supabaseUser.id) : '';
                 originalRefCache.clear();
+                refreshOriginalRefButtonsUi();
                 if (!supabaseUser) {
                     updateFavoritesControls();
                     return;
@@ -1778,7 +1828,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button type="button" class="fav-btn ${isFav ? 'is-fav' : ''}" aria-label="Save listing" aria-pressed="${isFav ? 'true' : 'false'}">${isFav ? '♥' : '♡'}</button>
                 </div>
                 <div class="card-content">
-                    <div class="card-ref">${reference || 'Reference unavailable'}</div>
+                    <div class="card-ref-row">
+                        <div class="card-ref">
+                            ${reference || 'Reference unavailable'}
+                            <span class="card-orig-ref muted" data-card-original-ref style="display:none"></span>
+                        </div>
+                        <button type="button" class="ref-chip ref-chip--small" data-action="show-original-ref" style="display:none" aria-label="Show original reference" title="Show original reference">Orig</button>
+                    </div>
                     <h3>${type} in ${town}</h3>
                     <div class="location">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
@@ -1812,6 +1868,75 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     if (!nowFav && favoritesOnly) {
                         filterProperties();
+                    }
+                });
+            }
+
+            const origBtn = card.querySelector('button[data-action="show-original-ref"]');
+            const origSpan = card.querySelector('[data-card-original-ref]');
+            const updateOrigBtnVisibility = () => {
+                if (!origBtn) return;
+                origBtn.dataset.scpRef = reference || '';
+                const allowed = Boolean(reference)
+                    && Boolean(supabaseClient && supabaseUser)
+                    && isPrivilegedRole(supabaseRole);
+                origBtn.style.display = allowed ? 'inline-flex' : 'none';
+            };
+            updateOrigBtnVisibility();
+
+            if (origBtn && origSpan) {
+                origBtn.addEventListener('click', async (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    const client = supabaseClient || getSupabase();
+                    if (!client) return;
+
+                    let user = supabaseUser;
+                    if (!user) {
+                        try {
+                            const { data } = await client.auth.getSession();
+                            user = data && data.session ? data.session.user : null;
+                        } catch {
+                            user = null;
+                        }
+                    }
+                    if (!user) return;
+                    if (!isPrivilegedRole(supabaseRole)) return;
+                    if (!reference) return;
+
+                    const already = (origSpan.dataset.originalRef || '').trim();
+                    if (already) {
+                        const prev = origBtn.textContent;
+                        await copyTextToClipboard(already);
+                        origBtn.textContent = 'Copied';
+                        window.setTimeout(() => { origBtn.textContent = prev || 'Copy'; }, 1200);
+                        return;
+                    }
+
+                    const prevText = origBtn.textContent;
+                    origBtn.disabled = true;
+                    origBtn.textContent = '…';
+                    try {
+                        const mapped = await supabaseMaybeGetOriginalRef(client, user.id, reference);
+                        if (!mapped || !mapped.original_ref) {
+                            origBtn.textContent = 'No ref';
+                            window.setTimeout(() => { origBtn.textContent = prevText || 'Orig'; }, 1300);
+                            return;
+                        }
+
+                        const src = originalRefSourceLabel(mapped.source);
+                        const label = src ? `${src}: ` : '';
+                        const value = toText(mapped.original_ref).trim();
+                        origSpan.textContent = `· ${label}${value}`;
+                        origSpan.dataset.originalRef = value;
+                        origSpan.style.display = 'inline';
+
+                        await copyTextToClipboard(value);
+                        origBtn.textContent = 'Copied';
+                        window.setTimeout(() => { origBtn.textContent = 'Copy'; }, 1200);
+                    } finally {
+                        origBtn.disabled = false;
                     }
                 });
             }
@@ -2255,7 +2380,10 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="modal-body">
                 <div class="modal-info">
                     <div class="card-badge">${type}</div>
-                    <div class="modal-ref">${reference || 'Ref unavailable'}</div>
+                    <div class="modal-ref-row">
+                        <div class="modal-ref">${reference || 'Ref unavailable'}</div>
+                        <button type="button" class="ref-chip ref-chip--small" data-action="copy-modal-original-ref" style="display:none" aria-label="Copy original reference" title="Copy original reference">Orig</button>
+                    </div>
                     <div class="modal-ref-sub muted" data-original-ref style="display:none"></div>
                     <h2>${modalTitle}</h2>
                     <div class="location">
@@ -2371,9 +2499,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Privileged users (via Supabase/RLS) can see the original system reference (e.g. Inmovilla ref).
         // Normal clients never receive this data because it's stored server-side behind RLS.
         const originalRefEl = modalDetails.querySelector('[data-original-ref]');
+        const originalRefBtn = modalDetails.querySelector('button[data-action="copy-modal-original-ref"]');
         if (originalRefEl) {
             originalRefEl.style.display = 'none';
             originalRefEl.textContent = '';
+            if (originalRefBtn) {
+                originalRefBtn.style.display = 'none';
+                originalRefBtn.dataset.originalRef = '';
+            }
             const scpRef = toText(reference).trim();
             if (scpRef) {
                 (async () => {
@@ -2394,8 +2527,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     const label = mapped.source ? `Original ref (${mapped.source})` : 'Original ref';
                     originalRefEl.textContent = `${label}: ${mapped.original_ref}`;
                     originalRefEl.style.display = 'block';
+                    if (originalRefBtn) {
+                        originalRefBtn.style.display = 'inline-flex';
+                        originalRefBtn.dataset.originalRef = toText(mapped.original_ref).trim();
+                    }
                 })();
             }
+        }
+
+        if (originalRefBtn) {
+            originalRefBtn.addEventListener('click', async () => {
+                const value = toText(originalRefBtn.dataset.originalRef).trim();
+                if (!value) return;
+                const prev = originalRefBtn.textContent;
+                await copyTextToClipboard(value);
+                originalRefBtn.textContent = 'Copied';
+                window.setTimeout(() => { originalRefBtn.textContent = prev || 'Orig'; }, 1200);
+            });
         }
 
         modal.style.display = 'block';
