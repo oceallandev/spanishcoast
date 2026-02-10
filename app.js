@@ -156,7 +156,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let maxBeachDistanceMeters = 'any';
     let seaViewFilter = 'any';
     let operationMode = 'any'; // any | sale | rent_longterm | rent_vacation
-    let sortMode = 'featured';
+    // Default sort: newest first (matches "Date added (newest)" in the UI).
+    let sortMode = 'date_desc';
     let currentGalleryIndex = 0;
     let currentGalleryImages = [];
     let map;
@@ -2369,19 +2370,82 @@ document.addEventListener('DOMContentLoaded', () => {
         updateActiveCityButton(selectedCity);
     }
 
+    function markerKindFor(property) {
+        const mode = listingModeFor(property);
+        if (mode === 'traspaso' || mode === 'business') {
+            return 'business';
+        }
+
+        const type = normalize(property && property.type);
+        if (!type) return 'property';
+
+        if (type.includes('penthouse') || type.includes('atico')) return 'penthouse';
+        if (type.includes('apartment') || type.includes('apartamento') || type.includes('flat') || type.includes('studio')) return 'apartment';
+
+        if (type.includes('villa') || type.includes('chalet') || type.includes('detached') || type.includes('single family')) return 'villa';
+        if (
+            type.includes('town house')
+            || type.includes('townhouse')
+            || type.includes('duplex')
+            || type.includes('triplex')
+            || type.includes('bungalow')
+            || type.includes('terraced')
+            || type.includes('semi detached')
+            || type.includes('semi-detached')
+            || type.includes('house')
+            || type.includes('casa')
+        ) return 'house';
+
+        if (type.includes('country') || type.includes('finca') || type.includes('rural') || type.includes('cortijo')) return 'country';
+        if (type.includes('plot') || type.includes('land') || type.includes('parcel') || type.includes('terrain') || type.includes('solar') || type.includes('rustic')) return 'plot';
+
+        if (
+            type.includes('commercial')
+            || type.includes('local')
+            || type.includes('office')
+            || type.includes('shop')
+            || type.includes('industrial')
+            || type.includes('warehouse')
+            || type.includes('premises')
+        ) return 'commercial';
+
+        if (type.includes('garage') || type.includes('parking')) return 'parking';
+
+        return 'property';
+    }
+
+    const MARKER_ICON_BASE = 'class="scp-marker-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
+    const MARKER_ICON_SVG = {
+        apartment: `<svg ${MARKER_ICON_BASE}><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"/><path d="M9 6h.01"/><path d="M15 6h.01"/><path d="M9 10h.01"/><path d="M15 10h.01"/><path d="M9 14h.01"/><path d="M15 14h.01"/><path d="M9 18h.01"/><path d="M15 18h.01"/></svg>`,
+        penthouse: `<svg ${MARKER_ICON_BASE}><path d="M5 22V9l7-6 7 6v13"/><path d="M9 22v-7h6v7"/><path d="M12 7l1 2 2 .3-1.6 1.4.5 2.3L12 12l-1.9 1 .5-2.3L9 9.3 11 9z"/></svg>`,
+        villa: `<svg ${MARKER_ICON_BASE}><path d="M3 11l9-7 9 7"/><path d="M5 10v11a1 1 0 0 0 1 1h4v-7h4v7h4a1 1 0 0 0 1-1V10"/></svg>`,
+        house: `<svg ${MARKER_ICON_BASE}><path d="M3 11l9-7 9 7"/><path d="M5 10v12h14V10"/><path d="M9 22v-7h6v7"/></svg>`,
+        country: `<svg ${MARKER_ICON_BASE}><path d="M12 2c-3 2.4-4.8 5.2-5.3 8.3h10.6C16.8 7.2 15 4.4 12 2z"/><path d="M7 10.3c-2.2 1.8-3.6 4-4 6.7h18c-.4-2.7-1.8-4.9-4-6.7"/><path d="M12 17v5"/><path d="M8 22h8"/></svg>`,
+        plot: `<svg ${MARKER_ICON_BASE}><path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3z"/><path d="M9 3v15"/><path d="M15 6v15"/></svg>`,
+        commercial: `<svg ${MARKER_ICON_BASE}><path d="M3 9l1-5h16l1 5"/><path d="M4 9v12h16V9"/><path d="M9 21v-7h6v7"/><path d="M7 12h10"/></svg>`,
+        parking: `<svg ${MARKER_ICON_BASE}><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z"/><path d="M10 16V8h3a2 2 0 0 1 0 4h-3"/></svg>`,
+        business: `<svg ${MARKER_ICON_BASE}><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg>`,
+        property: `<svg ${MARKER_ICON_BASE}><path d="M3 11l9-7 9 7"/><path d="M5 10v12h14V10"/><path d="M9 22v-7h6v7"/></svg>`
+    };
+
+    function markerIconSvgFor(kind) {
+        return MARKER_ICON_SVG[kind] || MARKER_ICON_SVG.property;
+    }
+
     function createMarkerIcon(property) {
         if (typeof L === 'undefined' || typeof L.divIcon !== 'function') {
             return undefined;
         }
 
+        const kind = markerKindFor(property);
         const markerText = escapeHtml(formatListingMarkerText(property));
 
         return L.divIcon({
-            className: 'marker-container',
+            className: `marker-container marker-kind-${kind}`,
             html: `
                 <div class="scp-marker" aria-hidden="true">
                     <div class="scp-marker-pin">
-                        <img class="scp-marker-logo" src="assets/scp-isotipo.png" alt="">
+                        ${markerIconSvgFor(kind)}
                     </div>
                     <div class="scp-marker-tag">${markerText}</div>
                 </div>
@@ -2683,9 +2747,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (sortFilterEl) {
-        sortMode = toText(sortFilterEl.value, 'featured') || 'featured';
+        sortMode = toText(sortFilterEl.value, 'date_desc') || 'date_desc';
         sortFilterEl.addEventListener('change', (event) => {
-            sortMode = toText(event.target.value, 'featured') || 'featured';
+            sortMode = toText(event.target.value, 'date_desc') || 'date_desc';
             renderLimit = 60;
             renderProperties({ reset: true });
         });
@@ -2742,7 +2806,7 @@ document.addEventListener('DOMContentLoaded', () => {
         maxBeachDistanceMeters = 'any';
         seaViewFilter = 'any';
         operationMode = 'any';
-        sortMode = 'featured';
+        sortMode = 'date_desc';
         favoritesOnly = false;
         autoRefFromUrl = '';
 
@@ -2757,7 +2821,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (parkingFilterEl) parkingFilterEl.value = 'any';
         if (beachFilterEl) beachFilterEl.value = 'any';
         if (seaViewFilterEl) seaViewFilterEl.value = 'any';
-        if (sortFilterEl) sortFilterEl.value = 'featured';
+        if (sortFilterEl) sortFilterEl.value = 'date_desc';
 
         updateActiveCityButton('all');
         setBrowserRef('', { push: false, state: {} });

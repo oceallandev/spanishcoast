@@ -2050,10 +2050,18 @@ body[data-section="properties"].map-open .map-section {
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.96);
     border: 2px solid rgba(255, 255, 255, 0.95);
+    color: #030712;
     box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
     display: grid;
     place-items: center;
     transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.25s ease, border-color 0.25s ease;
+}
+
+.scp-marker-ic {
+    width: 26px;
+    height: 26px;
+    display: block;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.18));
 }
 
 .scp-marker-logo {
@@ -2080,8 +2088,8 @@ body[data-section="properties"].map-open .map-section {
 .marker-container:hover .scp-marker-pin,
 .marker-container:hover .scp-marker-tag {
     transform: translateY(-4px) scale(1.05);
-    background: var(--primary);
-    border-color: var(--primary);
+    background: var(--marker-accent, var(--primary));
+    border-color: var(--marker-accent, var(--primary));
     color: white;
 }
 
@@ -2114,6 +2122,7 @@ body[data-section="properties"].map-open .map-section {
 .marker-container {
     background: transparent;
     border: none;
+    --marker-accent: var(--primary);
 }
 
 /* Inner Image Styling */
@@ -2140,8 +2149,8 @@ body[data-section="properties"].map-open .map-section {
 .marker-container.marker-active .scp-marker-pin,
 .marker-container.marker-active .scp-marker-tag {
     transform: translateY(-4px) scale(1.06);
-    background: var(--primary);
-    border-color: var(--primary);
+    background: var(--marker-accent, var(--primary));
+    border-color: var(--marker-accent, var(--primary));
     color: white;
     box-shadow: 0 16px 44px rgba(14, 165, 233, 0.5);
 }
