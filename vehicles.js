@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const toText = (v, fb = '') => (typeof v === 'string' ? v : v == null ? fb : String(v));
   const norm = (v) => toText(v).trim().toLowerCase();
+  const forcedCategory = norm(document.body && document.body.dataset ? document.body.dataset.vehicleCategory : '');
 
   const esc = (s) =>
     toText(s)
@@ -71,6 +72,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function syncViewportHeightVar() {
     document.documentElement.style.setProperty('--app-vh', `${window.innerHeight}px`);
+  }
+
+  function applyInitialFiltersFromUrl() {
+    try {
+      const params = new URLSearchParams(window.location.search || '');
+      const category = norm(params.get('category'));
+      const deal = norm(params.get('deal'));
+      const provider = toText(params.get('provider')).trim();
+      const location = toText(params.get('location')).trim();
+      const maxPrice = toText(params.get('maxPrice') || params.get('price')).trim();
+      const sort = norm(params.get('sort'));
+
+      if (categoryFilter && (category === 'any' || category === 'car' || category === 'boat')) {
+        categoryFilter.value = category;
+      }
+      if (dealFilter && (deal === 'any' || deal === 'sale' || deal === 'rent')) {
+        dealFilter.value = deal;
+      }
+      if (providerFilter && provider) {
+        providerFilter.value = provider;
+      }
+      if (locationFilter && location) {
+        locationFilter.value = location;
+      }
+      if (maxPriceFilter && maxPrice) {
+        maxPriceFilter.value = maxPrice;
+      }
+      if (sortFilter && (sort === 'featured' || sort === 'date_desc' || sort === 'price_asc' || sort === 'price_desc')) {
+        sortFilter.value = sort;
+      }
+    } catch {}
+
+    // Dedicated pages (cars/boats) should never be overridden by query params.
+    if (categoryFilter && (forcedCategory === 'car' || forcedCategory === 'boat')) {
+      categoryFilter.value = forcedCategory;
+      categoryFilter.disabled = true;
+      categoryFilter.setAttribute('aria-disabled', 'true');
+      document.body.classList.add('vehicle-category-locked');
+    }
+  }
+
+  function openFromHash() {
+    const raw = (window.location.hash || '').replace(/^#/, '');
+    if (!raw) return;
+    let id = raw;
+    try {
+      id = decodeURIComponent(raw);
+    } catch {}
+    const it = listings.find((x) => String(x && x.id) === String(id));
+    if (it) openModal(it);
   }
 
   function syncFiltersBarHeight() {
@@ -98,7 +149,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getFilters() {
     return {
-      category: categoryFilter ? norm(categoryFilter.value) : 'any',
+      category: forcedCategory === 'car' || forcedCategory === 'boat'
+        ? forcedCategory
+        : categoryFilter
+          ? norm(categoryFilter.value)
+          : 'any',
       deal: dealFilter ? norm(dealFilter.value) : 'any',
       provider: providerFilter ? toText(providerFilter.value) : 'any',
       location: locationFilter ? norm(locationFilter.value) : '',
@@ -119,9 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const p = Number(item.price);
       if (!Number.isFinite(p) || p <= 0 || p > f.maxPrice) return false;
     }
-    // Require at least one image (UX requirement).
-    const imgs = Array.isArray(item.images) ? item.images : [];
-    if (imgs.length === 0) return false;
     return true;
   }
 
@@ -170,6 +222,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateMap(items) {
+    // Avoid loading map tiles until the user asks for the map.
+    const wantsMap = !!mapSection && mapSection.classList.contains('active');
+    if (!wantsMap && !map) return;
+
     ensureMap();
     if (!map || !markersLayer) return;
 
@@ -289,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const providerEmail = provider ? toText(provider.email) : 'info@spanishcoastproperties.com';
     const providerWebsite = provider ? toText(provider.website) : '';
 
-    const shareUrl = `${window.location.origin}${window.location.pathname}#${encodeURIComponent(toText(it.id))}`;
+    const shareUrl = `${window.location.origin}${window.location.pathname}${window.location.search}#${encodeURIComponent(toText(it.id))}`;
     const mailBody = encodeURIComponent(
       `Hi Spanish Coast Properties,\n\nI am interested in this ${category.toLowerCase()} (${deal.toLowerCase()}):\n- ${title}\n- ${loc}\n- ${price}\n\nLink: ${shareUrl}\n\nMy phone:\nMy preferred dates (if rental):\n\nThank you.`
     );
@@ -385,14 +441,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Events
   hydrateProviderOptions();
+  applyInitialFiltersFromUrl();
   syncViewportHeightVar();
   syncFiltersBarHeight();
   render();
+  openFromHash();
 
   window.addEventListener('resize', () => {
     syncViewportHeightVar();
     syncFiltersBarHeight();
     if (map && typeof map.invalidateSize === 'function') setTimeout(() => map.invalidateSize(), 60);
+  });
+
+  window.addEventListener('hashchange', () => {
+    // Enable share links like vehicles.html#SCP-CAR-001.
+    openFromHash();
   });
 
   if (openFiltersBtn) openFiltersBtn.addEventListener('click', openFilters);
@@ -439,7 +502,12 @@ document.addEventListener('DOMContentLoaded', () => {
       toggleMapBtn.textContent = next ? 'List' : 'Map';
       if (next) {
         ensureMap();
+        // Now that the map is visible, draw markers for the current filters.
+        render();
         setTimeout(() => map && map.invalidateSize && map.invalidateSize(), 120);
+        try {
+          mapSection.scrollIntoView({ block: 'start', behavior: 'smooth' });
+        } catch {}
       }
     });
   }
@@ -515,4 +583,3 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'ArrowRight' && document.body.classList.contains('lightbox-open')) showNext(1);
   });
 });
-

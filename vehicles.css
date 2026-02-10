@@ -1,0 +1,77 @@
+/* Vehicles page overrides/additions (kept separate to avoid touching global CSS). */
+
+body[data-section="vehicles"] {
+  --vehicle-control-min: 180px;
+}
+
+body[data-section="vehicles"] #vehicle-map-section {
+  display: none;
+}
+
+body[data-section="vehicles"] #vehicle-map-section.active {
+  display: block;
+}
+
+body[data-section="vehicles"] #filters-bar .results-sort {
+  justify-items: start;
+  min-width: var(--vehicle-control-min);
+}
+
+body[data-section="vehicles"] #filters-bar .results-sort input {
+  width: 100%;
+  max-width: 320px;
+  padding: 0.7rem 0.9rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(248, 250, 252, 0.92);
+  font-weight: 900;
+  outline: none;
+}
+
+body[data-section="vehicles"] #filters-bar .results-sort input:focus {
+  border-color: rgba(14, 165, 233, 0.35);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.18);
+}
+
+body[data-section="vehicles"].modal-open,
+body[data-section="vehicles"].lightbox-open {
+  overflow: hidden;
+}
+
+body[data-section="vehicles"] .gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.9rem;
+}
+
+body[data-section="vehicles"] .gallery-grid img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+body[data-section="vehicles"] .gallery-grid img:hover {
+  transform: translateY(-2px);
+  border-color: rgba(14, 165, 233, 0.25);
+}
+
+body.vehicle-category-locked #vehicle-category-filter {
+  opacity: 0.75;
+}
+
+@media (max-width: 520px) {
+  body[data-section="vehicles"] {
+    --vehicle-control-min: 160px;
+  }
+
+  body[data-section="vehicles"] #filters-bar {
+    padding: 0.95rem;
+  }
+}

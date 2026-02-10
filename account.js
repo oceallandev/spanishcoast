@@ -111,6 +111,33 @@
     }
   };
 
+  const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, Math.max(0, Number(ms) || 0)));
+
+  const isAbortLikeError = (error) => {
+    const msg = error && error.message ? String(error.message) : String(error || '');
+    const lower = msg.toLowerCase();
+    return lower.includes('abort') || lower.includes('aborted') || lower.includes('signal');
+  };
+
+  const getSessionSafe = async (client, { retries = 2 } = {}) => {
+    if (!client) return { data: { session: null } };
+    let lastErr = null;
+    for (let i = 0; i <= retries; i++) {
+      try {
+        return await client.auth.getSession();
+      } catch (error) {
+        lastErr = error;
+        // Some browsers can throw AbortError during auth init; retry a couple times before surfacing.
+        if (i < retries && isAbortLikeError(error)) {
+          await sleep(140 * (i + 1));
+          continue;
+        }
+        throw error;
+      }
+    }
+    throw lastErr || new Error('Failed to read session');
+  };
+
   // Supabase can be slow to respond on some networks, and free-tier projects can "wake up" after
   // a period of inactivity. Keep this fairly generous so users don't get logged out / stuck.
   const AUTH_TIMEOUT_MS = 60000;
@@ -126,6 +153,7 @@
   let resetCooldownTimer = null;
 
   let recoveryMode = false;
+  let sawAuthEvent = false;
 
   const clearOfflineCacheAndReload = async () => {
     setStatus('Clearing offline cache…', 'This will refresh the page.');
@@ -502,7 +530,7 @@
     }
   };
 
-  async function refresh() {
+  async function refresh({ sessionOverride } = {}) {
     const client = getClient();
 
     if (recoveryPanel) {
@@ -548,15 +576,27 @@
     // Ensure the recovery panel is hidden during normal signed-in/out flows.
     setVisible(recoveryPanel, false);
 
-    let data;
-    try {
-      ({ data } = await client.auth.getSession());
-    } catch (error) {
-      setStatus('Auth session failed', error && error.message ? error.message : String(error));
-      if (signOutBtn) signOutBtn.disabled = true;
-      return;
+    let session = sessionOverride;
+    if (typeof sessionOverride === 'undefined') {
+      let data;
+      try {
+        ({ data } = await getSessionSafe(client));
+      } catch (error) {
+        const msg = error && error.message ? String(error.message) : String(error);
+        const status = window.scpSupabaseStatus || null;
+        const storage = status && status.storage ? String(status.storage) : 'unknown';
+        const hint = /abort/i.test(msg)
+          ? `Session check aborted (storage=${storage}). Try: Clear offline cache, then Reset login, then sign in again. If it persists, disable VPN/ad-block and open ?qa=1 for diagnostics.`
+          : `${msg} (storage=${storage})`;
+        setStatus('Auth session failed', hint);
+        if (signOutBtn) signOutBtn.disabled = true;
+        setVisible(dashboardPanels, false);
+        setVisible(authPanels, true, 'grid');
+        setVisible(authStatus, true, 'block');
+        return;
+      }
+      session = data && data.session ? data.session : null;
     }
-    const session = data && data.session ? data.session : null;
     const user = session && session.user ? session.user : null;
 
     if (!user) {
@@ -699,7 +739,7 @@
 
     let session;
     try {
-      const { data } = await client.auth.getSession();
+      const { data } = await getSessionSafe(client);
       session = data && data.session ? data.session : null;
       addDiag('ok', 'auth.getSession()', session ? 'Session found.' : 'No session (signed out).');
     } catch (error) {
@@ -745,8 +785,14 @@
   async function ensureLoaded() {
     // Prefer immediate refresh if the client is already initialised.
     if (window.scpSupabase) {
-      await refresh();
+      setStatus('Connecting...', 'Loading authentication…');
       await runDiagnostics();
+      // Let Supabase emit INITIAL_SESSION first (more reliable than racing getSession on some browsers).
+      await sleep(900);
+      if (!sawAuthEvent) {
+        await refresh();
+        await runDiagnostics();
+      }
       return;
     }
 
@@ -1080,35 +1126,37 @@
 
   const client = getClient();
   if (client) {
-    client.auth.onAuthStateChange(async (event) => {
+    client.auth.onAuthStateChange(async (event, session) => {
+      sawAuthEvent = true;
       if (event === 'PASSWORD_RECOVERY') {
         recoveryMode = true;
         stripAuthParamsFromUrl();
-        await refresh();
+        await refresh({ sessionOverride: session || null });
         await runDiagnostics();
         return;
       }
       if (event === 'SIGNED_IN') {
         stripAuthParamsFromUrl();
       }
-      await refresh();
+      await refresh({ sessionOverride: session || null });
       await runDiagnostics(); // keep ?qa=1 panel in sync after signing in/out
     });
   } else {
     window.addEventListener('scp:supabase:ready', () => {
       const c = getClient();
-      if (c) c.auth.onAuthStateChange(async (event) => {
+      if (c) c.auth.onAuthStateChange(async (event, session) => {
+        sawAuthEvent = true;
         if (event === 'PASSWORD_RECOVERY') {
           recoveryMode = true;
           stripAuthParamsFromUrl();
-          await refresh();
+          await refresh({ sessionOverride: session || null });
           await runDiagnostics();
           return;
         }
         if (event === 'SIGNED_IN') {
           stripAuthParamsFromUrl();
         }
-        await refresh();
+        await refresh({ sessionOverride: session || null });
         await runDiagnostics();
       });
     }, { once: true });

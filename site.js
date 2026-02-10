@@ -1,5 +1,8 @@
 // Small site-wide helpers: active nav, mobile menu, footer year.
 (() => {
+  const i18n = window.SCP_I18N || null;
+  const t = (key, vars) => (i18n && typeof i18n.t === 'function') ? i18n.t(key, vars) : '';
+
   const yearEl = document.getElementById('footer-year');
   if (yearEl) {
     yearEl.textContent = String(new Date().getFullYear());
@@ -39,8 +42,75 @@
   };
 
   // Make Account discoverable without having to update every page header/footer manually.
-  ensureNavLink('.primary-nav', { href: 'account.html', text: 'Account' });
-  ensureNavLink('.mobile-menu-links', { href: 'account.html', text: 'Account' });
+  ensureNavLink('.primary-nav', { href: 'account.html', text: t('nav.account') || 'Account' });
+  ensureNavLink('.mobile-menu-links', { href: 'account.html', text: t('nav.account') || 'Account' });
+
+  // Apply translations for nav labels without requiring every page to be edited.
+  const setLinkText = (selector, text) => {
+    document.querySelectorAll(selector).forEach((el) => {
+      if (!el) return;
+      el.textContent = text;
+    });
+  };
+
+  setLinkText('.primary-nav .nav-link[data-section=\"home\"]', t('nav.home') || 'Home');
+  setLinkText('.primary-nav .nav-link[data-section=\"properties\"]', t('nav.properties') || 'Properties');
+  setLinkText('.primary-nav .nav-link[data-section=\"businesses\"]', t('nav.businesses') || 'Businesses');
+  setLinkText('.primary-nav .nav-link[data-section=\"vehicles\"]', t('nav.vehicles') || 'Vehicles');
+  setLinkText('.primary-nav .nav-link[data-section=\"services\"]', t('nav.services') || 'Services');
+  setLinkText('.primary-nav .nav-link[data-section=\"account\"]', t('nav.account') || 'Account');
+
+  // Mobile menu uses plain <a> tags.
+  setLinkText('.mobile-menu-links a[href=\"index.html\"]', t('nav.home') || 'Home');
+  setLinkText('.mobile-menu-links a[href=\"properties.html\"]', t('nav.properties') || 'Properties');
+  setLinkText('.mobile-menu-links a[href=\"businesses.html\"]', t('nav.businesses') || 'Businesses');
+  setLinkText('.mobile-menu-links a[href=\"vehicles.html\"]', t('nav.vehicles') || 'Vehicles');
+  setLinkText('.mobile-menu-links a[href=\"services.html\"]', t('nav.services') || 'Services');
+  setLinkText('.mobile-menu-links a[href=\"account.html\"]', t('nav.account') || 'Account');
+
+  // Common CTA labels.
+  setLinkText('.header-cta[href^=\"tel:\"]', t('nav.call') || 'Call');
+  setLinkText('.mobile-menu-foot a[href^=\"mailto:\"]', t('nav.email') || 'Email');
+  setLinkText('.mobile-menu-foot a[href^=\"tel:\"]', t('nav.call') || 'Call');
+  setLinkText('.contact-label', t('nav.contact_us') || 'Contact Us');
+
+  const injectLangSwitcher = () => {
+    if (!i18n || typeof i18n.setLang !== 'function') return;
+    const headerRight = document.querySelector('.header-right');
+    if (!headerRight) return;
+    if (document.getElementById('lang-switch')) return;
+
+    const select = document.createElement('select');
+    select.id = 'lang-switch';
+    select.className = 'lang-switch';
+    select.setAttribute('aria-label', t('lang.label') || 'Language');
+
+    const opt = (value, label) => {
+      const o = document.createElement('option');
+      o.value = value;
+      o.textContent = label;
+      return o;
+    };
+
+    select.appendChild(opt('en', t('lang.en') || 'English'));
+    select.appendChild(opt('es', t('lang.es') || 'Spanish'));
+    try { select.value = i18n.lang || 'en'; } catch { /* ignore */ }
+
+    select.addEventListener('change', () => {
+      i18n.setLang(select.value, { persist: true, reload: true });
+    });
+
+    const beforeEl = headerRight.querySelector('#mobile-menu-btn') || null;
+    if (beforeEl) headerRight.insertBefore(select, beforeEl);
+    else headerRight.appendChild(select);
+  };
+
+  injectLangSwitcher();
+
+  // Translate any page content that uses data-i18n attributes.
+  if (i18n && typeof i18n.applyTranslations === 'function') {
+    i18n.applyTranslations(document);
+  }
 
   const menuBtn = document.getElementById('mobile-menu-btn');
   const menuBackdrop = document.getElementById('mobile-menu-backdrop');

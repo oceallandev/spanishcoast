@@ -332,10 +332,15 @@ def main() -> None:
             for fp in sorted(set(feed_files)):
                 if not fp.is_file():
                     continue
+                try:
+                    mtime_ms = int(fp.stat().st_mtime * 1000)
+                except Exception:
+                    mtime_ms = 0
                 if fp.suffix.lower() == ".json":
                     items = load_json_items(fp)
                     for it in items:
                         listing = vehicle_from_json_item(it, pid, name, category)
+                        listing.setdefault("dateAdded", mtime_ms)
                         lid = norm(listing.get("id"))
                         if not lid or lid in seen_ids:
                             continue
@@ -345,6 +350,7 @@ def main() -> None:
                     items = load_xml_items(fp)
                     for it in items:
                         listing = vehicle_from_xml_item(it, pid, name, category)
+                        listing.setdefault("dateAdded", mtime_ms)
                         lid = norm(listing.get("id"))
                         if not lid or lid in seen_ids:
                             continue
@@ -371,4 +377,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

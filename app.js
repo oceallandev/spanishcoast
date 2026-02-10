@@ -22,15 +22,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const EARTH_RADIUS_KM = 6371;
     const numberFormat = new Intl.NumberFormat('en-IE', { maximumFractionDigits: 0 });
     const PLACEHOLDER_IMAGE = 'assets/placeholder.png';
-    const LISTING_OVERRIDES_BY_REF = {
-        // Feed correction: this is a "traspaso" (business transfer) with monthly rent.
-        'SCP-1424': { mode: 'traspaso', price: 50000, monthlyRent: 572 }
-    };
-    const FAVORITES_STORAGE_KEY = 'scp:favourites:v1';
+	    const LISTING_OVERRIDES_BY_REF = {
+	        // Feed correction: this is a "traspaso" (business transfer) with monthly rent.
+	        'SCP-1424': { mode: 'traspaso', price: 50000, monthlyRent: 572 }
+	    };
+	    const FAVORITES_STORAGE_KEY = 'scp:favourites:v1';
+	    const SHARE_ICON_BASE = 'class="share-icon-svg" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"';
+	    const SHARE_ICON_SVG = {
+	        native: `<svg ${SHARE_ICON_BASE}><path d="M13.5 1a.5.5 0 0 1 .5.5V2h.5a1.5 1.5 0 0 1 1.5 1.5V4a.5.5 0 0 1-1 0v-.5a.5.5 0 0 0-.5-.5H14v.5a.5.5 0 0 1-1 0v-2a.5.5 0 0 1 .5-.5"/><path d="M11 2.5a.5.5 0 0 1 .5-.5h.5V1.5a.5.5 0 0 1 1 0V2h.5a.5.5 0 0 1 0 1H13v.5a.5.5 0 0 1-1 0V3h-.5a.5.5 0 0 1-.5-.5"/><path d="M4 5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H5v2.5H6a.5.5 0 0 1 0 1H5V12h2.5a.5.5 0 0 1 0 1H4.5A.5.5 0 0 1 4 12.5z"/><path d="M2 4a2 2 0 0 1 2-2h4.5a.5.5 0 0 1 0 1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V7.5a.5.5 0 0 1 1 0V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/></svg>`,
+	        copy: `<svg ${SHARE_ICON_BASE}><path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/><path fill-rule="evenodd" d="M2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"/></svg>`,
+	        instagram: `<svg ${SHARE_ICON_BASE}><path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942.038-.853.048-1.125.048-3.297 0-2.174-.01-2.446-.048-3.3-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.232s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.28-.11.704-.24 1.485-.275.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/></svg>`,
+	        tiktok: `<svg ${SHARE_ICON_BASE}><path d="M9.837 2.14a1.2 1.2 0 0 0-1.2 1.2v4.908a2.5 2.5 0 1 1-2-2.45V4.15a4 4 0 1 0 4.8 3.9V5.43a5.2 5.2 0 0 0 2.8.86V4.84a3.6 3.6 0 0 1-2.11-.67 3.6 3.6 0 0 1-1.09-2.03z"/></svg>`,
+	        x: `<svg ${SHARE_ICON_BASE}><path d="M12.6 0h2.4l-5.3 6.06L16 16h-4.7L7.8 10.61 3.1 16H.7l5.8-6.63L0 0h4.8l3.2 4.89L12.6 0z"/></svg>`,
+	        whatsapp: `<svg ${SHARE_ICON_BASE}><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.592 0 0 3.592 0 7.994c0 1.406.367 2.77 1.062 3.98L0 16l4.131-1.062a7.9 7.9 0 0 0 3.863 1.01h.003c4.402 0 7.994-3.592 7.994-7.994a7.9 7.9 0 0 0-2.39-5.628M7.994 14.521a6.56 6.56 0 0 1-3.347-.92l-.239-.144-2.452.63.654-2.386-.156-.244a6.6 6.6 0 0 1-1.007-3.46c0-3.667 2.984-6.654 6.647-6.654a6.62 6.62 0 0 1 4.708 1.953 6.6 6.6 0 0 1 1.947 4.703c0 3.667-2.984 6.654-6.655 6.654m3.546-4.854c-.193-.096-1.142-.564-1.32-.63-.178-.064-.307-.096-.435.096-.128.193-.5.63-.614.758-.114.128-.228.144-.421.048-.193-.096-.815-.3-1.553-.96-.574-.512-.96-1.142-1.073-1.335-.114-.193-.012-.297.085-.393.087-.086.193-.228.289-.342.096-.114.128-.193.193-.322.064-.128.032-.24-.016-.336-.048-.096-.435-1.044-.595-1.43-.156-.375-.315-.324-.435-.33l-.372-.007a.72.72 0 0 0-.521.24c-.178.193-.68.664-.68 1.62 0 .958.696 1.885.792 2.014.096.128 1.37 2.09 3.319 2.93.463.2.824.319 1.105.408.464.148.887.127 1.22.077.372-.056 1.142-.466 1.303-.916.16-.45.16-.837.112-.916-.048-.08-.176-.128-.37-.224"/></svg>`,
+	        telegram: `<svg ${SHARE_ICON_BASE}><path d="M16 0 0 7l4 2 8-5-6 6 1 4 3-3 3 5z"/></svg>`,
+	        facebook: `<svg ${SHARE_ICON_BASE}><path d="M16 8.049c0-4.446-3.582-8.05-8-8.05S0 3.603 0 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg>`,
+	        linkedin: `<svg ${SHARE_ICON_BASE}><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.252c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169H6.542c.03.678 0 7.225 0 7.225z"/></svg>`,
+	        report: `<svg ${SHARE_ICON_BASE}><path fill-rule="evenodd" d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14 8.737V14.5a.5.5 0 0 1-1 0V9.151l-5.314 2.19A.5.5 0 0 1 7 10.88V10H3v5.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0V9h4V1.12a.5.5 0 0 1 .686-.464l7 2.889a.5.5 0 0 1 .092.02zM8 2.9v6.958l6-2.477V5.377z"/></svg>`
+	    };
 
-    function storageAvailable() {
-        try {
-            if (!window.localStorage) return false;
+	    function storageAvailable() {
+	        try {
+	            if (!window.localStorage) return false;
             const testKey = '__scp_test__';
             window.localStorage.setItem(testKey, '1');
             window.localStorage.removeItem(testKey);
@@ -1144,30 +1157,55 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    async function supabaseDeleteFavorite(client, user, propertyId) {
-        if (!propertyId) return;
-        try {
-            await client
+	    async function supabaseDeleteFavorite(client, user, propertyId) {
+	        if (!propertyId) return;
+	        try {
+	            await client
                 .from('favourites')
                 .delete()
                 .eq('user_id', user.id)
                 .eq('property_id', propertyId);
         } catch (error) {
             // ignore
-        }
-    }
+	        }
+	    }
 
-    async function initSupabaseFavoritesSync() {
-        const client = getSupabase();
-        supabaseClient = client;
-        if (!client) return;
+	    const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, Math.max(0, Number(ms) || 0)));
+	    const isAbortLikeError = (error) => {
+	        const msg = error && error.message ? String(error.message) : String(error || '');
+	        const lower = msg.toLowerCase();
+	        return lower.includes('abort') || lower.includes('aborted') || lower.includes('signal');
+	    };
 
-        try {
-            const { data } = await client.auth.getSession();
-            supabaseUser = data && data.session ? data.session.user : null;
-            supabaseRole = supabaseUser ? await supabaseGetRole(client, supabaseUser.id) : '';
+	    async function supabaseGetSessionSafe(client, { retries = 2 } = {}) {
+	        if (!client) return { data: { session: null } };
+	        let lastErr = null;
+	        for (let i = 0; i <= retries; i++) {
+	            try {
+	                return await client.auth.getSession();
+	            } catch (error) {
+	                lastErr = error;
+	                if (i < retries && isAbortLikeError(error)) {
+	                    await sleep(140 * (i + 1));
+	                    continue;
+	                }
+	                throw error;
+	            }
+	        }
+	        throw lastErr || new Error('Failed to read session');
+	    }
 
-            if (supabaseUser) {
+	    async function initSupabaseFavoritesSync() {
+	        const client = getSupabase();
+	        supabaseClient = client;
+	        if (!client) return;
+
+	        try {
+	            const { data } = await supabaseGetSessionSafe(client);
+	            supabaseUser = data && data.session ? data.session.user : null;
+	            supabaseRole = supabaseUser ? await supabaseGetRole(client, supabaseUser.id) : '';
+
+	            if (supabaseUser) {
                 const localBefore = new Set(Array.from(favoriteIds));
                 const backendIds = await supabaseFetchFavorites(client, supabaseUser.id);
                 const backendSet = new Set(backendIds);
@@ -2002,21 +2040,51 @@ document.addEventListener('DOMContentLoaded', () => {
                         <a href="${dossierMailto}" class="cta-button">Request to visit</a>
                         ${sourceUrl ? `<a href="${escapeHtml(sourceUrl)}" class="cta-button" target="_blank" rel="noopener">Official page</a>` : ''}
                     </div>
-                    <div class="share-row" aria-label="Share">
-                        <button type="button" class="share-btn" data-share="native">📲 Share</button>
-                        <button type="button" class="share-btn" data-share="copy">📋 Copy link</button>
-                        <button type="button" class="share-btn" data-share="instagram">📸 Instagram</button>
-                        <button type="button" class="share-btn" data-share="tiktok">🎵 TikTok</button>
-                        <a class="share-btn" href="${xShare}" target="_blank" rel="noopener">𝕏 X</a>
-                        <a class="share-btn share-btn--warn" href="${reportMailto}">🚩 Report issue</a>
-                        <a class="share-btn" href="${whatsappShare}" target="_blank" rel="noopener">💬 WhatsApp</a>
-                        <a class="share-btn" href="${telegramShare}" target="_blank" rel="noopener">✈️ Telegram</a>
-                        <a class="share-btn" href="${facebookShare}" target="_blank" rel="noopener">📣 Facebook</a>
-                        <a class="share-btn" href="${linkedInShare}" target="_blank" rel="noopener">🔗 LinkedIn</a>
-                    </div>
-                </div>
-            </div>
-        `;
+	                    <div class="share-row" aria-label="Share">
+	                        <button type="button" class="share-btn" data-share="native">
+	                            <span class="share-icon share-icon--native">${SHARE_ICON_SVG.native}</span>
+	                            <span class="share-label">Share</span>
+	                        </button>
+	                        <button type="button" class="share-btn" data-share="copy">
+	                            <span class="share-icon share-icon--copy">${SHARE_ICON_SVG.copy}</span>
+	                            <span class="share-label">Copy link</span>
+	                        </button>
+	                        <button type="button" class="share-btn" data-share="instagram">
+	                            <span class="share-icon share-icon--instagram">${SHARE_ICON_SVG.instagram}</span>
+	                            <span class="share-label">Instagram</span>
+	                        </button>
+	                        <button type="button" class="share-btn" data-share="tiktok">
+	                            <span class="share-icon share-icon--tiktok">${SHARE_ICON_SVG.tiktok}</span>
+	                            <span class="share-label">TikTok</span>
+	                        </button>
+	                        <a class="share-btn" href="${xShare}" target="_blank" rel="noopener">
+	                            <span class="share-icon share-icon--x">${SHARE_ICON_SVG.x}</span>
+	                            <span class="share-label">X (Twitter)</span>
+	                        </a>
+	                        <a class="share-btn share-btn--warn" href="${reportMailto}">
+	                            <span class="share-icon share-icon--report">${SHARE_ICON_SVG.report}</span>
+	                            <span class="share-label">Report issue</span>
+	                        </a>
+	                        <a class="share-btn" href="${whatsappShare}" target="_blank" rel="noopener">
+	                            <span class="share-icon share-icon--whatsapp">${SHARE_ICON_SVG.whatsapp}</span>
+	                            <span class="share-label">WhatsApp</span>
+	                        </a>
+	                        <a class="share-btn" href="${telegramShare}" target="_blank" rel="noopener">
+	                            <span class="share-icon share-icon--telegram">${SHARE_ICON_SVG.telegram}</span>
+	                            <span class="share-label">Telegram</span>
+	                        </a>
+	                        <a class="share-btn" href="${facebookShare}" target="_blank" rel="noopener">
+	                            <span class="share-icon share-icon--facebook">${SHARE_ICON_SVG.facebook}</span>
+	                            <span class="share-label">Facebook</span>
+	                        </a>
+	                        <a class="share-btn" href="${linkedInShare}" target="_blank" rel="noopener">
+	                            <span class="share-icon share-icon--linkedin">${SHARE_ICON_SVG.linkedin}</span>
+	                            <span class="share-label">LinkedIn</span>
+	                        </a>
+	                    </div>
+	                </div>
+	            </div>
+	        `;
 
         // Privileged users (via Supabase/RLS) can see the original system reference (e.g. Inmovilla ref).
         // Normal clients never receive this data because it's stored server-side behind RLS.
@@ -2103,15 +2171,28 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        const shareNativeBtn = modalDetails.querySelector('[data-share="native"]');
-        const shareCopyBtn = modalDetails.querySelector('[data-share="copy"]');
-        const shareInstagramBtn = modalDetails.querySelector('[data-share="instagram"]');
-        const shareTiktokBtn = modalDetails.querySelector('[data-share="tiktok"]');
+	        const shareNativeBtn = modalDetails.querySelector('[data-share="native"]');
+	        const shareCopyBtn = modalDetails.querySelector('[data-share="copy"]');
+	        const shareInstagramBtn = modalDetails.querySelector('[data-share="instagram"]');
+	        const shareTiktokBtn = modalDetails.querySelector('[data-share="tiktok"]');
 
-        if (shareNativeBtn) {
-            shareNativeBtn.addEventListener('click', async () => {
-                if (navigator.share) {
-                    try {
+	        const shareBtnLabel = (btn) => {
+	            if (!btn) return '';
+	            const label = btn.querySelector('.share-label');
+	            return label ? label.textContent : btn.textContent;
+	        };
+
+	        const setShareBtnLabel = (btn, text) => {
+	            if (!btn) return;
+	            const label = btn.querySelector('.share-label');
+	            if (label) label.textContent = text;
+	            else btn.textContent = text;
+	        };
+
+	        if (shareNativeBtn) {
+	            shareNativeBtn.addEventListener('click', async () => {
+	                if (navigator.share) {
+	                    try {
                         await navigator.share({ title: shareTitle, text: shareTextRaw, url: propertyLink });
                         return;
                     } catch (error) {
@@ -2124,10 +2205,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        const shareToSocialApp = (btn, appName) => {
-            if (!btn) return;
-            btn.addEventListener('click', async () => {
-                if (navigator.share) {
+	        const shareToSocialApp = (btn, appName) => {
+	            if (!btn) return;
+	            btn.addEventListener('click', async () => {
+	                if (navigator.share) {
                     try {
                         await navigator.share({ title: shareTitle, text: shareTextRaw, url: propertyLink });
                         return;
@@ -2135,38 +2216,38 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Fall through to copy.
                     }
                 }
-                if (shareCopyBtn) {
-                    shareCopyBtn.click();
-                }
-                const original = btn.textContent;
-                btn.textContent = `✅ Copied. Open ${appName}`;
-                window.setTimeout(() => {
-                    btn.textContent = original;
-                }, 1800);
-            });
-        };
+	                if (shareCopyBtn) {
+	                    shareCopyBtn.click();
+	                }
+	                const original = shareBtnLabel(btn);
+	                setShareBtnLabel(btn, `Copied. Open ${appName}`);
+	                window.setTimeout(() => {
+	                    setShareBtnLabel(btn, original);
+	                }, 1800);
+	            });
+	        };
 
         shareToSocialApp(shareInstagramBtn, 'Instagram');
         shareToSocialApp(shareTiktokBtn, 'TikTok');
 
-        if (shareCopyBtn) {
-            shareCopyBtn.addEventListener('click', async () => {
-                const original = shareCopyBtn.textContent;
-                try {
-                    if (navigator.clipboard && navigator.clipboard.writeText) {
-                        await navigator.clipboard.writeText(propertyLink);
-                    } else {
-                        window.prompt('Copy link:', propertyLink);
-                    }
-                    shareCopyBtn.textContent = '✅ Copied';
-                    window.setTimeout(() => {
-                        shareCopyBtn.textContent = original;
-                    }, 1400);
-                } catch (error) {
-                    window.prompt('Copy link:', propertyLink);
-                }
-            });
-        }
+	        if (shareCopyBtn) {
+	            shareCopyBtn.addEventListener('click', async () => {
+	                const original = shareBtnLabel(shareCopyBtn);
+	                try {
+	                    if (navigator.clipboard && navigator.clipboard.writeText) {
+	                        await navigator.clipboard.writeText(propertyLink);
+	                    } else {
+	                        window.prompt('Copy link:', propertyLink);
+	                    }
+	                    setShareBtnLabel(shareCopyBtn, 'Copied');
+	                    window.setTimeout(() => {
+	                        setShareBtnLabel(shareCopyBtn, original);
+	                    }, 1400);
+	                } catch (error) {
+	                    window.prompt('Copy link:', propertyLink);
+	                }
+	            });
+	        }
 
         const thumbs = document.querySelectorAll('.thumb');
         const mainImg = document.getElementById('main-gallery-img');
