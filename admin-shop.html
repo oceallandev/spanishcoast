@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Shop Editor | Spanish Coast Properties</title>
+    <meta name="robots" content="noindex,nofollow">
+
+    <meta name="theme-color" content="#030712">
+    <link rel="manifest" href="manifest.webmanifest?v=20260210w">
+    <link rel="stylesheet" href="style.css?v=20260210w">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script defer src="config.js?v=20260210w"></script>
+    <script defer src="supabase-init.js?v=20260210w"></script>
+</head>
+
+<body data-section="account">
+    <div class="bg-mesh"></div>
+
+    <header class="main-header glass sticky">
+        <div class="header-inner">
+            <div class="header-left">
+                <div class="logo">
+                    <a href="index.html" aria-label="Spanish Coast Properties Home">
+                        <img src="assets/header-logo.png?v=2" alt="Spanish Coast Properties" class="main-logo"
+                            style="cursor: pointer;">
+                    </a>
+                </div>
+                <div class="brand-info">
+                    <span class="brand-name">Spanish Coast Properties</span>
+                </div>
+                <nav class="primary-nav" aria-label="Site sections">
+                    <a class="nav-link" data-section="services" href="services.html">Services</a>
+                    <a class="nav-link" href="shop.html">Shop</a>
+                    <a class="nav-link" href="account.html">Account</a>
+                </nav>
+            </div>
+
+            <div class="header-right">
+                <a class="header-cta" href="account.html">Back to Account</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="site-main">
+        <section class="page-section active">
+            <div class="page-hero">
+                <h1>Shop Editor</h1>
+                <p>Curate how WooCommerce products appear inside the app (admin only).</p>
+            </div>
+
+            <div class="glass panel">
+                <div class="admin-toolbar">
+                    <div class="admin-toolbar-left">
+                        <div class="results-sort">
+                            <label for="shop-admin-q">Search</label>
+                            <input id="shop-admin-q" class="admin-input" type="text" placeholder="Search name, SKU, WC id, category">
+                        </div>
+                        <div class="results-sort">
+                            <label for="shop-admin-category">Category</label>
+                            <select id="shop-admin-category" class="admin-select">
+                                <option value="all">All</option>
+                            </select>
+                        </div>
+                        <div class="results-sort">
+                            <label for="shop-admin-view">View</label>
+                            <select id="shop-admin-view" class="admin-select">
+                                <option value="all">All products</option>
+                                <option value="visible">Visible in app</option>
+                                <option value="hidden">Hidden in app</option>
+                                <option value="overridden">Has overrides</option>
+                                <option value="draft">Draft overrides</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="admin-toolbar-right">
+                        <button id="shop-admin-refresh" class="cta-button cta-button--outline" type="button">Refresh</button>
+                    </div>
+                </div>
+
+                <div class="muted" id="shop-admin-status" aria-live="polite"></div>
+
+                <div class="admin-table-wrap">
+                    <table class="admin-table crm-table" id="shop-admin-table">
+                        <thead>
+                            <tr>
+                                <th style="width:84px;">Image</th>
+                                <th style="width:320px;">Product</th>
+                                <th style="width:220px;">Category</th>
+                                <th style="width:160px;">Price</th>
+                                <th style="width:200px;">Status</th>
+                                <th style="width:160px; text-align:right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <div class="crm-footerbar">
+                    <div class="muted" id="shop-admin-showing">Ready.</div>
+                    <div class="crm-footer-actions">
+                        <a class="cta-button cta-button--outline" href="shop.html" target="_blank" rel="noopener">Open shop</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="shop-drawer-backdrop" class="crm-drawer-backdrop" aria-hidden="true"></div>
+    <aside id="shop-drawer" class="crm-drawer" aria-hidden="true">
+        <div class="crm-drawer-inner">
+            <div class="crm-drawer-head">
+                <div>
+                    <div class="crm-drawer-kicker">Shop Editor</div>
+                    <div class="crm-drawer-title" id="shop-drawer-title">Product</div>
+                    <div class="crm-drawer-subtitle muted" id="shop-drawer-subtitle"></div>
+                </div>
+                <button id="shop-drawer-close" class="crm-drawer-close" type="button" aria-label="Close">✕</button>
+            </div>
+            <div class="divider"></div>
+
+            <div id="shop-drawer-body">
+                <div class="muted">Select a product to edit.</div>
+            </div>
+        </div>
+    </aside>
+
+    <script defer src="shop-products.js"></script>
+    <script defer src="admin-shop.js?v=20260210w"></script>
+    <script defer src="site.js?v=20260210w"></script>
+</body>
+
+</html>
+

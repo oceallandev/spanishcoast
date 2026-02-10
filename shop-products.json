@@ -1,10 +1,1151 @@
 {
   "meta": {
-    "source": "woocommerce",
-    "api": "store",
-    "store_url": "",
-    "generated_at": ""
+    "api": "csv",
+    "store_url": "https://spanishcoastproperties.com",
+    "generated_at": "2026-02-10T11:41:39+00:00",
+    "source": "woocommerce"
   },
-  "products": []
+  "products": [
+    {
+      "id": 97257,
+      "sku": "1005008030134009",
+      "name": "Sliding Gate motor controller Tuya WiFi magnetic limit and spring limit universal PCB remote control 433MHz",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=97257",
+      "short_text": "",
+      "desc_text": "'\t\t\t \\n\t\t\t\t \\n\t\t\t\t\t\t\t\t\t\t\t  Hign-concerned Chemical:   None \\n\t\t\t\t\t\t \\n\t\t\t\t\t\t\t\t\t\t\t\t  Brand Name:   LPSECURITY \\n\t\t\t\t\t\t \\n\t\t\t\t\t\t\t\t\t\t\t\t  Origin:   Mainland China \\n\t\t\t\t\t\t \\n\t\t\t\t\t\t\t\t\t\t\t\t  Smart home platform:   Tuya \\n\t\t\t\t\t\t \\n\t\t\t\t\t\t\t\t\t\t\t\t  remote control:   433mhz 1527 Learning Remote Control \\n\t\t\t\t\t\t \\n\t\t\t\t\t\t\t\t\t\t\t\t  Limit switch:   Both magnetic limit and spring limit can be used. \\n\t\t\t\t\t\t \\n\t\t\t\t\t\t\t\t\t\t\t\t  Motor operating voltage:   220V ,If you need 110V please contact the seller \\n\t\t\t\t\t\t \\n\t\t\t\t\t\t\t\t\t\t\t\t  PCB working mode:   NO  NC Adjustable \\n\t\t\t\t\t\t \\n\t\t\t\t\t\t\t\t\t\t \\n\t\t\t \\n\t\t\t    Sliding Gate motor controller Tuya WiFi magnetic limit and spring limit universal PCB remote control 433MHz           Attention before purchase:     If you encounter any problems during installation, please contact our seller as soon as possible and we will provide technical services. Please do not easily return or refund the product. We can guarantee the quality and after-sales service of the product. If it is indeed a problem with the product, we will also replace it.       The product comes with a built-in Tuya WiFi module, eliminating the need to connect additional modules. As long as the PCB is within the coverage range of WiFi       We have detailed explanatory videos about wiring and product function display. If there are any unclear areas, we will provide video guidance.       PCB can be connected to magnetic limit switches and spring limit switches. Simple settings need to be made on the circuit board. If you encounter such problems, you can contact us       The remote control can only be a fixed code or a learning remote control. The rolling code remote control cannot be used.    You can leave an email and we will send the English version of the manual        Functions and parameters…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Electrical",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "2025-07-06",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/07/kf-S259e0dce4cab496d8abb8a3ec7846ee0X.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/07/kf-S244ea33104804470ac8ae07316ae3385Q.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 97267,
+      "sku": "1005003759466601",
+      "name": "WiFi Tuya Smart 16A Socket Glass Panel Outlet Power Monitor Touch Plug Relay Status Light Mode Adjustable Smart Life App Alexa",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=97267",
+      "short_text": "",
+      "desc_text": "'\t\t\t \\n\t\t\t\t \\n\t\t\t\t\t\t\t\t\t\t\t  Hign-concerned Chemical:   None \\n\t\t\t\t\t\t \\n\t\t\t\t\t\t\t\t\t\t\t\t  Communication method:   Wi-Fi \\n\t\t\t\t\t\t \\n\t\t\t\t\t\t\t\t\t\t\t\t  Brand Name:   MOES \\n\t\t\t\t\t\t \\n\t\t\t\t\t\t\t\t\t\t\t\t  Origin:   Mainland China \\n\t\t\t\t\t\t \\n\t\t\t\t\t\t\t\t\t\t\t\t  Model:   WK-EU(FR/UK)16M \\n\t\t\t\t\t\t \\n\t\t\t\t\t\t\t\t\t\t\t\t  Voltage:   95~245V AC, 50/60Hz \\n\t\t\t\t\t\t \\n\t\t\t\t\t\t\t\t\t\t\t\t  Wireless Protocol:   WiFi 802.11 b/g/n 2.4GHz \\n\t\t\t\t\t\t \\n\t\t\t\t\t\t\t\t\t\t\t\t  Max. Current(pure resistive load):   16A \\n\t\t\t\t\t\t \\n\t\t\t\t\t\t\t\t\t\t\t\t  Max. Load Power:   3000W \\n\t\t\t\t\t\t \\n\t\t\t\t\t\t\t\t\t\t \\n\t\t\t \\n\t\t\t                            \\n    \\n  \\n      New Upgraded WiFi Tuya Smart Wall Socket Glass Panel Outlet Power Monitor Extremely Soft Touch Plug Relay Status and Light Mode Adjustable Smart Life App Remote Relay Status and Light Mode Adjustable Voice Control by Alexa Google Home  By Moes       \\n      Main Features:           1.Extremely Soft Touch Feel with Glass Panel Design:New upgraded full glass panel tactile type ensures its special and unique user experience than other wall sockets,together with its perfect visual effect reflected by its bright and advanced luminous glass shader,a really good house appliance for modern smart lifestyle.  2.Smart WiFi Wall Outlet Socket with Electric Power Monitor:Compatible with Tuya Smart/Smart Life App enables its intelligent controls on your smart phones,featured with one new practical update as electric power monitor on connected devices for real-time control as power,current,voltage and total value displayed under each month,especially check the status of your device remotely when you are away from home.  3.Relay Status Adjustable with Light Mode Settable: ON/OFF/Remember last status optional for your device is supported in App and also with light mode settable for added convenience;check the switch…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Electrical",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "2025-07-06",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/07/kf-S2aff7fcf2e3d4aa891421ed3a1b82643M.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/07/kf-Safd1c986ccbf4f37aabcb9ad17be07f0C.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/07/kf-S592ea75928ae42ea9615f00930c8b1dbp.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/07/kf-Sefc7b97c99f741e2aad33a75de9452f9b.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/07/kf-S2779877962954deb81f6bf6dd0c28c769.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/07/kf-S1ab012f97faf4a55b20d4d3e92bc257dC.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 97816,
+      "sku": "",
+      "name": "Sensor de movimiento Tuya Zigbee, Radar MmWave de 10G, Sensor inteligente de cuerpo humano con iluminancia, temperatura, humedad, funciona con Alexa y Google",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=97816",
+      "short_text": "",
+      "desc_text": "Producto químico de alta preocupación:   Ninguno    Ángulo de detección:   110°    Rango de detección:   10m    Número de modelo:   Motion Sensor    Nombre de la marca:   coolo    Origen:   CN(Origen)         Hay 2 tipos:     1, el tipo Tuya Zigbee admite la aplicación tuya/smart life, es necesario utilizar la puerta de enlace tuya.  2. El tipo Zigbee 3.0 no admite la aplicación tuya/smart life ni la puerta de enlace tuya, solo admite Zigbee2mqtt en Home Assistant.         Especificación     Artículo: Sensor de movimiento humano inteligente con detección de humedad y temperatura de iluminancia    Voltaje de funcionamiento: DC3V      Protocolo inalámbrico: Zigbee 3.0 (necesita puerta de enlace zigbee)      Frecuencia MW: 10,525 GHz    Ángulo de detección: 110°±10°    Distancia de detección: 0,5 ~ 10 metros (eje Z)    Medidor de luminancia: 0~3000Lux    Resolución de temperatura: 0,1°℃    Resolución de humedad: 1%    Precisión de medición de temperatura: ±0,3°C    Precisión de la medición de humedad: ±3%    Tipo de batería: 2 piezas LR03 AAA (no incluidas)    Corriente de espera:     Tiempo en espera: >8 meses    Temperatura de trabajo: -10°C~55'℃    Humedad de trabajo: máx.99%RH    Tamaño del producto: 70x24,5x20mm        Contenido del paquete     1 * sensor de movimiento humano  1 * cinta de doble cara    1 * manual de usuario        Sensor de movimiento avanzado     PIR detecta el cuerpo humano o los animales que se están moviendo, alrededor de 110 ~ 120° El ángulo de detección, distancia de detección de hasta 10 m, puede lograr un monitoreo en tiempo real de día o de noche. Detección sensible del movimiento humano/mascota.        Detección de luminancia incorporada     Esta característica detecta el brillo de su hogar y muestra el valor de lujo directamente en la apl…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Sensors",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Sa26ed18c46484f6eba2da7d40b8ca0971.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Sdc7dd2b30e054be0b376521e121b2854i.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S2c5262fdd7f34de3a9431d5bd76abb1bX.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Sb593d63e51714d0bb2b6f6d3d019cc45j.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Sef51652cc08542ae93cd47c19fd4dfd2S.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S9d74c206358c490e9b44b7cf3691d00eP.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Sfc1d3df7f410488aa38af2dd210b94bax.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S4e3d98c33478474cafcc264a2594a12bq.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Se6c23bc0bdf24422813f5e39d7d99e81y.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S09f3e23bf0544f429e510021ebc13f88B.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Sc78a64e42d164889b8b69faa2ba38f10z.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S295d8049baf04b6cb917ea6082f4c8b4u.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S6db7b1f108a041d9bf3f63db6f92b4b0K.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Sde7375ff6fca4527b8db2d16a443fe002.webp",
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S82c958f8a9f0433d816dba371e151571f.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 97842,
+      "sku": "",
+      "name": "KERUI-Kit de alarma para el hogar, inalámbrico, WiFi, GSM, antirrobo, con pantalla táctil, aplicación Tuya Smart Life, sistema de alarma para protección de seguridad",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=97842",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Zona número:   99 \\n                             \\n\t\t\t\t\t\t\t                              Número de salidas:   6 \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   W181 \\n                             \\n\t\t\t\t\t\t\t                              Sensores en el kit:   Sensor para puerta/ventana \\n                             \\n\t\t\t\t\t\t\t                              Interfaz de Comunicación:   Sin cables \\n                             \\n\t\t\t\t\t\t\t                              Tipo de armado:   App \\n                             \\n\t\t\t\t\t\t\t                              Pantalla interactiva:   Sí \\n                             \\n\t\t\t\t\t\t\t                              muestra:   Sí \\n                             \\n\t\t\t\t\t\t\t                              Teclado para la contraseña:   Sí \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la marca:   KERUI \\n                             \\n\t\t\t\t\t\t\t                              KERUI Modelo:   W181 \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                              Plataforma de hogar inteligente:   amigo \\n                             \\n\t\t\t\t\t\t\t                              Tipo de la alarma:   La alarma,Sms,Control de aplicaciones \\n                             \\n\t\t\t\t\t\t\t                              Potencia (W):   DC5V \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n\t\t\t   \\n  KERUI W181 WIFI GSM Tuya sistema de alarma de seguridad inteligente \\n  1.Pon la seguridad de toda la casa al alcance d…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Alarm Kit",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Sab1caeee3de34ee1ba77f26db99e73bbK.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 97870,
+      "sku": "",
+      "name": "PGST Tuya GSM sistema de alarma 4G WIFI hogar inteligente 433MHz juegos de alarma de seguridad inalámbrica Control de aplicación Smart Life con Alexa",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=97870",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              High-concerned chemical:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Zone Number:   99 \\n                             \\n\t\t\t\t\t\t\t                              Output Number:   99 \\n                             \\n\t\t\t\t\t\t\t                              Model Number:   107-4G \\n                             \\n\t\t\t\t\t\t\t                              Kit Configuration:   Sensor para puerta/ventana \\n                             \\n\t\t\t\t\t\t\t                              Communication Interface:   Sin cables \\n                             \\n\t\t\t\t\t\t\t                              Arming Type:   App \\n                             \\n\t\t\t\t\t\t\t                              Video Interface:   No \\n                             \\n\t\t\t\t\t\t\t                              Display:   Sí \\n                             \\n\t\t\t\t\t\t\t                              Password Keyboard:   Sí \\n                             \\n\t\t\t\t\t\t\t                              Brand Name:   PGST \\n                             \\n\t\t\t\t\t\t\t                              Origin:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                              Smart home platform:   amigo \\n                             \\n\t\t\t\t\t\t\t                              Alarm Type:   La alarma,Control de aplicaciones,PSTN \\n                             \\n\t\t\t\t\t\t\t                              Supported languages:   Simplified Chinese, English, German, Russian, Spanish, Polish, Italian, French, Portuguese \\n                             \\n\t\t\t\t\t\t\t                              Support APP:   TUYA/Smart Life \\n                             \\n\t\t\t\t\t\t\t                              Alarm system version:   4G \\n                             \\n…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Alarm Kit",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S461560b146a44c9f93b8e368def12dd5W.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 97884,
+      "sku": "",
+      "name": "Tuya WiFi Zigbee alarma de humo protección contra incendios Detector de humo ahumadero combinación alarma de incendio sistema de seguridad para el hogar bomberos",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=97884",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   WKD-SM009 \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la marca:   zsviot \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                              Plataforma de hogar inteligente:   amigo \\n                             \\n\t\t\t\t\t\t\t                              Tipo:   Detector de humo \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n\t\t\t        Parámetro del producto        Aplicación: vida inteligente/Tuya inteligente Voltaje de entrada: 3V AA*2 Corriente estática: ≤5uA Corriente de alarma: ≤220mA Notificación de bajo voltaje: ≤2,4 V Nivel de sonido de alarma: 85 dB/1 m WiFi: 802.11 b/g/n Rango de detección: 40㎡ Método de instalación: montado en el techo Temperatura de trabajo: -10℃~+50°C Humedad de trabajo: ≤95%RH                            \\n\\n\\n",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Alarm Kit",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/07/kf-Sa2c2c55a0ac542a8b9960ae5dd70941eP.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 97887,
+      "sku": "",
+      "name": "Haozee-Detector de presencia humana Zigbee, 24G, Sensor PIR inteligente de cuerpo humano, Detector de Radar, sensores de movimiento, compatible con asistente doméstico",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=97887",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   human presence sensor \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la marca:   haozee \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                              perating voltage:   DC5V/1A \\n                             \\n\t\t\t\t\t\t\t                              Operating temperature &humidity:   -10°C~55°C/0%~95% RH \\n                             \\n\t\t\t\t\t\t\t                              llluminance value:   0~ 3000 Lux \\n                             \\n\t\t\t\t\t\t\t                              Stationary detection range:   0~600 cm \\n                             \\n\t\t\t\t\t\t\t                              Moving detection range:   0~1000 cm \\n                             \\n\t\t\t\t\t\t\t                              Detection Angle:   >90° \\n                             \\n\t\t\t\t\t\t\t                              Communication:   Zigbee3.0/2.4G Wi-Fi (Optional) \\n                             \\n\t\t\t\t\t\t\t                              Product size:   60*60*12 mm \\n                             \\n\t\t\t\t\t\t\t                              home assistant zigbee2mqtt:   just zigbee version support \\n                             \\n\t\t\t\t\t\t\t                              wifi version:   work with wifi router,no hub required \\n                             \\n\t\t\t\t\t\t\t                              Note:   stardard zigbee 3.0,won't work with tuya hub. \\n                             \\n\t\t\t\t\t\t\t                              Información/advertencia de seguridad del producto:   WARNING:CHOKING HAZA RD small parts,Not…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Sensors",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S7e79c16b769f456c967519de94a09885U.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 97893,
+      "sku": "",
+      "name": "Ewelink GU10 Zigbee bombillas LED WiFi lámpara LED inteligente RGB CW WW Ewelink App Control bombilla Led funciona con Alexa Google Yandex",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=97893",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Fuente de energía:   SOLAR \\n                             \\n\t\t\t\t\t\t\t                              Flujo luminoso:   249-2000 \\n                             \\n\t\t\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Área:   3-8 ㎡ \\n                             \\n\t\t\t\t\t\t\t                              Dispositivo inteligente:   Sí \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   570471 \\n                             \\n\t\t\t\t\t\t\t                              Flujo luminoso:   250 - 499 lúmenes \\n                             \\n\t\t\t\t\t\t\t                              Temperatura del color:   2700K ~ 6500K \\n                             \\n\t\t\t\t\t\t\t                              Ocasión:   Salón \\n                             \\n\t\t\t\t\t\t\t                              Tolerancia de potencia:   5 % \\n                             \\n\t\t\t\t\t\t\t                              Marca del chip LED:   Epistar \\n                             \\n\t\t\t\t\t\t\t                              Forma:   other \\n                             \\n\t\t\t\t\t\t\t                              Ángulo de Haz (º):   120 ° \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                              Tipo de artículo:   Bombillas LED \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la marca:   arteco \\n                             \\n\t\t\t\t\t\t\t                              Tipo de bombilla LED:   Lámpara de luz \\n                             \\n\t\t\t\t\t\t\t                              Certificación:   ce,FCC,ROHS \\n                             \\n…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Electrical",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Sc965424bd82a4206b7c15c434d8cac48A.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 97897,
+      "sku": "",
+      "name": "Tuya-válvula de agua WiFi, válvula de bola de cierre de Gas, temporizador, controlador de grifo inteligente para jardín, compatible con asistente de Google Alexa SmartLife",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=97897",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Estructura:   Piloto \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   2.6T-W \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n\t\t\t     Nota: Hay una válvula WiFi Tuya con color blanco y adaptador de la UE.   \\n   \\n   \\n   \\n \\n  \\n   \\n    \\n       • Integración de hogar inteligente:   La válvula de gas inteligente Tuya WiFi es una integración perfecta con el Asistente de Google, mejorando su experiencia de hogar inteligente.  \\n       \\n       • Riego cronometrado del jardín:   Este dispositivo cuenta con una función de temporizador que permite la irritación automatizada de su jardín, asegurando un riego óptimo sin intervención manual.  \\n       \\n       • Compatible con control remoto:   Con Alexa y el Asistente de Google, puede controlar de forma remota esta válvula de gas inteligente, brindando comodidad y flexibilidad en su funcionamiento.  \\n       \\n       • Integración del Asistente de Alexa:   Diseñada para funcionar con Alexa, esta válvula inteligente permite el control por voz, lo que facilita la gestión de las necesidades de agua de su jardín.  \\n       \\n       • Compatible con Google Hub:   Este dispositivo requiere un Tuya Hub para su funcionamiento, agregándolo al ecosistema de dispositivos inteligentes compatibles con la plataforma de Google.  \\n       \\n    \\n   \\n     ¡La válvula inteligente de gas/agua Tuya WiFi solo ofrece adaptador de la UE!!   \\n     \\n      \\n   \\n    \\n     \\n      \\n       \\n         \\n        \\n…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Electrical",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "simple",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Sc4891af4f84a4ee2ac1764ed97d29a76u.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 97899,
+      "sku": "",
+      "name": "Sirena de protección inteligente Tuya, Sensor de luz estroboscópica, WIFI, luz de sonido, alarma, sirena de seguridad, sistema de seguridad de alarma para el hogar de 110dB, enchufe europeo",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=97899",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   WiFi siren \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la marca:   ACJ \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                              Plataforma de hogar inteligente:   amigo \\n                             \\n\t\t\t\t\t\t\t                              Color:   white \\n                             \\n\t\t\t\t\t\t\t                              Power input:   AC 110-240V \\n                             \\n\t\t\t\t\t\t\t                              Receiving encoding method:   PT2262/EV1527 \\n                             \\n\t\t\t\t\t\t\t                              Receiving distance:   120M (open) \\n                             \\n\t\t\t\t\t\t\t                              Alarm loudness:   110DB \\n                             \\n\t\t\t\t\t\t\t                              WIFI:   2.4G \\n                             \\n\t\t\t\t\t\t\t                              APP control:   TUYA \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n\t\t\t            ACJ Tuya WIFI inteligente sonido luz alarma sirena protección de seguridad sirena Sensor de luz estroboscópica 110dB sistema de seguridad de alarma para el hogar       Características del producto:     1.Diseño exterior de moda.    2.Alarma de luz y sonido de bocina de alto decibelio    3.Fuente de alimentación de la batería de respaldo: alcance ultralargo    4.Se puede utilizar tanto en interiores como en exteriores.    5.Fácil instalación     Parámetros del producto:     Entrada de energía: 5V    Frecuencia inalámbrica: 433MHz    Mé…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Electrical",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "simple",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S8dc2d4a18a8d4a0fafdaab115b9c55aft.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 97901,
+      "sku": "",
+      "name": "MARPOU luces de techo inteligentes TUYA RGB atenuación luz de música moderna con Control remoto 32W 45W 47W AC220V para dormitorio sala de estar",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=97901",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Método de instalación:   autónomo \\n                             \\n\t\t\t\t\t\t\t                              Flujo luminoso:   2000-82000 \\n                             \\n\t\t\t\t\t\t\t                              Color:   BLANCO \\n                             \\n\t\t\t\t\t\t\t                              Dispositivo inteligente:   Sí \\n                             \\n\t\t\t\t\t\t\t                              Finalizar:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Garantía:   1 Year \\n                             \\n\t\t\t\t\t\t\t                              Aplicación:   cocina,Comedor,Habitación,recibidor,estudio \\n                             \\n\t\t\t\t\t\t\t                              Tipo de interruptor:   Control Remoto \\n                             \\n\t\t\t\t\t\t\t                              Número de fuentes de luz:   >20 \\n                             \\n\t\t\t\t\t\t\t                              Material:   PP / plástico \\n                             \\n\t\t\t\t\t\t\t                              Tipo de Base:   Cuña \\n                             \\n\t\t\t\t\t\t\t                              Fuente de luz:   Bombillas LED \\n                             \\n\t\t\t\t\t\t\t                              Fuente de energía:   AC \\n                             \\n\t\t\t\t\t\t\t                              Tipo de artículo:   Luces para el techo \\n                             \\n\t\t\t\t\t\t\t                              Bombillas incluidas:   Sí \\n                             \\n\t\t\t\t\t\t\t                              Estilo de instalación:   Montaje en superficie \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Electrical",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S4be7fc7c183b435a8472c517fd4aeb66j.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 97909,
+      "sku": "",
+      "name": "EWeLink-válvula de bola resistente al agua IP65 para Smart Zigbee Water Vavle, Control inalámbrico por aplicación DN15/DN20/DN25, funciona con Alexa SmartThings",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=97909",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Método de comunicación:   Zigbee \\n                             \\n\t\t\t\t\t\t\t                              Cámara equipada:   No \\n                             \\n\t\t\t\t\t\t\t                              Grado de montaje:   Casi listo \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   MS23091203ZB \\n                             \\n\t\t\t\t\t\t\t                              Compatibilidad:   Todos compatibles \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la marca:   mumubiz \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                              Input:   DC5V  ≤1A \\n                             \\n\t\t\t\t\t\t\t                              wireless standards:   Zigbee 3.0 \\n                             \\n\t\t\t\t\t\t\t                              work environment:   -20℃-50℃   ≤80 humidity \\n                             \\n\t\t\t\t\t\t\t                              Shell material:   ABS \\n                             \\n\t\t\t\t\t\t\t                              APP:   eWeLink \\n                             \\n\t\t\t\t\t\t\t                              Feature:   Alexa/Google Home \\n                             \\n\t\t\t\t\t\t\t                              Applicable to:   DN15 / DN20 / DN25 \\n                             \\n\t\t\t\t\t\t\t                              Open / Close Time:   18 seconds \\n                             \\n\t\t\t\t\t\t\t                              Size:   87*92 mm \\n                             \\n\t\t\t\t\t\t\t                              Waterproof:   IP65 \\n                             \\…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Electrical",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S631c1f13c0064c08ade1bde2d57878dbP.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 97915,
+      "sku": "",
+      "name": "Sensor de vibración Tuya Zigbee, detección de inclinación del eje XYZ, alarma de choque de movimiento en tiempo Real para protección de seguridad de puertas y ventanas de caja fuerte",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=97915",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Ángulo de detección:   120 \\n                             \\n\t\t\t\t\t\t\t                              Rango de detección:   5M \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   Zigbee Vibration Sensor \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la marca:   coolo \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n\t\t\t     Hay 2 tipos:   \\n   Tipo 1,    El tipo Zigbee 3.0 no admite la aplicación tuya/smart life ni el concentrador tuya, solo admite Zigbee2mqtt en Home Assistant.      Tipo 2,    El tipo Tuya Zigbee admite la aplicación tuya/smart life y el concentrador tuya.      \\n   Especificación   \\n  Voltaje de funcionamiento: CC 3 V  Conexiones inalámbricas: ZigBee 3.0 (es necesario utilizar el concentrador zigbee)  \\n  Corriente de espera: ≤10~15uA  Tiempo en espera: ≥15 meses    Batería: el tipo 1 no incluye batería seca AAA de 1,5 V * 2; El tipo 2 incluye CR2450  \\n  Rango de peso: ±2g  Rango de inclinación: ±10°  Temporizador de trabajo  temperatura: -  10°C~50℃  Humedad de trabajo: ≤95%    \\n  Frecuencia de actualización: media hora  \\n   \\n   Contenido del paquete   \\n  1 * Sensor de vibración inteligente Zigbee  \\n  1 * Manual de usuario  \\n  1 * Pin de reinicio  \\n  1 * pegatina de doble cara    \\n  【   Sensor de detección de vibraciones   】Habilite la función de detección de vibraciones en la aplicación inteligente.Cuando el dispositivo detecte vibración, se activará la función de notificación de alarma de…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Sensors",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Sc498f20d221d4fa9b8f3b9838a0d5509t.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 97920,
+      "sku": "",
+      "name": "Válvula de Gas inteligente Tuya Zigbee, WIFI, temporizador de apagado de agua para jardín, controlador de riego con asistente de Google Alexa SmartLife",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=97920",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Posición por defecto:   NORMALMENTE CERRADO \\n                             \\n\t\t\t\t\t\t\t                              Modo del actuador:   Con manual de instrucciones \\n                             \\n\t\t\t\t\t\t\t                              Estructura:   control \\n                             \\n\t\t\t\t\t\t\t                              Tamaño del Puerto:   DN15,DN20,DN25 \\n                             \\n\t\t\t\t\t\t\t                              Medio compatible:   Agua \\n                             \\n\t\t\t\t\t\t\t                              Material:   Plástico \\n                             \\n\t\t\t\t\t\t\t                              Rango de temperatura del medio acuoso:   Temperatura normal \\n                             \\n\t\t\t\t\t\t\t                              Potencia:   Solenoide \\n                             \\n\t\t\t\t\t\t\t                              Estándar:   Estándar \\n                             \\n\t\t\t\t\t\t\t                              Presión:   Baja presión \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   TUYA VALVE CONTROLLER \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la marca:   HOENYZY \\n                             \\n\t\t\t\t\t\t\t                              Fuente de energía:   CC \\n                             \\n\t\t\t\t\t\t\t                              Dispositivo inteligente:   Sí \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n\t\t\t       NOTA:      LA VÁLVULA WIFI PUEDE FUNCIONAR EL ESTANALÓN; ¡NECCESITA LA VÁLVULA ZIGBEE QUE…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Electrical",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S04758537d00443f597f4fc09499ebd0fd.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 97927,
+      "sku": "",
+      "name": "KERUI 5MP 8MP 4K PTZ WiFi IP Cámara inalámbrica Tuya Smart Outdoor Home Security Dual Lens 10MP 5K Camera CCTV Video Surveillance",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=97927",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Tipo de zoom:   Zoom digital \\n                             \\n\t\t\t\t\t\t\t                              Zoom:   8x \\n                             \\n\t\t\t\t\t\t\t                              Cantidad de lentes:   Lente única \\n                             \\n\t\t\t\t\t\t\t                              AI funciones:   Movimiento detecta \\n                             \\n\t\t\t\t\t\t\t                              Color Visión Nocturna:   No \\n                             \\n\t\t\t\t\t\t\t                              Temperatura de trabajo:   -10 °-60 ° \\n                             \\n\t\t\t\t\t\t\t                              Clasificación IP:   otro \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la App:   Smart Life \\n                             \\n\t\t\t\t\t\t\t                              Modo de potencia:   Electricidad de la red. \\n                             \\n\t\t\t\t\t\t\t                              Capacidad de batería recargable:   otro \\n                             \\n\t\t\t\t\t\t\t                              Batería recargable:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Escena:   Al aire libre \\n                             \\n\t\t\t\t\t\t\t                              Alcance de Movimiento (inclinación):   -10 °-180 ° \\n                             \\n\t\t\t\t\t\t\t                              Alcance de Movimiento (Pan):   0 °-360 ° \\n                             \\n\t\t\t\t\t\t\t                              Megapíxeles:   8MP \\n                             \\n\t\t\t\t\t\t\t                              Tarjeta micro SD:   Ninguno \\n                             \\n…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Cameras",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Sacb36b78c51d4dec86ef39dea0e616daH.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98001,
+      "sku": "",
+      "name": "KERUI 5MP 4K Tuya Smart Mini WiFi IP cámara interior inalámbrica seguridad del hogar AI detección humana cámara de vigilancia CCTV seguimiento automático",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98001",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Tipo de zoom:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Zoom:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Cantidad de lentes:   Lente única \\n                             \\n\t\t\t\t\t\t\t                              AI funciones:   De seguimiento inteligentes \\n                             \\n\t\t\t\t\t\t\t                              Color Visión Nocturna:   Sí \\n                             \\n\t\t\t\t\t\t\t                              Clasificación IP:   otro \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la App:   Smart Life \\n                             \\n\t\t\t\t\t\t\t                              Modo de potencia:   Electricidad de la red. \\n                             \\n\t\t\t\t\t\t\t                              Capacidad de batería recargable:   otro \\n                             \\n\t\t\t\t\t\t\t                              Batería recargable:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Escena:   Interior \\n                             \\n\t\t\t\t\t\t\t                              Alcance de Movimiento (inclinación):   otro \\n                             \\n\t\t\t\t\t\t\t                              Alcance de Movimiento (Pan):   otro \\n                             \\n\t\t\t\t\t\t\t                              Megapíxeles:   5MP \\n                             \\n\t\t\t\t\t\t\t                              Tarjeta micro SD:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Fuente de Alimentación:   Normal \\n                             \\n\t\t\t\t\t\t\t                              Almacenam…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Cameras",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Sc17b682174c643988c5d2737da80b872A.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98013,
+      "sku": "",
+      "name": "KERUI 10MP 5K cámara IP PTZ para exterior Tuya Smart 5K lente Dual cámara exterior seguridad visión nocturna impermeable detección de movimiento",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98013",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Tipo de zoom:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Zoom:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Cantidad de lentes:   Lente doble \\n                             \\n\t\t\t\t\t\t\t                              AI funciones:   Movimiento detecta \\n                             \\n\t\t\t\t\t\t\t                              Color Visión Nocturna:   Sí \\n                             \\n\t\t\t\t\t\t\t                              Clasificación IP:   protección IP66 \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la App:   otro \\n                             \\n\t\t\t\t\t\t\t                              Modo de potencia:   Electricidad de la red. \\n                             \\n\t\t\t\t\t\t\t                              Batería recargable:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Escena:   De interior y al aire libre \\n                             \\n\t\t\t\t\t\t\t                              Alcance de Movimiento (inclinación):   -10 °-180 ° \\n                             \\n\t\t\t\t\t\t\t                              Alcance de Movimiento (Pan):   0 °-360 ° \\n                             \\n\t\t\t\t\t\t\t                              Megapíxeles:   9MP \\n                             \\n\t\t\t\t\t\t\t                              Tarjeta micro SD:   128g TF tarjeta \\n                             \\n\t\t\t\t\t\t\t                              Fuente de Alimentación:   Normal \\n                             \\n\t\t\t\t\t\t\t                              Instalación:   Montado en la pared \\n                             \\n…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Cameras",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S4a8ca59e0c61481abfd6baaba7893730N.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98035,
+      "sku": "",
+      "name": "2025 nueva cerradura de puerta inteligente con Bluetooth Compatible con aplicación Tuya cerradura electrónica Digital cerradura de puerta de madera de hogar inteligente huella digital",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98035",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Fuente de Alimentación:   Batería seca \\n                             \\n\t\t\t\t\t\t\t                              Nivel de Protección:   No resistente al agua \\n                             \\n\t\t\t\t\t\t\t                              Adecuado para embutir:   otro \\n                             \\n\t\t\t\t\t\t\t                              Grosor de puerta compatible:   35-65mm \\n                             \\n\t\t\t\t\t\t\t                              Adecuado tipo de puerta:   Puerta de madera \\n                             \\n\t\t\t\t\t\t\t                              Terminar tipo:   otro \\n                             \\n\t\t\t\t\t\t\t                              Puerta Funcition:   Biométrico,Clave y teclado \\n                             \\n\t\t\t\t\t\t\t                              Conectividad:   Bluetooth \\n                             \\n\t\t\t\t\t\t\t                              Formas para desbloquear:   aplicación,Bluetooth,Teclas mecánicas,CARD,contraseña,FINGERPRINT \\n                             \\n\t\t\t\t\t\t\t                              Material:   Aleación de Aluminio \\n                             \\n\t\t\t\t\t\t\t                              Dirección:   Dirección Reversible \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                              Fuente de energía:   Batería seca \\n                             \\n\t\t\t\t\t\t\t                              Plataforma de hogar inteligente:   amigo \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n\t\t\t                  \\n\\n\\n",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Locks",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S738ea7062ef24ba19e884164b144c0ffq.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98055,
+      "sku": "",
+      "name": "LoraTap Tuya multimodo WiFi ZigBee 3,0 Bluetooth Mesh Gateway Hub Bridge inalámbrico y con cable aplicación remota Smart Life Control",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98055",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Número de modelo:   TYGWZ-01-EU-PLUG \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                              App Name:   Tuya, Smart Life \\n                             \\n\t\t\t\t\t\t\t                              Compatible with:   Smart Life Tuya ZigBee Devices \\n                             \\n\t\t\t\t\t\t\t                              Wired Gateway hub:   with Network Interface \\n                             \\n\t\t\t\t\t\t\t                              Adapter type:   EU type adapter \\n                             \\n\t\t\t\t\t\t\t                              Adapter Output:   5V  1A \\n                             \\n\t\t\t\t\t\t\t                              Brand:   LoraTap \\n                             \\n\t\t\t\t\t\t\t                              Wireless Protocol:   Tuya ZigBee 3.0 \\n                             \\n\t\t\t\t\t\t\t                              Wireless Frequency:   2.4GHz \\n                             \\n\t\t\t\t\t\t\t                              Wireless Gateway:   Connect up to 50 Devices \\n                             \\n\t\t\t\t\t\t\t                              Wired Gateway:   Connect up to 300 Devices \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n\t\t\t          Más para amar    Interruptor de escena de control remoto Smart Life Tuya ZigBee de 12 tipos         Repetidor extensor de señal Smart Life Tuya ZigBee                               La puerta de enlace puede funcionar con todos los dispositivos de la aplicación Smart Life  Tuya Zigbee Gateway Hub solo funciona con dispositivos Tuya Smart Life ZigBee.       Puerta de enlace ZigBee con cable  - Conecta hasta 300 dispositivos - Tuya ZigBee Hub Gateway es imprescindible para to…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Hubs",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Se1fe909114bc4020a8e91d624e50ea549.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98059,
+      "sku": "",
+      "name": "Tuya Zigbee/Bluetooth Gateway Smart Wireless Hub Gateway conectar 128(max) dispositivos zigbee para aplicación Smart Life Alexa Home SmartLife",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98059",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Método de comunicación:   Zigbee \\n                             \\n\t\t\t\t\t\t\t                              Cámara equipada:   No \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la marca:   LINCUKOO \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                              Estado del ensamblaje:   Listo para llevar \\n                             \\n\t\t\t\t\t\t\t                              product name:   Mini Zigbee/Bluetooth Gateway \\n                             \\n\t\t\t\t\t\t\t                              Use platform:   Tuya \\n                             \\n\t\t\t\t\t\t\t                              Agreement:   Zigbee/Bluetooth \\n                             \\n\t\t\t\t\t\t\t                              Distance used m:   ≥80 \\n                             \\n\t\t\t\t\t\t\t                              power supply:   5V TYPE C \\n                             \\n\t\t\t\t\t\t\t                              Dimensions:   60*60*15mm \\n                             \\n\t\t\t\t\t\t\t                              detection range:   128 devices \\n                             \\n\t\t\t\t\t\t\t                              authentication:   CE,ROHS,FCC \\n                             \\n\t\t\t\t\t\t\t                              Operating Temperature:   -10℃~+50℃ \\n                             \\n\t\t\t\t\t\t\t                              Operating Humidity:   Maximum 95%RH \\n                             \\n\t\t\t\t\t\t\t                              Información/advertencia de seguridad del producto:   CHOKING HAZARD - Small parts. Not for Children under 3 years. \\n…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Hubs",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S317d817d6ea142858ed861fe33940029v.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98063,
+      "sku": "",
+      "name": "RAYKUBE L31 Tuya BLE cerradura electrónica inteligente con huella dactilar cerradura de cilindro de 60/70mm con aplicación Tuya/Llaves/desbloqueo de tarjeta IC",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98063",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Fuente de Alimentación:   Batería seca \\n                             \\n\t\t\t\t\t\t\t                              Nivel de Protección:   No resistente al agua \\n                             \\n\t\t\t\t\t\t\t                              Adecuado tipo de puerta:   Puerta de acero,Puerta de madera,De latón,Acero inoxidable puerta,otro \\n                             \\n\t\t\t\t\t\t\t                              Prestaciones:   Apoyo Gateway \\n                             \\n\t\t\t\t\t\t\t                              Terminar tipo:   Pulido \\n                             \\n\t\t\t\t\t\t\t                              Conectividad:   Bluetooth \\n                             \\n\t\t\t\t\t\t\t                              Formas para desbloquear:   aplicación,Bluetooth,Teclas mecánicas,CARD,FINGERPRINT \\n                             \\n\t\t\t\t\t\t\t                              Material:   Aleación de Aluminio \\n                             \\n\t\t\t\t\t\t\t                              Dirección:   Dirección Reversible \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   L31 \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la marca:   RAYKUBE \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                              Plataforma de hogar inteligente:   amigo \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n\t\t\t   \\n   \\n   \\n \\n    \\n  RAYKUBE L31 Tuya BLE cerradura de puerta electrónica inteligente con huella dactilar, cerradura de cilindro con Tuya/llave de aplicación Smart Life, tarje…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Locks",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S35c514912ce94150aaa68dd28363317a0.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98073,
+      "sku": "",
+      "name": "Tuya-Mini Detector de movimiento PIR Zigbee 2 en 1 + luz Lux brillante, Sensor de alarma antirrobo de seguridad infrarrojo pasivo, Control por aplicación remota",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98073",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Ángulo de detección:   120 \\n                             \\n\t\t\t\t\t\t\t                              Rango de detección:   5m \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   ZigBee PIR Motion Sensor \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la marca:   coolo \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n\t\t\t     Actualización 2025/6/10:   \\n   Versión actual: el tipo \"No Lux\" admite tuya y Home Assistant Zigbee2MQTT, puede pedirlo normalmente, pero    El tipo \"con Lux\" no es compatible con hub tuya y tuya    , ¡Solo funciona con Home Assistant Zigbee2MQTT!Imágenes Las capturas de pantalla de la aplicación no pueden hacer referencia.Si necesita que la versión \"con Lux\" funcione con tuya, espere nuestra actualización, ¡gracias!   \\n   \\n   Especificación   \\n  Nombre del producto: Mini Sensor PIR Zigbee  Protocolo inalámbrico: Zigbee 3.0  Voltaje de funcionamiento: 3V  Tipo de batería: CR2450  Tiempo en espera: 1 año  Aplicación: Tuya Smart/vida inteligente  Material: ABS  Dimensiones: Φ 33*28mm  Certificación: CE/RoHS  \\n   \\n  Mini cuerpo, pequeño y exquisito.  Detección de movimiento humano, notificación instantánea de la aplicación, sin alarma faltante  Detector infrarrojo de alta precisión, más preciso  Supresión del flujo de aire, evite la detección falsa  Enlace inteligente con otros productos Tuya  Aplicación multiescenario, fácil de instalar.  \\n   \\n   Contenido del paquete   \\n   1 * Sensor de movi…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Sensors",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S0d553a4dd5334b7eb4ad1f74c2fc0de1a.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98077,
+      "sku": "",
+      "name": "ZIGBEE / WiFi Smart Switch 30A 6600W / 4000W Tuya Relay Module AC DC 7-32V 85-250V Timer Automatización del hogar Alexa DIY Smartlife APP",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98077",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Método de comunicación:   Zigbee,frecuencia radioeléctrica,Wi-Fi \\n                             \\n\t\t\t\t\t\t\t                              Grado de montaje:   Listo para llevar \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   WIFI-RF-30A \\n                             \\n\t\t\t\t\t\t\t                              Compatibilidad:   Todos compatibles \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la marca:   Scimagic-RC \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                              Product Name:   Wifi or zigbee Smart Switch 30a \\n                             \\n\t\t\t\t\t\t\t                              Connection method:   Zigbee / wifi \\n                             \\n\t\t\t\t\t\t\t                              Input voltage:   AC85-250V 110V 220V 230V \\n                             \\n\t\t\t\t\t\t\t                              Working Current:   30A \\n                             \\n\t\t\t\t\t\t\t                              Load power:   4000W 30A / 6600W 30A \\n                             \\n\t\t\t\t\t\t\t                              Remote Control frequency:   433MHz \\n                             \\n\t\t\t\t\t\t\t                              APP:   Tuya/Smart Life \\n                             \\n\t\t\t\t\t\t\t                              Three control methods:   WiFi Control, Remote Control and Manual Operation \\n                             \\n\t\t\t\t\t\t\t                              Name1:   30a smart breaker \\n                             \\n\t\t\t\t\t\t\t                              Name…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Electrical",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S4ff104d6241c4be3884625cdc02f6442V.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98084,
+      "sku": "",
+      "name": "Sensor de agua inteligente Tuya ZigBee, Detector de fugas, alarma de fuga de agua, Control de vida inteligente, funciona con puerta de enlace Zigbee",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98084",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   zigbee water leak sensor \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la marca:   iHseno \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                              Plataforma de hogar inteligente:   alexa,amigo,Asistente de Google \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n\t\t\t    \\n    \\n    Ya sabes????     ¡No se puede utilizar sin una puerta de enlace tuya zigbee!                       \\n    \\n      \\n\\n\\n",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Sensors",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Sa1f7da16adec42bdb9efbf0d691442d9f.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98090,
+      "sku": "",
+      "name": "Sensor de ventana de puerta Tuya Zigbee, alarma antirrobo, automatización del hogar inteligente, protección de seguridad, vida inteligente, funciona con Alexa y Google Home",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98090",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   ZD08 \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                              Plataforma de hogar inteligente:   alexa,amigo \\n                             \\n\t\t\t\t\t\t\t                              Power Supply:   CR2032(Include) \\n                             \\n\t\t\t\t\t\t\t                              Wireless Type:   Zigbee 3.0 (Only Support Tuya Zigbee Hub) \\n                             \\n\t\t\t\t\t\t\t                              Support APP:   Smart Life / Tuya Smart \\n                             \\n\t\t\t\t\t\t\t                              Main Body Size:   52.5mm x 26.5mm x13 mm \\n                             \\n\t\t\t\t\t\t\t                              Small Body Size:   34.5mm x 12.5mm x 13 mm \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n\t\t\t   \\n  \\n   \\n    \\n     \\n      \\n       \\n        \\n         \\n          \\n           \\n            \\n              Se solicita concentrador Tuya Zigbee  \\n               Este sensor de puerta no funciona solo.Necesita trabajar con    Centro Tuya ZigBee    a funcionar.   \\n             \\n              \\n             \\n            \\n            \\n             \\n            \\n           \\n          \\n         \\n        \\n         Características del producto:  \\n         1.Notificación instantánea   Envíe una notificación instantánea a su teléfono inmediatamente cuando se abra o cierre una puerta o ventana.Mantenerte informado todo el tiempo.    2.Alert de alarma   Siempre que se activa el sensor para abrir/cerrar, enviará una alarma para a…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Sensors",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S0e97fa44c73e477c939338c4c209d389w.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98094,
+      "sku": "",
+      "name": "AXUS EU WiFi interruptores de luz inteligentes Interruptor táctil RF433 sin cable neutro Smart Home Life Tuya App Control compatible con Alexa Google Home",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98094",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Corriente:   16a \\n                             \\n\t\t\t\t\t\t\t                              Material:   Plástico \\n                             \\n\t\t\t\t\t\t\t                              Certificación:   ce,ROHS \\n                             \\n\t\t\t\t\t\t\t                              Tipo de interruptor:   Interruptor de encendido/apagado \\n                             \\n\t\t\t\t\t\t\t                              Garantía:   1 year \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   AXUS-111 \\n                             \\n\t\t\t\t\t\t\t                              Características:   Wifi Smart Light Touch Switch \\n                             \\n\t\t\t\t\t\t\t                              Tipo de artículo:   Interruptores \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la marca:   AXUS \\n                             \\n\t\t\t\t\t\t\t                              Dispositivo inteligente:   Sí \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n\t\t\t   \\n   \\n \\n \\n  \\n   \\n    Especificación \\n    Color: blanco/negro  Material: PC + Panel de vidrio templado  Voltaje: 100-250 V 50/60 Hz  Corriente: 10A  Carga nominal: 5-150W/Gang  Consumo de energía: ≤0,5W  Temperatura de trabajo: 0℃~40℃  RF: 433MHz  Código estándar RF: 1527  Estándar WIFI: IEEE 802.11bgn 2,4 Ghz  Sistema de soporte: por encima de iOS 8.0 o Android 4.3  Requisito del concentrador: No  Seguridad de la red: WPA/WPA2”  Modo de control: APP/RF/Manual  Certificación: FCC, CE, RoHS  Aplicación: Tuy…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Electrical",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S89378e68d99b4023adbb29fc3b5bd70cd.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98114,
+      "sku": "",
+      "name": "Tuya-cerradura electrónica Digital inteligente 5 en 1, tarjeta de contraseña con huella dactilar, manija de desbloqueo remoto, hogar, Hotel y apartamento",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98114",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Fuente de Alimentación:   Batería seca \\n                             \\n\t\t\t\t\t\t\t                              Dirección:   Dirección Reversible \\n                             \\n\t\t\t\t\t\t\t                              Nivel de Protección:   protección IP66 \\n                             \\n\t\t\t\t\t\t\t                              Grosor de puerta compatible:   35-55mm \\n                             \\n\t\t\t\t\t\t\t                              Puerta Funcition:   Biométrico,Clave y teclado \\n                             \\n\t\t\t\t\t\t\t                              Conectividad:   Bluetooth \\n                             \\n\t\t\t\t\t\t\t                              Formas para desbloquear:   CARD,Teclas mecánicas,contraseña,FINGERPRINT,aplicación \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   Smart Lock \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                              Plataforma de hogar inteligente:   amigo \\n                             \\n\t\t\t\t\t\t\t                              Power supply:   Battery(not include) /USB \\n                             \\n\t\t\t\t\t\t\t                              Operating voltage:   36V and below \\n                             \\n\t\t\t\t\t\t\t                              Unlocking method:   Fingerprint/Password/Key/IC Card/ APP Unlock \\n                             \\n\t\t\t\t\t\t\t                              Keywords:   finger print door lock,gache electrique de porte,door handle lock,seguridad hogar \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Locks",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "simple",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S65503048d520452a8e11e87adeaa4733Z.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98116,
+      "sku": "",
+      "name": "RAYKUBE A1 Pro Tuya Bluetooth cerradura de puerta inteligente Tuya/APP Smart Life desbloqueo No requiere perforación entrega desde España a la UE Countri",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98116",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Hign-concerned Chemical:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Power Supply:   Batería seca \\n                             \\n\t\t\t\t\t\t\t                              Installation Method:   Instalación sin perforaciones \\n                             \\n\t\t\t\t\t\t\t                              Handle Direction:   Dirección Reversible \\n                             \\n\t\t\t\t\t\t\t                              Suitable Door Type:   Vidrio puerta,Puerta de madera,De latón,Acero inoxidable puerta,Puerta de acero \\n                             \\n\t\t\t\t\t\t\t                              Special Features:   Apoyo Gateway \\n                             \\n\t\t\t\t\t\t\t                              Finish Type:   Pulido \\n                             \\n\t\t\t\t\t\t\t                              Connectivity:   Bluetooth \\n                             \\n\t\t\t\t\t\t\t                              Ways To Unlock:   Control Remoto,contraseña,Bluetooth,aplicación \\n                             \\n\t\t\t\t\t\t\t                              Model Number:   A1 Pro \\n                             \\n\t\t\t\t\t\t\t                              Brand Name:   RAYKUBE \\n                             \\n\t\t\t\t\t\t\t                              RAYKUBE Model:   A1 PRO \\n                             \\n\t\t\t\t\t\t\t                              Origin:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                              Power Source:   Batería seca \\n                             \\n\t\t\t\t\t\t\t                              Smart home platform:   alexa,Asistente de Google \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n\t\t\t   \\n   \\n   \\n       \\n   Si necesita todos los accesorios A1 Pro, haga clic en las siguientes fotos para obte…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Locks",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "simple",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Ac93502052bfc46c4aaac96868d1060b5F.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98118,
+      "sku": "",
+      "name": "KERUI-sistema de alarma W181, seguridad para el hogar, WIFI, GSM, Tuya, Detector de movimiento inteligente, Sensor de puerta, cámara IP antirrobo, funciona con Alexa y Google",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98118",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Zona número:   99 \\n                             \\n\t\t\t\t\t\t\t                              Número de salidas:   6 \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   W181 \\n                             \\n\t\t\t\t\t\t\t                              Sensores en el kit:   Sensor para puerta/ventana \\n                             \\n\t\t\t\t\t\t\t                              Interfaz de Comunicación:   Sin cables \\n                             \\n\t\t\t\t\t\t\t                              Tipo de armado:   App \\n                             \\n\t\t\t\t\t\t\t                              Pantalla interactiva:   Sí \\n                             \\n\t\t\t\t\t\t\t                              muestra:   Sí \\n                             \\n\t\t\t\t\t\t\t                              Teclado para la contraseña:   Sí \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la marca:   KERUI \\n                             \\n\t\t\t\t\t\t\t                              KERUI Modelo:   W181 \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                              Plataforma de hogar inteligente:   amigo \\n                             \\n\t\t\t\t\t\t\t                              Tipo de la alarma:   La alarma,Sms,Control de aplicaciones \\n                             \\n\t\t\t\t\t\t\t                              Potencia (W):   DC5V \\n                             \\n\t\t\t\t\t\t\t                              Type:   Smart Gsm Wifi Alarm System \\n                             \\n\t\t\t\t\t\t\t                              APP:   Tuya Smart/Smart lif…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Alarm Kit",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S991172e539b24c74a7467995478f5fddY.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98134,
+      "sku": "",
+      "name": "Cerradura de puerta inteligente GIMDOW, instalación de pegatinas inteligentes para Hotel y apartamento, cerradura electrónica con aplicación inteligente Tuya compatible con Bluetooth",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98134",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Formas para desbloquear:   Control Remoto,contraseña,Bluetooth,aplicación \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la marca:   GIMDOW \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n\t\t\t                               Nota:               Por razones especiales de logística y transporte, la máquina no lleva baterías.                    GIMDOW cerradura inteligente Tuya contraseña Digital compatible con Bluetooth instalación de pegatinas inteligentes aplicación inteligente puerta abierta        El nombre de la aplicación es una vida inteligente y la aplicación inteligente Tuya también es compatible.    Cerradura inteligente Gimdow A1pro.    Esta es una cerradura inteligente mejorada, adecuada para cerraduras de puertas existentes.    La instalación es muy sencilla.La gente sólo necesita pegarlo detrás de la puerta.    Debido a su diseño único, se puede utilizar con cerraduras de puertas americanas y europeas.Tiene un teclado inalámbrico en el exterior y una aplicación cifrada compatible con Bluetooth que permite a las personas ingresar sus atributos con un simple código o clic, pero aún usan las teclas originales.    Las personas pueden compartir llaves virtuales temporales con las personas en las que confían (como cuidadores de mascotas, familiares, amigos e invitados de Airbnb).    Parámetros del producto GIMDOW A1 (bloqueo) Parámetros apparentes Dimensiones del producto: 135 mm x 60 mm x 45 mm Material del cuerpo: PC y acero Color: red gris Peso: 266 g Parámetros de hardware Modo de comunicación: por encima de Bluetooth 4.0 Fecha de la batería: batería AA * 4 Re…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Locks",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Ha8f17616af874f14a03bce5f4d8c9c5cZ.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98142,
+      "sku": "",
+      "name": "Sensor de lluvia Zigbee con Detector de luz, aplicación remota Smart Life, Control 2 en 1, Sensor de gota de lluvia para Tuya o asistente doméstico Zigbee2mqtt",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98142",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Método de comunicación:   Zigbee \\n                             \\n\t\t\t\t\t\t\t                              Cámara equipada:   No \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   zigbee rain sensor \\n                             \\n\t\t\t\t\t\t\t                              Compatibilidad:   otros \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la marca:   Forubest \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                              Estado del ensamblaje:   Listo para llevar \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n\t\t\t     Dos versiones opcionales   \\n   Tipo 1 para la versión tuya: necesita funcionar con la puerta de enlace tuya zigbee o con el concentrador zigbee2mqtt.No puede funcionar directamente sin puerta de enlace.   \\n   Tipo 2 para la versión Z2M: soporte solo para zigbee2mqtt en el asistente doméstico, puerta de enlace relacionada con z2m requerida. No puede funcionar directamente sin puerta de enlace.   \\n   \\n   *No funciona para ZHA   \\n   *Nota: No es compatible con puerta de enlace ewelink   \\n   *2 En 1 combinado con detección de lluvia y valor de iluminancia de brillo.  \\n  *ZigBee Hub como centro de control, úselo con puerta de enlace zigbee,  *Notificación de estado de lluvia (lluvia/ningún).  *Lienzo de escena inteligente.  *Monitoreo remoto, alta sensibilidad y tiempo de espera ultralargo.  \\n   \\n  Parámetro del producto  Nombre del producto: Sensor de detección de gotas de lluvia  Protocolo…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Sensors",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Sc5f0e0db57f341feb146f711b667716bc.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98146,
+      "sku": "",
+      "name": "Sensor de humedad del suelo Zigbee 3 en 1/4 en 1, medidor de humedad, probador de temperatura, Detector de luz, funciona con Tuya Smart Life 2MQTT HA",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98146",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   Zigbee Soil Moisture \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                              Plataforma de hogar inteligente:   amigo \\n                             \\n\t\t\t\t\t\t\t                              TIP:   3-IN1 Or 4-IN1version for your choice \\n                             \\n\t\t\t\t\t\t\t                              Note:   Zigbee 2QMTT or Zigbee Tuya Version for your choice \\n                             \\n\t\t\t\t\t\t\t                              Zigbee Soil Moisture Sensor:   Need zigbee hub to work, the hub not incldued on the package \\n                             \\n\t\t\t\t\t\t\t                              Zigbee Sensor:   Not support ZHA/Not support Ewelink app \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n\t\t\t   \\n  Sensor de humedad del suelo, Zigbee 2mqtt y Zigbee Tuya versión opcional, ¡todos requieren que el concentrador zigbee se empareje en la aplicación!!, \\n    -Versión Zigbee de 2 mqtt: admite aplicación de 2 mqtt (no es compatible con ZHA, no es compatible con Ewelink)  -Zigbee tuya versión: admite smart life/aplicación tuya (no es compatible con ZHA, no es compatible con Ewelink)          Antes de comprar: elija el protocolo adecuado para su hogar inteligente. El producto no es compatible con ZHA.    ¿Exceso de riego?-----¿Es bajo el riego?---------¿No es suficiente luz?-------------¿Por qué no está prosperando?¿Es el suelo, la temperatura, la humedad o la luz?  Deje de adivinar.Comience a medir.    ¡Bienvenido a nuestra familia de hogares inteligentes!N…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Sensors",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-Sd2596dd9148f4005b29b197909926837e.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98152,
+      "sku": "",
+      "name": "Rastreadores GPS Bluetooth Airtag IPX 5, seguimiento deportivo resistente al agua, encontrar mis ancianos, niños, mascotas, buscadores disponibles para iPhone, encuentra mi",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98152",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              impermeable:   No \\n                             \\n\t\t\t\t\t\t\t                              Gama:   Otros \\n                             \\n\t\t\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n\t\t\t     \\n \\n  \\n     Descripción   \\n   \\n    \\n    \\n   \\n      Debes seleccionar Agregar otro artículo.    \\n  \\n   \\n \\n \\n  \\n   \\n    \\n     \\n      \\n       \\n        \\n         \\n          \\n           \\n            \\n             \\n              \\n               \\n                  Acerca de este artículo   \\n                  【Trabaja con la aplicación Apple Find My】Esta etiqueta de seguimiento se integra perfectamente con la aplicación Apple Find My, brindándole una experiencia de seguimiento confiable y fácil de usar.Conecte la tarjeta sin esfuerzo a su iPhone u otros dispositivos Apple y disfrute de la flexibilidad de rastrear sus pertenencias desde su dispositivo Apple preferido, asegurándose de estar siempre conectado y en control.   \\n                  【Recordatorios detrás de izquierda】 ¿Alguna vez dejó su billetera o equipaje atrás rápidamente?La función de recordatorio de atrás de la izquierda de nuestra etiqueta de seguimiento garantiza que nunca más olvide sus pertenencias.Si alejas del artículo rastreado, tu teléfono inteligente te enviará una notificación, recordándote que debes recuperarla antes de que sea demasiado tarde.   \\n                  【Encuentre cerca con altavoz incorporado】La etiqueta de seguimiento incluye un altavoz incorporado que le permite localizar fácilmente sus pertenencias dentro de un rango…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Trackers",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "simple",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S5988b5b76dc54caa979a1af26ac0c086k.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98154,
+      "sku": "",
+      "name": "Sensor de vibración con función Zigbee, detección de aplicación Tuya Smart Life, notificación en tiempo Real, alarma de choque de movimiento, registro histórico",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98154",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Método de comunicación:   Zigbee \\n                             \\n\t\t\t\t\t\t\t                              Número de modelo:   71AWZ \\n                             \\n\t\t\t\t\t\t\t                              Nombre de la marca:   ONENUO \\n                             \\n\t\t\t\t\t\t\t                              Origen:   CN(Origen) \\n                             \\n\t\t\t\t\t\t\t                 \\n             \\n\t\t\t      \\n   \\n   Consejos para la compra: Este producto es la versión Zigbee, los usuarios deben haber comprado/ya comprado un hub tuya zigbee para operar.Si no tiene un concentrador zigbee, ese modelo no funcionará.   \\n \\n  \\n   \\n    \\n     \\n    \\n   \\n     \\n   \\n    \\n     \\n      \\n     \\n       \\n     \\n      \\n       \\n      \\n     \\n       \\n       Sensor de vibración inteligente Zigbee, detección de aplicación Tuya Smart Life, notificación, registro histórico de alarma de choque de movimiento en tiempo Real   \\n        \\n     \\n      \\n         Parámetros del producto:   \\n       \\n        \\n       \\n      \\n     \\n     \\n      Voltaje de funcionamiento: CC 3 V \\n     \\n     \\n      Corriente de espera: ≤10uA \\n     \\n     \\n      Corriente de alarma: ≤20mA \\n     \\n     \\n      Comunicación: Zigbee \\n     \\n     \\n      Indicador LED: SI \\n     \\n     \\n      Instalación: cinta de doble cara \\n     \\n     \\n      Batería: CR2450 \\n     \\n     \\n      Temperatura de trabajo: -10°C~50℃ \\n     \\n     \\n      Humedad de trabajo: ≤95% (sin condensación) \\n     \\n     \\n      \\n     \\n     \\n      \\n     \\n     \\n      \\n       \\n        \\n         \\n           Paquete del producto incluido:  \\n…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Sensors",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "simple",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S5fe780c4ddd246569f2b079efcee2d43f.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98156,
+      "sku": "",
+      "name": "FENVI 300Mbps inalámbrico WIFI repetidor remoto Wifi amplificador WiFi 802.11N WiFi amplificador repetidor Wi Fi reapeter",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98156",
+      "short_text": "",
+      "desc_text": "\\n                 \\n\t\t\t\t\t                              Clase de banda de frecuencia:   Banda única \\n                             \\n\t\t\t\t\t\t\t                              Producto químico de alta preocupación:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Frecuencia:   2,4 gigahercios \\n                             \\n\t\t\t\t\t\t\t                              Estándar de comunicación inalámbrica:   802.11n \\n                             \\n\t\t\t\t\t\t\t                              Velocidad de transmisión inalámbrica:   300 metros \\n                             \\n\t\t\t\t\t\t\t                              Función:   Cortafuegos \\n                             \\n\t\t\t\t\t\t\t                              Con función de módem:   No \\n                             \\n\t\t\t\t\t\t\t                              Velocidad de transferencia por cable:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Estándar Wifi:   802.11n \\n                             \\n\t\t\t\t\t\t\t                              Frecuencia compatible con Wi-Fi:   2,4G \\n                             \\n\t\t\t\t\t\t\t                              Puertos WAN:   1x10/100 Mbps \\n                             \\n\t\t\t\t\t\t\t                              Tipo:   Sin cables \\n                             \\n\t\t\t\t\t\t\t                              Compatibilidad WPS:   Sí \\n                             \\n\t\t\t\t\t\t\t                              Compatibilidad WDS:   No \\n                             \\n\t\t\t\t\t\t\t                              Estándares y protocolos:   Wi-Fi 802.11n \\n                             \\n\t\t\t\t\t\t\t                              Número de interfaces USB:   Ninguno \\n                             \\n\t\t\t\t\t\t\t                              Velocidad máxima de transferencia de la conexión LAN:   300Mbs…",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Electrical",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S7546d9da680242528074258ed618585e4.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    },
+    {
+      "id": 98167,
+      "sku": "",
+      "name": "Proyector de holograma 3D de 62cm, ventilador con Wifi, logotipo publicitario, lámpara holográfica, compatible con imagen y vídeo",
+      "slug": "",
+      "url": "https://spanishcoastproperties.com/?p=98167",
+      "short_text": "",
+      "desc_text": "Is Bulbs Included:   No    Luminous Flux:   2000-82000    Installation Method:   Montaje    Power Source:   SOLAR    Item Type:   Luz publicitaria    Origin:   FR (Origen)",
+      "price": null,
+      "regular_price": null,
+      "sale_price": null,
+      "currency": "EUR",
+      "currency_symbol": "€",
+      "on_sale": false,
+      "stock_status": null,
+      "categories": [
+        {
+          "id": null,
+          "name": "Commercial Lighting",
+          "slug": ""
+        },
+        {
+          "id": null,
+          "name": "Lights & Lighting",
+          "slug": ""
+        }
+      ],
+      "tags": [],
+      "date_created": "",
+      "type": "variable",
+      "images": [
+        "https://spanishcoastproperties.com/wp-content/uploads/2025/11/kf-S68a22ede433846e69877c2bf8b948e5fG.webp"
+      ],
+      "price_min": null,
+      "price_max": null
+    }
+  ]
 }
-

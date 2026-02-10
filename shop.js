@@ -12,6 +12,7 @@
 
   const toText = (v, fb = '') => (typeof v === 'string' ? v : v == null ? fb : String(v));
   const norm = (v) => toText(v).trim().toLowerCase();
+  const getClient = () => window.scpSupabase || null;
 
   const esc = (s) => toText(s).replace(/[&<>"']/g, (c) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -97,7 +98,8 @@
     return Number.isFinite(t) ? t : 0;
   };
 
-  const allProducts = Array.isArray(window.shopProducts) ? window.shopProducts : [];
+  const baseProducts = Array.isArray(window.shopProducts) ? window.shopProducts : [];
+  let allProducts = baseProducts.slice();
   const meta = window.shopProductsMeta || null;
 
   const setMeta = () => {
@@ -113,9 +115,9 @@
     metaEl.textContent = parts.length ? parts.join(' · ') : '';
   };
 
-  const categories = (() => {
+  const computeCategories = (items) => {
     const set = new Map();
-    allProducts.forEach((p) => {
+    (Array.isArray(items) ? items : []).forEach((p) => {
       categoriesFor(p).forEach((name) => {
         const key = norm(name);
         if (!key) return;
@@ -123,7 +125,9 @@
       });
     });
     return Array.from(set.values()).sort((a, b) => a.localeCompare(b));
-  })();
+  };
+
+  let categories = computeCategories(allProducts);
 
   const populateCategorySelect = () => {
     if (!catEl) return;
@@ -161,18 +165,36 @@
     return hay.includes(q);
   };
 
+  const boostFor = (p) => {
+    const n = Number(p && p.sort_boost);
+    return Number.isFinite(n) ? n : 0;
+  };
+
   const sortProducts = (items, sortMode) => {
     const out = items.slice();
     if (sortMode === 'price_asc') {
-      out.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
+      out.sort((a, b) => {
+        const ba = boostFor(a);
+        const bb = boostFor(b);
+        if (bb !== ba) return bb - ba;
+        return (Number(a.price) || 0) - (Number(b.price) || 0);
+      });
       return out;
     }
     if (sortMode === 'price_desc') {
-      out.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
+      out.sort((a, b) => {
+        const ba = boostFor(a);
+        const bb = boostFor(b);
+        if (bb !== ba) return bb - ba;
+        return (Number(b.price) || 0) - (Number(a.price) || 0);
+      });
       return out;
     }
     if (sortMode === 'sale') {
       out.sort((a, b) => {
+        const ba = boostFor(a);
+        const bb = boostFor(b);
+        if (bb !== ba) return bb - ba;
         const sa = a && a.on_sale ? 1 : 0;
         const sb = b && b.on_sale ? 1 : 0;
         if (sb !== sa) return sb - sa;
@@ -181,8 +203,113 @@
       return out;
     }
     // newest
-    out.sort((a, b) => parseDate(b && b.date_created) - parseDate(a && a.date_created));
+    out.sort((a, b) => {
+      const ba = boostFor(a);
+      const bb = boostFor(b);
+      if (bb !== ba) return bb - ba;
+      return parseDate(b && b.date_created) - parseDate(a && a.date_created);
+    });
     return out;
+  };
+
+  const mapOverrideCategories = (v) => {
+    if (Array.isArray(v)) {
+      return v.map((x) => toText(x).trim()).filter(Boolean);
+    }
+    if (typeof v === 'string') {
+      return v
+        .split(',')
+        .map((x) => toText(x).trim())
+        .filter(Boolean);
+    }
+    return [];
+  };
+
+  const mapOverrideImages = (v) => {
+    if (Array.isArray(v)) {
+      return v.map((x) => toText(x).trim()).filter(Boolean);
+    }
+    if (typeof v === 'string') {
+      return v
+        .split(/[\n,]+/g)
+        .map((x) => toText(x).trim())
+        .filter(Boolean);
+    }
+    return [];
+  };
+
+  const mergeOverrides = (base, overridesRows) => {
+    const map = new Map();
+    (Array.isArray(overridesRows) ? overridesRows : []).forEach((r) => {
+      const id = toText(r && r.wc_id).trim();
+      if (id) map.set(id, r);
+    });
+
+    const out = [];
+    (Array.isArray(base) ? base : []).forEach((p) => {
+      if (!p || p.id == null) return;
+      const key = toText(p.id).trim();
+      const o = map.get(key) || null;
+      if (!o) {
+        out.push(p);
+        return;
+      }
+      if (o.app_visible === false) return;
+
+      const merged = { ...p };
+      merged.sort_boost = Number(o.sort_boost) || 0;
+
+      if (toText(o.name).trim()) merged.name = toText(o.name).trim();
+      if (toText(o.sku).trim()) merged.sku = toText(o.sku).trim();
+      if (toText(o.url).trim()) merged.url = toText(o.url).trim();
+      if (toText(o.currency).trim()) merged.currency = toText(o.currency).trim();
+      if (toText(o.currency_symbol).trim()) merged.currency_symbol = toText(o.currency_symbol).trim();
+
+      if (o.price != null && o.price !== '') merged.price = Number(o.price);
+      if (o.regular_price != null && o.regular_price !== '') merged.regular_price = Number(o.regular_price);
+      if (o.sale_price != null && o.sale_price !== '') merged.sale_price = Number(o.sale_price);
+
+      // Derive on_sale from prices (keeps UI consistent).
+      const sale = Number(merged.sale_price);
+      const reg = Number(merged.regular_price);
+      merged.on_sale = Number.isFinite(sale) && Number.isFinite(reg) && sale > 0 && reg > 0 && sale < reg;
+
+      if (toText(o.short_text).trim()) merged.short_text = toText(o.short_text).trim();
+      if (toText(o.desc_text).trim()) merged.desc_text = toText(o.desc_text).trim();
+
+      const catNames = mapOverrideCategories(o.categories);
+      if (catNames.length) merged.categories = catNames.map((name) => ({ id: null, name, slug: '' }));
+
+      const imgs = mapOverrideImages(o.images);
+      if (imgs.length) merged.images = imgs;
+
+      out.push(merged);
+    });
+    return out;
+  };
+
+  const fetchOverrides = async () => {
+    const client = getClient();
+    if (!client) return [];
+    try {
+      const { data, error } = await client
+        .from('shop_product_overrides')
+        .select('wc_id,published,app_visible,sort_boost,name,sku,url,price,regular_price,sale_price,currency,currency_symbol,categories,images,short_text,desc_text')
+        .eq('published', true);
+      if (error) return [];
+      return Array.isArray(data) ? data : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const applyOverridesFromSupabase = async () => {
+    const rows = await fetchOverrides();
+    if (!rows.length) return;
+    allProducts = mergeOverrides(baseProducts, rows);
+    categories = computeCategories(allProducts);
+    populateCategorySelect();
+    renderGrid();
   };
 
   const renderGrid = () => {
@@ -409,8 +536,23 @@
     renderGrid();
     wireGridClicks();
     wireControls();
+
+    // Apply admin curation (published overrides) without blocking initial paint.
+    const onReady = () => applyOverridesFromSupabase();
+    if (window.scpSupabaseStatus && window.scpSupabaseStatus.enabled) {
+      onReady();
+    } else {
+      window.addEventListener('scp:supabase:ready', onReady, { once: true });
+      // Fallback: if the event never fires, do nothing.
+      window.setTimeout(() => {
+        try {
+          onReady();
+        } catch {
+          // ignore
+        }
+      }, 2500);
+    }
   };
 
   window.addEventListener('DOMContentLoaded', init);
 })();
-

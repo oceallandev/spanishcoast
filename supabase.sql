@@ -311,3 +311,64 @@ drop trigger if exists listing_ref_map_set_updated_at on public.listing_ref_map;
 create trigger listing_ref_map_set_updated_at
 before update on public.listing_ref_map
 for each row execute procedure public.set_updated_at();
+
+-- 5) Shop product overrides (admin-only edit)
+-- Allows you to curate/edit how WooCommerce products look inside the app without touching WordPress.
+-- Public users can read ONLY published overrides. Admin can read/write all.
+
+create table if not exists public.shop_product_overrides (
+  wc_id bigint primary key,
+  published boolean not null default true,
+  app_visible boolean not null default true,
+  sort_boost int not null default 0,
+
+  -- Optional overrides. Null = keep the original value from shop-products.js.
+  name text,
+  sku text,
+  url text,
+  price numeric,
+  regular_price numeric,
+  sale_price numeric,
+  currency text,
+  currency_symbol text,
+  categories jsonb,
+  images jsonb,
+  short_text text,
+  desc_text text,
+
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.shop_product_overrides enable row level security;
+
+drop policy if exists "shop_product_overrides: public read published" on public.shop_product_overrides;
+create policy "shop_product_overrides: public read published"
+on public.shop_product_overrides for select
+using (published = true);
+
+drop policy if exists "shop_product_overrides: admin read all" on public.shop_product_overrides;
+create policy "shop_product_overrides: admin read all"
+on public.shop_product_overrides for select
+using (public.is_admin());
+
+drop policy if exists "shop_product_overrides: admin insert" on public.shop_product_overrides;
+create policy "shop_product_overrides: admin insert"
+on public.shop_product_overrides for insert
+with check (public.is_admin());
+
+drop policy if exists "shop_product_overrides: admin update" on public.shop_product_overrides;
+create policy "shop_product_overrides: admin update"
+on public.shop_product_overrides for update
+using (public.is_admin())
+with check (public.is_admin());
+
+drop policy if exists "shop_product_overrides: admin delete" on public.shop_product_overrides;
+create policy "shop_product_overrides: admin delete"
+on public.shop_product_overrides for delete
+using (public.is_admin());
+
+drop trigger if exists shop_product_overrides_set_updated_at on public.shop_product_overrides;
+create trigger shop_product_overrides_set_updated_at
+before update on public.shop_product_overrides
+for each row execute procedure public.set_updated_at();

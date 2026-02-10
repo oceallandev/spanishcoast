@@ -65,6 +65,14 @@ Generate/update locally:
 python3 sync_woocommerce_products.py --store-url "https://your-woocommerce-site.com"
 ```
 
+Import from a WooCommerce Product Export CSV:
+
+```bash
+python3 sync_woocommerce_products.py \
+  --csv "/path/to/wc-product-export.csv" \
+  --store-url "https://your-woocommerce-site.com"
+```
+
 Automatic sync (recommended):
 1. In GitHub repo settings:
    - `Settings -> Secrets and variables -> Actions -> Variables`
