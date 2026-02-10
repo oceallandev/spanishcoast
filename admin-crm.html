@@ -8,15 +8,15 @@
     <meta name="robots" content="noindex,nofollow">
 
     <meta name="theme-color" content="#030712">
-    <link rel="manifest" href="manifest.webmanifest?v=20260210t">
-    <link rel="stylesheet" href="style.css?v=20260210t">
+    <link rel="manifest" href="manifest.webmanifest?v=20260210u">
+    <link rel="stylesheet" href="style.css?v=20260210u">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script defer src="config.js?v=20260210t"></script>
-    <script defer src="supabase-init.js?v=20260210t"></script>
+    <script defer src="config.js?v=20260210u"></script>
+    <script defer src="supabase-init.js?v=20260210u"></script>
 </head>
 
 <body data-section="account">
@@ -54,58 +54,82 @@
                 <p>Contacts and leads imported from external systems (admin only).</p>
             </div>
 
-            <div class="glass panel">
-                <div class="admin-toolbar">
-                    <div class="admin-toolbar-left">
-                        <button id="tab-contacts" class="cta-button cta-button--outline admin-tab is-active" type="button">Contacts</button>
-                        <button id="tab-demands" class="cta-button cta-button--outline admin-tab" type="button">Leads</button>
-                    </div>
-                    <div class="admin-toolbar-right">
-                        <input id="crm-q" class="admin-input" type="text" placeholder="Search email, name, phone, code">
-                        <button id="crm-refresh" class="cta-button" type="button">Refresh</button>
-                    </div>
-                </div>
+	            <div class="glass panel">
+	                <div class="admin-toolbar">
+	                    <div class="admin-toolbar-left">
+	                        <button id="tab-contacts" class="cta-button cta-button--outline admin-tab is-active" type="button">Contacts</button>
+	                        <button id="tab-demands" class="cta-button cta-button--outline admin-tab" type="button">Leads</button>
+	                    </div>
+	                    <div class="admin-toolbar-right">
+	                        <input id="crm-q" class="admin-input" type="text" placeholder="Search email, name, phone, code">
+	                        <button id="crm-refresh" class="cta-button" type="button">Search</button>
+	                    </div>
+	                </div>
 
-                <div class="muted" id="crm-status" aria-live="polite"></div>
+	                <div class="muted" id="crm-status" aria-live="polite"></div>
 
-                <div id="crm-contacts-wrap" class="admin-table-wrap">
-                    <table class="admin-table" id="crm-contacts-table">
-                        <thead>
-                            <tr>
-                                <th>Updated</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Area</th>
-                                <th>Code</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
+	                <div id="crm-contacts-wrap" class="admin-table-wrap">
+	                    <table class="admin-table crm-table" id="crm-contacts-table">
+	                        <thead>
+	                            <tr>
+	                                <th class="crm-col-updated">Updated</th>
+	                                <th class="crm-col-contact">Contact</th>
+	                                <th class="crm-col-email">Email</th>
+	                                <th class="crm-col-phone">Phone</th>
+	                                <th class="crm-col-area">Area</th>
+	                                <th class="crm-col-actions">Actions</th>
+	                            </tr>
+	                        </thead>
+	                        <tbody></tbody>
+	                    </table>
+	                </div>
 
-                <div id="crm-demands-wrap" class="admin-table-wrap" style="display:none">
-                    <table class="admin-table" id="crm-demands-table">
-                        <thead>
-                            <tr>
-                                <th>Updated</th>
-                                <th>Client</th>
-                                <th>Budget</th>
-                                <th>Beds/Baths</th>
-                                <th>Zones</th>
-                                <th>Types</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-    </main>
+	                <div id="crm-demands-wrap" class="admin-table-wrap" style="display:none">
+	                    <table class="admin-table crm-table" id="crm-demands-table">
+	                        <thead>
+	                            <tr>
+	                                <th class="crm-col-updated">Updated</th>
+	                                <th class="crm-col-lead">Lead</th>
+	                                <th class="crm-col-budget">Budget</th>
+	                                <th class="crm-col-criteria">Criteria</th>
+	                                <th class="crm-col-zones">Zones</th>
+	                                <th class="crm-col-types">Types</th>
+	                                <th class="crm-col-actions">Actions</th>
+	                            </tr>
+	                        </thead>
+	                        <tbody></tbody>
+	                    </table>
+	                </div>
 
-    <script defer src="admin-crm.js?v=20260210t"></script>
-    <script defer src="site.js?v=20260210t"></script>
-</body>
+	                <div class="crm-footerbar">
+	                    <div class="muted" id="crm-showing">Ready.</div>
+	                    <div class="crm-footer-actions">
+	                        <button id="crm-export" class="cta-button cta-button--outline" type="button">Export CSV</button>
+	                        <button id="crm-load-more" class="cta-button" type="button" style="display:none">Load more</button>
+	                    </div>
+	                </div>
+	            </div>
+	        </section>
+	    </main>
+
+	    <div id="crm-drawer-backdrop" class="crm-drawer-backdrop" aria-hidden="true"></div>
+	    <aside id="crm-drawer" class="crm-drawer" aria-hidden="true">
+	        <div class="crm-drawer-inner">
+	            <div class="crm-drawer-head">
+	                <div>
+	                    <div class="crm-drawer-kicker" id="crm-drawer-kicker">CRM</div>
+	                    <div class="crm-drawer-title" id="crm-drawer-title">Details</div>
+	                    <div class="crm-drawer-subtitle muted" id="crm-drawer-subtitle"></div>
+	                </div>
+	                <button id="crm-drawer-close" class="crm-drawer-close" type="button" aria-label="Close">✕</button>
+	            </div>
+	            <div class="divider"></div>
+	            <div id="crm-drawer-body"></div>
+	        </div>
+	    </aside>
+
+	    <script defer src="admin-crm.js?v=20260210u"></script>
+	    <script defer src="site.js?v=20260210u"></script>
+	</body>
 
 </html>
-
