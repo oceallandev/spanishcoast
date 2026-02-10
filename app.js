@@ -503,6 +503,16 @@ document.addEventListener('DOMContentLoaded', () => {
             resultsCount.textContent = String(currentProperties.length);
         }
 
+        // Remove any rendered card so users don't get a "dead" (unclickable) listing.
+        try {
+            const card = document.querySelector(`[data-property-id="${cssEscape(pid)}"]`);
+            if (card && card.parentNode) {
+                card.parentNode.removeChild(card);
+            }
+        } catch (error) {
+            // ignore
+        }
+
         // Remove marker immediately (no full re-render).
         const marker = markerMap.get(pid);
         if (marker && markersGroup && typeof markersGroup.removeLayer === 'function') {
@@ -2096,7 +2106,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function scrollToProperty(propertyId) {
-        const card = document.querySelector(`[data-property-id="${propertyId}"]`);
+        const pid = idKey(propertyId);
+        if (!pid) return;
+        const card = document.querySelector(`[data-property-id="${cssEscape(pid)}"]`);
         if (!card) {
             return;
         }
@@ -2763,18 +2775,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const nextThumbsBtn = document.getElementById('next-thumbs');
         const thumbsList = document.querySelector('.gallery-thumbs');
 
+        // Track consecutive failures so we don't end up in an infinite "try next image" loop.
+        const failedGalleryIndices = new Set();
+
         if (mainImg) {
             mainImg.setAttribute('referrerpolicy', 'no-referrer');
             mainImg.setAttribute('decoding', 'async');
+            mainImg.addEventListener('load', () => {
+                failedGalleryIndices.clear();
+            });
             mainImg.addEventListener('error', () => {
                 // If a host blocks hotlinking, try the next image before giving up.
-                if (currentGalleryImages.length > 1) {
-                    updateGallery(currentGalleryIndex + 1);
-                } else {
-                    markListingImagesBroken(property);
-                    modal.style.display = 'none';
-                    setBodyOverflow('auto');
+                failedGalleryIndices.add(currentGalleryIndex);
+                if (currentGalleryImages.length > 1 && failedGalleryIndices.size < currentGalleryImages.length) {
+                    let next = currentGalleryIndex;
+                    for (let i = 0; i < currentGalleryImages.length; i += 1) {
+                        next = (next + 1) % currentGalleryImages.length;
+                        if (!failedGalleryIndices.has(next)) {
+                            updateGallery(next);
+                            return;
+                        }
+                    }
                 }
+                markListingImagesBroken(property);
+                modal.style.display = 'none';
+                setBodyOverflow('auto');
             });
         }
 
@@ -2800,11 +2825,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (img) {
                 img.setAttribute('referrerpolicy', 'no-referrer');
                 img.setAttribute('decoding', 'async');
-                attachImageFallback(img, [img.getAttribute('src')], {
-                    onAllFailed: () => {
-                        markListingImagesBroken(property);
-                    }
-                });
+                // Thumbnails failing should not "kill" an entire listing; just swap to a placeholder.
+                attachImageFallback(img, [img.getAttribute('src')]);
             }
         });
 
@@ -3121,7 +3143,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const bounds = [];
 
         currentProperties.forEach((property) => {
-            const propertyId = idKey(property.id);
+            const propertyId = propertyIdFor(property);
+            if (!propertyId) return;
             const latitude = Number(property.latitude);
             const longitude = Number(property.longitude);
             if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
@@ -3140,7 +3163,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             marker.on('click', () => {
-                scrollToProperty(property.id);
+                scrollToProperty(propertyId);
                 openPropertyModal(property);
             });
 
