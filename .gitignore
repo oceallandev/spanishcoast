@@ -7,7 +7,10 @@ data.json
 keep_synced.sh
 sync_xml.pl
 validate_data.py
-.github/
+.github/*
+!.github/workflows/
+!.github/workflows/*.yml
+!.github/workflows/*.yaml
 
 # Never commit private exports (PII)
 private/*

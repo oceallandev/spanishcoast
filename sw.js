@@ -172,6 +172,29 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Listing data feeds: prefer network so daily feed syncs show up immediately.
+  if (
+    url.pathname.endsWith('/data.js')
+    || url.pathname.endsWith('/custom-listings.js')
+    || url.pathname.endsWith('/inmovilla-listings.js')
+    || url.pathname.endsWith('/newbuilds-listings.js')
+    || url.pathname.endsWith('/businesses-data.js')
+    || url.pathname.endsWith('/vehicles-data.js')
+  ) {
+    event.respondWith((async () => {
+      const cache = await caches.open(CACHE_NAME);
+      try {
+        const fresh = await fetch(req);
+        if (fresh && fresh.ok) cache.put(key, fresh.clone());
+        return fresh;
+      } catch {
+        const cached = await cache.match(key);
+        return cached || new Response('', { status: 504 });
+      }
+    })());
+    return;
+  }
+
   // HTML navigations: network-first, fallback to cache (supports offline).
   if (req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html')) {
     event.respondWith((async () => {
