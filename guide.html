@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Guide | Spanish Coast Properties</title>
+    <meta name="description"
+        content="Learn how to use the Spanish Coast Properties app: search, map, save favourites, share brochures, and collaborate.">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/guide.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="App Guide | Spanish Coast Properties">
+    <meta property="og:description"
+        content="Everything you can do in the app: search, map, save favourites, share brochures, and more.">
+    <meta property="og:url" content="https://oceallandev.github.io/spanishcoast/guide.html">
+    <meta property="og:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
+
+    <meta name="theme-color" content="#030712">
+    <link rel="manifest" href="manifest.webmanifest?v=20260210v">
+    <link rel="stylesheet" href="style.css?v=20260210v">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="bg-mesh"></div>
+
+    <header class="main-header glass sticky">
+        <div class="header-inner">
+            <div class="header-left">
+                <div class="logo">
+                    <a href="index.html" aria-label="Spanish Coast Properties Home">
+                        <img src="assets/header-logo.png?v=2" alt="Spanish Coast Properties" class="main-logo"
+                            id="main-logo-img" style="cursor: pointer;">
+                    </a>
+                </div>
+                <div class="brand-info">
+                    <span class="brand-name">Spanish Coast Properties</span>
+                </div>
+                <nav class="primary-nav" id="primary-nav" aria-label="Site sections">
+                    <a class="nav-link" data-section="properties" href="properties.html">Properties</a>
+                    <a class="nav-link" data-section="businesses" href="businesses.html">Businesses</a>
+                    <a class="nav-link" data-section="vehicles" href="vehicles.html">Vehicles</a>
+                    <a class="nav-link" data-section="services" href="services.html">Services</a>
+                </nav>
+            </div>
+
+            <div class="header-right">
+                <button id="mobile-menu-btn" class="mobile-menu-btn" type="button" aria-expanded="false"
+                    aria-label="Menu">☰</button>
+                <a class="header-cta" href="account.html">Account</a>
+            </div>
+        </div>
+    </header>
+
+    <div id="mobile-menu-backdrop" class="mobile-menu-backdrop" aria-hidden="true"></div>
+    <aside id="mobile-menu" class="mobile-menu" aria-hidden="true">
+        <div class="mobile-menu-head">
+            <div class="mobile-menu-title">Spanish Coast Properties</div>
+            <button id="mobile-menu-close" class="mobile-menu-close" type="button">✕</button>
+        </div>
+        <nav class="mobile-menu-links" aria-label="Mobile menu">
+            <a href="index.html">Home</a>
+            <a href="properties.html">Properties</a>
+            <a href="businesses.html">Businesses</a>
+            <a href="vehicles.html">Vehicles</a>
+            <a href="services.html">Services</a>
+        </nav>
+        <div class="mobile-menu-foot">
+            <a class="cta-button" href="account.html">Account</a>
+            <a class="cta-button" href="tel:+34624867866">Call</a>
+        </div>
+    </aside>
+
+    <main class="site-main" id="site-main">
+        <section class="page-section catalog-section active" aria-label="App guide">
+            <div class="catalog-hero">
+                <h2>App Guide</h2>
+                <p>
+                    This is the living guide for the Spanish Coast Properties app. It is updated together with the app so it
+                    always matches the latest design and functionality.
+                </p>
+                <div class="service-tags" aria-label="Guide version">
+                    <span class="tag">Version: <span id="guide-version">…</span></span>
+                    <span class="tag">Updated: <span id="guide-updated">…</span></span>
+                    <span class="tag">Fast · Map · Share · Save</span>
+                </div>
+            </div>
+
+            <div class="catalog-hero">
+                <h3>What You Can Do (At a Glance)</h3>
+                <div class="service-grid">
+                    <a class="service-card" href="#search">
+                        <h3>Search & filter</h3>
+                        <p>Find listings fast with filters, cities, and reference search.</p>
+                    </a>
+                    <a class="service-card" href="#map">
+                        <h3>Map view</h3>
+                        <p>Explore listings geographically with clean, branded markers.</p>
+                    </a>
+                    <a class="service-card" href="#save">
+                        <h3>Save favourites</h3>
+                        <p>Build a shortlist and keep it synced to your account.</p>
+                    </a>
+                    <a class="service-card" href="#brochure">
+                        <h3>Brochures</h3>
+                        <p>Open a clean brochure page and print to PDF for sharing.</p>
+                    </a>
+                    <a class="service-card" href="#share">
+                        <h3>Share instantly</h3>
+                        <p>Copy a link, WhatsApp, Telegram, or email a listing in seconds.</p>
+                    </a>
+                    <a class="service-card" href="#account">
+                        <h3>Account & security</h3>
+                        <p>Password login, magic links, password reset, and session tools.</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="catalog-hero guide-section" id="search">
+                <h3>Search & Filters</h3>
+                <p class="muted">
+                    Use the search bar, quick city buttons, and filters to narrow results quickly.
+                </p>
+                <div class="service-tags" aria-label="Search tips">
+                    <span class="tag">Reference search (SCP-XXXX)</span>
+                    <span class="tag">Town / area</span>
+                    <span class="tag">Beds / baths / price</span>
+                    <span class="tag">Sort: newest first</span>
+                </div>
+                <ul>
+                    <li>Tip: you can paste a reference like <b>SCP-1898</b> to open the exact listing.</li>
+                    <li>Tip: use <b>Saved</b> mode to show only your shortlist.</li>
+                </ul>
+            </div>
+
+            <div class="catalog-hero guide-section" id="map">
+                <h3>Map View</h3>
+                <p class="muted">
+                    The map is designed to be practical: explore areas, then open a listing for details.
+                </p>
+                <ul>
+                    <li>Tap a marker to open the listing.</li>
+                    <li>On mobile, use the Map toggle to switch between list and map.</li>
+                    <li>Markers use icons that reflect the listing type (apartment, villa, commercial, business, etc.).</li>
+                </ul>
+            </div>
+
+            <div class="catalog-hero guide-section" id="details">
+                <h3>Listing Details</h3>
+                <p class="muted">
+                    Each listing opens with a gallery, key stats, description, features, and contact actions.
+                </p>
+                <div class="service-grid">
+                    <div class="service-card" role="note">
+                        <h3>Gallery</h3>
+                        <p>Swipe/tap through images and open full-screen.</p>
+                    </div>
+                    <div class="service-card" role="note">
+                        <h3>Mini map</h3>
+                        <p>Quick location context with a Google Maps link when available.</p>
+                    </div>
+                    <div class="service-card" role="note">
+                        <h3>Actions</h3>
+                        <p>Save, request a visit, call, copy link, and share.</p>
+                    </div>
+                    <div class="service-card" role="note">
+                        <h3>Original ref (privileged)</h3>
+                        <p>Admins/partners can see the source reference; clients only see SCP refs.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="catalog-hero guide-section" id="save">
+                <h3>Saved Favourites</h3>
+                <p class="muted">
+                    Save listings to create a shortlist. When you are signed in, your favourites sync to your account.
+                </p>
+                <ul>
+                    <li>Use <b>Saved</b> to show only favourited listings.</li>
+                    <li>As an admin, you can view the favourites inbox to see what users are saving.</li>
+                </ul>
+            </div>
+
+            <div class="catalog-hero guide-section" id="brochure">
+                <h3>Brochures (Print to PDF)</h3>
+                <p class="muted">
+                    Every listing has a brochure page designed for clean printing to PDF. It also includes share buttons and a
+                    white-label mode for collaborators.
+                </p>
+                <div class="service-tags" aria-label="Brochure features">
+                    <span class="tag">Print to PDF</span>
+                    <span class="tag">WhatsApp link</span>
+                    <span class="tag">Copy link</span>
+                    <span class="tag">White-label</span>
+                    <span class="tag">Area snapshot</span>
+                </div>
+                <ul>
+                    <li>Open the brochure from the listing and click <b>Print to PDF</b> to save a clean PDF.</li>
+                    <li>Use <b>White-label</b> when sharing with partners (removes branding/contact blocks).</li>
+                </ul>
+            </div>
+
+            <div class="catalog-hero guide-section" id="share">
+                <h3>Share (WhatsApp / Link / Email)</h3>
+                <p class="muted">
+                    Sharing is built for real-world usage: fast, clear, and consistent across devices.
+                </p>
+                <ul>
+                    <li><b>Copy link</b> is the most reliable option across all phones and browsers.</li>
+                    <li><b>WhatsApp</b> and <b>Telegram</b> are ideal for sending a brochure link to clients instantly.</li>
+                    <li>When needed, use <b>Email link</b> for structured follow-ups.</li>
+                </ul>
+            </div>
+
+            <div class="catalog-hero guide-section" id="account">
+                <h3>Account (Login, Password, Sessions)</h3>
+                <p class="muted">
+                    Your account is mainly used to sync favourites across sessions and enable role-based dashboards.
+                </p>
+                <div class="service-grid">
+                    <div class="service-card" role="note">
+                        <h3>Sign in</h3>
+                        <p>Use email + password. You can also request a magic link where available.</p>
+                    </div>
+                    <div class="service-card" role="note">
+                        <h3>Reset password</h3>
+                        <p>Use “Reset your password” from the Account page to set a new password.</p>
+                    </div>
+                    <div class="service-card" role="note">
+                        <h3>Reset login</h3>
+                        <p>If login is stuck, use “Reset login” to clear cached auth/session data.</p>
+                    </div>
+                    <div class="service-card" role="note">
+                        <h3>Offline cache</h3>
+                        <p>“Clear offline cache” forces a clean refresh of cached pages/assets.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="catalog-hero guide-section" id="roles">
+                <h3>Roles & Dashboards</h3>
+                <p class="muted">
+                    Different roles unlock different tools. If you need access (agent/agency/developer), create an account then
+                    ask an admin to assign your role.
+                </p>
+                <div class="service-tags" aria-label="Roles">
+                    <span class="tag">Client</span>
+                    <span class="tag">Collaborator</span>
+                    <span class="tag">Agent</span>
+                    <span class="tag">Agency admin</span>
+                    <span class="tag">Partner</span>
+                    <span class="tag">Developer</span>
+                    <span class="tag">Admin</span>
+                </div>
+            </div>
+
+            <div class="catalog-hero guide-section" id="admin">
+                <h3>Admin Tools (Admin Only)</h3>
+                <p class="muted">
+                    Admin tools exist for operations and privacy. Contacts and leads are stored privately (not in the public app)
+                    and are only visible to admins.
+                </p>
+                <ul>
+                    <li><b>Favourites inbox</b>: view saved listings from all users and export CSV.</li>
+                    <li><b>CRM</b>: view/import contacts and leads (PII), edit fields, export CSV.</li>
+                    <li><b>User roles</b>: assign roles once users have created their own account.</li>
+                </ul>
+            </div>
+
+            <div class="catalog-hero guide-section" id="troubleshooting">
+                <h3>Troubleshooting</h3>
+                <div class="service-grid">
+                    <div class="service-card" role="note">
+                        <h3>Sign-in stuck / timed out</h3>
+                        <p>Try “Reset login”, switch network, disable VPN/ad-block, then try again.</p>
+                    </div>
+                    <div class="service-card" role="note">
+                        <h3>Magic link rate limit</h3>
+                        <p>Wait and try again later (providers rate-limit email sends). Password login is the fastest fallback.</p>
+                    </div>
+                    <div class="service-card" role="note">
+                        <h3>Data not updating</h3>
+                        <p>Use “Clear offline cache” on the Account page to force a clean refresh.</p>
+                    </div>
+                    <div class="service-card" role="note">
+                        <h3>Diagnostics</h3>
+                        <p>Open the Account page with <b>?qa=1</b> for setup checks.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="catalog-hero">
+                <h3>Need Help?</h3>
+                <p>
+                    If you want a faster result, send us the listing reference (<b>SCP-XXXX</b>), your town/area, and your goal
+                    (buy, rent, business transfer, management).
+                </p>
+                <div class="simple-cta">
+                    <a class="cta-button" href="mailto:info@spanishcoastproperties.com?subject=App%20Guide%20-%20Help">Email</a>
+                    <a class="cta-button" href="tel:+34624867866">Call</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h3>Spanish Coast Properties</h3>
+                <p>Transparent, fast, and practical support across property, business, and lifestyle services.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <ul class="footer-links">
+                    <li><a href="properties.html">Properties</a></li>
+                    <li><a href="businesses.html">Businesses</a></li>
+                    <li><a href="vehicles.html">Vehicles</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="account.html">Account</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <ul class="footer-links">
+                    <li><a href="tel:+34624867866">+34 624 867 866</a></li>
+                    <li><a href="mailto:info@spanishcoastproperties.com">info@spanishcoastproperties.com</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
+    </footer>
+
+    <script defer src="guide.js?v=20260210v"></script>
+    <script defer src="site.js?v=20260210v"></script>
+</body>
+
+</html>
+
