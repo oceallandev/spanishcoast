@@ -3168,6 +3168,29 @@ body[data-section="properties"].map-open .map-section {
     border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.brochure-content {
+    display: grid;
+    gap: 1.2rem;
+}
+
+.brochure-content .brochure-block {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+    padding: 1.05rem 1.05rem;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.brochure-content .brochure-block h2 {
+    margin-top: 0;
+}
+
+.brochure-block--span2 {
+    grid-column: 1 / -1;
+}
+
 .brochure-block h2 {
     font-size: 1.1rem;
     font-weight: 900;
@@ -3408,6 +3431,50 @@ body[data-section="properties"].map-open .map-section {
         margin: 0 !important;
         padding: 0 !important;
         max-width: none !important;
+    }
+
+    .brochure-content {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 10mm;
+        margin-top: 4mm;
+    }
+
+    .brochure-block {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        border-top: 0 !important;
+        break-inside: avoid;
+    }
+
+    .brochure-block h2 {
+        font-size: 1rem !important;
+        margin-bottom: 3mm !important;
+    }
+
+    .brochure-highlights,
+    .brochure-area-list,
+    .brochure-features {
+        grid-template-columns: 1fr !important;
+    }
+
+    .brochure-description {
+        column-count: 2;
+        column-gap: 10mm;
+    }
+
+    .brochure-description p,
+    .brochure-description ul {
+        break-inside: avoid-column;
+    }
+
+    .brochure-gallery {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        gap: 3mm !important;
+    }
+
+    .brochure-gallery-item {
+        aspect-ratio: 4/3;
     }
 
     .brochure-price {
