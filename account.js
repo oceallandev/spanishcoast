@@ -3,6 +3,7 @@
   const statusHint = document.getElementById('status-hint');
   const authStatus = document.getElementById('auth-status');
   const clearCacheAuthBtn = document.getElementById('clear-offline-cache-auth');
+  const resetAuthBtn = document.getElementById('reset-auth-storage');
   const signOutBtn = document.getElementById('sign-out-btn');
   const authPanels = document.getElementById('auth-panels');
   const dashboardPanels = document.getElementById('dashboard-panels');
@@ -100,6 +101,12 @@
     }
   };
 
+  const AUTH_TIMEOUT_MS = 30000;
+  const MAGIC_COOLDOWN_KEY = 'scp:magic_link:cooldown_until';
+  const MAGIC_COOLDOWN_MS = 60 * 1000;
+  const MAGIC_RATE_LIMIT_COOLDOWN_MS = 3 * 60 * 1000;
+  let magicCooldownTimer = null;
+
   const clearOfflineCacheAndReload = async () => {
     setStatus('Clearing offline cache…', 'This will refresh the page.');
     try {
@@ -125,6 +132,85 @@
     } catch {
       window.location.reload();
     }
+  };
+
+  const clearAuthStorage = () => {
+    try {
+      if (!window.localStorage) return;
+      const cfg = window.SCP_CONFIG || {};
+      const url = (cfg.supabaseUrl || '').trim();
+      if (!url) return;
+      const host = new URL(url).hostname || '';
+      const ref = host.split('.')[0] || '';
+      if (!ref) return;
+      const prefix = `sb-${ref}-`;
+
+      const toDelete = [];
+      for (let i = 0; i < window.localStorage.length; i += 1) {
+        const k = window.localStorage.key(i);
+        if (!k) continue;
+        if (k.startsWith(prefix)) toDelete.push(k);
+      }
+      toDelete.forEach((k) => window.localStorage.removeItem(k));
+
+      // Also clear local cooldowns so the user isn't locked out by mistake.
+      window.localStorage.removeItem(MAGIC_COOLDOWN_KEY);
+    } catch {
+      // ignore
+    }
+  };
+
+  const resetAuthStorageAndReload = async () => {
+    setStatus('Resetting login…', 'Clearing saved session data and offline cache.');
+    clearAuthStorage();
+    await clearOfflineCacheAndReload();
+  };
+
+  const readMagicCooldownUntil = () => {
+    try {
+      if (!window.localStorage) return 0;
+      const raw = window.localStorage.getItem(MAGIC_COOLDOWN_KEY);
+      const n = raw ? Number(raw) : 0;
+      return Number.isFinite(n) ? n : 0;
+    } catch {
+      return 0;
+    }
+  };
+
+  const setMagicCooldown = (ms) => {
+    try {
+      if (!window.localStorage) return;
+      window.localStorage.setItem(MAGIC_COOLDOWN_KEY, String(Date.now() + Math.max(0, Number(ms) || 0)));
+    } catch {
+      // ignore
+    }
+  };
+
+  const remainingMagicCooldownMs = () => Math.max(0, readMagicCooldownUntil() - Date.now());
+
+  const updateMagicCooldownUi = () => {
+    if (!magicForm) return;
+    const btn = magicForm.querySelector('button[type="submit"]');
+    if (!btn) return;
+    if (!btn.dataset.defaultText) btn.dataset.defaultText = btn.textContent || 'Send magic link';
+    if (btn.dataset.busy === '1') return;
+
+    const remaining = remainingMagicCooldownMs();
+    if (remaining > 0) {
+      btn.disabled = true;
+      btn.textContent = `Wait ${Math.ceil(remaining / 1000)}s`;
+      if (!magicCooldownTimer) {
+        magicCooldownTimer = window.setInterval(updateMagicCooldownUi, 1000);
+      }
+      return;
+    }
+
+    if (magicCooldownTimer) {
+      window.clearInterval(magicCooldownTimer);
+      magicCooldownTimer = null;
+    }
+    btn.disabled = false;
+    btn.textContent = btn.dataset.defaultText;
   };
 
   async function getProfileInfo(client, userId) {
@@ -292,7 +378,7 @@
         try {
           const { error } = await withTimeout(
             client.from('profiles').update({ role }).eq('user_id', userId),
-            15000,
+            AUTH_TIMEOUT_MS,
             'Update role'
           );
           if (error) {
@@ -434,9 +520,42 @@
     addDiag(urlOk ? 'ok' : 'bad', 'config: supabaseUrl', urlOk ? cfg.supabaseUrl : 'Missing. Set it in config.js.');
     addDiag(keyOk ? 'ok' : 'bad', 'config: anon/publishable key', keyOk ? `${String(cfg.supabaseAnonKey).slice(0, 16)}…` : 'Missing. Set it in config.js.');
 
+    const online = (typeof navigator !== 'undefined') ? navigator.onLine : null;
+    addDiag(online === false ? 'warn' : 'ok', 'navigator.onLine', online === false ? 'Offline (auth requests will fail).' : 'Online');
+
     const client = getClient();
     addDiag(client ? 'ok' : 'bad', 'client init', client ? 'window.scpSupabase created.' : 'Supabase client not initialised (check config + CDN).');
     if (!client) return;
+
+    // Direct ping: helps identify blocked/slow networks (VPN/ad-block) without needing a login.
+    try {
+      if (typeof fetch === 'function' && typeof AbortController !== 'undefined' && urlOk && keyOk) {
+        const t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+        const baseUrl = String(cfg.supabaseUrl).replace(/\/+$/, '');
+        const controller = new AbortController();
+        const timeoutId = window.setTimeout(() => controller.abort(), 8000);
+        let resp;
+        try {
+          resp = await fetch(`${baseUrl}/auth/v1/health`, {
+            method: 'GET',
+            headers: {
+              apikey: cfg.supabaseAnonKey,
+              Authorization: `Bearer ${cfg.supabaseAnonKey}`
+            },
+            signal: controller.signal
+          });
+        } finally {
+          window.clearTimeout(timeoutId);
+        }
+        const t1 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+        const ms = Math.round(Math.max(0, t1 - t0));
+        addDiag(resp.ok ? 'ok' : 'warn', 'Supabase auth ping', resp.ok ? `OK (${ms}ms)` : `HTTP ${resp.status} (${ms}ms)`);
+      } else {
+        addDiag('warn', 'Supabase auth ping', 'Skipped (browser lacks fetch/AbortController).');
+      }
+    } catch (error) {
+      addDiag('bad', 'Supabase auth ping', (error && error.message) ? error.message : String(error));
+    }
 
     let session;
     try {
@@ -523,7 +642,7 @@
         btn.textContent = 'Signing in…';
       }
       try {
-        const { error } = await withTimeout(client.auth.signInWithPassword({ email, password }), 15000, 'Sign-in');
+        const { error } = await withTimeout(client.auth.signInWithPassword({ email, password }), AUTH_TIMEOUT_MS, 'Sign-in');
         if (error) {
           setStatus('Sign-in failed', error.message || 'Please try again.');
           return;
@@ -531,7 +650,13 @@
         await refresh();
         await runDiagnostics();
       } catch (error) {
-        setStatus('Sign-in failed', (error && error.message) ? error.message : String(error));
+        const msg = (error && error.message) ? String(error.message) : String(error);
+        const lower = msg.toLowerCase();
+        if (lower.includes('timed out') || lower.includes('abort')) {
+          setStatus('Sign-in failed', 'Sign-in timed out. This is usually a network/VPN/ad-block issue reaching Supabase. Try “Reset login”, or switch network, then try again (open ?qa=1 for diagnostics).');
+        } else {
+          setStatus('Sign-in failed', msg);
+        }
       } finally {
         if (btn) {
           btn.disabled = false;
@@ -566,7 +691,7 @@
           email,
           password,
           options: { emailRedirectTo: redirectTo }
-        }), 15000, 'Sign-up');
+        }), AUTH_TIMEOUT_MS, 'Sign-up');
         if (error) {
           setStatus('Sign-up failed', error.message || 'Please try again.');
           return;
@@ -595,31 +720,55 @@
       }
       const email = (magicEmail && magicEmail.value ? magicEmail.value : '').trim();
       if (!email) return;
+
+      const remaining = remainingMagicCooldownMs();
+      if (remaining > 0) {
+        setStatus('Please wait', `Magic links are rate-limited. Try again in ${Math.ceil(remaining / 1000)}s.`);
+        updateMagicCooldownUi();
+        return;
+      }
+
       setStatus('Sending magic link…');
       const btn = magicForm.querySelector('button[type=\"submit\"]');
       const prev = btn ? btn.textContent : '';
       if (btn) {
         btn.disabled = true;
         btn.textContent = 'Sending…';
+        btn.dataset.busy = '1';
       }
       const redirectTo = `${window.location.origin}${window.location.pathname}`;
       try {
         const { error } = await withTimeout(client.auth.signInWithOtp({
           email,
           options: { emailRedirectTo: redirectTo }
-        }), 15000, 'Magic link');
+        }), AUTH_TIMEOUT_MS, 'Magic link');
         if (error) {
-          setStatus('Failed to send link', error.message || 'Please try again.');
+          const msg = error && error.message ? String(error.message) : 'Please try again.';
+          if (msg.toLowerCase().includes('rate limit')) {
+            setMagicCooldown(MAGIC_RATE_LIMIT_COOLDOWN_MS);
+            setStatus('Failed to send link', 'Email rate limit exceeded. Wait a few minutes and try again. (To remove strict limits and improve deliverability, set a custom SMTP provider in Supabase Auth settings.)');
+          } else {
+            setStatus('Failed to send link', msg);
+          }
           return;
         }
+        setMagicCooldown(MAGIC_COOLDOWN_MS);
         setStatus('Link sent', 'Check your inbox and click the sign-in link. If it does not log you in, add this page to Supabase Auth Redirect URLs.');
       } catch (error) {
-        setStatus('Failed to send link', (error && error.message) ? error.message : String(error));
+        const msg = (error && error.message) ? String(error.message) : String(error);
+        const lower = msg.toLowerCase();
+        if (lower.includes('timed out') || lower.includes('abort')) {
+          setStatus('Failed to send link', 'Magic link timed out. This is usually a network/VPN/ad-block issue reaching Supabase. Try “Reset login”, or switch network, then try again.');
+        } else {
+          setStatus('Failed to send link', msg);
+        }
       } finally {
         if (btn) {
           btn.disabled = false;
           btn.textContent = prev || 'Send magic link';
+          delete btn.dataset.busy;
         }
+        updateMagicCooldownUi();
       }
     });
   }
@@ -642,6 +791,10 @@
     clearCacheAuthBtn.addEventListener('click', clearOfflineCacheAndReload);
   }
 
+  if (resetAuthBtn) {
+    resetAuthBtn.addEventListener('click', resetAuthStorageAndReload);
+  }
+
   const client = getClient();
   if (client) {
     client.auth.onAuthStateChange(async () => {
@@ -659,4 +812,5 @@
   }
 
   ensureLoaded();
+  updateMagicCooldownUi();
 })();
