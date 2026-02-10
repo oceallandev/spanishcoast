@@ -214,6 +214,16 @@ def parse_kyero_v3_properties(
         desc_block = _child(el, "desc")
         desc = _pick_lang(desc_block, prefer_langs) if desc_block is not None else ""
         desc = desc or "Property details coming soon."
+        # Some Kyero/RedSp exports append a numeric supplier/account ID as a final line (e.g. "1073").
+        # Strip it so it never leaks into the public UI.
+        m = re.search(r"(?:&#13;|\r?\n)+\s*(\d{3,6})\s*$", desc)
+        if m:
+            try:
+                n = int(m.group(1))
+            except Exception:
+                n = None
+            if n is not None and n < 1900:
+                desc = desc[: m.start()].strip()
 
         url_block = _child(el, "url")
         source_url = _pick_lang(url_block, prefer_langs) if url_block is not None else ""
@@ -388,4 +398,3 @@ def main(argv: List[str]) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main(sys.argv[1:]))
-

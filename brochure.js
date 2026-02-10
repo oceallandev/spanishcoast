@@ -41,6 +41,12 @@
   const escapeHtml = (value) =>
     toText(value).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
+  const decodeHtmlEntities = (value) => {
+    const parser = document.createElement('textarea');
+    parser.innerHTML = toText(value);
+    return parser.value;
+  };
+
   const normalize = (value) =>
     toText(value)
       .toLowerCase()
@@ -162,15 +168,30 @@
   };
 
   const formatDescriptionHtml = (description) => {
-    const text = toText(description);
+    const text = decodeHtmlEntities(description)
+      .replace(/&#13;/g, '\n')
+      .replace(/\r\n?/g, '\n')
+      .trim();
     if (!text) return `<p class="muted">${escapeHtml(t('brochure.details_soon', 'Details coming soon.'))}</p>`;
 
     // Split into clean paragraphs and simple bullet blocks.
     const lines = text
-      .replace(/\r/g, '')
       .split('\n')
       .map((l) => l.trim())
       .filter(Boolean);
+
+    // Some Kyero/RedSp feeds append a numeric supplier/account ID as a final line (e.g. "1073").
+    while (lines.length > 0) {
+      const last = lines[lines.length - 1];
+      if (!/^\d{3,6}$/.test(last)) break;
+      const n = Number(last);
+      if (!Number.isFinite(n) || n >= 1900) break;
+      lines.pop();
+    }
+
+    if (!lines.length) {
+      return `<p class="muted">${escapeHtml(t('brochure.details_soon', 'Details coming soon.'))}</p>`;
+    }
 
     const blocks = [];
     let list = [];

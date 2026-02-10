@@ -192,11 +192,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const markerMap = new Map();
     let propertiesInitialized = false;
     let activeSection = 'home';
-    let miniMap = null;
-    let miniMapMarker = null;
-    let activeModalPropertyId = '';
-    let preModalScrollY = 0;
-    let lightboxIndex = 0;
+	    let miniMap = null;
+	    let miniMapMarker = null;
+	    let activeModalPropertyId = '';
+	    let preModalScrollTarget = 'window'; // 'window' | 'ui'
+	    let preModalScrollY = 0;
+	    let lightboxIndex = 0;
     let lightboxTouchStartX = null;
     let lightboxTouchStartY = null;
     let lightboxTouchStartTime = 0;
@@ -968,6 +969,21 @@ document.addEventListener('DOMContentLoaded', () => {
             .split('\n')
             .map((line) => line.trim())
             .filter(Boolean);
+
+        // Some Kyero/RedSp feeds append a numeric supplier/account ID as a final line (e.g. "1073").
+        // Strip that so it never leaks into the visible description.
+        while (lines.length > 0) {
+            const last = lines[lines.length - 1];
+            if (!/^\d{3,6}$/.test(last)) break;
+            const n = Number(last);
+            // Keep real years (e.g. 2024) but drop small IDs.
+            if (!Number.isFinite(n) || n >= 1900) break;
+            lines.pop();
+        }
+
+        if (!lines.length) {
+            return '<p>Property details coming soon.</p>';
+        }
 
         const blocks = [];
         let listItems = [];
@@ -2634,7 +2650,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         modal.style.display = 'block';
-        preModalScrollY = window.scrollY || 0;
+        // Properties/new-build pages scroll inside `.content-section`, not the window.
+        // Track which scroll container we should restore to when closing the modal.
+        const scrollEl = uiScrollEl || (propertiesSection ? propertiesSection.querySelector('.content-section') : null);
+        if (scrollEl && typeof scrollEl.scrollTop === 'number') {
+            preModalScrollTarget = 'ui';
+            preModalScrollY = scrollEl.scrollTop || 0;
+        } else {
+            preModalScrollTarget = 'window';
+            preModalScrollY = window.scrollY || 0;
+        }
         setBodyOverflow('hidden');
 
         const modalFavBtn = modalDetails.querySelector('[data-fav-toggle]');
@@ -2929,7 +2954,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Keep the list position stable after closing (especially on mobile Safari).
         window.setTimeout(() => {
             try {
-                window.scrollTo(0, preModalScrollY || 0);
+                if (preModalScrollTarget === 'ui' && uiScrollEl) {
+                    uiScrollEl.scrollTop = preModalScrollY || 0;
+                } else {
+                    window.scrollTo(0, preModalScrollY || 0);
+                }
             } catch (error) {
                 // ignore
             }
@@ -3302,19 +3331,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     window.addEventListener('popstate', () => {
-        const url = new URL(window.location.href);
-        const ref = toText(url.searchParams.get('ref')).trim();
-        const section = toText(url.searchParams.get('section')).trim();
-        const path = toText(window.location.pathname).toLowerCase();
-        const inferredSection = path.endsWith('properties.html')
-            ? 'properties'
-            : path.endsWith('businesses.html')
-                ? 'businesses'
-                : path.endsWith('vehicles.html')
-                    ? 'vehicles'
-                    : path.endsWith('services.html')
-                        ? 'services'
-                        : 'home';
+	        const url = new URL(window.location.href);
+	        const ref = toText(url.searchParams.get('ref')).trim();
+	        const section = toText(url.searchParams.get('section')).trim();
+	        const path = toText(window.location.pathname).toLowerCase();
+	        const inferredSection = (path.endsWith('properties.html') || path.endsWith('new-builds.html'))
+	            ? 'properties'
+	            : path.endsWith('businesses.html')
+	                ? 'businesses'
+	                : path.endsWith('vehicles.html')
+	                    ? 'vehicles'
+	                    : path.endsWith('services.html')
+	                        ? 'services'
+	                        : 'home';
         const next = ref ? 'properties' : (section || inferredSection || 'home');
         setActiveSection(next, { pushUrl: false });
 
