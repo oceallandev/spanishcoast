@@ -11,15 +11,15 @@
     <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/account.html">
 
     <meta name="theme-color" content="#030712">
-    <link rel="manifest" href="manifest.webmanifest?v=20260210k">
-    <link rel="stylesheet" href="style.css?v=20260210k">
+    <link rel="manifest" href="manifest.webmanifest?v=20260210l">
+    <link rel="stylesheet" href="style.css?v=20260210l">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script defer src="config.js?v=20260210k"></script>
-    <script defer src="supabase-init.js?v=20260210k"></script>
+    <script defer src="config.js?v=20260210l"></script>
+    <script defer src="supabase-init.js?v=20260210l"></script>
 </head>
 
 <body data-section="account">
@@ -88,11 +88,11 @@
                     <form id="sign-in-form" class="form-grid">
                         <label>
                             <span>Email</span>
-                            <input id="sign-in-email" type="email" autocomplete="email" required placeholder="you@email.com">
+                            <input id="sign-in-email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required placeholder="you@email.com">
                         </label>
                         <label>
                             <span>Password</span>
-                            <input id="sign-in-password" type="password" autocomplete="current-password" placeholder="Your password">
+                            <input id="sign-in-password" name="password" type="password" autocomplete="current-password" placeholder="Your password">
                         </label>
                         <button class="cta-button" type="submit">Sign in</button>
                     </form>
@@ -103,7 +103,7 @@
                     <form id="magic-link-form" class="form-grid">
                         <label>
                             <span>Email</span>
-                            <input id="magic-email" type="email" autocomplete="email" required placeholder="you@email.com">
+                            <input id="magic-email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required placeholder="you@email.com">
                         </label>
                         <button class="cta-button" type="submit">Send magic link</button>
                     </form>
@@ -115,11 +115,11 @@
                     <form id="sign-up-form" class="form-grid">
                         <label>
                             <span>Email</span>
-                            <input id="sign-up-email" type="email" autocomplete="email" required placeholder="you@email.com">
+                            <input id="sign-up-email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required placeholder="you@email.com">
                         </label>
                         <label>
                             <span>Password</span>
-                            <input id="sign-up-password" type="password" autocomplete="new-password" required minlength="8"
+                            <input id="sign-up-password" name="password" type="password" autocomplete="new-password" required minlength="8"
                                 placeholder="Minimum 8 characters">
                         </label>
                         <button class="cta-button" type="submit">Create account</button>
@@ -243,8 +243,8 @@
         <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
     </footer>
 
-    <script defer src="account.js?v=20260210k"></script>
-    <script defer src="site.js?v=20260210k"></script>
+    <script defer src="account.js?v=20260210l"></script>
+    <script defer src="site.js?v=20260210l"></script>
 </body>
 
 </html>
