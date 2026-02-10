@@ -720,6 +720,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return positive;
     }
 
+    function isExplicitNewBuild(property) {
+        try {
+            const explicit = property && (property.new_build ?? property.newBuild ?? property.is_new_build ?? property.isNewBuild);
+            return explicit === true
+                || explicit === '1'
+                || explicit === 1
+                || String(explicit).toLowerCase() === 'true'
+                || String(explicit).toLowerCase() === 'yes';
+        } catch (error) {
+            return false;
+        }
+    }
+
     function isInvestmentDeal(property) {
         const typeNorm = normalize(property && property.type);
         const text = normalize(property && property.description);
@@ -1630,6 +1643,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function filterProperties() {
         const loweredSearch = normalize(searchQuery);
         const loweredRef = normalize(refQuery);
+        const isNewBuildsPage = toText(window.location && window.location.pathname).toLowerCase().endsWith('new-builds.html');
 
         currentProperties = allProperties.filter((property) => {
             const ref = normalize(property.ref);
@@ -1650,7 +1664,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (selectedType !== 'all') {
                 const selectedNorm = normalize(selectedType);
                 if (selectedNorm === 'new build') {
-                    matchesType = isNewBuild(property);
+                    // On the dedicated New Builds page we require an explicit new-build flag coming from the feed.
+                    // This avoids showing resale listings that match the keyword heuristics.
+                    matchesType = isNewBuildsPage ? isExplicitNewBuild(property) : isNewBuild(property);
                 } else if (selectedNorm === 'investment') {
                     matchesType = isInvestmentDeal(property);
                 } else if (selectedNorm === 'apartment') {
