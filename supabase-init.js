@@ -24,6 +24,79 @@
     }
   };
 
+  const makeIdbStorage = (dbName, storeName) => {
+    const openDb = () => new Promise((resolve, reject) => {
+      try {
+        if (!window.indexedDB || typeof window.indexedDB.open !== 'function') {
+          reject(new Error('indexedDB not available'));
+          return;
+        }
+        const req = window.indexedDB.open(dbName, 1);
+        req.onupgradeneeded = () => {
+          try {
+            const db = req.result;
+            if (!db.objectStoreNames.contains(storeName)) db.createObjectStore(storeName);
+          } catch {
+            // ignore
+          }
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error || new Error('indexedDB open failed'));
+      } catch (e) {
+        reject(e);
+      }
+    });
+
+    // Cache the open promise so we don't open a new connection per operation.
+    let dbP = null;
+    const db = () => {
+      if (!dbP) dbP = openDb();
+      return dbP;
+    };
+
+    const withStore = async (mode, fn) => {
+      try {
+        const d = await db();
+        const tx = d.transaction(storeName, mode);
+        const store = tx.objectStore(storeName);
+        return await fn(store);
+      } catch {
+        return null;
+      }
+    };
+
+    const reqToPromise = (req) => new Promise((resolve) => {
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => resolve(null);
+    });
+
+    return {
+      getItem: async (key) =>
+        await withStore('readonly', async (store) => {
+          const req = store.get(key);
+          const res = await reqToPromise(req);
+          return res == null ? null : String(res);
+        }),
+      setItem: async (key, value) => {
+        await withStore('readwrite', async (store) => {
+          const req = store.put(String(value), key);
+          await reqToPromise(req);
+          return null;
+        });
+      },
+      removeItem: async (key) => {
+        await withStore('readwrite', async (store) => {
+          const req = store.delete(key);
+          await reqToPromise(req);
+          return null;
+        });
+      }
+    };
+  };
+
+  const IDB_DB_NAME = 'scp-supabase-auth';
+  const IDB_STORE_NAME = 'kv';
+
   let safeStorage = null;
   let safeStorageType = '';
   const ls = getStorage('localStorage');
@@ -35,6 +108,10 @@
     if (storageWritable(ss)) {
       safeStorage = ss;
       safeStorageType = 'sessionStorage';
+    } else if (typeof window !== 'undefined' && window.indexedDB) {
+      // Final fallback: IndexedDB. Useful for browsers that block local/session storage in strict/private modes.
+      safeStorage = makeIdbStorage(IDB_DB_NAME, IDB_STORE_NAME);
+      safeStorageType = 'indexedDB';
     }
   }
 
@@ -43,7 +120,11 @@
       const status = {
         enabled: Boolean(enabled),
         error: error || null,
-        storage: safeStorageType || 'none'
+        storage: safeStorageType || 'none',
+        persistSession: Boolean(safeStorage),
+        idb: safeStorageType === 'indexedDB'
+          ? { dbName: IDB_DB_NAME, storeName: IDB_STORE_NAME }
+          : null
       };
       window.scpSupabaseStatus = status;
       window.dispatchEvent(new CustomEvent('scp:supabase:ready', { detail: status }));

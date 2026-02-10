@@ -156,7 +156,6 @@
 
   const clearAuthStorage = () => {
     try {
-      if (!window.localStorage) return;
       const cfg = window.SCP_CONFIG || {};
       const url = (cfg.supabaseUrl || '').trim();
       if (!url) return;
@@ -165,16 +164,34 @@
       if (!ref) return;
       const prefix = `sb-${ref}-`;
 
-      const toDelete = [];
-      for (let i = 0; i < window.localStorage.length; i += 1) {
-        const k = window.localStorage.key(i);
-        if (!k) continue;
-        if (k.startsWith(prefix)) toDelete.push(k);
+      const clearPrefix = (storage) => {
+        if (!storage) return;
+        const toDelete = [];
+        for (let i = 0; i < storage.length; i += 1) {
+          const k = storage.key(i);
+          if (!k) continue;
+          if (k.startsWith(prefix)) toDelete.push(k);
+        }
+        toDelete.forEach((k) => storage.removeItem(k));
+      };
+
+      try { clearPrefix(window.localStorage); } catch { /* ignore */ }
+      try { clearPrefix(window.sessionStorage); } catch { /* ignore */ }
+
+      // IndexedDB fallback storage (used in strict/private modes). Best effort.
+      try {
+        const st = window.scpSupabaseStatus || {};
+        const dbName = st && st.idb && st.idb.dbName ? String(st.idb.dbName) : '';
+        if (dbName && window.indexedDB && typeof window.indexedDB.deleteDatabase === 'function') {
+          window.indexedDB.deleteDatabase(dbName);
+        }
+      } catch {
+        // ignore
       }
-      toDelete.forEach((k) => window.localStorage.removeItem(k));
 
       // Also clear local cooldowns so the user isn't locked out by mistake.
-      window.localStorage.removeItem(MAGIC_COOLDOWN_KEY);
+      try { window.localStorage && window.localStorage.removeItem(MAGIC_COOLDOWN_KEY); } catch { /* ignore */ }
+      try { window.sessionStorage && window.sessionStorage.removeItem(MAGIC_COOLDOWN_KEY); } catch { /* ignore */ }
     } catch {
       // ignore
     }
@@ -635,6 +652,20 @@
     const client = getClient();
     addDiag(client ? 'ok' : 'bad', 'client init', client ? 'window.scpSupabase created.' : 'Supabase client not initialised (check config + CDN).');
     if (!client) return;
+
+    try {
+      const st = window.scpSupabaseStatus || {};
+      const storage = st && st.storage ? String(st.storage) : 'unknown';
+      const persist = st && st.persistSession === true;
+      const detail = `storage=${storage} · persistSession=${persist ? 'true' : 'false'}`;
+      const level = (storage && storage !== 'none') ? 'ok' : 'warn';
+      const extra = storage === 'none'
+        ? ' Your browser is blocking website storage, so you will be signed out when you change pages. Turn off Private mode / allow website data, then use Reset login.'
+        : '';
+      addDiag(level, 'Auth storage', `${detail}.${extra}`);
+    } catch {
+      // ignore
+    }
 
     // Direct ping: helps identify blocked/slow networks (VPN/ad-block) without needing a login.
     try {
