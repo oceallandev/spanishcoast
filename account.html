@@ -11,16 +11,16 @@
     <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/account.html">
 
     <meta name="theme-color" content="#030712">
-    <link rel="manifest" href="manifest.webmanifest?v=20260210zk">
-    <link rel="stylesheet" href="style.css?v=20260210zk">
-    <script defer src="i18n.js?v=20260210zk"></script>
+    <link rel="manifest" href="manifest.webmanifest?v=20260210zn">
+    <link rel="stylesheet" href="style.css?v=20260210zn">
+    <script defer src="i18n.js?v=20260210zn"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script defer src="config.js?v=20260210zk"></script>
-    <script defer src="supabase-init.js?v=20260210zk"></script>
+    <script defer src="config.js?v=20260210zn"></script>
+    <script defer src="supabase-init.js?v=20260210zn"></script>
 </head>
 
 <body data-section="account">
@@ -83,86 +83,86 @@
 
 	            <div class="glass panel auth-status" id="auth-status" aria-live="polite" style="display:none"></div>
 	            <div class="auth-actions" id="auth-actions">
-	                <button id="clear-offline-cache-auth" class="cta-button cta-button--outline" type="button">Clear offline cache</button>
-	                <button id="reset-auth-storage" class="cta-button cta-button--outline" type="button">Reset login</button>
+	                <button id="clear-offline-cache-auth" class="cta-button cta-button--outline" type="button" data-i18n="account.actions.clear_offline_cache">Clear offline cache</button>
+	                <button id="reset-auth-storage" class="cta-button cta-button--outline" type="button" data-i18n="account.actions.reset_login">Reset login</button>
 	            </div>
 
 	            <div class="page-grid" id="auth-panels">
 	                <div class="glass panel">
-	                    <h2>Sign in</h2>
+	                    <h2 data-i18n="account.signin.title">Sign in</h2>
 	                    <form id="sign-in-form" class="form-grid">
 	                        <label>
-                            <span>Email</span>
-                            <input id="sign-in-email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required placeholder="you@email.com">
+                            <span data-i18n="account.field.email">Email</span>
+                            <input id="sign-in-email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required placeholder="you@email.com" data-i18n-placeholder="account.placeholder.email">
                         </label>
                         <label>
-                            <span>Password</span>
-                            <input id="sign-in-password" name="password" type="password" autocomplete="current-password" placeholder="Your password">
+                            <span data-i18n="account.field.password">Password</span>
+                            <input id="sign-in-password" name="password" type="password" autocomplete="current-password" placeholder="Your password" data-i18n-placeholder="account.field.password_current">
 	                        </label>
-	                        <button class="cta-button" type="submit">Sign in</button>
+	                        <button class="cta-button" type="submit" data-i18n="account.signin.button">Sign in</button>
 	                    </form>
 
 	                    <div class="divider"></div>
 
-	                    <h3>Reset your password</h3>
+	                    <h3 data-i18n="account.reset.title">Reset your password</h3>
 	                    <form id="reset-password-form" class="form-grid">
 	                        <label>
-	                            <span>Email</span>
+	                            <span data-i18n="account.field.email">Email</span>
 	                            <input id="reset-email" name="email" type="email" autocomplete="username" inputmode="email"
-	                                autocapitalize="none" spellcheck="false" required placeholder="you@email.com">
+	                                autocapitalize="none" spellcheck="false" required placeholder="you@email.com" data-i18n-placeholder="account.placeholder.email">
 	                        </label>
-	                        <button class="cta-button cta-button--outline" type="submit">Send reset link</button>
+	                        <button class="cta-button cta-button--outline" type="submit" data-i18n="account.reset.button">Send reset link</button>
 	                    </form>
-	                    <p class="muted">We will email you a secure link to choose a new password.</p>
+	                    <p class="muted" data-i18n="account.reset.note">We will email you a secure link to choose a new password.</p>
 
 	                    <div class="divider"></div>
 
-	                    <h3>Or sign in with a magic link</h3>
+	                    <h3 data-i18n="account.magic.title">Or sign in with a magic link</h3>
 	                    <form id="magic-link-form" class="form-grid">
 	                        <label>
-	                            <span>Email</span>
-                            <input id="magic-email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required placeholder="you@email.com">
+	                            <span data-i18n="account.field.email">Email</span>
+                            <input id="magic-email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required placeholder="you@email.com" data-i18n-placeholder="account.placeholder.email">
                         </label>
-                        <button class="cta-button" type="submit">Send magic link</button>
+                        <button class="cta-button" type="submit" data-i18n="account.magic.button">Send magic link</button>
                     </form>
-	                    <p class="muted">Check your inbox and click the link to sign in.</p>
+	                    <p class="muted" data-i18n="account.magic.note">Check your inbox and click the link to sign in.</p>
 	                </div>
 
 	                <div class="glass panel">
-                    <h2>Create account</h2>
+                    <h2 data-i18n="account.signup.title">Create account</h2>
                     <form id="sign-up-form" class="form-grid">
                         <label>
-                            <span>Email</span>
-                            <input id="sign-up-email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required placeholder="you@email.com">
+                            <span data-i18n="account.field.email">Email</span>
+                            <input id="sign-up-email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required placeholder="you@email.com" data-i18n-placeholder="account.placeholder.email">
                         </label>
                         <label>
-                            <span>Password</span>
+                            <span data-i18n="account.field.password">Password</span>
                             <input id="sign-up-password" name="password" type="password" autocomplete="new-password" required minlength="8"
-                                placeholder="Minimum 8 characters">
+                                placeholder="Minimum 8 characters" data-i18n-placeholder="account.field.password_min">
                         </label>
-                        <button class="cta-button" type="submit">Create account</button>
+                        <button class="cta-button" type="submit" data-i18n="account.signup.button">Create account</button>
                     </form>
-	                    <p class="muted">We use your email only for login and service updates you request.</p>
+	                    <p class="muted" data-i18n="account.signup.note">We use your email only for login and service updates you request.</p>
 	                </div>
 	            </div>
 
 	            <div class="glass panel auth-recovery" id="password-recovery-panel" style="display:none">
-	                <h2>Set a new password</h2>
-	                <p class="muted">Choose a strong password (minimum 8 characters). You will stay signed in after updating.</p>
+	                <h2 data-i18n="account.recovery.title">Set a new password</h2>
+	                <p class="muted" data-i18n="account.recovery.subtitle">Choose a strong password (minimum 8 characters). You will stay signed in after updating.</p>
 	                <form id="password-recovery-form" class="form-grid">
 	                    <label>
-	                        <span>New password</span>
+	                        <span data-i18n="account.recovery.new_password">New password</span>
 	                        <input id="recovery-password" name="password" type="password" autocomplete="new-password" required minlength="8"
-	                            placeholder="Minimum 8 characters">
+	                            placeholder="Minimum 8 characters" data-i18n-placeholder="account.field.password_min">
 	                    </label>
 	                    <label>
-	                        <span>Confirm new password</span>
+	                        <span data-i18n="account.recovery.confirm_password">Confirm new password</span>
 	                        <input id="recovery-password2" name="password2" type="password" autocomplete="new-password" required minlength="8"
-	                            placeholder="Repeat the password">
+	                            placeholder="Repeat the password" data-i18n-placeholder="account.field.password_repeat">
 	                    </label>
 	                    <div class="form-actions">
-	                        <button class="cta-button" type="submit">Update password</button>
-	                        <button class="cta-button cta-button--outline" id="recovery-cancel" type="button">Cancel</button>
+	                        <button class="cta-button" type="submit" data-i18n="account.recovery.update">Update password</button>
+	                        <button class="cta-button cta-button--outline" id="recovery-cancel" type="button" data-i18n="account.recovery.cancel">Cancel</button>
 	                    </div>
 	                </form>
 	            </div>
@@ -171,8 +171,8 @@
 	                <div class="glass panel account-welcome" id="account-status" aria-live="polite">
 	                    <div class="account-welcome-top">
 	                        <div>
-                            <div class="status-title">Dashboard</div>
-                            <div class="status-text" id="status-text">Connecting…</div>
+                            <div class="status-title" data-i18n="account.dashboard.title">Dashboard</div>
+                            <div class="status-text" id="status-text" data-i18n="account.dashboard.connecting">Connecting…</div>
                             <div class="muted" id="status-hint"></div>
                         </div>
                         <div class="account-welcome-actions">
@@ -180,76 +180,76 @@
                                 <span class="role-badge" id="dash-role">Client</span>
                             </div>
                             <div class="status-actions">
-                                <a class="cta-button cta-button--outline" href="properties.html">Browse</a>
-                                <a class="cta-button cta-button--outline" href="properties.html?saved=1">Saved</a>
-                                <button id="sign-out-btn" class="cta-button cta-button--outline" type="button" disabled>Sign out</button>
+                                <a class="cta-button cta-button--outline" href="properties.html" data-i18n="account.dashboard.browse">Browse</a>
+                                <a class="cta-button cta-button--outline" href="properties.html?saved=1" data-i18n="account.dashboard.saved">Saved</a>
+                                <button id="sign-out-btn" class="cta-button cta-button--outline" type="button" disabled data-i18n="account.dashboard.sign_out">Sign out</button>
                             </div>
                         </div>
                     </div>
                     <div style="margin-top:0.8rem; display:flex; gap:0.6rem; flex-wrap:wrap;">
-                        <button id="clear-offline-cache" class="cta-button cta-button--outline" type="button">Clear offline cache</button>
+                        <button id="clear-offline-cache" class="cta-button cta-button--outline" type="button" data-i18n="account.actions.clear_offline_cache">Clear offline cache</button>
                     </div>
                 </div>
 
 	                <div class="account-tiles" aria-label="Account shortcuts">
 	                    <a class="glass panel account-tile" href="properties.html?saved=1">
-	                        <div class="account-tile-k">Saved listings</div>
-	                        <div class="account-tile-v"><span id="dash-saved-count">0</span> saved</div>
-	                        <div class="muted">Open your shortlist and share it instantly.</div>
+	                        <div class="account-tile-k" data-i18n="account.tiles.saved_listings">Saved listings</div>
+	                        <div class="account-tile-v"><span id="dash-saved-count">0</span> <span data-i18n="account.tiles.saved_word">saved</span></div>
+	                        <div class="muted" data-i18n="account.tiles.saved_desc">Open your shortlist and share it instantly.</div>
 	                    </a>
 	                    <a class="glass panel account-tile" href="properties.html">
-	                        <div class="account-tile-k">Browse</div>
-	                        <div class="account-tile-v">Find your next place</div>
-	                        <div class="muted">Fast filters, accurate map, and shareable refs.</div>
+	                        <div class="account-tile-k" data-i18n="account.tiles.browse">Browse</div>
+	                        <div class="account-tile-v" data-i18n="account.tiles.browse_desc_title">Find your next place</div>
+	                        <div class="muted" data-i18n="account.tiles.browse_desc">Fast filters, accurate map, and shareable refs.</div>
 	                    </a>
 	                    <a class="glass panel account-tile" href="guide.html">
-	                        <div class="account-tile-k">Guide</div>
-	                        <div class="account-tile-v">How to use the app</div>
-	                        <div class="muted">All features, benefits, and quick tips in one place.</div>
+	                        <div class="account-tile-k" data-i18n="account.tiles.guide">Guide</div>
+	                        <div class="account-tile-v" data-i18n="account.tiles.guide_title">How to use the app</div>
+	                        <div class="muted" data-i18n="account.tiles.guide_desc">All features, benefits, and quick tips in one place.</div>
 	                    </a>
 	                    <a class="glass panel account-tile" href="admin-favourites.html" id="dash-admin-tile" style="display:none">
-	                        <div class="account-tile-k">Admin</div>
-	                        <div class="account-tile-v">Favourites inbox</div>
-	                        <div class="muted">See saved listings from all users (admin only).</div>
+	                        <div class="account-tile-k" data-i18n="account.tiles.admin">Admin</div>
+	                        <div class="account-tile-v" data-i18n="account.tiles.admin_fav_title">Favourites inbox</div>
+	                        <div class="muted" data-i18n="account.tiles.admin_fav_desc">See saved listings from all users (admin only).</div>
 	                    </a>
                     <a class="glass panel account-tile" href="admin-crm.html" id="dash-crm-tile" style="display:none">
-                        <div class="account-tile-k">Admin</div>
-                        <div class="account-tile-v">Leads & contacts</div>
-                        <div class="muted">Private CRM data (admin only).</div>
+                        <div class="account-tile-k" data-i18n="account.tiles.admin">Admin</div>
+                        <div class="account-tile-v" data-i18n="account.tiles.admin_crm_title">Leads & contacts</div>
+                        <div class="muted" data-i18n="account.tiles.admin_crm_desc">Private CRM data (admin only).</div>
                     </a>
                     <a class="glass panel account-tile" href="admin-shop.html" id="dash-shop-tile" style="display:none">
-                        <div class="account-tile-k">Admin</div>
-                        <div class="account-tile-v">Shop editor</div>
-                        <div class="muted">Curate smart device products shown in the app.</div>
+                        <div class="account-tile-k" data-i18n="account.tiles.admin">Admin</div>
+                        <div class="account-tile-v" data-i18n="account.tiles.admin_shop_title">Shop editor</div>
+                        <div class="muted" data-i18n="account.tiles.admin_shop_desc">Curate smart device products shown in the app.</div>
                     </a>
                     <a class="glass panel account-tile" href="collaborate.html" id="dash-partner-tile">
-                        <div class="account-tile-k" id="dash-partner-k">Partner tools</div>
-                        <div class="account-tile-v" id="dash-partner-v">White-label & collaboration</div>
-                        <div class="muted" id="dash-partner-desc">For agencies, agents, developers and partners.</div>
+                        <div class="account-tile-k" id="dash-partner-k" data-i18n="account.tiles.partner_tools">Partner tools</div>
+                        <div class="account-tile-v" id="dash-partner-v" data-i18n="account.tiles.partner_tools_title">White-label & collaboration</div>
+                        <div class="muted" id="dash-partner-desc" data-i18n="account.tiles.partner_tools_desc">For agencies, agents, developers and partners.</div>
                     </a>
                 </div>
 
                 <div class="glass panel account-admin" id="admin-panel" style="display:none">
                     <div class="account-admin-head">
                         <div>
-                            <h2 style="margin:0;">Admin Dashboard</h2>
-                            <div class="muted">Manage favourites inbox, roles, and collaborators.</div>
+                            <h2 style="margin:0;" data-i18n="account.admin.title">Admin Dashboard</h2>
+                            <div class="muted" data-i18n="account.admin.subtitle">Manage favourites inbox, roles, and collaborators.</div>
                         </div>
                         <div class="account-admin-actions">
-                            <a class="cta-button" href="admin-favourites.html">Favourites Inbox</a>
-                            <a class="cta-button cta-button--outline" href="admin-crm.html">CRM</a>
-                            <a class="cta-button cta-button--outline" href="admin-shop.html">Shop Editor</a>
+                            <a class="cta-button" href="admin-favourites.html" data-i18n="account.admin.btn.fav_inbox">Favourites Inbox</a>
+                            <a class="cta-button cta-button--outline" href="admin-crm.html" data-i18n="account.admin.btn.crm">CRM</a>
+                            <a class="cta-button cta-button--outline" href="admin-shop.html" data-i18n="account.admin.btn.shop">Shop Editor</a>
                         </div>
                     </div>
 
                     <div class="divider"></div>
 
-                    <h3 style="margin:0;">User roles</h3>
-                    <div class="muted" style="margin-top:0.35rem;">Users create their own account first. Then assign a role here.</div>
+                    <h3 style="margin:0;" data-i18n="account.admin.user_roles">User roles</h3>
+                    <div class="muted" style="margin-top:0.35rem;" data-i18n="account.admin.user_roles_help">Users create their own account first. Then assign a role here.</div>
                     <div class="account-admin-users">
                         <div class="account-admin-users-bar">
-                            <input id="admin-user-q" class="admin-input" type="text" placeholder="Search by email or display name (e.g. john@agency.com)">
-                            <button id="admin-user-refresh" class="cta-button cta-button--outline" type="button">Search</button>
+                            <input id="admin-user-q" class="admin-input" type="text" placeholder="Search by email or display name (e.g. john@agency.com)" data-i18n-placeholder="account.admin.search_placeholder">
+                            <button id="admin-user-refresh" class="cta-button cta-button--outline" type="button" data-i18n="account.admin.search">Search</button>
                         </div>
                         <div id="admin-user-status" class="muted" style="margin-top:0.5rem;"></div>
                         <div id="admin-user-list" class="account-admin-users-list"></div>
@@ -258,8 +258,8 @@
             </div>
 
             <div class="glass panel" id="diagnostics" style="display:none">
-                <h2>Diagnostics</h2>
-                <p class="muted">Open this page with <code>?qa=1</code> to see setup checks.</p>
+                <h2 data-i18n="account.diagnostics.title">Diagnostics</h2>
+                <p class="muted" data-i18n-html="account.diagnostics.subtitle">Open this page with <code>?qa=1</code> to see setup checks.</p>
                 <div id="diag-lines" class="diag-lines"></div>
             </div>
         </section>
@@ -293,8 +293,8 @@
         <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
     </footer>
 
-    <script defer src="account.js?v=20260210zk"></script>
-    <script defer src="site.js?v=20260210zk"></script>
+    <script defer src="account.js?v=20260210zn"></script>
+    <script defer src="site.js?v=20260210zn"></script>
 </body>
 
 </html>

@@ -1,5 +1,17 @@
 (() => {
   const $ = (id) => document.getElementById(id);
+  const t = (key, fallback, vars) => {
+    try {
+      if (window.SCP_I18N && typeof window.SCP_I18N.t === 'function') {
+        return window.SCP_I18N.t(key, vars);
+      }
+    } catch {
+      // ignore
+    }
+    if (fallback !== undefined) return String(fallback);
+    return String(key || '');
+  };
+
   const refChip = $('brochure-ref');
   const refFoot = $('brochure-ref-foot');
   const typeEl = $('brochure-type');
@@ -89,23 +101,23 @@
 
   const formatPrice = (price) => {
     const number = Number(price);
-    if (!Number.isFinite(number) || number <= 0) return 'Price on request';
+    if (!Number.isFinite(number) || number <= 0) return t('pricing.on_request', 'Price on request');
     return new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(number);
   };
 
   const formatListingPrice = (property) => {
     const mode = listingModeFor(property);
     const number = listingPriceNumber(property);
-    if (!Number.isFinite(number)) return 'Price on request';
+    if (!Number.isFinite(number)) return t('pricing.on_request', 'Price on request');
     const formatted = formatPrice(number);
     if (mode === 'rent') {
       const period = rentPeriodFor(property);
-      if (period === 'night') return `${formatted} / night`;
-      if (period === 'day') return `${formatted} / day`;
-      if (period === 'week') return `${formatted} / week`;
-      return `${formatted} / month`;
+      if (period === 'night') return t('pricing.per_night', `${formatted} / night`, { price: formatted });
+      if (period === 'day') return t('pricing.per_day', `${formatted} / day`, { price: formatted });
+      if (period === 'week') return t('pricing.per_week', `${formatted} / week`, { price: formatted });
+      return t('pricing.per_month', `${formatted} / month`, { price: formatted });
     }
-    if (mode === 'traspaso') return `${formatted} (Traspaso)`;
+    if (mode === 'traspaso') return t('pricing.traspaso_suffix', `${formatted} (Traspaso)`, { price: formatted });
     return formatted;
   };
 
@@ -151,7 +163,7 @@
 
   const formatDescriptionHtml = (description) => {
     const text = toText(description);
-    if (!text) return '<p class="muted">Details coming soon.</p>';
+    if (!text) return `<p class="muted">${escapeHtml(t('brochure.details_soon', 'Details coming soon.'))}</p>`;
 
     // Split into clean paragraphs and simple bullet blocks.
     const lines = text
@@ -189,7 +201,9 @@
 
   const setWhiteLabel = (wl) => {
     document.body.classList.toggle('brochure-wl', wl);
-    if (toggleBrandBtn) toggleBrandBtn.textContent = `White-label: ${wl ? 'On' : 'Off'}`;
+    if (toggleBrandBtn) {
+      toggleBrandBtn.textContent = `${t('brochure.white_label', 'White-label')}: ${wl ? t('brochure.on', 'On') : t('brochure.off', 'Off')}`;
+    }
     if (brandEl) brandEl.style.display = wl ? 'none' : 'flex';
     if (footEl) footEl.style.display = wl ? 'none' : 'block';
   };
@@ -207,8 +221,8 @@
     setWhiteLabel(wl);
 
     if (!ref) {
-      if (refChip) refChip.textContent = 'Missing ref';
-      if (descEl) descEl.innerHTML = '<p class="muted">Open this page with <code>?ref=SCP-XXXX</code>.</p>';
+      if (refChip) refChip.textContent = t('brochure.missing_ref', 'Missing ref');
+      if (descEl) descEl.innerHTML = `<p class="muted">${t('brochure.missing_ref_help_html', 'Open this page with <code>?ref=SCP-XXXX</code>.')}</p>`;
       return;
     }
 
@@ -314,11 +328,11 @@
 
     if (!match) {
       if (refChip) refChip.textContent = ref;
-      if (descEl) descEl.innerHTML = '<p class="muted">Listing not found.</p>';
+      if (descEl) descEl.innerHTML = `<p class="muted">${escapeHtml(t('brochure.listing_not_found', 'Listing not found.'))}</p>`;
       return;
     }
 
-    const type = toText(match.businessType || match.type, 'Listing');
+    const type = toText(match.businessType || match.type, t('brochure.type_default', 'Listing'));
     const town = toText(match.town, 'Costa Blanca South');
     const province = toText(match.province, 'Alicante');
     const beds = Number(match.beds) || 0;
@@ -373,44 +387,50 @@
         heroImg.decoding = 'async';
         heroImg.referrerPolicy = 'no-referrer';
       } else {
-        heroImg.alt = 'No image available';
+        heroImg.alt = t('brochure.no_image', 'No image available');
       }
     }
 
     if (statsEl) {
       const mode = listingModeFor(match);
       const parts = [
-        beds > 0 ? `🛏️ ${beds} beds` : '',
-        baths > 0 ? `🛁 ${baths} baths` : '',
-        built > 0 ? `📐 ${built} m2` : '',
+        beds > 0 ? `🛏️ ${t('brochure.stat.beds', `${beds} beds`, { n: beds })}` : '',
+        baths > 0 ? `🛁 ${t('brochure.stat.baths', `${baths} baths`, { n: baths })}` : '',
+        built > 0 ? `📐 ${t('brochure.stat.built', `${built} m2`, { n: built })}` : '',
         eurSqm ? `📊 ${eurSqm}` : '',
-        beds === 0 && baths === 0 && mode === 'traspaso' ? '🏷️ Traspaso' : '',
-        beds === 0 && baths === 0 && mode === 'business' ? '🏷️ Business for sale' : ''
+        beds === 0 && baths === 0 && mode === 'traspaso' ? `🏷️ ${t('listing.traspaso', 'Traspaso')}` : '',
+        beds === 0 && baths === 0 && mode === 'business' ? `🏷️ ${t('listing.business_for_sale', 'Business for sale')}` : ''
       ].filter(Boolean);
       statsEl.innerHTML = parts.map((p) => `<div class="brochure-stat">${escapeHtml(p)}</div>`).join('');
     }
 
     if (highlightsEl) {
       const mode = listingModeFor(match);
-      const op = mode === 'rent' ? 'For rent' : mode === 'traspaso' ? 'Traspaso' : mode === 'business' ? 'Business for sale' : 'For sale';
+      const op = mode === 'rent'
+        ? t('listing.for_rent', 'For Rent')
+        : mode === 'traspaso'
+          ? t('listing.traspaso', 'Traspaso')
+          : mode === 'business'
+            ? t('listing.business_for_sale', 'Business for sale')
+            : t('listing.for_sale', 'For Sale');
       const highlights = [
-        `✅ Reference: ${ref}`,
-        `✅ Operation: ${op}`,
-        `✅ Location: ${town}`,
-        built ? `✅ Built area: ${built} m2` : ''
+        `✅ ${t('brochure.highlight.reference', 'Reference')}: ${ref}`,
+        `✅ ${t('brochure.highlight.operation', 'Operation')}: ${op}`,
+        `✅ ${t('brochure.highlight.location', 'Location')}: ${town}`,
+        built ? `✅ ${t('brochure.highlight.built_area', 'Built area')}: ${built} m2` : ''
       ].filter(Boolean);
       highlightsEl.innerHTML = highlights.map((h) => `<div class="brochure-highlight">${escapeHtml(h)}</div>`).join('');
     }
 
     if (areaEl) {
-      const pickAreaCopy = (t) => {
-        const k = normalize(t);
-        if (k.includes('torrevieja')) return 'Coastal city with beaches, a marina promenade, and a wide choice of shops and restaurants.';
-        if (k.includes('guardamar')) return 'Known for long sandy beaches and the pine forest, with an easygoing coastal lifestyle.';
-        if (k.includes('orihuela')) return 'Popular coastal area with beaches, golf options, and year-round services.';
-        if (k.includes('quesada') || k.includes('ciudad quesada')) return 'Residential area with golf nearby and quick access to the coast and larger towns.';
-        if (k.includes('pilar')) return 'Authentic Spanish town close to the coast, with beaches and everyday services nearby.';
-        return 'Costa Blanca South lifestyle with year-round services, coastal atmosphere, and great connectivity across the area.';
+      const pickAreaCopy = (townName) => {
+        const k = normalize(townName);
+        if (k.includes('torrevieja')) return t('nearby.copy.torrevieja', 'Coastal city with beaches, a marina promenade, and a wide choice of shops and restaurants.');
+        if (k.includes('guardamar')) return t('nearby.copy.guardamar', 'Known for long sandy beaches and the pine forest, with an easygoing coastal lifestyle.');
+        if (k.includes('orihuela')) return t('nearby.copy.orihuela', 'Popular coastal area with beaches, golf options, and year-round services.');
+        if (k.includes('quesada') || k.includes('ciudad quesada')) return t('nearby.copy.quesada', 'Residential area with golf nearby and quick access to the coast and larger towns.');
+        if (k.includes('pilar')) return t('nearby.copy.pilar', 'Authentic Spanish town close to the coast, with beaches and everyday services nearby.');
+        return t('nearby.copy.default', 'Costa Blanca South lifestyle with year-round services, coastal atmosphere, and great connectivity across the area.');
       };
 
       const distanceKm = (lat1, lon1, lat2, lon2) => {
@@ -447,7 +467,7 @@
         const mins = Math.round((n / 4.8) * 60);
         if (mins < 3) return '';
         if (mins > 60) return '';
-        return `${mins} min walk`;
+        return t('nearby.min_walk', `${mins} min walk`, { mins });
       };
 
       const driveMins = (km) => {
@@ -457,7 +477,7 @@
         const mins = Math.round((n / 35) * 60);
         if (mins < 5) return '';
         if (mins > 90) return '';
-        return `${mins} min drive`;
+        return t('nearby.min_drive', `${mins} min drive`, { mins });
       };
 
       const nearbyCacheKey = (() => {
@@ -522,8 +542,8 @@
 
       const buildItems = (nearby) => {
         const base = [
-          { icon: '📍', label: 'Area', value: `${town}, ${province}` },
-          approxAirport ? { icon: '✈️', label: 'Airport (ALC)', value: `~${formatKm(approxAirport)} (${driveMins(approxAirport) || 'approx.'})` } : null
+          { icon: '📍', label: t('nearby.area', 'Area'), value: `${town}, ${province}` },
+          approxAirport ? { icon: '✈️', label: t('nearby.airport', 'Airport (ALC)'), value: `~${formatKm(approxAirport)} (${driveMins(approxAirport) || t('nearby.approx', 'approx.')})` } : null
         ].filter(Boolean);
 
         const items = Array.isArray(nearby) ? nearby : [];
@@ -552,22 +572,22 @@
         areaEl.innerHTML = `
           <div class="brochure-area-lead">${escapeHtml(lead)}</div>
           <ul class="brochure-area-list">${list}</ul>
-          <div class="brochure-area-footnote">${escapeHtml(note || 'Distances are approximate (straight-line). Sources: OpenStreetMap contributors.')}</div>
+          <div class="brochure-area-footnote">${escapeHtml(note || t('nearby.note', 'Distances are approximate (straight-line). Data: OpenStreetMap contributors.'))}</div>
         `;
       };
 
       const fallbackItems = buildItems([
-        { icon: '🛒', label: 'Shops', value: 'Nearby supermarkets and daily services (varies by exact street)' },
-        { icon: '🏫', label: 'Schools', value: 'Local schools in the area (varies by exact street)' },
-        { icon: '🌳', label: 'Parks', value: 'Green spaces and promenades nearby (varies by exact street)' }
+        { icon: '🛒', label: t('nearby.shops', 'Shops'), value: t('nearby.fallback_shops', 'Nearby supermarkets and daily services (varies by exact street)') },
+        { icon: '🏫', label: t('nearby.schools', 'Schools'), value: t('nearby.fallback_schools', 'Local schools in the area (varies by exact street)') },
+        { icon: '🌳', label: t('nearby.parks', 'Parks'), value: t('nearby.fallback_parks', 'Green spaces and promenades nearby (varies by exact street)') }
       ]);
 
       // Initial render: immediate, then enhance with OSM if possible.
-      render(fallbackItems, 'Loading nearby amenities…');
+      render(fallbackItems, t('nearby.loading', 'Loading nearby amenities…'));
 
       const cached = readCache();
       if (cached && Array.isArray(cached.items)) {
-        render(buildItems(cached.items), cached.note || 'Distances are approximate (straight-line). Sources: OpenStreetMap contributors.');
+        render(buildItems(cached.items), cached.note || t('nearby.note', 'Distances are approximate (straight-line). Data: OpenStreetMap contributors.'));
       }
 
       const fetchOsmNearby = async () => {
@@ -590,7 +610,7 @@
         ].join('\n');
 
         const ctrl = window.AbortController ? new AbortController() : null;
-        const t = window.setTimeout(() => { try { if (ctrl) ctrl.abort(); } catch { } }, 12000);
+        const timeoutId = window.setTimeout(() => { try { if (ctrl) ctrl.abort(); } catch { } }, 12000);
         try {
           const res = await fetch('https://overpass-api.de/api/interpreter', {
             method: 'POST',
@@ -620,20 +640,20 @@
           };
 
           const items = [
-            mk('🏖️', 'Beach', beach),
-            mk('🛒', 'Supermarket', supermarket),
-            mk('💊', 'Pharmacy', pharmacy),
-            mk('🌳', 'Park', park),
-            mk('🏫', 'School', school),
-            mk('🚌', 'Bus stop', bus),
-            mk('⛳', 'Golf', golf)
+            mk('🏖️', t('nearby.beach', 'Beach'), beach),
+            mk('🛒', t('nearby.supermarket', 'Supermarket'), supermarket),
+            mk('💊', t('nearby.pharmacy', 'Pharmacy'), pharmacy),
+            mk('🌳', t('nearby.park', 'Park'), park),
+            mk('🏫', t('nearby.school', 'School'), school),
+            mk('🚌', t('nearby.bus', 'Bus stop'), bus),
+            mk('⛳', t('nearby.golf', 'Golf'), golf)
           ].filter(Boolean);
 
-          return { items, note: 'Distances are approximate (straight-line). Data: OpenStreetMap contributors.' };
+          return { items, note: t('nearby.note', 'Distances are approximate (straight-line). Data: OpenStreetMap contributors.') };
         } catch {
           return null;
         } finally {
-          window.clearTimeout(t);
+          window.clearTimeout(timeoutId);
         }
       };
 
@@ -671,7 +691,7 @@
     if (galleryEl) {
       const thumbs = images.slice(0, 12);
       if (!thumbs.length) {
-        galleryEl.innerHTML = '<div class="muted">No gallery images available.</div>';
+        galleryEl.innerHTML = `<div class="muted">${escapeHtml(t('brochure.no_gallery_images', 'No gallery images available.'))}</div>`;
       } else {
         galleryEl.innerHTML = thumbs
           .map((src, idx) => `<div class="brochure-gallery-item"><img src="${src}" alt="Image ${idx + 1}" loading="lazy" referrerpolicy="no-referrer"></div>`)
@@ -695,10 +715,10 @@
         const link = shareLink();
         try {
           await navigator.clipboard.writeText(link);
-          copyBtn.textContent = 'Copied';
-          window.setTimeout(() => (copyBtn.textContent = 'Copy link'), 900);
+          copyBtn.textContent = t('brochure.copied', 'Copied');
+          window.setTimeout(() => (copyBtn.textContent = t('brochure.copy_link', 'Copy link')), 900);
         } catch {
-          window.prompt('Copy link:', link);
+          window.prompt(t('modal.share.copy_prompt', 'Copy link:'), link);
         }
       });
     }

@@ -108,6 +108,13 @@
     });
   };
 
+  const setAriaLabel = (selector, text) => {
+    document.querySelectorAll(selector).forEach((el) => {
+      if (!el || !text) return;
+      try { el.setAttribute('aria-label', text); } catch { /* ignore */ }
+    });
+  };
+
   setLinkText('.primary-nav .nav-link[data-section=\"home\"]', t('nav.home') || 'Home');
   setLinkText('.primary-nav .nav-link[data-section=\"properties\"]', t('nav.properties') || 'Properties');
   setLinkText('.primary-nav .nav-link[data-section=\"newbuilds\"]', t('nav.new_builds') || 'New Builds');
@@ -130,6 +137,16 @@
   setLinkText('.mobile-menu-foot a[href^=\"mailto:\"]', t('nav.email') || 'Email');
   setLinkText('.mobile-menu-foot a[href^=\"tel:\"]', t('nav.call') || 'Call');
   setLinkText('.contact-label', t('nav.contact_us') || 'Contact Us');
+
+  // Common button labels and aria-labels across pages.
+  setAriaLabel('#mobile-menu-btn', t('ui.menu') || 'Menu');
+  setAriaLabel('#open-filters-btn', t('ui.open_filters') || 'Open filters');
+  setAriaLabel('#toggle-map-btn', t('ui.toggle_map') || 'Toggle map');
+  setAriaLabel('#clear-filters-btn', t('ui.clear_all_filters') || 'Clear all filters');
+  setAriaLabel('#apply-filters', t('ui.apply_filters') || 'Apply filters');
+  setAriaLabel('#close-filters-btn', t('ui.close_filters') || 'Close filters');
+  setAriaLabel('.lightbox-nav.prev', t('ui.previous_image') || 'Previous image');
+  setAriaLabel('.lightbox-nav.next', t('ui.next_image') || 'Next image');
 
   const injectLangSwitcher = () => {
     if (!i18n || typeof i18n.setLang !== 'function') return;

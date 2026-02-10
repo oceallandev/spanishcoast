@@ -1,4 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const t = (key, fallback, vars) => {
+        try {
+            if (window.SCP_I18N && typeof window.SCP_I18N.t === 'function') {
+                return window.SCP_I18N.t(key, vars);
+            }
+        } catch (error) {
+            // ignore
+        }
+        if (fallback !== undefined) return String(fallback);
+        return String(key || '');
+    };
+
     const baseProperties = Array.isArray(propertyData) ? propertyData : [];
     const customProperties = Array.isArray(window.customPropertyData) ? window.customPropertyData : [];
     const rawProperties = baseProperties.concat(customProperties);
@@ -13,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         maxLon: -0.6
     };
     const MAIN_DESTINATIONS = [
-        { value: 'all', label: 'All Destinations' },
+        { value: 'all', label: t('city.all', 'All Destinations') },
         { value: 'torrevieja', label: 'Torrevieja' },
         { value: 'orihuela-costa', label: 'Orihuela Costa' },
         { value: 'guardamar', label: 'Guardamar' },
@@ -292,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
             searchPill.classList.remove('advanced-open');
             if (toggleAdvancedBtn) {
                 toggleAdvancedBtn.setAttribute('aria-expanded', 'false');
-                toggleAdvancedBtn.textContent = 'More';
+                toggleAdvancedBtn.textContent = t('filters.more', 'More');
             }
         }
         requestAnimationFrame(() => {
@@ -442,9 +454,9 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.setAttribute('aria-pressed', isFav ? 'true' : 'false');
         if (compact) {
             btn.textContent = isFav ? '♥' : '♡';
-            btn.title = isFav ? 'Remove from saved' : 'Save listing';
+            btn.title = isFav ? t('properties.fav.remove_title', 'Remove from saved') : t('properties.fav.save_title', 'Save listing');
         } else {
-            btn.textContent = isFav ? '♥ Saved' : '♡ Save';
+            btn.textContent = isFav ? t('modal.fav_saved', '♥ Saved') : t('modal.fav_save', '♡ Save');
         }
     }
 
@@ -467,7 +479,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (favoritesToggleBtn) {
             favoritesToggleBtn.classList.toggle('active', favoritesOnly);
             favoritesToggleBtn.setAttribute('aria-pressed', favoritesOnly ? 'true' : 'false');
-            favoritesToggleBtn.textContent = `Saved (${count})${favoritesOnly ? ' · Showing' : ''}`;
+            const savedLabel = t('properties.saved', 'Saved');
+            const showingLabel = t('properties.showing', 'Showing');
+            favoritesToggleBtn.textContent = `${savedLabel} (${count})${favoritesOnly ? ` · ${showingLabel}` : ''}`;
         }
         if (favoritesSendBtn) {
             favoritesSendBtn.disabled = count === 0;
@@ -656,9 +670,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function isNewBuild(property) {
         // Prefer explicit feed flags when available. Some feeds are inconsistent (e.g. new_build=0),
         // so we only treat explicit TRUE as authoritative and still fall back to heuristics otherwise.
+        let explicitTrue = false;
         try {
             const explicit = property && (property.new_build ?? property.newBuild ?? property.is_new_build ?? property.isNewBuild);
-            if (explicit === true || explicit === '1' || explicit === 1) return true;
+            explicitTrue = explicit === true
+                || explicit === '1'
+                || explicit === 1
+                || String(explicit).toLowerCase() === 'true'
+                || String(explicit).toLowerCase() === 'yes';
+            if (explicitTrue) return true;
         } catch (error) {
             // ignore
         }
@@ -1839,9 +1859,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const imageUrl = imageCandidates[0];
 
-            const type = toText(property.type, 'Property');
+            const type = toText(property.type, t('modal.type_default', 'Property'));
             const reference = toText(property.ref).trim();
-            const town = toText(property.town, 'Unknown Area');
+            const town = toText(property.town, t('modal.town_unknown', 'Unknown Area'));
             const province = toText(property.province, 'Alicante');
             const beds = Number(property.beds) || 0;
             const baths = Number(property.baths) || 0;
@@ -1849,10 +1869,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const eurPerSqm = eurPerSqmFor(property);
             const listingMode = listingModeFor(property);
             const listingLabel = listingMode === 'rent'
-                ? 'For Rent'
+                ? t('listing.for_rent', 'For Rent')
                 : listingMode === 'traspaso'
-                    ? 'Traspaso'
-                    : 'For Sale';
+                    ? t('listing.traspaso', 'Traspaso')
+                    : t('listing.for_sale', 'For Sale');
             const isFav = favoriteIds.has(pid);
 
             card.innerHTML = `
@@ -1860,26 +1880,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     <img src="${imageUrl}" alt="${type}" loading="lazy">
                     <div class="card-badge">${type}</div>
                     <div class="card-status ${listingMode}">${listingLabel}</div>
-                    <button type="button" class="fav-btn ${isFav ? 'is-fav' : ''}" aria-label="Save listing" aria-pressed="${isFav ? 'true' : 'false'}">${isFav ? '♥' : '♡'}</button>
+                    <button type="button" class="fav-btn ${isFav ? 'is-fav' : ''}" aria-label="${escapeHtml(t('listing.save_aria', 'Save listing'))}" aria-pressed="${isFav ? 'true' : 'false'}">${isFav ? '♥' : '♡'}</button>
                 </div>
                 <div class="card-content">
                     <div class="card-ref-row">
                         <div class="card-ref">
-                            ${reference || 'Reference unavailable'}
+                            ${reference || escapeHtml(t('listing.reference_unavailable', 'Reference unavailable'))}
                             <span class="card-orig-ref muted" data-card-original-ref style="display:none"></span>
                         </div>
-                        <button type="button" class="ref-chip ref-chip--small" data-action="show-original-ref" style="display:none" aria-label="Show original reference" title="Show original reference">Orig</button>
+                        <button type="button" class="ref-chip ref-chip--small" data-action="show-original-ref" style="display:none" aria-label="${escapeHtml(t('listing.original_ref_show', 'Show original reference'))}" title="${escapeHtml(t('listing.original_ref_show', 'Show original reference'))}">Orig</button>
                     </div>
-                    <h3>${type} in ${town}</h3>
+                    <h3>${type} ${escapeHtml(t('common.in', 'in'))} ${town}</h3>
                     <div class="location">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                         ${town}, ${province}
                     </div>
                     <div class="price">${formatListingPrice(property)}</div>
                     <div class="specs">
-                        <div class="spec-item">🛏️ Beds ${beds}</div>
-                        <div class="spec-item">🛁 Baths ${baths}</div>
-                        <div class="spec-item">📐 Area ${builtArea}m2</div>
+                        <div class="spec-item">🛏️ ${escapeHtml(t('modal.spec.beds', 'Beds'))} ${beds}</div>
+                        <div class="spec-item">🛁 ${escapeHtml(t('modal.spec.baths', 'Baths'))} ${baths}</div>
+                        <div class="spec-item">📐 ${escapeHtml(t('modal.spec.area', 'Area'))} ${builtArea} m2</div>
                         ${eurPerSqm ? `<div class="spec-item">📊 ${eurPerSqm}</div>` : ''}
                     </div>
                 </div>
@@ -1944,8 +1964,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (already) {
                         const prev = origBtn.textContent;
                         await copyTextToClipboard(already);
-                        origBtn.textContent = 'Copied';
-                        window.setTimeout(() => { origBtn.textContent = prev || 'Copy'; }, 1200);
+                        origBtn.textContent = t('modal.copied', 'Copied');
+                        window.setTimeout(() => { origBtn.textContent = prev || t('listing.original_ref_copy', 'Copy'); }, 1200);
                         return;
                     }
 
@@ -1955,8 +1975,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     try {
                         const mapped = await supabaseMaybeGetOriginalRef(client, user.id, reference);
                         if (!mapped || !mapped.original_ref) {
-                            origBtn.textContent = 'No ref';
-                            window.setTimeout(() => { origBtn.textContent = prevText || 'Orig'; }, 1300);
+                            origBtn.textContent = t('listing.original_ref_no_ref', 'No ref');
+                            window.setTimeout(() => { origBtn.textContent = prevText || t('modal.original_ref_short', 'Orig'); }, 1300);
                             return;
                         }
 
@@ -1968,8 +1988,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         origSpan.style.display = 'inline';
 
                         await copyTextToClipboard(value);
-                        origBtn.textContent = 'Copied';
-                        window.setTimeout(() => { origBtn.textContent = 'Copy'; }, 1200);
+                        origBtn.textContent = t('modal.copied', 'Copied');
+                        window.setTimeout(() => { origBtn.textContent = t('listing.original_ref_copy', 'Copy'); }, 1200);
                     } finally {
                         origBtn.disabled = false;
                     }
@@ -2022,7 +2042,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const loadMore = document.createElement('button');
             loadMore.type = 'button';
             loadMore.className = 'load-more-btn';
-            loadMore.textContent = `Load more (${visible.length} / ${sorted.length})`;
+            loadMore.textContent = t('listing.load_more', `Load more (${visible.length} / ${sorted.length})`, { shown: visible.length, total: sorted.length });
             loadMore.addEventListener('click', () => {
                 if (loadingMore) return;
                 loadingMore = true;
@@ -2118,7 +2138,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const mins = Math.round((n / 4.8) * 60);
             if (mins < 3) return '';
             if (mins > 60) return '';
-            return `${mins} min walk`;
+            return t('nearby.min_walk', `${mins} min walk`, { mins });
         };
 
         const driveMins = (km) => {
@@ -2128,7 +2148,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const mins = Math.round((n / 35) * 60);
             if (mins < 5) return '';
             if (mins > 90) return '';
-            return `${mins} min drive`;
+            return t('nearby.min_drive', `${mins} min drive`, { mins });
         };
 
         const nearbyCacheKey = (() => {
@@ -2354,11 +2374,11 @@ document.addEventListener('DOMContentLoaded', () => {
         currentGalleryIndex = 0;
         lightboxIndex = 0;
 
-        const type = toText(property.type, 'Property');
+        const type = toText(property.type, t('modal.type_default', 'Property'));
         const reference = toText(property.ref).trim();
-        const town = toText(property.town, 'Unknown Area');
+        const town = toText(property.town, t('modal.town_unknown', 'Unknown Area'));
         const province = toText(property.province, 'Alicante');
-        const description = toText(property.description, 'Property details coming soon.');
+        const description = toText(property.description, t('modal.description_placeholder', 'Property details coming soon.'));
         const beds = Number(property.beds) || 0;
         const baths = Number(property.baths) || 0;
         const builtArea = builtAreaFor(property);
@@ -2373,7 +2393,7 @@ document.addEventListener('DOMContentLoaded', () => {
         activeModalPropertyId = propertyId || '';
         const isFav = Boolean(propertyId && favoriteIds.has(propertyId));
         const dossierSubject = encodeURIComponent(`Request to visit - ${reference || `${town} ${type}`}`);
-        const shareTitle = `${reference || 'Property'} - ${town}, ${province}`;
+        const shareTitle = `${reference || t('modal.type_default', 'Property')} - ${town}, ${province}`;
         const shareTextRaw = `Check this ${type}${reference ? ` (${reference})` : ''} in ${town}: ${propertyLink}`;
         const shareText = encodeURIComponent(shareTextRaw);
         const shareUrl = encodeURIComponent(propertyLink);
@@ -2409,15 +2429,15 @@ document.addEventListener('DOMContentLoaded', () => {
             setBrowserRef(reference, { push: shouldPush, state: { modalRef: reference } });
         }
 
-        const modalTitle = escapeHtml(`${type} in ${town}`);
+        const modalTitle = escapeHtml(`${type} ${t('common.in', 'in')} ${town}`);
 
         modalDetails.innerHTML = `
             <div class="modal-body">
                 <div class="modal-info">
                     <div class="card-badge">${type}</div>
                     <div class="modal-ref-row">
-                        <div class="modal-ref">${reference || 'Ref unavailable'}</div>
-                        <button type="button" class="ref-chip ref-chip--small" data-action="copy-modal-original-ref" style="display:none" aria-label="Copy original reference" title="Copy original reference">Orig</button>
+                        <div class="modal-ref">${reference || escapeHtml(t('modal.ref_unavailable', 'Ref unavailable'))}</div>
+                        <button type="button" class="ref-chip ref-chip--small" data-action="copy-modal-original-ref" style="display:none" aria-label="${escapeHtml(t('modal.copy_original_ref', 'Copy original reference'))}" title="${escapeHtml(t('modal.copy_original_ref', 'Copy original reference'))}">${escapeHtml(t('modal.original_ref_short', 'Orig'))}</button>
                     </div>
                     <div class="modal-ref-sub muted" data-original-ref style="display:none"></div>
                     <h2>${modalTitle}</h2>
@@ -2427,9 +2447,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="price">${formatListingPrice(property)}</div>
                     <div class="modal-specs">
-                        <div class="modal-spec-item">🛏️ Beds ${beds}</div>
-                        <div class="modal-spec-item">🛁 Baths ${baths}</div>
-                        <div class="modal-spec-item">📐 Area ${builtArea}m2</div>
+                        <div class="modal-spec-item">🛏️ ${escapeHtml(t('modal.spec.beds', 'Beds'))} ${beds}</div>
+                        <div class="modal-spec-item">🛁 ${escapeHtml(t('modal.spec.baths', 'Baths'))} ${baths}</div>
+                        <div class="modal-spec-item">📐 ${escapeHtml(t('modal.spec.area', 'Area'))} ${builtArea} m2</div>
                         ${eurPerSqm ? `<div class="modal-spec-item">📊 ${eurPerSqm}</div>` : ''}
                     </div>
                 </div>
@@ -2454,13 +2474,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="modal-details-section">
                     <div class="mini-map-card">
                         <div class="mini-map-head">
-                            <h4>📍 Location</h4>
+                            <h4>📍 ${escapeHtml(t('modal.location_title', 'Location'))}</h4>
                             ${googleMapsUrl
-                ? `<a class="mini-map-link" href="${googleMapsUrl}" target="_blank" rel="noopener">Open in Google Maps</a>`
-                : `<span class="mini-map-link mini-map-link--disabled">Map unavailable</span>`}
+                ? `<a class="mini-map-link" href="${googleMapsUrl}" target="_blank" rel="noopener">${escapeHtml(t('modal.open_google_maps', 'Open in Google Maps'))}</a>`
+                : `<span class="mini-map-link mini-map-link--disabled">${escapeHtml(t('modal.map_unavailable', 'Map unavailable'))}</span>`}
                         </div>
                         <div id="property-mini-map" class="mini-map"></div>
-                        <div class="mini-map-note">Quick view of the area. Zoom in to explore nearby beaches, golf, and amenities.</div>
+                        <div class="mini-map-note">${escapeHtml(t('modal.quick_view_note', 'Quick view of the area. Zoom in to explore nearby beaches, golf, and amenities.'))}</div>
                     </div>
                     <div class="mini-map-card" data-nearby-card>
                         <div class="mini-map-head">
@@ -2471,28 +2491,28 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="desc">${descriptionHtml}</div>
                     <div class="features-list">
-                        <h4>Premium Amenities</h4>
+                        <h4>${escapeHtml(t('modal.amenities_title', 'Premium Amenities'))}</h4>
                         <ul>
                             ${features.length > 0
                 ? features.map((feature) => `<li>${feature}</li>`).join('')
-                : '<li>Premium finishes throughout</li><li>Advanced climate control</li>'}
+                : `<li>${escapeHtml(t('modal.amenities_fallback_1', 'Premium finishes throughout'))}</li><li>${escapeHtml(t('modal.amenities_fallback_2', 'Advanced climate control'))}</li>`}
                         </ul>
                     </div>
                     <div class="modal-cta">
-                        <button type="button" class="cta-button cta-button--outline" data-fav-toggle>${isFav ? '♥ Saved' : '♡ Save'}</button>
-                        <a href="brochure.html?ref=${encodeURIComponent(reference || '')}" class="cta-button cta-button--outline" target="_blank" rel="noopener">Brochure (PDF)</a>
-                        <a href="tel:+34624867866" class="cta-button">Call Now</a>
-                        <a href="${dossierMailto}" class="cta-button">Request to visit</a>
-                        ${sourceUrl ? `<a href="${escapeHtml(sourceUrl)}" class="cta-button" target="_blank" rel="noopener">Official page</a>` : ''}
+                        <button type="button" class="cta-button cta-button--outline" data-fav-toggle>${escapeHtml(isFav ? t('modal.fav_saved', '♥ Saved') : t('modal.fav_save', '♡ Save'))}</button>
+                        <a href="brochure.html?ref=${encodeURIComponent(reference || '')}" class="cta-button cta-button--outline" target="_blank" rel="noopener">${escapeHtml(t('modal.brochure_pdf', 'Brochure (PDF)'))}</a>
+                        <a href="tel:+34624867866" class="cta-button">${escapeHtml(t('modal.call_now', 'Call Now'))}</a>
+                        <a href="${dossierMailto}" class="cta-button">${escapeHtml(t('modal.request_visit', 'Request to visit'))}</a>
+                        ${sourceUrl ? `<a href="${escapeHtml(sourceUrl)}" class="cta-button" target="_blank" rel="noopener">${escapeHtml(t('modal.official_page', 'Official page'))}</a>` : ''}
                     </div>
-	                    <div class="share-row" aria-label="Share">
+	                    <div class="share-row" aria-label="${escapeHtml(t('modal.share', 'Share'))}">
 	                        <button type="button" class="share-btn" data-share="native">
 	                            <span class="share-icon share-icon--native">${SHARE_ICON_SVG.native}</span>
-	                            <span class="share-label">Share</span>
+	                            <span class="share-label">${escapeHtml(t('modal.share.native', 'Share'))}</span>
 	                        </button>
 	                        <button type="button" class="share-btn" data-share="copy">
 	                            <span class="share-icon share-icon--copy">${SHARE_ICON_SVG.copy}</span>
-	                            <span class="share-label">Copy link</span>
+	                            <span class="share-label">${escapeHtml(t('modal.share.copy_link', 'Copy link'))}</span>
 	                        </button>
 	                        <button type="button" class="share-btn" data-share="instagram">
 	                            <span class="share-icon share-icon--instagram">${SHARE_ICON_SVG.instagram}</span>
@@ -2504,11 +2524,11 @@ document.addEventListener('DOMContentLoaded', () => {
 	                        </button>
 	                        <a class="share-btn" href="${xShare}" target="_blank" rel="noopener">
 	                            <span class="share-icon share-icon--x">${SHARE_ICON_SVG.x}</span>
-	                            <span class="share-label">X (Twitter)</span>
+	                            <span class="share-label">${escapeHtml(t('modal.share.x_twitter', 'X (Twitter)'))}</span>
 	                        </a>
 	                        <a class="share-btn share-btn--warn" href="${reportMailto}">
 	                            <span class="share-icon share-icon--report">${SHARE_ICON_SVG.report}</span>
-	                            <span class="share-label">Report issue</span>
+	                            <span class="share-label">${escapeHtml(t('modal.share.report_issue', 'Report issue'))}</span>
 	                        </a>
 	                        <a class="share-btn" href="${whatsappShare}" target="_blank" rel="noopener">
 	                            <span class="share-icon share-icon--whatsapp">${SHARE_ICON_SVG.whatsapp}</span>
@@ -2559,7 +2579,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!user) return;
                     const mapped = await supabaseMaybeGetOriginalRef(client, user.id, scpRef);
                     if (!mapped || !mapped.original_ref) return;
-                    const label = mapped.source ? `Original ref (${mapped.source})` : 'Original ref';
+                    const baseLabel = t('modal.original_ref', 'Original ref');
+                    const label = mapped.source ? `${baseLabel} (${mapped.source})` : baseLabel;
                     originalRefEl.textContent = `${label}: ${mapped.original_ref}`;
                     originalRefEl.style.display = 'block';
                     if (originalRefBtn) {
@@ -2576,8 +2597,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!value) return;
                 const prev = originalRefBtn.textContent;
                 await copyTextToClipboard(value);
-                originalRefBtn.textContent = 'Copied';
-                window.setTimeout(() => { originalRefBtn.textContent = prev || 'Orig'; }, 1200);
+                originalRefBtn.textContent = t('modal.copied', 'Copied');
+                window.setTimeout(() => { originalRefBtn.textContent = prev || t('modal.original_ref_short', 'Orig'); }, 1200);
             });
         }
 
@@ -2632,7 +2653,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 miniMapMarker = L.marker([latitude, longitude]).addTo(miniMap);
                 window.setTimeout(() => miniMap.invalidateSize(), 250);
             } else {
-                miniMapContainer.innerHTML = '<div style="padding:14px;color:#94a3b8">Map unavailable for this listing.</div>';
+                miniMapContainer.innerHTML = `<div style="padding:14px;color:#94a3b8">${escapeHtml(t('modal.map_unavailable_listing', 'Map unavailable for this listing.'))}</div>`;
             }
         }
 
@@ -2689,7 +2710,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	                    shareCopyBtn.click();
 	                }
 	                const original = shareBtnLabel(btn);
-	                setShareBtnLabel(btn, `Copied. Open ${appName}`);
+	                setShareBtnLabel(btn, t('modal.share.copied_open_app', `Copied. Open ${appName}`, { app: appName }));
 	                window.setTimeout(() => {
 	                    setShareBtnLabel(btn, original);
 	                }, 1800);
@@ -2706,14 +2727,14 @@ document.addEventListener('DOMContentLoaded', () => {
 	                    if (navigator.clipboard && navigator.clipboard.writeText) {
 	                        await navigator.clipboard.writeText(propertyLink);
 	                    } else {
-	                        window.prompt('Copy link:', propertyLink);
+	                        window.prompt(t('modal.share.copy_prompt', 'Copy link:'), propertyLink);
 	                    }
-	                    setShareBtnLabel(shareCopyBtn, 'Copied');
+	                    setShareBtnLabel(shareCopyBtn, t('modal.copied', 'Copied'));
 	                    window.setTimeout(() => {
 	                        setShareBtnLabel(shareCopyBtn, original);
 	                    }, 1400);
 	                } catch (error) {
-	                    window.prompt('Copy link:', propertyLink);
+	                    window.prompt(t('modal.share.copy_prompt', 'Copy link:'), propertyLink);
 	                }
 	            });
 	        }
@@ -3171,7 +3192,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const next = !searchPill.classList.contains('advanced-open');
             searchPill.classList.toggle('advanced-open', next);
             toggleAdvancedBtn.setAttribute('aria-expanded', next ? 'true' : 'false');
-            toggleAdvancedBtn.textContent = next ? 'Less' : 'More';
+            toggleAdvancedBtn.textContent = next ? t('filters.less', 'Less') : t('filters.more', 'More');
             const scrollEl = document.getElementById('pill-scroll');
             if (scrollEl) {
                 scrollEl.scrollLeft = 0;
@@ -3188,7 +3209,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mapSection.classList.remove('active');
             document.body.classList.remove('map-open');
             if (toggleMapBtn) {
-                toggleMapBtn.textContent = 'Map';
+                toggleMapBtn.textContent = t('ui.map', 'Map');
             }
         }
         document.body.classList.add('filters-open');
@@ -3198,7 +3219,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (toggleAdvancedBtn) {
             toggleAdvancedBtn.setAttribute('aria-expanded', searchPill && searchPill.classList.contains('advanced-open') ? 'true' : 'false');
-            toggleAdvancedBtn.textContent = (searchPill && searchPill.classList.contains('advanced-open')) ? 'Less' : 'More';
+            toggleAdvancedBtn.textContent = (searchPill && searchPill.classList.contains('advanced-open'))
+                ? t('filters.less', 'Less')
+                : t('filters.more', 'More');
         }
     };
 
@@ -3379,7 +3402,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (mapSection && mapSection.classList.contains('active')) {
             mapSection.classList.remove('active');
             document.body.classList.remove('map-open');
-            if (toggleMapBtn) toggleMapBtn.textContent = 'Map';
+            if (toggleMapBtn) toggleMapBtn.textContent = t('ui.map', 'Map');
         }
 
         closeFilters();
@@ -3430,7 +3453,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mapSection.classList.toggle('active');
             const mapIsOpen = mapSection.classList.contains('active');
             document.body.classList.toggle('map-open', mapIsOpen);
-            toggleMapBtn.textContent = mapIsOpen ? 'List' : 'Map';
+            toggleMapBtn.textContent = mapIsOpen ? t('ui.list', 'List') : t('ui.map', 'Map');
 
             if (map && typeof map.invalidateSize === 'function') {
                 window.setTimeout(() => {

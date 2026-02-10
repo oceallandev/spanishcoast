@@ -1,5 +1,17 @@
 // Render Businesses/Vehicles catalogs without loading the heavy property app.
 (() => {
+  const t = (key, fallback, vars) => {
+    try {
+      if (window.SCP_I18N && typeof window.SCP_I18N.t === 'function') {
+        return window.SCP_I18N.t(key, vars);
+      }
+    } catch {
+      // ignore
+    }
+    if (fallback !== undefined) return String(fallback);
+    return String(key || '');
+  };
+
   const businessGrid = document.getElementById('business-grid');
   const vehicleGrid = document.getElementById('vehicle-grid');
   const businessKindFilter = document.getElementById('business-kind-filter');
@@ -34,7 +46,7 @@
 
   const formatPrice = (price, currency = 'EUR') => {
     const n = Number(price);
-    if (!Number.isFinite(n) || n <= 0) return 'Price on request';
+    if (!Number.isFinite(n) || n <= 0) return t('pricing.on_request', 'Price on request');
     const num = new Intl.NumberFormat('en-IE', { maximumFractionDigits: 0 }).format(n);
     return currency === 'EUR' ? `€${num}` : `${num} ${currency}`;
   };
@@ -51,8 +63,8 @@
   const businessCard = (b) => {
     const ref = toText(b.ref).trim();
     const kind = toText(b.kind, 'business');
-    const kindLabel = kind === 'traspaso' ? 'Traspaso' : 'Business';
-    const bizType = toText(b.businessType || b.title, 'Business');
+    const kindLabel = kind === 'traspaso' ? t('listing.traspaso', 'Traspaso') : t('listing.business', 'Business');
+    const bizType = toText(b.businessType || b.title, t('listing.business', 'Business'));
     const title = bizType;
     const town = toText(b.town, 'Costa Blanca South');
     const province = toText(b.province, 'Alicante');
@@ -91,12 +103,12 @@
           <div class="price">${esc(price)}</div>
           <div class="specs">
             <div class="spec-item">🏷️ ${esc(kindLabel)}</div>
-            <div class="spec-item">🏪 ${esc(bizType)}</div>
+          <div class="spec-item">🏪 ${esc(bizType)}</div>
           </div>
           ${desc ? `<div class="catalog-meta" style="margin-top:0.65rem">${esc(desc)}</div>` : ''}
           <div class="card-actions">
-            <a class="card-action" href="${escAttr(href)}">Details</a>
-            ${ref ? `<a class="card-action" href="${escAttr(brochureHref)}" target="_blank" rel="noopener">Brochure (PDF)</a>` : `<span class="card-action card-action--disabled">Brochure (PDF)</span>`}
+            <a class="card-action" href="${escAttr(href)}">${esc(t('catalog.details', 'Details'))}</a>
+            ${ref ? `<a class="card-action" href="${escAttr(brochureHref)}" target="_blank" rel="noopener">${esc(t('modal.brochure_pdf', 'Brochure (PDF)'))}</a>` : `<span class="card-action card-action--disabled">${esc(t('modal.brochure_pdf', 'Brochure (PDF)'))}</span>`}
             ${whatsappHref ? `<a class="card-action card-action--whatsapp" href="${escAttr(whatsappHref)}" target="_blank" rel="noopener">WhatsApp</a>` : `<span class="card-action card-action--disabled">WhatsApp</span>`}
           </div>
         </div>
@@ -144,7 +156,7 @@
       const lon = Number(b.longitude ?? b.lon);
       if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
       const ref = toText(b.ref).trim();
-      const label = toText(b.businessType || b.title || 'Business');
+      const label = toText(b.businessType || b.title || t('listing.business', 'Business'));
       const price = formatPrice(b.price, b.currency);
       const priceCompact = formatPriceCompact(b.price, b.currency);
       const tag = `${label}${priceCompact ? ` · ${priceCompact}` : ''}`;
@@ -174,7 +186,7 @@
     });
 
     if (businessMapCountEl) {
-      businessMapCountEl.textContent = `${items.length} result${items.length === 1 ? '' : 's'}`;
+      businessMapCountEl.textContent = t('catalog.count.results', `${items.length} results`, { count: items.length });
     }
 
     if (bounds.length > 0) {
@@ -185,8 +197,8 @@
   const setBusinessMapMode = (next) => {
     if (!businessMapWrap) return;
     businessMapWrap.hidden = !next;
-    if (businessMapToggleBtn) businessMapToggleBtn.textContent = next ? 'List' : 'Map';
-    if (businessHeaderMapToggleBtn) businessHeaderMapToggleBtn.textContent = next ? 'List' : 'Map';
+    if (businessMapToggleBtn) businessMapToggleBtn.textContent = next ? t('ui.list', 'List') : t('ui.map', 'Map');
+    if (businessHeaderMapToggleBtn) businessHeaderMapToggleBtn.textContent = next ? t('ui.list', 'List') : t('ui.map', 'Map');
     if (next) {
       // Leaflet needs a layout pass when a hidden container becomes visible.
       setTimeout(() => {
@@ -237,8 +249,8 @@
         id: toText(b.id || b.ref || b.title || Math.random()),
         ref: toText(b.ref || ''),
         kind: toText(b.kind || 'business'),
-        title: toText(b.title || 'Business'),
-        businessType: toText(b.businessType || b.category || b.title || 'Business'),
+        title: toText(b.title || t('listing.business', 'Business')),
+        businessType: toText(b.businessType || b.category || b.title || t('listing.business', 'Business')),
         town: toText(b.location || 'Costa Blanca South'),
         province: 'Alicante',
         price: b.price || null,
@@ -264,7 +276,7 @@
       const current = toText(businessTypeFilter.value || 'all', 'all');
       const options = uniqueBusinessTypes();
       businessTypeFilter.innerHTML = [
-        `<option value="all">All</option>`,
+        `<option value="all">${esc(t('common.all', 'All'))}</option>`,
         ...options.map((t) => `<option value="${escAttr(t)}">${esc(t)}</option>`)
       ].join('');
       businessTypeFilter.value = options.includes(current) ? current : 'all';
@@ -283,14 +295,14 @@
         : filteredByKind.filter((b) => norm(b.businessType || b.title) === norm(type));
 
       if (businessCountEl) {
-        businessCountEl.textContent = `${filtered.length} listing${filtered.length === 1 ? '' : 's'}`;
+        businessCountEl.textContent = t('catalog.count.listings', `${filtered.length} listings`, { count: filtered.length });
       }
 
       if (filtered.length === 0) {
         businessGrid.innerHTML = card(
-          'No businesses found',
-          'Try switching the filter to All.',
-          'If you tell us your budget and preferred sector, we will shortlist the best opportunities.'
+          t('catalog.businesses.none_title', 'No businesses found'),
+          t('catalog.businesses.none_meta', 'Try switching the filter to All.'),
+          t('catalog.businesses.none_body', 'If you tell us your budget and preferred sector, we will shortlist the best opportunities.')
         );
         updateBusinessMap([]);
         return;
@@ -338,13 +350,13 @@
   if (vehicleGrid) {
     if (vehicleItems.length === 0) {
       vehicleGrid.innerHTML = card(
-        'Vehicles coming soon',
-        'Cars and boats for sale or rent.',
-        'Tell us what you need and we will source options and manage the process.'
+        t('catalog.vehicles.soon_title', 'Vehicles coming soon'),
+        t('catalog.vehicles.soon_meta', 'Cars and boats for sale or rent.'),
+        t('catalog.vehicles.soon_body', 'Tell us what you need and we will source options and manage the process.')
       );
     } else {
       vehicleGrid.innerHTML = vehicleItems.map((v) =>
-        card(v.title || 'Vehicle', v.category || 'Car / Boat', v.description || '')
+        card(v.title || t('listing.vehicle', 'Vehicle'), v.category || 'Car / Boat', v.description || '')
       ).join('');
     }
   }
