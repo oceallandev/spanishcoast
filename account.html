@@ -11,15 +11,15 @@
     <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/account.html">
 
     <meta name="theme-color" content="#030712">
-    <link rel="manifest" href="manifest.webmanifest?v=20260210s">
-    <link rel="stylesheet" href="style.css?v=20260210s">
+    <link rel="manifest" href="manifest.webmanifest?v=20260210t">
+    <link rel="stylesheet" href="style.css?v=20260210t">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script defer src="config.js?v=20260210s"></script>
-    <script defer src="supabase-init.js?v=20260210s"></script>
+    <script defer src="config.js?v=20260210t"></script>
+    <script defer src="supabase-init.js?v=20260210t"></script>
 </head>
 
 <body data-section="account">
@@ -86,35 +86,48 @@
 	                <button id="reset-auth-storage" class="cta-button cta-button--outline" type="button">Reset login</button>
 	            </div>
 
-            <div class="page-grid" id="auth-panels">
-                <div class="glass panel">
-                    <h2>Sign in</h2>
-                    <form id="sign-in-form" class="form-grid">
-                        <label>
+	            <div class="page-grid" id="auth-panels">
+	                <div class="glass panel">
+	                    <h2>Sign in</h2>
+	                    <form id="sign-in-form" class="form-grid">
+	                        <label>
                             <span>Email</span>
                             <input id="sign-in-email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required placeholder="you@email.com">
                         </label>
                         <label>
                             <span>Password</span>
                             <input id="sign-in-password" name="password" type="password" autocomplete="current-password" placeholder="Your password">
-                        </label>
-                        <button class="cta-button" type="submit">Sign in</button>
-                    </form>
+	                        </label>
+	                        <button class="cta-button" type="submit">Sign in</button>
+	                    </form>
 
-                    <div class="divider"></div>
+	                    <div class="divider"></div>
 
-                    <h3>Or sign in with a magic link</h3>
-                    <form id="magic-link-form" class="form-grid">
-                        <label>
-                            <span>Email</span>
+	                    <h3>Reset your password</h3>
+	                    <form id="reset-password-form" class="form-grid">
+	                        <label>
+	                            <span>Email</span>
+	                            <input id="reset-email" name="email" type="email" autocomplete="username" inputmode="email"
+	                                autocapitalize="none" spellcheck="false" required placeholder="you@email.com">
+	                        </label>
+	                        <button class="cta-button cta-button--outline" type="submit">Send reset link</button>
+	                    </form>
+	                    <p class="muted">We will email you a secure link to choose a new password.</p>
+
+	                    <div class="divider"></div>
+
+	                    <h3>Or sign in with a magic link</h3>
+	                    <form id="magic-link-form" class="form-grid">
+	                        <label>
+	                            <span>Email</span>
                             <input id="magic-email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required placeholder="you@email.com">
                         </label>
                         <button class="cta-button" type="submit">Send magic link</button>
                     </form>
-                    <p class="muted">Check your inbox and click the link to sign in.</p>
-                </div>
+	                    <p class="muted">Check your inbox and click the link to sign in.</p>
+	                </div>
 
-                <div class="glass panel">
+	                <div class="glass panel">
                     <h2>Create account</h2>
                     <form id="sign-up-form" class="form-grid">
                         <label>
@@ -128,14 +141,35 @@
                         </label>
                         <button class="cta-button" type="submit">Create account</button>
                     </form>
-                    <p class="muted">We use your email only for login and service updates you request.</p>
-                </div>
-            </div>
+	                    <p class="muted">We use your email only for login and service updates you request.</p>
+	                </div>
+	            </div>
 
-            <div class="account-dashboard" id="dashboard-panels" style="display:none">
-                <div class="glass panel account-welcome" id="account-status" aria-live="polite">
-                    <div class="account-welcome-top">
-                        <div>
+	            <div class="glass panel auth-recovery" id="password-recovery-panel" style="display:none">
+	                <h2>Set a new password</h2>
+	                <p class="muted">Choose a strong password (minimum 8 characters). You will stay signed in after updating.</p>
+	                <form id="password-recovery-form" class="form-grid">
+	                    <label>
+	                        <span>New password</span>
+	                        <input id="recovery-password" name="password" type="password" autocomplete="new-password" required minlength="8"
+	                            placeholder="Minimum 8 characters">
+	                    </label>
+	                    <label>
+	                        <span>Confirm new password</span>
+	                        <input id="recovery-password2" name="password2" type="password" autocomplete="new-password" required minlength="8"
+	                            placeholder="Repeat the password">
+	                    </label>
+	                    <div class="form-actions">
+	                        <button class="cta-button" type="submit">Update password</button>
+	                        <button class="cta-button cta-button--outline" id="recovery-cancel" type="button">Cancel</button>
+	                    </div>
+	                </form>
+	            </div>
+
+	            <div class="account-dashboard" id="dashboard-panels" style="display:none">
+	                <div class="glass panel account-welcome" id="account-status" aria-live="polite">
+	                    <div class="account-welcome-top">
+	                        <div>
                             <div class="status-title">Dashboard</div>
                             <div class="status-text" id="status-text">Connecting…</div>
                             <div class="muted" id="status-hint"></div>
@@ -247,8 +281,8 @@
         <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
     </footer>
 
-    <script defer src="account.js?v=20260210s"></script>
-    <script defer src="site.js?v=20260210s"></script>
+    <script defer src="account.js?v=20260210t"></script>
+    <script defer src="site.js?v=20260210t"></script>
 </body>
 
 </html>

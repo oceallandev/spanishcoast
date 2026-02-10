@@ -35,11 +35,20 @@
   const magicForm = document.getElementById('magic-link-form');
   const magicEmail = document.getElementById('magic-email');
 
+  const resetPasswordForm = document.getElementById('reset-password-form');
+  const resetPasswordEmail = document.getElementById('reset-email');
+
+  const recoveryPanel = document.getElementById('password-recovery-panel');
+  const recoveryForm = document.getElementById('password-recovery-form');
+  const recoveryPassword = document.getElementById('recovery-password');
+  const recoveryPassword2 = document.getElementById('recovery-password2');
+  const recoveryCancel = document.getElementById('recovery-cancel');
+
   const setStatus = (text, hint) => {
     if (statusText) statusText.textContent = text;
     if (statusHint) statusHint.textContent = hint || '';
     if (authStatus) {
-      const msg = [text, hint].filter((v) => v != null && String(v).trim()).join('  ');
+      const msg = [text, hint].filter((v) => v != null && String(v).trim()).join('\n');
       authStatus.textContent = msg;
       authStatus.style.display = msg ? 'block' : 'none';
     }
@@ -104,10 +113,18 @@
   // Supabase can be slow to respond on some networks, and free-tier projects can "wake up" after
   // a period of inactivity. Keep this fairly generous so users don't get logged out / stuck.
   const AUTH_TIMEOUT_MS = 60000;
+
   const MAGIC_COOLDOWN_KEY = 'scp:magic_link:cooldown_until';
   const MAGIC_COOLDOWN_MS = 60 * 1000;
   const MAGIC_RATE_LIMIT_COOLDOWN_MS = 3 * 60 * 1000;
   let magicCooldownTimer = null;
+
+  const RESET_COOLDOWN_KEY = 'scp:password_reset:cooldown_until';
+  const RESET_COOLDOWN_MS = 60 * 1000;
+  const RESET_RATE_LIMIT_COOLDOWN_MS = 3 * 60 * 1000;
+  let resetCooldownTimer = null;
+
+  let recoveryMode = false;
 
   const clearOfflineCacheAndReload = async () => {
     setStatus('Clearing offline cache…', 'This will refresh the page.');
@@ -213,6 +230,73 @@
     }
     btn.disabled = false;
     btn.textContent = btn.dataset.defaultText;
+  };
+
+  const readResetCooldownUntil = () => {
+    try {
+      if (!window.localStorage) return 0;
+      const raw = window.localStorage.getItem(RESET_COOLDOWN_KEY);
+      const n = raw ? Number(raw) : 0;
+      return Number.isFinite(n) ? n : 0;
+    } catch {
+      return 0;
+    }
+  };
+
+  const setResetCooldown = (ms) => {
+    try {
+      if (!window.localStorage) return;
+      window.localStorage.setItem(RESET_COOLDOWN_KEY, String(Date.now() + Math.max(0, Number(ms) || 0)));
+    } catch {
+      // ignore
+    }
+  };
+
+  const remainingResetCooldownMs = () => Math.max(0, readResetCooldownUntil() - Date.now());
+
+  const updateResetCooldownUi = () => {
+    if (!resetPasswordForm) return;
+    const btn = resetPasswordForm.querySelector('button[type="submit"]');
+    if (!btn) return;
+    if (!btn.dataset.defaultText) btn.dataset.defaultText = btn.textContent || 'Send reset link';
+    if (btn.dataset.busy === '1') return;
+
+    const remaining = remainingResetCooldownMs();
+    if (remaining > 0) {
+      btn.disabled = true;
+      btn.textContent = `Wait ${Math.ceil(remaining / 1000)}s`;
+      if (!resetCooldownTimer) {
+        resetCooldownTimer = window.setInterval(updateResetCooldownUi, 1000);
+      }
+      return;
+    }
+
+    if (resetCooldownTimer) {
+      window.clearInterval(resetCooldownTimer);
+      resetCooldownTimer = null;
+    }
+    btn.disabled = false;
+    btn.textContent = btn.dataset.defaultText;
+  };
+
+  const stripAuthParamsFromUrl = () => {
+    try {
+      const url = new URL(window.location.href);
+      ['code', 'type', 'access_token', 'refresh_token', 'expires_in', 'token_type', 'error', 'error_description'].forEach((k) => {
+        url.searchParams.delete(k);
+      });
+      if (url.hash) {
+        const hash = new URLSearchParams(String(url.hash).replace(/^#/, ''));
+        ['type', 'access_token', 'refresh_token', 'expires_in', 'token_type', 'error', 'error_description'].forEach((k) => {
+          hash.delete(k);
+        });
+        const next = hash.toString();
+        url.hash = next ? `#${next}` : '';
+      }
+      window.history.replaceState({}, '', url.toString());
+    } catch {
+      // ignore
+    }
   };
 
   async function getProfileInfo(client, userId) {
@@ -402,6 +486,24 @@
 
   async function refresh() {
     const client = getClient();
+
+    if (recoveryPanel) {
+      setVisible(recoveryPanel, recoveryMode);
+      if (recoveryMode) {
+        setStatus('Password recovery', 'Set a new password below.');
+        if (signOutBtn) signOutBtn.disabled = true;
+        setVisible(dashboardPanels, false);
+        setVisible(authPanels, false);
+        setVisible(authStatus, true, 'block');
+        try {
+          if (recoveryPassword && typeof recoveryPassword.focus === 'function') recoveryPassword.focus();
+        } catch {
+          // ignore
+        }
+        return;
+      }
+    }
+
     if (!client) {
       const cfg = window.SCP_CONFIG || {};
       const url = (cfg.supabaseUrl || '').trim();
@@ -424,6 +526,9 @@
       setVisible(authStatus, true, 'block');
       return;
     }
+
+    // Ensure the recovery panel is hidden during normal signed-in/out flows.
+    setVisible(recoveryPanel, false);
 
     let data;
     try {
@@ -775,6 +880,149 @@
     });
   }
 
+  if (resetPasswordForm) {
+    resetPasswordForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const client = getClient();
+      if (!client) {
+        setStatus('Supabase not ready', 'Reload the page. If it persists, click Clear offline cache or open ?qa=1 for diagnostics.');
+        return;
+      }
+
+      // Help users by reusing the sign-in email when possible.
+      if (resetPasswordEmail && !resetPasswordEmail.value && signInEmail && signInEmail.value) {
+        resetPasswordEmail.value = signInEmail.value;
+      }
+
+      const email = (resetPasswordEmail && resetPasswordEmail.value ? resetPasswordEmail.value : '').trim();
+      if (!email) return;
+
+      const remaining = remainingResetCooldownMs();
+      if (remaining > 0) {
+        setStatus('Please wait', `Password reset emails are rate-limited. Try again in ${Math.ceil(remaining / 1000)}s.`);
+        updateResetCooldownUi();
+        return;
+      }
+
+      setStatus('Sending reset link…');
+      const btn = resetPasswordForm.querySelector('button[type="submit"]');
+      const prev = btn ? btn.textContent : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Sending…';
+        btn.dataset.busy = '1';
+      }
+      const redirectTo = `${window.location.origin}${window.location.pathname}`;
+      try {
+        const { error } = await withTimeout(
+          client.auth.resetPasswordForEmail(email, { redirectTo }),
+          AUTH_TIMEOUT_MS,
+          'Password reset'
+        );
+        if (error) {
+          const msg = error && error.message ? String(error.message) : 'Please try again.';
+          if (msg.toLowerCase().includes('rate limit')) {
+            setResetCooldown(RESET_RATE_LIMIT_COOLDOWN_MS);
+            setStatus('Failed to send reset link', 'Email rate limit exceeded. Wait a few minutes and try again. (To remove strict limits and improve deliverability, set a custom SMTP provider in Supabase Auth settings.)');
+          } else {
+            setStatus('Failed to send reset link', msg);
+          }
+          return;
+        }
+        setResetCooldown(RESET_COOLDOWN_MS);
+        setStatus('Reset link sent', 'Check your inbox and click the link to set a new password.');
+      } catch (error) {
+        const msg = (error && error.message) ? String(error.message) : String(error);
+        const lower = msg.toLowerCase();
+        if (lower.includes('timed out') || lower.includes('abort')) {
+          setStatus('Failed to send reset link', 'Password reset timed out. This is usually a network/VPN/ad-block issue reaching Supabase. Try “Reset login”, or switch network, then try again.');
+        } else {
+          setStatus('Failed to send reset link', msg);
+        }
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = prev || 'Send reset link';
+          delete btn.dataset.busy;
+        }
+        updateResetCooldownUi();
+      }
+    });
+  }
+
+  if (recoveryCancel) {
+    recoveryCancel.addEventListener('click', async () => {
+      recoveryMode = false;
+      try {
+        if (recoveryPassword) recoveryPassword.value = '';
+        if (recoveryPassword2) recoveryPassword2.value = '';
+      } catch {
+        // ignore
+      }
+      stripAuthParamsFromUrl();
+      await refresh();
+    });
+  }
+
+  if (recoveryForm) {
+    recoveryForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const client = getClient();
+      if (!client) {
+        setStatus('Supabase not ready', 'Reload the page and try again.');
+        return;
+      }
+      const p1 = (recoveryPassword && recoveryPassword.value ? recoveryPassword.value : '').trim();
+      const p2 = (recoveryPassword2 && recoveryPassword2.value ? recoveryPassword2.value : '').trim();
+      if (!p1 || !p2) return;
+      if (p1.length < 8) {
+        setStatus('Password update failed', 'Password must be at least 8 characters.');
+        return;
+      }
+      if (p1 !== p2) {
+        setStatus('Password update failed', 'Passwords do not match.');
+        return;
+      }
+
+      setStatus('Updating password…');
+      const btn = recoveryForm.querySelector('button[type="submit"]');
+      const prev = btn ? btn.textContent : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Updating…';
+      }
+      try {
+        const { error } = await withTimeout(
+          client.auth.updateUser({ password: p1 }),
+          AUTH_TIMEOUT_MS,
+          'Update password'
+        );
+        if (error) {
+          setStatus('Password update failed', error.message || 'Please try again.');
+          return;
+        }
+        recoveryMode = false;
+        stripAuthParamsFromUrl();
+        try {
+          if (recoveryPassword) recoveryPassword.value = '';
+          if (recoveryPassword2) recoveryPassword2.value = '';
+        } catch {
+          // ignore
+        }
+        setStatus('Password updated', 'You can now sign in with your new password on any device.');
+        await refresh();
+        await runDiagnostics();
+      } catch (error) {
+        setStatus('Password update failed', (error && error.message) ? error.message : String(error));
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = prev || 'Update password';
+        }
+      }
+    });
+  }
+
   if (signOutBtn) {
     signOutBtn.addEventListener('click', async () => {
       const client = getClient();
@@ -799,20 +1047,61 @@
 
   const client = getClient();
   if (client) {
-    client.auth.onAuthStateChange(async () => {
+    client.auth.onAuthStateChange(async (event) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        recoveryMode = true;
+        stripAuthParamsFromUrl();
+        await refresh();
+        await runDiagnostics();
+        return;
+      }
+      if (event === 'SIGNED_IN') {
+        stripAuthParamsFromUrl();
+      }
       await refresh();
       await runDiagnostics(); // keep ?qa=1 panel in sync after signing in/out
     });
   } else {
     window.addEventListener('scp:supabase:ready', () => {
       const c = getClient();
-      if (c) c.auth.onAuthStateChange(async () => {
+      if (c) c.auth.onAuthStateChange(async (event) => {
+        if (event === 'PASSWORD_RECOVERY') {
+          recoveryMode = true;
+          stripAuthParamsFromUrl();
+          await refresh();
+          await runDiagnostics();
+          return;
+        }
+        if (event === 'SIGNED_IN') {
+          stripAuthParamsFromUrl();
+        }
         await refresh();
         await runDiagnostics();
       });
     }, { once: true });
   }
 
+  // Some Supabase flows set type=recovery in the URL/hash; ensure the UI shows the recovery form.
+  try {
+    const url = new URL(window.location.href);
+    const typeFromSearch = (url.searchParams.get('type') || '').toLowerCase();
+    const typeFromHash = (() => {
+      const raw = String(url.hash || '').replace(/^#/, '');
+      if (!raw) return '';
+      try {
+        return (new URLSearchParams(raw).get('type') || '').toLowerCase();
+      } catch {
+        return '';
+      }
+    })();
+    if (typeFromSearch === 'recovery' || typeFromHash === 'recovery') {
+      recoveryMode = true;
+    }
+  } catch {
+    // ignore
+  }
+
   ensureLoaded();
   updateMagicCooldownUi();
+  updateResetCooldownUi();
 })();
