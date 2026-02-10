@@ -1909,6 +1909,270 @@ document.addEventListener('DOMContentLoaded', () => {
         window.setTimeout(() => card.classList.remove('highlighted'), 1800);
     }
 
+    function initNearbySnapshot(areaEl, statusEl, { pid = '', town = '', province = '', latitude, longitude } = {}) {
+        if (!areaEl) {
+            return;
+        }
+
+        const t = (key, fallback, vars) => {
+            try {
+                if (window.SCP_I18N && typeof window.SCP_I18N.t === 'function') {
+                    return window.SCP_I18N.t(key, vars);
+                }
+            } catch (error) {
+                // ignore
+            }
+            if (fallback !== undefined) return toText(fallback);
+            return toText(key);
+        };
+
+        const pickAreaCopy = (twn) => {
+            const k = normalize(twn);
+            if (k.includes('torrevieja')) return t('nearby.copy.torrevieja', 'Coastal city with beaches, a marina promenade, and a wide choice of shops and restaurants.');
+            if (k.includes('guardamar')) return t('nearby.copy.guardamar', 'Known for long sandy beaches and the pine forest, with an easygoing coastal lifestyle.');
+            if (k.includes('orihuela')) return t('nearby.copy.orihuela', 'Popular coastal area with beaches, golf options, and year-round services.');
+            if (k.includes('quesada') || k.includes('ciudad quesada')) return t('nearby.copy.quesada', 'Residential area with golf nearby and quick access to the coast and larger towns.');
+            if (k.includes('pilar')) return t('nearby.copy.pilar', 'Authentic Spanish town close to the coast, with beaches and everyday services nearby.');
+            return t('nearby.copy.default', 'Costa Blanca South lifestyle with year-round services, coastal atmosphere, and great connectivity across the area.');
+        };
+
+        const lat = Number(latitude);
+        const lon = Number(longitude);
+        const alc = { name: 'Alicante Airport (ALC)', lat: 38.2822, lon: -0.5582 };
+        const approxAirport = (Number.isFinite(lat) && Number.isFinite(lon))
+            ? Math.round(distanceKm(lat, lon, alc.lat, alc.lon))
+            : 0;
+
+        const formatKm = (km) => {
+            const n = Number(km);
+            if (!Number.isFinite(n) || n <= 0) return '';
+            if (n < 1) return `${Math.round(n * 1000)} m`;
+            if (n < 10) return `${n.toFixed(1)} km`;
+            return `${Math.round(n)} km`;
+        };
+
+        const walkMins = (km) => {
+            const n = Number(km);
+            if (!Number.isFinite(n) || n <= 0) return '';
+            // 4.8 km/h walking speed.
+            const mins = Math.round((n / 4.8) * 60);
+            if (mins < 3) return '';
+            if (mins > 60) return '';
+            return `${mins} min walk`;
+        };
+
+        const driveMins = (km) => {
+            const n = Number(km);
+            if (!Number.isFinite(n) || n <= 0) return '';
+            // Very rough urban average; avoid showing for tiny distances.
+            const mins = Math.round((n / 35) * 60);
+            if (mins < 5) return '';
+            if (mins > 90) return '';
+            return `${mins} min drive`;
+        };
+
+        const nearbyCacheKey = (() => {
+            if (!Number.isFinite(lat) || !Number.isFinite(lon)) return '';
+            const latKey = (Math.round(lat * 1000) / 1000).toFixed(3);
+            const lonKey = (Math.round(lon * 1000) / 1000).toFixed(3);
+            return `scp:area:v2:${latKey},${lonKey}`;
+        })();
+
+        const readCache = () => {
+            try {
+                if (!nearbyCacheKey || !window.localStorage) return null;
+                const raw = window.localStorage.getItem(nearbyCacheKey);
+                if (!raw) return null;
+                const parsed = JSON.parse(raw);
+                if (!parsed || typeof parsed !== 'object') return null;
+                // 7 days.
+                if (!parsed.ts || (Date.now() - Number(parsed.ts)) > (7 * 24 * 60 * 60 * 1000)) return null;
+                return parsed;
+            } catch {
+                return null;
+            }
+        };
+
+        const writeCache = (payload) => {
+            try {
+                if (!nearbyCacheKey || !window.localStorage) return;
+                window.localStorage.setItem(nearbyCacheKey, JSON.stringify({ ...payload, ts: Date.now() }));
+            } catch {
+                // ignore
+            }
+        };
+
+        const haversineKm = (aLat, aLon, bLat, bLon) => {
+            if (!Number.isFinite(aLat) || !Number.isFinite(aLon) || !Number.isFinite(bLat) || !Number.isFinite(bLon)) return NaN;
+            return distanceKm(aLat, aLon, bLat, bLon);
+        };
+
+        const elCenter = (el) => {
+            if (!el) return null;
+            if (Number.isFinite(el.lat) && Number.isFinite(el.lon)) return { lat: el.lat, lon: el.lon };
+            if (el.center && Number.isFinite(el.center.lat) && Number.isFinite(el.center.lon)) return { lat: el.center.lat, lon: el.center.lon };
+            return null;
+        };
+
+        const nearestOf = (elements, predicate) => {
+            let best = null;
+            let bestKm = Infinity;
+            (elements || []).forEach((el) => {
+                if (!predicate(el)) return;
+                const c = elCenter(el);
+                if (!c) return;
+                const km = haversineKm(lat, lon, c.lat, c.lon);
+                if (!Number.isFinite(km)) return;
+                if (km < bestKm) {
+                    bestKm = km;
+                    best = el;
+                }
+            });
+            return best ? { el: best, km: bestKm } : null;
+        };
+
+        const buildItems = (nearby) => {
+            const base = [
+                { icon: '📍', label: t('nearby.area', 'Area'), value: `${town}, ${province}` }
+            ];
+            if (approxAirport) {
+                base.push({
+                    icon: '✈️',
+                    label: t('nearby.airport', 'Airport (ALC)'),
+                    value: `~${formatKm(approxAirport)} (${driveMins(approxAirport) || t('nearby.approx', 'approx.')})`
+                });
+            }
+
+            const items = Array.isArray(nearby) ? nearby : [];
+            base.push(...items);
+            return base;
+        };
+
+        const render = (items, note, { loading = false } = {}) => {
+            const lead = pickAreaCopy(town);
+            const list = (items || []).map((it) => {
+                const v = toText(it.value);
+                const meta = toText(it.meta);
+                return `
+                    <li class="brochure-area-item">
+                        <span class="brochure-area-ic" aria-hidden="true">${escapeHtml(it.icon || '•')}</span>
+                        <span class="brochure-area-txt">
+                            <span class="brochure-area-label">${escapeHtml(it.label || '')}</span>
+                            <span class="brochure-area-val">${escapeHtml(v)}</span>
+                            ${meta ? `<span class="brochure-area-meta">${escapeHtml(meta)}</span>` : ``}
+                        </span>
+                    </li>
+                `;
+            }).join('');
+
+            areaEl.innerHTML = `
+                <div class="brochure-area-lead">${escapeHtml(lead)}</div>
+                <ul class="brochure-area-list">${list}</ul>
+                <div class="brochure-area-footnote">${escapeHtml(note || t('nearby.note', 'Distances are approximate (straight-line). Data: OpenStreetMap contributors.'))}</div>
+            `;
+
+            if (statusEl) {
+                statusEl.textContent = loading ? t('nearby.loading_short', 'Loading…') : '';
+            }
+        };
+
+        const fallbackItems = buildItems([
+            { icon: '🛒', label: t('nearby.shops', 'Shops'), value: t('nearby.fallback_shops', 'Nearby supermarkets and daily services (varies by exact street)') },
+            { icon: '🏫', label: t('nearby.schools', 'Schools'), value: t('nearby.fallback_schools', 'Local schools in the area (varies by exact street)') },
+            { icon: '🌳', label: t('nearby.parks', 'Parks'), value: t('nearby.fallback_parks', 'Green spaces and promenades nearby (varies by exact street)') }
+        ]);
+
+        // Initial render: immediate, then enhance with OSM if possible.
+        render(fallbackItems, t('nearby.loading', 'Loading nearby amenities…'), { loading: true });
+
+        const cached = readCache();
+        if (cached && Array.isArray(cached.items)) {
+            render(buildItems(cached.items), cached.note || t('nearby.note', 'Distances are approximate (straight-line). Data: OpenStreetMap contributors.'), { loading: false });
+        }
+
+        const fetchOsmNearby = async () => {
+            if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+            if (!window.fetch) return null;
+
+            // Overpass API: may be slow/unavailable. We keep this best-effort.
+            const query = [
+                '[out:json][timeout:20];',
+                '(',
+                `nwr(around:5000,${lat},${lon})["amenity"="school"];`,
+                `nwr(around:3000,${lat},${lon})["leisure"="park"];`,
+                `nwr(around:3000,${lat},${lon})["shop"="supermarket"];`,
+                `nwr(around:3000,${lat},${lon})["amenity"="pharmacy"];`,
+                `nwr(around:8000,${lat},${lon})["natural"="beach"];`,
+                `nwr(around:2000,${lat},${lon})["highway"="bus_stop"];`,
+                `nwr(around:15000,${lat},${lon})["leisure"="golf_course"];`,
+                ');',
+                'out center tags;'
+            ].join('\n');
+
+            const ctrl = window.AbortController ? new AbortController() : null;
+            const timeout = window.setTimeout(() => { try { if (ctrl) ctrl.abort(); } catch { } }, 12000);
+            try {
+                const res = await fetch('https://overpass-api.de/api/interpreter', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+                    body: `data=${encodeURIComponent(query)}`,
+                    signal: ctrl ? ctrl.signal : undefined
+                });
+                if (!res.ok) return null;
+                const json = await res.json();
+                const elements = json && Array.isArray(json.elements) ? json.elements : [];
+
+                const school = nearestOf(elements, (el) => el.tags && el.tags.amenity === 'school');
+                const park = nearestOf(elements, (el) => el.tags && el.tags.leisure === 'park');
+                const supermarket = nearestOf(elements, (el) => el.tags && el.tags.shop === 'supermarket');
+                const pharmacy = nearestOf(elements, (el) => el.tags && el.tags.amenity === 'pharmacy');
+                const beach = nearestOf(elements, (el) => el.tags && (el.tags.natural === 'beach' || el.tags.place === 'beach'));
+                const bus = nearestOf(elements, (el) => el.tags && el.tags.highway === 'bus_stop');
+                const golf = nearestOf(elements, (el) => el.tags && el.tags.leisure === 'golf_course');
+
+                const mk = (icon, label, hit) => {
+                    if (!hit) return null;
+                    const km = hit.km;
+                    const dist = formatKm(km);
+                    const meta = km <= 3 ? (walkMins(km) || '') : (driveMins(km) || '');
+                    const name = hit.el && hit.el.tags && hit.el.tags.name ? String(hit.el.tags.name) : '';
+                    return { icon, label, value: `~${dist}`, meta: name ? name : meta };
+                };
+
+                const items = [
+                    mk('🏖️', t('nearby.beach', 'Beach'), beach),
+                    mk('🛒', t('nearby.supermarket', 'Supermarket'), supermarket),
+                    mk('💊', t('nearby.pharmacy', 'Pharmacy'), pharmacy),
+                    mk('🌳', t('nearby.park', 'Park'), park),
+                    mk('🏫', t('nearby.school', 'School'), school),
+                    mk('🚌', t('nearby.bus', 'Bus stop'), bus),
+                    mk('⛳', t('nearby.golf', 'Golf'), golf)
+                ].filter(Boolean);
+
+                return { items, note: t('nearby.note', 'Distances are approximate (straight-line). Data: OpenStreetMap contributors.') };
+            } catch {
+                return null;
+            } finally {
+                window.clearTimeout(timeout);
+            }
+        };
+
+        // Fetch and enhance in the background.
+        (async () => {
+            const out = await fetchOsmNearby();
+            if (!out || !Array.isArray(out.items) || !out.items.length) {
+                if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+                    render(fallbackItems, t('nearby.unavailable', 'Nearby info may be limited for this listing.'), { loading: false });
+                }
+                return;
+            }
+            writeCache(out);
+            if (activeModalPropertyId !== pid) return;
+            if (!document.body.contains(areaEl)) return;
+            render(buildItems(out.items), out.note, { loading: false });
+        })();
+    }
+
     function openPropertyModal(property, { syncUrl = true, pushUrl = true } = {}) {
         if (!modal || !modalDetails) {
             return;
@@ -1968,6 +2232,17 @@ document.addEventListener('DOMContentLoaded', () => {
         );
         const reportMailto = `mailto:info@spanishcoastproperties.com?subject=${reportSubject}&body=${reportBody}`;
         const descriptionHtml = formatDescriptionHtml(description);
+        const t = (key, fallback, vars) => {
+            try {
+                if (window.SCP_I18N && typeof window.SCP_I18N.t === 'function') {
+                    return window.SCP_I18N.t(key, vars);
+                }
+            } catch (error) {
+                // ignore
+            }
+            if (fallback !== undefined) return toText(fallback);
+            return toText(key);
+        };
         if (syncUrl) {
             // Use pushState so browser Back closes the modal. If modal is already open, replace instead.
             const shouldPush = Boolean(pushUrl) && !isModalOpen();
@@ -2023,6 +2298,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         <div id="property-mini-map" class="mini-map"></div>
                         <div class="mini-map-note">Quick view of the area. Zoom in to explore nearby beaches, golf, and amenities.</div>
+                    </div>
+                    <div class="mini-map-card" data-nearby-card>
+                        <div class="mini-map-head">
+                            <h4>🧭 ${escapeHtml(t('nearby.title', 'Area snapshot'))}</h4>
+                            <span class="mini-map-link mini-map-link--disabled" data-nearby-status>${escapeHtml(t('nearby.loading_short', 'Loading…'))}</span>
+                        </div>
+                        <div data-nearby-area></div>
                     </div>
                     <div class="desc">${descriptionHtml}</div>
                     <div class="features-list">
@@ -2176,10 +2458,14 @@ document.addEventListener('DOMContentLoaded', () => {
 	        const shareInstagramBtn = modalDetails.querySelector('[data-share="instagram"]');
 	        const shareTiktokBtn = modalDetails.querySelector('[data-share="tiktok"]');
 
-	        const shareBtnLabel = (btn) => {
-	            if (!btn) return '';
-	            const label = btn.querySelector('.share-label');
-	            return label ? label.textContent : btn.textContent;
+            const nearbyAreaEl = modalDetails.querySelector('[data-nearby-area]');
+            const nearbyStatusEl = modalDetails.querySelector('[data-nearby-status]');
+            initNearbySnapshot(nearbyAreaEl, nearbyStatusEl, { pid: activeModalPropertyId, town, province, latitude, longitude });
+
+		        const shareBtnLabel = (btn) => {
+		            if (!btn) return '';
+		            const label = btn.querySelector('.share-label');
+		            return label ? label.textContent : btn.textContent;
 	        };
 
 	        const setShareBtnLabel = (btn, text) => {

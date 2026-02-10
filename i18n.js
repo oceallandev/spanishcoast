@@ -124,7 +124,38 @@
       'filters.sea_view_yes': 'Sea view',
 
       'account.hero.title': 'Your Account',
-      'account.hero.subtitle': 'Sign in to sync favourites across devices and unlock partner tools.'
+      'account.hero.subtitle': 'Sign in to sync favourites across devices and unlock partner tools.',
+
+      'nearby.title': 'Area snapshot',
+      'nearby.loading_short': 'Loading…',
+      'nearby.loading': 'Loading nearby amenities…',
+      'nearby.note': 'Distances are approximate (straight-line). Data: OpenStreetMap contributors.',
+      'nearby.approx': 'approx.',
+      'nearby.unavailable': 'Nearby info may be limited for this listing.',
+
+      'nearby.area': 'Area',
+      'nearby.airport': 'Airport (ALC)',
+      'nearby.shops': 'Shops',
+      'nearby.schools': 'Schools',
+      'nearby.parks': 'Parks',
+      'nearby.beach': 'Beach',
+      'nearby.supermarket': 'Supermarket',
+      'nearby.pharmacy': 'Pharmacy',
+      'nearby.park': 'Park',
+      'nearby.school': 'School',
+      'nearby.bus': 'Bus stop',
+      'nearby.golf': 'Golf',
+
+      'nearby.fallback_shops': 'Nearby supermarkets and daily services (varies by exact street)',
+      'nearby.fallback_schools': 'Local schools in the area (varies by exact street)',
+      'nearby.fallback_parks': 'Green spaces and promenades nearby (varies by exact street)',
+
+      'nearby.copy.torrevieja': 'Coastal city with beaches, a marina promenade, and a wide choice of shops and restaurants.',
+      'nearby.copy.guardamar': 'Known for long sandy beaches and the pine forest, with an easygoing coastal lifestyle.',
+      'nearby.copy.orihuela': 'Popular coastal area with beaches, golf options, and year-round services.',
+      'nearby.copy.quesada': 'Residential area with golf nearby and quick access to the coast and larger towns.',
+      'nearby.copy.pilar': 'Authentic Spanish town close to the coast, with beaches and everyday services nearby.',
+      'nearby.copy.default': 'Costa Blanca South lifestyle with year-round services, coastal atmosphere, and great connectivity across the area.'
     },
     es: {
       'lang.label': 'Idioma',
@@ -176,7 +207,38 @@
       'filters.sea_view_yes': 'Vistas al mar',
 
       'account.hero.title': 'Tu cuenta',
-      'account.hero.subtitle': 'Inicia sesión para sincronizar favoritos y desbloquear herramientas de colaboración.'
+      'account.hero.subtitle': 'Inicia sesión para sincronizar favoritos y desbloquear herramientas de colaboración.',
+
+      'nearby.title': 'Resumen de zona',
+      'nearby.loading_short': 'Cargando…',
+      'nearby.loading': 'Cargando servicios cercanos…',
+      'nearby.note': 'Las distancias son aproximadas (en linea recta). Datos: colaboradores de OpenStreetMap.',
+      'nearby.approx': 'aprox.',
+      'nearby.unavailable': 'La informacion cercana puede ser limitada para este anuncio.',
+
+      'nearby.area': 'Zona',
+      'nearby.airport': 'Aeropuerto (ALC)',
+      'nearby.shops': 'Tiendas',
+      'nearby.schools': 'Escuelas',
+      'nearby.parks': 'Parques',
+      'nearby.beach': 'Playa',
+      'nearby.supermarket': 'Supermercado',
+      'nearby.pharmacy': 'Farmacia',
+      'nearby.park': 'Parque',
+      'nearby.school': 'Escuela',
+      'nearby.bus': 'Parada de bus',
+      'nearby.golf': 'Golf',
+
+      'nearby.fallback_shops': 'Supermercados y servicios diarios cerca (varia segun la calle exacta)',
+      'nearby.fallback_schools': 'Escuelas locales en la zona (varia segun la calle exacta)',
+      'nearby.fallback_parks': 'Zonas verdes y paseos cercanos (varia segun la calle exacta)',
+
+      'nearby.copy.torrevieja': 'Ciudad costera con playas, paseo maritimo y una amplia oferta de tiendas y restaurantes.',
+      'nearby.copy.guardamar': 'Conocida por sus largas playas de arena y el pinar, con un estilo de vida costero relajado.',
+      'nearby.copy.orihuela': 'Zona costera popular con playas, opciones de golf y servicios todo el ano.',
+      'nearby.copy.quesada': 'Zona residencial con golf cerca y acceso rapido a la costa y a pueblos mas grandes.',
+      'nearby.copy.pilar': 'Pueblo autentico cerca de la costa, con playas y servicios diarios cerca.',
+      'nearby.copy.default': 'Estilo de vida en Costa Blanca Sur con servicios todo el ano, ambiente costero y buena conectividad en la zona.'
     }
   };
 
