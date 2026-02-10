@@ -2,6 +2,7 @@
   const statusText = document.getElementById('status-text');
   const statusHint = document.getElementById('status-hint');
   const authStatus = document.getElementById('auth-status');
+  const clearCacheAuthBtn = document.getElementById('clear-offline-cache-auth');
   const signOutBtn = document.getElementById('sign-out-btn');
   const authPanels = document.getElementById('auth-panels');
   const dashboardPanels = document.getElementById('dashboard-panels');
@@ -96,6 +97,33 @@
       ]);
     } finally {
       if (t) window.clearTimeout(t);
+    }
+  };
+
+  const clearOfflineCacheAndReload = async () => {
+    setStatus('Clearing offline cache…', 'This will refresh the page.');
+    try {
+      if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map((r) => r.unregister()));
+      }
+    } catch {
+      // ignore
+    }
+    try {
+      if (window.caches && caches.keys) {
+        const keys = await caches.keys();
+        await Promise.all(keys.filter((k) => k.startsWith('scp-cache-')).map((k) => caches.delete(k)));
+      }
+    } catch {
+      // ignore
+    }
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set('v', String(Date.now()));
+      window.location.replace(url.toString());
+    } catch {
+      window.location.reload();
     }
   };
 
@@ -479,7 +507,10 @@
     signInForm.addEventListener('submit', async (event) => {
       event.preventDefault();
       const client = getClient();
-      if (!client) return;
+      if (!client) {
+        setStatus('Supabase not ready', 'Reload the page. If it persists, click Clear offline cache or open ?qa=1 for diagnostics.');
+        return;
+      }
       const email = (signInEmail && signInEmail.value ? signInEmail.value : '').trim();
       const password = (signInPassword && signInPassword.value ? signInPassword.value : '').trim();
       if (!email || !password) return;
@@ -514,7 +545,10 @@
     signUpForm.addEventListener('submit', async (event) => {
       event.preventDefault();
       const client = getClient();
-      if (!client) return;
+      if (!client) {
+        setStatus('Supabase not ready', 'Reload the page. If it persists, click Clear offline cache or open ?qa=1 for diagnostics.');
+        return;
+      }
       const email = (signUpEmail && signUpEmail.value ? signUpEmail.value : '').trim();
       const password = (signUpPassword && signUpPassword.value ? signUpPassword.value : '').trim();
       if (!email || !password) return;
@@ -555,7 +589,10 @@
     magicForm.addEventListener('submit', async (event) => {
       event.preventDefault();
       const client = getClient();
-      if (!client) return;
+      if (!client) {
+        setStatus('Supabase not ready', 'Reload the page. If it persists, click Clear offline cache or open ?qa=1 for diagnostics.');
+        return;
+      }
       const email = (magicEmail && magicEmail.value ? magicEmail.value : '').trim();
       if (!email) return;
       setStatus('Sending magic link…');
@@ -598,33 +635,11 @@
   }
 
   if (clearCacheBtn) {
-    clearCacheBtn.addEventListener('click', async () => {
-      setStatus('Clearing offline cache…', 'This will refresh the page.');
-      try {
-        if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
-          const regs = await navigator.serviceWorker.getRegistrations();
-          await Promise.all(regs.map((r) => r.unregister()));
-        }
-      } catch {
-        // ignore
-      }
-      try {
-        if (window.caches && caches.keys) {
-          const keys = await caches.keys();
-          await Promise.all(keys.filter((k) => k.startsWith('scp-cache-')).map((k) => caches.delete(k)));
-        }
-      } catch {
-        // ignore
-      }
-      try {
-        // Fresh navigation to ensure we load new SW + assets.
-        const url = new URL(window.location.href);
-        url.searchParams.set('v', String(Date.now()));
-        window.location.replace(url.toString());
-      } catch {
-        window.location.reload();
-      }
-    });
+    clearCacheBtn.addEventListener('click', clearOfflineCacheAndReload);
+  }
+
+  if (clearCacheAuthBtn) {
+    clearCacheAuthBtn.addEventListener('click', clearOfflineCacheAndReload);
   }
 
   const client = getClient();
