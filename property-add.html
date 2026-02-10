@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell Your Property | Spanish Coast Properties</title>
+    <meta name="description"
+        content="Submit your property for sale in Costa Blanca South. Upload photos, add key details, and we will review before publishing. Free photo shoot available (subject to area and review).">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/property-add.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Sell Your Property | Spanish Coast Properties">
+    <meta property="og:description" content="Submit your property for sale. We review and publish verified listings.">
+    <meta property="og:url" content="https://oceallandev.github.io/spanishcoast/property-add.html">
+    <meta property="og:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
+
+    <meta name="theme-color" content="#030712">
+    <link rel="manifest" href="manifest.webmanifest?v=20260210zt">
+
+    <link rel="stylesheet" href="style.css?v=20260210zt">
+    <script defer src="i18n.js?v=20260210zt"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script defer src="config.js?v=20260210zt"></script>
+    <script defer src="supabase-init.js?v=20260210zt"></script>
+</head>
+
+<body data-section="account">
+    <div class="bg-mesh"></div>
+
+    <header class="main-header glass sticky">
+        <div class="header-inner">
+            <div class="header-left">
+                <div class="logo">
+                    <a href="index.html" aria-label="Spanish Coast Properties Home">
+                        <img src="assets/header-logo.png?v=2" alt="Spanish Coast Properties" class="main-logo"
+                            id="main-logo-img" style="cursor: pointer;">
+                    </a>
+                </div>
+                <div class="brand-info">
+                    <span class="brand-name">Spanish Coast Properties</span>
+                </div>
+                <nav class="primary-nav" id="primary-nav" aria-label="Site sections">
+                    <a class="nav-link" data-section="home" href="index.html">Home</a>
+                    <a class="nav-link" data-section="properties" href="properties.html">Properties</a>
+                    <a class="nav-link" data-section="businesses" href="businesses.html">Businesses</a>
+                    <a class="nav-link" data-section="vehicles" href="vehicles.html">Vehicles</a>
+                    <a class="nav-link" data-section="services" href="services.html">Services</a>
+                </nav>
+            </div>
+
+            <div class="header-right">
+                <button id="mobile-menu-btn" class="mobile-menu-btn" type="button" aria-expanded="false"
+                    aria-label="Menu">☰</button>
+                <a class="header-cta" href="tel:+34624867866">Call</a>
+            </div>
+        </div>
+    </header>
+
+    <div id="mobile-menu-backdrop" class="mobile-menu-backdrop" aria-hidden="true"></div>
+    <aside id="mobile-menu" class="mobile-menu" aria-hidden="true">
+        <div class="mobile-menu-head">
+            <div class="mobile-menu-title">Spanish Coast Properties</div>
+            <button id="mobile-menu-close" class="mobile-menu-close" type="button">✕</button>
+        </div>
+        <nav class="mobile-menu-links" aria-label="Mobile menu">
+            <a href="index.html">Home</a>
+            <a href="properties.html">Properties</a>
+            <a href="businesses.html">Businesses</a>
+            <a href="vehicles.html">Vehicles</a>
+            <a href="services.html">Services</a>
+            <a href="account.html">Account</a>
+        </nav>
+        <div class="mobile-menu-foot">
+            <a class="cta-button" href="mailto:info@spanishcoastproperties.com">Email</a>
+            <a class="cta-button" href="tel:+34624867866">Call</a>
+        </div>
+    </aside>
+
+    <main class="site-main" id="site-main">
+        <section class="page-section catalog-section active" aria-label="Sell your property">
+            <div class="catalog-hero">
+                <h2 data-i18n="property_add.hero.title">Sell Your Property With Us</h2>
+                <p data-i18n="property_add.hero.subtitle">
+                    Add your property details and photos. We review every submission and publish only verified listings.
+                </p>
+                <p class="muted" data-i18n="property_add.hero.note">
+                    If the property is a good fit for our area, we may contact you to schedule a free photo shooting using modern technology (subject to review and availability).
+                </p>
+                <div class="service-tags">
+                    <span class="tag" data-i18n="property_add.tags.sale">For sale</span>
+                    <span class="tag" data-i18n="property_add.tags.review">Admin review</span>
+                    <span class="tag" data-i18n="property_add.tags.photos">Photos</span>
+                    <span class="tag" data-i18n="property_add.tags.cb_south">Costa Blanca South</span>
+                </div>
+            </div>
+
+            <div class="glass panel">
+                <h3 style="margin:0;" data-i18n="property_add.form.title">Property details</h3>
+                <p class="muted" style="margin-top:0.35rem;" data-i18n="property_add.form.signin_hint">
+                    Tip: sign in on the <a class="admin-link" href="account.html">Account</a> page for instant submission and photo upload.
+                </p>
+
+                <form id="property-add-form" class="form-grid" autocomplete="on">
+                    <label>
+                        <span data-i18n="property_add.field.type">Type</span>
+                        <select id="pa-type" class="admin-input" required>
+                            <option value="" selected disabled>Select</option>
+                            <option value="Apartment">Apartment</option>
+                            <option value="Villa">Villa</option>
+                            <option value="Town House">Town House</option>
+                            <option value="Penthouse">Penthouse</option>
+                            <option value="Commercial">Commercial</option>
+                            <option value="Land">Land</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        <span data-i18n="property_add.field.town">Town / Area</span>
+                        <input id="pa-town" type="text" placeholder="e.g. Torrevieja" required>
+                    </label>
+
+                    <label>
+                        <span data-i18n="property_add.field.province">Province</span>
+                        <input id="pa-province" type="text" placeholder="Alicante" value="Alicante">
+                    </label>
+
+                    <label>
+                        <span data-i18n="property_add.field.price">Expected price (EUR)</span>
+                        <input id="pa-price" type="number" inputmode="numeric" step="1" min="0" placeholder="e.g. 189000">
+                    </label>
+
+                    <label>
+                        <span data-i18n="property_add.field.beds">Beds</span>
+                        <input id="pa-beds" type="number" inputmode="numeric" step="1" min="0" placeholder="e.g. 3">
+                    </label>
+
+                    <label>
+                        <span data-i18n="property_add.field.baths">Baths</span>
+                        <input id="pa-baths" type="number" inputmode="numeric" step="1" min="0" placeholder="e.g. 2">
+                    </label>
+
+                    <label>
+                        <span data-i18n="property_add.field.built_area">Built area (m2)</span>
+                        <input id="pa-built" type="number" inputmode="numeric" step="1" min="0" placeholder="e.g. 95">
+                    </label>
+
+                    <label>
+                        <span data-i18n="property_add.field.plot_area">Plot area (m2)</span>
+                        <input id="pa-plot" type="number" inputmode="numeric" step="1" min="0" placeholder="e.g. 250">
+                    </label>
+
+                    <label style="grid-column: 1 / -1;">
+                        <span data-i18n="property_add.field.description">Description</span>
+                        <textarea id="pa-desc" rows="5" placeholder="Condition, upgrades, parking, pool, orientation, nearby beach/golf, etc."></textarea>
+                    </label>
+
+                    <label style="grid-column: 1 / -1;">
+                        <span data-i18n="property_add.field.features">Key features (optional)</span>
+                        <input id="pa-features" type="text" placeholder="e.g. Pool, Parking, Sea view, Renovated, Near beach">
+                    </label>
+
+                    <div class="divider"></div>
+
+                    <h3 style="margin:0;" data-i18n="property_add.photos.title">Photos</h3>
+                    <p class="muted" style="margin-top:0.35rem;" data-i18n="property_add.photos.note">
+                        Add up to 12 images. If you don’t have good photos, submit anyway and we can arrange a free shoot after review.
+                    </p>
+
+                    <label style="grid-column: 1 / -1;">
+                        <span data-i18n="property_add.field.photos">Upload photos</span>
+                        <input id="pa-photos" type="file" accept="image/*" multiple>
+                    </label>
+
+                    <div id="pa-photo-preview" class="upload-grid" style="display:none"></div>
+                    <div class="muted" id="pa-photo-meta" aria-live="polite" style="grid-column: 1 / -1;"></div>
+
+                    <div class="divider"></div>
+
+                    <h3 style="margin:0;" data-i18n="property_add.location.title">Location (optional)</h3>
+                    <p class="muted" style="margin-top:0.35rem;" data-i18n="property_add.location.note">
+                        For privacy, do not share the exact address here. Town/area is enough. GPS coordinates help us speed up evaluation.
+                    </p>
+
+                    <div class="scout-location-row" style="grid-column: 1 / -1;">
+                        <button class="cta-button cta-button--outline" id="pa-get-location" type="button" data-i18n="property_add.location.btn">Use my location</button>
+                        <div class="muted" id="pa-location-text">No location yet.</div>
+                    </div>
+
+                    <label>
+                        <span data-i18n="property_add.field.lat">Latitude</span>
+                        <input id="pa-lat" type="number" inputmode="decimal" step="0.000001" placeholder="e.g. 37.9787">
+                    </label>
+
+                    <label>
+                        <span data-i18n="property_add.field.lon">Longitude</span>
+                        <input id="pa-lon" type="number" inputmode="decimal" step="0.000001" placeholder="e.g. -0.6822">
+                    </label>
+
+                    <div class="divider"></div>
+
+                    <h3 style="margin:0;" data-i18n="property_add.contact.title">Your contact (not shown publicly)</h3>
+
+                    <label>
+                        <span data-i18n="property_add.field.name">Name</span>
+                        <input id="pa-name" type="text" placeholder="Your name" required>
+                    </label>
+
+                    <label>
+                        <span data-i18n="property_add.field.email">Email</span>
+                        <input id="pa-email" type="email" placeholder="you@example.com">
+                    </label>
+
+                    <label>
+                        <span data-i18n="property_add.field.phone">Phone / WhatsApp</span>
+                        <input id="pa-phone" type="tel" placeholder="+34..." required>
+                    </label>
+
+                    <label style="grid-column: 1 / -1;">
+                        <span data-i18n="property_add.field.private_address">Exact address (optional, private)</span>
+                        <input id="pa-address" type="text" placeholder="Street + number (only for us, not published)">
+                    </label>
+
+                    <label class="scout-check" style="grid-column: 1 / -1;">
+                        <input id="pa-confirm" type="checkbox" required>
+                        <span data-i18n="property_add.confirm">
+                            I confirm I am the owner (or have permission to list this property) and I agree to be contacted for verification.
+                        </span>
+                    </label>
+
+                    <div class="simple-cta" style="margin-top:0.4rem;">
+                        <button class="cta-button" id="pa-submit" type="submit" data-i18n="property_add.submit">Submit for review</button>
+                        <button class="cta-button cta-button--outline" id="pa-copy" type="button" disabled data-i18n="property_add.copy">Copy message</button>
+                        <a class="cta-button cta-button--outline" id="pa-mailto" href="#" aria-disabled="true" data-i18n="property_add.email">Email</a>
+                        <a class="cta-button cta-button--outline" id="pa-whatsapp" href="#" aria-disabled="true" target="_blank"
+                            rel="noreferrer" data-i18n="property_add.whatsapp">WhatsApp</a>
+                    </div>
+
+                    <div class="muted" id="pa-status" aria-live="polite" style="margin-top:0.4rem;"></div>
+                    <pre id="pa-output" class="muted"
+                        style="white-space:pre-wrap; word-break:break-word; margin-top:0.6rem; display:none;"></pre>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h3>Spanish Coast Properties</h3>
+                <p>Sell your property with verified listings and professional support in Costa Blanca South.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="properties.html">Properties</a></li>
+                    <li><a href="new-builds.html">New Builds</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="account.html">Account</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <ul class="footer-links">
+                    <li><a href="tel:+34624867866">+34 624 867 866</a></li>
+                    <li><a href="mailto:info@spanishcoastproperties.com">info@spanishcoastproperties.com</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
+    </footer>
+
+    <script defer src="property-add.js?v=20260210zt"></script>
+    <script defer src="site.js?v=20260210zt"></script>
+</body>
+
+</html>
+

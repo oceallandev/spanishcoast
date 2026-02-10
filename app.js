@@ -344,6 +344,45 @@ document.addEventListener('DOMContentLoaded', () => {
             .replace(/[\u0300-\u036f]/g, '');
     }
 
+    // When owner-submitted listings are approved, some may not include GPS coordinates.
+    // We keep the UX intact by falling back to a town-level centroid (approximate, not exact address).
+    const TOWN_CENTROIDS = (() => {
+        const acc = new Map(); // townKey -> { sumLat, sumLon, n }
+        (Array.isArray(allProperties) ? allProperties : []).forEach((p) => {
+            const townKey = normalize(p && p.town).trim();
+            if (!townKey) return;
+            const lat = Number(p && p.latitude);
+            const lon = Number(p && p.longitude);
+            if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
+            const cur = acc.get(townKey) || { sumLat: 0, sumLon: 0, n: 0 };
+            cur.sumLat += lat;
+            cur.sumLon += lon;
+            cur.n += 1;
+            acc.set(townKey, cur);
+        });
+        const out = new Map(); // townKey -> { lat, lon }
+        acc.forEach((v, k) => {
+            if (!v || !v.n) return;
+            out.set(k, { lat: v.sumLat / v.n, lon: v.sumLon / v.n });
+        });
+        return out;
+    })();
+
+    function ensureListingCoords(property) {
+        if (!property) return property;
+        const lat = Number(property && property.latitude);
+        const lon = Number(property && property.longitude);
+        if (Number.isFinite(lat) && Number.isFinite(lon)) return property;
+        const townKey = normalize(property && property.town).trim();
+        if (!townKey) return property;
+        const centroid = TOWN_CENTROIDS.get(townKey);
+        if (!centroid) return property;
+        property.latitude = centroid.lat;
+        property.longitude = centroid.lon;
+        property.approx_location = true;
+        return property;
+    }
+
     function builtAreaFor(property) {
         const built = Number(property && property.surface_area && property.surface_area.built);
         return Number.isFinite(built) ? built : 0;
@@ -1363,6 +1402,91 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             // ignore
         }
+    }
+
+    const approvedPropertyListingIds = new Set(); // listing UUIDs already merged into allProperties
+
+    function mapApprovedPropertyListing(row) {
+        if (!row) return null;
+        const images = Array.isArray(row.images) ? row.images : [];
+        const features = Array.isArray(row.features) ? row.features : [];
+        const built = Number(row.built_area);
+        const plot = Number(row.plot_area);
+        const obj = {
+            id: toText(row.id).trim(),
+            ref: toText(row.ref).trim(),
+            price: Number.isFinite(Number(row.price)) ? Number(row.price) : 0,
+            currency: toText(row.currency, 'EUR').trim() || 'EUR',
+            type: toText(row.type, 'Property').trim(),
+            town: toText(row.town, '').trim(),
+            province: toText(row.province, 'Alicante').trim() || 'Alicante',
+            beds: Number.isFinite(Number(row.beds)) ? Math.trunc(Number(row.beds)) : 0,
+            baths: Number.isFinite(Number(row.baths)) ? Math.trunc(Number(row.baths)) : 0,
+            surface_area: { built: Number.isFinite(built) ? Math.trunc(built) : 0, plot: Number.isFinite(plot) ? Math.trunc(plot) : 0 },
+            latitude: Number.isFinite(Number(row.latitude)) ? Number(row.latitude) : null,
+            longitude: Number.isFinite(Number(row.longitude)) ? Number(row.longitude) : null,
+            description: toText(row.description, ''),
+            features,
+            images,
+            source: toText(row.source, 'owner') || 'owner'
+        };
+        ensureListingCoords(obj);
+        return obj;
+    }
+
+    async function loadApprovedPropertyListings() {
+        const client = getSupabase();
+        if (!client) return;
+
+        try {
+            const { data, error } = await client
+                .from('property_listings')
+                .select('id,ref,source,published,type,town,province,price,currency,beds,baths,built_area,plot_area,latitude,longitude,images,features,description,created_at')
+                .eq('published', true)
+                // Ascending ensures "newest first" sorting (by source index) stays correct after merging.
+                .order('created_at', { ascending: true })
+                .limit(500);
+
+            if (error) return;
+            const rows = Array.isArray(data) ? data : [];
+            if (!rows.length) return;
+
+            let added = 0;
+            rows.forEach((r) => {
+                const id = toText(r && r.id).trim();
+                if (!id || approvedPropertyListingIds.has(id)) return;
+
+                const mapped = mapApprovedPropertyListing(r);
+                if (!mapped) return;
+                // Keep the app's region constraint (Costa Blanca South) consistent.
+                if (!isPropertyInDisplayArea(mapped)) return;
+
+                const pid = idKey(mapped.id) || idKey(mapped.ref);
+                if (!pid || propertyById.has(pid)) return;
+
+                const index = allProperties.length;
+                approvedPropertyListingIds.add(id);
+                sourceIndexById.set(pid, index);
+                propertyById.set(pid, mapped);
+                allProperties.push(mapped);
+                added += 1;
+            });
+
+            if (added > 0) {
+                filterProperties();
+                applyRefFromUrl(); // allow deep links to open approved listings
+            }
+        } catch {
+            // ignore
+        }
+    }
+
+    function initSupabaseApprovedPropertyListings() {
+        const run = () => loadApprovedPropertyListings();
+        // Run soon (supabase-init.js should have already initialised in most cases).
+        window.setTimeout(run, 120);
+        // Also listen for the ready signal in case init happens later.
+        window.addEventListener('scp:supabase:ready', run, { once: true });
     }
 
     function sourceUrlFor(property) {
@@ -3401,6 +3525,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateFavoritesControls();
     initSupabaseFavoritesSync();
+    initSupabaseApprovedPropertyListings();
 
     if (favoritesToggleBtn) {
         favoritesToggleBtn.addEventListener('click', () => {

@@ -699,3 +699,247 @@ drop trigger if exists vehicle_listings_set_updated_at on public.vehicle_listing
 create trigger vehicle_listings_set_updated_at
 before update on public.vehicle_listings
 for each row execute procedure public.set_updated_at();
+
+-- 8) Properties (owner submissions + approved listings)
+-- Similar to vehicles:
+-- - Submissions contain PII and MUST remain private (owner/admin only)
+-- - Admin approves to publish into public.property_listings (no PII)
+
+-- 8.1) Storage bucket for owner-submitted property photos (private)
+-- Path convention: {auth.uid()}/{submission_uuid}/{uuid}.jpg
+insert into storage.buckets (id, name, public)
+values ('owner-properties', 'owner-properties', false)
+on conflict (id) do nothing;
+
+-- Public bucket for approved listing photos (no PII). Admin uploads here during approval.
+-- Path convention: {listing_ref}/{uuid}.jpg
+insert into storage.buckets (id, name, public)
+values ('property-listings', 'property-listings', true)
+on conflict (id) do nothing;
+
+drop policy if exists "owner-properties: insert own" on storage.objects;
+create policy "owner-properties: insert own"
+on storage.objects for insert
+to authenticated
+with check (
+  bucket_id = 'owner-properties'
+  and split_part(name, '/', 1) = auth.uid()::text
+);
+
+drop policy if exists "owner-properties: read own or admin" on storage.objects;
+create policy "owner-properties: read own or admin"
+on storage.objects for select
+to authenticated
+using (
+  bucket_id = 'owner-properties'
+  and (split_part(name, '/', 1) = auth.uid()::text or public.is_admin())
+);
+
+drop policy if exists "owner-properties: delete own or admin" on storage.objects;
+create policy "owner-properties: delete own or admin"
+on storage.objects for delete
+to authenticated
+using (
+  bucket_id = 'owner-properties'
+  and (split_part(name, '/', 1) = auth.uid()::text or public.is_admin())
+);
+
+drop policy if exists "property-listings: admin insert" on storage.objects;
+create policy "property-listings: admin insert"
+on storage.objects for insert
+to authenticated
+with check (
+  bucket_id = 'property-listings'
+  and public.is_admin()
+);
+
+drop policy if exists "property-listings: admin delete" on storage.objects;
+create policy "property-listings: admin delete"
+on storage.objects for delete
+to authenticated
+using (
+  bucket_id = 'property-listings'
+  and public.is_admin()
+);
+
+-- 8.2) Submissions inbox (private)
+create table if not exists public.property_submissions (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  user_email text,
+
+  source text not null default 'owner' check (source in ('owner')),
+
+  -- PII: stored for admin coordination only (not shown publicly).
+  contact_name text,
+  contact_email text,
+  contact_phone text,
+
+  status text not null default 'pending' check (status in ('pending', 'approved', 'rejected')),
+  admin_notes text,
+
+  -- Listing payload (no PII). Flexible so we can evolve fields without migrations.
+  listing jsonb not null,
+  -- Optional extra/sensitive fields that should never be published (e.g. exact address).
+  raw jsonb,
+
+  photo_bucket text not null default 'owner-properties',
+  photo_paths jsonb,
+
+  approved_listing_id uuid,
+  reviewed_at timestamptz,
+
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.property_submissions enable row level security;
+
+-- Migrations (safe to re-run).
+alter table public.property_submissions add column if not exists user_email text;
+alter table public.property_submissions add column if not exists source text;
+alter table public.property_submissions add column if not exists contact_name text;
+alter table public.property_submissions add column if not exists contact_email text;
+alter table public.property_submissions add column if not exists contact_phone text;
+alter table public.property_submissions add column if not exists status text;
+alter table public.property_submissions add column if not exists admin_notes text;
+alter table public.property_submissions add column if not exists listing jsonb;
+alter table public.property_submissions add column if not exists raw jsonb;
+alter table public.property_submissions add column if not exists photo_bucket text;
+alter table public.property_submissions add column if not exists photo_paths jsonb;
+alter table public.property_submissions add column if not exists approved_listing_id uuid;
+alter table public.property_submissions add column if not exists reviewed_at timestamptz;
+
+alter table public.property_submissions drop constraint if exists property_submissions_source_check;
+alter table public.property_submissions
+  add constraint property_submissions_source_check
+  check (source in ('owner'));
+
+alter table public.property_submissions drop constraint if exists property_submissions_status_check;
+alter table public.property_submissions
+  add constraint property_submissions_status_check
+  check (status in ('pending', 'approved', 'rejected'));
+
+create index if not exists property_submissions_created_at_idx on public.property_submissions(created_at desc);
+create index if not exists property_submissions_status_idx on public.property_submissions(status);
+
+drop policy if exists "property_submissions: read own or admin" on public.property_submissions;
+create policy "property_submissions: read own or admin"
+on public.property_submissions for select
+using (auth.uid() = user_id or public.is_admin());
+
+drop policy if exists "property_submissions: insert own" on public.property_submissions;
+create policy "property_submissions: insert own"
+on public.property_submissions for insert
+with check (auth.uid() = user_id);
+
+drop policy if exists "property_submissions: admin update" on public.property_submissions;
+create policy "property_submissions: admin update"
+on public.property_submissions for update
+using (public.is_admin())
+with check (public.is_admin());
+
+drop policy if exists "property_submissions: admin delete" on public.property_submissions;
+create policy "property_submissions: admin delete"
+on public.property_submissions for delete
+using (public.is_admin());
+
+drop trigger if exists property_submissions_set_updated_at on public.property_submissions;
+create trigger property_submissions_set_updated_at
+before update on public.property_submissions
+for each row execute procedure public.set_updated_at();
+
+-- 8.3) Public listings (approved properties only; no PII).
+-- Stable "SCP-XXXXXX" refs for owner-submitted properties.
+create sequence if not exists public.owner_scp_ref_seq start 900000;
+grant usage, select on sequence public.owner_scp_ref_seq to authenticated;
+
+create table if not exists public.property_listings (
+  id uuid primary key default gen_random_uuid(),
+  submission_id uuid references public.property_submissions(id) on delete set null,
+
+  published boolean not null default true,
+  source text not null default 'owner' check (source in ('owner', 'admin')),
+
+  ref text unique not null default ('SCP-' || nextval('public.owner_scp_ref_seq')::text),
+
+  type text,
+  town text,
+  province text,
+  price numeric,
+  currency text not null default 'EUR',
+  beds int,
+  baths int,
+  built_area int,
+  plot_area int,
+  latitude double precision,
+  longitude double precision,
+  images jsonb,
+  features jsonb,
+  description text,
+
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.property_listings enable row level security;
+
+-- Migrations (safe to re-run).
+alter table public.property_listings add column if not exists submission_id uuid;
+alter table public.property_listings add column if not exists published boolean;
+alter table public.property_listings add column if not exists source text;
+alter table public.property_listings add column if not exists ref text;
+alter table public.property_listings add column if not exists type text;
+alter table public.property_listings add column if not exists town text;
+alter table public.property_listings add column if not exists province text;
+alter table public.property_listings add column if not exists price numeric;
+alter table public.property_listings add column if not exists currency text;
+alter table public.property_listings add column if not exists beds int;
+alter table public.property_listings add column if not exists baths int;
+alter table public.property_listings add column if not exists built_area int;
+alter table public.property_listings add column if not exists plot_area int;
+alter table public.property_listings add column if not exists latitude double precision;
+alter table public.property_listings add column if not exists longitude double precision;
+alter table public.property_listings add column if not exists images jsonb;
+alter table public.property_listings add column if not exists features jsonb;
+alter table public.property_listings add column if not exists description text;
+
+alter table public.property_listings drop constraint if exists property_listings_source_check;
+alter table public.property_listings
+  add constraint property_listings_source_check
+  check (source in ('owner', 'admin'));
+
+create index if not exists property_listings_created_at_idx on public.property_listings(created_at desc);
+create index if not exists property_listings_published_idx on public.property_listings(published);
+create index if not exists property_listings_ref_idx on public.property_listings(ref);
+
+drop policy if exists "property_listings: public read published" on public.property_listings;
+create policy "property_listings: public read published"
+on public.property_listings for select
+using (published = true);
+
+drop policy if exists "property_listings: admin read all" on public.property_listings;
+create policy "property_listings: admin read all"
+on public.property_listings for select
+using (public.is_admin());
+
+drop policy if exists "property_listings: admin insert" on public.property_listings;
+create policy "property_listings: admin insert"
+on public.property_listings for insert
+with check (public.is_admin());
+
+drop policy if exists "property_listings: admin update" on public.property_listings;
+create policy "property_listings: admin update"
+on public.property_listings for update
+using (public.is_admin())
+with check (public.is_admin());
+
+drop policy if exists "property_listings: admin delete" on public.property_listings;
+create policy "property_listings: admin delete"
+on public.property_listings for delete
+using (public.is_admin());
+
+drop trigger if exists property_listings_set_updated_at on public.property_listings;
+create trigger property_listings_set_updated_at
+before update on public.property_listings
+for each row execute procedure public.set_updated_at();

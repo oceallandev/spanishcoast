@@ -116,17 +116,79 @@
       return p;
     };
 
+    const isAbortLikeError = (error) => {
+      const msg = error && error.message ? String(error.message) : String(error || '');
+      const lower = msg.toLowerCase();
+      return lower.includes('abort') || lower.includes('aborted') || lower.includes('signal');
+    };
+
+    const freshSignal = () => {
+      try {
+        if (typeof AbortController !== 'undefined') return new AbortController().signal;
+      } catch {
+        // ignore
+      }
+      return undefined;
+    };
+
+    const isRequest = (value) => {
+      try {
+        return typeof Request !== 'undefined' && value instanceof Request;
+      } catch {
+        return false;
+      }
+    };
+
+    const readStoredSession = () => {
+      try {
+        const host = new URL(url).hostname || '';
+        const ref = host.split('.')[0] || '';
+        if (!ref) return null;
+        const key = `sb-${ref}-auth-token`;
+
+        const readKey = (storage) => {
+          if (!storage) return null;
+          try {
+            const raw = storage.getItem(key);
+            if (!raw) return null;
+            const parsed = JSON.parse(raw);
+            if (!parsed || typeof parsed !== 'object') return null;
+            const session = parsed.currentSession || parsed.session || parsed;
+            if (session && session.user && session.access_token) return session;
+            return null;
+          } catch {
+            return null;
+          }
+        };
+
+        return readKey(safeStorage) || readKey(getStorage('localStorage')) || readKey(getStorage('sessionStorage'));
+      } catch {
+        return null;
+      }
+    };
+
     // Strip AbortSignal from fetch requests used by Supabase. If a browser/extension aborts the
     // signal incorrectly, dropping it is safer than hard-failing auth/session checks.
     const safeFetch = nativeFetch
       ? (input, init) => {
         try {
+          let safeInput = input;
+          if (isRequest(safeInput) && safeInput.signal && safeInput.signal.aborted) {
+            // Some environments end up with an already-aborted Request.signal (e.g. extensions/VPNs).
+            // Recreate the request with a fresh (non-aborted) signal so auth/network calls can proceed.
+            try {
+              safeInput = new Request(safeInput, { signal: freshSignal() });
+            } catch {
+              safeInput = input;
+            }
+          }
+
           const isPlain = init && Object.prototype.toString.call(init) === '[object Object]';
           const opts = isPlain ? { ...init } : init;
           if (opts && typeof opts === 'object' && 'signal' in opts) {
             try { delete opts.signal; } catch { /* ignore */ }
           }
-          return nativeFetch(input, opts);
+          return nativeFetch(safeInput, opts);
         } catch {
           return nativeFetch(input, init);
         }
@@ -145,7 +207,32 @@
     if (safeStorage) auth.storage = safeStorage;
 
     const opts = safeFetch ? { auth, global: { fetch: safeFetch } } : { auth };
-    window.scpSupabase = window.supabase.createClient(url, anonKey, opts);
+    const client = window.supabase.createClient(url, anonKey, opts);
+
+    // Patch auth.getSession() so it never hard-crashes the app on AbortErrors.
+    // (We've seen "signal is aborted without reason" throw and break dashboards.)
+    try {
+      if (client && client.auth && typeof client.auth.getSession === 'function' && !client.auth.getSession.__scpPatched) {
+        const origGetSession = client.auth.getSession.bind(client.auth);
+        const wrapped = async (...args) => {
+          try {
+            return await origGetSession(...args);
+          } catch (error) {
+            if (isAbortLikeError(error)) {
+              const session = readStoredSession();
+              return { data: { session: session || null }, error: null };
+            }
+            throw error;
+          }
+        };
+        wrapped.__scpPatched = true;
+        client.auth.getSession = wrapped;
+      }
+    } catch {
+      // ignore
+    }
+
+    window.scpSupabase = client;
     ready(true);
   } catch (error) {
     window.scpSupabase = null;

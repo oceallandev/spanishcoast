@@ -235,9 +235,10 @@
     window.history.replaceState({}, '', url.toString());
   };
 
-  const init = () => {
+  const init = async () => {
     const url = new URL(window.location.href);
     const ref = toText(url.searchParams.get('ref')).trim();
+    const refUpper = ref.toUpperCase();
     const wl = url.searchParams.get('wl') === '1';
     setWhiteLabel(wl);
 
@@ -346,6 +347,51 @@
 
     const propertyMatch = all.find((p) => normalize(p && p.ref) === normRef) || null;
     let match = propertyMatch ? mergeBusinessMeta(propertyMatch, businessMeta) : (businessMeta ? toPropertyLikeBusiness(businessMeta) : null);
+
+    const mapDbPropertyListing = (r) => {
+      if (!r) return null;
+      const images = Array.isArray(r.images) ? r.images : [];
+      const features = Array.isArray(r.features) ? r.features : [];
+      const built = Number(r.built_area);
+      const plot = Number(r.plot_area);
+      return {
+        id: toText(r.id),
+        ref: toText(r.ref),
+        price: Number.isFinite(Number(r.price)) ? Number(r.price) : 0,
+        currency: toText(r.currency, 'EUR'),
+        type: toText(r.type, 'Property'),
+        town: toText(r.town, 'Costa Blanca South'),
+        province: toText(r.province, 'Alicante'),
+        beds: Number.isFinite(Number(r.beds)) ? Math.trunc(Number(r.beds)) : 0,
+        baths: Number.isFinite(Number(r.baths)) ? Math.trunc(Number(r.baths)) : 0,
+        surface_area: { built: Number.isFinite(built) ? Math.trunc(built) : 0, plot: Number.isFinite(plot) ? Math.trunc(plot) : 0 },
+        latitude: Number.isFinite(Number(r.latitude)) ? Number(r.latitude) : null,
+        longitude: Number.isFinite(Number(r.longitude)) ? Number(r.longitude) : null,
+        description: toText(r.description, ''),
+        features,
+        images
+      };
+    };
+
+    if (!match) {
+      // Approved owner-submitted listings live in Supabase; fetch by ref when not found in local feeds.
+      try {
+        const client = window.scpSupabase || null;
+        if (client) {
+          const { data, error } = await client
+            .from('property_listings')
+            .select('id,ref,type,town,province,price,currency,beds,baths,built_area,plot_area,latitude,longitude,images,features,description')
+            .eq('published', true)
+            .eq('ref', refUpper)
+            .maybeSingle();
+          if (!error && data) {
+            match = mapDbPropertyListing(data);
+          }
+        }
+      } catch {
+        // ignore
+      }
+    }
 
     if (!match) {
       if (refChip) refChip.textContent = ref;

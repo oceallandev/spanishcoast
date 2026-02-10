@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Vehicles | Spanish Coast Properties</title>
+    <title>Admin Properties | Spanish Coast Properties</title>
     <meta name="robots" content="noindex,nofollow">
 
     <meta name="theme-color" content="#030712">
@@ -36,13 +36,13 @@
                     <span class="brand-name">Spanish Coast Properties</span>
                 </div>
                 <nav class="primary-nav" aria-label="Site sections">
-                    <a class="nav-link" data-section="vehicles" href="vehicles.html">Vehicles</a>
+                    <a class="nav-link" data-section="properties" href="properties.html">Properties</a>
                     <a class="nav-link" href="account.html">Account</a>
                 </nav>
             </div>
 
             <div class="header-right">
-                <a class="header-cta" href="vehicles.html">Back to Vehicles</a>
+                <a class="header-cta" href="properties.html">Back to Properties</a>
             </div>
         </div>
     </header>
@@ -50,8 +50,8 @@
     <main class="site-main">
         <section class="page-section catalog-section active">
             <div class="page-hero">
-                <h1>Vehicle Submissions</h1>
-                <p>Owner and dealer submissions (pending review). Approve to publish into Cars/Boats.</p>
+                <h1>Property Submissions</h1>
+                <p>Owner submissions (pending review). Approve to publish into Properties (no contact details shown publicly).</p>
             </div>
 
             <div class="glass panel">
@@ -64,7 +64,7 @@
                             <option value="rejected">Rejected</option>
                             <option value="all">All</option>
                         </select>
-                        <input id="q" class="admin-input" type="text" placeholder="Search title, location, contact">
+                        <input id="q" class="admin-input" type="text" placeholder="Search town, type, contact">
                     </div>
                     <div class="admin-toolbar-right">
                         <button id="csv-btn" class="cta-button cta-button--outline" type="button">Export CSV</button>
@@ -77,14 +77,16 @@
                     <table class="admin-table" id="sub-table">
                         <thead>
                             <tr>
+                                <th>Photo</th>
                                 <th>Time</th>
                                 <th>Status</th>
-                                <th>Source</th>
-                                <th>Category</th>
-                                <th>Deal</th>
-                                <th>Title</th>
-                                <th>Location</th>
+                                <th>Type</th>
+                                <th>Town</th>
                                 <th>Price</th>
+                                <th>Beds</th>
+                                <th>Baths</th>
+                                <th>Built</th>
+                                <th>Photos</th>
                                 <th>Contact</th>
                                 <th>Actions</th>
                             </tr>
@@ -94,13 +96,13 @@
                 </div>
 
                 <div class="muted" style="margin-top:0.7rem;">
-                    Approving creates a public listing (no contact details) that appears on <code>vehicles.html</code>, <code>cars.html</code>, and <code>boats.html</code>.
+                    Approving creates a public listing (no contact details) that appears on <code>properties.html</code> and can generate brochures via <code>brochure.html?ref=SCP-XXXXXX</code>.
                 </div>
             </div>
         </section>
     </main>
 
-    <script defer src="admin-vehicles.js?v=20260210zt"></script>
+    <script defer src="admin-properties.js?v=20260210zt"></script>
     <script defer src="site.js?v=20260210zt"></script>
 </body>
 
