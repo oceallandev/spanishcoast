@@ -17,12 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const businessItems = Array.isArray(window.businessData) ? window.businessData : [];
     const vehicleItems = Array.isArray(window.vehicleData) ? window.vehicleData : [];
     const TORREVIEJA_COORDS = { lat: 37.978, lon: -0.683 };
+    // Display area control (for now: Costa Blanca South only).
+    // This intentionally excludes Costa Blanca North towns (e.g. Benidorm/Calpe/Denia).
     const MAX_DISTANCE_FROM_TORREVIEJA_KM = 100;
     const DISPLAY_BOUNDS = {
-        minLat: 37.84,
-        maxLat: 38.13,
-        minLon: -0.8,
-        maxLon: -0.6
+        minLat: 37.75,
+        maxLat: 38.48,
+        minLon: -1.10,
+        maxLon: -0.25
     };
     const MAIN_DESTINATIONS = [
         { value: 'all', label: t('city.all', 'All Destinations') },
@@ -1650,16 +1652,28 @@ document.addEventListener('DOMContentLoaded', () => {
         return sorted;
     }
 
-    function filterProperties() {
-        const loweredSearch = normalize(searchQuery);
-        const loweredRef = normalize(refQuery);
-        const isNewBuildsPage = toText(window.location && window.location.pathname).toLowerCase().endsWith('new-builds.html');
+	    function filterProperties() {
+	        const loweredSearch = normalize(searchQuery);
+	        const loweredRef = normalize(refQuery);
+	        const path = toText(window.location && window.location.pathname).toLowerCase();
+	        const isNewBuildsPage = path.endsWith('new-builds.html');
+	        const isResalesPage = path.endsWith('properties.html');
 
-        currentProperties = allProperties.filter((property) => {
-            const ref = normalize(property.ref);
-            const town = normalize(property.town);
-            const province = normalize(property.province);
-            const type = normalize(property.type);
+	        currentProperties = allProperties.filter((property) => {
+	            // Keep sections clearly separated:
+	            // - `new-builds.html` shows only explicit developer/new-build feed listings
+	            // - `properties.html` hides explicit new-build listings (resale-focused)
+	            if (isNewBuildsPage && !isExplicitNewBuild(property)) {
+	                return false;
+	            }
+	            if (isResalesPage && isExplicitNewBuild(property)) {
+	                return false;
+	            }
+
+	            const ref = normalize(property.ref);
+	            const town = normalize(property.town);
+	            const province = normalize(property.province);
+	            const type = normalize(property.type);
             const description = normalize(property.description);
             const features = featuresFor(property).join(' ').toLowerCase();
 
@@ -2438,24 +2452,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const reportBody = encodeURIComponent(
             `Hello Spanish Coast Properties,\n\nI found an issue with this listing and would like to flag it.\n\nReference: ${reference || 'N/A'}\nLocation: ${town}, ${province}\nApp link: ${propertyLink}${sourceUrl ? `\nOfficial page: ${sourceUrl}` : ''}\n\nWhat seems wrong:\n- \n\n(If possible, add a screenshot or describe the problem.)\n\nThank you.`
         );
-        const reportMailto = `mailto:info@spanishcoastproperties.com?subject=${reportSubject}&body=${reportBody}`;
-        const descriptionHtml = formatDescriptionHtml(description);
-        const t = (key, fallback, vars) => {
-            try {
-                if (window.SCP_I18N && typeof window.SCP_I18N.t === 'function') {
-                    return window.SCP_I18N.t(key, vars);
-                }
-            } catch (error) {
-                // ignore
-            }
-            if (fallback !== undefined) return toText(fallback);
-            return toText(key);
-        };
-        if (syncUrl) {
-            // Use pushState so browser Back closes the modal. If modal is already open, replace instead.
-            const shouldPush = Boolean(pushUrl) && !isModalOpen();
-            setBrowserRef(reference, { push: shouldPush, state: { modalRef: reference } });
-        }
+	        const reportMailto = `mailto:info@spanishcoastproperties.com?subject=${reportSubject}&body=${reportBody}`;
+	        const descriptionHtml = formatDescriptionHtml(description);
+	        if (syncUrl) {
+	            // Use pushState so browser Back closes the modal. If modal is already open, replace instead.
+	            const shouldPush = Boolean(pushUrl) && !isModalOpen();
+	            setBrowserRef(reference, { push: shouldPush, state: { modalRef: reference } });
+	        }
 
         const modalTitle = escapeHtml(`${type} ${t('common.in', 'in')} ${town}`);
 
