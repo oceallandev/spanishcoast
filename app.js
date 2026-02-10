@@ -1768,6 +1768,8 @@ document.addEventListener('DOMContentLoaded', () => {
         resultsCount.textContent = String(currentProperties.length);
 
         if (currentProperties.length === 0) {
+            const path = toText(window.location.pathname).toLowerCase();
+            const isNewBuildsPage = path.endsWith('new-builds.html');
             const refExact = normalize(refQuery);
             if (refExact) {
                 const candidate = allProperties.find((property) => normalize(property.ref) === refExact);
@@ -1777,6 +1779,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     propertyGrid.innerHTML = '<p style="color:#94a3b8">This listing is hidden because its images are unavailable.</p>';
                     return;
                 }
+            }
+
+            if (isNewBuildsPage) {
+                propertyGrid.innerHTML = `
+                    <div class="glass panel" style="padding:1.1rem;border-radius:18px">
+                        <h3 style="margin:0 0 0.35rem;color:#fff;font-weight:900">No new build listings found</h3>
+                        <p class="muted" style="margin:0 0 0.85rem">
+                            If you just added a developer/new-build XML feed, you still need to import it into the app.
+                            The site is static (GitHub Pages), so feeds must be converted into <code>newbuilds-listings.js</code>.
+                        </p>
+                        <div class="muted" style="margin:0 0 0.6rem;font-weight:800">Import steps</div>
+                        <ol class="muted" style="margin:0 0 0.9rem;padding-left:1.2rem">
+                            <li>Download your RedSp feed file (Kyero v3) to your computer.</li>
+                            <li>Run: <code>python3 import_redsp_kyero_v3.py --xml \"/path/to/redsp1-kyero_v3.xml\" --source redsp1</code></li>
+                            <li>Commit + push the updated <code>newbuilds-listings.js</code>.</li>
+                        </ol>
+                        <div class="simple-cta" style="margin:0">
+                            <a class="cta-button" href="property-new-builds.html">How New Builds Work</a>
+                            <a class="cta-button cta-button--outline" href="properties.html">Browse all properties</a>
+                        </div>
+                    </div>
+                `;
+                return;
             }
 
             propertyGrid.innerHTML = '<p style="color:#94a3b8">No properties found for these filters.</p>';

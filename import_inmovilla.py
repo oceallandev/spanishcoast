@@ -200,6 +200,9 @@ class ScpRefAllocator:
         candidates = [
             os.path.join(self.repo_root, "data.js"),
             os.path.join(self.repo_root, "custom-listings.js"),
+            # Public imported feeds (committed) must be scanned so new sources never collide.
+            os.path.join(self.repo_root, "inmovilla-listings.js"),
+            os.path.join(self.repo_root, "newbuilds-listings.js"),
             os.path.join(self.repo_root, "businesses-data.js"),
             os.path.join(self.repo_root, "vehicles-data.js"),
             os.path.join(self.repo_root, "reference_map.csv"),
@@ -221,15 +224,13 @@ class ScpRefAllocator:
                 return
 
         for fp in candidates:
-            if os.path.exists(fp) and os.path.basename(fp) != "inmovilla-listings.js":
+            if os.path.exists(fp):
                 scan_file(fp)
 
         if max_num <= 0:
             for root, dirs, files in os.walk(self.repo_root):
                 dirs[:] = [d for d in dirs if d not in (".git", "private")]
                 for fn in files:
-                    if fn == "inmovilla-listings.js":
-                        continue
                     if not (fn.endswith(".js") or fn.endswith(".csv")):
                         continue
                     scan_file(os.path.join(root, fn))
