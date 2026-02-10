@@ -93,8 +93,9 @@
       'nav.call': 'Call',
 
       'home.hero.title': 'Property, Business, and Vehicle Deals, Managed Like a Concierge.',
-      'home.hero.subtitle': 'Buy, sell, rent, manage, and maintain. One trusted team for homes, commercial spaces, businesses for sale, and vehicles.',
+      'home.hero.subtitle': 'Buy, sell, rent, manage, and maintain. One trusted team for resale homes, new-build developments, commercial spaces, businesses for sale, and vehicles.',
       'home.hero.browse_properties': 'Browse Properties',
+      'home.hero.new_builds': 'New Builds',
       'home.hero.businesses_for_sale': 'Businesses for Sale',
       'home.hero.vehicles': 'Vehicles',
       'home.hero.viewing_trip': 'Viewing Trip Package',
@@ -179,8 +180,9 @@
       'nav.call': 'Llamar',
 
       'home.hero.title': 'Ofertas de propiedades, negocios y vehículos, gestionadas como un concierge.',
-      'home.hero.subtitle': 'Compra, vende, alquila, gestiona y mantén. Un solo equipo de confianza para viviendas, locales comerciales, negocios en venta y vehículos.',
+      'home.hero.subtitle': 'Compra, vende, alquila, gestiona y mantén. Un solo equipo de confianza para viviendas de reventa, obra nueva, locales comerciales, negocios en venta y vehículos.',
       'home.hero.browse_properties': 'Ver propiedades',
+      'home.hero.new_builds': 'Obra Nueva',
       'home.hero.businesses_for_sale': 'Negocios en venta',
       'home.hero.vehicles': 'Vehículos',
       'home.hero.viewing_trip': 'Paquete de viaje de visitas',

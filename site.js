@@ -9,7 +9,14 @@
   }
 
   const path = (window.location.pathname || '').toLowerCase();
-  const section =
+  const bodySection = (() => {
+    try {
+      return (document.body && document.body.dataset && document.body.dataset.section) ? String(document.body.dataset.section) : '';
+    } catch {
+      return '';
+    }
+  })();
+  const inferredSection =
     path.endsWith('/new-builds.html') || path.endsWith('new-builds.html') ? 'newbuilds' :
     path.endsWith('/properties.html') || path.endsWith('properties.html') ? 'properties' :
     path.endsWith('/businesses.html') || path.endsWith('businesses.html') ? 'businesses' :
@@ -20,7 +27,12 @@
     path.endsWith('/admin-crm.html') || path.endsWith('admin-crm.html') ? 'account' :
     'home';
 
-  document.body.dataset.section = document.body.dataset.section || section;
+  // Most pages set body[data-section] explicitly; prefer that for nav highlighting.
+  // Exception: new-builds.html intentionally uses body[data-section="properties"] to reuse the app layout,
+  // but we still want the New Builds nav link to be active.
+  const section = inferredSection === 'newbuilds' ? 'newbuilds' : (bodySection || inferredSection);
+
+  document.body.dataset.section = bodySection || section;
 
   document.querySelectorAll('.nav-link[data-section]').forEach((link) => {
     link.classList.toggle('active', link.dataset.section === section);
@@ -61,6 +73,32 @@
   // Make Account discoverable without having to update every page header/footer manually.
   ensureNavLink('.primary-nav', { href: 'account.html', text: t('nav.account') || 'Account', section: 'account' });
   ensureNavLink('.mobile-menu-links', { href: 'account.html', text: t('nav.account') || 'Account' });
+
+  // Add "New Builds" to footer explore lists (only when a Properties link exists in that list).
+  (() => {
+    const label = t('nav.new_builds') || 'New Builds';
+    document.querySelectorAll('.site-footer .footer-links').forEach((ul) => {
+      if (!ul) return;
+      const propsLink = ul.querySelector('a[href="properties.html"]');
+      if (!propsLink) return;
+      const already = Array.from(ul.querySelectorAll('a')).some((a) => (a.getAttribute('href') || '').includes('new-builds.html'));
+      if (already) return;
+
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = 'new-builds.html';
+      a.textContent = label;
+      li.appendChild(a);
+
+      const propsLi = propsLink.closest('li');
+      if (propsLi && propsLi.parentElement === ul) {
+        if (propsLi.nextSibling) ul.insertBefore(li, propsLi.nextSibling);
+        else ul.appendChild(li);
+      } else {
+        ul.appendChild(li);
+      }
+    });
+  })();
 
   // Apply translations for nav labels without requiring every page to be edited.
   const setLinkText = (selector, text) => {
