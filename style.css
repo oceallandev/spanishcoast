@@ -3509,7 +3509,7 @@ body[data-section="properties"].map-open .map-section {
 @media print {
     @page {
         size: A4;
-        margin: 12mm;
+        margin: 10mm;
     }
 
     .no-print {
@@ -3532,18 +3532,56 @@ body[data-section="properties"].map-open .map-section {
         max-width: none !important;
     }
 
-    .brochure-content {
-        display: grid !important;
+    .brochure-head {
+        padding-bottom: 4mm !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+    }
+
+    /* Print viewports often match small-screen breakpoints; force a compact two-column hero. */
+    .brochure-hero {
+        grid-template-columns: 1.35fr 1fr !important;
+        gap: 6mm !important;
+        padding-top: 4mm !important;
+        align-items: start !important;
+    }
+
+    .brochure-hero-imgwrap {
+        aspect-ratio: 16/9 !important;
+        border-radius: 10px !important;
+        border-color: #e2e8f0 !important;
+        background: #f8fafc !important;
+    }
+
+    .brochure-hero-stats {
         grid-template-columns: 1fr 1fr;
-        gap: 10mm;
-        margin-top: 4mm;
+        gap: 3mm !important;
+    }
+
+    .brochure-stat {
+        padding: 3mm 4mm !important;
+        border-radius: 10px !important;
+        font-size: 0.92rem !important;
+    }
+
+    .brochure-content {
+        /* Print engines are still fragile with multi-column + spanning blocks. Keep flow simple and predictable. */
+        display: block !important;
+        margin-top: 6mm;
     }
 
     .brochure-block {
         margin-top: 0 !important;
         padding-top: 0 !important;
         border-top: 0 !important;
-        break-inside: avoid;
+        /* Allow large blocks (area, gallery, description) to flow across pages. */
+        break-inside: auto;
+    }
+
+    .brochure-content .brochure-block {
+        margin: 0 0 6mm 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
     }
 
     .brochure-block h2 {
@@ -3551,10 +3589,68 @@ body[data-section="properties"].map-open .map-section {
         margin-bottom: 3mm !important;
     }
 
-    .brochure-highlights,
-    .brochure-area-list,
+    .brochure-highlights {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 3mm !important;
+    }
+
+    .brochure-highlight {
+        padding: 3mm 3.5mm !important;
+        border-radius: 10px !important;
+        font-size: 0.95rem !important;
+        break-inside: avoid;
+    }
+
+    .brochure-area {
+        padding: 3.5mm !important;
+        border-radius: 10px !important;
+    }
+
+    .brochure-area-lead {
+        font-size: 0.96rem !important;
+        margin-bottom: 3mm !important;
+    }
+
+    .brochure-area-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 3mm !important;
+    }
+
+    .brochure-area-item {
+        padding: 3mm 3.5mm !important;
+        border-radius: 10px !important;
+        gap: 3mm !important;
+        break-inside: avoid;
+    }
+
+    .brochure-area-ic {
+        width: 28px !important;
+        height: 28px !important;
+        border-radius: 10px !important;
+        font-size: 0.98rem !important;
+    }
+
+    .brochure-area-label {
+        font-size: 0.72rem !important;
+    }
+
+    .brochure-area-val {
+        font-size: 0.98rem !important;
+    }
+
+    .brochure-area-meta {
+        font-size: 0.92rem !important;
+    }
+
     .brochure-features {
-        grid-template-columns: 1fr !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 3mm !important;
+    }
+
+    .brochure-features li {
+        padding: 3mm 3.5mm !important;
+        border-radius: 10px !important;
+        break-inside: avoid;
     }
 
     .brochure-description {
