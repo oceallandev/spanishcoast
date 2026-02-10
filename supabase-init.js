@@ -157,6 +157,33 @@
 
     window.scpSupabase = window.supabase.createClient(url, anonKey, { auth });
     ready(true);
+
+    // If we fell back to IndexedDB, verify it actually works. Some browsers expose `indexedDB`
+    // but still block it in strict/private modes. This keeps diagnostics accurate.
+    if (safeStorageType === 'indexedDB' && safeStorage && typeof safeStorage.getItem === 'function') {
+      const testKey = '__scp_idb_test__';
+      Promise.resolve()
+        .then(() => safeStorage.setItem(testKey, '1'))
+        .then(() => safeStorage.getItem(testKey))
+        .then((v) => {
+          if (String(v || '') !== '1') throw new Error('indexedDB not writable');
+        })
+        .catch(() => {
+          try {
+            window.scpSupabaseStatus = {
+              ...(window.scpSupabaseStatus || {}),
+              storage: 'none',
+              persistSession: false,
+              error: 'Browser blocked IndexedDB storage (private/strict mode)'
+            };
+          } catch {
+            // ignore
+          }
+        })
+        .finally(() => {
+          try { safeStorage.removeItem(testKey); } catch { /* ignore */ }
+        });
+    }
   } catch (error) {
     window.scpSupabase = null;
     ready(false, error && error.message ? error.message : String(error));
