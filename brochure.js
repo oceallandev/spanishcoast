@@ -8,6 +8,7 @@
   const heroImg = $('brochure-hero-img');
   const statsEl = $('brochure-stats');
   const highlightsEl = $('brochure-highlights');
+  const areaEl = $('brochure-area');
   const descEl = $('brochure-description');
   const featuresEl = $('brochure-features');
   const galleryEl = $('brochure-gallery');
@@ -253,6 +254,13 @@
     const price = formatListingPrice(match);
     const images = imageUrlsFor(match);
 
+    // Helps browsers suggest a good PDF filename (varies by browser).
+    try {
+      document.title = `Brochure ${ref} - ${town}`;
+    } catch {
+      // ignore
+    }
+
     const shareLink = () => {
       const u = new URL(window.location.href);
       u.searchParams.set('ref', ref);
@@ -315,6 +323,48 @@
         built ? `✅ Built area: ${built} m2` : ''
       ].filter(Boolean);
       highlightsEl.innerHTML = highlights.map((h) => `<div class="brochure-highlight">${escapeHtml(h)}</div>`).join('');
+    }
+
+    if (areaEl) {
+      const pickAreaCopy = (t) => {
+        const k = normalize(t);
+        if (k.includes('torrevieja')) return 'Coastal city with beaches, a marina promenade, and a wide choice of shops and restaurants.';
+        if (k.includes('guardamar')) return 'Known for long sandy beaches and the pine forest, with an easygoing coastal lifestyle.';
+        if (k.includes('orihuela')) return 'Popular coastal area with beaches, golf options, and year-round services.';
+        if (k.includes('quesada') || k.includes('ciudad quesada')) return 'Residential area with golf nearby and quick access to the coast and larger towns.';
+        if (k.includes('pilar')) return 'Authentic Spanish town close to the coast, with beaches and everyday services nearby.';
+        return 'Costa Blanca South lifestyle with year-round services, coastal atmosphere, and great connectivity across the area.';
+      };
+
+      const distanceKm = (lat1, lon1, lat2, lon2) => {
+        const toRad = (v) => (v * Math.PI) / 180;
+        const R = 6371;
+        const dLat = toRad(lat2 - lat1);
+        const dLon = toRad(lon2 - lon1);
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+          + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2))
+          * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+      };
+
+      const lat = Number(match && match.latitude);
+      const lon = Number(match && match.longitude);
+      const alc = { name: 'Alicante Airport (ALC)', lat: 38.2822, lon: -0.5582 };
+      const approxAirport = (Number.isFinite(lat) && Number.isFinite(lon))
+        ? Math.round(distanceKm(lat, lon, alc.lat, alc.lon))
+        : 0;
+
+      const cards = [
+        { k: 'Area', v: `${town}, ${province}` },
+        { k: 'Why it works', v: pickAreaCopy(town) },
+        approxAirport ? { k: 'Airport', v: `Approx. ${approxAirport} km to ${alc.name}` } : null,
+        { k: 'Everyday', v: 'Supermarkets, cafes, healthcare, and transport options are typically close by (depending on exact location).' }
+      ].filter(Boolean);
+
+      areaEl.innerHTML = cards
+        .map((c) => `<div class="brochure-area-card"><div class="brochure-area-k">${escapeHtml(c.k)}</div><div class="brochure-area-v">${escapeHtml(c.v)}</div></div>`)
+        .join('');
     }
 
     if (descEl) {

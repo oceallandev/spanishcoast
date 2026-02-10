@@ -2986,6 +2986,34 @@ body[data-section="properties"].map-open .map-section {
     gap: 0.7rem;
 }
 
+.brochure-area {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+}
+
+.brochure-area-card {
+    padding: 0.9rem 0.95rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.brochure-area-k {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(148, 163, 184, 0.95);
+    font-weight: 900;
+    margin-bottom: 0.35rem;
+}
+
+.brochure-area-v {
+    color: rgba(226, 232, 240, 0.92);
+    line-height: 1.55;
+    font-weight: 800;
+}
+
 .brochure-highlight {
     padding: 0.85rem 0.9rem;
     border-radius: 16px;
@@ -3098,6 +3126,9 @@ body[data-section="properties"].map-open .map-section {
     .brochure-highlights {
         grid-template-columns: 1fr;
     }
+    .brochure-area {
+        grid-template-columns: 1fr;
+    }
     .brochure-features {
         grid-template-columns: 1fr;
     }
@@ -3150,6 +3181,7 @@ body[data-section="properties"].map-open .map-section {
 
     .brochure-stat,
     .brochure-highlight,
+    .brochure-area-card,
     .brochure-features li {
         background: #f8fafc !important;
         border-color: #e2e8f0 !important;
