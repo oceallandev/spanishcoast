@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Favourites | Spanish Coast Properties</title>
+    <title>Admin Street Scout | Spanish Coast Properties</title>
     <meta name="robots" content="noindex,nofollow">
 
     <meta name="theme-color" content="#030712">
@@ -36,14 +36,14 @@
                     <span class="brand-name">Spanish Coast Properties</span>
                 </div>
                 <nav class="primary-nav" aria-label="Site sections">
-                    <a class="nav-link" data-section="properties" href="properties.html">Properties</a>
                     <a class="nav-link" data-section="services" href="services.html">Services</a>
                     <a class="nav-link" href="account.html">Account</a>
+                    <a class="nav-link" href="street-scout.html">Street Scout</a>
                 </nav>
             </div>
 
             <div class="header-right">
-                <a class="header-cta" href="properties.html">Back to Properties</a>
+                <a class="header-cta" href="account.html">Back to Account</a>
             </div>
         </div>
     </header>
@@ -51,28 +51,42 @@
     <main class="site-main">
         <section class="page-section catalog-section active">
             <div class="page-hero">
-                <h1>Favourites Inbox</h1>
-                <p>Recent saved listings from logged-in users (admin only).</p>
+                <h1>Street Scout Inbox</h1>
+                <p>Board photo leads submitted by collaborators (admin only).</p>
             </div>
 
             <div class="glass panel">
-                <div class="admin-toolbar">
+                <div class="admin-toolbar" style="flex-wrap:wrap; gap:0.7rem; align-items:center;">
                     <button id="refresh-btn" class="cta-button" type="button">Refresh</button>
                     <button id="csv-btn" class="cta-button cta-button--outline" type="button">Export CSV</button>
+                    <select id="status-filter" class="admin-select" aria-label="Filter by status">
+                        <option value="">All statuses</option>
+                        <option value="new">New</option>
+                        <option value="called">Called</option>
+                        <option value="contacted">Contacted</option>
+                        <option value="signed">Signed</option>
+                        <option value="sold">Sold</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
                 </div>
                 <div class="muted" id="admin-status" aria-live="polite"></div>
                 <div class="admin-table-wrap">
-                    <table class="admin-table" id="fav-table">
+                    <table class="admin-table" id="scout-table">
                         <thead>
                             <tr>
                                 <th>Photo</th>
                                 <th>Time</th>
-                                <th>User</th>
-                                <th>Ref</th>
-                                <th>Town</th>
-                                <th>Type</th>
-                                <th>Price</th>
-                                <th>Link</th>
+                                <th>Scout</th>
+                                <th>Status</th>
+                                <th>Tier</th>
+                                <th>Reward</th>
+                                <th>Location</th>
+                                <th>Phone</th>
+                                <th>SCP Ref</th>
+                                <th>Scout notes</th>
+                                <th>Admin notes</th>
+                                <th>Save</th>
+                                <th>Payout</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -82,7 +96,7 @@
         </section>
     </main>
 
-    <script defer src="admin-favourites.js?v=20260210zq"></script>
+    <script defer src="admin-scout.js?v=20260210zq"></script>
     <script defer src="site.js?v=20260210zq"></script>
 </body>
 

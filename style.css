@@ -2972,6 +2972,60 @@ body[data-section="properties"].map-open .map-section {
     min-width: 160px;
 }
 
+.scout-location-row {
+    display: flex;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.scout-preview-wrap {
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.9rem;
+}
+
+.scout-preview {
+    width: 100%;
+    max-height: 320px;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    background: rgba(15, 23, 42, 0.55);
+}
+
+.scout-check {
+    display: flex;
+    gap: 0.65rem;
+    align-items: flex-start;
+    font-weight: 800;
+    color: rgba(226, 232, 240, 0.92);
+}
+
+.scout-check input {
+    width: 18px;
+    height: 18px;
+    margin-top: 0.1rem;
+    accent-color: rgba(14, 165, 233, 0.85);
+}
+
+.scout-status {
+    border-left: 4px solid rgba(148, 163, 184, 0.55);
+}
+
+.scout-status--ok {
+    border-left-color: rgba(34, 197, 94, 0.75);
+}
+
+.scout-status--warn {
+    border-left-color: rgba(251, 191, 36, 0.75);
+}
+
+.scout-status--bad {
+    border-left-color: rgba(244, 63, 94, 0.78);
+}
+
 .divider {
     height: 1px;
     background: rgba(255, 255, 255, 0.08);

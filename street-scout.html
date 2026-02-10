@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Street Scout | Spanish Coast Properties</title>
+    <meta name="description"
+        content="Earn €200–€500: take a photo of a For Sale board, capture the location, and send it to Spanish Coast Properties. We onboard the listing and you get rewarded when it sells.">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/street-scout.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Street Scout | Spanish Coast Properties">
+    <meta property="og:description"
+        content="Earn €200–€500 by scouting For Sale boards. Snap a photo + location, we onboard the listing, you track the status and get rewarded when it closes.">
+    <meta property="og:url" content="https://oceallandev.github.io/spanishcoast/street-scout.html">
+    <meta property="og:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
+
+    <meta name="theme-color" content="#030712">
+    <link rel="manifest" href="manifest.webmanifest?v=20260210zq">
+    <link rel="stylesheet" href="style.css?v=20260210zq">
+    <script defer src="i18n.js?v=20260210zq"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script defer src="config.js?v=20260210zq"></script>
+    <script defer src="supabase-init.js?v=20260210zq"></script>
+</head>
+
+<body data-section="account">
+    <div class="bg-mesh"></div>
+
+    <header class="main-header glass sticky">
+        <div class="header-inner">
+            <div class="header-left">
+                <div class="logo">
+                    <a href="index.html" aria-label="Spanish Coast Properties Home">
+                        <img src="assets/header-logo.png?v=2" alt="Spanish Coast Properties" class="main-logo"
+                            id="main-logo-img" style="cursor: pointer;">
+                    </a>
+                </div>
+                <div class="brand-info">
+                    <span class="brand-name">Spanish Coast Properties</span>
+                </div>
+                <nav class="primary-nav" id="primary-nav" aria-label="Site sections">
+                    <a class="nav-link" data-section="home" href="index.html">Home</a>
+                    <a class="nav-link" data-section="properties" href="properties.html">Properties</a>
+                    <a class="nav-link" data-section="businesses" href="businesses.html">Businesses</a>
+                    <a class="nav-link" data-section="vehicles" href="vehicles.html">Vehicles</a>
+                    <a class="nav-link" data-section="services" href="services.html">Services</a>
+                </nav>
+            </div>
+
+            <div class="header-right">
+                <button id="mobile-menu-btn" class="mobile-menu-btn" type="button" aria-expanded="false" aria-label="Menu">☰</button>
+                <a class="header-cta" href="account.html" data-i18n="nav.account">Account</a>
+            </div>
+        </div>
+    </header>
+
+    <div id="mobile-menu-backdrop" class="mobile-menu-backdrop" aria-hidden="true"></div>
+    <aside id="mobile-menu" class="mobile-menu" aria-hidden="true">
+        <div class="mobile-menu-head">
+            <div class="mobile-menu-title">Spanish Coast Properties</div>
+            <button id="mobile-menu-close" class="mobile-menu-close" type="button">✕</button>
+        </div>
+        <nav class="mobile-menu-links" aria-label="Mobile menu">
+            <a href="index.html">Home</a>
+            <a href="properties.html">Properties</a>
+            <a href="businesses.html">Businesses</a>
+            <a href="vehicles.html">Vehicles</a>
+            <a href="services.html">Services</a>
+            <a href="account.html">Account</a>
+        </nav>
+        <div class="mobile-menu-foot">
+            <a class="cta-button" href="mailto:info@spanishcoastproperties.com">Email</a>
+            <a class="cta-button" href="tel:+34624867866">Call</a>
+        </div>
+    </aside>
+
+    <main class="simple-page">
+        <section class="simple-hero">
+            <h1 data-i18n="page.scout.hero.title">Street Scout (Earn €200–€500)</h1>
+            <p data-i18n="page.scout.hero.subtitle">
+                Walking around and saw a “For Sale” sign? Snap a photo, capture the location, and send it to us. If we
+                onboard the property and it sells, you get rewarded.
+            </p>
+            <div class="service-tags" aria-label="Street Scout benefits">
+                <span class="tag" data-i18n="page.scout.tag.photo">Photo</span>
+                <span class="tag" data-i18n="page.scout.tag.location">Location</span>
+                <span class="tag" data-i18n="page.scout.tag.tracking">Tracking</span>
+                <span class="tag" data-i18n="page.scout.tag.payout">Payout</span>
+            </div>
+            <div class="simple-cta">
+                <a class="cta-button" href="#submit" data-i18n="page.scout.cta.submit">Submit a board</a>
+                <a class="cta-button cta-button--outline" href="account.html" data-i18n="page.scout.cta.account">Sign in / Create account</a>
+            </div>
+        </section>
+
+        <section class="simple-section">
+            <h2 data-i18n="page.scout.how.title">How It Works</h2>
+            <div class="service-grid">
+                <div class="service-card" role="note">
+                    <h3 data-i18n="page.scout.how.1.title">1) Take a photo</h3>
+                    <p data-i18n="page.scout.how.1.p">Capture the “For Sale” board clearly (phone number visible).</p>
+                </div>
+                <div class="service-card" role="note">
+                    <h3 data-i18n="page.scout.how.2.title">2) Send location</h3>
+                    <p data-i18n="page.scout.how.2.p">We attach GPS so we know the exact street and can react fast.</p>
+                </div>
+                <div class="service-card" role="note">
+                    <h3 data-i18n="page.scout.how.3.title">3) We call and onboard</h3>
+                    <p data-i18n="page.scout.how.3.p">We contact the owner/agency, verify details, and add it to our portfolio.</p>
+                </div>
+                <div class="service-card" role="note">
+                    <h3 data-i18n="page.scout.how.4.title">4) You get rewarded</h3>
+                    <p data-i18n="page.scout.how.4.p">When the deal closes, you receive a minimum €200 or €500 depending on the property tier.</p>
+                </div>
+            </div>
+            <p class="muted" style="margin-top:0.9rem" data-i18n="page.scout.disclaimer">
+                Note: payouts are subject to verification (duplicate submissions, fake boards, wrong location, or non-onboarded listings are not eligible).
+            </p>
+        </section>
+
+        <section class="simple-section" id="submit">
+            <h2 data-i18n="page.scout.submit.title">Submit a For Sale Board</h2>
+
+            <div class="glass panel" id="scout-status" aria-live="polite" style="display:none"></div>
+
+            <div class="glass panel" id="scout-auth-gate" style="display:none">
+                <h3 style="margin:0" data-i18n="page.scout.auth.title">Sign in first</h3>
+                <p class="muted" style="margin-top:0.45rem" data-i18n="page.scout.auth.p">
+                    To submit boards and track your rewards, sign in (or create a free account).
+                </p>
+                <div class="simple-cta">
+                    <a class="cta-button" href="account.html" data-i18n="page.scout.auth.cta">Open Account</a>
+                </div>
+            </div>
+
+            <div class="glass panel" id="scout-join" style="display:none">
+                <h3 style="margin:0" data-i18n="page.scout.join.title">Become a collaborator</h3>
+                <p class="muted" style="margin-top:0.45rem" data-i18n="page.scout.join.p">
+                    Enable Street Scout mode to submit boards. It takes one click.
+                </p>
+                <div class="simple-cta">
+                    <button class="cta-button" id="scout-join-btn" type="button" data-i18n="page.scout.join.cta">Enable Street Scout</button>
+                    <a class="cta-button cta-button--outline" href="collaborate.html" data-i18n="page.scout.join.learn_more">Learn about collaborations</a>
+                </div>
+            </div>
+
+            <div class="glass panel" id="scout-form-panel" style="display:none">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:0.8rem; flex-wrap:wrap;">
+                    <div>
+                        <h3 style="margin:0" data-i18n="page.scout.form.title">New submission</h3>
+                        <div class="muted" style="margin-top:0.35rem" id="scout-form-subtitle" data-i18n="page.scout.form.subtitle">
+                            Photo + location. Optional phone and notes help us move faster.
+                        </div>
+                    </div>
+                    <a class="cta-button cta-button--outline" href="admin-scout.html" id="scout-admin-link" style="display:none" data-i18n="page.scout.form.admin_link">Admin inbox</a>
+                </div>
+
+                <form id="scout-form" class="form-grid" autocomplete="off">
+                    <label>
+                        <span data-i18n="page.scout.form.photo">Board photo</span>
+                        <input id="scout-photo" name="photo" type="file" accept="image/*" capture="environment" required>
+                    </label>
+
+                    <div class="scout-preview-wrap" style="display:none" id="scout-preview-wrap">
+                        <img id="scout-preview" class="scout-preview" alt="" loading="lazy">
+                        <div class="muted" id="scout-preview-meta"></div>
+                    </div>
+
+                    <label>
+                        <span data-i18n="page.scout.form.location">Location</span>
+                        <div class="scout-location-row">
+                            <button class="cta-button cta-button--outline" type="button" id="scout-location-btn" data-i18n="page.scout.form.get_location">Get location</button>
+                            <div class="muted" id="scout-location-text" style="min-height:1.4em"></div>
+                        </div>
+                    </label>
+
+                    <label>
+                        <span data-i18n="page.scout.form.phone">Phone (optional)</span>
+                        <input id="scout-phone" name="phone" type="tel" inputmode="tel" placeholder="+34 …" data-i18n-placeholder="page.scout.form.phone_ph">
+                    </label>
+
+                    <label>
+                        <span data-i18n="page.scout.form.tier">Property tier (sets minimum reward)</span>
+                        <select id="scout-tier" class="admin-select">
+                            <option value="standard" data-i18n="page.scout.form.tier.standard">Standard (min €200)</option>
+                            <option value="premium" data-i18n="page.scout.form.tier.premium">Premium / Commercial (min €500)</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        <span data-i18n="page.scout.form.notes">Notes (optional)</span>
+                        <textarea id="scout-notes" name="notes" placeholder="Street name, best time to call, anything useful…"
+                            data-i18n-placeholder="page.scout.form.notes_ph"></textarea>
+                    </label>
+
+                    <label class="scout-check">
+                        <input id="scout-confirm" type="checkbox" required>
+                        <span data-i18n="page.scout.form.confirm">I took this photo myself and the location is correct.</span>
+                    </label>
+
+                    <button class="cta-button" id="scout-submit" type="submit" data-i18n="page.scout.form.submit">Send to Spanish Coast Properties</button>
+                </form>
+            </div>
+
+            <div class="glass panel" id="scout-my-panel" style="display:none">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:0.8rem; flex-wrap:wrap;">
+                    <div>
+                        <h3 style="margin:0" data-i18n="page.scout.mine.title">My submissions</h3>
+                        <div class="muted" style="margin-top:0.35rem" data-i18n="page.scout.mine.subtitle">Track status and rewards.</div>
+                    </div>
+                    <button class="cta-button cta-button--outline" id="scout-refresh" type="button" data-i18n="page.scout.mine.refresh">Refresh</button>
+                </div>
+                <div class="muted" id="scout-my-status" aria-live="polite" style="margin-top:0.6rem"></div>
+                <div class="admin-table-wrap" style="margin-top:0.7rem">
+                    <table class="admin-table" id="scout-my-table">
+                        <thead>
+                            <tr>
+                                <th data-i18n="page.scout.mine.th.time">Time</th>
+                                <th data-i18n="page.scout.mine.th.status">Status</th>
+                                <th data-i18n="page.scout.mine.th.reward">Reward</th>
+                                <th data-i18n="page.scout.mine.th.location">Location</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h3>Spanish Coast Properties</h3>
+                <p data-i18n="page.scout.footer.p">Street Scout: grow the portfolio, reward locals who help us discover listings.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="properties.html">Properties</a></li>
+                    <li><a href="new-builds.html">New Builds</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="account.html">Account</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <ul class="footer-links">
+                    <li><a href="tel:+34624867866">+34 624 867 866</a></li>
+                    <li><a href="mailto:info@spanishcoastproperties.com">info@spanishcoastproperties.com</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
+    </footer>
+
+    <script defer src="street-scout.js?v=20260210zq"></script>
+    <script defer src="site.js?v=20260210zq"></script>
+</body>
+
+</html>
+

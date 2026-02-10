@@ -372,3 +372,145 @@ drop trigger if exists shop_product_overrides_set_updated_at on public.shop_prod
 create trigger shop_product_overrides_set_updated_at
 before update on public.shop_product_overrides
 for each row execute procedure public.set_updated_at();
+
+-- 6) Street Scout (simple collaborators)
+-- Users can opt into "collaborator" role via RPC, then submit a board photo + GPS location.
+-- Admin manages the inbox and updates status/commission/payout.
+
+-- 6.1) One-click opt-in to collaborator role (safe: only upgrades client -> collaborator)
+create or replace function public.become_collaborator()
+returns text
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  r text;
+begin
+  if auth.uid() is null then
+    raise exception 'not_authenticated';
+  end if;
+
+  update public.profiles
+  set role = 'collaborator'
+  where user_id = auth.uid()
+    and role = 'client'
+  returning role into r;
+
+  if r is null then
+    select role into r from public.profiles where user_id = auth.uid();
+  end if;
+
+  return coalesce(r, 'collaborator');
+end;
+$$;
+
+revoke all on function public.become_collaborator() from public;
+grant execute on function public.become_collaborator() to authenticated;
+
+-- 6.2) Storage bucket for board photos (private)
+-- If Storage is disabled in this project, enable it in Supabase first (Storage -> Buckets).
+insert into storage.buckets (id, name, public)
+values ('collab-boards', 'collab-boards', false)
+on conflict (id) do nothing;
+
+-- Policies for uploads/reads under path: {auth.uid()}/{uuid}.jpg
+alter table storage.objects enable row level security;
+
+drop policy if exists "collab-boards: insert own" on storage.objects;
+create policy "collab-boards: insert own"
+on storage.objects for insert
+to authenticated
+with check (
+  bucket_id = 'collab-boards'
+  and split_part(name, '/', 1) = auth.uid()::text
+);
+
+drop policy if exists "collab-boards: read own or admin" on storage.objects;
+create policy "collab-boards: read own or admin"
+on storage.objects for select
+to authenticated
+using (
+  bucket_id = 'collab-boards'
+  and (split_part(name, '/', 1) = auth.uid()::text or public.is_admin())
+);
+
+drop policy if exists "collab-boards: delete own or admin" on storage.objects;
+create policy "collab-boards: delete own or admin"
+on storage.objects for delete
+to authenticated
+using (
+  bucket_id = 'collab-boards'
+  and (split_part(name, '/', 1) = auth.uid()::text or public.is_admin())
+);
+
+-- 6.3) Leads table (RLS: user reads their own; admin reads all; only admin can update)
+create table if not exists public.collab_board_leads (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  user_email text,
+
+  photo_bucket text not null default 'collab-boards',
+  photo_path text not null,
+
+  latitude double precision,
+  longitude double precision,
+  accuracy_m int,
+  captured_at timestamptz,
+
+  phone text,
+  notes text,
+  admin_notes text,
+
+  commission_tier text not null default 'standard' check (commission_tier in ('standard', 'premium')),
+  commission_eur int not null default 200,
+
+  status text not null default 'new' check (status in ('new', 'called', 'contacted', 'signed', 'sold', 'rejected')),
+  scp_ref text,
+  sold_at timestamptz,
+  paid_at timestamptz,
+
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.collab_board_leads enable row level security;
+
+create index if not exists collab_board_leads_created_at_idx on public.collab_board_leads(created_at desc);
+create index if not exists collab_board_leads_status_idx on public.collab_board_leads(status);
+
+drop policy if exists "collab_board_leads: read own or admin" on public.collab_board_leads;
+create policy "collab_board_leads: read own or admin"
+on public.collab_board_leads for select
+using (auth.uid() = user_id or public.is_admin());
+
+drop policy if exists "collab_board_leads: insert own" on public.collab_board_leads;
+create policy "collab_board_leads: insert own"
+on public.collab_board_leads for insert
+with check (auth.uid() = user_id);
+
+drop policy if exists "collab_board_leads: admin update" on public.collab_board_leads;
+create policy "collab_board_leads: admin update"
+on public.collab_board_leads for update
+using (public.is_admin())
+with check (public.is_admin());
+
+drop policy if exists "collab_board_leads: admin delete" on public.collab_board_leads;
+create policy "collab_board_leads: admin delete"
+on public.collab_board_leads for delete
+using (public.is_admin());
+
+drop trigger if exists collab_board_leads_set_updated_at on public.collab_board_leads;
+create trigger collab_board_leads_set_updated_at
+before update on public.collab_board_leads
+for each row execute procedure public.set_updated_at();
+
+-- Enable realtime insert notifications for admin inbox (optional).
+do $$
+begin
+  alter publication supabase_realtime add table public.collab_board_leads;
+exception when duplicate_object then
+  -- already added
+  null;
+end;
+$$;

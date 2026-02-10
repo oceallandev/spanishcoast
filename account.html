@@ -11,16 +11,16 @@
     <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/account.html">
 
     <meta name="theme-color" content="#030712">
-    <link rel="manifest" href="manifest.webmanifest?v=20260210zp">
-    <link rel="stylesheet" href="style.css?v=20260210zp">
-    <script defer src="i18n.js?v=20260210zp"></script>
+    <link rel="manifest" href="manifest.webmanifest?v=20260210zq">
+    <link rel="stylesheet" href="style.css?v=20260210zq">
+    <script defer src="i18n.js?v=20260210zq"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script defer src="config.js?v=20260210zp"></script>
-    <script defer src="supabase-init.js?v=20260210zp"></script>
+    <script defer src="config.js?v=20260210zq"></script>
+    <script defer src="supabase-init.js?v=20260210zq"></script>
 </head>
 
 <body data-section="account">
@@ -191,7 +191,7 @@
                     </div>
                 </div>
 
-	                <div class="account-tiles" aria-label="Account shortcuts">
+                <div class="account-tiles" aria-label="Account shortcuts">
 	                    <a class="glass panel account-tile" href="properties.html?saved=1">
 	                        <div class="account-tile-k" data-i18n="account.tiles.saved_listings">Saved listings</div>
 	                        <div class="account-tile-v"><span id="dash-saved-count">0</span> <span data-i18n="account.tiles.saved_word">saved</span></div>
@@ -202,15 +202,20 @@
 	                        <div class="account-tile-v" data-i18n="account.tiles.browse_desc_title">Find your next place</div>
 	                        <div class="muted" data-i18n="account.tiles.browse_desc">Fast filters, accurate map, and shareable refs.</div>
 	                    </a>
-	                    <a class="glass panel account-tile" href="guide.html">
-	                        <div class="account-tile-k" data-i18n="account.tiles.guide">Guide</div>
-	                        <div class="account-tile-v" data-i18n="account.tiles.guide_title">How to use the app</div>
-	                        <div class="muted" data-i18n="account.tiles.guide_desc">All features, benefits, and quick tips in one place.</div>
-	                    </a>
-	                    <a class="glass panel account-tile" href="admin-favourites.html" id="dash-admin-tile" style="display:none">
-	                        <div class="account-tile-k" data-i18n="account.tiles.admin">Admin</div>
-	                        <div class="account-tile-v" data-i18n="account.tiles.admin_fav_title">Favourites inbox</div>
-	                        <div class="muted" data-i18n="account.tiles.admin_fav_desc">See saved listings from all users (admin only).</div>
+                    <a class="glass panel account-tile" href="guide.html">
+                        <div class="account-tile-k" data-i18n="account.tiles.guide">Guide</div>
+                        <div class="account-tile-v" data-i18n="account.tiles.guide_title">How to use the app</div>
+                        <div class="muted" data-i18n="account.tiles.guide_desc">All features, benefits, and quick tips in one place.</div>
+                    </a>
+                    <a class="glass panel account-tile" href="street-scout.html" id="dash-scout-tile">
+                        <div class="account-tile-k" data-i18n="account.tiles.scout">Earn</div>
+                        <div class="account-tile-v" data-i18n="account.tiles.scout_title">Street Scout (€200–€500)</div>
+                        <div class="muted" data-i18n="account.tiles.scout_desc">Snap a For Sale board and earn when it closes.</div>
+                    </a>
+                    <a class="glass panel account-tile" href="admin-favourites.html" id="dash-admin-tile" style="display:none">
+                        <div class="account-tile-k" data-i18n="account.tiles.admin">Admin</div>
+                        <div class="account-tile-v" data-i18n="account.tiles.admin_fav_title">Favourites inbox</div>
+                        <div class="muted" data-i18n="account.tiles.admin_fav_desc">See saved listings from all users (admin only).</div>
 	                    </a>
                     <a class="glass panel account-tile" href="admin-crm.html" id="dash-crm-tile" style="display:none">
                         <div class="account-tile-k" data-i18n="account.tiles.admin">Admin</div>
@@ -239,6 +244,7 @@
                             <a class="cta-button" href="admin-favourites.html" data-i18n="account.admin.btn.fav_inbox">Favourites Inbox</a>
                             <a class="cta-button cta-button--outline" href="admin-crm.html" data-i18n="account.admin.btn.crm">CRM</a>
                             <a class="cta-button cta-button--outline" href="admin-shop.html" data-i18n="account.admin.btn.shop">Shop Editor</a>
+                            <a class="cta-button cta-button--outline" href="admin-scout.html" data-i18n="account.admin.btn.scout">Street Scout Inbox</a>
                         </div>
                     </div>
 
@@ -293,8 +299,8 @@
         <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
     </footer>
 
-    <script defer src="account.js?v=20260210zp"></script>
-    <script defer src="site.js?v=20260210zp"></script>
+    <script defer src="account.js?v=20260210zq"></script>
+    <script defer src="site.js?v=20260210zq"></script>
 </body>
 
 </html>
