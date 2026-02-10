@@ -11,15 +11,15 @@
     <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/account.html">
 
     <meta name="theme-color" content="#030712">
-    <link rel="manifest" href="manifest.webmanifest?v=20260210f">
-    <link rel="stylesheet" href="style.css?v=20260210f">
+    <link rel="manifest" href="manifest.webmanifest?v=20260210g">
+    <link rel="stylesheet" href="style.css?v=20260210g">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script defer src="config.js?v=20260210f"></script>
-    <script defer src="supabase-init.js?v=20260210f"></script>
+    <script defer src="config.js?v=20260210g"></script>
+    <script defer src="supabase-init.js?v=20260210g"></script>
 </head>
 
 <body data-section="account">
@@ -80,7 +80,7 @@
                 <p>Sign in to sync favourites across devices and unlock partner tools.</p>
             </div>
 
-            <div class="page-grid">
+            <div class="page-grid" id="auth-panels">
                 <div class="glass panel">
                     <h2>Sign in</h2>
                     <form id="sign-in-form" class="form-grid">
@@ -126,24 +126,76 @@
                 </div>
             </div>
 
-            <div class="glass panel account-status" id="account-status" aria-live="polite">
-                <div class="status-row">
-                    <div>
-                        <div class="status-title">Status</div>
-                        <div class="status-text" id="status-text">Not connected.</div>
+            <div class="account-dashboard" id="dashboard-panels" style="display:none">
+                <div class="glass panel account-welcome" id="account-status" aria-live="polite">
+                    <div class="account-welcome-top">
+                        <div>
+                            <div class="status-title">Dashboard</div>
+                            <div class="status-text" id="status-text">Connecting…</div>
+                            <div class="muted" id="status-hint"></div>
+                        </div>
+                        <div class="account-welcome-actions">
+                            <div class="account-badges">
+                                <span class="role-badge" id="dash-role">Client</span>
+                            </div>
+                            <div class="status-actions">
+                                <a class="cta-button cta-button--outline" href="properties.html">Browse</a>
+                                <a class="cta-button cta-button--outline" href="properties.html?saved=1">Saved</a>
+                                <button id="sign-out-btn" class="cta-button cta-button--outline" type="button" disabled>Sign out</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="status-actions">
-                        <a class="cta-button cta-button--outline" href="properties.html">Go to Properties</a>
-                        <a class="cta-button cta-button--outline" href="properties.html?saved=1">Open Saved</a>
-                        <button id="sign-out-btn" class="cta-button cta-button--outline" type="button" disabled>Sign out</button>
+                    <div style="margin-top:0.8rem; display:flex; gap:0.6rem; flex-wrap:wrap;">
+                        <button id="clear-offline-cache" class="cta-button cta-button--outline" type="button">Clear offline cache</button>
                     </div>
                 </div>
-                <div class="muted" id="status-hint"></div>
-                <div class="admin-links" id="admin-links" style="display:none">
-                    <a class="cta-button" href="admin-favourites.html">Admin: Favourites Inbox</a>
+
+                <div class="account-tiles" aria-label="Account shortcuts">
+                    <a class="glass panel account-tile" href="properties.html?saved=1">
+                        <div class="account-tile-k">Saved listings</div>
+                        <div class="account-tile-v"><span id="dash-saved-count">0</span> saved</div>
+                        <div class="muted">Open your shortlist and share it instantly.</div>
+                    </a>
+                    <a class="glass panel account-tile" href="properties.html">
+                        <div class="account-tile-k">Browse</div>
+                        <div class="account-tile-v">Find your next place</div>
+                        <div class="muted">Fast filters, accurate map, and shareable refs.</div>
+                    </a>
+                    <a class="glass panel account-tile" href="admin-favourites.html" id="dash-admin-tile" style="display:none">
+                        <div class="account-tile-k">Admin</div>
+                        <div class="account-tile-v">Favourites inbox</div>
+                        <div class="muted">See saved listings from all users (admin only).</div>
+                    </a>
+                    <a class="glass panel account-tile" href="collaborate.html" id="dash-partner-tile">
+                        <div class="account-tile-k" id="dash-partner-k">Partner tools</div>
+                        <div class="account-tile-v" id="dash-partner-v">White-label & collaboration</div>
+                        <div class="muted" id="dash-partner-desc">For agencies, agents, developers and partners.</div>
+                    </a>
                 </div>
-                <div style="margin-top:0.8rem; display:flex; gap:0.6rem; flex-wrap:wrap;">
-                    <button id="clear-offline-cache" class="cta-button cta-button--outline" type="button">Clear offline cache</button>
+
+                <div class="glass panel account-admin" id="admin-panel" style="display:none">
+                    <div class="account-admin-head">
+                        <div>
+                            <h2 style="margin:0;">Admin Dashboard</h2>
+                            <div class="muted">Manage favourites inbox, roles, and collaborators.</div>
+                        </div>
+                        <div class="account-admin-actions">
+                            <a class="cta-button" href="admin-favourites.html">Favourites Inbox</a>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <h3 style="margin:0;">User roles</h3>
+                    <div class="muted" style="margin-top:0.35rem;">Users create their own account first. Then assign a role here.</div>
+                    <div class="account-admin-users">
+                        <div class="account-admin-users-bar">
+                            <input id="admin-user-q" class="admin-input" type="text" placeholder="Search by email or display name (e.g. john@agency.com)">
+                            <button id="admin-user-refresh" class="cta-button cta-button--outline" type="button">Search</button>
+                        </div>
+                        <div id="admin-user-status" class="muted" style="margin-top:0.5rem;"></div>
+                        <div id="admin-user-list" class="account-admin-users-list"></div>
+                    </div>
                 </div>
             </div>
 
@@ -183,8 +235,8 @@
         <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
     </footer>
 
-    <script defer src="account.js?v=20260210f"></script>
-    <script defer src="site.js?v=20260210f"></script>
+    <script defer src="account.js?v=20260210g"></script>
+    <script defer src="site.js?v=20260210g"></script>
 </body>
 
 </html>

@@ -2,7 +2,20 @@
   const statusText = document.getElementById('status-text');
   const statusHint = document.getElementById('status-hint');
   const signOutBtn = document.getElementById('sign-out-btn');
-  const adminLinks = document.getElementById('admin-links');
+  const authPanels = document.getElementById('auth-panels');
+  const dashboardPanels = document.getElementById('dashboard-panels');
+  const dashRole = document.getElementById('dash-role');
+  const dashSavedCount = document.getElementById('dash-saved-count');
+  const dashAdminTile = document.getElementById('dash-admin-tile');
+  const partnerTile = document.getElementById('dash-partner-tile');
+  const partnerK = document.getElementById('dash-partner-k');
+  const partnerV = document.getElementById('dash-partner-v');
+  const partnerDesc = document.getElementById('dash-partner-desc');
+  const adminPanel = document.getElementById('admin-panel');
+  const adminUserQ = document.getElementById('admin-user-q');
+  const adminUserRefresh = document.getElementById('admin-user-refresh');
+  const adminUserStatus = document.getElementById('admin-user-status');
+  const adminUserList = document.getElementById('admin-user-list');
   const diagnosticsPanel = document.getElementById('diagnostics');
   const diagLines = document.getElementById('diag-lines');
   const clearCacheBtn = document.getElementById('clear-offline-cache');
@@ -24,6 +37,34 @@
   };
 
   const getClient = () => window.scpSupabase || null;
+
+  const setVisible = (el, yes, display = 'block') => {
+    if (!el) return;
+    el.style.display = yes ? display : 'none';
+  };
+
+  const FAVORITES_STORAGE_KEY = 'scp:favourites:v1';
+  const readSavedCount = () => {
+    try {
+      if (!window.localStorage) return 0;
+      const raw = window.localStorage.getItem(FAVORITES_STORAGE_KEY);
+      if (!raw) return 0;
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed.length : 0;
+    } catch {
+      return 0;
+    }
+  };
+
+  const ROLE_META = {
+    admin: { label: 'Admin', partner: true },
+    partner: { label: 'Partner', partner: true },
+    agency_admin: { label: 'Agency admin', partner: true },
+    agent: { label: 'Agent', partner: true },
+    developer: { label: 'Developer', partner: true },
+    collaborator: { label: 'Collaborator', partner: true },
+    client: { label: 'Client', partner: false }
+  };
 
   const addDiag = (level, title, detail) => {
     if (!diagLines) return;
@@ -51,15 +92,190 @@
     }
   };
 
-  async function getRoleInfo(client, userId) {
+  async function getProfileInfo(client, userId) {
     try {
-      const { data, error } = await client.from('profiles').select('role').eq('user_id', userId).maybeSingle();
-      if (error) return { role: '', error: error.message || String(error) };
-      return { role: (data && data.role) ? String(data.role) : '', error: '' };
+      const { data, error } = await client
+        .from('profiles')
+        .select('role,display_name')
+        .eq('user_id', userId)
+        .maybeSingle();
+      if (error) return { role: '', displayName: '', error: error.message || String(error) };
+      return {
+        role: (data && data.role) ? String(data.role) : '',
+        displayName: (data && data.display_name) ? String(data.display_name) : '',
+        error: ''
+      };
     } catch {
-      return { role: '', error: 'profiles lookup failed' };
+      return { role: '', displayName: '', error: 'profiles lookup failed' };
     }
   }
+
+  const normalizeRole = (role) => {
+    const r = (role || '').toString().trim().toLowerCase();
+    return r || 'client';
+  };
+
+  const setRoleBadge = (role) => {
+    const r = normalizeRole(role);
+    const meta = ROLE_META[r] || { label: r || 'Client', partner: false };
+    if (dashRole) dashRole.textContent = meta.label.toUpperCase();
+  };
+
+  let adminWired = false;
+  let lastAdminRows = [];
+
+  const rolesForAdminUi = () => ([
+    { value: 'client', label: 'Client' },
+    { value: 'collaborator', label: 'Collaborator' },
+    { value: 'partner', label: 'Partner' },
+    { value: 'agent', label: 'Agent' },
+    { value: 'agency_admin', label: 'Agency admin' },
+    { value: 'developer', label: 'Developer' },
+    { value: 'admin', label: 'Admin' }
+  ]);
+
+  const escapeHtml = (value) => {
+    const s = value == null ? '' : String(value);
+    return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  };
+
+  const isUuidLike = (text) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test((text || '').trim());
+
+  const renderAdminUsers = (rows) => {
+    if (!adminUserList) return;
+    lastAdminRows = Array.isArray(rows) ? rows : [];
+    if (!lastAdminRows.length) {
+      adminUserList.innerHTML = '';
+      return;
+    }
+
+    adminUserList.innerHTML = lastAdminRows.map((r) => {
+      const uid = r.user_id ? String(r.user_id) : '';
+      const email = r.email ? String(r.email) : '';
+      const name = r.display_name ? String(r.display_name) : '';
+      const role = r.role ? String(r.role) : 'client';
+      const createdAt = r.created_at ? new Date(r.created_at).toLocaleString() : '';
+      const title = email || name || uid;
+      const sub = `${uid}${createdAt ? ` · created ${createdAt}` : ''}${name && email ? ` · ${name}` : ''}`;
+      const options = rolesForAdminUi().map((o) => `<option value="${escapeHtml(o.value)}"${o.value === role ? ' selected' : ''}>${escapeHtml(o.label)}</option>`).join('');
+
+      return `
+        <div class="admin-user-row" data-user-id="${escapeHtml(uid)}">
+          <div class="admin-user-main">
+            <div class="admin-user-title">${escapeHtml(title)}</div>
+            <div class="admin-user-sub">${escapeHtml(sub)}</div>
+          </div>
+          <div class="admin-user-actions">
+            <select class="admin-select" data-role>
+              ${options}
+            </select>
+            <button class="cta-button cta-button--outline" type="button" data-save>Save</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  };
+
+  const loadAdminUsers = async () => {
+    if (!adminUserStatus || !adminUserList) return;
+    const client = getClient();
+    if (!client) return;
+
+    const q = (adminUserQ && adminUserQ.value ? adminUserQ.value : '').trim();
+    adminUserStatus.textContent = 'Loading users…';
+    adminUserList.innerHTML = '';
+
+    // Try selecting email if present; otherwise retry without it.
+    const attempt = async (withEmail) => {
+      const cols = withEmail ? 'user_id,role,display_name,email,created_at' : 'user_id,role,display_name,created_at';
+      let query = client.from('profiles').select(cols).order('created_at', { ascending: false }).limit(60);
+
+      if (q) {
+        if (isUuidLike(q)) {
+          query = query.eq('user_id', q);
+        } else if (withEmail) {
+          // Search by email or display name when email exists.
+          const safe = q.replace(/[,]/g, ' ').trim();
+          query = query.or(`email.ilike.%${safe}%,display_name.ilike.%${safe}%`);
+        } else {
+          const safe = q.replace(/[,]/g, ' ').trim();
+          query = query.ilike('display_name', `%${safe}%`);
+        }
+      }
+
+      return await query;
+    };
+
+    let out = await attempt(true);
+    if (out && out.error && String(out.error.message || '').toLowerCase().includes('column') && String(out.error.message || '').toLowerCase().includes('email')) {
+      out = await attempt(false);
+      if (adminUserStatus) adminUserStatus.textContent = 'Note: profiles.email column not found. Update `supabase.sql` to enable email search.';
+    }
+
+    const { data, error } = out || {};
+    if (error) {
+      adminUserStatus.textContent = `Failed to load users: ${error.message || String(error)}. Ensure admin policies exist (run updated supabase.sql).`;
+      return;
+    }
+
+    const rows = Array.isArray(data) ? data : [];
+    adminUserStatus.textContent = rows.length ? `Showing ${rows.length} users` : 'No users found.';
+    renderAdminUsers(rows);
+  };
+
+  const wireAdminUi = () => {
+    if (adminWired) return;
+    if (!adminPanel) return;
+    adminWired = true;
+
+    if (adminUserRefresh) adminUserRefresh.addEventListener('click', loadAdminUsers);
+    if (adminUserQ) {
+      adminUserQ.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          loadAdminUsers();
+        }
+      });
+    }
+
+    if (adminUserList) {
+      adminUserList.addEventListener('click', async (e) => {
+        const btn = e && e.target ? e.target.closest('[data-save]') : null;
+        if (!btn) return;
+        const row = btn.closest('.admin-user-row');
+        if (!row) return;
+        const userId = row.getAttribute('data-user-id') || '';
+        const select = row.querySelector('select[data-role]');
+        const role = select && select.value ? select.value : '';
+        if (!userId || !role) return;
+
+        const client = getClient();
+        if (!client) return;
+
+        btn.disabled = true;
+        btn.textContent = 'Saving…';
+        try {
+          const { error } = await withTimeout(
+            client.from('profiles').update({ role }).eq('user_id', userId),
+            15000,
+            'Update role'
+          );
+          if (error) {
+            btn.textContent = 'Failed';
+            if (adminUserStatus) adminUserStatus.textContent = `Role update failed: ${error.message || String(error)}`;
+          } else {
+            btn.textContent = 'Saved';
+            if (adminUserStatus) adminUserStatus.textContent = `Updated role for ${userId}`;
+            window.setTimeout(() => { btn.textContent = 'Save'; btn.disabled = false; }, 900);
+            return;
+          }
+        } catch (error) {
+          if (adminUserStatus) adminUserStatus.textContent = `Role update failed: ${(error && error.message) ? error.message : String(error)}`;
+        }
+        window.setTimeout(() => { btn.textContent = 'Save'; btn.disabled = false; }, 1200);
+      });
+    }
+  };
 
   async function refresh() {
     const client = getClient();
@@ -80,6 +296,8 @@
       }
 
       if (signOutBtn) signOutBtn.disabled = true;
+      setVisible(dashboardPanels, false);
+      setVisible(authPanels, true, 'grid');
       return;
     }
 
@@ -97,20 +315,66 @@
     if (!user) {
       setStatus('Signed out', 'Sign in to sync favourites across devices.');
       if (signOutBtn) signOutBtn.disabled = true;
-      if (adminLinks) adminLinks.style.display = 'none';
+      setVisible(dashboardPanels, false);
+      setVisible(authPanels, true, 'grid');
       return;
     }
 
-    const roleInfo = await getRoleInfo(client, user.id);
-    const role = roleInfo && roleInfo.role ? roleInfo.role : '';
-    const roleSuffix = role ? ` (${role})` : '';
-    const roleHint = !role && roleInfo && roleInfo.error ? ` Role unavailable: ${roleInfo.error}` : '';
+    setVisible(authPanels, false);
+    setVisible(dashboardPanels, true);
+
+    const profileInfo = await getProfileInfo(client, user.id);
+    const role = normalizeRole(profileInfo && profileInfo.role ? profileInfo.role : 'client');
+    const roleHint = !profileInfo.role && profileInfo && profileInfo.error ? ` Role unavailable: ${profileInfo.error}` : '';
+    const who = (profileInfo && profileInfo.displayName) ? profileInfo.displayName : (user.email || 'user');
+
     setStatus(
-      `Signed in as ${user.email || 'user'}${roleSuffix}`,
-      `Your favourites will sync to this account on the Properties page.${roleHint}`
+      `Welcome, ${who}`,
+      `Your saved listings will sync on the Properties page.${roleHint}`
     );
     if (signOutBtn) signOutBtn.disabled = false;
-    if (adminLinks) adminLinks.style.display = role === 'admin' ? 'block' : 'none';
+
+    setRoleBadge(role);
+    if (dashSavedCount) dashSavedCount.textContent = String(readSavedCount());
+    setVisible(dashAdminTile, role === 'admin', 'block');
+
+    const meta = ROLE_META[role] || ROLE_META.client;
+    if (partnerTile) {
+      const isPartner = meta && meta.partner;
+      partnerTile.classList.toggle('account-tile--disabled', !isPartner);
+      if (partnerK && partnerV && partnerDesc) {
+        if (role === 'developer') {
+          partnerK.textContent = 'Developer tools';
+          partnerV.textContent = 'Developments & collaboration';
+          partnerDesc.textContent = 'Share projects, control branding, and coordinate viewings.';
+        } else if (role === 'agency_admin' || role === 'agent') {
+          partnerK.textContent = 'Agency tools';
+          partnerV.textContent = 'White-label & collaboration';
+          partnerDesc.textContent = 'Share listings with your clients and keep your branding.';
+        } else if (role === 'collaborator' || role === 'partner') {
+          partnerK.textContent = 'Partner tools';
+          partnerV.textContent = 'White-label & collaboration';
+          partnerDesc.textContent = 'Brochures, links, and collaboration tools for partners.';
+        } else if (role === 'admin') {
+          partnerK.textContent = 'Collaboration';
+          partnerV.textContent = 'White-label & partners';
+          partnerDesc.textContent = 'Tools and flows used by agencies, agents and developers.';
+        } else {
+          partnerK.textContent = 'Partner access';
+          partnerV.textContent = 'Request collaboration';
+          partnerDesc.textContent = 'If you are an agency, agent or developer, ask us to enable partner tools.';
+        }
+      }
+    }
+
+    if (adminPanel) {
+      setVisible(adminPanel, role === 'admin');
+      if (role === 'admin') {
+        wireAdminUi();
+        // Lazy-load first time.
+        if (!lastAdminRows.length) loadAdminUsers();
+      }
+    }
   }
 
   async function runDiagnostics() {
