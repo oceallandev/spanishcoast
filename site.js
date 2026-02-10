@@ -111,8 +111,9 @@
       return o;
     };
 
-    select.appendChild(opt('en', t('lang.en') || 'English'));
-    select.appendChild(opt('es', t('lang.es') || 'Spanish'));
+    // Use short labels so the switcher never pushes important header buttons (Filters/Map) off-screen.
+    select.appendChild(opt('en', t('lang.en_short') || 'EN'));
+    select.appendChild(opt('es', t('lang.es_short') || 'ES'));
     try { select.value = i18n.lang || 'en'; } catch { /* ignore */ }
 
     select.addEventListener('change', () => {

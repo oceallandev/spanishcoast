@@ -94,6 +94,13 @@ body[data-section="properties"] {
         gap: 0.6rem;
     }
 
+    .lang-switch {
+        height: 40px;
+        padding: 0 0.65rem;
+        font-size: 0.78rem;
+        min-width: 52px;
+    }
+
     /* Make room for Filters + Map buttons in portrait mobile. */
     .header-cta {
         display: none;
@@ -148,7 +155,10 @@ body[data-section="properties"] {
     color: rgba(248, 250, 252, 0.92);
     font-weight: 800;
     font-size: 0.85rem;
-    padding: 0.55rem 0.85rem;
+    padding: 0.55rem 0.7rem;
+    min-width: 3.4rem;
+    text-align: center;
+    text-transform: uppercase;
     border-radius: 999px;
     cursor: pointer;
     line-height: 1;

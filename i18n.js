@@ -78,6 +78,8 @@
       'lang.label': 'Language',
       'lang.en': 'English',
       'lang.es': 'Spanish',
+      'lang.en_short': 'EN',
+      'lang.es_short': 'ES',
 
       'nav.home': 'Home',
       'nav.properties': 'Properties',
@@ -162,6 +164,8 @@
       'lang.label': 'Idioma',
       'lang.en': 'English',
       'lang.es': 'Español',
+      'lang.en_short': 'EN',
+      'lang.es_short': 'ES',
 
       'nav.home': 'Inicio',
       'nav.properties': 'Propiedades',
