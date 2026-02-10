@@ -79,6 +79,15 @@ create trigger on_auth_user_created
 after insert on auth.users
 for each row execute procedure public.handle_new_user();
 
+-- Backfill profiles for users created before the trigger existed (safe to re-run).
+insert into public.profiles (user_id, role, email)
+select u.id, 'client', u.email
+from auth.users u
+where not exists (
+  select 1 from public.profiles p where p.user_id = u.id
+)
+on conflict (user_id) do nothing;
+
 -- Backfill email for existing profiles (safe to re-run).
 update public.profiles p
 set email = u.email
