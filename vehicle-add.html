@@ -26,6 +26,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script defer src="config.js?v=20260210zs"></script>
+    <script defer src="supabase-init.js?v=20260210zs"></script>
 </head>
 
 <body data-section="vehicles">
@@ -86,6 +90,10 @@
                 <p>
                     Submit your vehicle for sale (or rent). We review the details and publish verified listings so buyers
                     get clean info and you avoid time-wasters.
+                </p>
+                <p class="muted">
+                    If you are signed in on the <a class="admin-link" href="account.html">Account</a> page, we can submit your listing instantly as <b>pending review</b>.
+                    Otherwise, generate the message below and send it by email or WhatsApp.
                 </p>
                 <div class="service-tags">
                     <a class="tag" href="cars.html">Cars</a>

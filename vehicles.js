@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   if (!document.body || document.body.dataset.section !== 'vehicles') return;
 
-  const listings = Array.isArray(window.vehicleListings) ? window.vehicleListings : [];
+  let listings = Array.isArray(window.vehicleListings) ? window.vehicleListings : [];
   const providers = Array.isArray(window.vehicleProviders) ? window.vehicleProviders : [];
 
   const filtersBar = document.getElementById('filters-bar');
@@ -69,6 +69,65 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const providerById = new Map(providers.map((p) => [toText(p.id), p]));
+
+  const getClient = () => window.scpSupabase || null;
+
+  async function loadApprovedListings() {
+    const client = getClient();
+    if (!client) return;
+
+    try {
+      const { data, error } = await client
+        .from('vehicle_listings')
+        .select('id,provider_name,source,category,deal,title,brand,model,year,price,currency,price_period,location,latitude,longitude,images,description,created_at')
+        .eq('published', true)
+        .order('created_at', { ascending: false })
+        .limit(500);
+
+      if (error) return;
+      const rows = Array.isArray(data) ? data : [];
+      if (!rows.length) return;
+
+      const existing = new Set(listings.map((x) => String(x && x.id)));
+      const mapped = rows.map((r) => {
+        const images = Array.isArray(r && r.images) ? r.images : [];
+        const createdAt = r && r.created_at ? new Date(r.created_at).getTime() : Date.now();
+        return {
+          id: r.id,
+          providerId: 'scp',
+          providerName: toText(r && r.provider_name, 'Spanish Coast Properties'),
+          category: toText(r && r.category, 'car'),
+          deal: toText(r && r.deal, 'sale'),
+          title: toText(r && r.title, 'Vehicle'),
+          brand: toText(r && r.brand, ''),
+          model: toText(r && r.model, ''),
+          year: r && r.year != null ? r.year : null,
+          price: r && r.price != null ? r.price : null,
+          currency: toText(r && r.currency, 'EUR'),
+          pricePeriod: toText(r && r.price_period, ''),
+          location: toText(r && r.location, ''),
+          latitude: r && r.latitude != null ? r.latitude : null,
+          longitude: r && r.longitude != null ? r.longitude : null,
+          images: images.length ? images : ['assets/placeholder.png'],
+          description: toText(r && r.description, ''),
+          dateAdded: createdAt
+        };
+      });
+
+      mapped.forEach((it) => {
+        const id = String(it && it.id);
+        if (!id || existing.has(id)) return;
+        existing.add(id);
+        listings.push(it);
+      });
+
+      render();
+      // Allow share links to open newly loaded approved listings.
+      openFromHash();
+    } catch {
+      // ignore
+    }
+  }
 
   function syncViewportHeightVar() {
     document.documentElement.style.setProperty('--app-vh', `${window.innerHeight}px`);
@@ -446,6 +505,10 @@ document.addEventListener('DOMContentLoaded', () => {
   syncFiltersBarHeight();
   render();
   openFromHash();
+
+  // Load approved listings from Supabase (user/dealer submissions) after initial render.
+  window.addEventListener('scp:supabase:ready', () => loadApprovedListings(), { once: true });
+  window.setTimeout(loadApprovedListings, 120);
 
   window.addEventListener('resize', () => {
     syncViewportHeightVar();

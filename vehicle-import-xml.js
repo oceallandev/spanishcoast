@@ -3,6 +3,7 @@
   const toText = (v, fb = '') => (typeof v === 'string' ? v : v == null ? fb : String(v));
   const norm = (v) => toText(v).trim();
   const normLower = (v) => norm(v).toLowerCase();
+  const getClient = () => window.scpSupabase || null;
 
   const slug = (s) =>
     normLower(s)
@@ -165,6 +166,7 @@
 
     let deal = normLower(it.deal || it.status || it.type || '');
     if (deal !== 'rent' && deal !== 'sale') deal = guessDeal(`${title} ${desc} ${deal}`);
+    if (deal !== 'rent' && deal !== 'sale') deal = 'sale';
 
     let category = chosenCategory;
     if (category === 'mixed') category = guessCategory(`${title} ${desc} ${brand} ${model}`);
@@ -175,7 +177,7 @@
       id,
       title,
       category: category === 'boat' ? 'boat' : 'car',
-      deal: deal === 'rent' ? 'rent' : deal === 'sale' ? 'sale' : 'any',
+      deal: deal === 'rent' ? 'rent' : 'sale',
       brand,
       model,
       year: year || null,
@@ -214,6 +216,7 @@
     const images = extractImagesXml(el);
     let deal = normLower(firstTextXml(el, ['deal', 'status', 'type']));
     if (deal !== 'rent' && deal !== 'sale') deal = guessDeal(`${title} ${desc} ${deal}`);
+    if (deal !== 'rent' && deal !== 'sale') deal = 'sale';
 
     let category = chosenCategory;
     if (category === 'mixed') category = guessCategory(`${title} ${desc} ${brand} ${model}`);
@@ -224,7 +227,7 @@
       id,
       title,
       category: category === 'boat' ? 'boat' : 'car',
-      deal: deal === 'rent' ? 'rent' : deal === 'sale' ? 'sale' : 'any',
+      deal: deal === 'rent' ? 'rent' : 'sale',
       brand,
       model,
       year: year || null,
@@ -278,6 +281,7 @@
 
     const btnCars = qs('vx-download-cars');
     const btnBoats = qs('vx-download-boats');
+    const btnSubmit = qs('vx-submit');
     const aMailto = qs('vx-mailto');
     const status = qs('vx-status');
     const summary = qs('vx-summary');
@@ -319,6 +323,7 @@
     const updateButtons = () => {
       if (btnCars) btnCars.disabled = carsOut.length === 0;
       if (btnBoats) btnBoats.disabled = boatsOut.length === 0;
+      if (btnSubmit) btnSubmit.disabled = (carsOut.length + boatsOut.length) === 0;
       setDisabledLink(aMailto, !lastMsg);
     };
 
@@ -510,7 +515,69 @@
       }
     });
 
+    const submitForReview = async () => {
+      const all = [...carsOut, ...boatsOut];
+      if (!all.length) return;
+
+      const client = getClient();
+      if (!client) {
+        if (status) status.textContent = 'Account submission unavailable (Supabase not configured). Use Email summary instead.';
+        return;
+      }
+
+      const { data: sessionData } = await client.auth.getSession();
+      const user = sessionData && sessionData.session ? sessionData.session.user : null;
+      if (!user) {
+        if (status) status.textContent = 'Signed out. Open Account and sign in to submit for review.';
+        return;
+      }
+
+      const company = norm(elCompany && elCompany.value);
+      const email = norm(elEmail && elEmail.value);
+      const phone = norm(elPhone && elPhone.value);
+
+      let ok = true;
+      try {
+        ok = window.confirm(`Submit ${all.length} listing(s) for admin review? They will not be published until approved.`);
+      } catch {
+        ok = true;
+      }
+      if (!ok) return;
+
+      const base = {
+        user_id: user.id,
+        user_email: user.email || email || null,
+        source: 'dealer_import',
+        company_name: company || null,
+        contact_name: company || null,
+        contact_email: email || user.email || null,
+        contact_phone: phone || null
+      };
+
+      const chunkSize = 25;
+      let sent = 0;
+
+      for (let i = 0; i < all.length; i += chunkSize) {
+        const chunk = all.slice(i, i + chunkSize).map((it) => ({
+          ...base,
+          listing: it
+        }));
+
+        if (status) status.textContent = `Submitting ${Math.min(i + chunk.length, all.length)} / ${all.length}…`;
+
+        const out = await client.from('vehicle_submissions').insert(chunk);
+        if (out && out.error) {
+          if (status) status.textContent = `Submit failed: ${out.error.message || 'unknown error'}`;
+          return;
+        }
+        sent += chunk.length;
+      }
+
+      if (status) status.textContent = `Submitted ${sent} listing(s) for review (pending admin approval).`;
+    };
+
+    if (btnSubmit) btnSubmit.addEventListener('click', submitForReview);
+
     updateButtons();
   });
 })();
-

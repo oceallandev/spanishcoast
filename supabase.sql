@@ -514,3 +514,188 @@ exception when duplicate_object then
   null;
 end;
 $$;
+
+-- 7) Vehicles (submissions + approved listings)
+-- Users can submit vehicles for review. Admin approves to publish into vehicle_listings.
+-- Submissions contain PII and MUST remain private (owner/admin only).
+
+create table if not exists public.vehicle_submissions (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  user_email text,
+
+  source text not null default 'owner' check (source in ('owner', 'dealer_import')),
+  company_name text,
+
+  -- PII: stored for admin coordination only (not shown publicly).
+  contact_name text,
+  contact_email text,
+  contact_phone text,
+
+  status text not null default 'pending' check (status in ('pending', 'approved', 'rejected')),
+  admin_notes text,
+
+  -- Listing payload (no PII). Flexible so we can evolve fields without migrations.
+  listing jsonb not null,
+  raw jsonb,
+
+  approved_listing_id uuid,
+  reviewed_at timestamptz,
+
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.vehicle_submissions enable row level security;
+
+-- Migrations (safe to re-run).
+alter table public.vehicle_submissions add column if not exists company_name text;
+alter table public.vehicle_submissions add column if not exists contact_name text;
+alter table public.vehicle_submissions add column if not exists contact_email text;
+alter table public.vehicle_submissions add column if not exists contact_phone text;
+alter table public.vehicle_submissions add column if not exists admin_notes text;
+alter table public.vehicle_submissions add column if not exists listing jsonb;
+alter table public.vehicle_submissions add column if not exists raw jsonb;
+alter table public.vehicle_submissions add column if not exists approved_listing_id uuid;
+alter table public.vehicle_submissions add column if not exists reviewed_at timestamptz;
+
+alter table public.vehicle_submissions drop constraint if exists vehicle_submissions_source_check;
+alter table public.vehicle_submissions
+  add constraint vehicle_submissions_source_check
+  check (source in ('owner', 'dealer_import'));
+
+alter table public.vehicle_submissions drop constraint if exists vehicle_submissions_status_check;
+alter table public.vehicle_submissions
+  add constraint vehicle_submissions_status_check
+  check (status in ('pending', 'approved', 'rejected'));
+
+create index if not exists vehicle_submissions_created_at_idx on public.vehicle_submissions(created_at desc);
+create index if not exists vehicle_submissions_status_idx on public.vehicle_submissions(status);
+
+drop policy if exists "vehicle_submissions: read own or admin" on public.vehicle_submissions;
+create policy "vehicle_submissions: read own or admin"
+on public.vehicle_submissions for select
+using (auth.uid() = user_id or public.is_admin());
+
+drop policy if exists "vehicle_submissions: insert own" on public.vehicle_submissions;
+create policy "vehicle_submissions: insert own"
+on public.vehicle_submissions for insert
+with check (auth.uid() = user_id);
+
+drop policy if exists "vehicle_submissions: admin update" on public.vehicle_submissions;
+create policy "vehicle_submissions: admin update"
+on public.vehicle_submissions for update
+using (public.is_admin())
+with check (public.is_admin());
+
+drop policy if exists "vehicle_submissions: admin delete" on public.vehicle_submissions;
+create policy "vehicle_submissions: admin delete"
+on public.vehicle_submissions for delete
+using (public.is_admin());
+
+drop trigger if exists vehicle_submissions_set_updated_at on public.vehicle_submissions;
+create trigger vehicle_submissions_set_updated_at
+before update on public.vehicle_submissions
+for each row execute procedure public.set_updated_at();
+
+-- Public listings: approved vehicles only (no PII).
+create table if not exists public.vehicle_listings (
+  id uuid primary key default gen_random_uuid(),
+  submission_id uuid references public.vehicle_submissions(id) on delete set null,
+
+  published boolean not null default true,
+  source text not null default 'owner' check (source in ('owner', 'dealer_import', 'admin')),
+  provider_name text,
+
+  category text not null check (category in ('car', 'boat')),
+  deal text not null check (deal in ('sale', 'rent')),
+
+  title text not null,
+  brand text,
+  model text,
+  year int,
+  price numeric,
+  currency text not null default 'EUR',
+  price_period text check (price_period in ('day', 'week', 'month') or price_period is null),
+
+  location text,
+  latitude double precision,
+  longitude double precision,
+  images jsonb,
+  description text,
+
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.vehicle_listings enable row level security;
+
+-- Migrations (safe to re-run).
+alter table public.vehicle_listings add column if not exists submission_id uuid;
+alter table public.vehicle_listings add column if not exists published boolean;
+alter table public.vehicle_listings add column if not exists source text;
+alter table public.vehicle_listings add column if not exists provider_name text;
+alter table public.vehicle_listings add column if not exists category text;
+alter table public.vehicle_listings add column if not exists deal text;
+alter table public.vehicle_listings add column if not exists title text;
+alter table public.vehicle_listings add column if not exists brand text;
+alter table public.vehicle_listings add column if not exists model text;
+alter table public.vehicle_listings add column if not exists year int;
+alter table public.vehicle_listings add column if not exists price numeric;
+alter table public.vehicle_listings add column if not exists currency text;
+alter table public.vehicle_listings add column if not exists price_period text;
+alter table public.vehicle_listings add column if not exists location text;
+alter table public.vehicle_listings add column if not exists latitude double precision;
+alter table public.vehicle_listings add column if not exists longitude double precision;
+alter table public.vehicle_listings add column if not exists images jsonb;
+alter table public.vehicle_listings add column if not exists description text;
+
+alter table public.vehicle_listings drop constraint if exists vehicle_listings_source_check;
+alter table public.vehicle_listings
+  add constraint vehicle_listings_source_check
+  check (source in ('owner', 'dealer_import', 'admin'));
+
+alter table public.vehicle_listings drop constraint if exists vehicle_listings_category_check;
+alter table public.vehicle_listings
+  add constraint vehicle_listings_category_check
+  check (category in ('car', 'boat'));
+
+alter table public.vehicle_listings drop constraint if exists vehicle_listings_deal_check;
+alter table public.vehicle_listings
+  add constraint vehicle_listings_deal_check
+  check (deal in ('sale', 'rent'));
+
+create index if not exists vehicle_listings_created_at_idx on public.vehicle_listings(created_at desc);
+create index if not exists vehicle_listings_published_idx on public.vehicle_listings(published);
+create index if not exists vehicle_listings_category_idx on public.vehicle_listings(category);
+
+drop policy if exists "vehicle_listings: public read published" on public.vehicle_listings;
+create policy "vehicle_listings: public read published"
+on public.vehicle_listings for select
+using (published = true);
+
+drop policy if exists "vehicle_listings: admin read all" on public.vehicle_listings;
+create policy "vehicle_listings: admin read all"
+on public.vehicle_listings for select
+using (public.is_admin());
+
+drop policy if exists "vehicle_listings: admin insert" on public.vehicle_listings;
+create policy "vehicle_listings: admin insert"
+on public.vehicle_listings for insert
+with check (public.is_admin());
+
+drop policy if exists "vehicle_listings: admin update" on public.vehicle_listings;
+create policy "vehicle_listings: admin update"
+on public.vehicle_listings for update
+using (public.is_admin())
+with check (public.is_admin());
+
+drop policy if exists "vehicle_listings: admin delete" on public.vehicle_listings;
+create policy "vehicle_listings: admin delete"
+on public.vehicle_listings for delete
+using (public.is_admin());
+
+drop trigger if exists vehicle_listings_set_updated_at on public.vehicle_listings;
+create trigger vehicle_listings_set_updated_at
+before update on public.vehicle_listings
+for each row execute procedure public.set_updated_at();

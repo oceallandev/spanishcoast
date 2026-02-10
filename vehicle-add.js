@@ -3,6 +3,7 @@
   const toText = (v, fb = '') => (typeof v === 'string' ? v : v == null ? fb : String(v));
   const norm = (v) => toText(v).trim();
   const normLower = (v) => norm(v).toLowerCase();
+  const getClient = () => window.scpSupabase || null;
 
   const slug = (s) =>
     normLower(s)
@@ -145,6 +146,7 @@
     let lastJson = null;
     let lastFilename = '';
     let lastMessage = '';
+    let lastSubmissionId = '';
 
     const updateActions = () => {
       const ready = Boolean(lastMessage);
@@ -176,6 +178,58 @@
           description: fields.description
         }
       ];
+    };
+
+    const submitPendingToSupabase = async (fields) => {
+      const client = getClient();
+      if (!client) return { ok: false, msg: 'Account submission unavailable (Supabase not configured).' };
+
+      const { data: sessionData } = await client.auth.getSession();
+      const user = sessionData && sessionData.session ? sessionData.session.user : null;
+      if (!user) {
+        return { ok: false, msg: 'Sign in on the Account page to submit instantly (pending review).' };
+      }
+
+      const listing = {
+        category: fields.category,
+        deal: fields.deal,
+        title: fields.title,
+        brand: fields.brand,
+        model: fields.model,
+        year: fields.year,
+        price: fields.price,
+        currency: fields.currency,
+        pricePeriod: fields.pricePeriod,
+        location: fields.location,
+        latitude: fields.latitude,
+        longitude: fields.longitude,
+        images: fields.images,
+        description: fields.description
+      };
+
+      const payload = {
+        user_id: user.id,
+        user_email: user.email || fields.contactEmail || null,
+        source: 'owner',
+        company_name: null,
+        contact_name: fields.contactName || null,
+        contact_email: fields.contactEmail || user.email || null,
+        contact_phone: fields.contactPhone || null,
+        listing
+      };
+
+      const out = await client
+        .from('vehicle_submissions')
+        .insert(payload)
+        .select('id')
+        .single();
+
+      if (out && out.error) {
+        return { ok: false, msg: out.error.message || 'Submission failed.' };
+      }
+
+      const sid = out && out.data && out.data.id ? String(out.data.id) : '';
+      return { ok: true, msg: sid ? `Submitted (pending review). Submission ID: ${sid}` : 'Submitted (pending review).' };
     };
 
     form.addEventListener('submit', (event) => {
@@ -238,6 +292,7 @@
       lastMessage = msg;
       lastJson = buildJsonListing(fields);
       lastFilename = `vehicle-${fields.category}-${slug(title) || 'listing'}.json`;
+      lastSubmissionId = '';
 
       if (out) {
         out.style.display = 'block';
@@ -259,6 +314,23 @@
 
       if (status) status.textContent = 'Message generated. Use Email/WhatsApp and attach the JSON if requested.';
       updateActions();
+
+      // If the user is signed in, submit directly into the admin review inbox.
+      (async () => {
+        try {
+          const out = await submitPendingToSupabase(fields);
+          if (out && out.ok) {
+            lastSubmissionId = out.msg || '';
+            if (status) status.textContent = out.msg;
+          } else if (out && out.msg) {
+            // Keep the message generation status, but append a hint about sign-in.
+            if (status) status.textContent = `Message generated. ${out.msg}`;
+          }
+        } catch (err) {
+          const msg = err && err.message ? err.message : String(err);
+          if (status) status.textContent = `Message generated. Submission failed: ${msg}`;
+        }
+      })();
     });
 
     if (btnCopy) {

@@ -10,6 +10,7 @@
   const dashRole = document.getElementById('dash-role');
   const dashSavedCount = document.getElementById('dash-saved-count');
   const dashAdminTile = document.getElementById('dash-admin-tile');
+  const dashVehiclesTile = document.getElementById('dash-vehicles-tile');
   const dashCrmTile = document.getElementById('dash-crm-tile');
   const dashShopTile = document.getElementById('dash-shop-tile');
   const partnerTile = document.getElementById('dash-partner-tile');
@@ -691,6 +692,7 @@
     setRoleBadge(role);
     if (dashSavedCount) dashSavedCount.textContent = String(readSavedCount());
     setVisible(dashAdminTile, role === 'admin', 'block');
+    setVisible(dashVehiclesTile, role === 'admin', 'block');
     setVisible(dashCrmTile, role === 'admin', 'block');
     setVisible(dashShopTile, role === 'admin', 'block');
 

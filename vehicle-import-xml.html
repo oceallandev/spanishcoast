@@ -26,6 +26,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script defer src="config.js?v=20260210zs"></script>
+    <script defer src="supabase-init.js?v=20260210zs"></script>
 </head>
 
 <body data-section="vehicles">
@@ -86,6 +90,9 @@
                 <p>
                     Upload an XML or JSON feed and we will validate it, preview listings, and generate a clean import file.
                     Then email the generated file to onboard your inventory into our app.
+                </p>
+                <p class="muted">
+                    If you are signed in on the <a class="admin-link" href="account.html">Account</a> page, you can submit the parsed listings directly as <b>pending review</b>.
                 </p>
                 <div class="service-tags">
                     <span class="tag">XML</span>
@@ -148,6 +155,7 @@
                         <button class="cta-button" id="vx-parse" type="submit">Parse feed</button>
                         <button class="cta-button cta-button--outline" id="vx-download-cars" type="button" disabled>Download cars JSON</button>
                         <button class="cta-button cta-button--outline" id="vx-download-boats" type="button" disabled>Download boats JSON</button>
+                        <button class="cta-button cta-button--outline" id="vx-submit" type="button" disabled>Submit for review</button>
                         <a class="cta-button cta-button--outline" id="vx-mailto" href="#" aria-disabled="true">Email summary</a>
                     </div>
 
