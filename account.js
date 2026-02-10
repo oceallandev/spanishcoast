@@ -101,7 +101,9 @@
     }
   };
 
-  const AUTH_TIMEOUT_MS = 30000;
+  // Supabase can be slow to respond on some networks, and free-tier projects can "wake up" after
+  // a period of inactivity. Keep this fairly generous so users don't get logged out / stuck.
+  const AUTH_TIMEOUT_MS = 60000;
   const MAGIC_COOLDOWN_KEY = 'scp:magic_link:cooldown_until';
   const MAGIC_COOLDOWN_MS = 60 * 1000;
   const MAGIC_RATE_LIMIT_COOLDOWN_MS = 3 * 60 * 1000;
