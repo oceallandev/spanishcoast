@@ -18,6 +18,104 @@
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[c]));
 
+  const decodeHtmlEntities = (value) => {
+    try {
+      const parser = document.createElement('textarea');
+      parser.innerHTML = toText(value);
+      return parser.value;
+    } catch {
+      return toText(value);
+    }
+  };
+
+  const splitSentenceChunks = (line) => {
+    return toText(line)
+      .split(/(?<=[.!?])\s+(?=[A-Z0-9])/)
+      .map((chunk) => chunk.trim())
+      .filter(Boolean);
+  };
+
+  const formatProductDescriptionHtml = (rawDescription) => {
+    let text = decodeHtmlEntities(rawDescription)
+      .replace(/\u00a0/g, ' ')
+      .replace(/\r\n?/g, '\n')
+      // Some imports include literal "\n" sequences rather than actual newlines.
+      .replace(/\\r\\n/g, '\n')
+      .replace(/\\n/g, '\n')
+      .replace(/\\r/g, '\n')
+      .replace(/\\t/g, ' ')
+      .replace(/\t/g, ' ')
+      // Recover structure from "spacer" formatting commonly found in dropship imports.
+      .replace(/[ ]{3,}/g, '\n')
+      .replace(/[ ]+\n/g, '\n')
+      .replace(/\n[ ]+/g, '\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+
+    if (!text) return '';
+
+    // Remove leading/trailing wrapper quotes that appear in some feeds.
+    text = text.replace(/^[`"'“”]+/, '').replace(/[`"'“”]+$/, '').trim();
+
+    const lines = text
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    if (!lines.length) return '';
+
+    const blocks = [];
+    let listItems = [];
+
+    const flushList = () => {
+      if (!listItems.length) return;
+      blocks.push(`<ul class="desc-list">${listItems.join('')}</ul>`);
+      listItems = [];
+    };
+
+    lines.forEach((line) => {
+      const safe = toText(line).trim();
+      if (!safe) return;
+
+      // Headings like "Main Features:" or "Specification:".
+      if (safe.length <= 64 && /:$/.test(safe) && !/\bhttps?:\/\//i.test(safe)) {
+        flushList();
+        blocks.push(`<h4 class="desc-heading">${esc(safe.replace(/:\s*$/, ''))}</h4>`);
+        return;
+      }
+
+      if (/^[-•*]\s+/.test(safe)) {
+        const item = safe.replace(/^[-•*]\s+/, '').trim();
+        if (item) listItems.push(`<li>${esc(item)}</li>`);
+        return;
+      }
+
+      if (/^\d+\s*[.)]\s+/.test(safe)) {
+        const item = safe.replace(/^\d+\s*[.)]\s+/, '').trim();
+        if (item) listItems.push(`<li>${esc(item)}</li>`);
+        return;
+      }
+
+      // Short key-value lines ("Brand: X", "Voltage: 220V").
+      if (/^[A-Za-zÀ-ÖØ-öø-ÿ0-9][^:]{1,48}:\s*\S+/.test(safe) && safe.length < 160) {
+        listItems.push(`<li>${esc(safe)}</li>`);
+        return;
+      }
+
+      const chunks = splitSentenceChunks(safe);
+      if (safe.length > 220 && chunks.length >= 3) {
+        chunks.forEach((chunk) => listItems.push(`<li>${esc(chunk)}</li>`));
+        return;
+      }
+
+      flushList();
+      blocks.push(`<p>${esc(safe)}</p>`);
+    });
+
+    flushList();
+    return blocks.join('');
+  };
+
   const money = (amount, { currency = 'EUR', symbol = '€' } = {}) => {
     const n = Number(amount);
     if (!Number.isFinite(n) || n <= 0) return '';
@@ -409,7 +507,7 @@
 
     const shortText = toText(p.short_text).trim();
     const descText = toText(p.desc_text).trim();
-    const desc = (descText || shortText) ? esc(descText || shortText) : '';
+    const descHtml = formatProductDescriptionHtml(descText || shortText);
 
     const thumbs = imgs.slice(0, 10);
     const thumbHtml = thumbs.length > 1
@@ -452,7 +550,7 @@
         ${thumbHtml}
       </div>
       <div class="modal-details-section">
-        ${desc ? `<div class="desc"><p>${desc}</p></div>` : `<div class="muted">No description available.</div>`}
+        ${descHtml ? `<div class="desc">${descHtml}</div>` : `<div class="muted">No description available.</div>`}
         <div class="features-list" style="margin-top:1.25rem;">
           <h4>Why this matters</h4>
           <ul>
