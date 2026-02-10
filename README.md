@@ -52,3 +52,28 @@ Admin UI:
 
 Tip:
 - If you need to re-assign all SCP refs for the Inmovilla feed, run the importer once with `--reset-ref-map`.
+
+## Sync WooCommerce Shop Products (Smart Devices)
+
+The app includes a shop page (`shop.html`) that renders products from a local file:
+- `shop-products.js` (generated, committed)
+- `shop-products.json` (generated, committed)
+
+Generate/update locally:
+
+```bash
+python3 sync_woocommerce_products.py --store-url "https://your-woocommerce-site.com"
+```
+
+Automatic sync (recommended):
+1. In GitHub repo settings:
+   - `Settings -> Secrets and variables -> Actions -> Variables`
+   - Add variable `WC_STORE_URL` (example: `https://spanishcoastproperties.com`)
+2. (Optional) If you want to use the authenticated API:
+   - Set variable `WC_API=v3`
+   - Add secrets `WC_CONSUMER_KEY` and `WC_CONSUMER_SECRET`
+3. Enable the workflow: `.github/workflows/sync-woocommerce-products.yml`
+
+Notes:
+- Store API (`WC_API=store`, default) is public and works for a showcase + "Open in shop" flow.
+- Do not put WooCommerce API keys in `config.js` (that file is public).

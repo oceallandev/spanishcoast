@@ -12,6 +12,7 @@ const PRECACHE_PATHS = [
   './brochure.html',
   './account.html',
   './guide.html',
+  './shop.html',
   './admin-favourites.html',
   './admin-crm.html',
   './viewing-trip.html',
@@ -47,6 +48,7 @@ const PRECACHE_PATHS = [
   './supabase-init.js?v=20260210v',
   './account.js?v=20260210v',
   './guide.js?v=20260210v',
+  './shop.js?v=20260210v',
   './admin-favourites.js?v=20260210v',
   './admin-crm.js?v=20260210v',
   './data.js?v=20260210v',
@@ -115,6 +117,22 @@ self.addEventListener('fetch', (event) => {
 
   // Config: always prefer network so config changes are picked up quickly.
   if (url.pathname.endsWith('/config.js')) {
+    event.respondWith((async () => {
+      const cache = await caches.open(CACHE_NAME);
+      try {
+        const fresh = await fetch(req);
+        if (fresh && fresh.ok) cache.put(key, fresh.clone());
+        return fresh;
+      } catch {
+        const cached = await cache.match(key);
+        return cached || new Response('', { status: 504 });
+      }
+    })());
+    return;
+  }
+
+  // WooCommerce product sync file: prefer network so daily updates show up immediately.
+  if (url.pathname.endsWith('/shop-products.js') || url.pathname.endsWith('/shop-products.json')) {
     event.respondWith((async () => {
       const cache = await caches.open(CACHE_NAME);
       try {

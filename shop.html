@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop (Smart Devices) | Spanish Coast Properties</title>
+    <meta name="description"
+        content="Smart devices shop: curated smart locks, sensors, cameras, and networking products. Open in WooCommerce and request installation or management.">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/shop.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Shop (Smart Devices) | Spanish Coast Properties">
+    <meta property="og:description"
+        content="Curated smart locks, sensors, cameras, and networking products. Request installation, setup, and ongoing management.">
+    <meta property="og:url" content="https://oceallandev.github.io/spanishcoast/shop.html">
+    <meta property="og:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
+
+    <meta name="theme-color" content="#030712">
+    <link rel="manifest" href="manifest.webmanifest?v=20260210v">
+    <link rel="stylesheet" href="style.css?v=20260210v">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body data-section="services">
+    <div class="bg-mesh"></div>
+
+    <header class="main-header glass sticky">
+        <div class="header-inner">
+            <div class="header-left">
+                <div class="logo">
+                    <a href="index.html" aria-label="Spanish Coast Properties Home">
+                        <img src="assets/header-logo.png?v=2" alt="Spanish Coast Properties" class="main-logo"
+                            id="main-logo-img" style="cursor: pointer;">
+                    </a>
+                </div>
+                <div class="brand-info">
+                    <span class="brand-name">Spanish Coast Properties</span>
+                </div>
+                <nav class="primary-nav" id="primary-nav" aria-label="Site sections">
+                    <a class="nav-link" data-section="home" href="index.html">Home</a>
+                    <a class="nav-link" data-section="properties" href="properties.html">Properties</a>
+                    <a class="nav-link" data-section="businesses" href="businesses.html">Businesses</a>
+                    <a class="nav-link" data-section="vehicles" href="vehicles.html">Vehicles</a>
+                    <a class="nav-link" data-section="services" href="services.html">Services</a>
+                </nav>
+            </div>
+
+            <div class="header-right">
+                <button id="mobile-menu-btn" class="mobile-menu-btn" type="button" aria-expanded="false"
+                    aria-label="Menu">☰</button>
+                <a class="header-cta" href="smart-devices.html">Smart Devices</a>
+            </div>
+        </div>
+    </header>
+
+    <div id="mobile-menu-backdrop" class="mobile-menu-backdrop" aria-hidden="true"></div>
+    <aside id="mobile-menu" class="mobile-menu" aria-hidden="true">
+        <div class="mobile-menu-head">
+            <div class="mobile-menu-title">Spanish Coast Properties</div>
+            <button id="mobile-menu-close" class="mobile-menu-close" type="button">✕</button>
+        </div>
+        <nav class="mobile-menu-links" aria-label="Mobile menu">
+            <a href="index.html">Home</a>
+            <a href="properties.html">Properties</a>
+            <a href="businesses.html">Businesses</a>
+            <a href="vehicles.html">Vehicles</a>
+            <a href="services.html">Services</a>
+        </nav>
+        <div class="mobile-menu-foot">
+            <a class="cta-button" href="account.html">Account</a>
+            <a class="cta-button" href="tel:+34624867866">Call</a>
+        </div>
+    </aside>
+
+    <main class="site-main" id="site-main">
+        <section class="page-section catalog-section active" aria-label="Smart devices shop">
+            <div class="catalog-hero">
+                <h2>Smart Devices Shop</h2>
+                <p>
+                    This page showcases the products from our WooCommerce shop, inside the app experience. Use it to browse
+                    quickly, then open the official product page to purchase, or request installation and setup.
+                </p>
+                <div class="service-tags" aria-label="Shop status">
+                    <span class="tag">Auto-synced from WooCommerce</span>
+                    <span class="tag">Install & handover support</span>
+                    <span class="tag">Rental access · Sensors · CCTV · Networking</span>
+                </div>
+                <div class="simple-cta">
+                    <a class="cta-button" href="mailto:info@spanishcoastproperties.com?subject=Smart%20Devices%20Shop%20-%20Install%20request">Request install</a>
+                    <a class="cta-button cta-button--outline" href="smart-devices.html">How we work</a>
+                </div>
+                <div class="muted shop-meta" id="shop-meta" aria-live="polite"></div>
+            </div>
+
+            <div class="catalog-controls glass" aria-label="Shop filters">
+                <div class="catalog-controls-left">
+                    <div class="results-sort">
+                        <label for="shop-q">Search</label>
+                        <input id="shop-q" class="admin-input" type="text"
+                            placeholder="Search devices (e.g. smart lock, camera, Zigbee)">
+                    </div>
+                    <div class="results-sort">
+                        <label for="shop-category">Category</label>
+                        <select id="shop-category">
+                            <option value="all">All</option>
+                        </select>
+                    </div>
+                    <div class="results-sort">
+                        <label for="shop-sort">Sort</label>
+                        <select id="shop-sort">
+                            <option value="newest">Newest</option>
+                            <option value="price_asc">Price: Low to high</option>
+                            <option value="price_desc">Price: High to low</option>
+                            <option value="sale">On sale</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="catalog-controls-right">
+                    <div class="catalog-count" id="shop-count" aria-label="Product count"></div>
+                </div>
+            </div>
+
+            <div class="catalog-grid" id="shop-grid" aria-label="Products"></div>
+        </section>
+    </main>
+
+    <div class="modal" id="shop-modal" aria-hidden="true">
+        <div class="modal-content">
+            <button class="close-modal" id="shop-modal-close" type="button" aria-label="Close">✕</button>
+            <div class="modal-body" id="shop-modal-body"></div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h3>Spanish Coast Properties</h3>
+                <p>Smart devices planning, installation, and management in Costa Blanca South.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <ul class="footer-links">
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="smart-devices.html">Smart Devices</a></li>
+                    <li><a href="account.html">Account</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <ul class="footer-links">
+                    <li><a href="tel:+34624867866">+34 624 867 866</a></li>
+                    <li><a href="mailto:info@spanishcoastproperties.com">info@spanishcoastproperties.com</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
+    </footer>
+
+    <script defer src="shop-products.js"></script>
+    <script defer src="shop.js?v=20260210v"></script>
+    <script defer src="site.js?v=20260210v"></script>
+</body>
+
+</html>
+
