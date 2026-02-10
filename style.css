@@ -1753,6 +1753,49 @@ body[data-section="properties"].ui-collapsed .city-bar {
     border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+.card-actions {
+    display: flex;
+    gap: 0.55rem;
+    flex-wrap: wrap;
+    margin-top: 0.85rem;
+}
+
+.card-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(248, 250, 252, 0.94);
+    font-weight: 900;
+    font-size: 0.82rem;
+    text-decoration: none;
+    transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.card-action:hover {
+    transform: translateY(-1px);
+    border-color: rgba(14, 165, 233, 0.24);
+    background: rgba(14, 165, 233, 0.10);
+}
+
+.card-action--whatsapp {
+    border-color: rgba(34, 197, 94, 0.32);
+    background: rgba(34, 197, 94, 0.10);
+}
+
+.card-action--whatsapp:hover {
+    border-color: rgba(34, 197, 94, 0.55);
+    background: rgba(34, 197, 94, 0.16);
+}
+
+.card-action--disabled {
+    opacity: 0.55;
+    pointer-events: none;
+}
+
 .load-more-btn {
     width: 100%;
     margin-top: 1.1rem;

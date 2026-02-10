@@ -58,33 +58,48 @@
     const province = toText(b.province, 'Alicante');
     const img = toText(b.image, '');
     const href = ref ? `properties.html?ref=${encodeURIComponent(ref)}` : 'properties.html';
+    const brochureHref = ref ? `brochure.html?ref=${encodeURIComponent(ref)}` : '';
     const price = formatPrice(b.price, b.currency);
     const desc = toText(b.description, '');
 
+    const whatsappHref = (() => {
+      if (!ref) return '';
+      try {
+        const abs = new URL(brochureHref, window.location.href).toString();
+        const text = encodeURIComponent(`Brochure: ${ref}\n${title}\n${price}\n${town}, ${province}\n\n${abs}`);
+        return `https://wa.me/?text=${text}`;
+      } catch {
+        return '';
+      }
+    })();
+
     return `
-      <article class="property-card">
-        <a class="business-card-link" href="${href}">
-          <div class="card-img-wrapper">
-            <img src="${esc(img)}" alt="${esc(title)}" loading="lazy" referrerpolicy="no-referrer"
-              onerror="this.onerror=null;this.src='assets/placeholder.png'">
-            <div class="card-badge">${esc(bizType)}</div>
-            <div class="card-status ${esc(kind)}">${esc(kindLabel)}</div>
+      <article class="property-card business-card" data-href="${escAttr(href)}" tabindex="0" role="link" aria-label="Open ${escAttr(title)}">
+        <div class="card-img-wrapper">
+          <img src="${esc(img)}" alt="${esc(title)}" loading="lazy" referrerpolicy="no-referrer"
+            onerror="this.onerror=null;this.src='assets/placeholder.png'">
+          <div class="card-badge">${esc(bizType)}</div>
+          <div class="card-status ${esc(kind)}">${esc(kindLabel)}</div>
+        </div>
+        <div class="card-content">
+          <div class="card-ref">${esc(ref || kindLabel)}</div>
+          <h3>${esc(title)}</h3>
+          <div class="location">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            ${esc(town)}, ${esc(province)}
           </div>
-          <div class="card-content">
-            <div class="card-ref">${esc(ref || kindLabel)}</div>
-            <h3>${esc(title)}</h3>
-            <div class="location">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              ${esc(town)}, ${esc(province)}
-            </div>
-            <div class="price">${esc(price)}</div>
-            <div class="specs">
-              <div class="spec-item">🏷️ ${esc(kindLabel)}</div>
-              <div class="spec-item">🏪 ${esc(bizType)}</div>
-            </div>
-            ${desc ? `<div class="catalog-meta" style="margin-top:0.65rem">${esc(desc)}</div>` : ''}
+          <div class="price">${esc(price)}</div>
+          <div class="specs">
+            <div class="spec-item">🏷️ ${esc(kindLabel)}</div>
+            <div class="spec-item">🏪 ${esc(bizType)}</div>
           </div>
-        </a>
+          ${desc ? `<div class="catalog-meta" style="margin-top:0.65rem">${esc(desc)}</div>` : ''}
+          <div class="card-actions">
+            <a class="card-action" href="${escAttr(href)}">Details</a>
+            ${ref ? `<a class="card-action" href="${escAttr(brochureHref)}" target="_blank" rel="noopener">Brochure (PDF)</a>` : `<span class="card-action card-action--disabled">Brochure (PDF)</span>`}
+            ${whatsappHref ? `<a class="card-action card-action--whatsapp" href="${escAttr(whatsappHref)}" target="_blank" rel="noopener">WhatsApp</a>` : `<span class="card-action card-action--disabled">WhatsApp</span>`}
+          </div>
+        </div>
       </article>
     `;
   };
@@ -181,6 +196,41 @@
   };
 
   if (businessGrid) {
+    let wiredBusinessCardClicks = false;
+
+    const wireBusinessCardClicks = () => {
+      if (wiredBusinessCardClicks) return;
+      wiredBusinessCardClicks = true;
+
+      businessGrid.addEventListener('click', (event) => {
+        const el = event && event.target ? event.target : null;
+        if (!el) return;
+        // Let real links behave normally.
+        if (el.closest('.card-actions')) return;
+        if (el.closest('a')) return;
+        const cardEl = el.closest('.business-card');
+        if (!cardEl) return;
+        const href = toText(cardEl.getAttribute('data-href')).trim();
+        if (!href) return;
+        window.location.href = href;
+      });
+
+      businessGrid.addEventListener('keydown', (event) => {
+        const key = event && event.key ? event.key : '';
+        if (key !== 'Enter' && key !== ' ') return;
+        const el = event && event.target ? event.target : null;
+        if (!el) return;
+        if (el.closest('.card-actions')) return;
+        if (el.closest('a')) return;
+        const cardEl = el.closest('.business-card');
+        if (!cardEl) return;
+        const href = toText(cardEl.getAttribute('data-href')).trim();
+        if (!href) return;
+        event.preventDefault();
+        window.location.href = href;
+      });
+    };
+
     const merged = [
       ...businessListings,
       ...businessItems.map((b) => ({
@@ -281,6 +331,7 @@
 	    // Mobile: keep list-first (map is available via the header toggle).
 	    const openByDefault = window.matchMedia && window.matchMedia('(min-width: 1024px)').matches;
 	    setBusinessMapMode(!!openByDefault);
+      wireBusinessCardClicks();
 	    renderBusinesses();
 	  }
 

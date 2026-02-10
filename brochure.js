@@ -55,11 +55,13 @@
   const listingModeFor = (property) => {
     const explicit = normalize(property && (property.listing_mode || property.listingMode || property.mode));
     if (explicit === 'sale' || explicit === 'rent' || explicit === 'traspaso' || explicit === 'business') return explicit;
-    const salePrice = Number(property && property.price);
-    if (Number.isFinite(salePrice) && salePrice > 0) return 'sale';
+    const kind = normalize(property && property.kind);
+    if (kind === 'traspaso' || kind === 'business') return kind;
     const text = normalize(property && property.description);
     if (text.includes('traspaso') || text.includes('being transferred') || text.includes('is transferred')) return 'traspaso';
     if (text.includes('for rent') || text.includes('monthly rent')) return 'rent';
+    const salePrice = Number(property && property.price);
+    if (Number.isFinite(salePrice) && salePrice > 0) return 'sale';
     return rentPriceFromDescription(property && property.description) ? 'rent' : 'sale';
   };
 
@@ -236,7 +238,79 @@
       return [];
     })();
     const all = base.concat(custom);
-    const match = all.find((p) => normalize(p && p.ref) === normalize(ref));
+    const normRef = normalize(ref);
+
+    const bizListings = Array.isArray(window.businessListings) ? window.businessListings : [];
+    const businessMeta = bizListings.find((b) => normalize(b && b.ref) === normRef) || null;
+
+    const toPropertyLikeBusiness = (b) => {
+      const kind = normalize(b && b.kind);
+      const businessType = toText(b && (b.businessType || b.title || b.category), '');
+      const price = Number(b && b.price);
+      const lat = Number(b && (b.latitude ?? b.lat));
+      const lon = Number(b && (b.longitude ?? b.lon));
+
+      const obj = {
+        id: toText(b && (b.id || b.ref || businessType || 'business')),
+        ref: toText(b && b.ref),
+        price: Number.isFinite(price) ? price : 0,
+        currency: toText(b && b.currency, 'EUR'),
+        type: businessType || 'Business',
+        businessType: businessType || '',
+        town: toText(b && (b.town || b.location), 'Costa Blanca South'),
+        province: toText(b && b.province, 'Alicante'),
+        beds: 0,
+        baths: 0,
+        description: toText(b && b.description, ''),
+        images: b && b.image ? [toText(b.image)] : [],
+        features: [
+          businessType ? `Sector: ${businessType}` : '',
+          kind === 'traspaso' ? 'Deal: Traspaso' : kind === 'business' ? 'Deal: Business for sale' : ''
+        ].filter(Boolean),
+        kind: kind || '',
+        listing_mode: kind === 'traspaso' || kind === 'business' ? kind : ''
+      };
+
+      if (Number.isFinite(lat)) obj.latitude = lat;
+      if (Number.isFinite(lon)) obj.longitude = lon;
+      return obj;
+    };
+
+    const mergeBusinessMeta = (property, meta) => {
+      if (!property || !meta) return property;
+      const out = { ...property };
+
+      const bizType = toText(meta && (meta.businessType || meta.title || meta.category), '');
+      if (bizType) out.businessType = bizType;
+
+      const kind = normalize(meta && meta.kind);
+      if (kind === 'traspaso' || kind === 'business') {
+        out.kind = kind;
+        out.listing_mode = kind;
+      }
+
+      if (!toText(out.description) && toText(meta.description)) out.description = toText(meta.description);
+      if (!toText(out.town) && toText(meta.town)) out.town = toText(meta.town);
+      if (!toText(out.province) && toText(meta.province)) out.province = toText(meta.province);
+
+      const outPrice = Number(out.price);
+      const metaPrice = Number(meta.price);
+      if ((!Number.isFinite(outPrice) || outPrice <= 0) && Number.isFinite(metaPrice) && metaPrice > 0) out.price = metaPrice;
+
+      const outLat = Number(out.latitude);
+      const outLon = Number(out.longitude);
+      const metaLat = Number(meta.latitude ?? meta.lat);
+      const metaLon = Number(meta.longitude ?? meta.lon);
+      if (!Number.isFinite(outLat) && Number.isFinite(metaLat)) out.latitude = metaLat;
+      if (!Number.isFinite(outLon) && Number.isFinite(metaLon)) out.longitude = metaLon;
+
+      const hasImages = Array.isArray(out.images) && out.images.length;
+      if (!hasImages && meta.image) out.images = [toText(meta.image)];
+      return out;
+    };
+
+    const propertyMatch = all.find((p) => normalize(p && p.ref) === normRef) || null;
+    let match = propertyMatch ? mergeBusinessMeta(propertyMatch, businessMeta) : (businessMeta ? toPropertyLikeBusiness(businessMeta) : null);
 
     if (!match) {
       if (refChip) refChip.textContent = ref;
@@ -244,7 +318,7 @@
       return;
     }
 
-    const type = toText(match.type, 'Property');
+    const type = toText(match.businessType || match.type, 'Listing');
     const town = toText(match.town, 'Costa Blanca South');
     const province = toText(match.province, 'Alicante');
     const beds = Number(match.beds) || 0;
@@ -271,16 +345,16 @@
       const link = shareLink();
 
       if (emailLink) {
-        const subject = encodeURIComponent(`Property brochure - ${ref}`);
+        const subject = encodeURIComponent(`Brochure - ${ref}`);
         const body = encodeURIComponent(
-          `Hello,\n\nHere is the brochure link:\n${link}\n\nReference: ${ref}\nPrice: ${price}\nLocation: ${town}, ${province}\n\n(You can also click Download PDF on the brochure page to save it as a PDF.)`
+          `Hello,\n\nHere is the brochure link:\n${link}\n\nReference: ${ref}\nType: ${type}\nPrice: ${price}\nLocation: ${town}, ${province}\n\n(You can click Print to PDF on the brochure page to save it as a PDF.)`
         );
         emailLink.href = `mailto:?subject=${subject}&body=${body}`;
       }
 
       if (whatsappLink) {
         const text = encodeURIComponent(
-          `Property brochure: ${ref}\n${price}\n${town}, ${province}\n\n${link}`
+          `Brochure: ${ref}\n${type}\n${price}\n${town}, ${province}\n\n${link}`
         );
         whatsappLink.href = `https://wa.me/?text=${text}`;
       }
@@ -304,18 +378,21 @@
     }
 
     if (statsEl) {
+      const mode = listingModeFor(match);
       const parts = [
-        `🛏️ ${beds} beds`,
-        `🛁 ${baths} baths`,
-        `📐 ${built} m2`,
-        eurSqm ? `📊 ${eurSqm}` : ''
+        beds > 0 ? `🛏️ ${beds} beds` : '',
+        baths > 0 ? `🛁 ${baths} baths` : '',
+        built > 0 ? `📐 ${built} m2` : '',
+        eurSqm ? `📊 ${eurSqm}` : '',
+        beds === 0 && baths === 0 && mode === 'traspaso' ? '🏷️ Traspaso' : '',
+        beds === 0 && baths === 0 && mode === 'business' ? '🏷️ Business for sale' : ''
       ].filter(Boolean);
       statsEl.innerHTML = parts.map((p) => `<div class="brochure-stat">${escapeHtml(p)}</div>`).join('');
     }
 
     if (highlightsEl) {
       const mode = listingModeFor(match);
-      const op = mode === 'rent' ? 'For rent' : mode === 'traspaso' ? 'Traspaso' : 'For sale';
+      const op = mode === 'rent' ? 'For rent' : mode === 'traspaso' ? 'Traspaso' : mode === 'business' ? 'Business for sale' : 'For sale';
       const highlights = [
         `✅ Reference: ${ref}`,
         `✅ Operation: ${op}`,
@@ -576,8 +653,19 @@
     if (featuresEl) {
       const feats = Array.isArray(match.features) ? match.features : [];
       const safe = feats.map((f) => toText(f).trim()).filter(Boolean);
-      const list = safe.length ? safe : ['Air conditioning', 'Modern finishes', 'Great location'];
-      featuresEl.innerHTML = list.slice(0, 16).map((f) => `<li>${escapeHtml(f)}</li>`).join('');
+      const mode = listingModeFor(match);
+      const fallback = (beds === 0 && baths === 0 && (mode === 'traspaso' || mode === 'business' || normalize(type).includes('commercial')))
+        ? [
+          'Key deal points (inventory, fixtures, licenses)',
+          'Lease terms / rent review (if applicable)',
+          'Handover plan and training period (if offered)',
+          'Business due diligence checklist (recommended)',
+          'Local services and foot traffic vary by exact street'
+        ]
+        : ['Air conditioning', 'Modern finishes', 'Great location'];
+
+      const list = safe.length ? safe : fallback;
+      featuresEl.innerHTML = list.slice(0, 18).map((f) => `<li>${escapeHtml(f)}</li>`).join('');
     }
 
     if (galleryEl) {

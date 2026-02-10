@@ -577,10 +577,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return explicitMode;
         }
 
-        const salePrice = Number(property && property.price);
-        if (Number.isFinite(salePrice) && salePrice > 0) {
-            return 'sale';
-        }
         const text = normalize(property && property.description);
         const isTransfer = text.includes('traspaso')
             || text.includes('being transferred')
@@ -588,6 +584,10 @@ document.addEventListener('DOMContentLoaded', () => {
             || text.includes('is transferred');
         if (isTransfer) {
             return 'traspaso';
+        }
+        const salePrice = Number(property && property.price);
+        if (Number.isFinite(salePrice) && salePrice > 0) {
+            return 'sale';
         }
         if (text.includes('available for rent') || text.includes('for rent') || text.includes('monthly rent')) {
             return 'rent';
