@@ -13,6 +13,7 @@
   const galleryEl = $('brochure-gallery');
   const toggleBrandBtn = $('brochure-toggle-brand');
   const copyBtn = $('brochure-copy-link');
+  const whatsappLink = $('brochure-whatsapp-link');
   const emailLink = $('brochure-email-link');
   const printBtn = $('brochure-print');
   const brandEl = $('brochure-brand');
@@ -252,11 +253,30 @@
     const price = formatListingPrice(match);
     const images = imageUrlsFor(match);
 
-    const brochureLink = (() => {
+    const shareLink = () => {
       const u = new URL(window.location.href);
       u.searchParams.set('ref', ref);
       return u.toString();
-    })();
+    };
+
+    const updateShareLinks = () => {
+      const link = shareLink();
+
+      if (emailLink) {
+        const subject = encodeURIComponent(`Property brochure - ${ref}`);
+        const body = encodeURIComponent(
+          `Hello,\n\nHere is the brochure link:\n${link}\n\nReference: ${ref}\nPrice: ${price}\nLocation: ${town}, ${province}\n\n(You can also click Download PDF on the brochure page to save it as a PDF.)`
+        );
+        emailLink.href = `mailto:?subject=${subject}&body=${body}`;
+      }
+
+      if (whatsappLink) {
+        const text = encodeURIComponent(
+          `Property brochure: ${ref}\n${price}\n${town}, ${province}\n\n${link}`
+        );
+        whatsappLink.href = `https://wa.me/?text=${text}`;
+      }
+    };
 
     if (refChip) refChip.textContent = ref;
     if (refFoot) refFoot.textContent = ref;
@@ -319,28 +339,26 @@
       }
     }
 
-    if (emailLink) {
-      const subject = encodeURIComponent(`Property brochure - ${ref}`);
-      const body = encodeURIComponent(`Hello,\n\nHere is the brochure link:\n${brochureLink}\n\nReference: ${ref}\nPrice: ${price}\nLocation: ${town}, ${province}\n\n(You can also click Download PDF on the brochure page to save it as a PDF.)`);
-      emailLink.href = `mailto:?subject=${subject}&body=${body}`;
-    }
+    updateShareLinks();
 
     if (toggleBrandBtn) {
       toggleBrandBtn.addEventListener('click', () => {
         const next = !document.body.classList.contains('brochure-wl');
         setWhiteLabel(next);
         updateUrlWl(next);
+        updateShareLinks();
       });
     }
 
     if (copyBtn) {
       copyBtn.addEventListener('click', async () => {
+        const link = shareLink();
         try {
-          await navigator.clipboard.writeText(brochureLink);
+          await navigator.clipboard.writeText(link);
           copyBtn.textContent = 'Copied';
           window.setTimeout(() => (copyBtn.textContent = 'Copy link'), 900);
         } catch {
-          window.prompt('Copy link:', brochureLink);
+          window.prompt('Copy link:', link);
         }
       });
     }

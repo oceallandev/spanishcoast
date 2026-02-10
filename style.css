@@ -3140,11 +3140,20 @@ body[data-section="properties"].map-open .map-section {
         color: #0ea5e9 !important;
     }
 
+    .brochure-type,
+    .brochure-location,
+    .brochure-description p,
+    .brochure-description li,
+    .brochure-contact-row {
+        color: #0b1220 !important;
+    }
+
     .brochure-stat,
     .brochure-highlight,
     .brochure-features li {
         background: #f8fafc !important;
         border-color: #e2e8f0 !important;
+        color: #0b1220 !important;
     }
 
     .brochure-description li::before {
