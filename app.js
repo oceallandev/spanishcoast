@@ -1061,8 +1061,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const town = toText(property && property.town).trim();
         const type = toText(property && property.type).trim();
         const price = listingPriceNumber(property);
+        const image = (() => {
+            const urls = imageUrlsFor(property);
+            return Array.isArray(urls) && urls.length ? urls[0] : null;
+        })();
 
-        const payload = {
+        const payloadBase = {
             user_id: user.id,
             user_email: toText(user.email).trim() || null,
             property_id: pid,
@@ -1074,7 +1078,21 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            await client.from('favourites').upsert(payload, { onConflict: 'user_id,property_id' });
+            const attempt = async (withImage) => {
+                const payload = withImage
+                    ? { ...payloadBase, property_image: image || null }
+                    : payloadBase;
+                return await client.from('favourites').upsert(payload, { onConflict: 'user_id,property_id' });
+            };
+
+            let out = await attempt(true);
+            if (out && out.error) {
+                const msg = String(out.error.message || '').toLowerCase();
+                // Backwards compatible with older schemas that don't have the column yet.
+                if (msg.includes('column') && msg.includes('property_image')) {
+                    out = await attempt(false);
+                }
+            }
         } catch (error) {
             // ignore
         }

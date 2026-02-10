@@ -1,6 +1,7 @@
 (() => {
   const statusText = document.getElementById('status-text');
   const statusHint = document.getElementById('status-hint');
+  const authStatus = document.getElementById('auth-status');
   const signOutBtn = document.getElementById('sign-out-btn');
   const authPanels = document.getElementById('auth-panels');
   const dashboardPanels = document.getElementById('dashboard-panels');
@@ -35,6 +36,11 @@
   const setStatus = (text, hint) => {
     if (statusText) statusText.textContent = text;
     if (statusHint) statusHint.textContent = hint || '';
+    if (authStatus) {
+      const msg = [text, hint].filter((v) => v != null && String(v).trim()).join('  ');
+      authStatus.textContent = msg;
+      authStatus.style.display = msg ? 'block' : 'none';
+    }
   };
 
   const getClient = () => window.scpSupabase || null;
@@ -299,6 +305,7 @@
       if (signOutBtn) signOutBtn.disabled = true;
       setVisible(dashboardPanels, false);
       setVisible(authPanels, true, 'grid');
+      setVisible(authStatus, true, 'block');
       return;
     }
 
@@ -318,11 +325,13 @@
       if (signOutBtn) signOutBtn.disabled = true;
       setVisible(dashboardPanels, false);
       setVisible(authPanels, true, 'grid');
+      setVisible(authStatus, true, 'block');
       return;
     }
 
     setVisible(authPanels, false);
     setVisible(dashboardPanels, true);
+    setVisible(authStatus, false);
 
     const profileInfo = await getProfileInfo(client, user.id);
     const role = normalizeRole(profileInfo && profileInfo.role ? profileInfo.role : 'client');
@@ -476,6 +485,12 @@
       if (!email || !password) return;
 
       setStatus('Signing in…');
+      const btn = signInForm.querySelector('button[type=\"submit\"]');
+      const prev = btn ? btn.textContent : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Signing in…';
+      }
       try {
         const { error } = await withTimeout(client.auth.signInWithPassword({ email, password }), 15000, 'Sign-in');
         if (error) {
@@ -486,6 +501,11 @@
         await runDiagnostics();
       } catch (error) {
         setStatus('Sign-in failed', (error && error.message) ? error.message : String(error));
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = prev || 'Sign in';
+        }
       }
     });
   }
@@ -500,6 +520,12 @@
       if (!email || !password) return;
 
       setStatus('Creating account…');
+      const btn = signUpForm.querySelector('button[type=\"submit\"]');
+      const prev = btn ? btn.textContent : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Creating…';
+      }
       const redirectTo = `${window.location.origin}${window.location.pathname}`;
       try {
         const { error } = await withTimeout(client.auth.signUp({
@@ -516,6 +542,11 @@
         await runDiagnostics();
       } catch (error) {
         setStatus('Sign-up failed', (error && error.message) ? error.message : String(error));
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = prev || 'Create account';
+        }
       }
     });
   }
@@ -528,6 +559,12 @@
       const email = (magicEmail && magicEmail.value ? magicEmail.value : '').trim();
       if (!email) return;
       setStatus('Sending magic link…');
+      const btn = magicForm.querySelector('button[type=\"submit\"]');
+      const prev = btn ? btn.textContent : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Sending…';
+      }
       const redirectTo = `${window.location.origin}${window.location.pathname}`;
       try {
         const { error } = await withTimeout(client.auth.signInWithOtp({
@@ -538,9 +575,14 @@
           setStatus('Failed to send link', error.message || 'Please try again.');
           return;
         }
-        setStatus('Link sent', 'Check your inbox and click the sign-in link.');
+        setStatus('Link sent', 'Check your inbox and click the sign-in link. If it does not log you in, add this page to Supabase Auth Redirect URLs.');
       } catch (error) {
         setStatus('Failed to send link', (error && error.message) ? error.message : String(error));
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = prev || 'Send magic link';
+        }
       }
     });
   }

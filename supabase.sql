@@ -94,6 +94,8 @@ create table if not exists public.favourites (
   property_id text not null,
   property_ref text,
   property_link text,
+  -- Small thumbnail URL for admin inbox convenience (optional).
+  property_image text,
   town text,
   type text,
   price numeric,
@@ -103,6 +105,9 @@ create table if not exists public.favourites (
 );
 
 alter table public.favourites enable row level security;
+
+-- Migrations for existing projects (safe to re-run).
+alter table public.favourites add column if not exists property_image text;
 
 drop policy if exists "favourites: read own" on public.favourites;
 create policy "favourites: read own"

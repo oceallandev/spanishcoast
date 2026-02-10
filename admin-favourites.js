@@ -53,12 +53,22 @@
     }
 
     setStatus('Loading favourites…');
-    const { data, error } = await client
+    const run = async (select) => await client
       .from('favourites')
-      .select('created_at,user_email,property_ref,property_link,town,type,price')
+      .select(select)
       .order('created_at', { ascending: false })
       .limit(250);
 
+    let out = await run('created_at,user_email,property_ref,property_link,town,type,price,property_image');
+    if (out && out.error) {
+      const msg = String(out.error.message || '').toLowerCase();
+      // Backwards compatible with older schemas that don't have the column yet.
+      if (msg.includes('column') && msg.includes('property_image')) {
+        out = await run('created_at,user_email,property_ref,property_link,town,type,price');
+      }
+    }
+
+    const { data, error } = out || {};
     if (error) {
       setStatus(`Failed to load: ${error.message || 'unknown error'}`);
       return;
@@ -70,8 +80,14 @@
       const time = row.created_at ? new Date(row.created_at).toLocaleString() : '';
       const link = row.property_link ? `<a class="admin-link" href="${escape(row.property_link)}" target="_blank" rel="noopener">Open</a>` : '';
       const price = row.price != null && row.price !== '' ? `€${Number(row.price).toLocaleString('en-IE')}` : '';
+      const imgSrc = row.property_image ? escape(row.property_image) : 'assets/placeholder.png';
+      const imgTag = `<img class="admin-thumb" src="${imgSrc}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/placeholder.png'">`;
+      const thumb = row.property_link
+        ? `<a href="${escape(row.property_link)}" target="_blank" rel="noopener" aria-label="Open ${escape(row.property_ref || '')}">${imgTag}</a>`
+        : imgTag;
       return `
         <tr>
+          <td>${thumb}</td>
           <td>${escape(time)}</td>
           <td>${escape(row.user_email || '')}</td>
           <td>${escape(row.property_ref || '')}</td>
@@ -87,7 +103,7 @@
   }
 
   function exportCsv() {
-    const headers = ['created_at', 'user_email', 'property_ref', 'town', 'type', 'price', 'property_link'];
+    const headers = ['created_at', 'user_email', 'property_ref', 'town', 'type', 'price', 'property_link', 'property_image'];
     const lines = [headers.map(toCsvCell).join(',')];
     lastRows.forEach((r) => {
       lines.push(headers.map((h) => toCsvCell(r[h])).join(','));
@@ -109,4 +125,3 @@
   window.addEventListener('scp:supabase:ready', () => loadRows(), { once: true });
   window.setTimeout(loadRows, 60);
 })();
-
