@@ -44,8 +44,8 @@ Supabase:
 1. Run `supabase.sql` (creates auth tables + admin-only CRM + `listing_ref_map`).
 2. Import the generated:
    - `private/inmovilla/listing_ref_map.sql` (maps Inmovilla refs -> SCP refs; visible only to privileged roles via RLS)
-   - `private/inmovilla/crm_contacts.sql`
-   - `private/inmovilla/crm_demands.sql`
+   - `private/inmovilla/crm_contacts.csv` and `private/inmovilla/crm_demands.csv` (recommended: Table Editor -> Import data)
+   - If you must use the SQL editor: use the smaller chunked files under `private/inmovilla/sql_chunks/` (e.g. `crm_contacts.part001.sql`).
 
 Admin UI:
 - `admin-crm.html` shows contacts + leads (admin only).

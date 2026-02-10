@@ -668,6 +668,75 @@ def write_sql_upsert(rows: List[Dict[str, Any]], out_path: str, table: str, conf
         f.write(sql)
 
 
+def write_sql_upsert_chunks(
+    rows: List[Dict[str, Any]],
+    out_dir: str,
+    file_prefix: str,
+    *,
+    table: str,
+    conflict_cols: List[str],
+    cols: List[str],
+    max_rows: int = 80,
+    max_chars: int = 160_000,
+) -> List[str]:
+    """
+    Supabase SQL editor has a query size limit; large single INSERT statements often fail.
+    This writes multiple smaller upserts that are safe to paste/run one-by-one.
+    """
+    os.makedirs(out_dir, exist_ok=True)
+
+    def q(v: Any) -> str:
+        if v is None:
+            return "null"
+        if isinstance(v, bool):
+            return "true" if v else "false"
+        if isinstance(v, (int, float)):
+            return str(v)
+        if isinstance(v, (dict, list)):
+            s = json.dumps(v, ensure_ascii=False)
+            s = s.replace("'", "''")
+            return f"'{s}'::jsonb"
+        s = str(v)
+        s = s.replace("'", "''")
+        return f"'{s}'"
+
+    conflict = ", ".join(conflict_cols)
+    set_cols = [c for c in cols if c not in conflict_cols]
+    update = ", ".join([f"{c} = excluded.{c}" for c in set_cols])
+
+    prefix = f"insert into public.{table} ({', '.join(cols)})\nvalues\n  "
+    suffix = f"\non conflict ({conflict}) do update set {update};\n"
+
+    paths: List[str] = []
+    chunk_idx = 1
+    buf: List[str] = []
+    buf_len = len(prefix) + len(suffix)
+
+    def flush() -> None:
+        nonlocal chunk_idx, buf, buf_len
+        if not buf:
+            return
+        out_path = os.path.join(out_dir, f"{file_prefix}.part{chunk_idx:03}.sql")
+        body = ",\n  ".join(buf)
+        with open(out_path, "w", encoding="utf-8") as f:
+            f.write(prefix + body + suffix)
+        paths.append(out_path)
+        chunk_idx += 1
+        buf = []
+        buf_len = len(prefix) + len(suffix)
+
+    for r in rows:
+        values = "(" + ", ".join(q(r.get(c)) for c in cols) + ")"
+        extra = len(values) + (len(",\n  ") if buf else 0)
+        if buf and (len(buf) >= max_rows or (buf_len + extra) > max_chars):
+            flush()
+        buf.append(values)
+        buf_len += extra
+
+    flush()
+    return paths
+
+
 def main(argv: List[str]) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--properties-xml", required=True, help="Path to Inmovilla properties XML (ofertas_*)")
@@ -699,6 +768,7 @@ def main(argv: List[str]) -> int:
         ref_fields = ["scp_ref", "source", "original_ref", "original_id"]
         ref_csv = os.path.join(priv_dir, "listing_ref_map.csv")
         ref_sql = os.path.join(priv_dir, "listing_ref_map.sql")
+        ref_chunks_dir = os.path.join(priv_dir, "sql_chunks")
         write_csv(ref_rows, ref_csv, ref_fields)
         write_sql_upsert(
             ref_rows,
@@ -707,7 +777,17 @@ def main(argv: List[str]) -> int:
             conflict_cols=["scp_ref"],
             cols=ref_fields,
         )
+        ref_chunks = write_sql_upsert_chunks(
+            ref_rows,
+            ref_chunks_dir,
+            "listing_ref_map",
+            table="listing_ref_map",
+            conflict_cols=["scp_ref"],
+            cols=ref_fields,
+            max_rows=250,
+        )
         print(f"Ref map: {len(ref_rows)} -> {ref_csv} (+ {ref_sql})")
+        print(f"  SQL editor chunks: {len(ref_chunks)} files -> {ref_chunks_dir}/listing_ref_map.partXXX.sql")
 
     if args.no_private:
         return 0
@@ -716,6 +796,7 @@ def main(argv: List[str]) -> int:
         contacts = parse_inmovilla_contacts(args.contacts_xml)
         contacts_csv = os.path.join(priv_dir, "crm_contacts.csv")
         contacts_sql = os.path.join(priv_dir, "crm_contacts.sql")
+        contacts_chunks_dir = os.path.join(priv_dir, "sql_chunks")
         contacts_fields = [
             "source",
             "external_client_code",
@@ -742,12 +823,23 @@ def main(argv: List[str]) -> int:
             conflict_cols=["source", "external_client_code"],
             cols=contacts_fields,
         )
+        contacts_chunks = write_sql_upsert_chunks(
+            contacts,
+            contacts_chunks_dir,
+            "crm_contacts",
+            table="crm_contacts",
+            conflict_cols=["source", "external_client_code"],
+            cols=contacts_fields,
+            max_rows=60,
+        )
         print(f"Contacts: {len(contacts)} -> {contacts_csv} (+ {contacts_sql})")
+        print(f"  SQL editor chunks: {len(contacts_chunks)} files -> {contacts_chunks_dir}/crm_contacts.partXXX.sql")
 
     if args.demands_xml:
         demands = parse_inmovilla_demands(args.demands_xml)
         demands_csv = os.path.join(priv_dir, "crm_demands.csv")
         demands_sql = os.path.join(priv_dir, "crm_demands.sql")
+        demands_chunks_dir = os.path.join(priv_dir, "sql_chunks")
         demands_fields = [
             "source",
             "external_client_code",
@@ -777,7 +869,17 @@ def main(argv: List[str]) -> int:
             conflict_cols=["source", "external_client_code", "external_demand_number"],
             cols=demands_fields,
         )
+        demands_chunks = write_sql_upsert_chunks(
+            demands,
+            demands_chunks_dir,
+            "crm_demands",
+            table="crm_demands",
+            conflict_cols=["source", "external_client_code", "external_demand_number"],
+            cols=demands_fields,
+            max_rows=30,
+        )
         print(f"Demands: {len(demands)} -> {demands_csv} (+ {demands_sql})")
+        print(f"  SQL editor chunks: {len(demands_chunks)} files -> {demands_chunks_dir}/crm_demands.partXXX.sql")
 
     print("\nIMPORTANT: Do not commit anything under `private/` (contains PII and private mappings).")
     return 0
