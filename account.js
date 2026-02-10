@@ -119,6 +119,39 @@
     return lower.includes('abort') || lower.includes('aborted') || lower.includes('signal');
   };
 
+  const tryReadSessionFromStorage = () => {
+    try {
+      const cfg = window.SCP_CONFIG || {};
+      const url = (cfg.supabaseUrl || '').trim();
+      if (!url) return null;
+      const host = new URL(url).hostname || '';
+      const ref = host.split('.')[0] || '';
+      if (!ref) return null;
+      const key = `sb-${ref}-auth-token`;
+
+      const readKey = (storage) => {
+        if (!storage) return null;
+        try {
+          const raw = storage.getItem(key);
+          if (!raw) return null;
+          const parsed = JSON.parse(raw);
+          if (!parsed || typeof parsed !== 'object') return null;
+          // Supabase versions can wrap the session; handle common shapes.
+          const session = parsed.currentSession || parsed.session || parsed;
+          if (!session || typeof session !== 'object') return null;
+          if (session.user && session.access_token) return session;
+          return null;
+        } catch {
+          return null;
+        }
+      };
+
+      return readKey(window.localStorage) || readKey(window.sessionStorage);
+    } catch {
+      return null;
+    }
+  };
+
   const getSessionSafe = async (client, { retries = 2 } = {}) => {
     if (!client) return { data: { session: null } };
     let lastErr = null;
@@ -141,6 +174,11 @@
   // Supabase can be slow to respond on some networks, and free-tier projects can "wake up" after
   // a period of inactivity. Keep this fairly generous so users don't get logged out / stuck.
   const AUTH_TIMEOUT_MS = 60000;
+
+  // If a browser/VPN/ad-block causes AbortError during auth init, don't lock the user out.
+  // We'll retry a few times and keep the UI usable.
+  let sessionAbortRetries = 0;
+  let sessionAbortTimer = null;
 
   const MAGIC_COOLDOWN_KEY = 'scp:magic_link:cooldown_until';
   const MAGIC_COOLDOWN_MS = 60 * 1000;
@@ -585,10 +623,35 @@
         const msg = error && error.message ? String(error.message) : String(error);
         const status = window.scpSupabaseStatus || null;
         const storage = status && status.storage ? String(status.storage) : 'unknown';
-        const hint = /abort/i.test(msg)
-          ? `Session check aborted (storage=${storage}). Try: Clear offline cache, then Reset login, then sign in again. If it persists, disable VPN/ad-block and open ?qa=1 for diagnostics.`
-          : `${msg} (storage=${storage})`;
-        setStatus('Auth session failed', hint);
+        const abortLike = /abort/i.test(msg);
+        const fallbackSession = abortLike ? tryReadSessionFromStorage() : null;
+        if (fallbackSession && fallbackSession.user) {
+          session = fallbackSession;
+        } else if (abortLike) {
+          sessionAbortRetries += 1;
+          const delay = Math.min(4000, 250 * sessionAbortRetries);
+          if (sessionAbortTimer) window.clearTimeout(sessionAbortTimer);
+          if (sessionAbortRetries <= 12) {
+            setStatus('Connecting…', `Auth session check aborted (storage=${storage}). Retrying in ${Math.ceil(delay / 1000)}s…`);
+            sessionAbortTimer = window.setTimeout(() => refresh(), delay);
+          } else {
+            const hint = `Session check aborted (storage=${storage}). Try: Clear offline cache, then Reset login, then sign in again. If it persists, disable VPN/ad-block and open ?qa=1 for diagnostics.`;
+            setStatus('Auth session failed', hint);
+          }
+          if (signOutBtn) signOutBtn.disabled = true;
+          setVisible(dashboardPanels, false);
+          setVisible(authPanels, true, 'grid');
+          setVisible(authStatus, true, 'block');
+          return;
+        } else {
+          const hint = `${msg} (storage=${storage})`;
+          setStatus('Auth session failed', hint);
+          if (signOutBtn) signOutBtn.disabled = true;
+          setVisible(dashboardPanels, false);
+          setVisible(authPanels, true, 'grid');
+          setVisible(authStatus, true, 'block');
+          return;
+        }
         if (signOutBtn) signOutBtn.disabled = true;
         setVisible(dashboardPanels, false);
         setVisible(authPanels, true, 'grid');
@@ -600,6 +663,7 @@
     const user = session && session.user ? session.user : null;
 
     if (!user) {
+      sessionAbortRetries = 0;
       setStatus('Signed out', 'Sign in to sync favourites across devices.');
       if (signOutBtn) signOutBtn.disabled = true;
       setVisible(dashboardPanels, false);
@@ -608,6 +672,7 @@
       return;
     }
 
+    sessionAbortRetries = 0;
     setVisible(authPanels, false);
     setVisible(dashboardPanels, true);
     setVisible(authStatus, false);
@@ -828,12 +893,12 @@
         btn.textContent = 'Signing in…';
       }
       try {
-        const { error } = await withTimeout(client.auth.signInWithPassword({ email, password }), AUTH_TIMEOUT_MS, 'Sign-in');
+        const { data, error } = await withTimeout(client.auth.signInWithPassword({ email, password }), AUTH_TIMEOUT_MS, 'Sign-in');
         if (error) {
           setStatus('Sign-in failed', error.message || 'Please try again.');
           return;
         }
-        await refresh();
+        await refresh({ sessionOverride: data && data.session ? data.session : undefined });
         await runDiagnostics();
       } catch (error) {
         const msg = (error && error.message) ? String(error.message) : String(error);
@@ -1108,7 +1173,7 @@
       if (!client) return;
       setStatus('Signing out…');
       await client.auth.signOut();
-      await refresh();
+      await refresh({ sessionOverride: null });
     });
   }
 
