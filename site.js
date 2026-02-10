@@ -13,6 +13,7 @@
     path.includes('/services') || path.endsWith('services.html') ? 'services' :
     path.endsWith('/account.html') || path.endsWith('account.html') ? 'account' :
     path.endsWith('/admin-favourites.html') || path.endsWith('admin-favourites.html') ? 'account' :
+    path.endsWith('/admin-crm.html') || path.endsWith('admin-crm.html') ? 'account' :
     'home';
 
   document.body.dataset.section = document.body.dataset.section || section;

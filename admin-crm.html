@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Favourites | Spanish Coast Properties</title>
+    <title>Admin CRM | Spanish Coast Properties</title>
     <meta name="robots" content="noindex,nofollow">
 
     <meta name="theme-color" content="#030712">
@@ -42,7 +42,7 @@
             </div>
 
             <div class="header-right">
-                <a class="header-cta" href="properties.html">Back to Properties</a>
+                <a class="header-cta" href="account.html">Back to Account</a>
             </div>
         </div>
     </header>
@@ -50,27 +50,50 @@
     <main class="site-main">
         <section class="page-section active">
             <div class="page-hero">
-                <h1>Favourites Inbox</h1>
-                <p>Recent saved listings from logged-in users (admin only).</p>
+                <h1>CRM</h1>
+                <p>Contacts and leads imported from external systems (admin only).</p>
             </div>
 
             <div class="glass panel">
                 <div class="admin-toolbar">
-                    <button id="refresh-btn" class="cta-button" type="button">Refresh</button>
-                    <button id="csv-btn" class="cta-button cta-button--outline" type="button">Export CSV</button>
+                    <div class="admin-toolbar-left">
+                        <button id="tab-contacts" class="cta-button cta-button--outline admin-tab is-active" type="button">Contacts</button>
+                        <button id="tab-demands" class="cta-button cta-button--outline admin-tab" type="button">Leads</button>
+                    </div>
+                    <div class="admin-toolbar-right">
+                        <input id="crm-q" class="admin-input" type="text" placeholder="Search email, name, phone, code">
+                        <button id="crm-refresh" class="cta-button" type="button">Refresh</button>
+                    </div>
                 </div>
-                <div class="muted" id="admin-status" aria-live="polite"></div>
-                <div class="admin-table-wrap">
-                    <table class="admin-table" id="fav-table">
+
+                <div class="muted" id="crm-status" aria-live="polite"></div>
+
+                <div id="crm-contacts-wrap" class="admin-table-wrap">
+                    <table class="admin-table" id="crm-contacts-table">
                         <thead>
                             <tr>
-                                <th>Time</th>
-                                <th>User</th>
-                                <th>Ref</th>
-                                <th>Town</th>
-                                <th>Type</th>
-                                <th>Price</th>
-                                <th>Link</th>
+                                <th>Updated</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Area</th>
+                                <th>Code</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <div id="crm-demands-wrap" class="admin-table-wrap" style="display:none">
+                    <table class="admin-table" id="crm-demands-table">
+                        <thead>
+                            <tr>
+                                <th>Updated</th>
+                                <th>Client</th>
+                                <th>Budget</th>
+                                <th>Beds/Baths</th>
+                                <th>Zones</th>
+                                <th>Types</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -80,7 +103,7 @@
         </section>
     </main>
 
-    <script defer src="admin-favourites.js?v=20260210i"></script>
+    <script defer src="admin-crm.js?v=20260210i"></script>
     <script defer src="site.js?v=20260210i"></script>
 </body>
 

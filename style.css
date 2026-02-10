@@ -2962,6 +2962,29 @@ body[data-section="properties"].map-open .map-section {
     margin-bottom: 0.7rem;
 }
 
+.admin-toolbar-left,
+.admin-toolbar-right {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.admin-toolbar-right {
+    justify-content: flex-end;
+}
+
+.admin-tab.is-active {
+    background: rgba(14, 165, 233, 0.14);
+    border-color: rgba(56, 189, 248, 0.28);
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.14);
+}
+
+.admin-tab.is-active:hover {
+    transform: translateY(-2px);
+    border-color: rgba(56, 189, 248, 0.38);
+}
+
 .admin-table-wrap {
     overflow: auto;
     border-radius: 14px;

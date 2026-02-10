@@ -142,3 +142,111 @@ drop trigger if exists favourites_set_updated_at on public.favourites;
 create trigger favourites_set_updated_at
 before update on public.favourites
 for each row execute procedure public.set_updated_at();
+
+-- 3) CRM (admin-only)
+-- Contacts + Demands from systems like Inmovilla. These tables contain PII and MUST remain admin-only.
+
+create table if not exists public.crm_contacts (
+  id uuid primary key default gen_random_uuid(),
+  source text not null default 'inmovilla',
+  external_client_code text not null,
+  email text,
+  first_name text,
+  last_name text,
+  phone1 text,
+  phone2 text,
+  phone3 text,
+  locality text,
+  province text,
+  nationality text,
+  client_type text,
+  notes text,
+  source_created_at timestamptz,
+  source_updated_at timestamptz,
+  raw jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (source, external_client_code)
+);
+
+alter table public.crm_contacts enable row level security;
+
+drop policy if exists "crm_contacts: admin read" on public.crm_contacts;
+create policy "crm_contacts: admin read"
+on public.crm_contacts for select
+using (public.is_admin());
+
+drop policy if exists "crm_contacts: admin insert" on public.crm_contacts;
+create policy "crm_contacts: admin insert"
+on public.crm_contacts for insert
+with check (public.is_admin());
+
+drop policy if exists "crm_contacts: admin update" on public.crm_contacts;
+create policy "crm_contacts: admin update"
+on public.crm_contacts for update
+using (public.is_admin())
+with check (public.is_admin());
+
+drop policy if exists "crm_contacts: admin delete" on public.crm_contacts;
+create policy "crm_contacts: admin delete"
+on public.crm_contacts for delete
+using (public.is_admin());
+
+drop trigger if exists crm_contacts_set_updated_at on public.crm_contacts;
+create trigger crm_contacts_set_updated_at
+before update on public.crm_contacts
+for each row execute procedure public.set_updated_at();
+
+create table if not exists public.crm_demands (
+  id uuid primary key default gen_random_uuid(),
+  source text not null default 'inmovilla',
+  external_client_code text,
+  external_demand_number text,
+  title text,
+  operation text check (operation in ('sale', 'rent') or operation is null),
+  price_min numeric,
+  price_max numeric,
+  beds_min int,
+  baths_min int,
+  types text,
+  zones text,
+  want_terrace boolean not null default false,
+  want_pool boolean not null default false,
+  want_garage boolean not null default false,
+  want_lift boolean not null default false,
+  notes text,
+  source_created_at timestamptz,
+  source_updated_at timestamptz,
+  raw jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (source, external_client_code, external_demand_number)
+);
+
+alter table public.crm_demands enable row level security;
+
+drop policy if exists "crm_demands: admin read" on public.crm_demands;
+create policy "crm_demands: admin read"
+on public.crm_demands for select
+using (public.is_admin());
+
+drop policy if exists "crm_demands: admin insert" on public.crm_demands;
+create policy "crm_demands: admin insert"
+on public.crm_demands for insert
+with check (public.is_admin());
+
+drop policy if exists "crm_demands: admin update" on public.crm_demands;
+create policy "crm_demands: admin update"
+on public.crm_demands for update
+using (public.is_admin())
+with check (public.is_admin());
+
+drop policy if exists "crm_demands: admin delete" on public.crm_demands;
+create policy "crm_demands: admin delete"
+on public.crm_demands for delete
+using (public.is_admin());
+
+drop trigger if exists crm_demands_set_updated_at on public.crm_demands;
+create trigger crm_demands_set_updated_at
+before update on public.crm_demands
+for each row execute procedure public.set_updated_at();
