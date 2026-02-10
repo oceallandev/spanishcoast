@@ -255,3 +255,50 @@ drop trigger if exists crm_demands_set_updated_at on public.crm_demands;
 create trigger crm_demands_set_updated_at
 before update on public.crm_demands
 for each row execute procedure public.set_updated_at();
+
+-- 4) Listing reference map (secure original refs for privileged roles)
+-- Keep source/system references (e.g. Inmovilla) off the public site.
+-- The frontend shows SCP refs to everyone, and fetches original refs from this table only for privileged roles.
+
+create table if not exists public.listing_ref_map (
+  scp_ref text primary key,
+  source text not null default 'inmovilla',
+  original_ref text not null,
+  original_id text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (source, original_ref)
+);
+
+alter table public.listing_ref_map enable row level security;
+
+drop policy if exists "listing_ref_map: privileged read" on public.listing_ref_map;
+create policy "listing_ref_map: privileged read"
+on public.listing_ref_map for select
+using (exists (
+  select 1
+  from public.profiles p
+  where p.user_id = auth.uid()
+    and p.role in ('admin', 'partner', 'agency_admin', 'agent', 'developer', 'collaborator')
+));
+
+drop policy if exists "listing_ref_map: admin insert" on public.listing_ref_map;
+create policy "listing_ref_map: admin insert"
+on public.listing_ref_map for insert
+with check (public.is_admin());
+
+drop policy if exists "listing_ref_map: admin update" on public.listing_ref_map;
+create policy "listing_ref_map: admin update"
+on public.listing_ref_map for update
+using (public.is_admin())
+with check (public.is_admin());
+
+drop policy if exists "listing_ref_map: admin delete" on public.listing_ref_map;
+create policy "listing_ref_map: admin delete"
+on public.listing_ref_map for delete
+using (public.is_admin());
+
+drop trigger if exists listing_ref_map_set_updated_at on public.listing_ref_map;
+create trigger listing_ref_map_set_updated_at
+before update on public.listing_ref_map
+for each row execute procedure public.set_updated_at();

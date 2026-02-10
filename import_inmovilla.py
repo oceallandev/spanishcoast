@@ -151,7 +151,171 @@ def _rent_period(value: str) -> str:
     return "month"
 
 
-def parse_inmovilla_properties(xml_path: str) -> List[Dict[str, Any]]:
+class ScpRefAllocator:
+    """
+    Allocate stable SCP-xxxx references for source refs (e.g. Inmovilla offers_ref).
+
+    The mapping is stored locally under `private/` (gitignored) so the public site never ships the
+    original ref. A SQL upsert export is also generated so admins can import it into Supabase
+    (behind RLS) and let privileged users see the original ref in the UI.
+    """
+
+    def __init__(
+        self,
+        map_path: str,
+        *,
+        repo_root: Optional[str] = None,
+        start_at: Optional[int] = None,
+        reset: bool = False,
+    ):
+        self.map_path = map_path
+        self.repo_root = repo_root or os.path.dirname(os.path.abspath(__file__))
+        self.state: Dict[str, Any] = {"version": 1, "next_number": 0, "map": {}, "meta": {}}
+        if not reset:
+            self._load()
+
+        if not isinstance(self.state.get("next_number"), int) or self.state.get("next_number", 0) <= 0:
+            base_next = (start_at or 0) if (start_at and start_at > 0) else (self._scan_max_scp_number() + 1)
+            base_next = max(base_next, self._max_allocated_number() + 1)
+            self.state["next_number"] = int(base_next)
+
+    def _load(self) -> None:
+        try:
+            with open(self.map_path, "r", encoding="utf-8") as f:
+                raw = json.load(f)
+            if isinstance(raw, dict) and isinstance(raw.get("map"), dict):
+                self.state.update(raw)
+        except Exception:
+            return
+
+    def save(self) -> None:
+        os.makedirs(os.path.dirname(self.map_path), exist_ok=True)
+        with open(self.map_path, "w", encoding="utf-8") as f:
+            json.dump(self.state, f, ensure_ascii=False, indent=2)
+
+    def _scan_max_scp_number(self) -> int:
+        rx = re.compile(r"\bSCP-(\d{3,6})\b")
+        max_num = 0
+
+        candidates = [
+            os.path.join(self.repo_root, "data.js"),
+            os.path.join(self.repo_root, "custom-listings.js"),
+            os.path.join(self.repo_root, "businesses-data.js"),
+            os.path.join(self.repo_root, "vehicles-data.js"),
+            os.path.join(self.repo_root, "reference_map.csv"),
+        ]
+
+        def scan_file(fp: str) -> None:
+            nonlocal max_num
+            try:
+                with open(fp, "r", encoding="utf-8", errors="ignore") as f:
+                    text = f.read()
+                for m in rx.finditer(text):
+                    try:
+                        n = int(m.group(1))
+                    except Exception:
+                        continue
+                    if n > max_num:
+                        max_num = n
+            except Exception:
+                return
+
+        for fp in candidates:
+            if os.path.exists(fp) and os.path.basename(fp) != "inmovilla-listings.js":
+                scan_file(fp)
+
+        if max_num <= 0:
+            for root, dirs, files in os.walk(self.repo_root):
+                dirs[:] = [d for d in dirs if d not in (".git", "private")]
+                for fn in files:
+                    if fn == "inmovilla-listings.js":
+                        continue
+                    if not (fn.endswith(".js") or fn.endswith(".csv")):
+                        continue
+                    scan_file(os.path.join(root, fn))
+
+        return max_num
+
+    def _max_allocated_number(self) -> int:
+        rx = re.compile(r"^SCP-(\d{3,6})$")
+        max_num = 0
+        mapping = self.state.get("map") or {}
+        if not isinstance(mapping, dict):
+            return 0
+        for v in mapping.values():
+            m = rx.match(_t(v))
+            if not m:
+                continue
+            try:
+                n = int(m.group(1))
+            except Exception:
+                continue
+            if n > max_num:
+                max_num = n
+        return max_num
+
+    def resolve(self, original_ref: str) -> str:
+        mapping = self.state.get("map")
+        if not isinstance(mapping, dict):
+            mapping = {}
+            self.state["map"] = mapping
+
+        key = _t(original_ref).upper()
+        if not key:
+            key = "UNKNOWN"
+
+        existing = _t(mapping.get(key))
+        if existing:
+            return existing
+
+        n = int(self.state.get("next_number") or 0)
+        if n <= 0:
+            n = self._scan_max_scp_number() + 1
+        scp_ref = f"SCP-{n}"
+        mapping[key] = scp_ref
+        self.state["next_number"] = n + 1
+        return scp_ref
+
+    def record(self, original_ref: str, original_id: str) -> None:
+        key = _t(original_ref).upper()
+        if not key:
+            key = "UNKNOWN"
+        meta = self.state.get("meta")
+        if not isinstance(meta, dict):
+            meta = {}
+            self.state["meta"] = meta
+        row = meta.get(key)
+        if not isinstance(row, dict):
+            row = {}
+            meta[key] = row
+        oid = _t(original_id)
+        if oid:
+            row["original_id"] = oid
+
+    def rows_for_supabase(self, source: str = "inmovilla") -> List[Dict[str, Any]]:
+        mapping = self.state.get("map")
+        if not isinstance(mapping, dict):
+            return []
+        rows: List[Dict[str, Any]] = []
+        meta = self.state.get("meta")
+        meta = meta if isinstance(meta, dict) else {}
+        for original_ref, scp_ref in mapping.items():
+            original_id = None
+            m = meta.get(original_ref)
+            if isinstance(m, dict):
+                original_id = _t(m.get("original_id")) or None
+            rows.append(
+                {
+                    "scp_ref": _t(scp_ref),
+                    "source": source,
+                    "original_ref": _t(original_ref),
+                    "original_id": original_id,
+                }
+            )
+        return rows
+
+
+def parse_inmovilla_properties(xml_path: str, allocator: Optional[ScpRefAllocator] = None) -> List[Dict[str, Any]]:
     out: List[Dict[str, Any]] = []
     prop_count = 0
 
@@ -162,7 +326,11 @@ def parse_inmovilla_properties(xml_path: str) -> List[Dict[str, Any]]:
         datos = el.find("datos")
 
         inmovilla_id = _get(datos, "ofertas_cod_ofer") or _get(datos, "id")
-        ref = _get(datos, "ofertas_ref") or _get(datos, "ofertas_referenciacol") or inmovilla_id
+        original_ref = _get(datos, "ofertas_ref") or _get(datos, "ofertas_referenciacol") or inmovilla_id
+        # Public ref shown to clients. If allocator is provided, we remap to SCP-xxxx and keep the original ref private.
+        ref = allocator.resolve(original_ref) if allocator else original_ref
+        if allocator:
+            allocator.record(original_ref, inmovilla_id)
         action = _get(datos, "accionoferta_accion")
         mode = _listing_mode(action)
 
@@ -244,8 +412,9 @@ def parse_inmovilla_properties(xml_path: str) -> List[Dict[str, Any]]:
 
         # Images
         images: List[str] = []
-        fotos = el.find("fotos")
-        if fotos is not None:
+        # Inmovilla exports photos as repeated <fotos> blocks (one <fotoX> per block),
+        # so we must iterate all of them (not just the first).
+        for fotos in el.findall("fotos"):
             for c in list(fotos):
                 u = _t(c.text)
                 if u:
@@ -254,7 +423,8 @@ def parse_inmovilla_properties(xml_path: str) -> List[Dict[str, Any]]:
         images = list(dict.fromkeys(images))
 
         obj: Dict[str, Any] = {
-            "id": f"imv-{_t(inmovilla_id) or _t(ref)}",
+            # Avoid shipping source refs in the public payload; keep IDs derived from SCP refs.
+            "id": f"imv-{_t(ref)}",
             "ref": _t(ref),
             "price": int(round(price)) if price and price > 0 else 0,
             "currency": "EUR",
@@ -507,18 +677,41 @@ def main(argv: List[str]) -> int:
     ap.add_argument("--out-public-js", default="inmovilla-listings.js", help="Public JS output for listings")
     ap.add_argument("--out-private-dir", default="private/inmovilla", help="Output dir for private contacts/leads exports")
     ap.add_argument("--no-private", action="store_true", help="Skip generating private exports (contacts/leads)")
+    ap.add_argument("--reset-ref-map", action="store_true", help="Reset local SCP ref map (will reassign refs)")
 
     args = ap.parse_args(argv)
 
-    props = parse_inmovilla_properties(args.properties_xml)
+    priv_dir = args.out_private_dir
+
+    # Allocate SCP refs and keep source refs private.
+    ref_map_path = os.path.join(priv_dir, "ref_map.json")
+    allocator = ScpRefAllocator(ref_map_path, reset=bool(args.reset_ref_map))
+
+    props = parse_inmovilla_properties(args.properties_xml, allocator=allocator)
     write_public_js(props, args.out_public_js)
+    allocator.save()
 
     print(f"Properties: {len(props)} -> {args.out_public_js}")
+
+    # Export ref mapping for Supabase (admin-only table behind RLS).
+    ref_rows = allocator.rows_for_supabase(source="inmovilla")
+    if ref_rows:
+        ref_fields = ["scp_ref", "source", "original_ref", "original_id"]
+        ref_csv = os.path.join(priv_dir, "listing_ref_map.csv")
+        ref_sql = os.path.join(priv_dir, "listing_ref_map.sql")
+        write_csv(ref_rows, ref_csv, ref_fields)
+        write_sql_upsert(
+            ref_rows,
+            ref_sql,
+            table="listing_ref_map",
+            conflict_cols=["scp_ref"],
+            cols=ref_fields,
+        )
+        print(f"Ref map: {len(ref_rows)} -> {ref_csv} (+ {ref_sql})")
 
     if args.no_private:
         return 0
 
-    priv_dir = args.out_private_dir
     if args.contacts_xml:
         contacts = parse_inmovilla_contacts(args.contacts_xml)
         contacts_csv = os.path.join(priv_dir, "crm_contacts.csv")
@@ -586,7 +779,7 @@ def main(argv: List[str]) -> int:
         )
         print(f"Demands: {len(demands)} -> {demands_csv} (+ {demands_sql})")
 
-    print("\nIMPORTANT: Do not commit anything under `private/` (contains PII).")
+    print("\nIMPORTANT: Do not commit anything under `private/` (contains PII and private mappings).")
     return 0
 
 

@@ -37,11 +37,18 @@ python3 import_inmovilla.py \
 
 Outputs:
 - `inmovilla-listings.js` (public listings) loaded by `properties.html` and `brochure.html`.
+- `private/inmovilla/listing_ref_map.sql` (original refs mapping for privileged users, **never public**). Ignored by git.
 - `private/inmovilla/*.csv` and `private/inmovilla/*.sql` (PII, admin-only). These are **ignored by git**.
 
 Supabase:
-1. Run `supabase.sql` (creates admin-only CRM tables: `crm_contacts` + `crm_demands`).
-2. Import the generated `private/inmovilla/crm_contacts.sql` and `private/inmovilla/crm_demands.sql` in the Supabase SQL editor.
+1. Run `supabase.sql` (creates auth tables + admin-only CRM + `listing_ref_map`).
+2. Import the generated:
+   - `private/inmovilla/listing_ref_map.sql` (maps Inmovilla refs -> SCP refs; visible only to privileged roles via RLS)
+   - `private/inmovilla/crm_contacts.sql`
+   - `private/inmovilla/crm_demands.sql`
 
 Admin UI:
 - `admin-crm.html` shows contacts + leads (admin only).
+
+Tip:
+- If you need to re-assign all SCP refs for the Inmovilla feed, run the importer once with `--reset-ref-map`.

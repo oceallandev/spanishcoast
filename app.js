@@ -1040,6 +1040,51 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    const originalRefCache = new Map(); // scpRef -> { original_ref, source } | null
+
+    function isPrivilegedRole(role) {
+        const r = toText(role).trim().toLowerCase();
+        return ['admin', 'partner', 'agency_admin', 'agent', 'developer', 'collaborator'].includes(r);
+    }
+
+    async function supabaseMaybeGetOriginalRef(client, userId, scpRef) {
+        const ref = toText(scpRef).trim();
+        if (!ref) return null;
+        if (originalRefCache.has(ref)) return originalRefCache.get(ref);
+
+        let role = toText(supabaseRole).trim();
+        if (!role && userId) {
+            role = await supabaseGetRole(client, userId);
+        }
+        if (!isPrivilegedRole(role)) {
+            originalRefCache.set(ref, null);
+            return null;
+        }
+
+        try {
+            const { data, error } = await client
+                .from('listing_ref_map')
+                .select('original_ref,source')
+                .eq('scp_ref', ref)
+                .maybeSingle();
+            if (error || !data) {
+                originalRefCache.set(ref, null);
+                return null;
+            }
+            const original_ref = toText(data.original_ref).trim();
+            if (!original_ref) {
+                originalRefCache.set(ref, null);
+                return null;
+            }
+            const mapped = { original_ref, source: toText(data.source).trim() };
+            originalRefCache.set(ref, mapped);
+            return mapped;
+        } catch (error) {
+            originalRefCache.set(ref, null);
+            return null;
+        }
+    }
+
     async function supabaseFetchFavorites(client, userId) {
         try {
             const { data, error } = await client
@@ -1145,6 +1190,7 @@ document.addEventListener('DOMContentLoaded', () => {
             client.auth.onAuthStateChange(async (event, session) => {
                 supabaseUser = session && session.user ? session.user : null;
                 supabaseRole = supabaseUser ? await supabaseGetRole(client, supabaseUser.id) : '';
+                originalRefCache.clear();
                 if (!supabaseUser) {
                     updateFavoritesControls();
                     return;
@@ -1896,6 +1942,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="modal-info">
                     <div class="card-badge">${type}</div>
                     <div class="modal-ref">${reference || 'Ref unavailable'}</div>
+                    <div class="modal-ref-sub muted" data-original-ref style="display:none"></div>
                     <h2>${modalTitle}</h2>
                     <div class="location">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
@@ -1969,6 +2016,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
         `;
+
+        // Privileged users (via Supabase/RLS) can see the original system reference (e.g. Inmovilla ref).
+        // Normal clients never receive this data because it's stored server-side behind RLS.
+        const originalRefEl = modalDetails.querySelector('[data-original-ref]');
+        if (originalRefEl) {
+            originalRefEl.style.display = 'none';
+            originalRefEl.textContent = '';
+            const scpRef = toText(reference).trim();
+            if (scpRef) {
+                (async () => {
+                    const client = getSupabase();
+                    if (!client) return;
+                    let user = supabaseUser;
+                    if (!user) {
+                        try {
+                            const { data } = await client.auth.getSession();
+                            user = data && data.session ? data.session.user : null;
+                        } catch {
+                            user = null;
+                        }
+                    }
+                    if (!user) return;
+                    const mapped = await supabaseMaybeGetOriginalRef(client, user.id, scpRef);
+                    if (!mapped || !mapped.original_ref) return;
+                    const label = mapped.source ? `Original ref (${mapped.source})` : 'Original ref';
+                    originalRefEl.textContent = `${label}: ${mapped.original_ref}`;
+                    originalRefEl.style.display = 'block';
+                })();
+            }
+        }
 
         modal.style.display = 'block';
         preModalScrollY = window.scrollY || 0;
