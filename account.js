@@ -19,6 +19,43 @@
   const partnerV = document.getElementById('dash-partner-v');
   const partnerDesc = document.getElementById('dash-partner-desc');
   const adminPanel = document.getElementById('admin-panel');
+  const accountWorkspace = document.getElementById('account-workspace');
+  const profileAvatar = document.getElementById('profile-avatar');
+  const profileName = document.getElementById('profile-name');
+  const profileEmail = document.getElementById('profile-email');
+  const profileBadges = document.getElementById('profile-badges');
+  const profileNote = document.getElementById('profile-note');
+  const roleHubTitle = document.getElementById('role-hub-title');
+  const roleHubActions = document.getElementById('role-hub-actions');
+  const roleHubBody = document.getElementById('role-hub-body');
+  const quicksharePanel = document.getElementById('quickshare-panel');
+  const quickshareWl = document.getElementById('quickshare-wl');
+  const quickshareRef = document.getElementById('quickshare-ref');
+  const quickshareOpen = document.getElementById('quickshare-open');
+  const quickshareBrochure = document.getElementById('quickshare-brochure');
+  const quickshareReel = document.getElementById('quickshare-reel');
+  const quickshareCopyLink = document.getElementById('quickshare-copy-link');
+  const quickshareCopyBrochure = document.getElementById('quickshare-copy-brochure');
+  const quickshareCopyReel = document.getElementById('quickshare-copy-reel');
+  const quickshareHint = document.getElementById('quickshare-hint');
+  const activityRefresh = document.getElementById('activity-refresh');
+  const activityGrid = document.getElementById('activity-grid');
+  const alertsPanel = document.getElementById('alerts-panel');
+  const alertsRefreshBtn = document.getElementById('alerts-refresh');
+  const alertsMarkSeenBtn = document.getElementById('alerts-mark-seen');
+  const alertsSummary = document.getElementById('alerts-summary');
+  const alertsStatus = document.getElementById('alerts-status');
+  const alertsList = document.getElementById('alerts-list');
+  const shopRefresh = document.getElementById('shop-refresh');
+  const shopBasketList = document.getElementById('shop-basket-list');
+  const shopBasketHint = document.getElementById('shop-basket-hint');
+  const shopCheckoutBtn = document.getElementById('shop-checkout');
+  const shopClearBasketBtn = document.getElementById('shop-clear-basket');
+  const shopCheckoutStatus = document.getElementById('shop-checkout-status');
+  const shopHistoryList = document.getElementById('shop-history-list');
+  const shopDocsModal = document.getElementById('shop-docs-modal');
+  const shopDocsModalClose = document.getElementById('shop-docs-modal-close');
+  const shopDocsModalBody = document.getElementById('shop-docs-modal-body');
   const adminUserQ = document.getElementById('admin-user-q');
   const adminUserRefresh = document.getElementById('admin-user-refresh');
   const adminUserStatus = document.getElementById('admin-user-status');
@@ -58,6 +95,18 @@
   };
 
   const getClient = () => window.scpSupabase || null;
+  const getBasket = () => window.SCP_BASKET || null;
+  const t = (key, fallback, vars) => {
+    try {
+      if (window.SCP_I18N && typeof window.SCP_I18N.t === 'function') {
+        return window.SCP_I18N.t(key, vars);
+      }
+    } catch {
+      // ignore
+    }
+    if (fallback !== undefined) return String(fallback);
+    return String(key || '');
+  };
 
   const setVisible = (el, yes, display = 'block') => {
     if (!el) return;
@@ -86,6 +135,9 @@
     collaborator: { label: 'Collaborator', partner: true },
     client: { label: 'Client', partner: false }
   };
+
+  const QUICKSHARE_REF_KEY = 'scp:quickshare:ref';
+  const QUICKSHARE_WL_KEY = 'scp:quickshare:wl';
 
   const addDiag = (level, title, detail) => {
     if (!diagLines) return;
@@ -414,6 +466,107 @@
     if (dashRole) dashRole.textContent = meta.label.toUpperCase();
   };
 
+  const initialsFor = (displayName, email) => {
+    const name = String(displayName || '').trim();
+    const fallback = String(email || '').trim().split('@')[0] || '';
+    const src = name || fallback || 'SCP';
+    const parts = src
+      .replace(/[^a-zA-Z0-9]+/g, ' ')
+      .trim()
+      .split(/\s+/g)
+      .filter(Boolean);
+    const a = (parts[0] || '').slice(0, 1);
+    const b = parts.length > 1 ? (parts[1] || '').slice(0, 1) : (parts[0] || '').slice(1, 2);
+    const out = `${a}${b}`.toUpperCase();
+    return out && out.trim() ? out : 'SC';
+  };
+
+  const normalizeRef = (value) => String(value || '').trim().toUpperCase();
+
+  const buildAbsUrl = (path, params = {}) => {
+    const url = new URL(path, window.location.href);
+    Object.entries(params || {}).forEach(([k, v]) => {
+      const val = v == null ? '' : String(v);
+      if (!val) url.searchParams.delete(k);
+      else url.searchParams.set(k, val);
+    });
+    return url.toString();
+  };
+
+  const setCtaDisabled = (el, yes) => {
+    if (!el) return;
+    el.classList.toggle('cta-button--disabled', !!yes);
+    if (yes) el.setAttribute('aria-disabled', 'true');
+    else el.removeAttribute('aria-disabled');
+    if (el.tagName === 'BUTTON') {
+      el.disabled = !!yes;
+    }
+  };
+
+  const copyText = async (text) => {
+    const value = String(text || '').trim();
+    if (!value) return false;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(value);
+        return true;
+      }
+    } catch {
+      // ignore
+    }
+    try {
+      window.prompt(t('account.copy_prompt', 'Copy:'), value);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const readQuickshareWl = () => {
+    try {
+      if (!window.localStorage) return false;
+      return window.localStorage.getItem(QUICKSHARE_WL_KEY) === '1';
+    } catch {
+      return false;
+    }
+  };
+
+  const writeQuickshareWl = (next) => {
+    try {
+      if (!window.localStorage) return;
+      window.localStorage.setItem(QUICKSHARE_WL_KEY, next ? '1' : '0');
+    } catch {
+      // ignore
+    }
+  };
+
+  const readQuickshareRef = () => {
+    try {
+      if (!window.localStorage) return '';
+      return normalizeRef(window.localStorage.getItem(QUICKSHARE_REF_KEY) || '');
+    } catch {
+      return '';
+    }
+  };
+
+  const writeQuickshareRef = (ref) => {
+    try {
+      if (!window.localStorage) return;
+      const val = normalizeRef(ref);
+      if (!val) window.localStorage.removeItem(QUICKSHARE_REF_KEY);
+      else window.localStorage.setItem(QUICKSHARE_REF_KEY, val);
+    } catch {
+      // ignore
+    }
+  };
+
+  let quickshareWired = false;
+  let activityWired = false;
+  let alertsWired = false;
+  let shopWired = false;
+  let dashboardUser = null;
+  let dashboardRole = 'client';
+
   let adminWired = false;
   let lastAdminRows = [];
 
@@ -570,6 +723,1028 @@
     }
   };
 
+  const roleHubContentFor = (role) => {
+    const r = normalizeRole(role);
+
+    if (r === 'admin') {
+      return {
+        title: t('account.role.admin.title', 'Admin control center'),
+        bullets: [
+          t('account.role.admin.b1', 'Review favourites inbox and respond fast to high-intent clients.'),
+          t('account.role.admin.b2', 'Approve new submissions (properties, vehicles, Street Scout).'),
+          t('account.role.admin.b3', 'Assign roles for agencies, agents, developers and collaborators.')
+        ],
+        actions: [
+          { href: 'admin-favourites.html', label: t('account.role.admin.a1', 'Favourites inbox') },
+          { href: 'admin-crm.html', label: t('account.role.admin.a2', 'CRM') },
+          { href: 'admin-scout.html', label: t('account.role.admin.a3', 'Street Scout') }
+        ],
+        note: t('account.role.admin.note', 'Tip: use “Quick share studio” to generate white-label brochure/reel links in one click.')
+      };
+    }
+
+    if (r === 'developer') {
+      return {
+        title: t('account.role.developer.title', 'Developer workspace'),
+        bullets: [
+          t('account.role.developer.b1', 'Share new builds with clients using brochure + reel video.'),
+          t('account.role.developer.b2', 'Use white-label links when sharing with partner agencies.'),
+          t('account.role.developer.b3', 'Coordinate viewings and documentation with the SCP team.')
+        ],
+        actions: [
+          { href: 'new-builds.html', label: t('account.role.developer.a1', 'New builds') },
+          { href: 'collaborate.html', label: t('account.role.developer.a2', 'Collaboration') },
+          { href: 'services.html', label: t('account.role.developer.a3', 'Services') }
+        ],
+        note: t('account.role.developer.note', 'Use Quick share studio for brochure/reel links by reference (SCP-XXXX).')
+      };
+    }
+
+    if (r === 'agency_admin') {
+      return {
+        title: t('account.role.agency_admin.title', 'Agency workspace'),
+        bullets: [
+          t('account.role.agency_admin.b1', 'Share listings with your clients using your own branding (white-label).'),
+          t('account.role.agency_admin.b2', 'Use reels to increase response on Instagram/TikTok.'),
+          t('account.role.agency_admin.b3', 'Send shortlists and keep everything in one system.')
+        ],
+        actions: [
+          { href: 'properties.html?saved=1', label: t('account.role.agency_admin.a1', 'Saved') },
+          { href: 'collaborate.html', label: t('account.role.agency_admin.a2', 'Partner tools') },
+          { href: 'guide.html', label: t('account.role.agency_admin.a3', 'Guide') }
+        ],
+        note: t('account.role.agency_admin.note', 'Use Quick share studio to generate brochure/reel links in seconds.')
+      };
+    }
+
+    if (r === 'agent' || r === 'partner') {
+      return {
+        title: t('account.role.agent.title', 'Agent workspace'),
+        bullets: [
+          t('account.role.agent.b1', 'Save listings and share a clean shortlist to your client.'),
+          t('account.role.agent.b2', 'Generate brochure PDFs and reel videos for social sharing.'),
+          t('account.role.agent.b3', 'White-label mode removes SCP branding for your presentations.')
+        ],
+        actions: [
+          { href: 'properties.html?saved=1', label: t('account.role.agent.a1', 'Saved') },
+          { href: 'properties.html', label: t('account.role.agent.a2', 'Browse') },
+          { href: 'viewing-trip.html', label: t('account.role.agent.a3', 'Viewing trip') }
+        ],
+        note: t('account.role.agent.note', 'Tip: open a listing modal and click Instagram/TikTok to generate a reel for sharing.')
+      };
+    }
+
+    if (r === 'collaborator') {
+      return {
+        title: t('account.role.collaborator.title', 'Collaborator workspace'),
+        bullets: [
+          t('account.role.collaborator.b1', 'Street Scout: take a photo of a “For Sale” board and earn €200–€500.'),
+          t('account.role.collaborator.b2', 'Your submissions are tracked and visible in your dashboard.'),
+          t('account.role.collaborator.b3', 'You can also share listings with brochure PDFs and reels.')
+        ],
+        actions: [
+          { href: 'street-scout.html', label: t('account.role.collaborator.a1', 'Street Scout') },
+          { href: 'properties.html?saved=1', label: t('account.role.collaborator.a2', 'Saved') },
+          { href: 'guide.html', label: t('account.role.collaborator.a3', 'Guide') }
+        ],
+        note: t('account.role.collaborator.note', 'Keep your location enabled when submitting Street Scout leads.')
+      };
+    }
+
+    return {
+      title: t('account.role.client.title', 'Client dashboard'),
+      bullets: [
+        t('account.role.client.b1', 'Save listings on mobile and desktop (sync enabled).'),
+        t('account.role.client.b2', 'Request a visit and plan a viewing trip when you are ready.'),
+        t('account.role.client.b3', 'Sell your property with admin approval for quality control.')
+      ],
+      actions: [
+        { href: 'properties.html', label: t('account.role.client.a1', 'Browse') },
+        { href: 'properties.html?saved=1', label: t('account.role.client.a2', 'Saved') },
+        { href: 'property-add.html', label: t('account.role.client.a3', 'Sell') }
+      ],
+      note: t('account.role.client.note', 'If you are an agency/agent/developer, ask us to enable partner tools.')
+    };
+  };
+
+  const renderRoleHub = (role) => {
+    if (!roleHubTitle || !roleHubActions || !roleHubBody) return;
+    const content = roleHubContentFor(role);
+    roleHubTitle.textContent = content.title || '';
+
+    const actions = Array.isArray(content.actions) ? content.actions : [];
+    roleHubActions.innerHTML = actions.slice(0, 4).map((a, idx) => {
+      const accent = idx === 0;
+      const cls = accent ? 'account-badge account-badge--accent' : 'account-badge';
+      return `<a class="${cls}" href="${escapeHtml(a.href || '#')}">${escapeHtml(a.label || '')}</a>`;
+    }).join('');
+
+    const bullets = Array.isArray(content.bullets) ? content.bullets : [];
+    const note = content.note ? String(content.note) : '';
+    roleHubBody.innerHTML = `
+      <ul>
+        ${bullets.slice(0, 5).map((b) => `<li>${escapeHtml(b)}</li>`).join('')}
+      </ul>
+      ${note ? `<div class="muted">${escapeHtml(note)}</div>` : ''}
+    `;
+  };
+
+  const wireQuickshare = () => {
+    if (quickshareWired) return;
+    if (!quicksharePanel) return;
+    quickshareWired = true;
+
+    if (quickshareWl) {
+      quickshareWl.checked = readQuickshareWl();
+      quickshareWl.addEventListener('change', () => {
+        writeQuickshareWl(!!quickshareWl.checked);
+        updateQuickshare();
+      });
+    }
+    if (quickshareRef) {
+      const stored = readQuickshareRef();
+      if (stored) quickshareRef.value = stored;
+      quickshareRef.addEventListener('input', () => {
+        writeQuickshareRef(quickshareRef.value);
+        updateQuickshare();
+      });
+      quickshareRef.addEventListener('blur', () => {
+        const next = normalizeRef(quickshareRef.value);
+        quickshareRef.value = next;
+        writeQuickshareRef(next);
+        updateQuickshare();
+      });
+    }
+
+    const flashHint = (msg) => {
+      if (!quickshareHint) return;
+      if (!quickshareHint.dataset.defaultText) quickshareHint.dataset.defaultText = quickshareHint.textContent || '';
+      quickshareHint.textContent = msg;
+      window.setTimeout(() => {
+        quickshareHint.textContent = quickshareHint.dataset.defaultText || '';
+      }, 1400);
+    };
+
+    const onCopy = async (getter) => {
+      const text = typeof getter === 'function' ? getter() : '';
+      const ok = await copyText(text);
+      flashHint(ok ? t('account.quickshare.copied', 'Copied') : t('account.quickshare.copy_failed', 'Copy failed'));
+    };
+
+    if (quickshareCopyLink) quickshareCopyLink.addEventListener('click', () => onCopy(() => (quickshareOpen ? quickshareOpen.href : '')));
+    if (quickshareCopyBrochure) quickshareCopyBrochure.addEventListener('click', () => onCopy(() => (quickshareBrochure ? quickshareBrochure.href : '')));
+    if (quickshareCopyReel) quickshareCopyReel.addEventListener('click', () => onCopy(() => (quickshareReel ? quickshareReel.href : '')));
+
+    updateQuickshare();
+  };
+
+  const updateQuickshare = () => {
+    const ref = normalizeRef(quickshareRef && quickshareRef.value ? quickshareRef.value : '');
+    const wl = quickshareWl ? !!quickshareWl.checked : false;
+    const hasRef = !!ref;
+
+    const listingUrl = buildAbsUrl('properties.html', hasRef ? { ref } : {});
+    const brochureUrl = buildAbsUrl('brochure.html', hasRef ? { ref, wl: wl ? '1' : '' } : {});
+    const reelUrl = buildAbsUrl('reel.html', hasRef ? { ref, wl: wl ? '1' : '' } : {});
+
+    if (quickshareOpen) quickshareOpen.href = listingUrl;
+    if (quickshareBrochure) quickshareBrochure.href = brochureUrl;
+    if (quickshareReel) quickshareReel.href = reelUrl;
+
+    setCtaDisabled(quickshareOpen, !hasRef);
+    setCtaDisabled(quickshareBrochure, !hasRef);
+    setCtaDisabled(quickshareReel, !hasRef);
+    setCtaDisabled(quickshareCopyLink, !hasRef);
+    setCtaDisabled(quickshareCopyBrochure, !hasRef);
+    setCtaDisabled(quickshareCopyReel, !hasRef);
+  };
+
+  const safeCount = async (client, table, { filters = [] } = {}) => {
+    try {
+      let q = client.from(table).select('id', { count: 'exact', head: true });
+      (filters || []).forEach((f) => {
+        if (!f) return;
+        if (f.op === 'eq') q = q.eq(f.col, f.val);
+      });
+      const { count, error } = await q;
+      if (error) return null;
+      return Number.isFinite(Number(count)) ? Number(count) : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const renderActivity = (items) => {
+    if (!activityGrid) return;
+    const rows = Array.isArray(items) ? items : [];
+    activityGrid.innerHTML = rows.map((it) => {
+      const href = it.href ? String(it.href) : '';
+      const wrapOpen = href ? `<a class="activity-item" href="${escapeHtml(href)}">` : `<div class="activity-item">`;
+      const wrapClose = href ? '</a>' : '</div>';
+      return `
+        ${wrapOpen}
+          <div class="activity-k">${escapeHtml(it.k || '')}</div>
+          <div class="activity-v">${escapeHtml(it.v == null ? '—' : String(it.v))}</div>
+          ${it.note ? `<div class="activity-note">${escapeHtml(it.note)}</div>` : ''}
+        ${wrapClose}
+      `;
+    }).join('');
+  };
+
+  const normalizeAlertCriteria = (raw) => {
+    const c = raw && typeof raw === 'object' ? raw : {};
+    const scope = String(c.scope || 'resales').trim();
+    const around = c && c.spatial && c.spatial.around && typeof c.spatial.around === 'object' ? c.spatial.around : {};
+    return {
+      scope: ['resales', 'new_builds', 'all'].includes(scope) ? scope : 'resales',
+      selectedCity: String(c.selectedCity || 'all').trim() || 'all',
+      selectedType: String(c.selectedType || 'all').trim() || 'all',
+      maxPrice: String(c.maxPrice || 'any').trim() || 'any',
+      minBeds: Math.max(0, Number(c.minBeds) || 0),
+      minBaths: Math.max(0, Number(c.minBaths) || 0),
+      operationMode: String(c.operationMode || 'any').trim() || 'any',
+      spatialMode: c && c.spatial && c.spatial.mode ? String(c.spatial.mode) : 'none',
+      aroundRadiusKm: Number(around.radiusKm) || 0
+    };
+  };
+
+  const cityLabelForAlert = (cityKey) => {
+    const key = String(cityKey || '').trim().toLowerCase();
+    if (!key || key === 'all') return t('city.all', 'All Destinations');
+    const map = {
+      torrevieja: 'Torrevieja',
+      'orihuela-costa': 'Orihuela Costa',
+      guardamar: 'Guardamar',
+      quesada: 'Quesada'
+    };
+    return map[key] || key.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
+  };
+
+  const alertScopeLabel = (scope) => {
+    if (scope === 'new_builds') return t('alerts.scope.new_builds', 'New Builds');
+    if (scope === 'all') return t('alerts.scope.all', 'All Listings');
+    return t('alerts.scope.resales', 'Properties');
+  };
+
+  const summarizeAlertCriteria = (raw) => {
+    const c = normalizeAlertCriteria(raw);
+    const parts = [alertScopeLabel(c.scope)];
+    if (c.selectedCity && c.selectedCity !== 'all') parts.push(cityLabelForAlert(c.selectedCity));
+    if (c.selectedType && c.selectedType !== 'all') parts.push(c.selectedType);
+    if (c.maxPrice !== 'any') {
+      const p = Number(c.maxPrice);
+      if (Number.isFinite(p) && p > 0) parts.push(`≤ €${new Intl.NumberFormat('en-IE', { maximumFractionDigits: 0 }).format(p)}`);
+    }
+    if (c.minBeds > 0) parts.push(`${c.minBeds}+ ${t('filters.beds', 'Beds')}`);
+    if (c.minBaths > 0) parts.push(`${c.minBaths}+ ${t('filters.baths', 'Baths')}`);
+    if (c.operationMode && c.operationMode !== 'any') {
+      const opLabel = c.operationMode === 'sale'
+        ? t('filters.sale', 'Sale')
+        : c.operationMode === 'rent_longterm'
+          ? t('filters.rent_long', 'Rent (long-term)')
+          : c.operationMode === 'rent_vacation'
+            ? t('filters.rent_vacation', 'Rent (vacation)')
+            : c.operationMode;
+      parts.push(opLabel);
+    }
+    if (c.spatialMode === 'around' && c.aroundRadiusKm > 0) parts.push(`${c.aroundRadiusKm} km radius`);
+    if (c.spatialMode === 'polygon') parts.push(t('account.alerts.perimeter_on', 'Perimeter area'));
+    return parts.slice(0, 7).join(' · ');
+  };
+
+  const setAlertsStatus = (text) => {
+    if (!alertsStatus) return;
+    alertsStatus.textContent = text ? String(text) : '';
+  };
+
+  const loadUserAlerts = async (client, user) => {
+    if (!client || !user) return [];
+    const { data, error } = await client
+      .from('saved_search_alerts')
+      .select('id,name,criteria,enabled,created_at,updated_at')
+      .eq('user_id', user.id)
+      .order('updated_at', { ascending: false })
+      .limit(40);
+    if (error) throw error;
+    return Array.isArray(data) ? data : [];
+  };
+
+  const loadUserAlertMatches = async (client, user) => {
+    if (!client || !user) return [];
+    const { data, error } = await client
+      .from('saved_search_matches')
+      .select('id,alert_id,property_id,property_ref,property_town,property_type,property_price,property_url,seen,matched_at')
+      .eq('user_id', user.id)
+      .order('matched_at', { ascending: false })
+      .limit(240);
+    if (error) throw error;
+    return Array.isArray(data) ? data : [];
+  };
+
+  const renderAlertsPanel = ({ alerts = [], matches = [] } = {}) => {
+    if (!alertsList || !alertsSummary) return;
+
+    const alertRows = Array.isArray(alerts) ? alerts : [];
+    const matchRows = Array.isArray(matches) ? matches : [];
+
+    const byAlert = new Map();
+    matchRows.forEach((m) => {
+      const aid = m && m.alert_id ? String(m.alert_id) : '';
+      if (!aid) return;
+      if (!byAlert.has(aid)) byAlert.set(aid, []);
+      byAlert.get(aid).push(m);
+    });
+
+    const unseen = matchRows.filter((m) => !(m && m.seen)).length;
+    alertsSummary.textContent = t('account.alerts.summary', '{alerts} alerts · {new} new matches', {
+      alerts: alertRows.length,
+      new: unseen
+    });
+
+    if (alertsMarkSeenBtn) alertsMarkSeenBtn.disabled = unseen === 0;
+
+    if (!alertRows.length) {
+      alertsList.innerHTML = `<div class="account-alert-empty">${escapeHtml(t('account.alerts.empty', 'No alerts yet. Save your requirements from Properties or New Builds.'))}</div>`;
+      return;
+    }
+
+    alertsList.innerHTML = alertRows.map((alert) => {
+      const id = alert && alert.id ? String(alert.id) : '';
+      const enabled = !alert || alert.enabled !== false;
+      const rows = byAlert.get(id) || [];
+      const newCount = rows.filter((r) => !(r && r.seen)).length;
+      const totalCount = rows.length;
+      const criteriaSummary = summarizeAlertCriteria(alert && alert.criteria);
+      const latest = rows.slice(0, 3);
+
+      const latestHtml = latest.length
+        ? `
+          <div class="account-alert-match-list">
+            ${latest.map((m) => {
+              const ref = m && m.property_ref ? String(m.property_ref) : (m && m.property_id ? String(m.property_id) : '');
+              const town = m && m.property_town ? String(m.property_town) : '';
+              const url = m && m.property_url ? String(m.property_url) : 'properties.html';
+              const txt = [ref, town].filter(Boolean).join(' · ');
+              return `<a class="account-alert-match" href="${escapeHtml(url)}">${escapeHtml(txt || t('listing.item', 'Listing'))}</a>`;
+            }).join('')}
+          </div>
+        `
+        : `<div class="muted">${escapeHtml(t('account.alerts.no_matches', 'No matches yet for this alert.'))}</div>`;
+
+      return `
+        <div class="account-alert-item" data-alert-id="${escapeHtml(id)}">
+          <div class="account-alert-head">
+            <div class="account-alert-name">${escapeHtml(alert && alert.name ? String(alert.name) : t('alerts.default_name', 'Saved alert'))}</div>
+            <div class="account-alert-metrics">
+              <span class="account-alert-badge${newCount > 0 ? ' account-alert-badge--new' : ''}">
+                ${escapeHtml(t('account.alerts.new_badge', '{count} new', { count: newCount }))}
+              </span>
+              <span class="account-alert-badge">
+                ${escapeHtml(t('account.alerts.total_badge', '{count} total', { count: totalCount }))}
+              </span>
+              ${enabled ? '' : `<span class="account-alert-badge">${escapeHtml(t('account.alerts.paused', 'Paused'))}</span>`}
+            </div>
+          </div>
+          <div class="account-alert-summary">${escapeHtml(criteriaSummary)}</div>
+          <div class="account-alert-actions">
+            <button class="cta-button cta-button--outline" type="button" data-alert-toggle="${escapeHtml(id)}" data-enabled="${enabled ? '1' : '0'}">
+              ${escapeHtml(enabled ? t('account.alerts.pause', 'Pause') : t('account.alerts.resume', 'Resume'))}
+            </button>
+            <button class="cta-button cta-button--outline" type="button" data-alert-delete="${escapeHtml(id)}">${escapeHtml(t('account.alerts.delete', 'Delete'))}</button>
+          </div>
+          ${latestHtml}
+        </div>
+      `;
+    }).join('');
+  };
+
+  const refreshAlertsPanel = async (client, user) => {
+    if (!alertsPanel || !alertsList || !alertsSummary) return;
+    if (!client || !user) {
+      alertsSummary.textContent = t('account.alerts.auth', 'Sign in to load your alerts.');
+      alertsList.innerHTML = '';
+      setAlertsStatus('');
+      if (alertsMarkSeenBtn) alertsMarkSeenBtn.disabled = true;
+      return;
+    }
+
+    alertsSummary.textContent = t('account.alerts.loading', 'Loading alerts…');
+    setAlertsStatus('');
+
+    try {
+      const [alerts, matches] = await Promise.all([
+        loadUserAlerts(client, user),
+        loadUserAlertMatches(client, user)
+      ]);
+      renderAlertsPanel({ alerts, matches });
+    } catch (error) {
+      const msg = error && error.message ? String(error.message) : String(error);
+      if (/relation|saved_search/i.test(msg)) {
+        alertsSummary.textContent = t('account.alerts.setup_required', 'Alerts table missing. Run the updated supabase.sql.');
+      } else {
+        alertsSummary.textContent = t('account.alerts.load_failed', 'Could not load alerts right now.');
+      }
+      alertsList.innerHTML = '';
+    }
+  };
+
+  const wireAlertsUi = () => {
+    if (alertsWired) return;
+    if (!alertsPanel) return;
+    alertsWired = true;
+
+    if (alertsRefreshBtn) {
+      alertsRefreshBtn.addEventListener('click', async () => {
+        const client = getClient();
+        const user = dashboardUser;
+        await refreshAlertsPanel(client, user);
+      });
+    }
+
+    if (alertsMarkSeenBtn) {
+      alertsMarkSeenBtn.addEventListener('click', async () => {
+        const client = getClient();
+        const user = dashboardUser;
+        if (!client || !user) return;
+        alertsMarkSeenBtn.disabled = true;
+        setAlertsStatus(t('account.alerts.marking', 'Marking as seen…'));
+        try {
+          const { error } = await client
+            .from('saved_search_matches')
+            .update({ seen: true })
+            .eq('user_id', user.id)
+            .eq('seen', false);
+          if (error) {
+            setAlertsStatus(t('account.alerts.mark_failed', 'Could not mark alerts as seen.'));
+          } else {
+            setAlertsStatus(t('account.alerts.mark_done', 'All alerts marked as seen.'));
+          }
+        } catch {
+          setAlertsStatus(t('account.alerts.mark_failed', 'Could not mark alerts as seen.'));
+        }
+        await refreshAlertsPanel(client, user);
+        window.setTimeout(() => setAlertsStatus(''), 2200);
+      });
+    }
+
+    if (alertsList) {
+      alertsList.addEventListener('click', async (event) => {
+        const el = event && event.target ? event.target : null;
+        if (!el) return;
+        const client = getClient();
+        const user = dashboardUser;
+        if (!client || !user) return;
+
+        const toggleBtn = el.closest('[data-alert-toggle]');
+        if (toggleBtn) {
+          const id = toggleBtn.getAttribute('data-alert-toggle') || '';
+          const enabled = toggleBtn.getAttribute('data-enabled') === '1';
+          if (!id) return;
+          setAlertsStatus(t('account.alerts.updating', 'Updating alert…'));
+          try {
+            const { error } = await client
+              .from('saved_search_alerts')
+              .update({ enabled: !enabled })
+              .eq('id', id)
+              .eq('user_id', user.id);
+            if (error) {
+              setAlertsStatus(t('account.alerts.update_failed', 'Could not update alert.'));
+            } else {
+              setAlertsStatus(t('account.alerts.updated', 'Alert updated.'));
+            }
+          } catch {
+            setAlertsStatus(t('account.alerts.update_failed', 'Could not update alert.'));
+          }
+          await refreshAlertsPanel(client, user);
+          window.setTimeout(() => setAlertsStatus(''), 2200);
+          return;
+        }
+
+        const deleteBtn = el.closest('[data-alert-delete]');
+        if (deleteBtn) {
+          const id = deleteBtn.getAttribute('data-alert-delete') || '';
+          if (!id) return;
+          const ok = window.confirm(t('account.alerts.delete_confirm', 'Delete this alert?'));
+          if (!ok) return;
+          setAlertsStatus(t('account.alerts.deleting', 'Deleting alert…'));
+          try {
+            const { error } = await client
+              .from('saved_search_alerts')
+              .delete()
+              .eq('id', id)
+              .eq('user_id', user.id);
+            if (error) {
+              setAlertsStatus(t('account.alerts.delete_failed', 'Could not delete alert.'));
+            } else {
+              setAlertsStatus(t('account.alerts.deleted', 'Alert deleted.'));
+            }
+          } catch {
+            setAlertsStatus(t('account.alerts.delete_failed', 'Could not delete alert.'));
+          }
+          await refreshAlertsPanel(client, user);
+          window.setTimeout(() => setAlertsStatus(''), 2200);
+        }
+      });
+    }
+  };
+
+  const loadActivity = async (client, user, role) => {
+    if (!client || !user) return;
+    if (!activityGrid) return;
+
+    renderActivity([
+      { k: t('account.activity.loading', 'Loading'), v: '…', note: t('account.activity.loading_note', 'Fetching your latest stats…') }
+    ]);
+
+    const isAdmin = normalizeRole(role) === 'admin';
+
+    if (isAdmin) {
+      const [newScout, newProp, newVeh, favTotal] = await Promise.all([
+        safeCount(client, 'collab_board_leads', { filters: [{ op: 'eq', col: 'status', val: 'new' }] }),
+        safeCount(client, 'property_submissions', { filters: [{ op: 'eq', col: 'status', val: 'new' }] }),
+        safeCount(client, 'vehicle_submissions', { filters: [{ op: 'eq', col: 'status', val: 'new' }] }),
+        safeCount(client, 'favourites')
+      ]);
+
+      renderActivity([
+        { k: t('account.activity.admin.fav', 'Favourites'), v: favTotal ?? '—', note: t('account.activity.admin.fav_note', 'Total saved across all users'), href: 'admin-favourites.html' },
+        { k: t('account.activity.admin.scout', 'Street Scout'), v: newScout ?? '—', note: t('account.activity.admin.scout_note', 'New leads to review'), href: 'admin-scout.html' },
+        { k: t('account.activity.admin.props', 'Property inbox'), v: newProp ?? '—', note: t('account.activity.admin.props_note', 'New owner submissions'), href: 'admin-properties.html' },
+        { k: t('account.activity.admin.vehicles', 'Vehicle inbox'), v: newVeh ?? '—', note: t('account.activity.admin.vehicles_note', 'New vehicle submissions'), href: 'admin-vehicles.html' }
+      ]);
+      return;
+    }
+
+    const uid = user.id;
+    const localSaved = readSavedCount();
+    const [favCount, artCount, alertNewCount, scoutCount, propCount, vehCount] = await Promise.all([
+      safeCount(client, 'favourites', { filters: [{ op: 'eq', col: 'user_id', val: uid }] }),
+      safeCount(client, 'blog_favourites', { filters: [{ op: 'eq', col: 'user_id', val: uid }] }),
+      safeCount(client, 'saved_search_matches', { filters: [{ op: 'eq', col: 'user_id', val: uid }, { op: 'eq', col: 'seen', val: false }] }),
+      safeCount(client, 'collab_board_leads', { filters: [{ op: 'eq', col: 'user_id', val: uid }] }),
+      safeCount(client, 'property_submissions', { filters: [{ op: 'eq', col: 'user_id', val: uid }] }),
+      safeCount(client, 'vehicle_submissions', { filters: [{ op: 'eq', col: 'user_id', val: uid }] })
+    ]);
+
+    renderActivity([
+      { k: t('account.activity.saved', 'Saved'), v: favCount ?? '—', note: t('account.activity.saved_note', `Synced favourites · ${localSaved} on this device`, { local: localSaved }), href: 'properties.html?saved=1' },
+      { k: t('account.activity.articles', 'Articles'), v: artCount ?? '—', note: t('account.activity.articles_note', 'Saved blog posts'), href: 'blog.html?saved=1' },
+      { k: t('account.activity.alerts', 'Alerts'), v: alertNewCount ?? '—', note: t('account.activity.alerts_note', 'New listing matches from your saved requirements'), href: '#alerts-panel' },
+      { k: t('account.activity.scout', 'Street Scout'), v: scoutCount ?? '—', note: t('account.activity.scout_note', 'Board leads submitted'), href: 'street-scout.html' },
+      { k: t('account.activity.props', 'Sell / Submit'), v: propCount ?? '—', note: t('account.activity.props_note', 'Property submissions'), href: 'property-add.html' },
+      { k: t('account.activity.vehicles', 'Vehicles'), v: vehCount ?? '—', note: t('account.activity.vehicles_note', 'Vehicle submissions'), href: 'vehicle-add.html' }
+    ]);
+  };
+
+  const fmtDateShort = (iso) => {
+    try {
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return '';
+      const lang = (window.SCP_I18N && window.SCP_I18N.lang) ? String(window.SCP_I18N.lang) : 'en';
+      return d.toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-GB', { year: 'numeric', month: 'short', day: '2-digit' });
+    } catch {
+      return '';
+    }
+  };
+
+  const money = (amount, { currency = 'EUR', symbol = '€' } = {}) => {
+    const n = Number(amount);
+    if (!Number.isFinite(n) || n <= 0) return '';
+    try {
+      return new Intl.NumberFormat('en-IE', {
+        style: 'currency',
+        currency,
+        maximumFractionDigits: 2
+      }).format(n);
+    } catch {
+      return `${symbol}${n.toFixed(2).replace(/\\.00$/, '')}`;
+    }
+  };
+
+  const basketItems = () => {
+    const basket = getBasket();
+    if (!basket || typeof basket.read !== 'function') return [];
+    const items = basket.read();
+    return Array.isArray(items) ? items : [];
+  };
+
+  const renderBasket = () => {
+    if (!shopBasketList) return;
+    const items = basketItems();
+    if (!items.length) {
+      shopBasketList.innerHTML = `
+        <div class="muted">${escapeHtml(t('account.shop.basket_empty', 'Basket is empty. Open the shop to add devices.'))}</div>
+      `;
+      return;
+    }
+
+    shopBasketList.innerHTML = items
+      .slice(0, 24)
+      .map((it) => {
+        const id = it && it.wc_id ? String(it.wc_id) : '';
+        const name = it && it.name ? String(it.name) : `WC-${id}`;
+        const sku = it && it.sku ? String(it.sku) : '';
+        const img = it && it.image ? String(it.image) : 'assets/placeholder.png';
+        const cur = it && it.currency ? String(it.currency) : 'EUR';
+        const sym = it && it.currency_symbol ? String(it.currency_symbol) : '€';
+        const price = it && it.price != null ? money(it.price, { currency: cur, symbol: sym }) : '';
+        const meta = [sku ? `SKU: ${sku}` : '', price ? `Price: ${price}` : t('account.shop.price_on_request', 'Price on request')].filter(Boolean).join(' · ');
+
+        return `
+          <div class="account-shop-item" data-wc-id="${escapeHtml(id)}">
+            <img class="account-shop-thumb" src="${escapeHtml(img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/placeholder.png'">
+            <div class="account-shop-main">
+              <div class="account-shop-name">${escapeHtml(name)}</div>
+              <div class="account-shop-meta">${escapeHtml(meta)}</div>
+              <div class="account-shop-controls">
+                <div class="account-shop-qty" aria-label="Quantity">
+                  <button type="button" data-qty="minus" aria-label="Decrease">-</button>
+                  <span>${escapeHtml(String(it.qty || 1))}</span>
+                  <button type="button" data-qty="plus" aria-label="Increase">+</button>
+                </div>
+                <button class="account-shop-mini" type="button" data-remove="1">${escapeHtml(t('account.shop.remove', 'Remove'))}</button>
+                ${it && it.url ? `<a class="account-shop-mini" href="${escapeHtml(String(it.url))}" target="_blank" rel="noopener">${escapeHtml(t('account.shop.open', 'Open'))}</a>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      })
+      .join('');
+  };
+
+  const badgeForStatus = (status) => {
+    const s = String(status || 'requested').toLowerCase();
+    const cls = s === 'paid' || s === 'fulfilled' || s === 'installed'
+      ? `order-badge order-badge--${s}`
+      : s === 'cancelled'
+        ? 'order-badge order-badge--cancelled'
+        : 'order-badge order-badge--requested';
+    return `<span class="${cls}">${escapeHtml(t(`account.shop.status.${s}`, s.toUpperCase()))}</span>`;
+  };
+
+  const renderShopHistory = ({ orders = [], items = [] } = {}) => {
+    if (!shopHistoryList) return;
+    const ords = Array.isArray(orders) ? orders : [];
+    if (!ords.length) {
+      shopHistoryList.innerHTML = `
+        <div class="muted">${escapeHtml(t('account.shop.history_empty', 'No purchases yet. Your requests and purchases will show here.'))}</div>
+      `;
+      return;
+    }
+
+    const itemRows = Array.isArray(items) ? items : [];
+    const byOrder = new Map();
+    itemRows.forEach((r) => {
+      const oid = r && r.order_id ? String(r.order_id) : '';
+      if (!oid) return;
+      if (!byOrder.has(oid)) byOrder.set(oid, []);
+      byOrder.get(oid).push(r);
+    });
+
+    shopHistoryList.innerHTML = ords
+      .slice(0, 12)
+      .map((o) => {
+        const oid = o && o.id ? String(o.id) : '';
+        const status = o && o.status ? String(o.status) : 'requested';
+        const createdAt = o && o.created_at ? String(o.created_at) : '';
+        const date = createdAt ? fmtDateShort(createdAt) : '';
+        const lines = (byOrder.get(oid) || []).slice(0, 12);
+
+        const itemsHtml = lines.length
+          ? `
+            <div class="account-order-lines">
+              ${lines.map((it) => {
+                const wcId = it && it.wc_id != null ? String(it.wc_id) : '';
+                const img = it && it.image ? String(it.image) : 'assets/placeholder.png';
+                const name = it && it.name ? String(it.name) : (wcId ? `WC-${wcId}` : 'Item');
+                const qty = Number(it && it.qty) || 1;
+                return `
+                  <div class="account-order-line">
+                    <img class="account-order-thumb" src="${escapeHtml(img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/placeholder.png'">
+                    <div class="account-order-line-name">${escapeHtml(name)} <span class="muted" style="font-weight:900;">x${escapeHtml(String(qty))}</span></div>
+                    ${wcId ? `<button class="account-shop-mini" type="button" data-docs-wc="${escapeHtml(wcId)}" data-docs-status="${escapeHtml(status)}">${escapeHtml(t('account.shop.docs', 'Docs'))}</button>` : ''}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          `
+          : `<div class="muted">${escapeHtml(t('account.shop.order_no_items', 'No items recorded.'))}</div>`;
+
+        return `
+          <div class="account-shop-item" data-order-id="${escapeHtml(oid)}">
+            <div class="account-shop-main">
+              <div class="account-order-head">
+                <div class="account-shop-name">${escapeHtml(t('account.shop.order', 'Order'))} ${escapeHtml(oid ? `#${oid.slice(0, 8)}` : '')}</div>
+                ${badgeForStatus(status)}
+              </div>
+              <div class="account-shop-meta">${escapeHtml([date ? `${t('account.shop.placed', 'Placed')} ${date}` : '', oid ? `ID: ${oid}` : ''].filter(Boolean).join(' · '))}</div>
+              ${itemsHtml}
+            </div>
+          </div>
+        `;
+      })
+      .join('');
+  };
+
+  const closeShopDocsModal = () => {
+    if (!shopDocsModal) return;
+    shopDocsModal.style.display = 'none';
+    shopDocsModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (shopDocsModalBody) shopDocsModalBody.textContent = '';
+  };
+
+  const openShopDocsModal = (html) => {
+    if (!shopDocsModal || !shopDocsModalBody) return;
+    shopDocsModalBody.innerHTML = html || '';
+    shopDocsModal.style.display = 'block';
+    shopDocsModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const renderDocsHtml = ({ title = '', instructions = '', links = [] } = {}) => {
+    const safeTitle = String(title || '').trim();
+    const safeInstr = String(instructions || '').trim();
+    const list = Array.isArray(links) ? links.map((x) => String(x || '').trim()).filter(Boolean) : [];
+
+    const blocks = [];
+    blocks.push(`<div class="blog-post">`);
+    blocks.push(`<h2 class="blog-post-title" style="margin-top:0;">${escapeHtml(safeTitle || t('account.shop.docs_title', 'Installation instructions'))}</h2>`);
+    blocks.push(`<p class="blog-post-excerpt">${escapeHtml(t('account.shop.docs_note', 'This content is available after purchase/approval.'))}</p>`);
+
+    if (safeInstr) {
+      const lines = safeInstr.split(/\\r?\\n/).map((l) => l.trim()).filter(Boolean);
+      const looksLikeList = lines.length >= 2 && lines.filter((l) => /^[-*•]\\s+/.test(l)).length >= 2;
+      if (looksLikeList) {
+        blocks.push(`<ul class="blog-post-ul">`);
+        lines.forEach((l) => {
+          const item = l.replace(/^[-*•]\\s+/, '').trim();
+          if (item) blocks.push(`<li>${escapeHtml(item)}</li>`);
+        });
+        blocks.push(`</ul>`);
+      } else {
+        lines.slice(0, 24).forEach((l) => blocks.push(`<p class="blog-post-p">${escapeHtml(l)}</p>`));
+      }
+    } else {
+      blocks.push(`<p class="blog-post-p muted">${escapeHtml(t('account.shop.docs_empty', 'No instructions added yet.'))}</p>`);
+    }
+
+    if (list.length) {
+      blocks.push(`<h3 class="blog-post-h">${escapeHtml(t('account.shop.docs_links', 'Links'))}</h3>`);
+      blocks.push(`<ul class="blog-post-ul">`);
+      list.slice(0, 10).forEach((url) => {
+        const safe = url.startsWith('http://') || url.startsWith('https://') ? url : '';
+        blocks.push(`<li>${safe ? `<a href="${escapeHtml(safe)}" target="_blank" rel="noopener noreferrer">${escapeHtml(safe)}</a>` : escapeHtml(url)}</li>`);
+      });
+      blocks.push(`</ul>`);
+    }
+
+    blocks.push(`</div>`);
+    return blocks.join('');
+  };
+
+  const loadDocsForWc = async (client, wcId) => {
+    if (!client) return null;
+    const id = Number(wcId);
+    if (!Number.isFinite(id) || id <= 0) return null;
+    try {
+      const { data, error } = await client
+        .from('shop_product_docs')
+        .select('wc_id,title,instructions,links,updated_at')
+        .eq('wc_id', id)
+        .maybeSingle();
+      if (error) return null;
+      if (!data) return null;
+      return {
+        title: data.title || '',
+        instructions: data.instructions || '',
+        links: Array.isArray(data.links) ? data.links : []
+      };
+    } catch {
+      return null;
+    }
+  };
+
+  const loadShopOrders = async (client, user) => {
+    if (!client || !user) return { orders: [], items: [] };
+    try {
+      const { data: orders, error } = await client
+        .from('shop_orders')
+        .select('id,status,created_at,updated_at')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(12);
+      if (error) return { orders: [], items: [] };
+      const ords = Array.isArray(orders) ? orders : [];
+      const ids = ords.map((o) => o && o.id).filter(Boolean);
+      if (!ids.length) return { orders: ords, items: [] };
+
+      const { data: items, error: itemsErr } = await client
+        .from('shop_order_items')
+        .select('order_id,wc_id,sku,name,qty,image,product_url,currency,currency_symbol,price')
+        .in('order_id', ids);
+      if (itemsErr) return { orders: ords, items: [] };
+      return { orders: ords, items: Array.isArray(items) ? items : [] };
+    } catch {
+      return { orders: [], items: [] };
+    }
+  };
+
+  const setShopStatus = (text) => {
+    if (!shopCheckoutStatus) return;
+    shopCheckoutStatus.textContent = text || '';
+  };
+
+  const refreshShopPanel = async (client, user) => {
+    renderBasket();
+    if (!shopHistoryList) return;
+    if (!client || !user) {
+      shopHistoryList.innerHTML = `<div class="muted">${escapeHtml(t('account.shop.history_auth', 'Sign in to see your purchase history.'))}</div>`;
+      return;
+    }
+    renderShopHistory({ orders: [], items: [] });
+    const res = await loadShopOrders(client, user);
+    renderShopHistory(res);
+  };
+
+  const wireShopUi = () => {
+    if (shopWired) return;
+    shopWired = true;
+
+    renderBasket();
+
+    window.addEventListener('scp:basket:change', () => {
+      renderBasket();
+    });
+    window.addEventListener('storage', (event) => {
+      try {
+        const basket = getBasket();
+        const key = basket && basket.key ? String(basket.key) : '';
+        if (key && event && event.key === key) renderBasket();
+      } catch {
+        // ignore
+      }
+    });
+
+    if (shopBasketList) {
+      shopBasketList.addEventListener('click', (event) => {
+        const el = event && event.target ? event.target : null;
+        if (!el) return;
+        const row = el.closest('[data-wc-id]');
+        const wcId = row ? row.getAttribute('data-wc-id') : '';
+        const basket = getBasket();
+        if (!basket || !wcId) return;
+
+        if (el.closest('[data-remove]')) {
+          basket.remove(wcId);
+          return;
+        }
+        const qtyBtn = el.closest('[data-qty]');
+        if (qtyBtn) {
+          const dir = qtyBtn.getAttribute('data-qty');
+          const items = basket.read();
+          const cur = Array.isArray(items) ? items.find((it) => String(it.wc_id) === String(wcId)) : null;
+          const q = Number(cur && cur.qty) || 1;
+          basket.setQty(wcId, dir === 'minus' ? Math.max(1, q - 1) : Math.min(99, q + 1));
+        }
+      });
+    }
+
+    if (shopClearBasketBtn) {
+      shopClearBasketBtn.addEventListener('click', () => {
+        const basket = getBasket();
+        if (!basket || typeof basket.clear !== 'function') return;
+        basket.clear();
+        setShopStatus(t('account.shop.cleared', 'Basket cleared.'));
+        window.setTimeout(() => setShopStatus(''), 1600);
+      });
+    }
+
+    if (shopDocsModalClose) shopDocsModalClose.addEventListener('click', closeShopDocsModal);
+    if (shopDocsModal) {
+      shopDocsModal.addEventListener('click', (event) => {
+        if (event && event.target === shopDocsModal) closeShopDocsModal();
+      });
+    }
+    window.addEventListener('keydown', (event) => {
+      if (event && event.key === 'Escape') closeShopDocsModal();
+    });
+
+    if (shopHistoryList) {
+      shopHistoryList.addEventListener('click', async (event) => {
+        const el = event && event.target ? event.target : null;
+        if (!el) return;
+        const btn = el.closest('[data-docs-wc]');
+        if (!btn) return;
+        const wcId = btn.getAttribute('data-docs-wc') || '';
+        const status = btn.getAttribute('data-docs-status') || 'requested';
+
+        const client = getClient();
+        if (!client) {
+          openShopDocsModal(renderDocsHtml({ title: '', instructions: '', links: [] }));
+          return;
+        }
+
+        openShopDocsModal(renderDocsHtml({
+          title: '',
+          instructions: status && String(status).toLowerCase() === 'requested'
+            ? t('account.shop.docs_pending', 'Docs will appear here after payment/approval.')
+            : '',
+          links: []
+        }));
+
+        const docs = await loadDocsForWc(client, wcId);
+        if (!docs) {
+          openShopDocsModal(renderDocsHtml({
+            title: '',
+            instructions: status && String(status).toLowerCase() === 'requested'
+              ? t('account.shop.docs_pending', 'Docs will appear here after payment/approval.')
+              : t('account.shop.docs_empty', 'No instructions added yet.'),
+            links: []
+          }));
+          return;
+        }
+        openShopDocsModal(renderDocsHtml(docs));
+      });
+    }
+
+    if (shopCheckoutBtn) {
+      shopCheckoutBtn.addEventListener('click', async () => {
+        const client = getClient();
+        const user = dashboardUser;
+        if (!client || !user) return;
+
+        const basket = getBasket();
+        const items = basketItems();
+        if (!basket || !items.length) {
+          setShopStatus(t('account.shop.checkout_empty', 'Basket is empty.'));
+          window.setTimeout(() => setShopStatus(''), 1800);
+          return;
+        }
+
+        shopCheckoutBtn.disabled = true;
+        setShopStatus(t('account.shop.checkout_sending', 'Sending request…'));
+
+        try {
+          const { data: orderRow, error } = await withTimeout(
+            client
+              .from('shop_orders')
+              .insert({ user_id: user.id, user_email: user.email || null, status: 'requested' })
+              .select('id')
+              .single(),
+            AUTH_TIMEOUT_MS,
+            'Checkout'
+          );
+          if (error || !orderRow || !orderRow.id) {
+            setShopStatus(`${t('account.shop.checkout_failed', 'Checkout failed')}: ${(error && error.message) ? error.message : 'unknown error'}`);
+            return;
+          }
+
+          const orderId = String(orderRow.id);
+          const payload = items.map((it) => ({
+            order_id: orderId,
+            wc_id: it && it.wc_id ? Number(it.wc_id) : null,
+            sku: it && it.sku ? String(it.sku) : null,
+            name: it && it.name ? String(it.name) : null,
+            qty: Number(it && it.qty) || 1,
+            image: it && it.image ? String(it.image) : null,
+            product_url: it && it.url ? String(it.url) : null,
+            currency: it && it.currency ? String(it.currency) : null,
+            currency_symbol: it && it.currency_symbol ? String(it.currency_symbol) : null,
+            price: it && it.price != null ? Number(it.price) : null
+          }));
+
+          const { error: itemsErr } = await withTimeout(
+            client.from('shop_order_items').insert(payload),
+            AUTH_TIMEOUT_MS,
+            'Checkout items'
+          );
+          if (itemsErr) {
+            setShopStatus(`${t('account.shop.checkout_failed', 'Checkout failed')}: ${itemsErr.message || 'items error'}`);
+            return;
+          }
+
+          if (typeof basket.clear === 'function') basket.clear();
+          setShopStatus(t('account.shop.checkout_sent', 'Request sent. We will contact you to confirm payment and installation.'));
+          await refreshShopPanel(client, user);
+        } catch (err) {
+          setShopStatus(`${t('account.shop.checkout_failed', 'Checkout failed')}: ${err && err.message ? err.message : String(err)}`);
+        } finally {
+          shopCheckoutBtn.disabled = false;
+          window.setTimeout(() => setShopStatus(''), 6000);
+        }
+      });
+    }
+
+    if (shopRefresh) {
+      shopRefresh.addEventListener('click', async () => {
+        const client = getClient();
+        const user = dashboardUser;
+        await refreshShopPanel(client, user);
+      });
+    }
+  };
+
   async function refresh({ sessionOverride } = {}) {
     const client = getClient();
 
@@ -579,6 +1754,7 @@
         setStatus('Password recovery', 'Set a new password below.');
         if (signOutBtn) signOutBtn.disabled = true;
         setVisible(dashboardPanels, false);
+        setVisible(accountWorkspace, false);
         setVisible(authPanels, false);
         setVisible(authStatus, true, 'block');
         try {
@@ -608,6 +1784,7 @@
 
       if (signOutBtn) signOutBtn.disabled = true;
       setVisible(dashboardPanels, false);
+      setVisible(accountWorkspace, false);
       setVisible(authPanels, true, 'grid');
       setVisible(authStatus, true, 'block');
       return;
@@ -642,6 +1819,7 @@
           }
           if (signOutBtn) signOutBtn.disabled = true;
           setVisible(dashboardPanels, false);
+          setVisible(accountWorkspace, false);
           setVisible(authPanels, true, 'grid');
           setVisible(authStatus, true, 'block');
           return;
@@ -650,12 +1828,14 @@
           setStatus('Auth session failed', hint);
           if (signOutBtn) signOutBtn.disabled = true;
           setVisible(dashboardPanels, false);
+          setVisible(accountWorkspace, false);
           setVisible(authPanels, true, 'grid');
           setVisible(authStatus, true, 'block');
           return;
         }
         if (signOutBtn) signOutBtn.disabled = true;
         setVisible(dashboardPanels, false);
+        setVisible(accountWorkspace, false);
         setVisible(authPanels, true, 'grid');
         setVisible(authStatus, true, 'block');
         return;
@@ -667,8 +1847,11 @@
     if (!user) {
       sessionAbortRetries = 0;
       setStatus('Signed out', 'Sign in to sync favourites across devices.');
+      dashboardUser = null;
+      dashboardRole = 'client';
       if (signOutBtn) signOutBtn.disabled = true;
       setVisible(dashboardPanels, false);
+      setVisible(accountWorkspace, false);
       setVisible(authPanels, true, 'grid');
       setVisible(authStatus, true, 'block');
       return;
@@ -677,6 +1860,7 @@
     sessionAbortRetries = 0;
     setVisible(authPanels, false);
     setVisible(dashboardPanels, true);
+    setVisible(accountWorkspace, true, 'grid');
     setVisible(authStatus, false);
 
     const profileInfo = await getProfileInfo(client, user.id);
@@ -699,6 +1883,53 @@
     setVisible(dashShopTile, role === 'admin', 'block');
 
     const meta = ROLE_META[role] || ROLE_META.client;
+
+    dashboardUser = user;
+    dashboardRole = role;
+
+    if (profileAvatar) profileAvatar.textContent = initialsFor(profileInfo && profileInfo.displayName ? profileInfo.displayName : '', user.email || '');
+    if (profileName) profileName.textContent = (profileInfo && profileInfo.displayName) ? String(profileInfo.displayName) : (user.email || 'User');
+    if (profileEmail) profileEmail.textContent = user.email || '';
+    if (profileBadges) {
+      const badges = [];
+      badges.push(`<span class="account-badge account-badge--accent">${escapeHtml(meta.label || role || 'Client')}</span>`);
+      if (meta.partner) badges.push(`<span class="account-badge">${escapeHtml(t('account.badge.partner', 'Partner tools enabled'))}</span>`);
+      if (normalizeRole(role) === 'collaborator') badges.push(`<span class="account-badge">${escapeHtml(t('account.badge.scout', 'Street Scout'))}</span>`);
+      if (normalizeRole(role) === 'developer') badges.push(`<span class="account-badge">${escapeHtml(t('account.badge.newbuilds', 'New builds'))}</span>`);
+      profileBadges.innerHTML = badges.join('');
+    }
+    if (profileNote) {
+      const content = roleHubContentFor(role);
+      profileNote.textContent = content && content.note ? String(content.note) : '';
+    }
+
+    renderRoleHub(role);
+
+    if (quicksharePanel) {
+      setVisible(quicksharePanel, !!(meta && meta.partner));
+      if (meta && meta.partner) wireQuickshare();
+    }
+
+    if (!activityWired && activityRefresh) {
+      activityWired = true;
+      activityRefresh.addEventListener('click', async () => {
+        const c = getClient();
+        if (!c || !dashboardUser) return;
+        await loadActivity(c, dashboardUser, dashboardRole);
+      });
+    }
+    if (client && activityGrid) {
+      loadActivity(client, user, role);
+    }
+
+    // Saved requirements + new-match notifications.
+    wireAlertsUi();
+    refreshAlertsPanel(client, user);
+
+    // Shop basket + purchase history.
+    wireShopUi();
+    refreshShopPanel(client, user);
+
     if (partnerTile) {
       const isPartner = meta && meta.partner;
       partnerTile.classList.toggle('account-tile--disabled', !isPartner);

@@ -1,0 +1,232 @@
+Spanish Coast Properties
+User Manual (All Access Levels)
+Version: 20260211c
+Updated: 2026-02-11
+
+------------------------------------------------------------
+1) PURPOSE
+------------------------------------------------------------
+This manual explains how each access level should use the app,
+what tools are available, and the recommended day-to-day workflow.
+
+The app is role-based. Different users see different dashboard tools.
+
+------------------------------------------------------------
+2) QUICK START (ALL USERS)
+------------------------------------------------------------
+Step 1: Open Account page and sign in.
+Step 2: Open Properties page and apply filters.
+Step 3: Save listings to build your shortlist.
+Step 4: Share with brochure/reel/catalog tools.
+Step 5: Use Saved Alerts to receive new matching listings.
+
+Core pages:
+- Account: account role + activity + alerts
+- Properties: search, map, shortlist
+- New Builds: developer inventory
+- Businesses / Vehicles: additional listing verticals
+- Guide: this manual online
+
+------------------------------------------------------------
+3) ROLE MATRIX
+------------------------------------------------------------
+Client:
+- Browse, search, map, save favourites
+- Save alerts + receive matches
+- Share listing links and brochures
+
+Collaborator:
+- All Client access
+- Street Scout submission and tracking
+
+Agent:
+- All Client access
+- White-label sharing and partner workflow
+- Catalog generation for clients
+
+Agency Admin:
+- All Agent access
+- Team/agency collaboration workflow
+
+Partner:
+- Partner sharing tools
+- White-label quick share flow
+
+Developer:
+- New build-focused partner workflow
+- Brochure/reel/catalog sharing for developments
+
+Admin:
+- Full platform operations
+- CRM contacts/leads
+- User role assignment
+- Review and approval workflows
+
+------------------------------------------------------------
+4) ROLE MANUALS
+------------------------------------------------------------
+
+4.1 CLIENT
+Access:
+- Properties search and filters
+- Map with area tools
+- Saved favourites
+- Saved alerts and new match notifications
+- Brochure and reel sharing
+
+Recommended workflow:
+1. Filter by location/type/budget/requirements.
+2. Save strong options.
+3. Use Create Catalog to build a clean shortlist link.
+4. Request viewing from listing modal.
+5. Monitor alert matches in Account dashboard.
+
+Notes:
+- CRM and admin data are not visible to clients.
+- Original feed references are hidden.
+
+4.2 COLLABORATOR (STREET SCOUT)
+Access:
+- All Client tools
+- Street Scout page and submission history
+
+Recommended workflow:
+1. Open Street Scout page.
+2. Take a clear board photo.
+3. Capture GPS location.
+4. Submit with notes.
+5. Track status changes in dashboard.
+
+Commission logic:
+- Minimum target reward is typically 200 EUR or 500 EUR
+  depending on listing tier and successful closure.
+
+4.3 AGENT
+Access:
+- All Client tools
+- White-label sharing
+- Brochure/reel quick-share by reference
+- Client catalog generation
+
+Recommended workflow:
+1. Build filtered shortlist for buyer profile.
+2. Save best options.
+3. Create client catalog link.
+4. Enable white-label where needed.
+5. Share brochure/reel for high-intent options.
+
+4.4 AGENCY ADMIN
+Access:
+- All Agent tools
+- Agency-level collaboration workflow
+
+Recommended workflow:
+1. Validate shortlist quality.
+2. Keep outbound formatting consistent.
+3. Use catalogs + reels for client communication.
+4. Coordinate next actions with internal team.
+
+4.5 PARTNER
+Access:
+- Partner sharing stack
+- White-label links
+
+Recommended workflow:
+1. Open Account -> Quick Share Studio.
+2. Enter SCP reference.
+3. Copy listing, brochure, and reel links.
+4. Share in channels (WhatsApp, social, email).
+
+4.6 DEVELOPER
+Access:
+- Partner tools focused on New Builds
+- White-label brochure/reel/catalog generation
+
+Recommended workflow:
+1. Open New Builds and filter by target profile.
+2. Select references to share.
+3. Create brochure/reel/catalog assets.
+4. Send development-specific shortlists.
+
+4.7 ADMIN
+Access:
+- Full role and operations control
+- Admin Favourites Inbox
+- Admin CRM (contacts/leads)
+- Admin submissions review (properties/vehicles/scout)
+
+Recommended workflow:
+1. Monitor favourites inbox and high-intent demand.
+2. Review and approve submissions.
+3. Keep CRM records clean and updated.
+4. Assign roles only after user account exists.
+5. Audit alerts/session issues in diagnostics.
+
+------------------------------------------------------------
+5) KEY FEATURES AND HOW TO USE THEM
+------------------------------------------------------------
+
+5.1 SEARCH + MAP
+- Use location and advanced filters to narrow quickly.
+- On map, use perimeter draw and around-me modes.
+- Sort defaults to newest first.
+
+5.2 SAVED FAVOURITES
+- Save from listing cards or modal.
+- Toggle Saved mode to focus on shortlist only.
+- Saved items sync to signed-in account.
+
+5.3 CLIENT CATALOG BUILDER
+- Open Properties.
+- Click Create Catalog.
+- Choose source:
+  - Current filtered results, or
+  - Saved listings
+- Select listing limit and optional client name.
+- Open catalog or copy link.
+
+5.4 BROCHURE + REEL
+- From listing modal:
+  - Brochure (print/save PDF)
+  - Reel Studio (video share flow)
+- Use white-label mode for partner-facing output.
+
+5.5 ALERTS
+- Save alert from filtered search.
+- New matches appear in Account dashboard.
+- Mark seen after review.
+
+------------------------------------------------------------
+6) SECURITY + PRIVACY
+------------------------------------------------------------
+- CRM contacts/leads are admin-only.
+- Source/original references are role-restricted.
+- RLS policies control database visibility.
+- Users should use strong passwords.
+
+------------------------------------------------------------
+7) TROUBLESHOOTING
+------------------------------------------------------------
+Sign-in timeout:
+- Retry sign in
+- Disable VPN/ad-block
+- Clear offline cache
+- Reset login
+
+Magic link rate limit:
+- Wait before requesting another link
+- Use password login as fallback
+
+Session drops:
+- Clear offline cache
+- Reset login
+- Re-authenticate
+- Run diagnostics with ?qa=1
+
+------------------------------------------------------------
+8) SUPPORT CONTACT
+------------------------------------------------------------
+Email: info@spanishcoastproperties.com
+Phone: +34 624 867 866
+
+End of manual.

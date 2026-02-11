@@ -18,9 +18,9 @@
     <meta property="og:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
 
     <meta name="theme-color" content="#030712">
-    <link rel="manifest" href="manifest.webmanifest?v=20260210zt">
-    <link rel="stylesheet" href="style.css?v=20260210zt">
-    <script defer src="i18n.js?v=20260210zt"></script>
+    <link rel="manifest" href="manifest.webmanifest?v=20260211b">
+    <link rel="stylesheet" href="style.css?v=20260211b">
+    <script defer src="i18n.js?v=20260211b"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -88,6 +88,21 @@
                     <span class="tag">Version: <span id="guide-version">…</span></span>
                     <span class="tag">Updated: <span id="guide-updated">…</span></span>
                     <span class="tag">Fast · Map · Share · Save</span>
+                </div>
+            </div>
+
+            <div class="catalog-hero">
+                <h3>User Manual (All Access Levels)</h3>
+                <p class="muted">
+                    Download the current role-based user manual as PDF, or use print to save a fresh PDF directly from this page.
+                </p>
+                <div class="simple-cta">
+                    <a class="cta-button" id="manual-download-pdf" href="assets/scp-user-manual.pdf?v=20260211c" download>
+                        Download User Manual (PDF)
+                    </a>
+                    <button class="cta-button cta-button--outline" id="manual-print-btn" type="button">
+                        Print / Save as PDF
+                    </button>
                 </div>
             </div>
 
@@ -186,6 +201,7 @@
                 </p>
                 <ul>
                     <li>Use <b>Saved</b> to show only favourited listings.</li>
+                    <li>Use <b>Create catalog</b> to generate a client-ready shortlist link from your current search or saved listings.</li>
                     <li>As an admin, you can view the favourites inbox to see what users are saving.</li>
                 </ul>
             </div>
@@ -281,6 +297,65 @@
                 </div>
             </div>
 
+            <div class="catalog-hero guide-section" id="role-client">
+                <h3>Role Manual: Client</h3>
+                <ul>
+                    <li><b>Access:</b> browse listings, map tools, save favourites, saved alerts, brochure/reel share, account sync.</li>
+                    <li><b>Daily flow:</b> open Properties, apply filters, save favourites, create catalog, request visits.</li>
+                    <li><b>Best practice:</b> keep profile email active so alert matches arrive correctly.</li>
+                    <li><b>Not available:</b> CRM, admin inboxes, role management, source references.</li>
+                </ul>
+            </div>
+
+            <div class="catalog-hero guide-section" id="role-collaborator">
+                <h3>Role Manual: Collaborator (Street Scout)</h3>
+                <ul>
+                    <li><b>Access:</b> all client features + Street Scout submission/tracking.</li>
+                    <li><b>Daily flow:</b> open Street Scout, capture board photo, confirm GPS, submit, track status in dashboard.</li>
+                    <li><b>Payout logic:</b> target minimum €200 / €500 depending on property tier and closure result.</li>
+                    <li><b>Best practice:</b> ensure location permission is enabled before submitting.</li>
+                </ul>
+            </div>
+
+            <div class="catalog-hero guide-section" id="role-agent">
+                <h3>Role Manual: Agent</h3>
+                <ul>
+                    <li><b>Access:</b> all client tools + partner share workflow (white-label, brochure, reel, catalogs).</li>
+                    <li><b>Daily flow:</b> filter by buyer needs, save shortlist, generate client catalog, share brochure/reel links.</li>
+                    <li><b>Best practice:</b> use white-label mode for outbound partner/client presentations.</li>
+                    <li><b>Not available:</b> admin CRM tables and role assignment controls.</li>
+                </ul>
+            </div>
+
+            <div class="catalog-hero guide-section" id="role-agency-admin">
+                <h3>Role Manual: Agency Admin</h3>
+                <ul>
+                    <li><b>Access:</b> all agent tools + agency-level collaboration workflows.</li>
+                    <li><b>Daily flow:</b> review team shortlists, create branded catalogs, coordinate listing shares and follow-up.</li>
+                    <li><b>Best practice:</b> standardize the same catalog format for all outgoing proposals.</li>
+                    <li><b>Not available:</b> direct admin-only CRM and global role management.</li>
+                </ul>
+            </div>
+
+            <div class="catalog-hero guide-section" id="role-partner">
+                <h3>Role Manual: Partner</h3>
+                <ul>
+                    <li><b>Access:</b> partner sharing features, white-label brochures/reels, client catalog links.</li>
+                    <li><b>Daily flow:</b> open Account → Quick share studio, insert SCP reference, copy listing/brochure/reel links.</li>
+                    <li><b>Best practice:</b> validate listing reference before sending links to clients.</li>
+                </ul>
+            </div>
+
+            <div class="catalog-hero guide-section" id="role-developer">
+                <h3>Role Manual: Developer</h3>
+                <ul>
+                    <li><b>Access:</b> partner tools focused on new builds and development showcase.</li>
+                    <li><b>Daily flow:</b> review New Builds inventory, generate brochures/reels/catalogs by reference, share to agencies/clients.</li>
+                    <li><b>Best practice:</b> use development-specific catalogs for segmented buyer profiles.</li>
+                    <li><b>Not available:</b> admin-only CRM and platform-wide permissions controls.</li>
+                </ul>
+            </div>
+
             <div class="catalog-hero guide-section" id="admin">
                 <h3>Admin Tools (Admin Only)</h3>
                 <p class="muted">
@@ -288,9 +363,11 @@
                     and are only visible to admins.
                 </p>
                 <ul>
+                    <li><b>Access:</b> full platform control across all role dashboards and ops panels.</li>
                     <li><b>Favourites inbox</b>: view saved listings from all users and export CSV.</li>
                     <li><b>CRM</b>: view/import contacts and leads (PII), edit fields, export CSV.</li>
                     <li><b>User roles</b>: assign roles once users have created their own account.</li>
+                    <li><b>Publishing ops</b>: review submissions (properties/vehicles/scout) before publish.</li>
                 </ul>
             </div>
 
@@ -357,8 +434,8 @@
         <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
     </footer>
 
-    <script defer src="guide.js?v=20260210zt"></script>
-    <script defer src="site.js?v=20260210zt"></script>
+    <script defer src="guide.js?v=20260211c"></script>
+    <script defer src="site.js?v=20260211b"></script>
 </body>
 
 </html>

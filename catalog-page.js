@@ -25,7 +25,15 @@
   let businessMap = null;
   let businessMarkersLayer = null;
 
-  const toText = (v, fb = '') => (typeof v === 'string' ? v : v == null ? fb : String(v));
+  const normalizeFeedText = (value) => {
+    const raw = value == null ? '' : String(value);
+    if (!raw) return raw;
+    return raw
+      .replace(/\[\s*amp\s*,?\s*\]/gi, '&')
+      .replace(/&amp,/gi, '&')
+      .replace(/&amp(?!;)/gi, '&');
+  };
+  const toText = (v, fb = '') => (typeof v === 'string' ? normalizeFeedText(v) : v == null ? fb : normalizeFeedText(v));
   const esc = (s) => toText(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const escAttr = (s) => esc(s).replace(/\"/g, '&quot;').replace(/'/g, '&#39;');
   const norm = (v) => toText(v).trim().toLowerCase();
@@ -71,14 +79,23 @@
     const img = toText(b.image, '');
     const href = ref ? `properties.html?ref=${encodeURIComponent(ref)}` : 'properties.html';
     const brochureHref = ref ? `brochure.html?ref=${encodeURIComponent(ref)}` : '';
+    const shareHref = (() => {
+      const r = ref.toUpperCase();
+      if (!r || !/^SCP-\\d+/.test(r)) return '';
+      try {
+        return new URL(`share/listing/${encodeURIComponent(r)}.html`, window.location.href).toString();
+      } catch {
+        return '';
+      }
+    })();
     const price = formatPrice(b.price, b.currency);
     const desc = toText(b.description, '');
 
     const whatsappHref = (() => {
       if (!ref) return '';
       try {
-        const abs = new URL(brochureHref, window.location.href).toString();
-        const text = encodeURIComponent(`Brochure: ${ref}\n${title}\n${price}\n${town}, ${province}\n\n${abs}`);
+        const abs = shareHref || new URL(href, window.location.href).toString();
+        const text = encodeURIComponent(`${title}\n${price}\n${town}, ${province}\nRef: ${ref}\n\n${abs}`);
         return `https://wa.me/?text=${text}`;
       } catch {
         return '';

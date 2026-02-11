@@ -17,10 +17,16 @@
     <meta property="og:url" content="https://oceallandev.github.io/spanishcoast/properties.html">
     <meta property="og:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
 
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Properties | Spanish Coast Properties">
+    <meta name="twitter:description"
+        content="Browse resale and new build listings in Costa Blanca South. Filter and view exact results on the map.">
+    <meta name="twitter:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
+
     <meta name="theme-color" content="#030712">
-    <link rel="manifest" href="manifest.webmanifest?v=20260210zt">
-    <link rel="stylesheet" href="style.css?v=20260210zt">
-    <script defer src="i18n.js?v=20260210zt"></script>
+    <link rel="manifest" href="manifest.webmanifest?v=20260211d">
+    <link rel="stylesheet" href="style.css?v=20260211d">
+    <script defer src="i18n.js?v=20260211d"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -32,10 +38,12 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
 
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script defer src="config.js?v=20260210zt"></script>
-    <script defer src="supabase-init.js?v=20260210zt"></script>
+    <script defer src="config.js?v=20260211d"></script>
+    <script defer src="supabase-init.js?v=20260211d"></script>
 </head>
 
 <body data-section="properties">
@@ -59,13 +67,20 @@
                     <a class="nav-link" data-section="businesses" href="businesses.html">Businesses</a>
                     <a class="nav-link" data-section="vehicles" href="vehicles.html">Vehicles</a>
                     <a class="nav-link" data-section="services" href="services.html">Services</a>
+                    <a class="nav-link" data-section="blog" href="blog.html" data-i18n="nav.blog">Blog</a>
                 </nav>
             </div>
 
             <div class="header-right">
                 <button id="mobile-menu-btn" class="mobile-menu-btn" type="button" aria-expanded="false" aria-label="Menu">☰</button>
-                <a class="header-cta" href="tel:+34624867866">Call</a>
-                <button id="open-filters-btn" class="open-filters-btn" type="button" aria-label="Open filters">🔎</button>
+                <button id="open-filters-btn" class="open-filters-btn" type="button" aria-label="Open filters">
+                    <span aria-hidden="true">🔎</span>
+                    <span data-i18n="ui.open_filters">Open filters</span>
+                </button>
+                <button id="open-catalog-builder-btn" class="open-catalog-btn" type="button" aria-label="Create catalog">
+                    <span aria-hidden="true">📁</span>
+                    <span data-i18n="properties.send_saved">Create catalog</span>
+                </button>
                 <button id="toggle-map-btn" class="toggle-map-btn" type="button" aria-label="Toggle map">Map</button>
             </div>
         </div>
@@ -83,6 +98,7 @@
             <a href="businesses.html">Businesses</a>
             <a href="vehicles.html">Vehicles</a>
             <a href="services.html">Services</a>
+            <a href="blog.html" data-i18n="nav.blog">Blog</a>
         </nav>
         <div class="mobile-menu-foot">
             <a class="cta-button" href="mailto:info@spanishcoastproperties.com">Email</a>
@@ -257,14 +273,17 @@
 	                                <option value="beach_asc" data-i18n="properties.sort.beach_asc">Beach distance (near to far)</option>
 	                            </select>
 	                        </div>
-	                        <div class="results-actions">
-	                            <button id="favorites-toggle" class="favorites-toggle" type="button" aria-pressed="false">
-	                                Saved (0)
-	                            </button>
-	                            <button id="favorites-send" class="favorites-send" type="button" disabled>
-	                                <span data-i18n="properties.send_saved">Send saved</span>
-	                            </button>
-	                        </div>
+		                        <div class="results-actions">
+		                            <button id="favorites-toggle" class="favorites-toggle" type="button" aria-pressed="false">
+		                                Saved (0)
+		                            </button>
+		                            <button id="save-alert-btn" class="save-alert-btn" type="button" data-i18n="properties.save_alert">
+		                                Save alert
+		                            </button>
+		                            <button id="favorites-send" class="favorites-send" type="button" disabled>
+		                                <span data-i18n="properties.send_saved">Create catalog</span>
+		                            </button>
+		                        </div>
 	                    </div>
 	                    <div class="results-cta">
 	                        <a class="cta-button" href="property-add.html" data-i18n="properties.cta.sell_property">Sell your property</a>
@@ -287,6 +306,48 @@
         <div class="modal-content">
             <span class="close-modal">&times;</span>
             <div id="modal-details"></div>
+        </div>
+    </div>
+
+    <div id="catalog-builder-modal" class="modal catalog-builder-modal" aria-hidden="true" role="dialog" aria-modal="true"
+        aria-labelledby="catalog-builder-title">
+        <div class="modal-content catalog-builder-content">
+            <button id="catalog-builder-close" class="catalog-builder-close" type="button" aria-label="Close">✕</button>
+            <div class="catalog-builder-head">
+                <h3 id="catalog-builder-title" data-i18n="catalog.builder.title">Create client catalog</h3>
+                <p class="muted" data-i18n="catalog.builder.subtitle">Use your filtered search or saved listings to generate a shareable catalog link.</p>
+            </div>
+            <div class="catalog-builder-grid">
+                <label class="catalog-builder-field">
+                    <span data-i18n="catalog.builder.source">Source</span>
+                    <select id="catalog-builder-source">
+                        <option value="filtered" data-i18n="catalog.builder.source_filtered">Current search results</option>
+                        <option value="saved" data-i18n="catalog.builder.source_saved">Saved listings</option>
+                    </select>
+                </label>
+                <label class="catalog-builder-field">
+                    <span data-i18n="catalog.builder.limit">Listings to include</span>
+                    <select id="catalog-builder-limit">
+                        <option value="8">8</option>
+                        <option value="12" selected>12</option>
+                        <option value="18">18</option>
+                        <option value="24">24</option>
+                    </select>
+                </label>
+                <label class="catalog-builder-field">
+                    <span data-i18n="catalog.builder.client_name">Client name (optional)</span>
+                    <input id="catalog-builder-client" type="text" placeholder="Client name" data-i18n-placeholder="catalog.builder.client_name_placeholder">
+                </label>
+                <label class="catalog-builder-check">
+                    <input id="catalog-builder-wl" type="checkbox">
+                    <span data-i18n="catalog.builder.whitelabel">White-label</span>
+                </label>
+            </div>
+            <div id="catalog-builder-status" class="catalog-builder-status muted" aria-live="polite"></div>
+            <div class="catalog-builder-actions">
+                <button id="catalog-builder-open" class="cta-button" type="button" data-i18n="catalog.builder.open">Open catalog</button>
+                <button id="catalog-builder-copy" class="cta-button cta-button--outline" type="button" data-i18n="catalog.builder.copy">Copy link</button>
+            </div>
         </div>
     </div>
 
@@ -325,13 +386,13 @@
         <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
     </footer>
 
-    <script defer src="data.js?v=20260210zt"></script>
-    <script defer src="catalog.js?v=20260210zt"></script>
-    <script defer src="custom-listings.js?v=20260210zt"></script>
-    <script defer src="inmovilla-listings.js?v=20260210zt"></script>
-    <script defer src="newbuilds-listings.js?v=20260210zt"></script>
-    <script defer src="app.js?v=20260210zt"></script>
-    <script defer src="site.js?v=20260210zt"></script>
+    <script defer src="data.js?v=20260211d"></script>
+    <script defer src="catalog.js?v=20260211d"></script>
+    <script defer src="custom-listings.js?v=20260211d"></script>
+    <script defer src="inmovilla-listings.js?v=20260211d"></script>
+    <script defer src="newbuilds-listings.js?v=20260211d"></script>
+    <script defer src="app.js?v=20260211d"></script>
+    <script defer src="site.js?v=20260211d"></script>
 </body>
 
 </html>

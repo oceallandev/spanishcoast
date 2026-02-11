@@ -2,6 +2,11 @@
 (() => {
   const i18n = window.SCP_I18N || null;
   const t = (key, vars) => (i18n && typeof i18n.t === 'function') ? i18n.t(key, vars) : '';
+  const tr = (key, fallback, vars) => {
+    const translated = t(key, vars);
+    if (!translated || translated === key) return fallback;
+    return translated;
+  };
 
   const yearEl = document.getElementById('footer-year');
   if (yearEl) {
@@ -22,6 +27,7 @@
     path.endsWith('/businesses.html') || path.endsWith('businesses.html') ? 'businesses' :
     path.endsWith('/vehicles.html') || path.endsWith('vehicles.html') ? 'vehicles' :
     path.includes('/services') || path.endsWith('services.html') ? 'services' :
+    path.endsWith('/blog.html') || path.endsWith('blog.html') ? 'blog' :
     path.endsWith('/account.html') || path.endsWith('account.html') ? 'account' :
     path.endsWith('/admin-favourites.html') || path.endsWith('admin-favourites.html') ? 'account' :
     path.endsWith('/admin-crm.html') || path.endsWith('admin-crm.html') ? 'account' :
@@ -74,6 +80,10 @@
   ensureNavLink('.primary-nav', { href: 'account.html', text: t('nav.account') || 'Account', section: 'account' });
   ensureNavLink('.mobile-menu-links', { href: 'account.html', text: t('nav.account') || 'Account' });
 
+  // Make Blog discoverable without having to update every page header/footer manually.
+  ensureNavLink('.primary-nav', { href: 'blog.html', text: t('nav.blog') || 'Blog', section: 'blog', afterHref: 'services.html' });
+  ensureNavLink('.mobile-menu-links', { href: 'blog.html', text: t('nav.blog') || 'Blog', afterHref: 'services.html' });
+
   // Add "New Builds" to footer explore lists (only when a Properties link exists in that list).
   (() => {
     const label = t('nav.new_builds') || 'New Builds';
@@ -100,6 +110,32 @@
     });
   })();
 
+  // Add "Blog" to footer explore lists (only when a Services link exists in that list).
+  (() => {
+    const label = t('nav.blog') || 'Blog';
+    document.querySelectorAll('.site-footer .footer-links').forEach((ul) => {
+      if (!ul) return;
+      const servicesLink = ul.querySelector('a[href="services.html"]');
+      if (!servicesLink) return;
+      const already = Array.from(ul.querySelectorAll('a')).some((a) => (a.getAttribute('href') || '').includes('blog.html'));
+      if (already) return;
+
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = 'blog.html';
+      a.textContent = label;
+      li.appendChild(a);
+
+      const servicesLi = servicesLink.closest('li');
+      if (servicesLi && servicesLi.parentElement === ul) {
+        if (servicesLi.nextSibling) ul.insertBefore(li, servicesLi.nextSibling);
+        else ul.appendChild(li);
+      } else {
+        ul.appendChild(li);
+      }
+    });
+  })();
+
   // Apply translations for nav labels without requiring every page to be edited.
   const setLinkText = (selector, text) => {
     document.querySelectorAll(selector).forEach((el) => {
@@ -115,49 +151,88 @@
     });
   };
 
-  setLinkText('.primary-nav .nav-link[data-section=\"home\"]', t('nav.home') || 'Home');
-  setLinkText('.primary-nav .nav-link[data-section=\"properties\"]', t('nav.properties') || 'Properties');
-  setLinkText('.primary-nav .nav-link[data-section=\"newbuilds\"]', t('nav.new_builds') || 'New Builds');
-  setLinkText('.primary-nav .nav-link[data-section=\"businesses\"]', t('nav.businesses') || 'Businesses');
-  setLinkText('.primary-nav .nav-link[data-section=\"vehicles\"]', t('nav.vehicles') || 'Vehicles');
-  setLinkText('.primary-nav .nav-link[data-section=\"services\"]', t('nav.services') || 'Services');
-  setLinkText('.primary-nav .nav-link[data-section=\"account\"]', t('nav.account') || 'Account');
+  const refreshStaticLabels = () => {
+    setLinkText('.primary-nav .nav-link[data-section=\"home\"]', tr('nav.home', 'Home'));
+    setLinkText('.primary-nav .nav-link[data-section=\"properties\"]', tr('nav.properties', 'Properties'));
+    setLinkText('.primary-nav .nav-link[data-section=\"newbuilds\"]', tr('nav.new_builds', 'New Builds'));
+    setLinkText('.primary-nav .nav-link[data-section=\"businesses\"]', tr('nav.businesses', 'Businesses'));
+    setLinkText('.primary-nav .nav-link[data-section=\"vehicles\"]', tr('nav.vehicles', 'Vehicles'));
+    setLinkText('.primary-nav .nav-link[data-section=\"services\"]', tr('nav.services', 'Services'));
+    setLinkText('.primary-nav .nav-link[data-section=\"blog\"]', tr('nav.blog', 'Blog'));
+    setLinkText('.primary-nav .nav-link[data-section=\"account\"]', tr('nav.account', 'Account'));
 
-  // Mobile menu uses plain <a> tags.
-  setLinkText('.mobile-menu-links a[href=\"index.html\"]', t('nav.home') || 'Home');
-  setLinkText('.mobile-menu-links a[href=\"properties.html\"]', t('nav.properties') || 'Properties');
-  setLinkText('.mobile-menu-links a[href=\"new-builds.html\"]', t('nav.new_builds') || 'New Builds');
-  setLinkText('.mobile-menu-links a[href=\"businesses.html\"]', t('nav.businesses') || 'Businesses');
-  setLinkText('.mobile-menu-links a[href=\"vehicles.html\"]', t('nav.vehicles') || 'Vehicles');
-  setLinkText('.mobile-menu-links a[href=\"services.html\"]', t('nav.services') || 'Services');
-  setLinkText('.mobile-menu-links a[href=\"account.html\"]', t('nav.account') || 'Account');
+    // Mobile menu uses plain <a> tags.
+    setLinkText('.mobile-menu-links a[href=\"index.html\"]', tr('nav.home', 'Home'));
+    setLinkText('.mobile-menu-links a[href=\"properties.html\"]', tr('nav.properties', 'Properties'));
+    setLinkText('.mobile-menu-links a[href=\"new-builds.html\"]', tr('nav.new_builds', 'New Builds'));
+    setLinkText('.mobile-menu-links a[href=\"businesses.html\"]', tr('nav.businesses', 'Businesses'));
+    setLinkText('.mobile-menu-links a[href=\"vehicles.html\"]', tr('nav.vehicles', 'Vehicles'));
+    setLinkText('.mobile-menu-links a[href=\"services.html\"]', tr('nav.services', 'Services'));
+    setLinkText('.mobile-menu-links a[href=\"blog.html\"]', tr('nav.blog', 'Blog'));
+    setLinkText('.mobile-menu-links a[href=\"account.html\"]', tr('nav.account', 'Account'));
 
-  // Common CTA labels.
-  setLinkText('.header-cta[href^=\"tel:\"]', t('nav.call') || 'Call');
-  setLinkText('.mobile-menu-foot a[href^=\"mailto:\"]', t('nav.email') || 'Email');
-  setLinkText('.mobile-menu-foot a[href^=\"tel:\"]', t('nav.call') || 'Call');
-  setLinkText('.contact-label', t('nav.contact_us') || 'Contact Us');
+    // Common CTA labels.
+    setLinkText('.header-cta[href^=\"tel:\"]', tr('nav.call', 'Call'));
+    setLinkText('.mobile-menu-foot a[href^=\"mailto:\"]', tr('nav.email', 'Email'));
+    setLinkText('.mobile-menu-foot a[href^=\"tel:\"]', tr('nav.call', 'Call'));
+    setLinkText('.contact-label', tr('nav.contact_us', 'Contact Us'));
 
-  // Common button labels and aria-labels across pages.
-  setAriaLabel('#mobile-menu-btn', t('ui.menu') || 'Menu');
-  setAriaLabel('#open-filters-btn', t('ui.open_filters') || 'Open filters');
-  setAriaLabel('#toggle-map-btn', t('ui.toggle_map') || 'Toggle map');
-  setAriaLabel('#clear-filters-btn', t('ui.clear_all_filters') || 'Clear all filters');
-  setAriaLabel('#apply-filters', t('ui.apply_filters') || 'Apply filters');
-  setAriaLabel('#close-filters-btn', t('ui.close_filters') || 'Close filters');
-  setAriaLabel('.lightbox-nav.prev', t('ui.previous_image') || 'Previous image');
-  setAriaLabel('.lightbox-nav.next', t('ui.next_image') || 'Next image');
+    // Common button labels and aria-labels across pages.
+    setAriaLabel('#mobile-menu-btn', tr('ui.menu', 'Menu'));
+    setAriaLabel('#open-filters-btn', tr('ui.open_filters', 'Open filters'));
+    setAriaLabel('#open-catalog-builder-btn', tr('properties.send_saved', 'Create catalog'));
+    setAriaLabel('#toggle-map-btn', tr('ui.toggle_map', 'Toggle map'));
+    setAriaLabel('#clear-filters-btn', tr('ui.clear_all_filters', 'Clear all filters'));
+    setAriaLabel('#apply-filters', tr('ui.apply_filters', 'Apply filters'));
+    setAriaLabel('#close-filters-btn', tr('ui.close_filters', 'Close filters'));
+    setAriaLabel('.lightbox-nav.prev', tr('ui.previous_image', 'Previous image'));
+    setAriaLabel('.lightbox-nav.next', tr('ui.next_image', 'Next image'));
+  };
+
+  refreshStaticLabels();
+
+  const fallbackSetLang = (nextCode) => {
+    const code = String(nextCode || 'en').trim().toLowerCase() || 'en';
+    try {
+      window.localStorage.setItem('scp:lang', code);
+    } catch {
+      // ignore
+    }
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set('lang', code);
+      window.location.href = url.toString();
+      return;
+    } catch {
+      // ignore
+    }
+    window.location.reload();
+  };
 
   const injectLangSwitcher = () => {
-    if (!i18n || typeof i18n.setLang !== 'function') return;
     const headerRight = document.querySelector('.header-right');
     if (!headerRight) return;
-    if (document.getElementById('lang-switch')) return;
-
-    const select = document.createElement('select');
-    select.id = 'lang-switch';
-    select.className = 'lang-switch';
-    select.setAttribute('aria-label', t('lang.label') || 'Language');
+    let select = document.getElementById('lang-switch');
+    if (!select) {
+      select = document.createElement('select');
+      select.id = 'lang-switch';
+      select.className = 'lang-switch';
+      const beforeEl = headerRight.querySelector('#mobile-menu-btn') || null;
+      if (beforeEl) headerRight.insertBefore(select, beforeEl);
+      else headerRight.appendChild(select);
+    }
+    if (!select.dataset.bound) {
+      select.addEventListener('change', () => {
+        if (i18n && typeof i18n.setLang === 'function') {
+          i18n.setLang(select.value, { persist: true, reload: true });
+          return;
+        }
+        fallbackSetLang(select.value);
+      });
+      select.dataset.bound = '1';
+    }
+    select.setAttribute('aria-label', tr('lang.label', 'Language'));
+    select.innerHTML = '';
 
     const opt = (value, label) => {
       const o = document.createElement('option');
@@ -167,17 +242,23 @@
     };
 
     // Use short labels so the switcher never pushes important header buttons (Filters/Map) off-screen.
-    select.appendChild(opt('en', t('lang.en_short') || 'EN'));
-    select.appendChild(opt('es', t('lang.es_short') || 'ES'));
-    try { select.value = i18n.lang || 'en'; } catch { /* ignore */ }
-
-    select.addEventListener('change', () => {
-      i18n.setLang(select.value, { persist: true, reload: true });
+    const supported = (i18n && Array.isArray(i18n.SUPPORTED) && i18n.SUPPORTED.length)
+      ? i18n.SUPPORTED
+      : ['en', 'es', 'ro', 'sv'];
+    supported.forEach((code) => {
+      const safeCode = String(code || '').trim().toLowerCase();
+      if (!safeCode) return;
+      const shortKey = `lang.${safeCode}_short`;
+      const longKey = `lang.${safeCode}`;
+      const label = tr(shortKey, tr(longKey, safeCode.toUpperCase()));
+      select.appendChild(opt(safeCode, label));
     });
-
-    const beforeEl = headerRight.querySelector('#mobile-menu-btn') || null;
-    if (beforeEl) headerRight.insertBefore(select, beforeEl);
-    else headerRight.appendChild(select);
+    try {
+      const local = window.localStorage ? String(window.localStorage.getItem('scp:lang') || '').trim().toLowerCase() : '';
+      select.value = (i18n && i18n.lang) || local || 'en';
+    } catch {
+      select.value = 'en';
+    }
   };
 
   injectLangSwitcher();
@@ -186,6 +267,14 @@
   if (i18n && typeof i18n.applyTranslations === 'function') {
     i18n.applyTranslations(document);
   }
+
+  window.addEventListener('scp:i18n-updated', () => {
+    injectLangSwitcher();
+    refreshStaticLabels();
+    if (i18n && typeof i18n.applyTranslations === 'function') {
+      i18n.applyTranslations(document);
+    }
+  });
 
   const menuBtn = document.getElementById('mobile-menu-btn');
   const menuBackdrop = document.getElementById('mobile-menu-backdrop');

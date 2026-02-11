@@ -1,6 +1,7 @@
 (() => {
   const versionEl = document.getElementById('guide-version');
   const updatedEl = document.getElementById('guide-updated');
+  const printBtn = document.getElementById('manual-print-btn');
 
   const pickVersion = () => {
     const link = document.querySelector('link[href*="style.css"][href*="?v="]');
@@ -28,5 +29,10 @@
   if (updatedEl) {
     updatedEl.textContent = v ? (formatUpdatedFromVersion(v) || v) : 'unknown';
   }
-})();
 
+  if (printBtn) {
+    printBtn.addEventListener('click', () => {
+      window.print();
+    });
+  }
+})();

@@ -1,0 +1,62 @@
+{
+  "news": [
+    {
+      "id": "gn_en_costa_blanca_property",
+      "label": "Google News",
+      "lang": "en",
+      "url": "https://news.google.com/rss/search?q=Costa%20Blanca%20property%20when%3A7d&hl=en-GB&gl=GB&ceid=GB:en",
+      "tags": ["Costa Blanca", "Property"]
+    },
+    {
+      "id": "gn_en_spain_property_market",
+      "label": "Google News",
+      "lang": "en",
+      "url": "https://news.google.com/rss/search?q=Spain%20property%20market%20when%3A7d&hl=en-GB&gl=GB&ceid=GB:en",
+      "tags": ["Spain", "Market"]
+    },
+    {
+      "id": "gn_en_spain_mortgage_rates",
+      "label": "Google News",
+      "lang": "en",
+      "url": "https://news.google.com/rss/search?q=Spain%20mortgage%20rates%20when%3A7d&hl=en-GB&gl=GB&ceid=GB:en",
+      "tags": ["Spain", "Mortgage"]
+    },
+    {
+      "id": "gn_es_costa_blanca_vivienda",
+      "label": "Google News",
+      "lang": "es",
+      "url": "https://news.google.com/rss/search?q=Costa%20Blanca%20vivienda%20when%3A7d&hl=es&gl=ES&ceid=ES:es",
+      "tags": ["Costa Blanca", "Vivienda"]
+    },
+    {
+      "id": "gn_es_alicante_obra_nueva",
+      "label": "Google News",
+      "lang": "es",
+      "url": "https://news.google.com/rss/search?q=Alicante%20obra%20nueva%20when%3A7d&hl=es&gl=ES&ceid=ES:es",
+      "tags": ["Alicante", "Obra nueva"]
+    },
+    {
+      "id": "gn_es_licencia_apertura",
+      "label": "Google News",
+      "lang": "es",
+      "url": "https://news.google.com/rss/search?q=licencia%20apertura%20Spain%20when%3A30d&hl=es&gl=ES&ceid=ES:es",
+      "tags": ["Licencias", "Negocios"]
+    }
+  ],
+  "trends": [
+    {
+      "id": "trends_es",
+      "label": "Google Trends",
+      "lang": "es",
+      "url": "https://trends.google.com/trending/rss?geo=ES",
+      "tags": ["Tendencias"]
+    },
+    {
+      "id": "trends_gb",
+      "label": "Google Trends",
+      "lang": "en",
+      "url": "https://trends.google.com/trending/rss?geo=GB",
+      "tags": ["Trends"]
+    }
+  ]
+}

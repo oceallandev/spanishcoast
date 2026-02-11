@@ -101,6 +101,7 @@
     ready: false,
     role: '',
     overrides: new Map(), // wc_id -> row
+    docs: new Map(), // wc_id -> docs row
     activeId: '',
     drawerOpen: false
   };
@@ -334,6 +335,11 @@
     const ovShort = o && o.short_text != null ? toText(o.short_text) : '';
     const ovDesc = o && o.desc_text != null ? toText(o.desc_text) : '';
 
+    const d = state.docs.get(id) || null;
+    const docTitle = d && d.title != null ? toText(d.title) : '';
+    const docInstr = d && d.instructions != null ? toText(d.instructions) : '';
+    const docLinks = d && Array.isArray(d.links) ? d.links.map((x) => toText(x).trim()).filter(Boolean).join('\n') : '';
+
     drawerBody.innerHTML = `
       <div class="features-list" style="margin-top:0;">
         <h4 style="margin-top:0;">Preview</h4>
@@ -415,6 +421,38 @@
           <button class="cta-button cta-button--outline" id="shop-ov-delete" type="button" ${o ? '' : 'disabled'}>Remove overrides</button>
         </div>
       </form>
+
+      <div class="divider"></div>
+
+      <form id="shop-docs-form" class="form-grid crm-form-grid">
+        <div class="crm-span-2">
+          <h4 style="margin:0;">Post-purchase docs</h4>
+          <div class="muted" style="margin-top:0.35rem;">
+            These instructions are visible to buyers only after the order is marked as <b>paid/fulfilled/installed</b>.
+          </div>
+        </div>
+
+        <label class="crm-span-2">
+          <span>Docs title</span>
+          <input id="shop-doc-title" type="text" value="${escape(docTitle)}" placeholder="Installation instructions">
+        </label>
+
+        <label class="crm-span-2">
+          <span>Instructions (one step per line)</span>
+          <textarea id="shop-doc-instructions" placeholder="1) What to do...">${escape(docInstr)}</textarea>
+        </label>
+
+        <label class="crm-span-2">
+          <span>Links (one URL per line)</span>
+          <textarea id="shop-doc-links" placeholder="https://...">${escape(docLinks)}</textarea>
+        </label>
+
+        <div class="crm-form-actions crm-span-2">
+          <button class="cta-button" type="submit">Save docs</button>
+          <button class="cta-button cta-button--outline" id="shop-doc-delete" type="button" ${d ? '' : 'disabled'}>Remove docs</button>
+        </div>
+        <div class="muted crm-span-2" id="shop-doc-status"></div>
+      </form>
     `;
 
     const form = document.getElementById('shop-override-form');
@@ -431,6 +469,23 @@
         await deleteActiveOverride();
       });
     }
+
+    const docsForm = document.getElementById('shop-docs-form');
+    const docsDel = document.getElementById('shop-doc-delete');
+
+    if (docsForm) {
+      docsForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await saveActiveDocs();
+      });
+    }
+    if (docsDel) {
+      docsDel.addEventListener('click', async () => {
+        await deleteActiveDocs();
+      });
+    }
+
+    loadDocsForActive();
 
     state.drawerOpen = true;
     document.body.classList.add('crm-open');
@@ -518,6 +573,123 @@
     openDrawer(id);
   }
 
+  const setDocsStatus = (text) => {
+    const el = document.getElementById('shop-doc-status');
+    if (el) el.textContent = text || '';
+  };
+
+  const loadDocsForActive = async () => {
+    const client = getClient();
+    const id = toText(state.activeId).trim();
+    if (!client || !id) return;
+    if (state.role !== 'admin') return;
+    setDocsStatus('Loading docs…');
+    try {
+      const { data, error } = await client
+        .from('shop_product_docs')
+        .select('wc_id,title,instructions,links,updated_at')
+        .eq('wc_id', Number(id))
+        .maybeSingle();
+      if (error) {
+        setDocsStatus(`Docs not available: ${error.message || 'unknown error'}`);
+        return;
+      }
+      if (!data) {
+        setDocsStatus('No docs saved yet.');
+        return;
+      }
+      state.docs.set(id, data);
+      if (toText(state.activeId).trim() !== id) return;
+
+      const titleEl = document.getElementById('shop-doc-title');
+      const instrEl = document.getElementById('shop-doc-instructions');
+      const linksEl = document.getElementById('shop-doc-links');
+      const delEl = document.getElementById('shop-doc-delete');
+
+      if (titleEl) titleEl.value = toText(data.title);
+      if (instrEl) instrEl.value = toText(data.instructions);
+      if (linksEl) linksEl.value = Array.isArray(data.links) ? data.links.map((x) => toText(x).trim()).filter(Boolean).join('\n') : '';
+      if (delEl) delEl.disabled = false;
+
+      setDocsStatus('Docs loaded.');
+    } catch (e) {
+      setDocsStatus(`Docs load failed: ${e && e.message ? e.message : String(e)}`);
+    }
+  };
+
+  async function saveActiveDocs() {
+    const client = getClient();
+    if (!client) {
+      setDocsStatus('Supabase not configured.');
+      return;
+    }
+    if (state.role !== 'admin') {
+      setDocsStatus('Access denied (admin only).');
+      return;
+    }
+    const id = toText(state.activeId).trim();
+    if (!id) return;
+
+    const title = nullIfEmpty(document.getElementById('shop-doc-title') && document.getElementById('shop-doc-title').value);
+    const instructions = nullIfEmpty(document.getElementById('shop-doc-instructions') && document.getElementById('shop-doc-instructions').value);
+    const linksRaw = document.getElementById('shop-doc-links') && document.getElementById('shop-doc-links').value;
+    const links = asArrayOrNull(safeList(linksRaw));
+
+    const payload = {
+      wc_id: Number(id),
+      title,
+      instructions,
+      links
+    };
+
+    setDocsStatus('Saving docs…');
+    const { data, error } = await client.from('shop_product_docs').upsert(payload, { onConflict: 'wc_id' }).select('*');
+    if (error) {
+      setDocsStatus(`Save failed: ${error.message || 'unknown error'}`);
+      return;
+    }
+    const row = Array.isArray(data) && data[0] ? data[0] : payload;
+    state.docs.set(id, row);
+    setDocsStatus('Docs saved.');
+
+    const delEl = document.getElementById('shop-doc-delete');
+    if (delEl) delEl.disabled = false;
+  }
+
+  async function deleteActiveDocs() {
+    const client = getClient();
+    if (!client) {
+      setDocsStatus('Supabase not configured.');
+      return;
+    }
+    if (state.role !== 'admin') {
+      setDocsStatus('Access denied (admin only).');
+      return;
+    }
+    const id = toText(state.activeId).trim();
+    if (!id) return;
+    setDocsStatus('Removing docs…');
+    try {
+      const { error } = await client.from('shop_product_docs').delete().eq('wc_id', Number(id));
+      if (error) {
+        setDocsStatus(`Delete failed: ${error.message || 'unknown error'}`);
+        return;
+      }
+      state.docs.delete(id);
+      const titleEl = document.getElementById('shop-doc-title');
+      const instrEl = document.getElementById('shop-doc-instructions');
+      const linksEl = document.getElementById('shop-doc-links');
+      const delEl = document.getElementById('shop-doc-delete');
+      if (titleEl) titleEl.value = '';
+      if (instrEl) instrEl.value = '';
+      if (linksEl) linksEl.value = '';
+      if (delEl) delEl.disabled = true;
+      setDocsStatus('Docs removed.');
+    } catch (e) {
+      setDocsStatus(`Delete failed: ${e && e.message ? e.message : String(e)}`);
+    }
+  }
+
   async function loadOverrides() {
     const client = getClient();
     if (!client) {
@@ -585,4 +757,3 @@
   window.addEventListener('scp:supabase:ready', () => loadOverrides(), { once: true });
   window.setTimeout(loadOverrides, 80);
 })();
-

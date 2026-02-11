@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Canvas captureStream test</title>
+    <style>
+      body { font-family: system-ui, -apple-system, sans-serif; padding: 16px; }
+      .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      canvas, video { width: 100%; border: 1px solid #ccc; border-radius: 8px; background: #111; }
+      .note { margin-top: 10px; color: #333; }
+      code { background: #eee; padding: 2px 6px; border-radius: 6px; }
+    </style>
+  </head>
+  <body>
+    <h1>Canvas captureStream test</h1>
+    <div class="row">
+      <div>
+        <h3>Canvas</h3>
+        <canvas id="c" width="640" height="360"></canvas>
+      </div>
+      <div>
+        <h3>Video (canvas stream)</h3>
+        <video id="v" autoplay muted playsinline></video>
+      </div>
+    </div>
+    <div class="note" id="note">Loading...</div>
+
+    <script>
+      (async () => {
+        const url = new URL(window.location.href);
+        const imgUrl = url.searchParams.get('img') || 'https://fotos15.apinmo.com/7515/27139790/9-1.jpg';
+        const note = document.getElementById('note');
+        const canvas = document.getElementById('c');
+        const ctx = canvas.getContext('2d');
+        const video = document.getElementById('v');
+
+        const img = new Image();
+        // Do NOT set crossOrigin here. We intentionally test the "tainted canvas" scenario.
+        img.src = imgUrl;
+
+        await new Promise((resolve) => {
+          img.onload = resolve;
+          img.onerror = resolve;
+        });
+
+        ctx.fillStyle = '#111';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        if (img.naturalWidth && img.naturalHeight) {
+          const scale = Math.max(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
+          const dw = img.naturalWidth * scale;
+          const dh = img.naturalHeight * scale;
+          const dx = (canvas.width - dw) / 2;
+          const dy = (canvas.height - dh) / 2;
+          ctx.drawImage(img, dx, dy, dw, dh);
+          ctx.fillStyle = 'rgba(0,0,0,0.6)';
+          ctx.fillRect(0, 0, canvas.width, 36);
+          ctx.fillStyle = 'white';
+          ctx.font = 'bold 14px system-ui, -apple-system, sans-serif';
+          ctx.fillText('Test overlay', 12, 22);
+        } else {
+          ctx.fillStyle = 'crimson';
+          ctx.font = 'bold 18px system-ui, -apple-system, sans-serif';
+          ctx.fillText('Image failed to load', 12, 32);
+        }
+
+        const stream = canvas.captureStream(30);
+        video.srcObject = stream;
+        try { await video.play(); } catch {}
+
+        let tainted = false;
+        try {
+          // This will throw if tainted.
+          canvas.toDataURL('image/png');
+        } catch {
+          tainted = true;
+        }
+
+        note.textContent =
+          'Image: ' + imgUrl + ' | tainted=' + tainted + ' | captureStream tracks=' + (stream.getVideoTracks().length);
+      })();
+    </script>
+  </body>
+</html>
+

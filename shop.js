@@ -13,6 +13,16 @@
   const toText = (v, fb = '') => (typeof v === 'string' ? v : v == null ? fb : String(v));
   const norm = (v) => toText(v).trim().toLowerCase();
   const getClient = () => window.scpSupabase || null;
+  const getBasket = () => window.SCP_BASKET || null;
+
+  const t = (key, fallback, vars) => {
+    try {
+      if (window.SCP_I18N && typeof window.SCP_I18N.t === 'function') return window.SCP_I18N.t(key, vars);
+    } catch {
+      // ignore
+    }
+    return fallback !== undefined ? String(fallback) : String(key || '');
+  };
 
   const esc = (s) => toText(s).replace(/[&<>"']/g, (c) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -143,6 +153,44 @@
   };
 
   const productUrlFor = (p) => toText(p && (p.url || p.permalink || p.link)).trim();
+
+  const addToBasket = (p, { qty = 1 } = {}) => {
+    const basket = getBasket();
+    if (!basket || typeof basket.add !== 'function') return { ok: false, count: 0 };
+
+    const name = toText(p && p.name, 'Product');
+    const sku = toText(p && p.sku).trim();
+    const img = imageFor(p) || 'assets/placeholder.png';
+    const url = productUrlFor(p);
+    const cur = toText(p && p.currency, 'EUR') || 'EUR';
+    const sym = toText(p && p.currency_symbol, '€') || '€';
+
+    const res = basket.add({
+      wc_id: p && p.id != null ? p.id : '',
+      qty,
+      name,
+      sku,
+      url,
+      image: img,
+      currency: cur,
+      currency_symbol: sym,
+      price: p && p.price != null && p.price !== '' ? Number(p.price) : null
+    }, { qty });
+
+    if (metaEl && res && res.ok) {
+      const prev = metaEl.textContent || '';
+      metaEl.textContent = t('shop.basket.added', 'Added to basket', { count: res.count }) + ` (${res.count})`;
+      window.setTimeout(() => {
+        try {
+          metaEl.textContent = prev;
+        } catch {
+          // ignore
+        }
+      }, 1400);
+    }
+
+    return res;
+  };
 
   const whatsappHrefFor = (p) => {
     const url = productUrlFor(p);
@@ -469,6 +517,7 @@
             </div>
             <div class="card-actions">
               <button type="button" class="card-action" data-open-details="1">Details</button>
+              <button type="button" class="card-action card-action--basket" data-add-basket="1">${esc(t('shop.actions.add_to_basket', 'Add to basket'))}</button>
               ${url ? `<a class="card-action" href="${esc(url)}" target="_blank" rel="noopener">Open in shop</a>` : `<span class="card-action card-action--disabled">Open in shop</span>`}
               <a class="card-action card-action--whatsapp" href="${esc(wa)}" target="_blank" rel="noopener">WhatsApp</a>
             </div>
@@ -537,6 +586,7 @@
           <div class="modal-spec-item">📄 Documentation included</div>
         </div>
         <div class="modal-cta">
+          <button class="cta-button" id="shop-add-basket-btn" type="button">${esc(t('shop.actions.add_to_basket', 'Add to basket'))}</button>
           ${url ? `<a class="cta-button" href="${esc(url)}" target="_blank" rel="noopener">Open in shop</a>` : `<span class="cta-button cta-button--outline" style="opacity:0.65;">No shop link</span>`}
           <a class="cta-button cta-button--outline" href="${esc(wa)}" target="_blank" rel="noopener">WhatsApp</a>
           <a class="cta-button cta-button--outline" href="${esc(mail)}">Email</a>
@@ -577,6 +627,23 @@
 
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
+
+    const addBtn = document.getElementById('shop-add-basket-btn');
+    if (addBtn) {
+      addBtn.addEventListener('click', () => {
+        const res = addToBasket(p, { qty: 1 });
+        if (res && res.ok) {
+          addBtn.textContent = t('shop.basket.added_short', 'Added');
+          window.setTimeout(() => {
+            try {
+              addBtn.textContent = t('shop.actions.add_to_basket', 'Add to basket');
+            } catch {
+              // ignore
+            }
+          }, 1200);
+        }
+      });
+    }
   };
 
   const closeModal = () => {
@@ -601,6 +668,18 @@
       const el = event && event.target ? event.target : null;
       if (!el) return;
       if (el.closest('a')) return;
+
+      const addBtn = el.closest('[data-add-basket]');
+      if (addBtn) {
+        const card = addBtn.closest('.shop-card');
+        const id = card ? card.getAttribute('data-wc-id') : '';
+        const p = findById(id);
+        if (p) addToBasket(p, { qty: 1 });
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+
       const card = el.closest('.shop-card');
       if (!card) return;
       const id = card.getAttribute('data-wc-id');
@@ -613,6 +692,7 @@
       if (key !== 'Enter' && key !== ' ') return;
       const el = event && event.target ? event.target : null;
       if (!el) return;
+      if (el.closest('a') || el.closest('button') || el.closest('[data-add-basket]')) return;
       const card = el.closest('.shop-card');
       if (!card) return;
       event.preventDefault();

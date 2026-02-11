@@ -404,7 +404,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const providerEmail = provider ? toText(provider.email) : 'info@spanishcoastproperties.com';
     const providerWebsite = provider ? toText(provider.website) : '';
 
-    const shareUrl = `${window.location.origin}${window.location.pathname}${window.location.search}#${encodeURIComponent(toText(it.id))}`;
+    // Use a static share landing page (with OG/Twitter meta tags) for rich previews on WhatsApp/Facebook/LinkedIn/X.
+    let shareUrl = '';
+    try {
+      const u = new URL(`share/vehicle/${encodeURIComponent(toText(it.id))}.html`, window.location.href);
+      u.search = '';
+      u.hash = '';
+      shareUrl = u.toString();
+    } catch {
+      shareUrl = `${window.location.origin}${window.location.pathname}`;
+    }
     const mailBody = encodeURIComponent(
       `Hi Spanish Coast Properties,\n\nI am interested in this ${category.toLowerCase()} (${deal.toLowerCase()}):\n- ${title}\n- ${loc}\n- ${price}\n\nLink: ${shareUrl}\n\nMy phone:\nMy preferred dates (if rental):\n\nThank you.`
     );
@@ -451,7 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
       shareBtn.addEventListener('click', async () => {
         try {
           if (navigator.share) {
-            await navigator.share({ title, text: `${title} - ${price}`, url: shareUrl });
+            await navigator.share({ title, text: `${title}\n${price}\n${loc}`, url: shareUrl });
           } else {
             await navigator.clipboard.writeText(shareUrl);
             shareBtn.textContent = 'Copied';

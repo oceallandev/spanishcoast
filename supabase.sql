@@ -157,6 +157,187 @@ create trigger favourites_set_updated_at
 before update on public.favourites
 for each row execute procedure public.set_updated_at();
 
+-- 2.1) Blog favourites (saved articles)
+create table if not exists public.blog_favourites (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  post_id text not null,
+  created_at timestamptz not null default now(),
+  unique (user_id, post_id)
+);
+
+alter table public.blog_favourites enable row level security;
+
+drop policy if exists "blog_favourites: read own" on public.blog_favourites;
+create policy "blog_favourites: read own"
+on public.blog_favourites for select
+using (auth.uid() = user_id);
+
+drop policy if exists "blog_favourites: insert own" on public.blog_favourites;
+create policy "blog_favourites: insert own"
+on public.blog_favourites for insert
+with check (auth.uid() = user_id);
+
+drop policy if exists "blog_favourites: delete own" on public.blog_favourites;
+create policy "blog_favourites: delete own"
+on public.blog_favourites for delete
+using (auth.uid() = user_id);
+
+drop policy if exists "blog_favourites: admin read all" on public.blog_favourites;
+create policy "blog_favourites: admin read all"
+on public.blog_favourites for select
+using (public.is_admin());
+
+-- 2.2) Saved search alerts (user requirements + notifications on new matches)
+create table if not exists public.saved_search_alerts (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  user_email text,
+  name text not null,
+  -- Scope keeps resale/new-build discovery separated while still allowing future mixed alerts.
+  scope text not null default 'resales' check (scope in ('resales', 'new_builds', 'all')),
+  -- JSON payload with filter requirements from properties/new-builds pages.
+  criteria jsonb not null default '{}'::jsonb,
+  criteria_hash text not null,
+  enabled boolean not null default true,
+  notify_in_app boolean not null default true,
+  notify_email boolean not null default false,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (user_id, criteria_hash)
+);
+
+alter table public.saved_search_alerts enable row level security;
+
+-- Migrations for existing projects (safe to re-run).
+alter table public.saved_search_alerts add column if not exists user_email text;
+alter table public.saved_search_alerts add column if not exists name text;
+alter table public.saved_search_alerts add column if not exists scope text;
+alter table public.saved_search_alerts add column if not exists criteria jsonb;
+alter table public.saved_search_alerts add column if not exists criteria_hash text;
+alter table public.saved_search_alerts add column if not exists enabled boolean;
+alter table public.saved_search_alerts add column if not exists notify_in_app boolean;
+alter table public.saved_search_alerts add column if not exists notify_email boolean;
+alter table public.saved_search_alerts add column if not exists created_at timestamptz;
+alter table public.saved_search_alerts add column if not exists updated_at timestamptz;
+
+update public.saved_search_alerts set name = coalesce(nullif(name, ''), 'Saved alert') where name is null or name = '';
+update public.saved_search_alerts set scope = coalesce(nullif(scope, ''), 'resales') where scope is null or scope = '';
+update public.saved_search_alerts set criteria = coalesce(criteria, '{}'::jsonb) where criteria is null;
+update public.saved_search_alerts set criteria_hash = coalesce(nullif(criteria_hash, ''), md5(coalesce(criteria::text, '{}'))) where criteria_hash is null or criteria_hash = '';
+update public.saved_search_alerts set enabled = coalesce(enabled, true) where enabled is null;
+update public.saved_search_alerts set notify_in_app = coalesce(notify_in_app, true) where notify_in_app is null;
+update public.saved_search_alerts set notify_email = coalesce(notify_email, false) where notify_email is null;
+update public.saved_search_alerts set created_at = coalesce(created_at, now()) where created_at is null;
+update public.saved_search_alerts set updated_at = coalesce(updated_at, now()) where updated_at is null;
+
+alter table public.saved_search_alerts alter column name set not null;
+alter table public.saved_search_alerts alter column scope set default 'resales';
+alter table public.saved_search_alerts alter column scope set not null;
+alter table public.saved_search_alerts alter column criteria set default '{}'::jsonb;
+alter table public.saved_search_alerts alter column criteria set not null;
+alter table public.saved_search_alerts alter column criteria_hash set not null;
+alter table public.saved_search_alerts alter column enabled set default true;
+alter table public.saved_search_alerts alter column enabled set not null;
+alter table public.saved_search_alerts alter column notify_in_app set default true;
+alter table public.saved_search_alerts alter column notify_in_app set not null;
+alter table public.saved_search_alerts alter column notify_email set default false;
+alter table public.saved_search_alerts alter column notify_email set not null;
+alter table public.saved_search_alerts alter column created_at set default now();
+alter table public.saved_search_alerts alter column created_at set not null;
+alter table public.saved_search_alerts alter column updated_at set default now();
+alter table public.saved_search_alerts alter column updated_at set not null;
+
+alter table public.saved_search_alerts drop constraint if exists saved_search_alerts_scope_check;
+alter table public.saved_search_alerts
+  add constraint saved_search_alerts_scope_check
+  check (scope in ('resales', 'new_builds', 'all'));
+
+create unique index if not exists saved_search_alerts_user_hash_uidx on public.saved_search_alerts(user_id, criteria_hash);
+create index if not exists saved_search_alerts_user_enabled_idx on public.saved_search_alerts(user_id, enabled);
+create index if not exists saved_search_alerts_updated_at_idx on public.saved_search_alerts(updated_at desc);
+
+drop policy if exists "saved_search_alerts: read own" on public.saved_search_alerts;
+create policy "saved_search_alerts: read own"
+on public.saved_search_alerts for select
+using (auth.uid() = user_id);
+
+drop policy if exists "saved_search_alerts: insert own" on public.saved_search_alerts;
+create policy "saved_search_alerts: insert own"
+on public.saved_search_alerts for insert
+with check (auth.uid() = user_id);
+
+drop policy if exists "saved_search_alerts: update own" on public.saved_search_alerts;
+create policy "saved_search_alerts: update own"
+on public.saved_search_alerts for update
+using (auth.uid() = user_id)
+with check (auth.uid() = user_id);
+
+drop policy if exists "saved_search_alerts: delete own" on public.saved_search_alerts;
+create policy "saved_search_alerts: delete own"
+on public.saved_search_alerts for delete
+using (auth.uid() = user_id);
+
+drop policy if exists "saved_search_alerts: admin read all" on public.saved_search_alerts;
+create policy "saved_search_alerts: admin read all"
+on public.saved_search_alerts for select
+using (public.is_admin());
+
+drop trigger if exists saved_search_alerts_set_updated_at on public.saved_search_alerts;
+create trigger saved_search_alerts_set_updated_at
+before update on public.saved_search_alerts
+for each row execute procedure public.set_updated_at();
+
+create table if not exists public.saved_search_matches (
+  id uuid primary key default gen_random_uuid(),
+  alert_id uuid not null references public.saved_search_alerts(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
+  property_id text not null,
+  property_ref text,
+  property_town text,
+  property_type text,
+  property_price numeric,
+  property_url text,
+  seen boolean not null default false,
+  matched_at timestamptz not null default now(),
+  unique (alert_id, property_id)
+);
+
+alter table public.saved_search_matches enable row level security;
+
+create index if not exists saved_search_matches_user_seen_idx on public.saved_search_matches(user_id, seen, matched_at desc);
+create index if not exists saved_search_matches_alert_idx on public.saved_search_matches(alert_id, matched_at desc);
+create index if not exists saved_search_matches_property_idx on public.saved_search_matches(property_id);
+
+drop policy if exists "saved_search_matches: read own or admin" on public.saved_search_matches;
+create policy "saved_search_matches: read own or admin"
+on public.saved_search_matches for select
+using (auth.uid() = user_id or public.is_admin());
+
+drop policy if exists "saved_search_matches: insert own" on public.saved_search_matches;
+create policy "saved_search_matches: insert own"
+on public.saved_search_matches for insert
+with check (
+  auth.uid() = user_id
+  and exists (
+    select 1
+    from public.saved_search_alerts a
+    where a.id = saved_search_matches.alert_id
+      and a.user_id = auth.uid()
+  )
+);
+
+drop policy if exists "saved_search_matches: update own or admin" on public.saved_search_matches;
+create policy "saved_search_matches: update own or admin"
+on public.saved_search_matches for update
+using (auth.uid() = user_id or public.is_admin())
+with check (auth.uid() = user_id or public.is_admin());
+
+drop policy if exists "saved_search_matches: delete own or admin" on public.saved_search_matches;
+create policy "saved_search_matches: delete own or admin"
+on public.saved_search_matches for delete
+using (auth.uid() = user_id or public.is_admin());
+
 -- 3) CRM (admin-only)
 -- Contacts + Demands from systems like Inmovilla. These tables contain PII and MUST remain admin-only.
 
@@ -373,6 +554,152 @@ create trigger shop_product_overrides_set_updated_at
 before update on public.shop_product_overrides
 for each row execute procedure public.set_updated_at();
 
+-- 5.1) Shop orders (basket checkout requests + purchase history)
+create table if not exists public.shop_orders (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  user_email text,
+  status text not null default 'requested' check (status in ('requested', 'paid', 'fulfilled', 'installed', 'cancelled')),
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.shop_orders enable row level security;
+
+drop policy if exists "shop_orders: read own" on public.shop_orders;
+create policy "shop_orders: read own"
+on public.shop_orders for select
+using (auth.uid() = user_id);
+
+drop policy if exists "shop_orders: insert own" on public.shop_orders;
+create policy "shop_orders: insert own"
+on public.shop_orders for insert
+with check (auth.uid() = user_id);
+
+drop policy if exists "shop_orders: admin read all" on public.shop_orders;
+create policy "shop_orders: admin read all"
+on public.shop_orders for select
+using (public.is_admin());
+
+drop policy if exists "shop_orders: admin update all" on public.shop_orders;
+create policy "shop_orders: admin update all"
+on public.shop_orders for update
+using (public.is_admin())
+with check (public.is_admin());
+
+drop policy if exists "shop_orders: admin delete" on public.shop_orders;
+create policy "shop_orders: admin delete"
+on public.shop_orders for delete
+using (public.is_admin());
+
+drop trigger if exists shop_orders_set_updated_at on public.shop_orders;
+create trigger shop_orders_set_updated_at
+before update on public.shop_orders
+for each row execute procedure public.set_updated_at();
+
+-- 5.2) Shop order items (snapshot at time of request)
+create table if not exists public.shop_order_items (
+  id uuid primary key default gen_random_uuid(),
+  order_id uuid not null references public.shop_orders(id) on delete cascade,
+  wc_id bigint,
+  sku text,
+  name text,
+  qty int not null default 1 check (qty > 0),
+  price numeric,
+  currency text,
+  currency_symbol text,
+  product_url text,
+  image text,
+  created_at timestamptz not null default now()
+);
+
+alter table public.shop_order_items enable row level security;
+
+drop policy if exists "shop_order_items: read own" on public.shop_order_items;
+create policy "shop_order_items: read own"
+on public.shop_order_items for select
+using (
+  public.is_admin()
+  or exists (
+    select 1
+    from public.shop_orders o
+    where o.id = shop_order_items.order_id
+      and o.user_id = auth.uid()
+  )
+);
+
+drop policy if exists "shop_order_items: insert own" on public.shop_order_items;
+create policy "shop_order_items: insert own"
+on public.shop_order_items for insert
+with check (
+  exists (
+    select 1
+    from public.shop_orders o
+    where o.id = shop_order_items.order_id
+      and o.user_id = auth.uid()
+  )
+);
+
+drop policy if exists "shop_order_items: admin update" on public.shop_order_items;
+create policy "shop_order_items: admin update"
+on public.shop_order_items for update
+using (public.is_admin())
+with check (public.is_admin());
+
+drop policy if exists "shop_order_items: admin delete" on public.shop_order_items;
+create policy "shop_order_items: admin delete"
+on public.shop_order_items for delete
+using (public.is_admin());
+
+-- 5.3) Shop product docs (post-purchase installation instructions)
+create table if not exists public.shop_product_docs (
+  wc_id bigint primary key,
+  title text,
+  instructions text,
+  links jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.shop_product_docs enable row level security;
+
+drop policy if exists "shop_product_docs: read if purchased" on public.shop_product_docs;
+create policy "shop_product_docs: read if purchased"
+on public.shop_product_docs for select
+using (
+  public.is_admin()
+  or exists (
+    select 1
+    from public.shop_orders o
+    join public.shop_order_items i on i.order_id = o.id
+    where o.user_id = auth.uid()
+      and o.status in ('paid', 'fulfilled', 'installed')
+      and i.wc_id = shop_product_docs.wc_id
+  )
+);
+
+drop policy if exists "shop_product_docs: admin insert" on public.shop_product_docs;
+create policy "shop_product_docs: admin insert"
+on public.shop_product_docs for insert
+with check (public.is_admin());
+
+drop policy if exists "shop_product_docs: admin update" on public.shop_product_docs;
+create policy "shop_product_docs: admin update"
+on public.shop_product_docs for update
+using (public.is_admin())
+with check (public.is_admin());
+
+drop policy if exists "shop_product_docs: admin delete" on public.shop_product_docs;
+create policy "shop_product_docs: admin delete"
+on public.shop_product_docs for delete
+using (public.is_admin());
+
+drop trigger if exists shop_product_docs_set_updated_at on public.shop_product_docs;
+create trigger shop_product_docs_set_updated_at
+before update on public.shop_product_docs
+for each row execute procedure public.set_updated_at();
+
 -- 6) Street Scout (simple collaborators)
 -- Users can opt into "collaborator" role via RPC, then submit a board photo + GPS location.
 -- Admin manages the inbox and updates status/commission/payout.
@@ -415,34 +742,52 @@ values ('collab-boards', 'collab-boards', false)
 on conflict (id) do nothing;
 
 -- Policies for uploads/reads under path: {auth.uid()}/{uuid}.jpg
-alter table storage.objects enable row level security;
+do $$
+begin
+  begin
+    execute 'alter table storage.objects enable row level security';
+  exception when insufficient_privilege then
+    raise notice 'Skipping storage.objects RLS enable for collab-boards (insufficient privilege).';
+  end;
 
-drop policy if exists "collab-boards: insert own" on storage.objects;
-create policy "collab-boards: insert own"
-on storage.objects for insert
-to authenticated
-with check (
-  bucket_id = 'collab-boards'
-  and split_part(name, '/', 1) = auth.uid()::text
-);
+  begin
+    execute 'drop policy if exists "collab-boards: insert own" on storage.objects';
+    execute $sql$
+      create policy "collab-boards: insert own"
+      on storage.objects for insert
+      to authenticated
+      with check (
+        bucket_id = 'collab-boards'
+        and split_part(name, '/', 1) = auth.uid()::text
+      )
+    $sql$;
 
-drop policy if exists "collab-boards: read own or admin" on storage.objects;
-create policy "collab-boards: read own or admin"
-on storage.objects for select
-to authenticated
-using (
-  bucket_id = 'collab-boards'
-  and (split_part(name, '/', 1) = auth.uid()::text or public.is_admin())
-);
+    execute 'drop policy if exists "collab-boards: read own or admin" on storage.objects';
+    execute $sql$
+      create policy "collab-boards: read own or admin"
+      on storage.objects for select
+      to authenticated
+      using (
+        bucket_id = 'collab-boards'
+        and (split_part(name, '/', 1) = auth.uid()::text or public.is_admin())
+      )
+    $sql$;
 
-drop policy if exists "collab-boards: delete own or admin" on storage.objects;
-create policy "collab-boards: delete own or admin"
-on storage.objects for delete
-to authenticated
-using (
-  bucket_id = 'collab-boards'
-  and (split_part(name, '/', 1) = auth.uid()::text or public.is_admin())
-);
+    execute 'drop policy if exists "collab-boards: delete own or admin" on storage.objects';
+    execute $sql$
+      create policy "collab-boards: delete own or admin"
+      on storage.objects for delete
+      to authenticated
+      using (
+        bucket_id = 'collab-boards'
+        and (split_part(name, '/', 1) = auth.uid()::text or public.is_admin())
+      )
+    $sql$;
+  exception when insufficient_privilege then
+    raise notice 'Skipping collab-boards storage policies (insufficient privilege). Configure in Storage -> Policies.';
+  end;
+end;
+$$;
 
 -- 6.3) Leads table (RLS: user reads their own; admin reads all; only admin can update)
 create table if not exists public.collab_board_leads (
@@ -717,50 +1062,68 @@ insert into storage.buckets (id, name, public)
 values ('property-listings', 'property-listings', true)
 on conflict (id) do nothing;
 
-drop policy if exists "owner-properties: insert own" on storage.objects;
-create policy "owner-properties: insert own"
-on storage.objects for insert
-to authenticated
-with check (
-  bucket_id = 'owner-properties'
-  and split_part(name, '/', 1) = auth.uid()::text
-);
+do $$
+begin
+  begin
+    execute 'drop policy if exists "owner-properties: insert own" on storage.objects';
+    execute $sql$
+      create policy "owner-properties: insert own"
+      on storage.objects for insert
+      to authenticated
+      with check (
+        bucket_id = 'owner-properties'
+        and split_part(name, '/', 1) = auth.uid()::text
+      )
+    $sql$;
 
-drop policy if exists "owner-properties: read own or admin" on storage.objects;
-create policy "owner-properties: read own or admin"
-on storage.objects for select
-to authenticated
-using (
-  bucket_id = 'owner-properties'
-  and (split_part(name, '/', 1) = auth.uid()::text or public.is_admin())
-);
+    execute 'drop policy if exists "owner-properties: read own or admin" on storage.objects';
+    execute $sql$
+      create policy "owner-properties: read own or admin"
+      on storage.objects for select
+      to authenticated
+      using (
+        bucket_id = 'owner-properties'
+        and (split_part(name, '/', 1) = auth.uid()::text or public.is_admin())
+      )
+    $sql$;
 
-drop policy if exists "owner-properties: delete own or admin" on storage.objects;
-create policy "owner-properties: delete own or admin"
-on storage.objects for delete
-to authenticated
-using (
-  bucket_id = 'owner-properties'
-  and (split_part(name, '/', 1) = auth.uid()::text or public.is_admin())
-);
+    execute 'drop policy if exists "owner-properties: delete own or admin" on storage.objects';
+    execute $sql$
+      create policy "owner-properties: delete own or admin"
+      on storage.objects for delete
+      to authenticated
+      using (
+        bucket_id = 'owner-properties'
+        and (split_part(name, '/', 1) = auth.uid()::text or public.is_admin())
+      )
+    $sql$;
 
-drop policy if exists "property-listings: admin insert" on storage.objects;
-create policy "property-listings: admin insert"
-on storage.objects for insert
-to authenticated
-with check (
-  bucket_id = 'property-listings'
-  and public.is_admin()
-);
+    execute 'drop policy if exists "property-listings: admin insert" on storage.objects';
+    execute $sql$
+      create policy "property-listings: admin insert"
+      on storage.objects for insert
+      to authenticated
+      with check (
+        bucket_id = 'property-listings'
+        and public.is_admin()
+      )
+    $sql$;
 
-drop policy if exists "property-listings: admin delete" on storage.objects;
-create policy "property-listings: admin delete"
-on storage.objects for delete
-to authenticated
-using (
-  bucket_id = 'property-listings'
-  and public.is_admin()
-);
+    execute 'drop policy if exists "property-listings: admin delete" on storage.objects';
+    execute $sql$
+      create policy "property-listings: admin delete"
+      on storage.objects for delete
+      to authenticated
+      using (
+        bucket_id = 'property-listings'
+        and public.is_admin()
+      )
+    $sql$;
+  exception when insufficient_privilege then
+    raise notice 'Skipping owner/property storage policies (insufficient privilege). Configure in Storage -> Policies.';
+  end;
+end;
+$$;
 
 -- 8.2) Submissions inbox (private)
 create table if not exists public.property_submissions (

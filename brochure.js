@@ -32,9 +32,18 @@
   const brandEl = $('brochure-brand');
   const footEl = $('brochure-foot');
 
+  const normalizeFeedText = (value) => {
+    const raw = value === null || value === undefined ? '' : String(value);
+    if (!raw) return raw;
+    return raw
+      .replace(/\[\s*amp\s*,?\s*\]/gi, '&')
+      .replace(/&amp,/gi, '&')
+      .replace(/&amp(?!;)/gi, '&');
+  };
+
   const toText = (v, fallback = '') => {
     if (v === null || v === undefined) return fallback;
-    const s = String(v);
+    const s = normalizeFeedText(v);
     return s.trim() ? s : fallback;
   };
 

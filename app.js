@@ -201,16 +201,43 @@ document.addEventListener('DOMContentLoaded', () => {
     let lightboxTouchStartX = null;
     let lightboxTouchStartY = null;
     let lightboxTouchStartTime = 0;
-    let renderLimit = 60;
-    const RENDER_BATCH = 60;
-    let mapDirty = true;
-    let mapHasUserInteracted = false;
-    let mapLastFitSignature = '';
-    let filterTimer = null;
-    let loadMoreObserver = null;
-    let loadingMore = false;
-    let renderSequence = 0;
-    const renderedPropertyIds = new Set();
+	    let renderLimit = 60;
+	    const RENDER_BATCH = 60;
+	    let mapDirty = true;
+	    let mapHasUserInteracted = false;
+	    let mapLastFitSignature = '';
+	    // Spatial map filters (Idealista-style perimeter + "around me").
+	    // These are applied inside `filterProperties()` so they affect list + map markers consistently.
+	    let spatialFilterMode = 'none'; // none | polygon | around
+	    let spatialPolygon = null; // { vertices: [{lat, lng}], bounds: { minLat, maxLat, minLon, maxLon } }
+	    let spatialAround = null; // { lat, lon, radiusKm }
+	    const spatialUi = {
+	        drawBtn: null,
+	        aroundBtn: null,
+	        clearBtn: null,
+	        radiusRow: null,
+	        radiusSelect: null,
+	        statusEl: null
+	    };
+	    const AROUND_RADIUS_KM_OPTIONS = [1, 2, 5, 10, 20, 50];
+	    const DEFAULT_AROUND_RADIUS_KM = 10;
+	    let spatialLayers = null;
+	    let spatialPolygonLayer = null;
+	    let spatialAroundCircle = null;
+	    let spatialAroundMarker = null;
+	    let spatialDrawHandler = null;
+	    let spatialIsDrawing = false;
+	    let filterTimer = null;
+	    let loadMoreObserver = null;
+	    let loadingMore = false;
+	    let renderSequence = 0;
+	    const renderedPropertyIds = new Set();
+	    let alertsSyncInFlight = false;
+	    let alertsSyncTimer = null;
+	    let alertsLastSyncAt = 0;
+	    let alertsLastSyncedUserId = '';
+	    let saveAlertResetTimer = null;
+	    let catalogBuilderStatusTimer = null;
 
     // --- DOM Elements ---
     const homeSection = document.getElementById('home-section');
@@ -260,11 +287,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchPill = document.querySelector('.search-pill');
     const toggleAdvancedBtn = document.getElementById('toggle-advanced-btn');
     const openFiltersBtn = document.getElementById('open-filters-btn');
+    const openCatalogBuilderBtn = document.getElementById('open-catalog-builder-btn');
     const closeFiltersBtn = document.getElementById('close-filters-btn');
     const filtersBackdrop = document.getElementById('filters-backdrop');
-    const favoritesToggleBtn = document.getElementById('favorites-toggle');
-    const favoritesSendBtn = document.getElementById('favorites-send');
-    const footerYear = document.getElementById('footer-year');
+	    const favoritesToggleBtn = document.getElementById('favorites-toggle');
+	    const favoritesSendBtn = document.getElementById('favorites-send');
+	    const saveAlertBtn = document.getElementById('save-alert-btn');
+	    const catalogBuilderModal = document.getElementById('catalog-builder-modal');
+	    const catalogBuilderCloseBtn = document.getElementById('catalog-builder-close');
+	    const catalogBuilderSourceEl = document.getElementById('catalog-builder-source');
+	    const catalogBuilderLimitEl = document.getElementById('catalog-builder-limit');
+	    const catalogBuilderClientEl = document.getElementById('catalog-builder-client');
+	    const catalogBuilderWlEl = document.getElementById('catalog-builder-wl');
+	    const catalogBuilderStatusEl = document.getElementById('catalog-builder-status');
+	    const catalogBuilderOpenBtn = document.getElementById('catalog-builder-open');
+	    const catalogBuilderCopyBtn = document.getElementById('catalog-builder-copy');
+	    const footerYear = document.getElementById('footer-year');
     let filtersBarResizeTimer = null;
     let uiCollapsed = false;
     let uiScrollEl = null;
@@ -326,14 +364,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { threshold: 0.08 })
         : { observe: () => {}, unobserve: () => {} };
 
+    function normalizeFeedText(value) {
+        const raw = value === null || value === undefined ? '' : String(value);
+        if (!raw) {
+            return raw;
+        }
+        return raw
+            .replace(/\[\s*amp\s*,?\s*\]/gi, '&')
+            .replace(/&amp,/gi, '&')
+            .replace(/&amp(?!;)/gi, '&');
+    }
+
     function toText(value, fallback = '') {
         if (typeof value === 'string') {
-            return value;
+            return normalizeFeedText(value);
         }
         if (value === null || value === undefined) {
             return fallback;
         }
-        return String(value);
+        return normalizeFeedText(value);
     }
 
     function normalize(value) {
@@ -526,9 +575,12 @@ document.addEventListener('DOMContentLoaded', () => {
             favoritesToggleBtn.textContent = `${savedLabel} (${count})${favoritesOnly ? ` · ${showingLabel}` : ''}`;
         }
         if (favoritesSendBtn) {
-            favoritesSendBtn.disabled = count === 0;
-            favoritesSendBtn.classList.toggle('disabled', count === 0);
+            const hasFiltered = Array.isArray(currentProperties) && currentProperties.length > 0;
+            const disabled = !(count > 0 || hasFiltered);
+            favoritesSendBtn.disabled = disabled;
+            favoritesSendBtn.classList.toggle('disabled', disabled);
         }
+        updateCatalogBuilderUi();
     }
 
     function markListingImagesBroken(property) {
@@ -1090,6 +1142,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return url.toString();
     }
 
+    function buildListingShareLink(reference) {
+        // Social previews do not execute JS, so we share a static landing page with OG/Twitter meta tags.
+        const ref = toText(reference).trim().toUpperCase();
+        if (!ref) return '';
+        // Only generate for the standard numeric SCP refs we pre-generate share pages for.
+        if (!/^SCP-\d+/.test(ref)) return '';
+        try {
+            const url = new URL(`share/listing/${encodeURIComponent(ref)}.html`, window.location.href);
+            return url.toString();
+        } catch (error) {
+            return '';
+        }
+    }
+
     function favoriteIdFor(property) {
         return propertyIdFor(property);
     }
@@ -1145,6 +1211,173 @@ document.addEventListener('DOMContentLoaded', () => {
         return `mailto:info@spanishcoastproperties.com?subject=${subject}&body=${body}`;
     }
 
+    function collectCatalogProperties(source = 'filtered') {
+        const mode = toText(source, 'filtered').trim().toLowerCase();
+        const base = mode === 'saved'
+            ? Array.from(favoriteIds).map((pid) => propertyById.get(pid)).filter(Boolean)
+            : currentProperties.slice();
+        const ordered = sortProperties(base);
+        const seenRefs = new Set();
+        const out = [];
+        ordered.forEach((property) => {
+            const ref = toText(property && property.ref).trim().toUpperCase();
+            if (!ref || seenRefs.has(ref)) return;
+            if (!imageUrlsFor(property).length) return;
+            seenRefs.add(ref);
+            out.push(property);
+        });
+        return out;
+    }
+
+    function catalogBuilderSelectionSummary() {
+        const source = catalogBuilderSourceEl ? toText(catalogBuilderSourceEl.value, 'filtered') : 'filtered';
+        const rawLimit = catalogBuilderLimitEl ? Number(catalogBuilderLimitEl.value) : 12;
+        const limit = Math.min(24, Math.max(1, Number.isFinite(rawLimit) ? rawLimit : 12));
+        const candidates = collectCatalogProperties(source);
+        const selected = candidates.slice(0, limit);
+        const refs = selected
+            .map((property) => toText(property && property.ref).trim().toUpperCase())
+            .filter(Boolean);
+        return {
+            source,
+            limit,
+            total: candidates.length,
+            selected: selected.length,
+            refs,
+            truncated: candidates.length > selected.length
+        };
+    }
+
+    function buildClientCatalogLink({ refs = [], clientName = '', whiteLabel = false } = {}) {
+        const cleanRefs = Array.isArray(refs)
+            ? refs.map((ref) => toText(ref).trim().toUpperCase()).filter(Boolean).slice(0, 24)
+            : [];
+        const url = new URL('client-catalog.html', window.location.href);
+        if (cleanRefs.length) {
+            url.searchParams.set('refs', cleanRefs.join(','));
+        }
+        const name = toText(clientName).trim();
+        if (name) {
+            url.searchParams.set('client', name);
+        }
+        if (whiteLabel) {
+            url.searchParams.set('wl', '1');
+        }
+        return url.toString();
+    }
+
+    function setCatalogBuilderStatus(text, tone = '') {
+        if (!catalogBuilderStatusEl) return;
+        if (catalogBuilderStatusTimer) {
+            window.clearTimeout(catalogBuilderStatusTimer);
+            catalogBuilderStatusTimer = null;
+        }
+        catalogBuilderStatusEl.classList.remove('is-ok', 'is-error');
+        if (tone === 'ok') catalogBuilderStatusEl.classList.add('is-ok');
+        if (tone === 'error') catalogBuilderStatusEl.classList.add('is-error');
+        catalogBuilderStatusEl.textContent = toText(text);
+    }
+
+    function updateCatalogBuilderUi() {
+        if (!catalogBuilderModal) return;
+        const summary = catalogBuilderSelectionSummary();
+        const hasListings = summary.refs.length > 0;
+        if (catalogBuilderOpenBtn) catalogBuilderOpenBtn.disabled = !hasListings;
+        if (catalogBuilderCopyBtn) catalogBuilderCopyBtn.disabled = !hasListings;
+
+        if (!catalogBuilderStatusEl || catalogBuilderStatusEl.classList.contains('is-ok') || catalogBuilderStatusEl.classList.contains('is-error')) {
+            return;
+        }
+
+        if (!hasListings) {
+            setCatalogBuilderStatus(
+                t('catalog.builder.status_none', 'No listings available for this selection. Try changing source or filters.')
+            );
+            return;
+        }
+
+        if (summary.truncated) {
+            setCatalogBuilderStatus(
+                t('catalog.builder.status_ready_limited', 'Ready: {selected} of {total} listings (limited to {limit}).', {
+                    selected: summary.selected,
+                    total: summary.total,
+                    limit: summary.limit
+                })
+            );
+            return;
+        }
+
+        setCatalogBuilderStatus(
+            t('catalog.builder.status_ready', 'Ready: {selected} listings.', { selected: summary.selected })
+        );
+    }
+
+    function closeCatalogBuilder() {
+        if (!catalogBuilderModal) return;
+        catalogBuilderModal.style.display = 'none';
+        catalogBuilderModal.setAttribute('aria-hidden', 'true');
+        if (catalogBuilderStatusTimer) {
+            window.clearTimeout(catalogBuilderStatusTimer);
+            catalogBuilderStatusTimer = null;
+        }
+        if (catalogBuilderStatusEl) {
+            catalogBuilderStatusEl.classList.remove('is-ok', 'is-error');
+        }
+    }
+
+    function openCatalogBuilder() {
+        if (!catalogBuilderModal) return;
+        if (catalogBuilderSourceEl) {
+            const hasFiltered = Array.isArray(currentProperties) && currentProperties.length > 0;
+            const hasSaved = favoriteIds.size > 0;
+            catalogBuilderSourceEl.value = hasFiltered ? 'filtered' : (hasSaved ? 'saved' : 'filtered');
+        }
+        catalogBuilderModal.style.display = 'block';
+        catalogBuilderModal.setAttribute('aria-hidden', 'false');
+        updateCatalogBuilderUi();
+    }
+
+    async function onCatalogBuilderAction(mode = 'open') {
+        const summary = catalogBuilderSelectionSummary();
+        if (!summary.refs.length) {
+            setCatalogBuilderStatus(
+                t('catalog.builder.status_none', 'No listings available for this selection. Try changing source or filters.'),
+                'error'
+            );
+            catalogBuilderStatusTimer = window.setTimeout(() => {
+                if (catalogBuilderStatusEl) catalogBuilderStatusEl.classList.remove('is-ok', 'is-error');
+                updateCatalogBuilderUi();
+            }, 1700);
+            return;
+        }
+
+        const url = buildClientCatalogLink({
+            refs: summary.refs,
+            clientName: catalogBuilderClientEl ? catalogBuilderClientEl.value : '',
+            whiteLabel: catalogBuilderWlEl ? !!catalogBuilderWlEl.checked : false
+        });
+
+        if (mode === 'copy') {
+            const ok = await copyTextToClipboard(url);
+            setCatalogBuilderStatus(
+                ok ? t('catalog.builder.copied', 'Catalog link copied') : t('catalog.builder.copy_failed', 'Copy failed'),
+                ok ? 'ok' : 'error'
+            );
+            catalogBuilderStatusTimer = window.setTimeout(() => {
+                if (catalogBuilderStatusEl) catalogBuilderStatusEl.classList.remove('is-ok', 'is-error');
+                updateCatalogBuilderUi();
+            }, 1700);
+            return;
+        }
+
+        window.open(url, '_blank', 'noopener,noreferrer');
+        setCatalogBuilderStatus(t('catalog.builder.opened', 'Catalog opened in a new tab'), 'ok');
+        catalogBuilderStatusTimer = window.setTimeout(() => {
+            if (catalogBuilderStatusEl) catalogBuilderStatusEl.classList.remove('is-ok', 'is-error');
+            updateCatalogBuilderUi();
+        }, 1700);
+    }
+
     function getSupabase() {
         return window.scpSupabase || null;
     }
@@ -1163,7 +1396,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const originalRefCache = new Map(); // scpRef -> { original_ref, source } | null
+    const originalRefCache = new Map(); // scpRef -> { original_ref, original_id, source } | null
 
     function isPrivilegedRole(role) {
         const r = toText(role).trim().toLowerCase();
@@ -1218,7 +1451,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const { data, error } = await client
                 .from('listing_ref_map')
-                .select('original_ref,source')
+                .select('original_ref,original_id,source')
                 .eq('scp_ref', ref)
                 .maybeSingle();
             if (error || !data) {
@@ -1230,7 +1463,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 originalRefCache.set(ref, null);
                 return null;
             }
-            const mapped = { original_ref, source: toText(data.source).trim() };
+            const mapped = { original_ref, original_id: toText(data.original_id).trim(), source: toText(data.source).trim() };
             originalRefCache.set(ref, mapped);
             return mapped;
         } catch (error) {
@@ -1352,19 +1585,21 @@ document.addEventListener('DOMContentLoaded', () => {
 	        }
 	    }
 
-	    async function initSupabaseFavoritesSync() {
-	        const client = getSupabase();
-	        supabaseClient = client;
-	        if (!client) return;
+		    async function initSupabaseFavoritesSync() {
+		        const client = getSupabase();
+		        supabaseClient = client;
+		        updateSaveAlertButtonUi();
+		        if (!client) return;
 
 	        try {
 	            const { data } = await supabaseGetSessionSafe(client);
-	            supabaseUser = data && data.session ? data.session.user : null;
-	            supabaseRole = supabaseUser ? await supabaseGetRole(client, supabaseUser.id) : '';
-	            refreshOriginalRefButtonsUi();
+		            supabaseUser = data && data.session ? data.session.user : null;
+		            supabaseRole = supabaseUser ? await supabaseGetRole(client, supabaseUser.id) : '';
+		            refreshOriginalRefButtonsUi();
+		            updateSaveAlertButtonUi();
 
-	            if (supabaseUser) {
-                const localBefore = new Set(Array.from(favoriteIds));
+		            if (supabaseUser) {
+	                const localBefore = new Set(Array.from(favoriteIds));
                 const backendIds = await supabaseFetchFavorites(client, supabaseUser.id);
                 const backendSet = new Set(backendIds);
                 const mergedAll = new Set([...backendSet, ...Array.from(localBefore)]);
@@ -1376,31 +1611,35 @@ document.addEventListener('DOMContentLoaded', () => {
                     const property = propertyById.get(pid);
                     if (property) supabaseUpsertFavorite(client, supabaseUser, property);
                 });
-                // Refresh UI in case the user is currently in favourites-only mode.
-                filterProperties();
-            }
-        } catch (error) {
-            // ignore
+	                // Refresh UI in case the user is currently in favourites-only mode.
+	                filterProperties();
+	                scheduleSavedAlertsSync({ delayMs: 1000, force: true });
+	            }
+	        } catch (error) {
+	            // ignore
         }
 
         try {
             client.auth.onAuthStateChange(async (event, session) => {
                 supabaseUser = session && session.user ? session.user : null;
-                supabaseRole = supabaseUser ? await supabaseGetRole(client, supabaseUser.id) : '';
-                originalRefCache.clear();
-                refreshOriginalRefButtonsUi();
-                if (!supabaseUser) {
-                    updateFavoritesControls();
-                    return;
-                }
-                const backendIds = await supabaseFetchFavorites(client, supabaseUser.id);
-                favoriteIds = new Set([...backendIds, ...Array.from(favoriteIds)]);
-                persistFavoriteIds(favoriteIds);
-                updateFavoritesControls();
-                filterProperties();
-            });
-        } catch (error) {
-            // ignore
+	                supabaseRole = supabaseUser ? await supabaseGetRole(client, supabaseUser.id) : '';
+	                originalRefCache.clear();
+	                refreshOriginalRefButtonsUi();
+	                updateSaveAlertButtonUi();
+	                if (!supabaseUser) {
+	                    updateFavoritesControls();
+	                    alertsLastSyncedUserId = '';
+	                    return;
+	                }
+	                const backendIds = await supabaseFetchFavorites(client, supabaseUser.id);
+	                favoriteIds = new Set([...backendIds, ...Array.from(favoriteIds)]);
+	                persistFavoriteIds(favoriteIds);
+	                updateFavoritesControls();
+	                filterProperties();
+	                scheduleSavedAlertsSync({ delayMs: 1000, force: true });
+	            });
+	        } catch (error) {
+	            // ignore
         }
     }
 
@@ -1472,10 +1711,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 added += 1;
             });
 
-            if (added > 0) {
-                filterProperties();
-                applyRefFromUrl(); // allow deep links to open approved listings
-            }
+	            if (added > 0) {
+	                filterProperties();
+	                applyRefFromUrl(); // allow deep links to open approved listings
+	                scheduleSavedAlertsSync({ delayMs: 1200, force: true });
+	            }
         } catch {
             // ignore
         }
@@ -1764,11 +2004,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return (ax - bx) * direction;
     }
 
-    function sortProperties(list) {
-        const mode = toText(sortMode, 'featured');
-        if (mode === 'featured') {
-            return list;
-        }
+	    function sortProperties(list) {
+	        const mode = toText(sortMode, 'featured');
+	        if (mode === 'featured') {
+	            return list;
+	        }
         const sorted = list.slice();
         sorted.sort((pa, pb) => {
             if (mode === 'date_desc') return sourceIndexFor(pb) - sourceIndexFor(pa);
@@ -1788,15 +2028,717 @@ document.addEventListener('DOMContentLoaded', () => {
                 return compareNullableNumbers(da, db, 1);
             }
             return 0;
-        });
-        return sorted;
-    }
+	        });
+	        return sorted;
+	    }
 
-	    function filterProperties() {
-	        const loweredSearch = normalize(searchQuery);
-	        const loweredRef = normalize(refQuery);
-	        const path = toText(window.location && window.location.pathname).toLowerCase();
-	        const isNewBuildsPage = path.endsWith('new-builds.html');
+	    function spatialVerticesFromLatLngs(latlngs) {
+	        const out = [];
+	        if (!latlngs) return out;
+	        // Leaflet polygons may return: [LatLng, LatLng...] or [[LatLng...]].
+	        const ring = Array.isArray(latlngs) && Array.isArray(latlngs[0]) ? latlngs[0] : latlngs;
+	        if (!Array.isArray(ring)) return out;
+	        ring.forEach((pt) => {
+	            const lat = Number(pt && pt.lat);
+	            const lng = Number(pt && (pt.lng ?? pt.lon));
+	            if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+	            out.push({ lat, lng });
+	        });
+	        return out;
+	    }
+
+	    function spatialBoundsForVertices(vertices) {
+	        const b = { minLat: Infinity, maxLat: -Infinity, minLon: Infinity, maxLon: -Infinity };
+	        vertices.forEach((v) => {
+	            b.minLat = Math.min(b.minLat, v.lat);
+	            b.maxLat = Math.max(b.maxLat, v.lat);
+	            b.minLon = Math.min(b.minLon, v.lng);
+	            b.maxLon = Math.max(b.maxLon, v.lng);
+	        });
+	        if (!Number.isFinite(b.minLat)) {
+	            return { minLat: 0, maxLat: 0, minLon: 0, maxLon: 0 };
+	        }
+	        return b;
+	    }
+
+	    // Ray-casting point-in-polygon (treat lon/lat as planar; good enough for local searches).
+	    function pointInPolygon(lat, lon, vertices) {
+	        if (!Array.isArray(vertices) || vertices.length < 3) return false;
+	        let inside = false;
+	        for (let i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
+	            const yi = vertices[i].lat;
+	            const xi = vertices[i].lng;
+	            const yj = vertices[j].lat;
+	            const xj = vertices[j].lng;
+
+	            const intersect = ((yi > lat) !== (yj > lat))
+	                && (lon < ((xj - xi) * (lat - yi)) / (yj - yi) + xi);
+	            if (intersect) inside = !inside;
+	        }
+	        return inside;
+	    }
+
+	    function matchesSpatialFilter(property) {
+	        if (spatialFilterMode === 'polygon' && spatialPolygon && Array.isArray(spatialPolygon.vertices)) {
+	            const lat = Number(property && property.latitude);
+	            const lon = Number(property && property.longitude);
+	            if (!Number.isFinite(lat) || !Number.isFinite(lon)) return false;
+	            const b = spatialPolygon.bounds;
+	            if (b && (lat < b.minLat || lat > b.maxLat || lon < b.minLon || lon > b.maxLon)) {
+	                return false;
+	            }
+	            return pointInPolygon(lat, lon, spatialPolygon.vertices);
+	        }
+
+	        if (spatialFilterMode === 'around' && spatialAround) {
+	            const lat = Number(property && property.latitude);
+	            const lon = Number(property && property.longitude);
+	            if (!Number.isFinite(lat) || !Number.isFinite(lon)) return false;
+	            const centerLat = Number(spatialAround.lat);
+	            const centerLon = Number(spatialAround.lon);
+	            const radiusKm = Number(spatialAround.radiusKm);
+	            if (!Number.isFinite(centerLat) || !Number.isFinite(centerLon) || !Number.isFinite(radiusKm) || radiusKm <= 0) return true;
+	            return distanceKm(lat, lon, centerLat, centerLon) <= radiusKm;
+	        }
+
+	        return true;
+	    }
+
+	    function setSpatialStatus(text) {
+	        if (!spatialUi.statusEl) return;
+	        spatialUi.statusEl.textContent = toText(text).trim();
+	    }
+
+	    function syncSpatialUi() {
+	        const active = spatialFilterMode !== 'none' || spatialIsDrawing;
+	        if (spatialUi.clearBtn) spatialUi.clearBtn.disabled = !active;
+	        if (spatialUi.drawBtn) spatialUi.drawBtn.classList.toggle('scp-map-search__btn--active', spatialFilterMode === 'polygon' || spatialIsDrawing);
+	        if (spatialUi.aroundBtn) spatialUi.aroundBtn.classList.toggle('scp-map-search__btn--active', spatialFilterMode === 'around');
+	        if (spatialUi.radiusRow) {
+	            const showRadius = spatialFilterMode === 'around';
+	            spatialUi.radiusRow.hidden = !showRadius;
+	            if (showRadius && spatialUi.radiusSelect) {
+	                const km = spatialAround ? Number(spatialAround.radiusKm) : DEFAULT_AROUND_RADIUS_KM;
+	                const nextKm = Number.isFinite(km) && km > 0 ? km : DEFAULT_AROUND_RADIUS_KM;
+	                spatialUi.radiusSelect.value = String(nextKm);
+	            }
+	        }
+
+	        if (spatialIsDrawing) {
+	            setSpatialStatus(t('map.tools.status_drawing', 'Drawing perimeter: click to add points, double-click to finish.'));
+	            return;
+	        }
+	        if (spatialFilterMode === 'polygon') {
+	            setSpatialStatus(t('map.tools.status_polygon', 'Perimeter filter is ON. Only listings inside the drawn area are shown.'));
+	            return;
+	        }
+	        if (spatialFilterMode === 'around' && spatialAround) {
+	            const km = Number(spatialAround.radiusKm) || DEFAULT_AROUND_RADIUS_KM;
+	            setSpatialStatus(t('map.tools.status_around', 'Around me filter is ON ({km} km).', { km: String(km) }));
+	            return;
+	        }
+	        setSpatialStatus(t('map.tools.status_none', 'Tip: Draw an area on the map, or search around you.'));
+	    }
+
+	    function ensureSpatialLayers() {
+	        if (!map || typeof L === 'undefined') return;
+	        if (spatialLayers) return;
+	        spatialLayers = L.featureGroup().addTo(map);
+	    }
+
+	    function clearSpatialFilter({ silent = false } = {}) {
+	        spatialFilterMode = 'none';
+	        spatialPolygon = null;
+	        spatialAround = null;
+	        spatialIsDrawing = false;
+
+	        try {
+	            if (spatialDrawHandler && typeof spatialDrawHandler.disable === 'function') spatialDrawHandler.disable();
+	        } catch (error) {
+	            // ignore
+	        }
+	        spatialDrawHandler = null;
+
+	        if (spatialLayers && typeof spatialLayers.clearLayers === 'function') {
+	            spatialLayers.clearLayers();
+	        } else if (map && typeof map.removeLayer === 'function') {
+	            // Fallback in case featureGroup wasn't initialised for some reason.
+	            [spatialPolygonLayer, spatialAroundCircle, spatialAroundMarker].forEach((layer) => {
+	                if (!layer) return;
+	                try { map.removeLayer(layer); } catch { /* ignore */ }
+	            });
+	        }
+
+	        spatialPolygonLayer = null;
+	        spatialAroundCircle = null;
+	        spatialAroundMarker = null;
+
+	        syncSpatialUi();
+	        if (!silent) {
+	            mapHasUserInteracted = true;
+	            filterProperties();
+	        }
+	    }
+
+	    function setSpatialPolygonFromLayer(layer, { silent = false } = {}) {
+	        if (!layer) return;
+	        const latlngs = typeof layer.getLatLngs === 'function' ? layer.getLatLngs() : null;
+	        const vertices = spatialVerticesFromLatLngs(latlngs);
+	        if (vertices.length < 3) return;
+	        const bounds = spatialBoundsForVertices(vertices);
+
+	        spatialFilterMode = 'polygon';
+	        spatialPolygon = { vertices, bounds };
+	        spatialAround = null;
+	        spatialIsDrawing = false;
+
+	        ensureSpatialLayers();
+	        if (spatialLayers && spatialPolygonLayer && spatialPolygonLayer !== layer) {
+	            try { spatialLayers.removeLayer(spatialPolygonLayer); } catch { /* ignore */ }
+	        }
+	        if (spatialLayers) {
+	            try { spatialLayers.clearLayers(); } catch { /* ignore */ }
+	            try { spatialLayers.addLayer(layer); } catch { /* ignore */ }
+	        } else if (map && typeof layer.addTo === 'function') {
+	            layer.addTo(map);
+	        }
+
+	        spatialPolygonLayer = layer;
+	        spatialAroundCircle = null;
+	        spatialAroundMarker = null;
+
+	        try {
+	            if (typeof layer.setStyle === 'function') {
+	                layer.setStyle({ color: '#38bdf8', weight: 3, opacity: 0.95, fillOpacity: 0.12 });
+	            }
+	        } catch (error) {
+	            // ignore
+	        }
+
+	        syncSpatialUi();
+	        if (!silent) {
+	            mapHasUserInteracted = true;
+	            try {
+	                if (map && typeof map.fitBounds === 'function' && typeof layer.getBounds === 'function') {
+	                    map.fitBounds(layer.getBounds(), { padding: [30, 30], maxZoom: 13 });
+	                }
+	            } catch (error) {
+	                // ignore
+	            }
+	            filterProperties();
+	        }
+	    }
+
+	    function setSpatialAroundFilter({ lat, lon, radiusKm }, { silent = false } = {}) {
+	        const centerLat = Number(lat);
+	        const centerLon = Number(lon);
+	        const km = Number(radiusKm);
+	        if (!Number.isFinite(centerLat) || !Number.isFinite(centerLon)) return;
+
+	        spatialFilterMode = 'around';
+	        spatialAround = { lat: centerLat, lon: centerLon, radiusKm: Number.isFinite(km) && km > 0 ? km : DEFAULT_AROUND_RADIUS_KM };
+	        spatialPolygon = null;
+	        spatialIsDrawing = false;
+
+	        ensureSpatialLayers();
+	        if (spatialLayers) {
+	            try { spatialLayers.clearLayers(); } catch { /* ignore */ }
+	        }
+	        spatialPolygonLayer = null;
+
+	        if (map && typeof L !== 'undefined') {
+	            const radiusMeters = Math.max(0, Number(spatialAround.radiusKm) || DEFAULT_AROUND_RADIUS_KM) * 1000;
+	            spatialAroundCircle = L.circle([centerLat, centerLon], {
+	                radius: radiusMeters,
+	                color: '#22c55e',
+	                weight: 2,
+	                opacity: 0.9,
+	                fillOpacity: 0.10,
+	                dashArray: '6 6'
+	            });
+	            spatialAroundMarker = L.circleMarker([centerLat, centerLon], {
+	                radius: 5,
+	                color: '#22c55e',
+	                weight: 2,
+	                opacity: 1,
+	                fillColor: '#22c55e',
+	                fillOpacity: 1
+	            });
+
+	            if (spatialLayers) {
+	                try { spatialLayers.addLayer(spatialAroundCircle); } catch { /* ignore */ }
+	                try { spatialLayers.addLayer(spatialAroundMarker); } catch { /* ignore */ }
+	            } else {
+	                spatialAroundCircle.addTo(map);
+	                spatialAroundMarker.addTo(map);
+	            }
+	        }
+
+	        syncSpatialUi();
+	        if (!silent) {
+	            mapHasUserInteracted = true;
+	            try {
+	                if (map && spatialAroundCircle && typeof map.fitBounds === 'function' && typeof spatialAroundCircle.getBounds === 'function') {
+	                    map.fitBounds(spatialAroundCircle.getBounds(), { padding: [30, 30], maxZoom: 13 });
+	                }
+	            } catch (error) {
+	                // ignore
+	            }
+	            filterProperties();
+	        }
+	    }
+
+	    function listingScopeFromPath(pathname) {
+	        const path = toText(pathname).toLowerCase();
+	        if (path.endsWith('new-builds.html')) return 'new_builds';
+	        if (path.endsWith('properties.html')) return 'resales';
+	        return 'all';
+	    }
+
+	    function buildCurrentSpatialCriteria() {
+	        if (spatialFilterMode === 'polygon' && spatialPolygon && Array.isArray(spatialPolygon.vertices) && spatialPolygon.vertices.length >= 3) {
+	            return {
+	                mode: 'polygon',
+	                polygon: spatialPolygon.vertices
+	                    .slice(0, 80)
+	                    .map((v) => ({ lat: Number(v.lat), lng: Number(v.lng) }))
+	                    .filter((v) => Number.isFinite(v.lat) && Number.isFinite(v.lng))
+	            };
+	        }
+	        if (spatialFilterMode === 'around' && spatialAround) {
+	            const lat = Number(spatialAround.lat);
+	            const lon = Number(spatialAround.lon);
+	            const radiusKm = Number(spatialAround.radiusKm);
+	            if (Number.isFinite(lat) && Number.isFinite(lon) && Number.isFinite(radiusKm) && radiusKm > 0) {
+	                return { mode: 'around', around: { lat, lon, radiusKm } };
+	            }
+	        }
+	        return { mode: 'none' };
+	    }
+
+	    function buildCurrentSavedAlertCriteria() {
+	        return {
+	            v: 1,
+	            scope: listingScopeFromPath(window.location && window.location.pathname),
+	            selectedCity: toText(selectedCity, 'all') || 'all',
+	            selectedType: toText(selectedType, 'all') || 'all',
+	            searchQuery: toText(searchQuery, '').trim(),
+	            refQuery: toText(refQuery, '').trim(),
+	            maxPrice: toText(maxPrice, 'any') || 'any',
+	            minBeds: Number(minBeds) || 0,
+	            minBaths: Number(minBaths) || 0,
+	            poolFilter: toText(poolFilter, 'any') || 'any',
+	            parkingFilter: toText(parkingFilter, 'any') || 'any',
+	            maxBeachDistanceMeters: toText(maxBeachDistanceMeters, 'any') || 'any',
+	            seaViewFilter: toText(seaViewFilter, 'any') || 'any',
+	            operationMode: toText(operationMode, 'any') || 'any',
+	            spatial: buildCurrentSpatialCriteria()
+	        };
+	    }
+
+	    function normalizeSavedAlertCriteria(raw) {
+	        const c = raw && typeof raw === 'object' ? raw : {};
+	        const scope = toText(c.scope, 'resales');
+	        const spatial = c.spatial && typeof c.spatial === 'object' ? c.spatial : { mode: 'none' };
+	        const normalizedSpatial = (() => {
+	            const mode = toText(spatial.mode, 'none');
+	            if (mode === 'polygon') {
+	                const points = Array.isArray(spatial.polygon) ? spatial.polygon : [];
+	                const polygon = points
+	                    .slice(0, 120)
+	                    .map((v) => ({ lat: Number(v && v.lat), lng: Number(v && (v.lng ?? v.lon)) }))
+	                    .filter((v) => Number.isFinite(v.lat) && Number.isFinite(v.lng));
+	                if (polygon.length >= 3) return { mode: 'polygon', polygon };
+	            }
+	            if (mode === 'around') {
+	                const a = spatial.around && typeof spatial.around === 'object' ? spatial.around : {};
+	                const lat = Number(a.lat);
+	                const lon = Number(a.lon);
+	                const radiusKm = Number(a.radiusKm);
+	                if (Number.isFinite(lat) && Number.isFinite(lon) && Number.isFinite(radiusKm) && radiusKm > 0) {
+	                    return { mode: 'around', around: { lat, lon, radiusKm } };
+	                }
+	            }
+	            return { mode: 'none' };
+	        })();
+
+	        return {
+	            v: Number(c.v) || 1,
+	            scope: ['resales', 'new_builds', 'all'].includes(scope) ? scope : 'resales',
+	            selectedCity: toText(c.selectedCity, 'all') || 'all',
+	            selectedType: toText(c.selectedType, 'all') || 'all',
+	            searchQuery: toText(c.searchQuery, '').trim(),
+	            refQuery: toText(c.refQuery, '').trim(),
+	            maxPrice: toText(c.maxPrice, 'any') || 'any',
+	            minBeds: Math.max(0, Number(c.minBeds) || 0),
+	            minBaths: Math.max(0, Number(c.minBaths) || 0),
+	            poolFilter: toText(c.poolFilter, 'any') || 'any',
+	            parkingFilter: toText(c.parkingFilter, 'any') || 'any',
+	            maxBeachDistanceMeters: toText(c.maxBeachDistanceMeters, 'any') || 'any',
+	            seaViewFilter: toText(c.seaViewFilter, 'any') || 'any',
+	            operationMode: toText(c.operationMode, 'any') || 'any',
+	            spatial: normalizedSpatial
+	        };
+	    }
+
+	    function savedAlertCriteriaHash(criteria) {
+	        const normalized = normalizeSavedAlertCriteria(criteria);
+	        return JSON.stringify(normalized);
+	    }
+
+	    function cityLabelForAlert(cityKey) {
+	        const key = toText(cityKey).trim().toLowerCase();
+	        if (!key || key === 'all') return t('city.all', 'All Destinations');
+	        const found = MAIN_DESTINATIONS.find((it) => toText(it && it.value).trim().toLowerCase() === key);
+	        if (found && found.label) return found.label;
+	        return key.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
+	    }
+
+	    function savedAlertNameForCriteria(criteria) {
+	        const c = normalizeSavedAlertCriteria(criteria);
+	        const parts = [];
+
+	        if (c.scope === 'new_builds') parts.push(t('alerts.scope.new_builds', 'New Builds'));
+	        else if (c.scope === 'resales') parts.push(t('alerts.scope.resales', 'Properties'));
+	        else parts.push(t('alerts.scope.all', 'All Listings'));
+
+	        if (c.selectedCity && c.selectedCity !== 'all') parts.push(cityLabelForAlert(c.selectedCity));
+	        if (c.maxPrice && c.maxPrice !== 'any') parts.push(`≤ €${numberFormat.format(Number(c.maxPrice) || 0)}`);
+	        if ((Number(c.minBeds) || 0) > 0) parts.push(`${Number(c.minBeds)}+ ${t('filters.beds', 'Beds')}`);
+
+	        if (!parts.length) return t('alerts.default_name', 'Saved alert');
+	        return parts.slice(0, 4).join(' · ');
+	    }
+
+	    function setSaveAlertButtonState(state, labelText) {
+	        if (!saveAlertBtn) return;
+	        if (saveAlertResetTimer) {
+	            window.clearTimeout(saveAlertResetTimer);
+	            saveAlertResetTimer = null;
+	        }
+	        saveAlertBtn.classList.remove('is-busy', 'is-ok', 'is-error');
+	        if (state === 'busy') saveAlertBtn.classList.add('is-busy');
+	        if (state === 'ok') saveAlertBtn.classList.add('is-ok');
+	        if (state === 'error') saveAlertBtn.classList.add('is-error');
+	        saveAlertBtn.textContent = toText(labelText, t('properties.save_alert', 'Save alert'));
+	    }
+
+	    function resetSaveAlertButtonText() {
+	        if (!saveAlertBtn) return;
+	        setSaveAlertButtonState('idle', t('properties.save_alert', 'Save alert'));
+	    }
+
+	    function flashSaveAlertButton(state, text, durationMs = 1800) {
+	        if (!saveAlertBtn) return;
+	        setSaveAlertButtonState(state, text);
+	        saveAlertResetTimer = window.setTimeout(() => {
+	            resetSaveAlertButtonText();
+	        }, Math.max(900, Number(durationMs) || 1800));
+	    }
+
+	    function updateSaveAlertButtonUi() {
+	        if (!saveAlertBtn) return;
+	        const signedIn = Boolean(supabaseClient && supabaseUser);
+	        saveAlertBtn.disabled = false;
+	        saveAlertBtn.title = signedIn
+	            ? t('properties.save_alert_hint', 'Save these requirements and get notified when new matches arrive.')
+	            : t('properties.save_alert_signin_hint', 'Sign in first to save requirements and receive match alerts.');
+	        if (!saveAlertBtn.classList.contains('is-busy') && !saveAlertBtn.classList.contains('is-ok') && !saveAlertBtn.classList.contains('is-error')) {
+	            saveAlertBtn.textContent = t('properties.save_alert', 'Save alert');
+	        }
+	    }
+
+	    async function supabaseUpsertSavedAlert(client, user, criteria) {
+	        const normalized = normalizeSavedAlertCriteria(criteria);
+	        const payload = {
+	            user_id: user.id,
+	            user_email: toText(user.email).trim() || null,
+	            name: savedAlertNameForCriteria(normalized),
+	            scope: normalized.scope,
+	            criteria: normalized,
+	            criteria_hash: savedAlertCriteriaHash(normalized),
+	            enabled: true,
+	            notify_in_app: true,
+	            notify_email: false
+	        };
+	        return await client
+	            .from('saved_search_alerts')
+	            .upsert(payload, { onConflict: 'user_id,criteria_hash' })
+	            .select('id,name,criteria_hash')
+	            .single();
+	    }
+
+	    async function supabaseFetchSavedAlerts(client, userId) {
+	        const { data, error } = await client
+	            .from('saved_search_alerts')
+	            .select('id,name,criteria,enabled')
+	            .eq('user_id', userId)
+	            .eq('enabled', true)
+	            .limit(30);
+	        if (error) throw error;
+	        return Array.isArray(data) ? data : [];
+	    }
+
+	    function matchesSpatialCriteriaForAlert(property, spatialCriteria) {
+	        const s = spatialCriteria && typeof spatialCriteria === 'object' ? spatialCriteria : { mode: 'none' };
+	        const mode = toText(s.mode, 'none');
+	        if (mode === 'none') return true;
+
+	        const lat = Number(property && property.latitude);
+	        const lon = Number(property && property.longitude);
+	        if (!Number.isFinite(lat) || !Number.isFinite(lon)) return false;
+
+	        if (mode === 'polygon') {
+	            const points = Array.isArray(s.polygon) ? s.polygon : [];
+	            if (points.length < 3) return true;
+	            const vertices = points
+	                .map((v) => ({ lat: Number(v && v.lat), lng: Number(v && (v.lng ?? v.lon)) }))
+	                .filter((v) => Number.isFinite(v.lat) && Number.isFinite(v.lng));
+	            if (vertices.length < 3) return true;
+	            const bounds = spatialBoundsForVertices(vertices);
+	            if (lat < bounds.minLat || lat > bounds.maxLat || lon < bounds.minLon || lon > bounds.maxLon) return false;
+	            return pointInPolygon(lat, lon, vertices);
+	        }
+
+	        if (mode === 'around') {
+	            const a = s.around && typeof s.around === 'object' ? s.around : {};
+	            const centerLat = Number(a.lat);
+	            const centerLon = Number(a.lon);
+	            const radiusKm = Number(a.radiusKm);
+	            if (!Number.isFinite(centerLat) || !Number.isFinite(centerLon) || !Number.isFinite(radiusKm) || radiusKm <= 0) return true;
+	            return distanceKm(lat, lon, centerLat, centerLon) <= radiusKm;
+	        }
+
+	        return true;
+	    }
+
+	    function savedAlertMatchesProperty(property, criteriaInput) {
+	        const criteria = normalizeSavedAlertCriteria(criteriaInput);
+	        const scope = criteria.scope;
+
+	        if (scope === 'new_builds' && !isExplicitNewBuild(property)) return false;
+	        if (scope === 'resales' && isExplicitNewBuild(property)) return false;
+
+	        const loweredSearch = normalize(criteria.searchQuery);
+	        const loweredRef = normalize(criteria.refQuery);
+	        const ref = normalize(property.ref);
+	        const town = normalize(property.town);
+	        const province = normalize(property.province);
+	        const type = normalize(property.type);
+	        const description = normalize(property.description);
+	        const features = featuresFor(property).join(' ').toLowerCase();
+
+	        const propertyPrice = listingPriceNumber(property);
+	        const propertyBeds = Number(property.beds) || 0;
+	        const propertyBaths = Number(property.baths) || 0;
+
+	        const matchesRef = loweredRef === '' || ref.includes(loweredRef);
+	        const matchesCity = matchesDestination(property, criteria.selectedCity);
+
+	        const typeNorm = normalize(property.type);
+	        let matchesType = true;
+	        if (criteria.selectedType !== 'all') {
+	            const selectedNorm = normalize(criteria.selectedType);
+	            if (selectedNorm === 'new build') {
+	                matchesType = scope === 'new_builds' ? isExplicitNewBuild(property) : isNewBuild(property);
+	            } else if (selectedNorm === 'investment') {
+	                matchesType = isInvestmentDeal(property);
+	            } else if (selectedNorm === 'apartment') {
+	                matchesType = typeNorm.includes('apartment') || typeNorm.includes('apartamento');
+	            } else if (selectedNorm === 'penthouse') {
+	                matchesType = typeNorm.includes('penthouse');
+	            } else if (selectedNorm === 'town house') {
+	                matchesType = typeNorm.includes('town house') || typeNorm.includes('casa');
+	            } else {
+	                matchesType = typeNorm === selectedNorm || typeNorm.includes(selectedNorm);
+	            }
+	        }
+
+	        const matchesSearch = loweredSearch === ''
+	            || town.includes(loweredSearch)
+	            || province.includes(loweredSearch)
+	            || type.includes(loweredSearch)
+	            || description.includes(loweredSearch);
+
+	        const matchesPrice = criteria.maxPrice === 'any'
+	            || (Number.isFinite(propertyPrice) && propertyPrice <= Number(criteria.maxPrice));
+	        const matchesBeds = propertyBeds >= (Number(criteria.minBeds) || 0);
+	        const matchesBaths = propertyBaths >= (Number(criteria.minBaths) || 0);
+
+	        let matchesPool = true;
+	        if (criteria.poolFilter !== 'any') {
+	            if (criteria.poolFilter === 'pool') {
+	                matchesPool = features.includes('pool') || features.includes('swimming');
+	            }
+	            if (criteria.poolFilter === 'private') {
+	                matchesPool = features.includes('private pool')
+	                    || (features.includes('pool') && features.includes('private'));
+	            }
+	            if (criteria.poolFilter === 'communal') {
+	                matchesPool = features.includes('communal pool')
+	                    || features.includes('community pool')
+	                    || features.includes('shared pool');
+	            }
+	        }
+
+	        const matchesParking = criteria.parkingFilter !== 'parking'
+	            || features.includes('parking')
+	            || features.includes('garage')
+	            || features.includes('carport');
+
+	        const maxBeach = criteria.maxBeachDistanceMeters === 'any' ? null : Number(criteria.maxBeachDistanceMeters);
+	        const distanceMeters = maxBeach ? beachDistanceMetersFor(property) : null;
+	        const matchesBeach = maxBeach === null
+	            || (Number.isFinite(distanceMeters) && distanceMeters <= maxBeach);
+
+	        const matchesSeaView = criteria.seaViewFilter === 'any'
+	            || (criteria.seaViewFilter === 'yes' && hasSeaView(property));
+
+	        const op = operationFor(property);
+	        const matchesOperation = criteria.operationMode === 'any' || op === criteria.operationMode;
+
+	        const passes = matchesRef
+	            && matchesCity
+	            && matchesType
+	            && matchesOperation
+	            && matchesSearch
+	            && matchesPrice
+	            && matchesBeds
+	            && matchesBaths
+	            && matchesPool
+	            && matchesParking
+	            && matchesBeach
+	            && matchesSeaView
+	            && matchesSpatialCriteriaForAlert(property, criteria.spatial);
+
+	        if (!passes) return false;
+
+	        const imageCandidates = imageUrlsFor(property);
+	        if (!imageCandidates.length) return false;
+	        const propertyId = propertyIdFor(property);
+	        const cached = propertyId ? imageOkCache.get(propertyId) : undefined;
+	        if (cached === false) return false;
+
+	        return true;
+	    }
+
+	    function matchingPropertiesForSavedAlert(criteria) {
+	        return allProperties.filter((property) => savedAlertMatchesProperty(property, criteria));
+	    }
+
+	    async function supabaseUpsertSavedAlertMatches(client, user, alertRow, matches) {
+	        const alertId = toText(alertRow && alertRow.id).trim();
+	        if (!alertId || !Array.isArray(matches) || !matches.length) return;
+	        const payload = matches.slice(0, 1200).map((property) => {
+	            const pid = propertyIdFor(property);
+	            const ref = toText(property && property.ref).trim();
+	            return {
+	                alert_id: alertId,
+	                user_id: user.id,
+	                property_id: pid,
+	                property_ref: ref || null,
+	                property_town: toText(property && property.town).trim() || null,
+	                property_type: toText(property && property.type).trim() || null,
+	                property_price: Number.isFinite(listingPriceNumber(property)) ? listingPriceNumber(property) : null,
+	                property_url: buildPropertyLink(ref || pid)
+	            };
+	        }).filter((row) => toText(row.property_id).trim());
+
+	        if (!payload.length) return;
+
+	        const chunkSize = 200;
+	        for (let i = 0; i < payload.length; i += chunkSize) {
+	            const chunk = payload.slice(i, i + chunkSize);
+	            // Do not override existing rows (e.g. seen=true). We only want truly new matches inserted.
+	            const { error } = await client
+	                .from('saved_search_matches')
+	                .upsert(chunk, { onConflict: 'alert_id,property_id', ignoreDuplicates: true });
+	            if (error) throw error;
+	        }
+	    }
+
+	    async function syncSavedAlertsForUser({ force = false } = {}) {
+	        if (alertsSyncInFlight) return;
+	        if (!supabaseClient || !supabaseUser) return;
+
+	        const uid = toText(supabaseUser.id).trim();
+	        if (!uid) return;
+
+	        const now = Date.now();
+	        if (!force && alertsLastSyncedUserId === uid && (now - alertsLastSyncAt) < 2 * 60 * 1000) {
+	            return;
+	        }
+
+	        alertsSyncInFlight = true;
+	        try {
+	            const alerts = await supabaseFetchSavedAlerts(supabaseClient, uid);
+	            if (!alerts.length) {
+	                alertsLastSyncedUserId = uid;
+	                alertsLastSyncAt = now;
+	                return;
+	            }
+	            for (const alertRow of alerts.slice(0, 30)) {
+	                const criteria = normalizeSavedAlertCriteria(alertRow && alertRow.criteria);
+	                const matches = matchingPropertiesForSavedAlert(criteria);
+	                if (!matches.length) continue;
+	                await supabaseUpsertSavedAlertMatches(supabaseClient, supabaseUser, alertRow, matches);
+	            }
+	            alertsLastSyncedUserId = uid;
+	            alertsLastSyncAt = Date.now();
+	        } catch (error) {
+	            // ignore
+	        } finally {
+	            alertsSyncInFlight = false;
+	        }
+	    }
+
+	    function scheduleSavedAlertsSync({ delayMs = 900, force = false } = {}) {
+	        if (alertsSyncTimer) {
+	            window.clearTimeout(alertsSyncTimer);
+	            alertsSyncTimer = null;
+	        }
+	        alertsSyncTimer = window.setTimeout(() => {
+	            alertsSyncTimer = null;
+	            syncSavedAlertsForUser({ force });
+	        }, Math.max(120, Number(delayMs) || 900));
+	    }
+
+	    async function onSaveAlertClicked() {
+	        if (!saveAlertBtn) return;
+	        const client = supabaseClient || getSupabase();
+	        if (!client || !supabaseUser) {
+	            flashSaveAlertButton('error', t('properties.save_alert_signin', 'Sign in first to save alerts'));
+	            return;
+	        }
+
+	        syncFiltersFromControls();
+	        filterProperties();
+
+	        setSaveAlertButtonState('busy', t('properties.save_alert_saving', 'Saving…'));
+	        try {
+	            const criteria = buildCurrentSavedAlertCriteria();
+	            const { error } = await supabaseUpsertSavedAlert(client, supabaseUser, criteria);
+	            if (error) {
+	                const msg = toText(error && error.message).toLowerCase();
+	                if (msg.includes('relation') && msg.includes('saved_search')) {
+	                    flashSaveAlertButton('error', t('properties.save_alert_setup', 'Run Supabase SQL update'));
+	                } else {
+	                    flashSaveAlertButton('error', t('properties.save_alert_error', 'Could not save alert'));
+	                }
+	                return;
+	            }
+	            flashSaveAlertButton('ok', t('properties.save_alert_saved', 'Alert saved'));
+	            scheduleSavedAlertsSync({ delayMs: 200, force: true });
+	        } catch (error) {
+	            flashSaveAlertButton('error', t('properties.save_alert_error', 'Could not save alert'));
+	        }
+	    }
+
+		    function filterProperties() {
+		        const loweredSearch = normalize(searchQuery);
+		        const loweredRef = normalize(refQuery);
+		        const path = toText(window.location && window.location.pathname).toLowerCase();
+		        const isNewBuildsPage = path.endsWith('new-builds.html');
 	        const isResalesPage = path.endsWith('properties.html');
 
 	        currentProperties = allProperties.filter((property) => {
@@ -1900,15 +2842,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 && matchesBeach
                 && matchesSeaView;
 
-            if (!passesCoreFilters) {
-                return false;
-            }
+		            if (!passesCoreFilters) {
+		                return false;
+		            }
 
-            // Never show a listing with no image URLs at all.
-            const imageCandidates = imageUrlsFor(property);
-            if (!imageCandidates.length) {
-                return false;
-            }
+		            if (!matchesSpatialFilter(property)) {
+		                return false;
+		            }
+
+		            // Never show a listing with no image URLs at all.
+		            const imageCandidates = imageUrlsFor(property);
+		            if (!imageCandidates.length) {
+		                return false;
+		            }
 
             // Hide only when we know images are broken. Otherwise show immediately and verify in background.
             const propertyId = propertyIdFor(property);
@@ -1934,6 +2880,7 @@ document.addEventListener('DOMContentLoaded', () => {
             updateMapMarkers();
             mapDirty = false;
         }
+        updateFavoritesControls();
     }
 
     function scheduleFilter(delayMs = 180) {
@@ -2060,6 +3007,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <img src="${imageUrl}" alt="${type}" loading="lazy">
                     <div class="card-badge">${type}</div>
                     <div class="card-status ${listingMode}">${listingLabel}</div>
+                    <button type="button" class="card-reel-btn" data-action="open-card-reel" aria-label="${escapeHtml(t('listing.play_reel', 'Play reel'))}">▶</button>
                     <button type="button" class="fav-btn ${isFav ? 'is-fav' : ''}" aria-label="${escapeHtml(t('listing.save_aria', 'Save listing'))}" aria-pressed="${isFav ? 'true' : 'false'}">${isFav ? '♥' : '♡'}</button>
                 </div>
                 <div class="card-content">
@@ -2103,6 +3051,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     if (!nowFav && favoritesOnly) {
                         filterProperties();
+                    }
+                });
+            }
+
+            const reelBtn = card.querySelector('button[data-action="open-card-reel"]');
+            if (reelBtn) {
+                reelBtn.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    if (!reference) return;
+                    try {
+                        const reelUrl = new URL('reel.html', window.location.href);
+                        reelUrl.searchParams.set('ref', reference);
+                        reelUrl.searchParams.set('autoplay', '1');
+                        window.open(reelUrl.toString(), '_blank', 'noopener,noreferrer');
+                    } catch {
+                        // ignore
                     }
                 });
             }
@@ -2572,18 +3537,32 @@ document.addEventListener('DOMContentLoaded', () => {
             : null;
         const sourceUrl = sourceUrlFor(property);
         const propertyLink = buildPropertyLink(reference);
+        const shareCardLink = buildListingShareLink(reference) || propertyLink;
         activeModalPropertyId = propertyId || '';
         const isFav = Boolean(propertyId && favoriteIds.has(propertyId));
         const dossierSubject = encodeURIComponent(`Request to visit - ${reference || `${town} ${type}`}`);
-        const shareTitle = `${reference || t('modal.type_default', 'Property')} - ${town}, ${province}`;
-        const shareTextRaw = `Check this ${type}${reference ? ` (${reference})` : ''} in ${town}: ${propertyLink}`;
-        const shareText = encodeURIComponent(shareTextRaw);
-        const shareUrl = encodeURIComponent(propertyLink);
-        const whatsappShare = `https://wa.me/?text=${shareText}`;
-        const telegramShare = `https://t.me/share/url?url=${shareUrl}&text=${shareText}`;
+        const priceText = formatListingPrice(property);
+        const shareTitle = `${priceText ? `${priceText} · ` : ''}${type} in ${town}, ${province}`;
+        const specParts = [];
+        if (beds) specParts.push(`${beds} bed${beds === 1 ? '' : 's'}`);
+        if (baths) specParts.push(`${baths} bath${baths === 1 ? '' : 's'}`);
+        if (builtArea) specParts.push(`${builtArea} m2`);
+        const shareCaptionNoUrl = [
+            'Spanish Coast Properties',
+            `${type} in ${town}, ${province}`,
+            priceText || '',
+            specParts.length ? specParts.join(' · ') : '',
+            reference ? `Ref: ${reference}` : ''
+        ].filter(Boolean).join('\n');
+        const shareCaptionWithUrl = `${shareCaptionNoUrl}\n${shareCardLink}`;
+
+        const shareUrl = encodeURIComponent(shareCardLink);
+        const whatsappShare = `https://wa.me/?text=${encodeURIComponent(shareCaptionWithUrl)}`;
+        const telegramShare = `https://t.me/share/url?url=${shareUrl}&text=${encodeURIComponent(shareCaptionNoUrl)}`;
         const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
         const linkedInShare = `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`;
-        const xShare = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTitle)}&url=${shareUrl}`;
+        const xText = `${shareCaptionNoUrl}\n#CostaBlancaSouth #SpainRealEstate`;
+        const xShare = `https://twitter.com/intent/tweet?text=${encodeURIComponent(xText)}&url=${shareUrl}`;
         const dossierBody = encodeURIComponent(
             `Hello Spanish Coast Properties,\n\nI would like to request a visit for this property.\n\nReference: ${reference || 'N/A'}\nType: ${type}\nLocation: ${town}, ${province}\nPrice: ${formatListingPrice(property)}\nApp link: ${propertyLink}${sourceUrl ? `\nOfficial page: ${sourceUrl}` : ''}\n\nPreferred dates/times:\n1) \n2) \n\nThank you.`
         );
@@ -2609,6 +3588,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="modal-ref-row">
                         <div class="modal-ref">${reference || escapeHtml(t('modal.ref_unavailable', 'Ref unavailable'))}</div>
                         <button type="button" class="ref-chip ref-chip--small" data-action="copy-modal-original-ref" style="display:none" aria-label="${escapeHtml(t('modal.copy_original_ref', 'Copy original reference'))}" title="${escapeHtml(t('modal.copy_original_ref', 'Copy original reference'))}">${escapeHtml(t('modal.original_ref_short', 'Orig'))}</button>
+                        <button type="button" class="ref-chip ref-chip--small" data-action="copy-modal-original-id" style="display:none" aria-label="${escapeHtml(t('modal.copy_original_id', 'Copy feed ID'))}" title="${escapeHtml(t('modal.copy_original_id', 'Copy feed ID'))}">${escapeHtml(t('modal.original_id_short', 'ID'))}</button>
                     </div>
                     <div class="modal-ref-sub muted" data-original-ref style="display:none"></div>
                     <h2>${modalTitle}</h2>
@@ -2669,13 +3649,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 : `<li>${escapeHtml(t('modal.amenities_fallback_1', 'Premium finishes throughout'))}</li><li>${escapeHtml(t('modal.amenities_fallback_2', 'Advanced climate control'))}</li>`}
                         </ul>
                     </div>
-                    <div class="modal-cta">
-                        <button type="button" class="cta-button cta-button--outline" data-fav-toggle>${escapeHtml(isFav ? t('modal.fav_saved', '♥ Saved') : t('modal.fav_save', '♡ Save'))}</button>
-                        <a href="brochure.html?ref=${encodeURIComponent(reference || '')}" class="cta-button cta-button--outline" target="_blank" rel="noopener">${escapeHtml(t('modal.brochure_pdf', 'Brochure (PDF)'))}</a>
-                        <a href="tel:+34624867866" class="cta-button">${escapeHtml(t('modal.call_now', 'Call Now'))}</a>
-                        <a href="${dossierMailto}" class="cta-button">${escapeHtml(t('modal.request_visit', 'Request to visit'))}</a>
-                        ${sourceUrl ? `<a href="${escapeHtml(sourceUrl)}" class="cta-button" target="_blank" rel="noopener">${escapeHtml(t('modal.official_page', 'Official page'))}</a>` : ''}
-                    </div>
+	                    <div class="modal-cta">
+	                        <button type="button" class="cta-button cta-button--outline" data-fav-toggle>${escapeHtml(isFav ? t('modal.fav_saved', '♥ Saved') : t('modal.fav_save', '♡ Save'))}</button>
+	                        <a href="brochure.html?ref=${encodeURIComponent(reference || '')}" class="cta-button cta-button--outline" target="_blank" rel="noopener">${escapeHtml(t('modal.brochure_pdf', 'Brochure (PDF)'))}</a>
+	                        <a href="reel.html?ref=${encodeURIComponent(reference || '')}&autoplay=1" class="cta-button cta-button--outline cta-button--reel-play" target="_blank" rel="noopener">▶ ${escapeHtml(t('modal.reel_play', 'Play Reel'))}</a>
+	                        <a href="reel.html?ref=${encodeURIComponent(reference || '')}" class="cta-button cta-button--outline" target="_blank" rel="noopener">${escapeHtml(t('modal.reel_video', 'Reel Studio'))}</a>
+	                        <a href="reel.html?ref=${encodeURIComponent(reference || '')}&app=tiktok&autoplay=1" class="cta-button cta-button--outline" target="_blank" rel="noopener">🎵 ${escapeHtml(t('modal.reel_tiktok', 'TikTok Video'))}</a>
+	                        <a href="tel:+34624867866" class="cta-button">${escapeHtml(t('modal.call_now', 'Call Now'))}</a>
+	                        <a href="${dossierMailto}" class="cta-button">${escapeHtml(t('modal.request_visit', 'Request to visit'))}</a>
+	                        ${sourceUrl ? `<a href="${escapeHtml(sourceUrl)}" class="cta-button" target="_blank" rel="noopener">${escapeHtml(t('modal.official_page', 'Official page'))}</a>` : ''}
+	                    </div>
 	                    <div class="share-row" aria-label="${escapeHtml(t('modal.share', 'Share'))}">
 	                        <button type="button" class="share-btn" data-share="native">
 	                            <span class="share-icon share-icon--native">${SHARE_ICON_SVG.native}</span>
@@ -2684,6 +3667,10 @@ document.addEventListener('DOMContentLoaded', () => {
 	                        <button type="button" class="share-btn" data-share="copy">
 	                            <span class="share-icon share-icon--copy">${SHARE_ICON_SVG.copy}</span>
 	                            <span class="share-label">${escapeHtml(t('modal.share.copy_link', 'Copy link'))}</span>
+	                        </button>
+	                        <button type="button" class="share-btn" data-share="copy-caption">
+	                            <span class="share-icon share-icon--copy">${SHARE_ICON_SVG.copy}</span>
+	                            <span class="share-label">${escapeHtml(t('modal.share.copy_caption', 'Copy caption'))}</span>
 	                        </button>
 	                        <button type="button" class="share-btn" data-share="instagram">
 	                            <span class="share-icon share-icon--instagram">${SHARE_ICON_SVG.instagram}</span>
@@ -2726,12 +3713,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // Normal clients never receive this data because it's stored server-side behind RLS.
         const originalRefEl = modalDetails.querySelector('[data-original-ref]');
         const originalRefBtn = modalDetails.querySelector('button[data-action="copy-modal-original-ref"]');
+        const originalIdBtn = modalDetails.querySelector('button[data-action="copy-modal-original-id"]');
         if (originalRefEl) {
             originalRefEl.style.display = 'none';
             originalRefEl.textContent = '';
             if (originalRefBtn) {
                 originalRefBtn.style.display = 'none';
                 originalRefBtn.dataset.originalRef = '';
+            }
+            if (originalIdBtn) {
+                originalIdBtn.style.display = 'none';
+                originalIdBtn.dataset.originalId = '';
             }
             const scpRef = toText(reference).trim();
             if (scpRef) {
@@ -2752,11 +3744,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!mapped || !mapped.original_ref) return;
                     const baseLabel = t('modal.original_ref', 'Original ref');
                     const label = mapped.source ? `${baseLabel} (${mapped.source})` : baseLabel;
-                    originalRefEl.textContent = `${label}: ${mapped.original_ref}`;
+                    const lines = [];
+                    lines.push(`${label}: ${mapped.original_ref}`);
+                    if (toText(mapped.original_id).trim()) {
+                        lines.push(`${t('modal.original_id', 'Feed ID')}: ${toText(mapped.original_id).trim()}`);
+                    }
+                    originalRefEl.textContent = lines.join('\n');
+                    originalRefEl.style.whiteSpace = 'pre-line';
                     originalRefEl.style.display = 'block';
                     if (originalRefBtn) {
                         originalRefBtn.style.display = 'inline-flex';
                         originalRefBtn.dataset.originalRef = toText(mapped.original_ref).trim();
+                    }
+                    if (originalIdBtn && toText(mapped.original_id).trim()) {
+                        originalIdBtn.style.display = 'inline-flex';
+                        originalIdBtn.dataset.originalId = toText(mapped.original_id).trim();
                     }
                 })();
             }
@@ -2770,6 +3772,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 await copyTextToClipboard(value);
                 originalRefBtn.textContent = t('modal.copied', 'Copied');
                 window.setTimeout(() => { originalRefBtn.textContent = prev || t('modal.original_ref_short', 'Orig'); }, 1200);
+            });
+        }
+
+        if (originalIdBtn) {
+            originalIdBtn.addEventListener('click', async () => {
+                const value = toText(originalIdBtn.dataset.originalId).trim();
+                if (!value) return;
+                const prev = originalIdBtn.textContent;
+                await copyTextToClipboard(value);
+                originalIdBtn.textContent = t('modal.copied', 'Copied');
+                window.setTimeout(() => { originalIdBtn.textContent = prev || t('modal.original_id_short', 'ID'); }, 1200);
             });
         }
 
@@ -2839,6 +3852,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	        const shareNativeBtn = modalDetails.querySelector('[data-share="native"]');
 	        const shareCopyBtn = modalDetails.querySelector('[data-share="copy"]');
+	        const shareCopyCaptionBtn = modalDetails.querySelector('[data-share="copy-caption"]');
 	        const shareInstagramBtn = modalDetails.querySelector('[data-share="instagram"]');
 	        const shareTiktokBtn = modalDetails.querySelector('[data-share="tiktok"]');
 
@@ -2863,7 +3877,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	            shareNativeBtn.addEventListener('click', async () => {
 	                if (navigator.share) {
 	                    try {
-                        await navigator.share({ title: shareTitle, text: shareTextRaw, url: propertyLink });
+                        await navigator.share({ title: shareTitle, text: shareCaptionNoUrl, url: shareCardLink });
                         return;
                     } catch (error) {
                         // Fall back to copy.
@@ -2875,14 +3889,27 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-	        const shareToSocialApp = (btn, appName) => {
-	            if (!btn) return;
-	            btn.addEventListener('click', async () => {
-	                if (navigator.share) {
-                    try {
-                        await navigator.share({ title: shareTitle, text: shareTextRaw, url: propertyLink });
-                        return;
-                    } catch (error) {
+		        const shareToSocialApp = (btn, appName) => {
+		            if (!btn) return;
+		            btn.addEventListener('click', async () => {
+		                // Social apps rarely accept a URL as a "post" on mobile. Instead, generate a short reel video
+		                // (in-browser) and let the user share the file from the reel page.
+		                try {
+		                    if (reference) {
+		                        const reelUrl = new URL('reel.html', window.location.href);
+		                        reelUrl.searchParams.set('ref', reference);
+		                        reelUrl.searchParams.set('app', String(appName || '').toLowerCase());
+		                        window.open(reelUrl.toString(), '_blank', 'noopener,noreferrer');
+		                        return;
+		                    }
+		                } catch {
+		                    // fall back to link sharing below
+		                }
+		                if (navigator.share) {
+		                    try {
+		                        await navigator.share({ title: shareTitle, text: shareCaptionNoUrl, url: shareCardLink });
+		                        return;
+		                    } catch (error) {
                         // Fall through to copy.
                     }
                 }
@@ -2905,16 +3932,35 @@ document.addEventListener('DOMContentLoaded', () => {
 	                const original = shareBtnLabel(shareCopyBtn);
 	                try {
 	                    if (navigator.clipboard && navigator.clipboard.writeText) {
-	                        await navigator.clipboard.writeText(propertyLink);
+	                        await navigator.clipboard.writeText(shareCardLink);
 	                    } else {
-	                        window.prompt(t('modal.share.copy_prompt', 'Copy link:'), propertyLink);
+	                        window.prompt(t('modal.share.copy_prompt', 'Copy link:'), shareCardLink);
 	                    }
 	                    setShareBtnLabel(shareCopyBtn, t('modal.copied', 'Copied'));
 	                    window.setTimeout(() => {
 	                        setShareBtnLabel(shareCopyBtn, original);
 	                    }, 1400);
 	                } catch (error) {
-	                    window.prompt(t('modal.share.copy_prompt', 'Copy link:'), propertyLink);
+	                    window.prompt(t('modal.share.copy_prompt', 'Copy link:'), shareCardLink);
+	                }
+	            });
+	        }
+
+	        if (shareCopyCaptionBtn) {
+	            shareCopyCaptionBtn.addEventListener('click', async () => {
+	                const original = shareBtnLabel(shareCopyCaptionBtn);
+	                try {
+	                    if (navigator.clipboard && navigator.clipboard.writeText) {
+	                        await navigator.clipboard.writeText(shareCaptionWithUrl);
+	                    } else {
+	                        window.prompt(t('modal.share.copy_prompt', 'Copy link:'), shareCaptionWithUrl);
+	                    }
+	                    setShareBtnLabel(shareCopyCaptionBtn, t('modal.copied', 'Copied'));
+	                    window.setTimeout(() => {
+	                        setShareBtnLabel(shareCopyCaptionBtn, original);
+	                    }, 1400);
+	                } catch (error) {
+	                    window.prompt(t('modal.share.copy_prompt', 'Copy link:'), shareCaptionWithUrl);
 	                }
 	            });
 	        }
@@ -3197,10 +4243,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return MARKER_ICON_SVG[kind] || MARKER_ICON_SVG.property;
     }
 
-    function createMarkerIcon(property) {
-        if (typeof L === 'undefined' || typeof L.divIcon !== 'function') {
-            return undefined;
-        }
+	    function createMarkerIcon(property) {
+	        if (typeof L === 'undefined' || typeof L.divIcon !== 'function') {
+	            return undefined;
+	        }
 
         const kind = markerKindFor(property);
         const markerText = escapeHtml(formatListingMarkerText(property));
@@ -3219,13 +4265,232 @@ document.addEventListener('DOMContentLoaded', () => {
             iconSize: [160, 48],
             // Anchor at the bottom of the pin.
             iconAnchor: [24, 48]
-        });
-    }
+	        });
+	    }
 
-    function initMap() {
-        if (typeof L === 'undefined') {
-            return;
-        }
+	    const MAP_TOOL_ICON_BASE = 'class="scp-map-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"';
+	    const MAP_TOOL_ICON_SVG = {
+	        draw: `<svg ${MAP_TOOL_ICON_BASE}><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`,
+	        around: `<svg ${MAP_TOOL_ICON_BASE}><circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/><circle cx="12" cy="12" r="8"/></svg>`,
+	        clear: `<svg ${MAP_TOOL_ICON_BASE}><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>`
+	    };
+
+	    function aroundRadiusKmFromUi() {
+	        const raw = spatialUi.radiusSelect ? Number(spatialUi.radiusSelect.value) : DEFAULT_AROUND_RADIUS_KM;
+	        if (Number.isFinite(raw) && raw > 0) return raw;
+	        return DEFAULT_AROUND_RADIUS_KM;
+	    }
+
+	    function startSpatialDrawPolygon() {
+	        if (!map || typeof L === 'undefined') return;
+	        if (!L.Draw || !L.Draw.Polygon) {
+	            setSpatialStatus(t('map.tools.draw_unavailable', 'Perimeter tool is not available right now.'));
+	            return;
+	        }
+
+	        mapHasUserInteracted = true;
+	        spatialIsDrawing = true;
+	        syncSpatialUi();
+
+	        try {
+	            if (spatialDrawHandler && typeof spatialDrawHandler.disable === 'function') spatialDrawHandler.disable();
+	        } catch (error) {
+	            // ignore
+	        }
+
+	        spatialDrawHandler = new L.Draw.Polygon(map, {
+	            allowIntersection: false,
+	            showArea: true,
+	            shapeOptions: {
+	                color: '#38bdf8',
+	                weight: 3,
+	                opacity: 0.95,
+	                fillOpacity: 0.12
+	            }
+	        });
+
+	        try {
+	            spatialDrawHandler.enable();
+	        } catch (error) {
+	            spatialIsDrawing = false;
+	            syncSpatialUi();
+	            setSpatialStatus(t('map.tools.draw_unavailable', 'Perimeter tool is not available right now.'));
+	        }
+	    }
+
+	    function startSpatialAroundMe() {
+	        if (!map) return;
+	        if (!navigator || !navigator.geolocation) {
+	            setSpatialStatus(t('map.tools.geo_unavailable', 'Geolocation is not available on this device.'));
+	            return;
+	        }
+
+	        mapHasUserInteracted = true;
+	        setSpatialStatus(t('map.tools.geo_getting', 'Getting your location…'));
+
+	        const radiusKm = aroundRadiusKmFromUi();
+	        const options = { enableHighAccuracy: false, timeout: 12000, maximumAge: 10 * 60 * 1000 };
+
+	        navigator.geolocation.getCurrentPosition(
+	            (pos) => {
+	                const lat = Number(pos && pos.coords && pos.coords.latitude);
+	                const lon = Number(pos && pos.coords && pos.coords.longitude);
+	                if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+	                    setSpatialStatus(t('map.tools.geo_failed', 'Could not read your location.'));
+	                    return;
+	                }
+	                setSpatialAroundFilter({ lat, lon, radiusKm }, { silent: false });
+	            },
+	            (err) => {
+	                const code = Number(err && err.code);
+	                if (code === 1) {
+	                    setSpatialStatus(t('map.tools.geo_denied', 'Location permission denied.'));
+	                } else if (code === 3) {
+	                    setSpatialStatus(t('map.tools.geo_timeout', 'Location request timed out. Try again.'));
+	                } else {
+	                    setSpatialStatus(t('map.tools.geo_failed', 'Location request failed. Try again.'));
+	                }
+	            },
+	            options
+	        );
+	    }
+
+	    function initSpatialMapControls() {
+	        if (!map || typeof L === 'undefined') return;
+	        if (map._scpSpatialControlsReady) return;
+	        map._scpSpatialControlsReady = true;
+
+	        ensureSpatialLayers();
+
+	        const control = L.control({ position: 'topleft' });
+	        control.onAdd = () => {
+	            const wrap = L.DomUtil.create('div', 'scp-map-search');
+	            wrap.setAttribute('role', 'group');
+	            wrap.setAttribute('aria-label', t('map.tools.aria', 'Map search tools'));
+
+	            const row = document.createElement('div');
+	            row.className = 'scp-map-search__row';
+
+	            const mkBtn = ({ key, fallback, icon, className = '' } = {}) => {
+	                const btn = document.createElement('button');
+	                btn.type = 'button';
+	                btn.className = `scp-map-search__btn ${className}`.trim();
+	                btn.innerHTML = `${icon || ''}<span>${escapeHtml(t(key, fallback))}</span>`;
+	                return btn;
+	            };
+
+	            const drawBtn = mkBtn({
+	                key: 'map.tools.draw',
+	                fallback: 'Draw area',
+	                icon: MAP_TOOL_ICON_SVG.draw
+	            });
+	            const aroundBtn = mkBtn({
+	                key: 'map.tools.around',
+	                fallback: 'Around me',
+	                icon: MAP_TOOL_ICON_SVG.around
+	            });
+	            const clearBtn = mkBtn({
+	                key: 'map.tools.clear',
+	                fallback: 'Clear',
+	                icon: MAP_TOOL_ICON_SVG.clear,
+	                className: 'scp-map-search__btn--danger'
+	            });
+
+	            clearBtn.disabled = true;
+
+	            row.appendChild(drawBtn);
+	            row.appendChild(aroundBtn);
+	            row.appendChild(clearBtn);
+
+	            const radiusRow = document.createElement('div');
+	            radiusRow.className = 'scp-map-search__row scp-map-search__radius';
+	            radiusRow.hidden = true;
+
+	            const radiusLabel = document.createElement('label');
+	            radiusLabel.textContent = t('map.tools.radius', 'Radius');
+
+	            const radiusSelect = document.createElement('select');
+	            AROUND_RADIUS_KM_OPTIONS.forEach((km) => {
+	                const opt = document.createElement('option');
+	                opt.value = String(km);
+	                opt.textContent = `${km} km`;
+	                radiusSelect.appendChild(opt);
+	            });
+	            radiusSelect.value = String(DEFAULT_AROUND_RADIUS_KM);
+
+	            radiusRow.appendChild(radiusLabel);
+	            radiusRow.appendChild(radiusSelect);
+
+	            const statusEl = document.createElement('div');
+	            statusEl.className = 'scp-map-search__status';
+	            statusEl.setAttribute('aria-live', 'polite');
+
+	            wrap.appendChild(row);
+	            wrap.appendChild(radiusRow);
+	            wrap.appendChild(statusEl);
+
+	            spatialUi.drawBtn = drawBtn;
+	            spatialUi.aroundBtn = aroundBtn;
+	            spatialUi.clearBtn = clearBtn;
+	            spatialUi.radiusRow = radiusRow;
+	            spatialUi.radiusSelect = radiusSelect;
+	            spatialUi.statusEl = statusEl;
+
+	            drawBtn.addEventListener('click', () => startSpatialDrawPolygon());
+	            aroundBtn.addEventListener('click', () => startSpatialAroundMe());
+	            clearBtn.addEventListener('click', () => clearSpatialFilter());
+
+	            radiusSelect.addEventListener('change', () => {
+	                const nextKm = aroundRadiusKmFromUi();
+	                if (spatialFilterMode === 'around' && spatialAround) {
+	                    setSpatialAroundFilter({ lat: spatialAround.lat, lon: spatialAround.lon, radiusKm: nextKm }, { silent: false });
+	                } else {
+	                    // Keep UI informative even before geolocation is granted.
+	                    if (spatialFilterMode === 'none') syncSpatialUi();
+	                }
+	            });
+
+	            try {
+	                L.DomEvent.disableClickPropagation(wrap);
+	                L.DomEvent.disableScrollPropagation(wrap);
+	            } catch (error) {
+	                // ignore
+	            }
+
+	            // Initial hint.
+	            syncSpatialUi();
+
+	            return wrap;
+	        };
+
+	        control.addTo(map);
+
+	        // Hook Leaflet.Draw polygon creation events.
+	        const createdEvent = (L.Draw && L.Draw.Event && L.Draw.Event.CREATED) ? L.Draw.Event.CREATED : 'draw:created';
+	        map.on(createdEvent, (e) => {
+	            if (!e || !e.layer) return;
+	            spatialIsDrawing = false;
+	            try {
+	                if (spatialDrawHandler && typeof spatialDrawHandler.disable === 'function') spatialDrawHandler.disable();
+	            } catch (error) {
+	                // ignore
+	            }
+	            spatialDrawHandler = null;
+	            setSpatialPolygonFromLayer(e.layer, { silent: false });
+	        });
+
+	        const drawStopEvent = (L.Draw && L.Draw.Event && L.Draw.Event.DRAWSTOP) ? L.Draw.Event.DRAWSTOP : 'draw:drawstop';
+	        map.on(drawStopEvent, () => {
+	            if (!spatialIsDrawing) return;
+	            spatialIsDrawing = false;
+	            syncSpatialUi();
+	        });
+	    }
+
+	    function initMap() {
+	        if (typeof L === 'undefined') {
+	            return;
+	        }
 
         const mapElement = document.getElementById('map');
         if (!mapElement) {
@@ -3246,12 +4511,14 @@ document.addEventListener('DOMContentLoaded', () => {
             ? L.markerClusterGroup()
             : L.layerGroup();
 
-        markersGroup.addTo(map);
+	        markersGroup.addTo(map);
 
-        // Preserve user zoom/position: once the user pans/zooms, avoid auto-fit snapping back.
-        map.on('movestart', (e) => {
-            if (e && e.originalEvent) mapHasUserInteracted = true;
-        });
+	        initSpatialMapControls();
+
+	        // Preserve user zoom/position: once the user pans/zooms, avoid auto-fit snapping back.
+	        map.on('movestart', (e) => {
+	            if (e && e.originalEvent) mapHasUserInteracted = true;
+	        });
         map.on('zoomstart', (e) => {
             if (e && e.originalEvent) mapHasUserInteracted = true;
         });
@@ -3523,9 +4790,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    updateFavoritesControls();
-    initSupabaseFavoritesSync();
-    initSupabaseApprovedPropertyListings();
+	    updateFavoritesControls();
+	    updateSaveAlertButtonUi();
+	    initSupabaseFavoritesSync();
+	    initSupabaseApprovedPropertyListings();
 
     if (favoritesToggleBtn) {
         favoritesToggleBtn.addEventListener('click', () => {
@@ -3538,12 +4806,60 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (favoritesSendBtn) {
-        favoritesSendBtn.addEventListener('click', () => {
-            if (favoriteIds.size === 0) return;
-            window.location.href = buildFavoritesMailto();
-        });
-    }
+	    if (favoritesSendBtn) {
+	        favoritesSendBtn.addEventListener('click', () => {
+	            openCatalogBuilder();
+	        });
+	    }
+
+	    if (openCatalogBuilderBtn) {
+	        openCatalogBuilderBtn.addEventListener('click', () => {
+	            openCatalogBuilder();
+	        });
+	    }
+
+	    if (catalogBuilderCloseBtn) {
+	        catalogBuilderCloseBtn.addEventListener('click', () => {
+	            closeCatalogBuilder();
+	        });
+	    }
+
+	    if (catalogBuilderModal) {
+	        catalogBuilderModal.addEventListener('click', (event) => {
+	            if (event.target === catalogBuilderModal) {
+	                closeCatalogBuilder();
+	            }
+	        });
+	    }
+
+	    [catalogBuilderSourceEl, catalogBuilderLimitEl, catalogBuilderClientEl, catalogBuilderWlEl].forEach((el) => {
+	        if (!el) return;
+	        const eventName = el.tagName === 'SELECT' ? 'change' : 'input';
+	        el.addEventListener(eventName, () => {
+	            updateCatalogBuilderUi();
+	        });
+	        if (eventName !== 'change') {
+	            el.addEventListener('change', () => updateCatalogBuilderUi());
+	        }
+	    });
+
+	    if (catalogBuilderOpenBtn) {
+	        catalogBuilderOpenBtn.addEventListener('click', () => {
+	            onCatalogBuilderAction('open');
+	        });
+	    }
+
+	    if (catalogBuilderCopyBtn) {
+	        catalogBuilderCopyBtn.addEventListener('click', () => {
+	            onCatalogBuilderAction('copy');
+	        });
+	    }
+
+	    if (saveAlertBtn) {
+	        saveAlertBtn.addEventListener('click', () => {
+	            onSaveAlertClicked();
+	        });
+	    }
 
     function syncFiltersFromControls() {
         selectedType = typeFilter ? typeFilter.value : 'all';
@@ -3562,11 +4878,11 @@ document.addEventListener('DOMContentLoaded', () => {
         seaViewFilter = seaViewFilterEl ? seaViewFilterEl.value : 'any';
     }
 
-    function resetAllFilters() {
-        selectedCity = 'all';
-        selectedType = 'all';
-        searchQuery = '';
-        refQuery = '';
+	    function resetAllFilters() {
+	        selectedCity = 'all';
+	        selectedType = 'all';
+	        searchQuery = '';
+	        refQuery = '';
         maxPrice = 'any';
         minBeds = 0;
         minBaths = 0;
@@ -3575,13 +4891,14 @@ document.addEventListener('DOMContentLoaded', () => {
         maxBeachDistanceMeters = 'any';
         seaViewFilter = 'any';
         operationMode = 'any';
-        sortMode = 'date_desc';
-        favoritesOnly = false;
-        autoRefFromUrl = '';
+	        sortMode = 'date_desc';
+	        favoritesOnly = false;
+	        autoRefFromUrl = '';
+	        clearSpatialFilter({ silent: true });
 
-        if (refSearchInput) refSearchInput.value = '';
-        if (searchInput) searchInput.value = '';
-        if (typeFilter) typeFilter.value = 'all';
+	        if (refSearchInput) refSearchInput.value = '';
+	        if (searchInput) searchInput.value = '';
+	        if (typeFilter) typeFilter.value = 'all';
         if (dealFilterEl) dealFilterEl.value = 'any';
         if (priceFilter) priceFilter.value = '';
         if (bedsFilter) bedsFilter.value = '0';
@@ -3742,6 +5059,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
+            if (catalogBuilderModal && catalogBuilderModal.style.display === 'block') {
+                closeCatalogBuilder();
+                return;
+            }
             if (lightbox && lightbox.style.display === 'flex') {
                 closeLightboxModal();
             }

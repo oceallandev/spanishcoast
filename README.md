@@ -24,6 +24,16 @@ Your app will be available at:
 
 The app is responsive and works on mobile browsers.
 
+## Localization (EN / ES / RO / SV)
+
+The app includes a scalable localization system with:
+- full base dictionaries for English and Spanish,
+- curated Romanian/Swedish UI overrides,
+- automatic completion of missing Romanian/Swedish keys with local browser cache.
+
+See:
+- `docs/i18n-localization.md`
+
 ## Import Inmovilla XML (Properties + Contacts/Leads)
 
 This repo includes an importer for Inmovilla exports:

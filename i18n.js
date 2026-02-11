@@ -8,9 +8,36 @@
 //   - data-i18n-title="key" (title attribute)
 //   - data-i18n-aria-label="key" (aria-label attribute)
 (() => {
-  const SUPPORTED = ['en', 'es'];
+  const toLangArray = (value) => {
+    if (!Array.isArray(value)) return [];
+    return value.map((v) => String(v || '').trim().toLowerCase()).filter(Boolean);
+  };
+
+  const SUPPORTED = Array.from(new Set([
+    'en',
+    'es',
+    'ro',
+    'sv',
+    ...toLangArray(window.SCP_I18N_EXTRA_LANGS)
+  ]));
   const DEFAULT_LANG = 'en';
   const STORAGE_KEY = 'scp:lang';
+  const AUTO_CACHE_VERSION = '20260211b';
+  const AUTO_CACHE_KEY_PREFIX = `scp:i18n:auto:${AUTO_CACHE_VERSION}:`;
+  const AUTO_ERROR_KEY_PREFIX = `scp:i18n:auto:error:${AUTO_CACHE_VERSION}:`;
+  const AUTO_RETRY_AFTER_MS = 12 * 60 * 60 * 1000;
+  const AUTO_TRANSLATE_LANGS = Array.from(new Set([
+    'ro',
+    'sv',
+    ...toLangArray(window.SCP_I18N_AUTO_TRANSLATE_LANGS)
+  ]));
+  const AUTO_TRANSLATE_BATCH_SIZE = 24;
+  const AUTO_TRANSLATE_ENABLED = true;
+  const AUTO_TRANSLATE_DELIMITER = '___SCP_SEGMENT___';
+  const LANG_FALLBACKS = {
+    ro: ['en', 'es'],
+    sv: ['en', 'es']
+  };
 
   const normalizeLang = (raw) => {
     const v = String(raw || '').trim().toLowerCase();
@@ -78,8 +105,12 @@
       'lang.label': 'Language',
       'lang.en': 'English',
       'lang.es': 'Spanish',
+      'lang.ro': 'Romanian',
+      'lang.sv': 'Swedish',
       'lang.en_short': 'EN',
       'lang.es_short': 'ES',
+      'lang.ro_short': 'RO',
+      'lang.sv_short': 'SV',
 
       'common.in': 'in',
       'common.all': 'All',
@@ -90,10 +121,48 @@
       'nav.businesses': 'Businesses',
       'nav.vehicles': 'Vehicles',
       'nav.services': 'Services',
+      'nav.blog': 'Blog',
       'nav.account': 'Account',
       'nav.contact_us': 'Contact Us',
       'nav.email': 'Email',
       'nav.call': 'Call',
+
+      'blog.hero.title': 'Blog & Market Pulse',
+      'blog.hero.subtitle': 'Short, useful updates generated from public headlines and Google Trends, with practical takeaways for Costa Blanca South.',
+      'blog.hero.disclaimer': 'We do not copy full articles. Each post is an original summary/commentary and includes source links so you can verify details.',
+      'blog.tag.updated_daily': 'Updated daily',
+      'blog.tag.news': 'News',
+      'blog.tag.trends': 'Trends',
+      'blog.filters.search': 'Search',
+      'blog.filters.search_placeholder': 'Search topics…',
+      'blog.filters.type': 'Type',
+      'blog.filters.language': 'Language',
+      'blog.lang.auto': 'My language',
+      'blog.lang.all': 'All languages',
+      'blog.kind.news': 'News',
+      'blog.kind.trend': 'Trends',
+      'blog.actions.reload': 'Reload',
+      'blog.actions.copy_link': 'Copy link',
+      'blog.actions.copied': 'Copied',
+      'blog.actions.save': 'Save',
+      'blog.actions.saved': 'Saved',
+      'blog.actions.saved_filter': 'Saved',
+      'blog.count.posts': 'posts',
+      'blog.empty.title': 'No posts yet',
+      'blog.empty.subtitle': 'This section updates daily. If you just enabled it, the first posts will appear after the next sync.',
+      'blog.saved_empty.title': 'No saved posts yet',
+      'blog.saved_empty.subtitle': 'Tap Save on any article to keep it here.',
+      'blog.updated.label': 'Last updated',
+      'blog.post.untitled': 'Untitled',
+      'blog.post.sources': 'Sources',
+      'blog.card.open_hint': 'Tap card to open article',
+      'blog.footer.p': 'Daily updates for Costa Blanca South: property, business, vehicles, and practical advice.',
+      'blog.footer.explore': 'Explore',
+      'blog.footer.contact': 'Contact',
+
+      'shop.actions.add_to_basket': 'Add to basket',
+      'shop.basket.added': 'Added to basket',
+      'shop.basket.added_short': 'Added',
 
       'home.hero.title': 'Property, Business, and Vehicle Deals, Managed Like a Concierge.',
       'home.hero.subtitle': 'Buy, sell, rent, manage, and maintain. One trusted team for resale homes, new-build developments, commercial spaces, businesses for sale, and vehicles.',
@@ -152,6 +221,22 @@
       'ui.previous_image': 'Previous image',
       'ui.next_image': 'Next image',
 
+      'map.tools.aria': 'Map search tools',
+      'map.tools.draw': 'Draw area',
+      'map.tools.around': 'Around me',
+      'map.tools.clear': 'Clear',
+      'map.tools.radius': 'Radius',
+      'map.tools.status_none': 'Tip: Draw an area on the map, or search around you.',
+      'map.tools.status_drawing': 'Drawing perimeter: click to add points, double-click to finish.',
+      'map.tools.status_polygon': 'Perimeter filter is ON. Only listings inside the drawn area are shown.',
+      'map.tools.status_around': 'Around me filter is ON ({km} km).',
+      'map.tools.draw_unavailable': 'Perimeter tool is not available right now.',
+      'map.tools.geo_unavailable': 'Geolocation is not available on this device.',
+      'map.tools.geo_getting': 'Getting your location…',
+      'map.tools.geo_failed': 'Location request failed. Try again.',
+      'map.tools.geo_denied': 'Location permission denied.',
+      'map.tools.geo_timeout': 'Location request timed out. Try again.',
+
       'properties.results.found_prefix': 'Found',
       'properties.results.found_suffix': 'listings in Costa Blanca South',
       'properties.results.subtitle': 'Filter resale and new build listings and switch to map view to see only the exact results.',
@@ -167,7 +252,16 @@
       'properties.sort.beach_asc': 'Beach distance (near to far)',
       'properties.saved': 'Saved',
       'properties.showing': 'Showing',
-      'properties.send_saved': 'Send saved',
+      'properties.send_saved': 'Create catalog',
+      'properties.save_alert': 'Save alert',
+      'properties.save_alert_hint': 'Save these requirements and get notified when new matches arrive.',
+      'properties.save_alert_signin_hint': 'Sign in first to save requirements and receive match alerts.',
+      'properties.save_alert_signin': 'Sign in first to save alerts',
+      'properties.save_alert_saving': 'Saving…',
+      'properties.save_alert_saved': 'Alert saved',
+      'properties.save_alert_setup': 'Run Supabase SQL update',
+      'properties.save_alert_error': 'Could not save alert',
+      'properties.cta.sell_property': 'Sell your property',
       'properties.cta.new_builds': 'New Builds',
       'properties.cta.viewing_trip': 'Plan a viewing trip (2-7 days)',
 
@@ -178,6 +272,10 @@
       'newbuilds.cta.all_properties': 'All Properties',
 
       'city.all': 'All Destinations',
+      'alerts.scope.resales': 'Properties',
+      'alerts.scope.new_builds': 'New Builds',
+      'alerts.scope.all': 'All Listings',
+      'alerts.default_name': 'Saved alert',
 
       'listing.for_rent': 'For Rent',
       'listing.for_sale': 'For Sale',
@@ -190,7 +288,9 @@
       'listing.original_ref_show': 'Show original reference',
       'listing.original_ref_copy': 'Copy',
       'listing.original_ref_no_ref': 'No ref',
+      'listing.item': 'Listing',
       'listing.load_more': 'Load more ({shown} / {total})',
+      'listing.play_reel': 'Play reel',
 
       'modal.ref_unavailable': 'Ref unavailable',
       'modal.type_default': 'Property',
@@ -199,6 +299,9 @@
       'modal.original_ref': 'Original ref',
       'modal.original_ref_short': 'Orig',
       'modal.copy_original_ref': 'Copy original reference',
+      'modal.original_id': 'Feed ID',
+      'modal.original_id_short': 'ID',
+      'modal.copy_original_id': 'Copy feed ID',
       'modal.copied': 'Copied',
       'modal.location_title': 'Location',
       'modal.open_google_maps': 'Open in Google Maps',
@@ -211,12 +314,16 @@
       'modal.fav_save': '♡ Save',
       'modal.fav_saved': '♥ Saved',
       'modal.brochure_pdf': 'Brochure (PDF)',
+      'modal.reel_play': 'Play Reel',
+      'modal.reel_video': 'Reel Studio',
+      'modal.reel_tiktok': 'TikTok Video',
       'modal.call_now': 'Call Now',
       'modal.request_visit': 'Request to visit',
       'modal.official_page': 'Official page',
       'modal.share': 'Share',
       'modal.share.native': 'Share',
       'modal.share.copy_link': 'Copy link',
+      'modal.share.copy_caption': 'Copy caption',
       'modal.share.x_twitter': 'X (Twitter)',
       'modal.share.report_issue': 'Report issue',
       'modal.share.copy_prompt': 'Copy link:',
@@ -227,6 +334,37 @@
 
       'properties.fav.save_title': 'Save listing',
       'properties.fav.remove_title': 'Remove from saved',
+
+      'catalog.builder.title': 'Create client catalog',
+      'catalog.builder.subtitle': 'Use your filtered search or saved listings to generate a shareable catalog link.',
+      'catalog.builder.source': 'Source',
+      'catalog.builder.source_filtered': 'Current search results',
+      'catalog.builder.source_saved': 'Saved listings',
+      'catalog.builder.limit': 'Listings to include',
+      'catalog.builder.client_name': 'Client name (optional)',
+      'catalog.builder.client_name_placeholder': 'Client name',
+      'catalog.builder.whitelabel': 'White-label',
+      'catalog.builder.open': 'Open catalog',
+      'catalog.builder.copy': 'Copy link',
+      'catalog.builder.status_none': 'No listings available for this selection. Try changing source or filters.',
+      'catalog.builder.status_ready': 'Ready: {selected} listings.',
+      'catalog.builder.status_ready_limited': 'Ready: {selected} of {total} listings (limited to {limit}).',
+      'catalog.builder.copied': 'Catalog link copied',
+      'catalog.builder.copy_failed': 'Copy failed',
+      'catalog.builder.opened': 'Catalog opened in a new tab',
+
+      'catalog.page.title': 'Client Catalog',
+      'catalog.page.subtitle': 'A clean shortlist generated from your search.',
+      'catalog.page.subtitle_wl': 'White-label view enabled. Branding is hidden.',
+      'catalog.page.back': 'Back to search',
+      'catalog.page.copy': 'Copy link',
+      'catalog.page.print': 'Print / Save PDF',
+      'catalog.page.whitelabel': 'White-label',
+      'catalog.page.for_client': 'For',
+      'catalog.page.listings': 'listings',
+      'catalog.page.not_found': 'not found',
+      'catalog.page.empty_title': 'No listings selected',
+      'catalog.page.empty_help': 'Open Properties, filter listings, then use Create catalog.',
 
       'brochure.print_pdf': 'Print / Save as PDF',
       'brochure.share_whatsapp': 'Send by WhatsApp',
@@ -262,7 +400,63 @@
       'brochure.highlight.operation': 'Operation',
       'brochure.highlight.location': 'Location',
       'brochure.highlight.built_area': 'Built area',
+
+      'reel.back': 'Back',
+      'reel.loading': 'Loading…',
+      'reel.tools_label': 'Reel tools',
+      'reel.white_label': 'White-label',
+      'reel.on': 'On',
+      'reel.off': 'Off',
+      'reel.create_video': 'Create video',
+      'reel.share': 'Share',
+      'reel.download': 'Download',
+      'reel.download_captions': 'Download captions',
+      'reel.copy_caption': 'Copy caption',
+      'reel.preview.title': 'Reel preview',
+      'reel.preview.subtitle': 'Creating a short social video with logo + key details.',
+      'reel.preview.subtitle_dynamic': 'Creating a {duration} social video with {audio} and {captions}.',
+      'reel.caption.label': 'Caption',
+      'reel.caption.note': 'Paste into Instagram/TikTok if needed.',
+      'reel.caption.on': 'Captions on',
+      'reel.caption.off': 'Captions off',
+      'reel.caption.more_info': 'Ask for more details',
+      'reel.caption.contact': 'Message us on WhatsApp',
+      'reel.controls.duration': 'Duration',
+      'reel.controls.audio': 'Audio',
+      'reel.controls.overlay_caption': 'Show on-screen captions',
+      'reel.duration.quick': '7s (Quick)',
+      'reel.duration.recommended': '9s (Recommended)',
+      'reel.duration.standard': '12s',
+      'reel.duration.detailed': '15s (Detailed)',
+      'reel.playback.label': 'Playback',
+      'reel.playback.note': 'Use this player to preview before sharing.',
+      'reel.audio.none': 'No music',
+      'reel.audio.ambient': 'Ambient',
+      'reel.audio.upbeat': 'Upbeat',
+      'reel.disclaimer': 'Video export runs in your browser. If sharing a file is not supported on your device, use Download then upload in your app.',
+      'reel.missing_ref': 'Missing ref',
+      'reel.missing_ref_help': 'Open this page with ?ref=SCP-XXXX',
+      'reel.listing_not_found': 'Listing not found.',
+      'reel.copy_prompt': 'Copy caption:',
+      'reel.status.prep': 'Preparing…',
+      'reel.status.no_canvas': 'Your browser does not support this feature.',
+      'reel.status.no_images': 'No images found for this listing.',
+      'reel.status.loading_images': 'Loading images…',
+      'reel.status.loaded_n': 'Loaded {n} images',
+      'reel.status.images_failed': 'Images failed to load. Try again.',
+      'reel.status.recording': 'Recording…',
+      'reel.status.recorder_failed': 'Video export is not supported on this browser.',
+      'reel.status.ready': 'Video ready.',
+      'reel.status.ready_with_audio': 'Video ready with audio.',
+      'reel.status.shared': 'Shared.',
+      'reel.status.fallback_shared': 'Downloaded. Paste caption in {app}.',
+      'reel.status.no_video': 'Create the video first.',
+      'reel.status.loading_listing': 'Loading listing…',
+      'reel.status.ready_to_create': 'Ready. Tap “Create video”.',
+      'reel.status.caption_copied': 'Caption copied.',
+      'reel.status.preferred_app': 'Tip: Generate, then Share and choose {app}.',
       'pricing.on_request': 'Price on request',
+      'time.month': 'month',
       'pricing.per_night': '{price} / night',
       'pricing.per_day': '{price} / day',
       'pricing.per_week': '{price} / week',
@@ -298,11 +492,15 @@
       'account.dashboard.connecting': 'Connecting…',
       'account.dashboard.browse': 'Browse',
       'account.dashboard.saved': 'Saved',
+      'account.dashboard.manual_pdf': 'Manual PDF',
       'account.dashboard.sign_out': 'Sign out',
       'account.tiles.saved_listings': 'Saved listings',
       'account.tiles.saved_word': 'saved',
       'account.tiles.saved_count': '{count} saved',
       'account.tiles.saved_desc': 'Open your shortlist and share it instantly.',
+      'account.tiles.sell_property': 'Sell',
+      'account.tiles.sell_property_title': 'List your property',
+      'account.tiles.sell_property_desc': 'Upload photos and submit for admin review. We publish verified listings.',
       'account.tiles.browse': 'Browse',
       'account.tiles.browse_desc_title': 'Find your next place',
       'account.tiles.browse_desc': 'Fast filters, accurate map, and shareable refs.',
@@ -334,6 +532,170 @@
       'account.admin.search': 'Search',
       'account.diagnostics.title': 'Diagnostics',
       'account.diagnostics.subtitle': 'Open this page with <code>?qa=1</code> to see setup checks.',
+      'account.copy_prompt': 'Copy:',
+      'account.badge.partner': 'Partner tools enabled',
+      'account.badge.scout': 'Street Scout',
+      'account.badge.newbuilds': 'New builds',
+
+      'account.role.title': 'Your workspace',
+      'account.role.admin.title': 'Admin control center',
+      'account.role.admin.b1': 'Review favourites inbox and respond fast to high-intent clients.',
+      'account.role.admin.b2': 'Approve new submissions (properties, vehicles, Street Scout).',
+      'account.role.admin.b3': 'Assign roles for agencies, agents, developers and collaborators.',
+      'account.role.admin.a1': 'Favourites inbox',
+      'account.role.admin.a2': 'CRM',
+      'account.role.admin.a3': 'Street Scout',
+      'account.role.admin.note': 'Tip: use “Quick share studio” to generate white-label brochure/reel links in one click.',
+
+      'account.role.developer.title': 'Developer workspace',
+      'account.role.developer.b1': 'Share new builds with clients using brochure + reel video.',
+      'account.role.developer.b2': 'Use white-label links when sharing with partner agencies.',
+      'account.role.developer.b3': 'Coordinate viewings and documentation with the SCP team.',
+      'account.role.developer.a1': 'New builds',
+      'account.role.developer.a2': 'Collaboration',
+      'account.role.developer.a3': 'Services',
+      'account.role.developer.note': 'Use Quick share studio for brochure/reel links by reference (SCP-XXXX).',
+
+      'account.role.agency_admin.title': 'Agency workspace',
+      'account.role.agency_admin.b1': 'Share listings with your clients using your own branding (white-label).',
+      'account.role.agency_admin.b2': 'Use reels to increase response on Instagram/TikTok.',
+      'account.role.agency_admin.b3': 'Send shortlists and keep everything in one system.',
+      'account.role.agency_admin.a1': 'Saved',
+      'account.role.agency_admin.a2': 'Partner tools',
+      'account.role.agency_admin.a3': 'Guide',
+      'account.role.agency_admin.note': 'Use Quick share studio to generate brochure/reel links in seconds.',
+
+      'account.role.agent.title': 'Agent workspace',
+      'account.role.agent.b1': 'Save listings and share a clean shortlist to your client.',
+      'account.role.agent.b2': 'Generate brochure PDFs and reel videos for social sharing.',
+      'account.role.agent.b3': 'White-label mode removes SCP branding for your presentations.',
+      'account.role.agent.a1': 'Saved',
+      'account.role.agent.a2': 'Browse',
+      'account.role.agent.a3': 'Viewing trip',
+      'account.role.agent.note': 'Tip: open a listing modal and click Instagram/TikTok to generate a reel for sharing.',
+
+      'account.role.collaborator.title': 'Collaborator workspace',
+      'account.role.collaborator.b1': 'Street Scout: take a photo of a “For Sale” board and earn €200–€500.',
+      'account.role.collaborator.b2': 'Your submissions are tracked and visible in your dashboard.',
+      'account.role.collaborator.b3': 'You can also share listings with brochure PDFs and reels.',
+      'account.role.collaborator.a1': 'Street Scout',
+      'account.role.collaborator.a2': 'Saved',
+      'account.role.collaborator.a3': 'Guide',
+      'account.role.collaborator.note': 'Keep your location enabled when submitting Street Scout leads.',
+
+      'account.role.client.title': 'Client dashboard',
+      'account.role.client.b1': 'Save listings on mobile and desktop (sync enabled).',
+      'account.role.client.b2': 'Request a visit and plan a viewing trip when you are ready.',
+      'account.role.client.b3': 'Sell your property with admin approval for quality control.',
+      'account.role.client.a1': 'Browse',
+      'account.role.client.a2': 'Saved',
+      'account.role.client.a3': 'Sell',
+      'account.role.client.note': 'If you are an agency/agent/developer, ask us to enable partner tools.',
+
+      'account.quickshare.kicker': 'Partner tools',
+      'account.quickshare.title': 'Quick share studio',
+      'account.quickshare.whitelabel': 'White-label',
+      'account.quickshare.ref_label': 'Reference',
+      'account.quickshare.open_listing': 'Open listing',
+      'account.quickshare.open_brochure': 'Brochure (PDF)',
+      'account.quickshare.open_reel': 'Reel (Video)',
+      'account.quickshare.copy_link': 'Copy link',
+      'account.quickshare.copy_brochure': 'Copy brochure',
+      'account.quickshare.copy_reel': 'Copy reel',
+      'account.quickshare.hint': 'Tip: open a listing modal and click Instagram/TikTok to generate a reel video for sharing.',
+      'account.quickshare.copied': 'Copied',
+      'account.quickshare.copy_failed': 'Copy failed',
+
+      'account.activity.kicker': 'Your activity',
+      'account.activity.title': 'Sync & submissions',
+      'account.activity.refresh': 'Refresh',
+      'account.activity.loading': 'Loading',
+      'account.activity.loading_note': 'Fetching your latest stats…',
+      'account.activity.admin.fav': 'Favourites',
+      'account.activity.admin.fav_note': 'Total saved across all users',
+      'account.activity.admin.scout': 'Street Scout',
+      'account.activity.admin.scout_note': 'New leads to review',
+      'account.activity.admin.props': 'Property inbox',
+      'account.activity.admin.props_note': 'New owner submissions',
+      'account.activity.admin.vehicles': 'Vehicle inbox',
+      'account.activity.admin.vehicles_note': 'New vehicle submissions',
+      'account.activity.saved': 'Saved',
+      'account.activity.saved_note': 'Synced favourites · {local} on this device',
+      'account.activity.articles': 'Articles',
+      'account.activity.articles_note': 'Saved blog posts',
+      'account.activity.alerts': 'Alerts',
+      'account.activity.alerts_note': 'New listing matches from your saved requirements',
+      'account.activity.scout': 'Street Scout',
+      'account.activity.scout_note': 'Board leads submitted',
+      'account.activity.props': 'Sell / Submit',
+      'account.activity.props_note': 'Property submissions',
+      'account.activity.vehicles': 'Vehicles',
+      'account.activity.vehicles_note': 'Vehicle submissions',
+
+      'account.alerts.kicker': 'Property alerts',
+      'account.alerts.title': 'Saved requirements & new matches',
+      'account.alerts.refresh': 'Refresh',
+      'account.alerts.mark_seen': 'Mark all seen',
+      'account.alerts.auth': 'Sign in to load your alerts.',
+      'account.alerts.loading': 'Loading alerts…',
+      'account.alerts.summary': '{alerts} alerts · {new} new matches',
+      'account.alerts.empty': 'No alerts yet. Save your requirements from Properties or New Builds.',
+      'account.alerts.no_matches': 'No matches yet for this alert.',
+      'account.alerts.new_badge': '{count} new',
+      'account.alerts.total_badge': '{count} total',
+      'account.alerts.paused': 'Paused',
+      'account.alerts.pause': 'Pause',
+      'account.alerts.resume': 'Resume',
+      'account.alerts.delete': 'Delete',
+      'account.alerts.marking': 'Marking as seen…',
+      'account.alerts.mark_failed': 'Could not mark alerts as seen.',
+      'account.alerts.mark_done': 'All alerts marked as seen.',
+      'account.alerts.updating': 'Updating alert…',
+      'account.alerts.update_failed': 'Could not update alert.',
+      'account.alerts.updated': 'Alert updated.',
+      'account.alerts.delete_confirm': 'Delete this alert?',
+      'account.alerts.deleting': 'Deleting alert…',
+      'account.alerts.delete_failed': 'Could not delete alert.',
+      'account.alerts.deleted': 'Alert deleted.',
+      'account.alerts.setup_required': 'Alerts table missing. Run the updated supabase.sql.',
+      'account.alerts.load_failed': 'Could not load alerts right now.',
+      'account.alerts.perimeter_on': 'Perimeter area',
+
+      'account.shop.kicker': 'Smart Devices',
+      'account.shop.title': 'Basket & Purchases',
+      'account.shop.open_shop': 'Open shop',
+      'account.shop.refresh': 'Refresh',
+      'account.shop.basket_title': 'Your basket',
+      'account.shop.basket_hint': 'Add devices from the shop and request installation help.',
+      'account.shop.basket_empty': 'Basket is empty. Open the shop to add devices.',
+      'account.shop.checkout': 'Request checkout',
+      'account.shop.checkout_empty': 'Basket is empty.',
+      'account.shop.checkout_sending': 'Sending request…',
+      'account.shop.checkout_failed': 'Checkout failed',
+      'account.shop.checkout_sent': 'Request sent. We will contact you to confirm payment and installation.',
+      'account.shop.clear_basket': 'Clear basket',
+      'account.shop.cleared': 'Basket cleared.',
+      'account.shop.remove': 'Remove',
+      'account.shop.open': 'Open',
+      'account.shop.price_on_request': 'Price on request',
+      'account.shop.history_title': 'Purchase history',
+      'account.shop.history_hint': 'After payment/approval, installation instructions will appear here.',
+      'account.shop.history_empty': 'No purchases yet. Your requests and purchases will show here.',
+      'account.shop.history_auth': 'Sign in to see your purchase history.',
+      'account.shop.order': 'Order',
+      'account.shop.placed': 'Placed',
+      'account.shop.order_no_items': 'No items recorded.',
+      'account.shop.docs': 'Docs',
+      'account.shop.docs_title': 'Installation instructions',
+      'account.shop.docs_note': 'This content is available after purchase/approval.',
+      'account.shop.docs_pending': 'Docs will appear here after payment/approval.',
+      'account.shop.docs_empty': 'No instructions added yet.',
+      'account.shop.docs_links': 'Links',
+      'account.shop.status.requested': 'Requested',
+      'account.shop.status.paid': 'Paid',
+      'account.shop.status.fulfilled': 'Fulfilled',
+      'account.shop.status.installed': 'Installed',
+      'account.shop.status.cancelled': 'Cancelled',
 
       'services.hero.title': 'Services That Remove Friction',
       'services.hero.subtitle': 'Buyers and sellers do not need more listings, they need a reliable process. We provide clear next steps, local coordination, and the paperwork support that makes deals actually happen.',
@@ -468,7 +830,7 @@
       'page.scout.join.working': 'Enabling Street Scout…',
       'page.scout.join.done': 'Street Scout enabled. You can submit now.',
       'page.scout.join.failed': 'Failed to enable',
-      'page.scout.footer.p': 'Street Scout: grow the portfolio, reward locals who help us discover listings.'
+      'page.scout.footer.p': 'Street Scout: grow the portfolio, reward locals who help us discover listings.',
 
       'catalog.details': 'Details',
       'catalog.count.results': '{count} results',
@@ -614,8 +976,12 @@
       'lang.label': 'Idioma',
       'lang.en': 'English',
       'lang.es': 'Español',
+      'lang.ro': 'Rumano',
+      'lang.sv': 'Sueco',
       'lang.en_short': 'EN',
       'lang.es_short': 'ES',
+      'lang.ro_short': 'RO',
+      'lang.sv_short': 'SV',
 
       'common.in': 'en',
       'common.all': 'Todos',
@@ -626,10 +992,48 @@
       'nav.businesses': 'Negocios',
       'nav.vehicles': 'Vehículos',
       'nav.services': 'Servicios',
+      'nav.blog': 'Blog',
       'nav.account': 'Cuenta',
       'nav.contact_us': 'Contacto',
       'nav.email': 'Correo',
       'nav.call': 'Llamar',
+
+      'blog.hero.title': 'Blog y Actualizaciones',
+      'blog.hero.subtitle': 'Actualizaciones cortas y útiles generadas a partir de titulares públicos y Google Trends, con conclusiones prácticas para Costa Blanca Sur.',
+      'blog.hero.disclaimer': 'No copiamos artículos completos. Cada publicación es un resumen/comentario original e incluye enlaces a fuentes para que puedas verificar los detalles.',
+      'blog.tag.updated_daily': 'Actualizado a diario',
+      'blog.tag.news': 'Noticias',
+      'blog.tag.trends': 'Tendencias',
+      'blog.filters.search': 'Buscar',
+      'blog.filters.search_placeholder': 'Buscar temas…',
+      'blog.filters.type': 'Tipo',
+      'blog.filters.language': 'Idioma',
+      'blog.lang.auto': 'Mi idioma',
+      'blog.lang.all': 'Todos los idiomas',
+      'blog.kind.news': 'Noticias',
+      'blog.kind.trend': 'Tendencias',
+      'blog.actions.reload': 'Recargar',
+      'blog.actions.copy_link': 'Copiar enlace',
+      'blog.actions.copied': 'Copiado',
+      'blog.actions.save': 'Guardar',
+      'blog.actions.saved': 'Guardado',
+      'blog.actions.saved_filter': 'Guardados',
+      'blog.count.posts': 'publicaciones',
+      'blog.empty.title': 'Aún no hay publicaciones',
+      'blog.empty.subtitle': 'Esta sección se actualiza a diario. Si la acabas de activar, las primeras publicaciones aparecerán después de la próxima sincronización.',
+      'blog.saved_empty.title': 'Aún no tienes guardados',
+      'blog.saved_empty.subtitle': 'Pulsa Guardar en cualquier artículo para verlo aquí.',
+      'blog.updated.label': 'Última actualización',
+      'blog.post.untitled': 'Sin título',
+      'blog.post.sources': 'Fuentes',
+      'blog.card.open_hint': 'Toca la tarjeta para abrir el articulo',
+      'blog.footer.p': 'Actualizaciones diarias para Costa Blanca Sur: propiedades, negocios, vehículos y consejos prácticos.',
+      'blog.footer.explore': 'Explorar',
+      'blog.footer.contact': 'Contacto',
+
+      'shop.actions.add_to_basket': 'Añadir a la cesta',
+      'shop.basket.added': 'Añadido a la cesta',
+      'shop.basket.added_short': 'Añadido',
 
       'home.hero.title': 'Ofertas de propiedades, negocios y vehículos, gestionadas como un concierge.',
       'home.hero.subtitle': 'Compra, vende, alquila, gestiona y mantén. Un solo equipo de confianza para viviendas de reventa, obra nueva, locales comerciales, negocios en venta y vehículos.',
@@ -688,6 +1092,22 @@
       'ui.previous_image': 'Imagen anterior',
       'ui.next_image': 'Siguiente imagen',
 
+      'map.tools.aria': 'Herramientas de busqueda en el mapa',
+      'map.tools.draw': 'Dibujar area',
+      'map.tools.around': 'Cerca de mi',
+      'map.tools.clear': 'Borrar',
+      'map.tools.radius': 'Radio',
+      'map.tools.status_none': 'Consejo: dibuja un area en el mapa o busca cerca de ti.',
+      'map.tools.status_drawing': 'Dibujando perimetro: toca para anadir puntos, doble toque para terminar.',
+      'map.tools.status_polygon': 'Filtro de perimetro activado. Solo se muestran anuncios dentro del area.',
+      'map.tools.status_around': 'Filtro \"cerca de mi\" activado ({km} km).',
+      'map.tools.draw_unavailable': 'La herramienta de perimetro no esta disponible ahora.',
+      'map.tools.geo_unavailable': 'La geolocalizacion no esta disponible en este dispositivo.',
+      'map.tools.geo_getting': 'Obteniendo tu ubicacion…',
+      'map.tools.geo_failed': 'La solicitud de ubicacion fallo. Intentalo de nuevo.',
+      'map.tools.geo_denied': 'Permiso de ubicacion denegado.',
+      'map.tools.geo_timeout': 'La ubicacion tardo demasiado. Intentalo de nuevo.',
+
       'properties.results.found_prefix': 'Encontradas',
       'properties.results.found_suffix': 'propiedades en Costa Blanca Sur',
       'properties.results.subtitle': 'Filtra viviendas de reventa y obra nueva y cambia a vista de mapa para ver solo los resultados exactos.',
@@ -703,7 +1123,16 @@
       'properties.sort.beach_asc': 'Distancia a playa (cerca a lejos)',
       'properties.saved': 'Guardadas',
       'properties.showing': 'Mostrando',
-      'properties.send_saved': 'Enviar guardadas',
+      'properties.send_saved': 'Crear catalogo',
+      'properties.save_alert': 'Guardar alerta',
+      'properties.save_alert_hint': 'Guarda estos requisitos y te avisaremos cuando entren nuevas coincidencias.',
+      'properties.save_alert_signin_hint': 'Inicia sesion para guardar requisitos y recibir alertas de nuevas coincidencias.',
+      'properties.save_alert_signin': 'Inicia sesion para guardar alertas',
+      'properties.save_alert_saving': 'Guardando…',
+      'properties.save_alert_saved': 'Alerta guardada',
+      'properties.save_alert_setup': 'Ejecuta la actualizacion SQL de Supabase',
+      'properties.save_alert_error': 'No se pudo guardar la alerta',
+      'properties.cta.sell_property': 'Vender tu propiedad',
       'properties.cta.new_builds': 'Obra Nueva',
       'properties.cta.viewing_trip': 'Planificar viaje de visitas (2-7 dias)',
 
@@ -714,6 +1143,10 @@
       'newbuilds.cta.all_properties': 'Todas las propiedades',
 
       'city.all': 'Todas las zonas',
+      'alerts.scope.resales': 'Propiedades',
+      'alerts.scope.new_builds': 'Obra Nueva',
+      'alerts.scope.all': 'Todos los anuncios',
+      'alerts.default_name': 'Alerta guardada',
 
       'listing.for_rent': 'En alquiler',
       'listing.for_sale': 'En venta',
@@ -726,7 +1159,9 @@
       'listing.original_ref_show': 'Ver referencia original',
       'listing.original_ref_copy': 'Copiar',
       'listing.original_ref_no_ref': 'Sin ref',
+      'listing.item': 'Anuncio',
       'listing.load_more': 'Cargar mas ({shown} / {total})',
+      'listing.play_reel': 'Ver reel',
 
       'modal.ref_unavailable': 'Ref no disponible',
       'modal.type_default': 'Propiedad',
@@ -735,6 +1170,9 @@
       'modal.original_ref': 'Ref original',
       'modal.original_ref_short': 'Orig',
       'modal.copy_original_ref': 'Copiar referencia original',
+      'modal.original_id': 'ID de feed',
+      'modal.original_id_short': 'ID',
+      'modal.copy_original_id': 'Copiar ID de feed',
       'modal.copied': 'Copiado',
       'modal.location_title': 'Ubicacion',
       'modal.open_google_maps': 'Abrir en Google Maps',
@@ -747,12 +1185,16 @@
       'modal.fav_save': '♡ Guardar',
       'modal.fav_saved': '♥ Guardada',
       'modal.brochure_pdf': 'Folleto (PDF)',
+      'modal.reel_play': 'Ver Reel',
+      'modal.reel_video': 'Estudio Reel',
+      'modal.reel_tiktok': 'Video TikTok',
       'modal.call_now': 'Llamar',
       'modal.request_visit': 'Solicitar visita',
       'modal.official_page': 'Pagina oficial',
       'modal.share': 'Compartir',
       'modal.share.native': 'Compartir',
       'modal.share.copy_link': 'Copiar enlace',
+      'modal.share.copy_caption': 'Copiar texto',
       'modal.share.x_twitter': 'X (Twitter)',
       'modal.share.report_issue': 'Reportar problema',
       'modal.share.copy_prompt': 'Copiar enlace:',
@@ -763,6 +1205,37 @@
 
       'properties.fav.save_title': 'Guardar anuncio',
       'properties.fav.remove_title': 'Quitar de guardadas',
+
+      'catalog.builder.title': 'Crear catalogo para cliente',
+      'catalog.builder.subtitle': 'Usa tu busqueda filtrada o guardadas para generar un enlace de catalogo para compartir.',
+      'catalog.builder.source': 'Origen',
+      'catalog.builder.source_filtered': 'Resultados actuales',
+      'catalog.builder.source_saved': 'Guardadas',
+      'catalog.builder.limit': 'Anuncios a incluir',
+      'catalog.builder.client_name': 'Nombre del cliente (opcional)',
+      'catalog.builder.client_name_placeholder': 'Nombre del cliente',
+      'catalog.builder.whitelabel': 'Marca blanca',
+      'catalog.builder.open': 'Abrir catalogo',
+      'catalog.builder.copy': 'Copiar enlace',
+      'catalog.builder.status_none': 'No hay anuncios disponibles para esta seleccion. Cambia origen o filtros.',
+      'catalog.builder.status_ready': 'Listo: {selected} anuncios.',
+      'catalog.builder.status_ready_limited': 'Listo: {selected} de {total} anuncios (limite {limit}).',
+      'catalog.builder.copied': 'Enlace del catalogo copiado',
+      'catalog.builder.copy_failed': 'Error al copiar',
+      'catalog.builder.opened': 'Catalogo abierto en una nueva pestaña',
+
+      'catalog.page.title': 'Catalogo de cliente',
+      'catalog.page.subtitle': 'Una seleccion limpia generada desde tu busqueda.',
+      'catalog.page.subtitle_wl': 'Modo marca blanca activado. La marca queda oculta.',
+      'catalog.page.back': 'Volver a buscar',
+      'catalog.page.copy': 'Copiar enlace',
+      'catalog.page.print': 'Imprimir / Guardar PDF',
+      'catalog.page.whitelabel': 'Marca blanca',
+      'catalog.page.for_client': 'Para',
+      'catalog.page.listings': 'anuncios',
+      'catalog.page.not_found': 'no encontrados',
+      'catalog.page.empty_title': 'No hay anuncios seleccionados',
+      'catalog.page.empty_help': 'Abre Propiedades, filtra resultados y usa Crear catalogo.',
 
       'brochure.print_pdf': 'Imprimir / Guardar en PDF',
       'brochure.share_whatsapp': 'Enviar por WhatsApp',
@@ -798,7 +1271,63 @@
       'brochure.highlight.operation': 'Operacion',
       'brochure.highlight.location': 'Ubicacion',
       'brochure.highlight.built_area': 'Superficie construida',
+
+      'reel.back': 'Volver',
+      'reel.loading': 'Cargando…',
+      'reel.tools_label': 'Herramientas del video',
+      'reel.white_label': 'Marca blanca',
+      'reel.on': 'Activada',
+      'reel.off': 'Desactivada',
+      'reel.create_video': 'Crear video',
+      'reel.share': 'Compartir',
+      'reel.download': 'Descargar',
+      'reel.download_captions': 'Descargar subtitulos',
+      'reel.copy_caption': 'Copiar texto',
+      'reel.preview.title': 'Vista previa',
+      'reel.preview.subtitle': 'Creando un video corto con logo y detalles clave.',
+      'reel.preview.subtitle_dynamic': 'Creando un video social de {duration} con {audio} y {captions}.',
+      'reel.caption.label': 'Texto',
+      'reel.caption.note': 'Pega en Instagram/TikTok si hace falta.',
+      'reel.caption.on': 'Subtitulos activos',
+      'reel.caption.off': 'Sin subtitulos',
+      'reel.caption.more_info': 'Pide mas detalles',
+      'reel.caption.contact': 'Escribenos por WhatsApp',
+      'reel.controls.duration': 'Duracion',
+      'reel.controls.audio': 'Audio',
+      'reel.controls.overlay_caption': 'Mostrar subtitulos en pantalla',
+      'reel.duration.quick': '7s (Rapido)',
+      'reel.duration.recommended': '9s (Recomendado)',
+      'reel.duration.standard': '12s',
+      'reel.duration.detailed': '15s (Detallado)',
+      'reel.playback.label': 'Reproduccion',
+      'reel.playback.note': 'Usa este reproductor para previsualizar antes de compartir.',
+      'reel.audio.none': 'Sin musica',
+      'reel.audio.ambient': 'Ambiental',
+      'reel.audio.upbeat': 'Ritmico',
+      'reel.disclaimer': 'La exportacion del video se hace en tu navegador. Si tu dispositivo no permite compartir el archivo, usa Descargar y subelo en tu app.',
+      'reel.missing_ref': 'Falta referencia',
+      'reel.missing_ref_help': 'Abre esta pagina con ?ref=SCP-XXXX',
+      'reel.listing_not_found': 'Anuncio no encontrado.',
+      'reel.copy_prompt': 'Copiar texto:',
+      'reel.status.prep': 'Preparando…',
+      'reel.status.no_canvas': 'Tu navegador no soporta esta funcion.',
+      'reel.status.no_images': 'No se encontraron imagenes para este anuncio.',
+      'reel.status.loading_images': 'Cargando imagenes…',
+      'reel.status.loaded_n': 'Cargadas {n} imagenes',
+      'reel.status.images_failed': 'No se pudieron cargar las imagenes. Intentalo de nuevo.',
+      'reel.status.recording': 'Grabando…',
+      'reel.status.recorder_failed': 'La exportacion de video no esta soportada en este navegador.',
+      'reel.status.ready': 'Video listo.',
+      'reel.status.ready_with_audio': 'Video listo con audio.',
+      'reel.status.shared': 'Compartido.',
+      'reel.status.fallback_shared': 'Descargado. Pega el texto en {app}.',
+      'reel.status.no_video': 'Primero crea el video.',
+      'reel.status.loading_listing': 'Cargando anuncio…',
+      'reel.status.ready_to_create': 'Listo. Pulsa “Crear video”.',
+      'reel.status.caption_copied': 'Texto copiado.',
+      'reel.status.preferred_app': 'Consejo: genera y luego comparte y elige {app}.',
       'pricing.on_request': 'Precio a consultar',
+      'time.month': 'mes',
       'pricing.per_night': '{price} / noche',
       'pricing.per_day': '{price} / dia',
       'pricing.per_week': '{price} / semana',
@@ -834,11 +1363,15 @@
       'account.dashboard.connecting': 'Conectando…',
       'account.dashboard.browse': 'Ver',
       'account.dashboard.saved': 'Guardadas',
+      'account.dashboard.manual_pdf': 'Manual PDF',
       'account.dashboard.sign_out': 'Cerrar sesion',
       'account.tiles.saved_listings': 'Propiedades guardadas',
       'account.tiles.saved_word': 'guardadas',
       'account.tiles.saved_count': '{count} guardadas',
       'account.tiles.saved_desc': 'Abre tu seleccion y compartela al instante.',
+      'account.tiles.sell_property': 'Vender',
+      'account.tiles.sell_property_title': 'Publica tu propiedad',
+      'account.tiles.sell_property_desc': 'Sube fotos y envia para revision del admin. Publicamos anuncios verificados.',
       'account.tiles.browse': 'Ver',
       'account.tiles.browse_desc_title': 'Encuentra tu proximo lugar',
       'account.tiles.browse_desc': 'Filtros rapidos, mapa preciso y referencias compartibles.',
@@ -870,6 +1403,170 @@
       'account.admin.search': 'Buscar',
       'account.diagnostics.title': 'Diagnosticos',
       'account.diagnostics.subtitle': 'Abre esta pagina con <code>?qa=1</code> para ver comprobaciones.',
+      'account.copy_prompt': 'Copiar:',
+      'account.badge.partner': 'Herramientas partner activas',
+      'account.badge.scout': 'Street Scout',
+      'account.badge.newbuilds': 'Obra nueva',
+
+      'account.role.title': 'Tu espacio',
+      'account.role.admin.title': 'Centro de administracion',
+      'account.role.admin.b1': 'Revisa la bandeja de favoritos y responde rapido a clientes con alta intencion.',
+      'account.role.admin.b2': 'Aprueba nuevas solicitudes (propiedades, vehiculos, Street Scout).',
+      'account.role.admin.b3': 'Asigna roles a agencias, agentes, promotores y colaboradores.',
+      'account.role.admin.a1': 'Bandeja de favoritos',
+      'account.role.admin.a2': 'CRM',
+      'account.role.admin.a3': 'Street Scout',
+      'account.role.admin.note': 'Consejo: usa “Estudio rapido” para generar enlaces en marca blanca en un clic.',
+
+      'account.role.developer.title': 'Espacio de promotor',
+      'account.role.developer.b1': 'Comparte obra nueva con clientes usando folleto y reel.',
+      'account.role.developer.b2': 'Usa enlaces en marca blanca al compartir con agencias partner.',
+      'account.role.developer.b3': 'Coordina visitas y documentacion con el equipo de SCP.',
+      'account.role.developer.a1': 'Obra nueva',
+      'account.role.developer.a2': 'Colaboracion',
+      'account.role.developer.a3': 'Servicios',
+      'account.role.developer.note': 'Usa el estudio rapido para enlaces de folleto/reel por referencia (SCP-XXXX).',
+
+      'account.role.agency_admin.title': 'Espacio de agencia',
+      'account.role.agency_admin.b1': 'Comparte anuncios con tus clientes con tu marca (marca blanca).',
+      'account.role.agency_admin.b2': 'Usa reels para mejorar respuesta en Instagram/TikTok.',
+      'account.role.agency_admin.b3': 'Envia shortlists y manten todo en un solo sistema.',
+      'account.role.agency_admin.a1': 'Guardadas',
+      'account.role.agency_admin.a2': 'Herramientas partner',
+      'account.role.agency_admin.a3': 'Guia',
+      'account.role.agency_admin.note': 'Usa el estudio rapido para generar enlaces de folleto/reel en segundos.',
+
+      'account.role.agent.title': 'Espacio de agente',
+      'account.role.agent.b1': 'Guarda anuncios y comparte una shortlist limpia con tu cliente.',
+      'account.role.agent.b2': 'Genera folletos PDF y reels para redes sociales.',
+      'account.role.agent.b3': 'La marca blanca elimina la marca de SCP en tus presentaciones.',
+      'account.role.agent.a1': 'Guardadas',
+      'account.role.agent.a2': 'Ver',
+      'account.role.agent.a3': 'Viaje de visitas',
+      'account.role.agent.note': 'Consejo: abre un anuncio y pulsa Instagram/TikTok para generar un reel.',
+
+      'account.role.collaborator.title': 'Espacio de colaborador',
+      'account.role.collaborator.b1': 'Street Scout: haz una foto de un cartel “Se vende” y gana €200–€500.',
+      'account.role.collaborator.b2': 'Tus envios se guardan y se ven en tu panel.',
+      'account.role.collaborator.b3': 'Tambien puedes compartir anuncios con folletos y reels.',
+      'account.role.collaborator.a1': 'Street Scout',
+      'account.role.collaborator.a2': 'Guardadas',
+      'account.role.collaborator.a3': 'Guia',
+      'account.role.collaborator.note': 'Mantén la ubicacion activada al enviar leads.',
+
+      'account.role.client.title': 'Panel de cliente',
+      'account.role.client.b1': 'Guarda anuncios en movil y escritorio (sincronizacion activa).',
+      'account.role.client.b2': 'Solicita visita y planifica un viaje de visitas cuando estes listo.',
+      'account.role.client.b3': 'Vende tu propiedad con aprobacion admin para control de calidad.',
+      'account.role.client.a1': 'Ver',
+      'account.role.client.a2': 'Guardadas',
+      'account.role.client.a3': 'Vender',
+      'account.role.client.note': 'Si eres agencia/agente/promotor, pide que activemos herramientas partner.',
+
+      'account.quickshare.kicker': 'Herramientas partner',
+      'account.quickshare.title': 'Estudio rapido',
+      'account.quickshare.whitelabel': 'Marca blanca',
+      'account.quickshare.ref_label': 'Referencia',
+      'account.quickshare.open_listing': 'Abrir anuncio',
+      'account.quickshare.open_brochure': 'Folleto (PDF)',
+      'account.quickshare.open_reel': 'Reel (Video)',
+      'account.quickshare.copy_link': 'Copiar enlace',
+      'account.quickshare.copy_brochure': 'Copiar folleto',
+      'account.quickshare.copy_reel': 'Copiar reel',
+      'account.quickshare.hint': 'Consejo: abre un anuncio y pulsa Instagram/TikTok para generar un reel para compartir.',
+      'account.quickshare.copied': 'Copiado',
+      'account.quickshare.copy_failed': 'No se pudo copiar',
+
+      'account.activity.kicker': 'Tu actividad',
+      'account.activity.title': 'Sync y envios',
+      'account.activity.refresh': 'Actualizar',
+      'account.activity.loading': 'Cargando',
+      'account.activity.loading_note': 'Obteniendo tus estadisticas…',
+      'account.activity.admin.fav': 'Favoritos',
+      'account.activity.admin.fav_note': 'Total guardadas de todos los usuarios',
+      'account.activity.admin.scout': 'Street Scout',
+      'account.activity.admin.scout_note': 'Nuevos leads para revisar',
+      'account.activity.admin.props': 'Bandeja propiedades',
+      'account.activity.admin.props_note': 'Nuevas solicitudes de propietarios',
+      'account.activity.admin.vehicles': 'Bandeja vehiculos',
+      'account.activity.admin.vehicles_note': 'Nuevas solicitudes de vehiculos',
+      'account.activity.saved': 'Guardadas',
+      'account.activity.saved_note': 'Favoritos sincronizados · {local} en este dispositivo',
+      'account.activity.articles': 'Artículos',
+      'account.activity.articles_note': 'Publicaciones del blog guardadas',
+      'account.activity.alerts': 'Alertas',
+      'account.activity.alerts_note': 'Nuevas coincidencias segun tus requisitos guardados',
+      'account.activity.scout': 'Street Scout',
+      'account.activity.scout_note': 'Leads enviados',
+      'account.activity.props': 'Vender / Enviar',
+      'account.activity.props_note': 'Solicitudes de propiedades',
+      'account.activity.vehicles': 'Vehiculos',
+      'account.activity.vehicles_note': 'Solicitudes de vehiculos',
+
+      'account.alerts.kicker': 'Alertas de propiedades',
+      'account.alerts.title': 'Requisitos guardados y nuevas coincidencias',
+      'account.alerts.refresh': 'Actualizar',
+      'account.alerts.mark_seen': 'Marcar todo como visto',
+      'account.alerts.auth': 'Inicia sesion para cargar tus alertas.',
+      'account.alerts.loading': 'Cargando alertas…',
+      'account.alerts.summary': '{alerts} alertas · {new} nuevas coincidencias',
+      'account.alerts.empty': 'Aun no hay alertas. Guarda tus requisitos desde Propiedades u Obra Nueva.',
+      'account.alerts.no_matches': 'Aun no hay coincidencias para esta alerta.',
+      'account.alerts.new_badge': '{count} nuevas',
+      'account.alerts.total_badge': '{count} total',
+      'account.alerts.paused': 'Pausada',
+      'account.alerts.pause': 'Pausar',
+      'account.alerts.resume': 'Reanudar',
+      'account.alerts.delete': 'Eliminar',
+      'account.alerts.marking': 'Marcando como vistas…',
+      'account.alerts.mark_failed': 'No se pudieron marcar las alertas como vistas.',
+      'account.alerts.mark_done': 'Todas las alertas marcadas como vistas.',
+      'account.alerts.updating': 'Actualizando alerta…',
+      'account.alerts.update_failed': 'No se pudo actualizar la alerta.',
+      'account.alerts.updated': 'Alerta actualizada.',
+      'account.alerts.delete_confirm': '¿Eliminar esta alerta?',
+      'account.alerts.deleting': 'Eliminando alerta…',
+      'account.alerts.delete_failed': 'No se pudo eliminar la alerta.',
+      'account.alerts.deleted': 'Alerta eliminada.',
+      'account.alerts.setup_required': 'Falta la tabla de alertas. Ejecuta el supabase.sql actualizado.',
+      'account.alerts.load_failed': 'No se pudieron cargar las alertas ahora.',
+      'account.alerts.perimeter_on': 'Area por perimetro',
+
+      'account.shop.kicker': 'Dispositivos inteligentes',
+      'account.shop.title': 'Cesta y compras',
+      'account.shop.open_shop': 'Abrir tienda',
+      'account.shop.refresh': 'Actualizar',
+      'account.shop.basket_title': 'Tu cesta',
+      'account.shop.basket_hint': 'Añade dispositivos desde la tienda y solicita ayuda de instalación.',
+      'account.shop.basket_empty': 'La cesta está vacía. Abre la tienda para añadir dispositivos.',
+      'account.shop.checkout': 'Solicitar compra',
+      'account.shop.checkout_empty': 'La cesta está vacía.',
+      'account.shop.checkout_sending': 'Enviando solicitud…',
+      'account.shop.checkout_failed': 'Fallo en la solicitud',
+      'account.shop.checkout_sent': 'Solicitud enviada. Te contactaremos para confirmar pago e instalación.',
+      'account.shop.clear_basket': 'Vaciar cesta',
+      'account.shop.cleared': 'Cesta vaciada.',
+      'account.shop.remove': 'Eliminar',
+      'account.shop.open': 'Abrir',
+      'account.shop.price_on_request': 'Precio bajo consulta',
+      'account.shop.history_title': 'Historial de compras',
+      'account.shop.history_hint': 'Tras el pago/aprobación, las instrucciones de instalación aparecerán aquí.',
+      'account.shop.history_empty': 'Aún no hay compras. Tus solicitudes y compras aparecerán aquí.',
+      'account.shop.history_auth': 'Inicia sesión para ver tu historial de compras.',
+      'account.shop.order': 'Pedido',
+      'account.shop.placed': 'Realizado',
+      'account.shop.order_no_items': 'No hay artículos registrados.',
+      'account.shop.docs': 'Docs',
+      'account.shop.docs_title': 'Instrucciones de instalación',
+      'account.shop.docs_note': 'Este contenido está disponible tras la compra/aprobación.',
+      'account.shop.docs_pending': 'Las instrucciones aparecerán aquí tras el pago/aprobación.',
+      'account.shop.docs_empty': 'Aún no hay instrucciones.',
+      'account.shop.docs_links': 'Enlaces',
+      'account.shop.status.requested': 'Solicitado',
+      'account.shop.status.paid': 'Pagado',
+      'account.shop.status.fulfilled': 'Confirmado',
+      'account.shop.status.installed': 'Instalado',
+      'account.shop.status.cancelled': 'Cancelado',
 
       'services.hero.title': 'Servicios que eliminan friccion',
       'services.hero.subtitle': 'Los compradores y vendedores no necesitan mas anuncios, necesitan un proceso fiable. Damos pasos claros, coordinacion local y soporte documental para que los acuerdos se cierren.',
@@ -1148,6 +1845,327 @@
     }
   };
 
+  const MANUAL_LOCALES = {
+    ro: {
+      'lang.label': 'Limbă',
+      'lang.en': 'Engleză',
+      'lang.es': 'Spaniolă',
+      'lang.ro': 'Română',
+      'lang.sv': 'Suedeză',
+      'lang.en_short': 'EN',
+      'lang.es_short': 'ES',
+      'lang.ro_short': 'RO',
+      'lang.sv_short': 'SV',
+      'common.in': 'în',
+      'common.all': 'Toate',
+      'nav.home': 'Acasă',
+      'nav.properties': 'Proprietăți',
+      'nav.new_builds': 'Construcții noi',
+      'nav.businesses': 'Afaceri',
+      'nav.vehicles': 'Vehicule',
+      'nav.services': 'Servicii',
+      'nav.blog': 'Blog',
+      'nav.account': 'Cont',
+      'nav.contact_us': 'Contact',
+      'nav.email': 'Email',
+      'nav.call': 'Sună',
+      'ui.menu': 'Meniu',
+      'ui.map': 'Hartă',
+      'ui.list': 'Listă',
+      'ui.open_filters': 'Deschide filtrele',
+      'ui.toggle_map': 'Comută harta',
+      'ui.clear_all_filters': 'Șterge toate filtrele',
+      'ui.apply_filters': 'Aplică filtrele',
+      'ui.close_filters': 'Închide filtrele',
+      'pricing.on_request': 'Preț la cerere'
+    },
+    sv: {
+      'lang.label': 'Språk',
+      'lang.en': 'Engelska',
+      'lang.es': 'Spanska',
+      'lang.ro': 'Rumänska',
+      'lang.sv': 'Svenska',
+      'lang.en_short': 'EN',
+      'lang.es_short': 'ES',
+      'lang.ro_short': 'RO',
+      'lang.sv_short': 'SV',
+      'common.in': 'i',
+      'common.all': 'Alla',
+      'nav.home': 'Hem',
+      'nav.properties': 'Bostäder',
+      'nav.new_builds': 'Nyproduktion',
+      'nav.businesses': 'Företag',
+      'nav.vehicles': 'Fordon',
+      'nav.services': 'Tjänster',
+      'nav.blog': 'Blogg',
+      'nav.account': 'Konto',
+      'nav.contact_us': 'Kontakt',
+      'nav.email': 'E-post',
+      'nav.call': 'Ring',
+      'ui.menu': 'Meny',
+      'ui.map': 'Karta',
+      'ui.list': 'Lista',
+      'ui.open_filters': 'Öppna filter',
+      'ui.toggle_map': 'Växla karta',
+      'ui.clear_all_filters': 'Rensa alla filter',
+      'ui.apply_filters': 'Använd filter',
+      'ui.close_filters': 'Stäng filter',
+      'pricing.on_request': 'Pris på begäran'
+    }
+  };
+
+  const AUTO_TRANSLATION_GLOSSARY = {
+    ro: {
+      'Spanish Coast Properties': 'Spanish Coast Properties',
+      'Costa Blanca South': 'Costa Blanca Sud',
+      'Traspaso': 'Traspaso',
+      'WhatsApp': 'WhatsApp',
+      'TikTok': 'TikTok',
+      'Instagram': 'Instagram'
+    },
+    sv: {
+      'Spanish Coast Properties': 'Spanish Coast Properties',
+      'Costa Blanca South': 'Costa Blanca Syd',
+      'Traspaso': 'Traspaso',
+      'WhatsApp': 'WhatsApp',
+      'TikTok': 'TikTok',
+      'Instagram': 'Instagram'
+    }
+  };
+
+  const localeReadyPromises = Object.create(null);
+
+  const mergeLocaleObjects = (base, patch) => {
+    const out = { ...(base || {}) };
+    Object.keys(patch || {}).forEach((k) => {
+      const v = patch[k];
+      if (typeof v === 'string') out[k] = v;
+    });
+    return out;
+  };
+
+  const ensureSupportedLang = (code) => {
+    const c = normalizeLang(code);
+    if (!c) return;
+    if (!SUPPORTED.includes(c)) SUPPORTED.push(c);
+  };
+
+  const registerLocale = (code, locale, { includeInSupported = true } = {}) => {
+    const c = normalizeLang(code);
+    if (!c || !locale || typeof locale !== 'object') return;
+    DICT[c] = mergeLocaleObjects(DICT[c], locale);
+    if (includeInSupported) ensureSupportedLang(c);
+  };
+
+  Object.keys(MANUAL_LOCALES).forEach((code) => {
+    registerLocale(code, MANUAL_LOCALES[code], { includeInSupported: true });
+  });
+
+  const autoCacheKey = (code) => `${AUTO_CACHE_KEY_PREFIX}${normalizeLang(code)}`;
+  const autoErrorKey = (code) => `${AUTO_ERROR_KEY_PREFIX}${normalizeLang(code)}`;
+
+  const loadAutoCache = (code) => {
+    try {
+      if (!window.localStorage) return null;
+      const raw = window.localStorage.getItem(autoCacheKey(code));
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object') return null;
+      return parsed;
+    } catch {
+      return null;
+    }
+  };
+
+  const saveAutoCache = (code, dict) => {
+    try {
+      if (!window.localStorage) return;
+      window.localStorage.setItem(autoCacheKey(code), JSON.stringify(dict || {}));
+    } catch {
+      // ignore storage quota and private mode errors
+    }
+  };
+
+  const readAutoErrorTs = (code) => {
+    try {
+      if (!window.localStorage) return 0;
+      const raw = Number(window.localStorage.getItem(autoErrorKey(code)) || 0);
+      return Number.isFinite(raw) ? raw : 0;
+    } catch {
+      return 0;
+    }
+  };
+
+  const markAutoError = (code) => {
+    try {
+      if (!window.localStorage) return;
+      window.localStorage.setItem(autoErrorKey(code), String(Date.now()));
+    } catch {
+      // ignore
+    }
+  };
+
+  const clearAutoError = (code) => {
+    try {
+      if (!window.localStorage) return;
+      window.localStorage.removeItem(autoErrorKey(code));
+    } catch {
+      // ignore
+    }
+  };
+
+  const preserveVars = (text) => {
+    const tokens = [];
+    const prepared = String(text || '').replace(/\{[\w]+\}/g, (m) => {
+      const token = `__SCP_VAR_${tokens.length}__`;
+      tokens.push({ token, value: m });
+      return token;
+    });
+    return { prepared, tokens };
+  };
+
+  const restoreVars = (text, tokens) => {
+    let out = String(text || '');
+    (tokens || []).forEach(({ token, value }) => {
+      out = out.split(token).join(value);
+    });
+    return out;
+  };
+
+  const applyGlossary = (text, code) => {
+    const glossary = AUTO_TRANSLATION_GLOSSARY[normalizeLang(code)] || {};
+    let out = String(text || '');
+    Object.keys(glossary).forEach((source) => {
+      out = out.split(source).join(glossary[source]);
+    });
+    return out;
+  };
+
+  const isAutoTranslatable = (value) => {
+    if (typeof value !== 'string') return false;
+    const trimmed = value.trim();
+    if (!trimmed) return false;
+    // Keep HTML snippets untouched to avoid broken markup.
+    if (/[<>]/.test(trimmed)) return false;
+    return true;
+  };
+
+  const readGoogleTranslatedText = (payload) => {
+    if (!Array.isArray(payload) || !Array.isArray(payload[0])) return '';
+    return payload[0].map((part) => (Array.isArray(part) ? String(part[0] || '') : '')).join('');
+  };
+
+  const translateChunkGoogle = async (texts, targetCode) => {
+    if (!Array.isArray(texts) || !texts.length) return [];
+
+    const prepared = texts.map((text) => preserveVars(text));
+    const joined = prepared.map((item) => item.prepared).join(AUTO_TRANSLATE_DELIMITER);
+    const url = new URL('https://translate.googleapis.com/translate_a/single');
+    url.searchParams.set('client', 'gtx');
+    url.searchParams.set('sl', DEFAULT_LANG);
+    url.searchParams.set('tl', normalizeLang(targetCode));
+    url.searchParams.set('dt', 't');
+    url.searchParams.set('q', joined);
+
+    const res = await fetch(url.toString(), { method: 'GET', mode: 'cors', cache: 'no-store' });
+    if (!res.ok) {
+      throw new Error(`translate_failed_${res.status}`);
+    }
+    const payload = await res.json();
+    const translatedJoined = readGoogleTranslatedText(payload);
+    if (!translatedJoined) throw new Error('translate_empty');
+
+    let segments = translatedJoined.split(AUTO_TRANSLATE_DELIMITER);
+    if (segments.length !== texts.length) {
+      const rx = new RegExp(`\\s*${AUTO_TRANSLATE_DELIMITER}\\s*`, 'g');
+      segments = translatedJoined.split(rx);
+    }
+    if (segments.length !== texts.length) {
+      throw new Error('translate_segment_mismatch');
+    }
+
+    return segments.map((value, idx) => {
+      const restored = restoreVars(value, prepared[idx].tokens);
+      return applyGlossary(restored, targetCode);
+    });
+  };
+
+  const translationChainFor = (targetLang) => {
+    const chain = [];
+    const add = (code) => {
+      const c = normalizeLang(code);
+      if (!c) return;
+      if (!chain.includes(c)) chain.push(c);
+    };
+    add(targetLang);
+    (LANG_FALLBACKS[normalizeLang(targetLang)] || []).forEach(add);
+    add(DEFAULT_LANG);
+    return chain;
+  };
+
+  const ensureLocaleReady = (code) => {
+    const targetCode = normalizeLang(code);
+    if (!AUTO_TRANSLATE_ENABLED || !AUTO_TRANSLATE_LANGS.includes(targetCode)) {
+      return Promise.resolve(false);
+    }
+    if (localeReadyPromises[targetCode]) return localeReadyPromises[targetCode];
+
+    localeReadyPromises[targetCode] = (async () => {
+      const cached = loadAutoCache(targetCode);
+      if (cached && typeof cached === 'object') {
+        registerLocale(targetCode, cached, { includeInSupported: true });
+      }
+
+      const lastErrorAt = readAutoErrorTs(targetCode);
+      if (lastErrorAt && (Date.now() - lastErrorAt) < AUTO_RETRY_AFTER_MS) {
+        return false;
+      }
+
+      const base = DICT[DEFAULT_LANG] || {};
+      const target = mergeLocaleObjects(DICT[targetCode], {});
+      const missingKeys = Object.keys(base).filter((key) => {
+        if (Object.prototype.hasOwnProperty.call(target, key)) return false;
+        return isAutoTranslatable(base[key]);
+      });
+
+      if (!missingKeys.length) return false;
+
+      let translatedAny = false;
+      for (let i = 0; i < missingKeys.length; i += AUTO_TRANSLATE_BATCH_SIZE) {
+        const batchKeys = missingKeys.slice(i, i + AUTO_TRANSLATE_BATCH_SIZE);
+        const batchTexts = batchKeys.map((key) => String(base[key]));
+
+        let translated = [];
+        try {
+          // Free endpoint, cached locally after first success.
+          translated = await translateChunkGoogle(batchTexts, targetCode);
+        } catch {
+          markAutoError(targetCode);
+          break;
+        }
+
+        if (!Array.isArray(translated) || translated.length !== batchKeys.length) break;
+        batchKeys.forEach((key, idx) => {
+          const text = String(translated[idx] || '').trim();
+          if (text) target[key] = text;
+        });
+        translatedAny = true;
+
+        if (i + AUTO_TRANSLATE_BATCH_SIZE < missingKeys.length) {
+          await new Promise((resolve) => setTimeout(resolve, 0));
+        }
+      }
+
+      if (!translatedAny) return false;
+      registerLocale(targetCode, target, { includeInSupported: true });
+      saveAutoCache(targetCode, target);
+      clearAutoError(targetCode);
+      return true;
+    })();
+
+    return localeReadyPromises[targetCode];
+  };
+
   let lang = detectLang();
 
   const format = (text, vars) => {
@@ -1160,11 +2178,16 @@
 
   const t = (key, vars) => {
     const k = String(key || '');
-    const dict = DICT[lang] || DICT[DEFAULT_LANG] || {};
-    const fallback = DICT[DEFAULT_LANG] || {};
-    const val = Object.prototype.hasOwnProperty.call(dict, k)
-      ? dict[k]
-      : (Object.prototype.hasOwnProperty.call(fallback, k) ? fallback[k] : k);
+    const chain = translationChainFor(lang);
+    let val = k;
+    for (let i = 0; i < chain.length; i += 1) {
+      const dict = DICT[chain[i]] || null;
+      if (!dict) continue;
+      if (Object.prototype.hasOwnProperty.call(dict, k)) {
+        val = dict[k];
+        break;
+      }
+    }
     return format(val, vars);
   };
 
@@ -1210,6 +2233,14 @@
     });
   };
 
+  const emitUpdated = () => {
+    try {
+      window.dispatchEvent(new CustomEvent('scp:i18n-updated', { detail: { lang } }));
+    } catch {
+      // ignore environments without CustomEvent
+    }
+  };
+
   const setLang = (next, { persist = true, reload = true } = {}) => {
     const n = normalizeLang(next);
     if (!SUPPORTED.includes(n)) return;
@@ -1225,12 +2256,26 @@
       } catch {
         window.location.reload();
       }
+      return;
     }
+    applyTranslations(document);
+    emitUpdated();
+    ensureLocaleReady(lang).then((changed) => {
+      if (!changed) return;
+      applyTranslations(document);
+      emitUpdated();
+    });
   };
 
   const init = () => {
     setHtmlLang();
     applyTranslations(document);
+    emitUpdated();
+    ensureLocaleReady(lang).then((changed) => {
+      if (!changed) return;
+      applyTranslations(document);
+      emitUpdated();
+    });
   };
 
   window.SCP_I18N = {
@@ -1240,7 +2285,14 @@
     detectLang,
     t,
     setLang,
-    applyTranslations
+    applyTranslations,
+    registerLocale: (code, locale, options = {}) => {
+      registerLocale(code, locale, options);
+      if (normalizeLang(code) !== lang) return;
+      applyTranslations(document);
+      emitUpdated();
+    },
+    ensureLocaleReady
   };
 
   if (document.readyState === 'loading') {

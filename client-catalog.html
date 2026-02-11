@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Catalog | Spanish Coast Properties</title>
+    <meta name="description" content="Share a clean shortlist of listings with your client.">
+    <meta name="robots" content="noindex,follow">
+    <meta name="theme-color" content="#030712">
+    <link rel="manifest" href="manifest.webmanifest?v=20260211b">
+    <link rel="stylesheet" href="style.css?v=20260211b">
+    <script defer src="i18n.js?v=20260211b"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body class="client-catalog-body" data-section="properties">
+    <div class="bg-mesh"></div>
+
+    <header class="main-header glass sticky">
+        <div class="header-inner">
+            <div class="header-left">
+                <div class="logo">
+                    <a href="index.html" aria-label="Spanish Coast Properties Home">
+                        <img src="assets/header-logo.png?v=2" alt="Spanish Coast Properties" class="main-logo">
+                    </a>
+                </div>
+                <div class="brand-info">
+                    <span class="brand-name">Spanish Coast Properties</span>
+                </div>
+                <nav class="primary-nav" id="primary-nav" aria-label="Site sections">
+                    <a class="nav-link" data-section="home" href="index.html">Home</a>
+                    <a class="nav-link" data-section="properties" href="properties.html">Properties</a>
+                    <a class="nav-link" data-section="new-builds" href="new-builds.html">New Builds</a>
+                    <a class="nav-link" data-section="businesses" href="businesses.html">Businesses</a>
+                    <a class="nav-link" data-section="vehicles" href="vehicles.html">Vehicles</a>
+                    <a class="nav-link" data-section="services" href="services.html">Services</a>
+                    <a class="nav-link" data-section="blog" href="blog.html">Blog</a>
+                </nav>
+            </div>
+            <div class="header-right">
+                <a class="header-cta" href="account.html">Account</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="site-main">
+        <section class="page-section catalog-section active" aria-label="Client catalog">
+            <div class="client-catalog-wrap">
+                <div class="catalog-hero client-catalog-head">
+                    <div>
+                        <h2 id="client-catalog-title" data-i18n="catalog.page.title">Client Catalog</h2>
+                        <p id="client-catalog-subtitle" data-i18n="catalog.page.subtitle">A clean shortlist generated from your search.</p>
+                        <div class="service-tags client-catalog-branding" aria-label="Brand">
+                            <span class="tag">Spanish Coast Properties</span>
+                            <span class="tag">Costa Blanca South</span>
+                        </div>
+                    </div>
+                    <div class="client-catalog-toolbar">
+                        <a class="cta-button cta-button--outline" href="properties.html" data-i18n="catalog.page.back">Back to search</a>
+                        <button id="client-catalog-copy" class="cta-button cta-button--outline" type="button" data-i18n="catalog.page.copy">Copy link</button>
+                        <button id="client-catalog-print" class="cta-button cta-button--outline" type="button" data-i18n="catalog.page.print">Print / Save PDF</button>
+                        <label class="client-catalog-wl">
+                            <input id="client-catalog-wl" type="checkbox">
+                            <span data-i18n="catalog.page.whitelabel">White-label</span>
+                        </label>
+                    </div>
+                    <div id="client-catalog-summary" class="muted" aria-live="polite"></div>
+                </div>
+                <div id="client-catalog-grid" class="client-catalog-grid"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h3>Spanish Coast Properties</h3>
+                <p>Curated listings in Costa Blanca South with clean sharing tools for clients and partners.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <ul class="footer-links">
+                    <li><a href="properties.html">Properties</a></li>
+                    <li><a href="new-builds.html">New Builds</a></li>
+                    <li><a href="businesses.html">Businesses</a></li>
+                    <li><a href="vehicles.html">Vehicles</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <ul class="footer-links">
+                    <li><a href="tel:+34624867866">+34 624 867 866</a></li>
+                    <li><a href="mailto:info@spanishcoastproperties.com">info@spanishcoastproperties.com</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
+    </footer>
+
+    <script defer src="data.js?v=20260211b"></script>
+    <script defer src="custom-listings.js?v=20260211b"></script>
+    <script defer src="inmovilla-listings.js?v=20260211b"></script>
+    <script defer src="newbuilds-listings.js?v=20260211b"></script>
+    <script defer src="client-catalog.js?v=20260211b"></script>
+    <script defer src="site.js?v=20260211b"></script>
+</body>
+
+</html>
