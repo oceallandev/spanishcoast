@@ -103,6 +103,51 @@
     return s.trim() ? s : fallback;
   };
 
+  const normalizeLangCode = (raw) => {
+    const v = toText(raw).trim().toLowerCase();
+    if (!v) return 'en';
+    return (v.split(/[-_]/)[0] || 'en').trim() || 'en';
+  };
+
+  const currentLangCode = () => {
+    try {
+      return normalizeLangCode(window.SCP_I18N && window.SCP_I18N.lang);
+    } catch {
+      return 'en';
+    }
+  };
+
+  const localizedDescriptionFor = (listing) => {
+    const lang = currentLangCode();
+    try {
+      const map = listing && listing.i18n && listing.i18n.description;
+      if (map && typeof map === 'object') {
+        const direct = toText(map[lang]).trim();
+        if (direct) return { text: direct, localized: true };
+      }
+    } catch {
+      // ignore
+    }
+    return { text: toText(listing && listing.description, ''), localized: false };
+  };
+
+  const translateDynamicText = (value) => {
+    const text = toText(value).trim();
+    if (!text) return Promise.resolve(text);
+    try {
+      const i18n = window.SCP_I18N;
+      if (!i18n || typeof i18n.translateDynamicText !== 'function') {
+        return Promise.resolve(text);
+      }
+      return i18n.translateDynamicText(text, {
+        targetLang: i18n.lang || '',
+        sourceLang: 'auto'
+      }).then((translated) => toText(translated, text));
+    } catch {
+      return Promise.resolve(text);
+    }
+  };
+
   const escapeHtml = (value) =>
     toText(value).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -804,9 +849,30 @@
     }
 
     if (descEl) {
-      descEl.innerHTML = formatDescriptionHtml(match.description);
+      const lang = currentLangCode();
+      const descInfo = localizedDescriptionFor(match);
+      const baseDescription = toText(descInfo.text, '');
+      descEl.innerHTML = formatDescriptionHtml(baseDescription);
       descEl.setAttribute('data-i18n-dynamic-scope', '');
-      queueDynamicTranslate(descEl);
+
+      if (descInfo.localized) {
+        // Exact feed language version (RedSp v4) — keep it as-is.
+        descEl.setAttribute('data-i18n-dynamic-ignore', '');
+      } else if (lang !== 'en' && baseDescription) {
+        // Translate whole description string for consistency (fallback to per-node translation).
+        descEl.setAttribute('data-i18n-dynamic-ignore', '');
+        translateDynamicText(baseDescription).then((translated) => {
+          if (!translated || translated === baseDescription) {
+            descEl.removeAttribute('data-i18n-dynamic-ignore');
+            queueDynamicTranslate(descEl);
+            return;
+          }
+          descEl.innerHTML = formatDescriptionHtml(translated);
+        });
+      } else {
+        descEl.removeAttribute('data-i18n-dynamic-ignore');
+        queueDynamicTranslate(descEl);
+      }
     }
 
     if (featuresEl) {

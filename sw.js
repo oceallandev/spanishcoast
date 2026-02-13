@@ -1,5 +1,5 @@
 /* Minimal same-origin service worker for instant repeat loads on mobile WebKit/Android. */
-const CACHE_NAME = 'scp-cache-20260212f';
+const CACHE_NAME = 'scp-cache-20260213b';
 
 const PRECACHE_PATHS = [
   './',
@@ -62,12 +62,12 @@ const PRECACHE_PATHS = [
   './vehicle-add.js?v=20260211d',
   './property-add.js?v=20260212a',
   './vehicle-import-xml.js?v=20260211d',
-  './app.js?v=20260212a',
+  './app.js?v=20260213b',
   './client-catalog.js?v=20260212a',
   './custom-listings.js?v=20260211d',
   './inmovilla-listings.js?v=20260211d',
-  './newbuilds-listings.js?v=20260211d',
-  './brochure.js?v=20260212a',
+  './newbuilds-listings.js?v=20260213b',
+  './brochure.js?v=20260213b',
   './reel.js?v=20260212d',
   './tour.js?v=20260212d',
   './tour-data.js?v=20260212a',
@@ -75,7 +75,7 @@ const PRECACHE_PATHS = [
   './blog-posts.js?v=20260211d',
   './blog-posts.json',
   './config.js?v=20260211d',
-  './i18n.js?v=20260212h',
+  './i18n.js?v=20260213b',
   './supabase-init.js?v=20260211d',
   './account.js?v=20260212a',
   './guide.js?v=20260211d',

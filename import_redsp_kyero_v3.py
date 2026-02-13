@@ -393,6 +393,21 @@ def parse_redsp_v4_properties(
         "mountain_views": "Mountain views",
     }
 
+    def _clean_desc(value: str) -> str:
+        desc = _t(value)
+        if not desc:
+            return ""
+        # Some exports append a numeric supplier/account ID as a final line (e.g. "1073").
+        m = re.search(r"(?:&#13;|\r?\n)+\s*(\d{3,6})\s*$", desc)
+        if m:
+            try:
+                n = int(m.group(1))
+            except Exception:
+                n = None
+            if n is not None and n < 1900:
+                desc = desc[: m.start()].strip()
+        return desc
+
     for ev, el in ET.iterparse(xml_path, events=("end",)):
         if _strip_ns(el.tag) != "property":
             continue
@@ -431,8 +446,17 @@ def parse_redsp_v4_properties(
         lat = _float(_find_text(el, "location/latitude"))
         lon = _float(_find_text(el, "location/longitude"))
 
+        # Keep optional multilingual blocks for UI (only store the non-English variants we support).
+        i18n: Dict[str, Any] = {}
+        desc_i18n: Dict[str, str] = {}
+        title_i18n: Dict[str, str] = {}
+
         desc_block = _child(el, "desc")
         if desc_block is not None:
+            for code in ("es", "ro", "sv"):
+                v = _clean_desc(_lang_text(desc_block, code))
+                if v:
+                    desc_i18n[code] = v
             desc = prefer_english_text(
                 _lang_text(desc_block, "en"),
                 _lang_text(desc_block, "es"),
@@ -442,16 +466,21 @@ def parse_redsp_v4_properties(
                 desc = _pick_lang(desc_block, prefer_langs)
         else:
             desc = ""
-        desc = desc or "Property details coming soon."
-        # Some exports append a numeric supplier/account ID as a final line (e.g. "1073").
-        m = re.search(r"(?:&#13;|\r?\n)+\s*(\d{3,6})\s*$", desc)
-        if m:
-            try:
-                n = int(m.group(1))
-            except Exception:
-                n = None
-            if n is not None and n < 1900:
-                desc = desc[: m.start()].strip()
+        desc = _clean_desc(desc) or "Property details coming soon."
+
+        title_block = _child(el, "title")
+        if title_block is not None:
+            for code in ("en", "es", "ro", "sv"):
+                v = _t(_lang_text(title_block, code))
+                if v:
+                    title_i18n[code] = v
+        if title_i18n:
+            # Keep only non-English title variants in the payload to avoid bloating output.
+            title_i18n.pop("en", None)
+            if title_i18n:
+                i18n["title"] = title_i18n
+        if desc_i18n:
+            i18n["description"] = desc_i18n
 
         feats: List[str] = []
 
@@ -557,6 +586,9 @@ def parse_redsp_v4_properties(
             "new_build": new_build_value,
             "source": source,
         }
+
+        if i18n:
+            item["i18n"] = i18n
 
         if postal_code:
             item["postal_code"] = postal_code

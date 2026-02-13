@@ -1283,6 +1283,39 @@ document.addEventListener('DOMContentLoaded', () => {
         return blocks.join('');
     }
 
+    function normalizeLangCode(raw) {
+        const v = toText(raw).trim().toLowerCase();
+        if (!v) return 'en';
+        return (v.split(/[-_]/)[0] || 'en').trim() || 'en';
+    }
+
+    function currentLangCode() {
+        try {
+            return normalizeLangCode(window.SCP_I18N && window.SCP_I18N.lang);
+        } catch (error) {
+            return 'en';
+        }
+    }
+
+    function localizedDescriptionFor(property) {
+        const lang = currentLangCode();
+        try {
+            const map = property && property.i18n && property.i18n.description;
+            if (map && typeof map === 'object') {
+                const direct = toText(map[lang]).trim();
+                if (direct) {
+                    return { text: direct, localized: true };
+                }
+            }
+        } catch (error) {
+            // ignore
+        }
+        return {
+            text: toText(property && property.description, t('modal.description_placeholder', 'Property details coming soon.')),
+            localized: false
+        };
+    }
+
     function buildPropertyLink(reference) {
         // Always generate a stable, shareable URL for this listing.
         return buildAppUrl('properties.html', {
@@ -3500,8 +3533,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         </p>
                         <div class="muted" style="margin:0 0 0.6rem;font-weight:800">Import steps</div>
                         <ol class="muted" style="margin:0 0 0.9rem;padding-left:1.2rem">
-                            <li>Download your RedSp feed file (Kyero v3) to your computer.</li>
-                            <li>Run: <code>python3 import_redsp_kyero_v3.py --xml \"/path/to/redsp1-kyero_v3.xml\" --source redsp1</code></li>
+                            <li>Download your RedSp feed file (Kyero v3 or RedSp v4) to your computer (or use the feed URL).</li>
+                            <li>Run: <code>python3 import_redsp_kyero_v3.py --url \"https://xml.redsp.net/files/.../redsp1-redsp_v4.xml\" --source redsp1</code> (or use <code>--xml</code> for a local file)</li>
                             <li>Commit + push the updated <code>newbuilds-listings.js</code>.</li>
                         </ol>
                         <div class="simple-cta" style="margin:0">
@@ -3695,8 +3728,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         const src = originalRefSourceLabel(mapped.source);
                         const label = src ? `${src}: ` : '';
                         const value = toText(mapped.original_ref).trim();
-                        origSpan.textContent = `· ${label}${value}`;
+                        const originalId = toText(mapped.original_id).trim();
+                        const devMatch = originalId.match(/\bdev:([A-Z0-9]+)/i);
+                        const devRef = devMatch ? toText(devMatch[1]).trim().toUpperCase() : '';
+                        const devSuffix = devRef ? ` · DEV: ${devRef}` : '';
+                        origSpan.textContent = `· ${label}${value}${devSuffix}`;
                         origSpan.dataset.originalRef = value;
+                        origSpan.dataset.originalId = originalId;
                         origSpan.style.display = 'inline';
 
                         await copyTextToClipboard(value);
@@ -4099,7 +4137,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const reference = toText(property.ref).trim();
         const town = toText(property.town, t('modal.town_unknown', 'Unknown Area'));
         const province = toText(property.province, 'Alicante');
-        const description = toText(property.description, t('modal.description_placeholder', 'Property details coming soon.'));
+        const descInfo = localizedDescriptionFor(property);
+        const description = descInfo.text;
+        const descriptionLocalized = descInfo.localized;
         const beds = Number(property.beds) || 0;
         const baths = Number(property.baths) || 0;
         const builtArea = builtAreaFor(property);
@@ -4147,6 +4187,7 @@ document.addEventListener('DOMContentLoaded', () => {
         );
 	        const reportMailto = `mailto:info@spanishcoastproperties.com?subject=${reportSubject}&body=${reportBody}`;
 	        const descriptionHtml = formatDescriptionHtml(description);
+            const langCode = currentLangCode();
 	        if (syncUrl) {
 	            // Use pushState so browser Back closes the modal. If modal is already open, replace instead.
 	            const shouldPush = Boolean(pushUrl) && !isModalOpen();
@@ -4283,17 +4324,32 @@ document.addEventListener('DOMContentLoaded', () => {
 	            </div>
 	        `;
 
-        queueDynamicTranslate(modalDetails);
         const modalDescEl = modalDetails.querySelector('[data-modal-description]');
         const modalPropertyId = activeModalPropertyId;
         if (modalDescEl) {
+            // If we already have an exact language version from the feed (RedSp v4), do not re-translate it.
+            // If we need to translate, we translate the whole string and then keep the subtree out of the
+            // auto DOM translator to avoid double-translating sentence-by-sentence.
+            if (descriptionLocalized || langCode !== 'en') {
+                modalDescEl.setAttribute('data-i18n-dynamic-ignore', '');
+            } else {
+                modalDescEl.removeAttribute('data-i18n-dynamic-ignore');
+            }
+        }
+
+        queueDynamicTranslate(modalDetails);
+
+        if (modalDescEl && !descriptionLocalized && langCode !== 'en') {
             translateDynamicText(description).then((translatedDescription) => {
-                if (!translatedDescription) return;
-                if (translatedDescription === description) return;
                 if (activeModalPropertyId !== modalPropertyId) return;
                 if (!document.body.contains(modalDescEl)) return;
+                if (!translatedDescription || translatedDescription === description) {
+                    // If the single-string translation fails, fall back to per-node translation.
+                    modalDescEl.removeAttribute('data-i18n-dynamic-ignore');
+                    queueDynamicTranslate(modalDescEl);
+                    return;
+                }
                 modalDescEl.innerHTML = formatDescriptionHtml(translatedDescription);
-                queueDynamicTranslate(modalDescEl);
             });
         }
 
@@ -4334,8 +4390,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     const label = mapped.source ? `${baseLabel} (${mapped.source})` : baseLabel;
                     const lines = [];
                     lines.push(`${label}: ${mapped.original_ref}`);
-                    if (toText(mapped.original_id).trim()) {
-                        lines.push(`${t('modal.original_id', 'Feed ID')}: ${toText(mapped.original_id).trim()}`);
+                    const rawId = toText(mapped.original_id).trim();
+                    if (rawId) {
+                        const devMatch = rawId.match(/\bdev:([A-Z0-9]+)/i);
+                        const devRef = devMatch ? toText(devMatch[1]).trim().toUpperCase() : '';
+                        const idOnly = rawId.replace(/\s*\|\s*dev:[^|]+/i, '').trim();
+                        if (idOnly) {
+                            lines.push(`${t('modal.original_id', 'Feed ID')}: ${idOnly}`);
+                        }
+                        if (devRef) {
+                            lines.push(`${t('modal.development_ref', 'Development')}: ${devRef}`);
+                        }
                     }
                     originalRefEl.textContent = lines.join('\n');
                     originalRefEl.style.whiteSpace = 'pre-line';

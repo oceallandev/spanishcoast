@@ -24,10 +24,10 @@
   ]));
   const DEFAULT_LANG = 'en';
   const STORAGE_KEY = 'scp:lang';
-  const AUTO_CACHE_VERSION = '20260212f';
+  const AUTO_CACHE_VERSION = '20260213b';
   const AUTO_CACHE_KEY_PREFIX = `scp:i18n:auto:${AUTO_CACHE_VERSION}:`;
   const AUTO_ERROR_KEY_PREFIX = `scp:i18n:auto:error:${AUTO_CACHE_VERSION}:`;
-  const AUTO_RETRY_AFTER_MS = 30 * 60 * 1000;
+  const AUTO_RETRY_AFTER_MS = 10 * 60 * 1000;
   const AUTO_TRANSLATE_LANGS = Array.from(new Set([
     'es',
     'ro',
@@ -38,13 +38,13 @@
   const AUTO_TRANSLATE_WARMUP_LIMIT = 180;
   const AUTO_TRANSLATE_ENABLED = true;
   const AUTO_TRANSLATE_DELIMITER = '___SCP_SEGMENT___';
-  const DYNAMIC_CACHE_VERSION = '20260212f';
+  const DYNAMIC_CACHE_VERSION = '20260213b';
   const DYNAMIC_CACHE_KEY_PREFIX = `scp:i18n:dynamic:${DYNAMIC_CACHE_VERSION}:`;
   const DYNAMIC_MISS_CACHE_KEY_PREFIX = `scp:i18n:dynamic:miss:${DYNAMIC_CACHE_VERSION}:`;
   const DYNAMIC_BATCH_CHAR_LIMIT = 1400;
   const DYNAMIC_BATCH_ITEM_LIMIT = 8;
   const DYNAMIC_VALUE_MAX_LEN = 1800;
-  const DYNAMIC_MISS_RETRY_MS = 10 * 60 * 1000;
+  const DYNAMIC_MISS_RETRY_MS = 2 * 60 * 1000;
   const ONDEMAND_LOCALE_BATCH_SIZE = 8;
   const LANG_FALLBACKS = {
     ro: ['en', 'es'],
@@ -359,6 +359,7 @@
       'modal.copy_original_ref': 'Copy original reference',
       'modal.original_id': 'Feed ID',
       'modal.original_id_short': 'ID',
+      'modal.development_ref': 'Development',
       'modal.copy_original_id': 'Copy feed ID',
       'modal.copied': 'Copied',
       'modal.location_title': 'Location',
@@ -1551,6 +1552,7 @@
       'modal.copy_original_ref': 'Copiar referencia original',
       'modal.original_id': 'ID de feed',
       'modal.original_id_short': 'ID',
+      'modal.development_ref': 'Promocion',
       'modal.copy_original_id': 'Copiar ID de feed',
       'modal.copied': 'Copiado',
       'modal.location_title': 'Ubicacion',
