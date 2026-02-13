@@ -7,6 +7,8 @@
 //   - data-i18n-placeholder="key" (placeholder attribute)
 //   - data-i18n-title="key" (title attribute)
 //   - data-i18n-aria-label="key" (aria-label attribute)
+//   - data-i18n-alt="key" (alt attribute)
+//   - data-i18n-value="key" (value attribute, e.g. input buttons)
 (() => {
   const toLangArray = (value) => {
     if (!Array.isArray(value)) return [];
@@ -22,18 +24,28 @@
   ]));
   const DEFAULT_LANG = 'en';
   const STORAGE_KEY = 'scp:lang';
-  const AUTO_CACHE_VERSION = '20260211b';
+  const AUTO_CACHE_VERSION = '20260212f';
   const AUTO_CACHE_KEY_PREFIX = `scp:i18n:auto:${AUTO_CACHE_VERSION}:`;
   const AUTO_ERROR_KEY_PREFIX = `scp:i18n:auto:error:${AUTO_CACHE_VERSION}:`;
-  const AUTO_RETRY_AFTER_MS = 12 * 60 * 60 * 1000;
+  const AUTO_RETRY_AFTER_MS = 30 * 60 * 1000;
   const AUTO_TRANSLATE_LANGS = Array.from(new Set([
+    'es',
     'ro',
     'sv',
     ...toLangArray(window.SCP_I18N_AUTO_TRANSLATE_LANGS)
   ]));
-  const AUTO_TRANSLATE_BATCH_SIZE = 24;
+  const AUTO_TRANSLATE_BATCH_SIZE = 16;
+  const AUTO_TRANSLATE_WARMUP_LIMIT = 180;
   const AUTO_TRANSLATE_ENABLED = true;
   const AUTO_TRANSLATE_DELIMITER = '___SCP_SEGMENT___';
+  const DYNAMIC_CACHE_VERSION = '20260212f';
+  const DYNAMIC_CACHE_KEY_PREFIX = `scp:i18n:dynamic:${DYNAMIC_CACHE_VERSION}:`;
+  const DYNAMIC_MISS_CACHE_KEY_PREFIX = `scp:i18n:dynamic:miss:${DYNAMIC_CACHE_VERSION}:`;
+  const DYNAMIC_BATCH_CHAR_LIMIT = 1400;
+  const DYNAMIC_BATCH_ITEM_LIMIT = 8;
+  const DYNAMIC_VALUE_MAX_LEN = 1800;
+  const DYNAMIC_MISS_RETRY_MS = 10 * 60 * 1000;
+  const ONDEMAND_LOCALE_BATCH_SIZE = 8;
   const LANG_FALLBACKS = {
     ro: ['en', 'es'],
     sv: ['en', 'es']
@@ -114,6 +126,12 @@
 
       'common.in': 'in',
       'common.all': 'All',
+      'common.na': 'N/A',
+      'common.price_on_request': 'Price on request',
+      'common.per_night': 'night',
+      'common.per_day': 'day',
+      'common.per_week': 'week',
+      'common.per_month': 'month',
 
       'nav.home': 'Home',
       'nav.properties': 'Properties',
@@ -161,8 +179,40 @@
       'blog.footer.contact': 'Contact',
 
       'shop.actions.add_to_basket': 'Add to basket',
+      'shop.actions.details': 'Details',
+      'shop.actions.open_in_shop': 'Open in shop',
+      'shop.actions.no_shop_link': 'No shop link',
+      'shop.card.aria_open_details': 'Open {name} details',
       'shop.basket.added': 'Added to basket',
       'shop.basket.added_short': 'Added',
+      'shop.empty.title': 'No products loaded yet',
+      'shop.empty.body_prefix': 'The shop page is ready, but',
+      'shop.empty.body_suffix': 'is empty. Sync from WooCommerce to populate it.',
+      'shop.status.on_sale': 'On sale',
+      'shop.count.product_single': 'product',
+      'shop.count.product_plural': 'products',
+      'shop.meta.source_label': 'Source',
+      'shop.meta.synced_label': 'Synced',
+      'shop.meta.store_label': 'Store',
+      'shop.price_on_request': 'Price on request',
+      'shop.spec.install_support': 'Install support',
+      'shop.spec.secure_handover': 'Secure handover',
+      'shop.spec.documentation': 'Documentation included',
+      'shop.no_description': 'No description available.',
+      'shop.why_title': 'Why this matters',
+      'shop.why.1': 'Reduce operational friction (rentals, staff, suppliers)',
+      'shop.why.2': 'Keep access controlled and auditable',
+      'shop.why.3': 'Improve reliability with a clean network foundation',
+      'shop.why.4': 'Less confusion at handover time',
+      'shop.cta.request_install': 'Request install',
+      'shop.cta.how_we_work': 'How we work',
+
+      'page.collaborate.cta.email': 'Email us',
+      'page.collaborate.cta.dealer_tool': 'Dealer XML import tool',
+      'page.collaborate.cta.see_services': 'See services',
+      'page.collaborate.cta.open_scout': 'Open Street Scout',
+      'page.collaborate.cta.account': 'Sign in / Create account',
+      'page.businesses.cta.see_services': 'See services',
 
       'home.hero.title': 'Property, Business, and Vehicle Deals, Managed Like a Concierge.',
       'home.hero.subtitle': 'Buy, sell, rent, manage, and maintain. One trusted team for resale homes, new-build developments, commercial spaces, businesses for sale, and vehicles.',
@@ -192,6 +242,7 @@
       'filters.any': 'Any',
       'filters.type': 'Type',
       'filters.any_type': 'Any Type',
+      'filters.any_provider': 'Any provider',
       'filters.operation': 'Operation',
       'filters.sale': 'Sale',
       'filters.rent_long': 'Rent (long-term)',
@@ -227,7 +278,7 @@
       'map.tools.clear': 'Clear',
       'map.tools.radius': 'Radius',
       'map.tools.status_none': 'Tip: Draw an area on the map, or search around you.',
-      'map.tools.status_drawing': 'Drawing perimeter: click to add points, double-click to finish.',
+      'map.tools.status_drawing': 'Draw a circle around the area with your finger (or mouse). Lift to finish.',
       'map.tools.status_polygon': 'Perimeter filter is ON. Only listings inside the drawn area are shown.',
       'map.tools.status_around': 'Around me filter is ON ({km} km).',
       'map.tools.draw_unavailable': 'Perimeter tool is not available right now.',
@@ -272,6 +323,10 @@
       'newbuilds.cta.all_properties': 'All Properties',
 
       'city.all': 'All Destinations',
+      'city.torrevieja': 'Torrevieja',
+      'city.orihuela_costa': 'Orihuela Costa',
+      'city.guardamar': 'Guardamar',
+      'city.quesada': 'Quesada',
       'alerts.scope.resales': 'Properties',
       'alerts.scope.new_builds': 'New Builds',
       'alerts.scope.all': 'All Listings',
@@ -280,6 +335,9 @@
       'listing.for_rent': 'For Rent',
       'listing.for_sale': 'For Sale',
       'listing.traspaso': 'Traspaso',
+      'listing.traspaso_with_rent': '{price} (Traspaso) + {rent} / {month} {rentWord}',
+      'listing.rent_word': 'rent',
+      'listing.rent_short': 'Rent',
       'listing.business_for_sale': 'Business for sale',
       'listing.business': 'Business',
       'listing.vehicle': 'Vehicle',
@@ -315,7 +373,9 @@
       'modal.fav_saved': '♥ Saved',
       'modal.brochure_pdf': 'Brochure (PDF)',
       'modal.reel_play': 'Play Reel',
+      'modal.share_video': 'Share video',
       'modal.reel_video': 'Reel Studio',
+      'modal.tour_3d': '3D Tour',
       'modal.reel_tiktok': 'TikTok Video',
       'modal.call_now': 'Call Now',
       'modal.request_visit': 'Request to visit',
@@ -401,26 +461,117 @@
       'brochure.highlight.location': 'Location',
       'brochure.highlight.built_area': 'Built area',
 
+      'tour.back': 'Back',
+      'tour.loading': 'Loading…',
+      'tour.open_brochure': 'Brochure',
+      'tour.share': 'Share',
+      'tour.open_studio': 'Tour Studio',
+      'tour.close_studio': 'Close Studio',
+      'tour.title': 'Virtual Tour',
+      'tour.title_suffix': 'Tour',
+      'tour.overlay.title': 'Preparing 3D walkthrough…',
+      'tour.overlay.subtitle': 'Loading panorama and interactive hotspots.',
+      'tour.prev_scene': 'Previous scene',
+      'tour.next_scene': 'Next scene',
+      'tour.auto_spin_on': 'Auto-spin on',
+      'tour.auto_spin_off': 'Auto-spin off',
+      'tour.dollhouse.title': 'Dollhouse',
+      'tour.scene_list': 'Scenes',
+      'tour.scene': 'Scene',
+      'tour.next': 'Next',
+      'tour.jump': 'Jump',
+      'tour.scenes_count': '{count} scenes',
+      'tour.loading_scene': 'Loading scene…',
+      'tour.ready': 'Ready. Drag to look around, tap hotspots to move.',
+      'tour.loaded_from': 'Loaded from',
+      'tour.shared': 'Tour shared.',
+      'tour.copy_link_done': 'Link copied to clipboard.',
+      'tour.warning.non_pano': 'This image is not 2:1 panorama. For Matterport-style view use Insta360 equirectangular export.',
+      'tour.warning.no_webgl': 'Compatibility mode active: this device/browser does not provide WebGL, so we show scene images with interactive hotspots.',
+      'tour.warning.compat_mode': 'Compatibility mode active: showing scene image because this host blocks secure 360 texture loading.',
+      'tour.warning.dollhouse_unavailable': 'Dollhouse preview unavailable on this device. Scene list remains active.',
+      'tour.warning.fallback_photos': 'Fallback mode from listing photos. For full Matterport-style result, use Insta360 2:1 panoramas in Tour Studio.',
+      'tour.error.no_scenes': 'No valid scenes found for this listing.',
+      'tour.error.scene_failed': 'Scene failed to load',
+      'tour.error.check_url': 'Check panorama URL and CORS/public access.',
+      'tour.error.no_listing_title': 'Listing not found',
+      'tour.error.no_listing_sub': 'Open this page with ?ref=SCP-XXXX from a property card.',
+      'tour.error.init_failed': 'Could not initialize 3D viewer.',
+      'tour.error.no_tour': 'No tour found. Open Tour Studio and paste Insta360 panorama URLs.',
+      'tour.error.no_tour_title': 'Tour not configured yet',
+      'tour.error.no_tour_sub': 'Open Tour Studio and paste Insta360 panorama URLs.',
+      'tour.config.public': 'Published tour config',
+      'tour.config.fallback': 'Listing photos (fallback)',
+      'tour.fallback.alt': 'Tour scene',
+      'tour.studio.title': 'Tour Studio (Insta360)',
+      'tour.studio.badge': 'Admin tool',
+      'tour.studio.copy': 'Paste Insta360 equirectangular photo URLs (one per line) and we auto-build a Matterport-style flow with hotspots and dollhouse nodes.',
+      'tour.studio.urls_label': 'Panorama URLs',
+      'tour.studio.generate': 'Generate from URLs',
+      'tour.studio.save_draft': 'Save draft',
+      'tour.studio.load_draft': 'Load draft',
+      'tour.studio.clear_draft': 'Clear draft',
+      'tour.studio.json_label': 'Tour JSON (optional)',
+      'tour.studio.import_json': 'Import JSON',
+      'tour.studio.export_json': 'Export JSON',
+      'tour.studio.local_label': 'Local preview files (optional)',
+      'tour.studio.preview_files': 'Preview local files',
+      'tour.studio.note': 'Tip: for full 360 quality use 2:1 panorama JPG files from Insta360 export.',
+      'tour.studio.no_tour_to_save': 'No tour loaded to save.',
+      'tour.studio.saved': 'Draft tour saved on this device.',
+      'tour.studio.save_failed': 'Could not save draft (storage full or blocked).',
+      'tour.studio.cleared': 'Draft removed for this listing.',
+      'tour.studio.clear_failed': 'Could not clear draft.',
+      'tour.studio.no_tour_to_export': 'No tour loaded to export.',
+      'tour.studio.exported': 'Tour JSON exported.',
+      'tour.studio.json_empty': 'Paste tour JSON first.',
+      'tour.studio.json_import': 'JSON import',
+      'tour.studio.imported': 'Tour JSON imported.',
+      'tour.studio.import_failed': 'Invalid JSON or scene format.',
+      'tour.studio.no_urls': 'Add one panorama URL per line first.',
+      'tour.studio.url_builder': 'URL builder',
+      'tour.studio.generated': 'Virtual tour generated from URLs.',
+      'tour.studio.no_files': 'Choose local panorama files first.',
+      'tour.studio.local_preview': 'Local preview',
+      'tour.studio.preview_ready': 'Local preview ready. Export JSON and replace URLs with hosted files before publishing.',
+      'tour.studio.no_draft': 'No saved draft found for this listing.',
+      'tour.studio.saved_draft': 'Saved draft',
+      'tour.studio.draft_loaded': 'Draft loaded.',
+
       'reel.back': 'Back',
       'reel.loading': 'Loading…',
       'reel.tools_label': 'Reel tools',
       'reel.white_label': 'White-label',
       'reel.on': 'On',
       'reel.off': 'Off',
+      'reel.play_video': 'Play video',
       'reel.create_video': 'Create video',
       'reel.share': 'Share',
+      'reel.share_video': 'Share video',
       'reel.download': 'Download',
       'reel.download_captions': 'Download captions',
       'reel.copy_caption': 'Copy caption',
       'reel.preview.title': 'Reel preview',
       'reel.preview.subtitle': 'Creating a short social video with logo + key details.',
       'reel.preview.subtitle_dynamic': 'Creating a {duration} social video with {audio} and {captions}.',
+      'reel.auto_mode_note': 'We automatically build the best short reel from listing media and key details.',
       'reel.caption.label': 'Caption',
       'reel.caption.note': 'Paste into Instagram/TikTok if needed.',
       'reel.caption.on': 'Captions on',
       'reel.caption.off': 'Captions off',
       'reel.caption.more_info': 'Ask for more details',
       'reel.caption.contact': 'Message us on WhatsApp',
+      'reel.caption.price_label': 'Price',
+      'reel.caption.ref_label': 'Ref',
+      'reel.caption.whatsapp_available': 'WhatsApp available',
+      'reel.spec.bed': 'bed',
+      'reel.spec.beds': 'beds',
+      'reel.spec.bath': 'bath',
+      'reel.spec.baths': 'baths',
+      'reel.type.business': 'Business',
+      'reel.feature.sector_prefix': 'Sector',
+      'reel.feature.deal_traspaso': 'Deal: Traspaso',
+      'reel.feature.deal_business': 'Deal: Business for sale',
       'reel.controls.duration': 'Duration',
       'reel.controls.audio': 'Audio',
       'reel.controls.overlay_caption': 'Show on-screen captions',
@@ -433,6 +584,14 @@
       'reel.audio.none': 'No music',
       'reel.audio.ambient': 'Ambient',
       'reel.audio.upbeat': 'Upbeat',
+      'reel.audio.chill': 'Chill',
+      'reel.audio.cinematic': 'Cinematic',
+      'reel.audio.tropical': 'Tropical',
+      'reel.audio.house': 'House',
+      'reel.audio.lofi': 'Lo-fi',
+      'reel.audio.piano': 'Piano',
+      'reel.audio.sunset': 'Sunset',
+      'reel.audio.corporate': 'Corporate',
       'reel.disclaimer': 'Video export runs in your browser. If sharing a file is not supported on your device, use Download then upload in your app.',
       'reel.missing_ref': 'Missing ref',
       'reel.missing_ref_help': 'Open this page with ?ref=SCP-XXXX',
@@ -445,16 +604,20 @@
       'reel.status.loaded_n': 'Loaded {n} images',
       'reel.status.images_failed': 'Images failed to load. Try again.',
       'reel.status.recording': 'Recording…',
+      'reel.status.audio_fallback': 'Audio export is not supported here. Retrying without music.',
       'reel.status.recorder_failed': 'Video export is not supported on this browser.',
+      'reel.status.auto_generating': 'Generating your reel…',
+      'reel.status.choose_platform': 'Choose a platform below.',
       'reel.status.ready': 'Video ready.',
       'reel.status.ready_with_audio': 'Video ready with audio.',
+      'reel.status.ready_no_audio': 'Video ready. Audio is not available on this browser/device.',
       'reel.status.shared': 'Shared.',
       'reel.status.fallback_shared': 'Downloaded. Paste caption in {app}.',
-      'reel.status.no_video': 'Create the video first.',
+      'reel.status.no_video': 'Tap Play video first.',
       'reel.status.loading_listing': 'Loading listing…',
       'reel.status.ready_to_create': 'Ready. Tap “Create video”.',
       'reel.status.caption_copied': 'Caption copied.',
-      'reel.status.preferred_app': 'Tip: Generate, then Share and choose {app}.',
+      'reel.status.preferred_app': 'Tip: Tap Share video and choose {app}.',
       'pricing.on_request': 'Price on request',
       'time.month': 'month',
       'pricing.per_night': '{price} / night',
@@ -530,12 +693,111 @@
       'account.admin.user_roles_help': 'Users create their own account first. Then assign a role here.',
       'account.admin.search_placeholder': 'Search by email or display name (e.g. john@agency.com)',
       'account.admin.search': 'Search',
+      'account.admin.created_prefix': 'created',
+      'account.admin.save': 'Save',
+      'account.admin.loading_users': 'Loading users…',
+      'account.admin.email_column_missing': 'Note: profiles.email column not found. Update `supabase.sql` to enable email search.',
+      'account.admin.load_failed': 'Failed to load users: {error}. Ensure admin policies exist (run updated supabase.sql).',
+      'account.admin.showing_users': 'Showing {count} users',
+      'account.admin.no_users': 'No users found.',
+      'account.admin.saving': 'Saving…',
+      'account.admin.failed_short': 'Failed',
+      'account.admin.saved_short': 'Saved',
+      'account.admin.role_update_failed': 'Role update failed: {error}',
+      'account.admin.role_updated': 'Updated role for {userId}',
       'account.diagnostics.title': 'Diagnostics',
       'account.diagnostics.subtitle': 'Open this page with <code>?qa=1</code> to see setup checks.',
       'account.copy_prompt': 'Copy:',
       'account.badge.partner': 'Partner tools enabled',
       'account.badge.scout': 'Street Scout',
       'account.badge.newbuilds': 'New builds',
+      'account.common.user': 'user',
+      'account.common.user_title': 'User',
+      'account.error.profiles_lookup_failed': 'Profiles lookup failed',
+
+      'role.admin': 'Admin',
+      'role.partner': 'Partner',
+      'role.agency_admin': 'Agency admin',
+      'role.agent': 'Agent',
+      'role.developer': 'Developer',
+      'role.collaborator': 'Collaborator',
+      'role.client': 'Client',
+
+      'account.partner.developer.k': 'Developer tools',
+      'account.partner.developer.v': 'Developments & collaboration',
+      'account.partner.developer.d': 'Share projects, control branding, and coordinate viewings.',
+      'account.partner.agency.k': 'Agency tools',
+      'account.partner.agency.v': 'White-label & collaboration',
+      'account.partner.agency.d': 'Share listings with your clients and keep your branding.',
+      'account.partner.partner.k': 'Partner tools',
+      'account.partner.partner.v': 'White-label & collaboration',
+      'account.partner.partner.d': 'Brochures, links, and collaboration tools for partners.',
+      'account.partner.admin.k': 'Collaboration',
+      'account.partner.admin.v': 'White-label & partners',
+      'account.partner.admin.d': 'Tools and flows used by agencies, agents and developers.',
+      'account.partner.default.k': 'Partner access',
+      'account.partner.default.v': 'Request collaboration',
+      'account.partner.default.d': 'If you are an agency, agent or developer, ask us to enable partner tools.',
+
+      'account.status.clearing_cache_title': 'Clearing offline cache…',
+      'account.status.clearing_cache_hint': 'This will refresh the page.',
+      'account.status.resetting_login_title': 'Resetting login…',
+      'account.status.resetting_login_hint': 'Clearing saved session data and offline cache.',
+      'account.status.wait_seconds': 'Wait {seconds}s',
+      'account.status.recovery_title': 'Password recovery',
+      'account.status.recovery_hint': 'Set a new password below.',
+      'account.status.supabase_not_configured_title': 'Supabase is not configured.',
+      'account.status.supabase_not_configured_hint': 'Fill `config.js` with your Supabase URL + anon/publishable key.',
+      'account.status.supabase_init_failed': 'Supabase init failed',
+      'account.status.supabase_not_ready_title': 'Supabase not ready',
+      'account.status.supabase_not_ready_hint': 'The Supabase client did not initialise. Check the Diagnostics (?qa=1).',
+      'account.status.connecting': 'Connecting...',
+      'account.status.connecting_ellipsis': 'Connecting…',
+      'account.status.initializing_auth': 'Initialising authentication…',
+      'account.status.loading_auth': 'Loading authentication…',
+      'account.status.auth_session_retrying': 'Auth session check aborted (storage={storage}). Retrying in {seconds}s…',
+      'account.status.auth_session_failed_title': 'Auth session failed',
+      'account.status.auth_session_failed_hint': 'Session check aborted (storage={storage}). Try: Clear offline cache, then Reset login, then sign in again. If it persists, disable VPN/ad-block and open ?qa=1 for diagnostics.',
+      'account.status.auth_session_error_with_storage': '{message} (storage={storage})',
+      'account.status.signed_out_title': 'Signed out',
+      'account.status.signed_out_hint': 'Sign in to sync favourites across devices.',
+      'account.status.role_unavailable': ' Role unavailable: {error}',
+      'account.status.welcome': 'Welcome, {name}',
+      'account.status.saved_sync_hint': 'Your saved listings will sync on the Properties page.{roleHint}',
+      'account.status.supabase_not_ready_reload': 'Reload the page. If it persists, click Clear offline cache or open ?qa=1 for diagnostics.',
+      'account.status.signing_in': 'Signing in…',
+      'account.status.signin_failed_title': 'Sign-in failed',
+      'account.status.try_again': 'Please try again.',
+      'account.status.signin_timeout': 'Sign-in timed out. This is usually a network/VPN/ad-block issue reaching Supabase. Try “Reset login”, or switch network, then try again (open ?qa=1 for diagnostics).',
+      'account.status.creating_account': 'Creating account…',
+      'account.status.creating_short': 'Creating…',
+      'account.status.signup_failed_title': 'Sign-up failed',
+      'account.status.check_email_title': 'Check your email',
+      'account.status.check_email_hint': 'Confirm your email address to finish creating your account.',
+      'account.status.please_wait': 'Please wait',
+      'account.status.magic_rate_limited': 'Magic links are rate-limited. Try again in {seconds}s.',
+      'account.status.sending_magic': 'Sending magic link…',
+      'account.status.sending_short': 'Sending…',
+      'account.status.failed_send_link_title': 'Failed to send link',
+      'account.status.email_rate_limit': 'Email rate limit exceeded. Wait a few minutes and try again. (To remove strict limits and improve deliverability, set a custom SMTP provider in Supabase Auth settings.)',
+      'account.status.link_sent_title': 'Link sent',
+      'account.status.link_sent_hint': 'Check your inbox and click the sign-in link. If it does not log you in, add this page to Supabase Auth Redirect URLs.',
+      'account.status.magic_timeout': 'Magic link timed out. This is usually a network/VPN/ad-block issue reaching Supabase. Try “Reset login”, or switch network, then try again.',
+      'account.status.reset_rate_limited': 'Password reset emails are rate-limited. Try again in {seconds}s.',
+      'account.status.sending_reset': 'Sending reset link…',
+      'account.status.failed_reset_title': 'Failed to send reset link',
+      'account.status.reset_link_sent_title': 'Reset link sent',
+      'account.status.reset_link_sent_hint': 'Check your inbox and click the link to set a new password.',
+      'account.status.reset_timeout': 'Password reset timed out. This is usually a network/VPN/ad-block issue reaching Supabase. Try “Reset login”, or switch network, then try again.',
+      'account.status.reload_and_try_again': 'Reload the page and try again.',
+      'account.status.password_update_failed_title': 'Password update failed',
+      'account.status.password_min_length': 'Password must be at least 8 characters.',
+      'account.status.password_mismatch': 'Passwords do not match.',
+      'account.status.updating_password': 'Updating password…',
+      'account.status.updating_short': 'Updating…',
+      'account.status.password_updated_title': 'Password updated',
+      'account.status.password_updated_hint': 'You can now sign in with your new password on any device.',
+      'account.status.signing_out': 'Signing out…',
 
       'account.role.title': 'Your workspace',
       'account.role.admin.title': 'Admin control center',
@@ -936,6 +1198,77 @@
       'page.businesses.collab.cta.options': 'Collaboration options',
       'page.businesses.collab.cta.email': 'Email us',
 
+      'property_add.hero.title': 'Sell Your Property With Us',
+      'property_add.hero.subtitle': 'Add your property details and photos. We review every submission and publish only verified listings.',
+      'property_add.hero.note': 'If the property is a good fit for our area, we may contact you to schedule a free photo shooting using modern technology (subject to review and availability).',
+      'property_add.tags.sale': 'For sale',
+      'property_add.tags.review': 'Admin review',
+      'property_add.tags.photos': 'Photos',
+      'property_add.tags.cb_south': 'Costa Blanca South',
+      'property_add.form.title': 'Property details',
+      'property_add.form.signin_hint': 'Tip: sign in on the Account page for instant submission and photo upload.',
+      'property_add.form.signin_hint_html': 'Tip: sign in on the <a class=\"admin-link\" href=\"account.html\">Account</a> page for instant submission and photo upload.',
+      'property_add.field.type': 'Type',
+      'property_add.field.town': 'Town / Area',
+      'property_add.field.province': 'Province',
+      'property_add.field.price': 'Expected price (EUR)',
+      'property_add.field.beds': 'Beds',
+      'property_add.field.baths': 'Baths',
+      'property_add.field.built_area': 'Built area (m2)',
+      'property_add.field.plot_area': 'Plot area (m2)',
+      'property_add.field.description': 'Description',
+      'property_add.field.features': 'Key features (optional)',
+      'property_add.photos.title': 'Photos',
+      'property_add.photos.note': 'Add up to 12 images. If you do not have good photos, submit anyway and we can arrange a free shoot after review.',
+      'property_add.field.photos': 'Upload photos',
+      'property_add.photos.limit': 'Only the first 12 photos will be used.',
+      'property_add.location.title': 'Location (optional)',
+      'property_add.location.note': 'For privacy, do not share the exact address here. Town/area is enough. GPS coordinates help us speed up evaluation.',
+      'property_add.location.btn': 'Use my location',
+      'property_add.location.none': 'No location yet.',
+      'property_add.location.getting': 'Getting location…',
+      'property_add.location.done': 'Location added.',
+      'property_add.location.failed': 'Location failed',
+      'property_add.field.lat': 'Latitude',
+      'property_add.field.lon': 'Longitude',
+      'property_add.contact.title': 'Your contact (not shown publicly)',
+      'property_add.field.name': 'Name',
+      'property_add.field.email': 'Email',
+      'property_add.field.phone': 'Phone / WhatsApp',
+      'property_add.field.private_address': 'Exact address (optional, private)',
+      'property_add.confirm': 'I confirm I am the owner (or have permission to list this property) and I agree to be contacted for verification.',
+      'property_add.submit': 'Submit for review',
+      'property_add.submitting': 'Submitting…',
+      'property_add.copy': 'Copy message',
+      'property_add.copied': 'Copied to clipboard.',
+      'property_add.copy_failed': 'Copy failed (browser blocked). Use Email or WhatsApp instead.',
+      'property_add.email': 'Email',
+      'property_add.whatsapp': 'WhatsApp',
+      'property_add.errors.required': 'Missing required fields: Type, Town/Area, Name, Phone.',
+
+      'vehicles.category.car': 'Car',
+      'vehicles.category.boat': 'Boat',
+      'vehicles.deal.rent': 'For Rent',
+      'vehicles.deal.sale': 'For Sale',
+      'vehicles.deal.offer': 'Offer',
+      'vehicles.card.open_details': 'View vehicle details',
+      'vehicles.empty.title': 'No vehicles found',
+      'vehicles.empty.meta': 'Add partner feeds to feeds/vehicles and feeds/boats, then run python3 build_vehicles_data.py.',
+      'vehicles.empty.body': 'If you want to list your vehicles for rent or sale, email us and we will onboard your feed.',
+      'vehicles.actions.request_details': 'Request details',
+      'vehicles.actions.call_provider': 'Call provider',
+      'vehicles.actions.website': 'Website',
+      'vehicles.actions.share': 'Share',
+      'vehicles.actions.copied': 'Copied',
+      'vehicles.mail.subject_prefix': 'Vehicle inquiry',
+      'vehicles.mail.greeting': 'Hi Spanish Coast Properties,',
+      'vehicles.mail.interested': 'I am interested in this {category} ({deal}):',
+      'vehicles.mail.link': 'Link',
+      'vehicles.mail.phone': 'My phone',
+      'vehicles.mail.preferred_dates': 'My preferred dates (if rental)',
+      'vehicles.mail.thanks': 'Thank you.',
+      'vehicles.partner_listing': 'Partner listing',
+
       'account.hero.title': 'Your Account',
       'account.hero.subtitle': 'Sign in to sync favourites across devices and unlock partner tools.',
 
@@ -985,6 +1318,12 @@
 
       'common.in': 'en',
       'common.all': 'Todos',
+      'common.na': 'N/D',
+      'common.price_on_request': 'Precio a consultar',
+      'common.per_night': 'noche',
+      'common.per_day': 'dia',
+      'common.per_week': 'semana',
+      'common.per_month': 'mes',
 
       'nav.home': 'Inicio',
       'nav.properties': 'Propiedades',
@@ -1032,8 +1371,40 @@
       'blog.footer.contact': 'Contacto',
 
       'shop.actions.add_to_basket': 'Añadir a la cesta',
+      'shop.actions.details': 'Detalles',
+      'shop.actions.open_in_shop': 'Abrir en tienda',
+      'shop.actions.no_shop_link': 'Sin enlace de tienda',
+      'shop.card.aria_open_details': 'Abrir detalles de {name}',
       'shop.basket.added': 'Añadido a la cesta',
       'shop.basket.added_short': 'Añadido',
+      'shop.empty.title': 'Aún no hay productos cargados',
+      'shop.empty.body_prefix': 'La página de la tienda está lista, pero',
+      'shop.empty.body_suffix': 'está vacío. Sincroniza desde WooCommerce para rellenarlo.',
+      'shop.status.on_sale': 'En oferta',
+      'shop.count.product_single': 'producto',
+      'shop.count.product_plural': 'productos',
+      'shop.meta.source_label': 'Fuente',
+      'shop.meta.synced_label': 'Sincronizado',
+      'shop.meta.store_label': 'Tienda',
+      'shop.price_on_request': 'Precio bajo consulta',
+      'shop.spec.install_support': 'Soporte de instalación',
+      'shop.spec.secure_handover': 'Entrega segura',
+      'shop.spec.documentation': 'Documentación incluida',
+      'shop.no_description': 'No hay descripción disponible.',
+      'shop.why_title': 'Por qué importa',
+      'shop.why.1': 'Reduce fricción operativa (alquileres, equipo, proveedores)',
+      'shop.why.2': 'Mantiene el acceso controlado y auditable',
+      'shop.why.3': 'Mejora la fiabilidad con una base de red limpia',
+      'shop.why.4': 'Menos confusión en el momento de la entrega',
+      'shop.cta.request_install': 'Solicitar instalación',
+      'shop.cta.how_we_work': 'Cómo trabajamos',
+
+      'page.collaborate.cta.email': 'Escríbenos',
+      'page.collaborate.cta.dealer_tool': 'Herramienta de importación XML',
+      'page.collaborate.cta.see_services': 'Ver servicios',
+      'page.collaborate.cta.open_scout': 'Abrir Street Scout',
+      'page.collaborate.cta.account': 'Iniciar sesión / Crear cuenta',
+      'page.businesses.cta.see_services': 'Ver servicios',
 
       'home.hero.title': 'Ofertas de propiedades, negocios y vehículos, gestionadas como un concierge.',
       'home.hero.subtitle': 'Compra, vende, alquila, gestiona y mantén. Un solo equipo de confianza para viviendas de reventa, obra nueva, locales comerciales, negocios en venta y vehículos.',
@@ -1063,6 +1434,7 @@
       'filters.any': 'Cualquiera',
       'filters.type': 'Tipo',
       'filters.any_type': 'Cualquier tipo',
+      'filters.any_provider': 'Cualquier proveedor',
       'filters.operation': 'Operación',
       'filters.sale': 'Venta',
       'filters.rent_long': 'Alquiler (larga temporada)',
@@ -1098,7 +1470,7 @@
       'map.tools.clear': 'Borrar',
       'map.tools.radius': 'Radio',
       'map.tools.status_none': 'Consejo: dibuja un area en el mapa o busca cerca de ti.',
-      'map.tools.status_drawing': 'Dibujando perimetro: toca para anadir puntos, doble toque para terminar.',
+      'map.tools.status_drawing': 'Dibuja un circulo alrededor de la zona con el dedo (o raton). Suelta para terminar.',
       'map.tools.status_polygon': 'Filtro de perimetro activado. Solo se muestran anuncios dentro del area.',
       'map.tools.status_around': 'Filtro \"cerca de mi\" activado ({km} km).',
       'map.tools.draw_unavailable': 'La herramienta de perimetro no esta disponible ahora.',
@@ -1143,6 +1515,10 @@
       'newbuilds.cta.all_properties': 'Todas las propiedades',
 
       'city.all': 'Todas las zonas',
+      'city.torrevieja': 'Torrevieja',
+      'city.orihuela_costa': 'Orihuela Costa',
+      'city.guardamar': 'Guardamar',
+      'city.quesada': 'Quesada',
       'alerts.scope.resales': 'Propiedades',
       'alerts.scope.new_builds': 'Obra Nueva',
       'alerts.scope.all': 'Todos los anuncios',
@@ -1151,6 +1527,9 @@
       'listing.for_rent': 'En alquiler',
       'listing.for_sale': 'En venta',
       'listing.traspaso': 'Traspaso',
+      'listing.traspaso_with_rent': '{price} (Traspaso) + {rent} / {month} alquiler',
+      'listing.rent_word': 'alquiler',
+      'listing.rent_short': 'Alquiler',
       'listing.business_for_sale': 'Negocio en venta',
       'listing.business': 'Negocio',
       'listing.vehicle': 'Vehiculo',
@@ -1186,7 +1565,9 @@
       'modal.fav_saved': '♥ Guardada',
       'modal.brochure_pdf': 'Folleto (PDF)',
       'modal.reel_play': 'Ver Reel',
+      'modal.share_video': 'Compartir video',
       'modal.reel_video': 'Estudio Reel',
+      'modal.tour_3d': 'Tour 3D',
       'modal.reel_tiktok': 'Video TikTok',
       'modal.call_now': 'Llamar',
       'modal.request_visit': 'Solicitar visita',
@@ -1272,26 +1653,117 @@
       'brochure.highlight.location': 'Ubicacion',
       'brochure.highlight.built_area': 'Superficie construida',
 
+      'tour.back': 'Volver',
+      'tour.loading': 'Cargando…',
+      'tour.open_brochure': 'Folleto',
+      'tour.share': 'Compartir',
+      'tour.open_studio': 'Tour Studio',
+      'tour.close_studio': 'Cerrar Studio',
+      'tour.title': 'Tour Virtual',
+      'tour.title_suffix': 'Tour',
+      'tour.overlay.title': 'Preparando recorrido 3D…',
+      'tour.overlay.subtitle': 'Cargando panoramica y puntos interactivos.',
+      'tour.prev_scene': 'Escena anterior',
+      'tour.next_scene': 'Siguiente escena',
+      'tour.auto_spin_on': 'Giro automatico activo',
+      'tour.auto_spin_off': 'Giro automatico desactivado',
+      'tour.dollhouse.title': 'Dollhouse',
+      'tour.scene_list': 'Escenas',
+      'tour.scene': 'Escena',
+      'tour.next': 'Siguiente',
+      'tour.jump': 'Ir',
+      'tour.scenes_count': '{count} escenas',
+      'tour.loading_scene': 'Cargando escena…',
+      'tour.ready': 'Listo. Arrastra para mirar alrededor y pulsa los puntos para avanzar.',
+      'tour.loaded_from': 'Cargado desde',
+      'tour.shared': 'Tour compartido.',
+      'tour.copy_link_done': 'Enlace copiado al portapapeles.',
+      'tour.warning.non_pano': 'Esta imagen no es una panoramica 2:1. Para un resultado tipo Matterport usa exportacion equirectangular de Insta360.',
+      'tour.warning.no_webgl': 'Modo compatibilidad activo: este dispositivo/navegador no ofrece WebGL, por eso mostramos imagenes con hotspots interactivos.',
+      'tour.warning.compat_mode': 'Modo compatibilidad activo: se muestra la imagen porque este servidor bloquea la carga segura de texturas 360.',
+      'tour.warning.dollhouse_unavailable': 'La vista dollhouse no esta disponible en este dispositivo. La lista de escenas sigue activa.',
+      'tour.warning.fallback_photos': 'Modo alternativo desde fotos del anuncio. Para un resultado tipo Matterport, usa panoramicas Insta360 2:1 en Tour Studio.',
+      'tour.error.no_scenes': 'No se encontraron escenas validas para este anuncio.',
+      'tour.error.scene_failed': 'No se pudo cargar la escena',
+      'tour.error.check_url': 'Revisa la URL panoramica y el acceso CORS/publico.',
+      'tour.error.no_listing_title': 'Anuncio no encontrado',
+      'tour.error.no_listing_sub': 'Abre esta pagina con ?ref=SCP-XXXX desde una propiedad.',
+      'tour.error.init_failed': 'No se pudo iniciar el visor 3D.',
+      'tour.error.no_tour': 'No hay tour configurado. Abre Tour Studio y pega URLs panoramicas de Insta360.',
+      'tour.error.no_tour_title': 'Tour no configurado',
+      'tour.error.no_tour_sub': 'Abre Tour Studio y pega URLs panoramicas de Insta360.',
+      'tour.config.public': 'Configuracion publicada',
+      'tour.config.fallback': 'Fotos del anuncio (alternativo)',
+      'tour.fallback.alt': 'Escena del tour',
+      'tour.studio.title': 'Tour Studio (Insta360)',
+      'tour.studio.badge': 'Herramienta admin',
+      'tour.studio.copy': 'Pega URLs de fotos equirectangulares de Insta360 (una por linea) y generamos el flujo tipo Matterport con hotspots y nodos dollhouse.',
+      'tour.studio.urls_label': 'URLs panoramicas',
+      'tour.studio.generate': 'Generar desde URLs',
+      'tour.studio.save_draft': 'Guardar borrador',
+      'tour.studio.load_draft': 'Cargar borrador',
+      'tour.studio.clear_draft': 'Borrar borrador',
+      'tour.studio.json_label': 'JSON del tour (opcional)',
+      'tour.studio.import_json': 'Importar JSON',
+      'tour.studio.export_json': 'Exportar JSON',
+      'tour.studio.local_label': 'Archivos locales de vista previa (opcional)',
+      'tour.studio.preview_files': 'Previsualizar archivos locales',
+      'tour.studio.note': 'Tip: para calidad 360 completa usa JPG panoramicos 2:1 exportados desde Insta360.',
+      'tour.studio.no_tour_to_save': 'No hay tour cargado para guardar.',
+      'tour.studio.saved': 'Borrador guardado en este dispositivo.',
+      'tour.studio.save_failed': 'No se pudo guardar el borrador (almacenamiento lleno o bloqueado).',
+      'tour.studio.cleared': 'Borrador eliminado para este anuncio.',
+      'tour.studio.clear_failed': 'No se pudo eliminar el borrador.',
+      'tour.studio.no_tour_to_export': 'No hay tour cargado para exportar.',
+      'tour.studio.exported': 'JSON del tour exportado.',
+      'tour.studio.json_empty': 'Pega primero el JSON del tour.',
+      'tour.studio.json_import': 'Importacion JSON',
+      'tour.studio.imported': 'JSON del tour importado.',
+      'tour.studio.import_failed': 'JSON invalido o formato de escena incorrecto.',
+      'tour.studio.no_urls': 'Añade primero una URL panoramica por linea.',
+      'tour.studio.url_builder': 'Generador por URLs',
+      'tour.studio.generated': 'Tour virtual generado desde URLs.',
+      'tour.studio.no_files': 'Selecciona primero archivos panoramicos locales.',
+      'tour.studio.local_preview': 'Vista previa local',
+      'tour.studio.preview_ready': 'Vista previa local lista. Exporta JSON y reemplaza URLs por archivos alojados antes de publicar.',
+      'tour.studio.no_draft': 'No hay borrador guardado para este anuncio.',
+      'tour.studio.saved_draft': 'Borrador guardado',
+      'tour.studio.draft_loaded': 'Borrador cargado.',
+
       'reel.back': 'Volver',
       'reel.loading': 'Cargando…',
       'reel.tools_label': 'Herramientas del video',
       'reel.white_label': 'Marca blanca',
       'reel.on': 'Activada',
       'reel.off': 'Desactivada',
+      'reel.play_video': 'Reproducir video',
       'reel.create_video': 'Crear video',
       'reel.share': 'Compartir',
+      'reel.share_video': 'Compartir video',
       'reel.download': 'Descargar',
       'reel.download_captions': 'Descargar subtitulos',
       'reel.copy_caption': 'Copiar texto',
       'reel.preview.title': 'Vista previa',
       'reel.preview.subtitle': 'Creando un video corto con logo y detalles clave.',
       'reel.preview.subtitle_dynamic': 'Creando un video social de {duration} con {audio} y {captions}.',
+      'reel.auto_mode_note': 'Generamos automaticamente el mejor reel corto con las fotos y datos clave del anuncio.',
       'reel.caption.label': 'Texto',
       'reel.caption.note': 'Pega en Instagram/TikTok si hace falta.',
       'reel.caption.on': 'Subtitulos activos',
       'reel.caption.off': 'Sin subtitulos',
       'reel.caption.more_info': 'Pide mas detalles',
       'reel.caption.contact': 'Escribenos por WhatsApp',
+      'reel.caption.price_label': 'Precio',
+      'reel.caption.ref_label': 'Ref',
+      'reel.caption.whatsapp_available': 'WhatsApp disponible',
+      'reel.spec.bed': 'habitacion',
+      'reel.spec.beds': 'habitaciones',
+      'reel.spec.bath': 'bano',
+      'reel.spec.baths': 'banos',
+      'reel.type.business': 'Negocio',
+      'reel.feature.sector_prefix': 'Sector',
+      'reel.feature.deal_traspaso': 'Operacion: Traspaso',
+      'reel.feature.deal_business': 'Operacion: Negocio en venta',
       'reel.controls.duration': 'Duracion',
       'reel.controls.audio': 'Audio',
       'reel.controls.overlay_caption': 'Mostrar subtitulos en pantalla',
@@ -1304,6 +1776,14 @@
       'reel.audio.none': 'Sin musica',
       'reel.audio.ambient': 'Ambiental',
       'reel.audio.upbeat': 'Ritmico',
+      'reel.audio.chill': 'Chill',
+      'reel.audio.cinematic': 'Cinematico',
+      'reel.audio.tropical': 'Tropical',
+      'reel.audio.house': 'House',
+      'reel.audio.lofi': 'Lo-fi',
+      'reel.audio.piano': 'Piano',
+      'reel.audio.sunset': 'Atardecer',
+      'reel.audio.corporate': 'Corporativo',
       'reel.disclaimer': 'La exportacion del video se hace en tu navegador. Si tu dispositivo no permite compartir el archivo, usa Descargar y subelo en tu app.',
       'reel.missing_ref': 'Falta referencia',
       'reel.missing_ref_help': 'Abre esta pagina con ?ref=SCP-XXXX',
@@ -1316,16 +1796,20 @@
       'reel.status.loaded_n': 'Cargadas {n} imagenes',
       'reel.status.images_failed': 'No se pudieron cargar las imagenes. Intentalo de nuevo.',
       'reel.status.recording': 'Grabando…',
+      'reel.status.audio_fallback': 'El audio no se puede exportar aqui. Reintentando sin musica.',
       'reel.status.recorder_failed': 'La exportacion de video no esta soportada en este navegador.',
+      'reel.status.auto_generating': 'Generando tu reel…',
+      'reel.status.choose_platform': 'Elige una plataforma abajo.',
       'reel.status.ready': 'Video listo.',
       'reel.status.ready_with_audio': 'Video listo con audio.',
+      'reel.status.ready_no_audio': 'Video listo. El audio no esta disponible en este navegador/dispositivo.',
       'reel.status.shared': 'Compartido.',
       'reel.status.fallback_shared': 'Descargado. Pega el texto en {app}.',
-      'reel.status.no_video': 'Primero crea el video.',
+      'reel.status.no_video': 'Pulsa primero Reproducir video.',
       'reel.status.loading_listing': 'Cargando anuncio…',
       'reel.status.ready_to_create': 'Listo. Pulsa “Crear video”.',
       'reel.status.caption_copied': 'Texto copiado.',
-      'reel.status.preferred_app': 'Consejo: genera y luego comparte y elige {app}.',
+      'reel.status.preferred_app': 'Consejo: pulsa Compartir video y elige {app}.',
       'pricing.on_request': 'Precio a consultar',
       'time.month': 'mes',
       'pricing.per_night': '{price} / noche',
@@ -1401,12 +1885,111 @@
       'account.admin.user_roles_help': 'El usuario crea su cuenta primero. Luego asigna un rol aqui.',
       'account.admin.search_placeholder': 'Buscar por correo o nombre (p.ej. john@agency.com)',
       'account.admin.search': 'Buscar',
+      'account.admin.created_prefix': 'creado',
+      'account.admin.save': 'Guardar',
+      'account.admin.loading_users': 'Cargando usuarios…',
+      'account.admin.email_column_missing': 'Nota: no existe la columna profiles.email. Actualiza `supabase.sql` para habilitar la busqueda por correo.',
+      'account.admin.load_failed': 'No se pudieron cargar usuarios: {error}. Asegura politicas de admin (ejecuta el supabase.sql actualizado).',
+      'account.admin.showing_users': 'Mostrando {count} usuarios',
+      'account.admin.no_users': 'No se encontraron usuarios.',
+      'account.admin.saving': 'Guardando…',
+      'account.admin.failed_short': 'Error',
+      'account.admin.saved_short': 'Guardado',
+      'account.admin.role_update_failed': 'Error al actualizar rol: {error}',
+      'account.admin.role_updated': 'Rol actualizado para {userId}',
       'account.diagnostics.title': 'Diagnosticos',
       'account.diagnostics.subtitle': 'Abre esta pagina con <code>?qa=1</code> para ver comprobaciones.',
       'account.copy_prompt': 'Copiar:',
       'account.badge.partner': 'Herramientas partner activas',
       'account.badge.scout': 'Street Scout',
       'account.badge.newbuilds': 'Obra nueva',
+      'account.common.user': 'usuario',
+      'account.common.user_title': 'Usuario',
+      'account.error.profiles_lookup_failed': 'Fallo al consultar perfiles',
+
+      'role.admin': 'Admin',
+      'role.partner': 'Colaborador',
+      'role.agency_admin': 'Admin de agencia',
+      'role.agent': 'Agente',
+      'role.developer': 'Promotor',
+      'role.collaborator': 'Colaborador',
+      'role.client': 'Cliente',
+
+      'account.partner.developer.k': 'Herramientas de promotor',
+      'account.partner.developer.v': 'Promociones y colaboracion',
+      'account.partner.developer.d': 'Comparte proyectos, controla la marca y coordina visitas.',
+      'account.partner.agency.k': 'Herramientas de agencia',
+      'account.partner.agency.v': 'Marca blanca y colaboracion',
+      'account.partner.agency.d': 'Comparte anuncios con tus clientes y mantén tu marca.',
+      'account.partner.partner.k': 'Herramientas partner',
+      'account.partner.partner.v': 'Marca blanca y colaboracion',
+      'account.partner.partner.d': 'Folletos, enlaces y herramientas de colaboracion para partners.',
+      'account.partner.admin.k': 'Colaboracion',
+      'account.partner.admin.v': 'Marca blanca y partners',
+      'account.partner.admin.d': 'Herramientas y flujos para agencias, agentes y promotores.',
+      'account.partner.default.k': 'Acceso partner',
+      'account.partner.default.v': 'Solicitar colaboracion',
+      'account.partner.default.d': 'Si eres agencia, agente o promotor, pide activar las herramientas partner.',
+
+      'account.status.clearing_cache_title': 'Borrando cache offline…',
+      'account.status.clearing_cache_hint': 'La pagina se recargara.',
+      'account.status.resetting_login_title': 'Reiniciando login…',
+      'account.status.resetting_login_hint': 'Borrando sesion guardada y cache offline.',
+      'account.status.wait_seconds': 'Espera {seconds}s',
+      'account.status.recovery_title': 'Recuperacion de contraseña',
+      'account.status.recovery_hint': 'Elige una nueva contraseña abajo.',
+      'account.status.supabase_not_configured_title': 'Supabase no está configurado.',
+      'account.status.supabase_not_configured_hint': 'Completa `config.js` con tu URL de Supabase y clave anon/publicable.',
+      'account.status.supabase_init_failed': 'Fallo al iniciar Supabase',
+      'account.status.supabase_not_ready_title': 'Supabase no está listo',
+      'account.status.supabase_not_ready_hint': 'El cliente de Supabase no se inicializo. Revisa Diagnosticos (?qa=1).',
+      'account.status.connecting': 'Conectando...',
+      'account.status.connecting_ellipsis': 'Conectando…',
+      'account.status.initializing_auth': 'Inicializando autenticacion…',
+      'account.status.loading_auth': 'Cargando autenticacion…',
+      'account.status.auth_session_retrying': 'La comprobacion de sesion fue abortada (storage={storage}). Reintentando en {seconds}s…',
+      'account.status.auth_session_failed_title': 'Fallo de sesion de autenticacion',
+      'account.status.auth_session_failed_hint': 'La comprobacion de sesion fue abortada (storage={storage}). Prueba: borrar cache offline, luego Reiniciar login y volver a iniciar sesion. Si persiste, desactiva VPN/bloqueadores y abre ?qa=1.',
+      'account.status.auth_session_error_with_storage': '{message} (storage={storage})',
+      'account.status.signed_out_title': 'Sesion cerrada',
+      'account.status.signed_out_hint': 'Inicia sesion para sincronizar favoritos entre dispositivos.',
+      'account.status.role_unavailable': ' Rol no disponible: {error}',
+      'account.status.welcome': 'Bienvenido, {name}',
+      'account.status.saved_sync_hint': 'Tus anuncios guardados se sincronizarán en la página Propiedades.{roleHint}',
+      'account.status.supabase_not_ready_reload': 'Recarga la página. Si persiste, pulsa Borrar cache offline o abre ?qa=1.',
+      'account.status.signing_in': 'Iniciando sesion…',
+      'account.status.signin_failed_title': 'Error al iniciar sesion',
+      'account.status.try_again': 'Intentalo de nuevo.',
+      'account.status.signin_timeout': 'El inicio de sesion agotó el tiempo. Suele ser un problema de red/VPN/bloqueador al llegar a Supabase. Prueba “Reiniciar login” o cambia de red y reintenta (?qa=1).',
+      'account.status.creating_account': 'Creando cuenta…',
+      'account.status.creating_short': 'Creando…',
+      'account.status.signup_failed_title': 'Error al crear cuenta',
+      'account.status.check_email_title': 'Revisa tu correo',
+      'account.status.check_email_hint': 'Confirma tu correo para terminar de crear la cuenta.',
+      'account.status.please_wait': 'Espera',
+      'account.status.magic_rate_limited': 'Los enlaces mágicos tienen límite. Reintenta en {seconds}s.',
+      'account.status.sending_magic': 'Enviando enlace mágico…',
+      'account.status.sending_short': 'Enviando…',
+      'account.status.failed_send_link_title': 'No se pudo enviar el enlace',
+      'account.status.email_rate_limit': 'Límite de envío de correo superado. Espera unos minutos e inténtalo de nuevo. (Para quitar límites estrictos y mejorar entrega, configura SMTP propio en Supabase Auth).',
+      'account.status.link_sent_title': 'Enlace enviado',
+      'account.status.link_sent_hint': 'Revisa tu correo y pulsa el enlace de inicio de sesión. Si no te conecta, añade esta página a Redirect URLs en Supabase Auth.',
+      'account.status.magic_timeout': 'El enlace mágico agotó el tiempo. Suele ser problema de red/VPN/bloqueador al llegar a Supabase. Prueba “Reiniciar login” o cambia de red.',
+      'account.status.reset_rate_limited': 'Los correos de restablecimiento tienen límite. Reintenta en {seconds}s.',
+      'account.status.sending_reset': 'Enviando enlace de restablecimiento…',
+      'account.status.failed_reset_title': 'No se pudo enviar el enlace de restablecimiento',
+      'account.status.reset_link_sent_title': 'Enlace de restablecimiento enviado',
+      'account.status.reset_link_sent_hint': 'Revisa tu correo y pulsa el enlace para definir una nueva contraseña.',
+      'account.status.reset_timeout': 'El restablecimiento agotó el tiempo. Suele ser problema de red/VPN/bloqueador al llegar a Supabase. Prueba “Reiniciar login” o cambia de red.',
+      'account.status.reload_and_try_again': 'Recarga la página e inténtalo de nuevo.',
+      'account.status.password_update_failed_title': 'Error al actualizar contraseña',
+      'account.status.password_min_length': 'La contraseña debe tener al menos 8 caracteres.',
+      'account.status.password_mismatch': 'Las contraseñas no coinciden.',
+      'account.status.updating_password': 'Actualizando contraseña…',
+      'account.status.updating_short': 'Actualizando…',
+      'account.status.password_updated_title': 'Contraseña actualizada',
+      'account.status.password_updated_hint': 'Ya puedes iniciar sesión con tu nueva contraseña en cualquier dispositivo.',
+      'account.status.signing_out': 'Cerrando sesion…',
 
       'account.role.title': 'Tu espacio',
       'account.role.admin.title': 'Centro de administracion',
@@ -1807,6 +2390,77 @@
       'page.businesses.collab.cta.options': 'Opciones de colaboracion',
       'page.businesses.collab.cta.email': 'Escribenos',
 
+      'property_add.hero.title': 'Vende tu propiedad con nosotros',
+      'property_add.hero.subtitle': 'Añade los detalles y fotos de tu propiedad. Revisamos cada envío y publicamos solo anuncios verificados.',
+      'property_add.hero.note': 'Si la propiedad encaja con nuestra zona, podemos contactarte para programar una sesión de fotos gratuita con tecnología moderna (sujeto a revisión y disponibilidad).',
+      'property_add.tags.sale': 'En venta',
+      'property_add.tags.review': 'Revisión admin',
+      'property_add.tags.photos': 'Fotos',
+      'property_add.tags.cb_south': 'Costa Blanca Sur',
+      'property_add.form.title': 'Detalles de la propiedad',
+      'property_add.form.signin_hint': 'Consejo: inicia sesión en la página Cuenta para enviar al instante y subir fotos.',
+      'property_add.form.signin_hint_html': 'Consejo: inicia sesión en la página <a class=\"admin-link\" href=\"account.html\">Cuenta</a> para enviar al instante y subir fotos.',
+      'property_add.field.type': 'Tipo',
+      'property_add.field.town': 'Ciudad / Zona',
+      'property_add.field.province': 'Provincia',
+      'property_add.field.price': 'Precio esperado (EUR)',
+      'property_add.field.beds': 'Dormitorios',
+      'property_add.field.baths': 'Baños',
+      'property_add.field.built_area': 'Superficie construida (m2)',
+      'property_add.field.plot_area': 'Superficie parcela (m2)',
+      'property_add.field.description': 'Descripción',
+      'property_add.field.features': 'Características clave (opcional)',
+      'property_add.photos.title': 'Fotos',
+      'property_add.photos.note': 'Añade hasta 12 imágenes. Si no tienes buenas fotos, envía igualmente y podremos organizar una sesión gratuita tras la revisión.',
+      'property_add.field.photos': 'Subir fotos',
+      'property_add.photos.limit': 'Solo se usarán las primeras 12 fotos.',
+      'property_add.location.title': 'Ubicación (opcional)',
+      'property_add.location.note': 'Por privacidad, no compartas aquí la dirección exacta. Con ciudad/zona es suficiente. Las coordenadas GPS nos ayudan a evaluar más rápido.',
+      'property_add.location.btn': 'Usar mi ubicación',
+      'property_add.location.none': 'Sin ubicación todavía.',
+      'property_add.location.getting': 'Obteniendo ubicación…',
+      'property_add.location.done': 'Ubicación añadida.',
+      'property_add.location.failed': 'Ubicación fallida',
+      'property_add.field.lat': 'Latitud',
+      'property_add.field.lon': 'Longitud',
+      'property_add.contact.title': 'Tu contacto (no se muestra públicamente)',
+      'property_add.field.name': 'Nombre',
+      'property_add.field.email': 'Correo',
+      'property_add.field.phone': 'Teléfono / WhatsApp',
+      'property_add.field.private_address': 'Dirección exacta (opcional, privada)',
+      'property_add.confirm': 'Confirmo que soy el propietario (o tengo permiso para anunciar esta propiedad) y acepto que me contacten para verificación.',
+      'property_add.submit': 'Enviar para revisión',
+      'property_add.submitting': 'Enviando…',
+      'property_add.copy': 'Copiar mensaje',
+      'property_add.copied': 'Copiado al portapapeles.',
+      'property_add.copy_failed': 'No se pudo copiar (bloqueado por el navegador). Usa Correo o WhatsApp.',
+      'property_add.email': 'Correo',
+      'property_add.whatsapp': 'WhatsApp',
+      'property_add.errors.required': 'Faltan campos obligatorios: Tipo, Ciudad/Zona, Nombre, Teléfono.',
+
+      'vehicles.category.car': 'Coche',
+      'vehicles.category.boat': 'Barco',
+      'vehicles.deal.rent': 'En alquiler',
+      'vehicles.deal.sale': 'En venta',
+      'vehicles.deal.offer': 'Oferta',
+      'vehicles.card.open_details': 'Ver detalles del vehiculo',
+      'vehicles.empty.title': 'No se encontraron vehiculos',
+      'vehicles.empty.meta': 'Añade feeds de socios en feeds/vehicles y feeds/boats, y luego ejecuta python3 build_vehicles_data.py.',
+      'vehicles.empty.body': 'Si quieres publicar tus vehiculos para venta o alquiler, escribenos y activamos tu feed.',
+      'vehicles.actions.request_details': 'Solicitar detalles',
+      'vehicles.actions.call_provider': 'Llamar al proveedor',
+      'vehicles.actions.website': 'Web',
+      'vehicles.actions.share': 'Compartir',
+      'vehicles.actions.copied': 'Copiado',
+      'vehicles.mail.subject_prefix': 'Consulta vehículo',
+      'vehicles.mail.greeting': 'Hola Spanish Coast Properties,',
+      'vehicles.mail.interested': 'Estoy interesado en este {category} ({deal}):',
+      'vehicles.mail.link': 'Enlace',
+      'vehicles.mail.phone': 'Mi teléfono',
+      'vehicles.mail.preferred_dates': 'Mis fechas preferidas (si es alquiler)',
+      'vehicles.mail.thanks': 'Gracias.',
+      'vehicles.partner_listing': 'Anuncio colaborador',
+
       'account.hero.title': 'Tu cuenta',
       'account.hero.subtitle': 'Inicia sesión para sincronizar favoritos y desbloquear herramientas de colaboración.',
 
@@ -1858,6 +2512,12 @@
       'lang.sv_short': 'SV',
       'common.in': 'în',
       'common.all': 'Toate',
+      'common.na': 'N/A',
+      'common.price_on_request': 'Preț la cerere',
+      'common.per_night': 'noapte',
+      'common.per_day': 'zi',
+      'common.per_week': 'săptămână',
+      'common.per_month': 'lună',
       'nav.home': 'Acasă',
       'nav.properties': 'Proprietăți',
       'nav.new_builds': 'Construcții noi',
@@ -1869,6 +2529,13 @@
       'nav.contact_us': 'Contact',
       'nav.email': 'Email',
       'nav.call': 'Sună',
+      'role.admin': 'Admin',
+      'role.partner': 'Partener',
+      'role.agency_admin': 'Admin agenție',
+      'role.agent': 'Agent',
+      'role.developer': 'Dezvoltator',
+      'role.collaborator': 'Colaborator',
+      'role.client': 'Client',
       'ui.menu': 'Meniu',
       'ui.map': 'Hartă',
       'ui.list': 'Listă',
@@ -1877,7 +2544,165 @@
       'ui.clear_all_filters': 'Șterge toate filtrele',
       'ui.apply_filters': 'Aplică filtrele',
       'ui.close_filters': 'Închide filtrele',
-      'pricing.on_request': 'Preț la cerere'
+      'pricing.on_request': 'Preț la cerere',
+      'modal.share_video': 'Distribuie video',
+      'reel.play_video': 'Redă video',
+      'reel.share_video': 'Distribuie video',
+      'reel.auto_mode_note': 'Construim automat cel mai bun reel scurt din media anunțului și detaliile cheie.',
+      'reel.audio.none': 'Fără muzică',
+      'reel.audio.ambient': 'Ambiental',
+      'reel.audio.upbeat': 'Energic',
+      'reel.audio.chill': 'Relax',
+      'reel.audio.cinematic': 'Cinematic',
+      'reel.audio.tropical': 'Tropical',
+      'reel.audio.house': 'House',
+      'reel.audio.lofi': 'Lo-fi',
+      'reel.audio.piano': 'Pian',
+      'reel.audio.sunset': 'Apus',
+      'reel.audio.corporate': 'Corporate',
+      'reel.caption.price_label': 'Preț',
+      'reel.caption.ref_label': 'Ref',
+      'reel.caption.whatsapp_available': 'WhatsApp disponibil',
+      'reel.spec.bed': 'dormitor',
+      'reel.spec.beds': 'dormitoare',
+      'reel.spec.bath': 'baie',
+      'reel.spec.baths': 'băi',
+      'reel.type.business': 'Afacere',
+      'reel.feature.sector_prefix': 'Sector',
+      'reel.feature.deal_traspaso': 'Tranzacție: Traspaso',
+      'reel.feature.deal_business': 'Tranzacție: Afacere de vânzare',
+      'reel.status.audio_fallback': 'Exportul audio nu este disponibil aici. Reîncercăm fără muzică.',
+      'reel.status.auto_generating': 'Generăm reel-ul tău…',
+      'reel.status.choose_platform': 'Alege o platformă mai jos.',
+      'reel.status.no_video': 'Apasă mai întâi Redă video.',
+      'reel.status.preferred_app': 'Sfat: apasă Distribuie video și alege {app}.',
+      'filters.clear': 'Șterge',
+      'filters.any_provider': 'Orice furnizor',
+      'properties.saved': 'Salvate',
+      'properties.sort.date_desc': 'Data adăugării (cele mai noi)',
+      'properties.sort.date_asc': 'Data adăugării (cele mai vechi)',
+      'properties.send_saved': 'Creează catalog',
+      'properties.save_alert': 'Salvează alerta',
+      'city.all': 'Toate zonele',
+      'city.torrevieja': 'Torrevieja',
+      'city.orihuela_costa': 'Orihuela Costa',
+      'city.guardamar': 'Guardamar',
+      'city.quesada': 'Quesada',
+      'catalog.builder.source_saved': 'Anunțuri salvate',
+      'blog.tag.updated_daily': 'Actualizat zilnic',
+      'blog.lang.auto': 'Limba mea',
+      'blog.actions.saved_filter': 'Salvate',
+      'blog.filters.search_placeholder': 'Caută subiecte…',
+      'map.tools.aria': 'Instrumente de căutare pe hartă',
+      'map.tools.draw': 'Desenează zonă',
+      'map.tools.around': 'În jurul meu',
+      'map.tools.clear': 'Șterge',
+      'map.tools.radius': 'Rază',
+      'map.tools.tip': 'Sfat: desenează o zonă pe hartă sau caută în jurul tău.',
+      'account.actions.clear_offline_cache': 'Șterge cache-ul offline',
+      'account.actions.reset_login': 'Resetează autentificarea',
+      'account.signin.title': 'Autentificare',
+      'account.signin.button': 'Autentificare',
+      'account.hero.subtitle': 'Autentifică-te pentru a sincroniza favoritele pe toate dispozitivele și a debloca unelte pentru parteneri.',
+      'account.dashboard.saved': 'Salvate',
+      'account.alerts.title': 'Cerințe salvate și potriviri noi',
+      'account.shop.clear_basket': 'Golește coșul',
+      'account.tiles.saved_listings': 'Anunțuri salvate',
+      'account.tiles.scout_title': 'Street Scout (€200–€500)',
+      'account.admin.btn.scout': 'Inbox Street Scout',
+      'services.vehicles.rent.desc': 'Prețuri clare, așteptări realiste și predare/primire fără fricțiuni.',
+      'services.hero.title': 'Servicii care elimină fricțiunea',
+      'services.collab.title': 'Lucrează cu noi',
+      'services.collab.subtitle': 'Două căi de colaborare: parteneri verificați (agenții, dezvoltatori, furnizori) și Street Scouts care descoperă panouri „De vânzare”.',
+      'services.collab.scout.title': 'Street Scout (Câștigă €200–€500)',
+      'page.businesses.collab.title': 'Lucrează cu noi (colaboratori verificați)',
+      'page.businesses.collab.cta.email': 'Trimite email',
+      'page.businesses.cta.see_services': 'Vezi servicii',
+      'page.scout.hero.title': 'Street Scout (Câștigă €200–€500)',
+      'page.scout.cta.account': 'Autentificare / Creează cont',
+      'page.scout.auth.title': 'Autentifică-te mai întâi',
+      'page.scout.how.title': 'Cum funcționează',
+      'page.scout.join.p': 'Activează modul Street Scout pentru a trimite panouri. Durează doar un click.',
+      'page.scout.join.cta': 'Activează Street Scout',
+      'page.scout.footer.p': 'Street Scout: creștem portofoliul și recompensăm localnicii care ne ajută să descoperim proprietăți.',
+      'page.collaborate.cta.email': 'Trimite email',
+      'page.collaborate.cta.dealer_tool': 'Instrument import XML dealer',
+      'page.collaborate.cta.see_services': 'Vezi servicii',
+      'page.collaborate.cta.open_scout': 'Deschide Street Scout',
+      'page.collaborate.cta.account': 'Autentificare / Creează cont',
+      'vehicles.category.car': 'Mașină',
+      'vehicles.category.boat': 'Barcă',
+      'vehicles.deal.rent': 'De închiriat',
+      'vehicles.deal.sale': 'De vânzare',
+      'vehicles.deal.offer': 'Ofertă',
+      'vehicles.card.open_details': 'Vezi detalii vehicul',
+      'vehicles.empty.title': 'Nu s-au găsit vehicule',
+      'vehicles.empty.meta': 'Adaugă feed-uri partener în feeds/vehicles și feeds/boats, apoi rulează python3 build_vehicles_data.py.',
+      'vehicles.empty.body': 'Dacă vrei să publici vehiculele tale la vânzare sau închiriere, scrie-ne și activăm feed-ul tău.',
+      'vehicles.actions.request_details': 'Solicită detalii',
+      'vehicles.actions.call_provider': 'Sună furnizorul',
+      'vehicles.actions.website': 'Website',
+      'vehicles.actions.share': 'Distribuie',
+      'vehicles.actions.copied': 'Copiat',
+      'vehicles.mail.subject_prefix': 'Solicitare vehicul',
+      'vehicles.mail.greeting': 'Salut, Spanish Coast Properties,',
+      'vehicles.mail.interested': 'Sunt interesat de acest {category} ({deal}):',
+      'vehicles.mail.link': 'Link',
+      'vehicles.mail.phone': 'Telefonul meu',
+      'vehicles.mail.preferred_dates': 'Datele mele preferate (dacă este închiriere)',
+      'vehicles.mail.thanks': 'Mulțumesc.',
+      'shop.actions.details': 'Detalii',
+      'shop.actions.open_in_shop': 'Deschide în magazin',
+      'shop.actions.no_shop_link': 'Fără link de magazin',
+      'shop.price_on_request': 'Preț la cerere',
+      'shop.spec.install_support': 'Suport instalare',
+      'shop.spec.secure_handover': 'Predare sigură',
+      'shop.spec.documentation': 'Documentație inclusă',
+      'shop.no_description': 'Nicio descriere disponibilă.',
+      'shop.why_title': 'De ce contează',
+      'shop.why.1': 'Reduce fricțiunea operațională (închirieri, echipă, furnizori)',
+      'shop.why.2': 'Păstrează accesul controlat și auditat',
+      'shop.why.3': 'Îmbunătățește fiabilitatea cu o bază de rețea curată',
+      'shop.why.4': 'Mai puțină confuzie la predare',
+      'shop.cta.request_install': 'Solicită instalare',
+      'shop.cta.how_we_work': 'Cum lucrăm',
+      'shop.empty.title': 'Încă nu sunt produse încărcate',
+      'shop.empty.body_prefix': 'Pagina magazinului este pregătită, dar',
+      'shop.empty.body_suffix': 'este gol. Sincronizează din WooCommerce pentru a-l popula.',
+      'shop.status.on_sale': 'La reducere',
+      'shop.count.product_single': 'produs',
+      'shop.count.product_plural': 'produse',
+      'shop.meta.source_label': 'Sursă',
+      'shop.meta.synced_label': 'Sincronizat',
+      'shop.meta.store_label': 'Magazin',
+      'tour.back': 'Înapoi',
+      'tour.loading': 'Se încarcă…',
+      'tour.open_brochure': 'Broșură',
+      'tour.share': 'Distribuie',
+      'tour.open_studio': 'Tour Studio',
+      'tour.close_studio': 'Închide Studio',
+      'tour.title': 'Tur virtual',
+      'tour.overlay.title': 'Pregătim turul 3D…',
+      'tour.overlay.subtitle': 'Încărcăm panorama și hotspoturile interactive.',
+      'tour.prev_scene': 'Scena anterioară',
+      'tour.next_scene': 'Scena următoare',
+      'tour.auto_spin_on': 'Rotire automată activă',
+      'tour.dollhouse.title': 'Dollhouse',
+      'tour.scene_list': 'Scene',
+      'tour.studio.title': 'Tour Studio (Insta360)',
+      'tour.studio.badge': 'Instrument admin',
+      'tour.studio.copy': 'Lipește URL-urile fotografiilor equirectangulare Insta360 (una pe linie) și generăm fluxul tip Matterport cu hotspoturi și noduri dollhouse.',
+      'tour.studio.urls_label': 'URL-uri panoramă',
+      'tour.studio.generate': 'Generează din URL-uri',
+      'tour.studio.save_draft': 'Salvează draft',
+      'tour.studio.load_draft': 'Încarcă draft',
+      'tour.studio.clear_draft': 'Șterge draft',
+      'tour.studio.json_label': 'JSON tur (opțional)',
+      'tour.studio.import_json': 'Importă JSON',
+      'tour.studio.export_json': 'Exportă JSON',
+      'tour.studio.local_label': 'Fișiere locale pentru preview (opțional)',
+      'tour.studio.preview_files': 'Preview fișiere locale',
+      'tour.studio.note': 'Pont: pentru calitate 360 completă folosește JPG panoramic 2:1 exportat din Insta360.'
     },
     sv: {
       'lang.label': 'Språk',
@@ -1891,6 +2716,12 @@
       'lang.sv_short': 'SV',
       'common.in': 'i',
       'common.all': 'Alla',
+      'common.na': 'N/A',
+      'common.price_on_request': 'Pris på begäran',
+      'common.per_night': 'natt',
+      'common.per_day': 'dag',
+      'common.per_week': 'vecka',
+      'common.per_month': 'månad',
       'nav.home': 'Hem',
       'nav.properties': 'Bostäder',
       'nav.new_builds': 'Nyproduktion',
@@ -1902,6 +2733,13 @@
       'nav.contact_us': 'Kontakt',
       'nav.email': 'E-post',
       'nav.call': 'Ring',
+      'role.admin': 'Admin',
+      'role.partner': 'Partner',
+      'role.agency_admin': 'Byråadmin',
+      'role.agent': 'Agent',
+      'role.developer': 'Utvecklare',
+      'role.collaborator': 'Samarbetspartner',
+      'role.client': 'Kund',
       'ui.menu': 'Meny',
       'ui.map': 'Karta',
       'ui.list': 'Lista',
@@ -1910,7 +2748,165 @@
       'ui.clear_all_filters': 'Rensa alla filter',
       'ui.apply_filters': 'Använd filter',
       'ui.close_filters': 'Stäng filter',
-      'pricing.on_request': 'Pris på begäran'
+      'pricing.on_request': 'Pris på begäran',
+      'modal.share_video': 'Dela video',
+      'reel.play_video': 'Spela video',
+      'reel.share_video': 'Dela video',
+      'reel.auto_mode_note': 'Vi bygger automatiskt den bästa korta reelen från objektets media och nyckeldetaljer.',
+      'reel.audio.none': 'Ingen musik',
+      'reel.audio.ambient': 'Ambient',
+      'reel.audio.upbeat': 'Uppåt',
+      'reel.audio.chill': 'Chill',
+      'reel.audio.cinematic': 'Cinematisk',
+      'reel.audio.tropical': 'Tropisk',
+      'reel.audio.house': 'House',
+      'reel.audio.lofi': 'Lo-fi',
+      'reel.audio.piano': 'Piano',
+      'reel.audio.sunset': 'Solnedgång',
+      'reel.audio.corporate': 'Corporate',
+      'reel.caption.price_label': 'Pris',
+      'reel.caption.ref_label': 'Ref',
+      'reel.caption.whatsapp_available': 'WhatsApp tillgängligt',
+      'reel.spec.bed': 'sovrum',
+      'reel.spec.beds': 'sovrum',
+      'reel.spec.bath': 'badrum',
+      'reel.spec.baths': 'badrum',
+      'reel.type.business': 'Företag',
+      'reel.feature.sector_prefix': 'Sektor',
+      'reel.feature.deal_traspaso': 'Affärstyp: Traspaso',
+      'reel.feature.deal_business': 'Affärstyp: Företag till salu',
+      'reel.status.audio_fallback': 'Ljudexport stöds inte här. Försöker igen utan musik.',
+      'reel.status.auto_generating': 'Skapar din reel…',
+      'reel.status.choose_platform': 'Välj en plattform nedan.',
+      'reel.status.no_video': 'Tryck först på Spela video.',
+      'reel.status.preferred_app': 'Tips: tryck på Dela video och välj {app}.',
+      'filters.clear': 'Rensa',
+      'filters.any_provider': 'Valfri leverantör',
+      'properties.saved': 'Sparade',
+      'properties.sort.date_desc': 'Datum tillagt (nyast)',
+      'properties.sort.date_asc': 'Datum tillagt (äldst)',
+      'properties.send_saved': 'Skapa katalog',
+      'properties.save_alert': 'Spara bevakning',
+      'city.all': 'Alla områden',
+      'city.torrevieja': 'Torrevieja',
+      'city.orihuela_costa': 'Orihuela Costa',
+      'city.guardamar': 'Guardamar',
+      'city.quesada': 'Quesada',
+      'catalog.builder.source_saved': 'Sparade objekt',
+      'blog.tag.updated_daily': 'Uppdateras dagligen',
+      'blog.lang.auto': 'Mitt språk',
+      'blog.actions.saved_filter': 'Sparade',
+      'blog.filters.search_placeholder': 'Sök ämnen…',
+      'map.tools.aria': 'Kartsökverktyg',
+      'map.tools.draw': 'Rita område',
+      'map.tools.around': 'Runt mig',
+      'map.tools.clear': 'Rensa',
+      'map.tools.radius': 'Radie',
+      'map.tools.tip': 'Tips: rita ett område på kartan eller sök runt dig.',
+      'account.actions.clear_offline_cache': 'Rensa offline-cache',
+      'account.actions.reset_login': 'Återställ inloggning',
+      'account.signin.title': 'Logga in',
+      'account.signin.button': 'Logga in',
+      'account.hero.subtitle': 'Logga in för att synka favoriter mellan enheter och låsa upp partnerverktyg.',
+      'account.dashboard.saved': 'Sparade',
+      'account.alerts.title': 'Sparade krav och nya matchningar',
+      'account.shop.clear_basket': 'Töm varukorg',
+      'account.tiles.saved_listings': 'Sparade objekt',
+      'account.tiles.scout_title': 'Street Scout (€200–€500)',
+      'account.admin.btn.scout': 'Street Scout-inkorg',
+      'services.vehicles.rent.desc': 'Tydlig prissättning, realistiska förväntningar och smidig hämtning/överlämning.',
+      'services.hero.title': 'Tjänster som minskar friktion',
+      'services.collab.title': 'Arbeta med oss',
+      'services.collab.subtitle': 'Två samarbetsvägar: verifierade partners (byråer, utvecklare, leverantörer) och Street Scouts som hittar ”Till salu”-skyltar.',
+      'services.collab.scout.title': 'Street Scout (Tjäna €200–€500)',
+      'page.businesses.collab.title': 'Arbeta med oss (verifierade samarbetspartners)',
+      'page.businesses.collab.cta.email': 'E-posta oss',
+      'page.businesses.cta.see_services': 'Se tjänster',
+      'page.scout.hero.title': 'Street Scout (Tjäna €200–€500)',
+      'page.scout.cta.account': 'Logga in / Skapa konto',
+      'page.scout.auth.title': 'Logga in först',
+      'page.scout.how.title': 'Så fungerar det',
+      'page.scout.join.p': 'Aktivera Street Scout-läge för att skicka in skyltar. Det tar bara ett klick.',
+      'page.scout.join.cta': 'Aktivera Street Scout',
+      'page.scout.footer.p': 'Street Scout: bygg portföljen och belöna lokalbor som hjälper oss hitta objekt.',
+      'page.collaborate.cta.email': 'E-posta oss',
+      'page.collaborate.cta.dealer_tool': 'Dealer XML-importverktyg',
+      'page.collaborate.cta.see_services': 'Se tjänster',
+      'page.collaborate.cta.open_scout': 'Öppna Street Scout',
+      'page.collaborate.cta.account': 'Logga in / Skapa konto',
+      'vehicles.category.car': 'Bil',
+      'vehicles.category.boat': 'Båt',
+      'vehicles.deal.rent': 'Uthyres',
+      'vehicles.deal.sale': 'Till salu',
+      'vehicles.deal.offer': 'Erbjudande',
+      'vehicles.card.open_details': 'Visa fordonsdetaljer',
+      'vehicles.empty.title': 'Inga fordon hittades',
+      'vehicles.empty.meta': 'Lägg till partnerflöden i feeds/vehicles och feeds/boats, kör sedan python3 build_vehicles_data.py.',
+      'vehicles.empty.body': 'Om du vill lista dina fordon för försäljning eller uthyrning, maila oss så kopplar vi in ditt flöde.',
+      'vehicles.actions.request_details': 'Begär detaljer',
+      'vehicles.actions.call_provider': 'Ring leverantören',
+      'vehicles.actions.website': 'Webbplats',
+      'vehicles.actions.share': 'Dela',
+      'vehicles.actions.copied': 'Kopierad',
+      'vehicles.mail.subject_prefix': 'Fordonförfrågan',
+      'vehicles.mail.greeting': 'Hej Spanish Coast Properties,',
+      'vehicles.mail.interested': 'Jag är intresserad av detta {category} ({deal}):',
+      'vehicles.mail.link': 'Länk',
+      'vehicles.mail.phone': 'Mitt telefonnummer',
+      'vehicles.mail.preferred_dates': 'Mina önskade datum (om uthyrning)',
+      'vehicles.mail.thanks': 'Tack.',
+      'shop.actions.details': 'Detaljer',
+      'shop.actions.open_in_shop': 'Öppna i butik',
+      'shop.actions.no_shop_link': 'Ingen butikslänk',
+      'shop.price_on_request': 'Pris på begäran',
+      'shop.spec.install_support': 'Installationsstöd',
+      'shop.spec.secure_handover': 'Säker överlämning',
+      'shop.spec.documentation': 'Dokumentation ingår',
+      'shop.no_description': 'Ingen beskrivning tillgänglig.',
+      'shop.why_title': 'Varför detta är viktigt',
+      'shop.why.1': 'Minska operativ friktion (uthyrning, personal, leverantörer)',
+      'shop.why.2': 'Håll åtkomst kontrollerad och spårbar',
+      'shop.why.3': 'Förbättra driftsäkerheten med en stabil nätverksgrund',
+      'shop.why.4': 'Mindre förvirring vid överlämning',
+      'shop.cta.request_install': 'Begär installation',
+      'shop.cta.how_we_work': 'Så arbetar vi',
+      'shop.empty.title': 'Inga produkter har laddats ännu',
+      'shop.empty.body_prefix': 'Butikssidan är klar, men',
+      'shop.empty.body_suffix': 'är tom. Synka från WooCommerce för att fylla den.',
+      'shop.status.on_sale': 'På rea',
+      'shop.count.product_single': 'produkt',
+      'shop.count.product_plural': 'produkter',
+      'shop.meta.source_label': 'Källa',
+      'shop.meta.synced_label': 'Synkad',
+      'shop.meta.store_label': 'Butik',
+      'tour.back': 'Tillbaka',
+      'tour.loading': 'Laddar…',
+      'tour.open_brochure': 'Broschyr',
+      'tour.share': 'Dela',
+      'tour.open_studio': 'Tour Studio',
+      'tour.close_studio': 'Stäng Studio',
+      'tour.title': 'Virtuell rundtur',
+      'tour.overlay.title': 'Förbereder 3D-rundtur…',
+      'tour.overlay.subtitle': 'Laddar panorama och interaktiva hotspots.',
+      'tour.prev_scene': 'Föregående scen',
+      'tour.next_scene': 'Nästa scen',
+      'tour.auto_spin_on': 'Autospin på',
+      'tour.dollhouse.title': 'Dollhouse',
+      'tour.scene_list': 'Scener',
+      'tour.studio.title': 'Tour Studio (Insta360)',
+      'tour.studio.badge': 'Adminverktyg',
+      'tour.studio.copy': 'Klistra in Insta360 equirektangulära foto-URL:er (en per rad) så skapar vi ett Matterport-liknande flöde med hotspots och dollhouse-noder.',
+      'tour.studio.urls_label': 'Panorama-URL:er',
+      'tour.studio.generate': 'Generera från URL:er',
+      'tour.studio.save_draft': 'Spara utkast',
+      'tour.studio.load_draft': 'Ladda utkast',
+      'tour.studio.clear_draft': 'Rensa utkast',
+      'tour.studio.json_label': 'Tour JSON (valfritt)',
+      'tour.studio.import_json': 'Importera JSON',
+      'tour.studio.export_json': 'Exportera JSON',
+      'tour.studio.local_label': 'Lokala förhandsvisningsfiler (valfritt)',
+      'tour.studio.preview_files': 'Förhandsgranska lokala filer',
+      'tour.studio.note': 'Tips: för full 360-kvalitet använd 2:1 panoramabilder (JPG) från Insta360-export.'
     }
   };
 
@@ -1930,6 +2926,308 @@
       'WhatsApp': 'WhatsApp',
       'TikTok': 'TikTok',
       'Instagram': 'Instagram'
+    }
+  };
+
+  // High-frequency UI phrases that should stay stable and idiomatic across pages.
+  const STATIC_PHRASE_OVERRIDES = {
+    en: {
+      'Apartamento': 'Apartment',
+      'Apartamentos': 'Apartments',
+      'Piso': 'Apartment',
+      'Pisos': 'Apartments',
+      'Atico': 'Penthouse',
+      'Ático': 'Penthouse',
+      'Chalet': 'Villa',
+      'Casa adosada': 'Town House',
+      'Adosado': 'Town House',
+      'Duplex': 'Duplex',
+      'Dúplex': 'Duplex',
+      'Local comercial': 'Commercial',
+      'Locales comerciales': 'Commercial',
+      'Parcela': 'Plot',
+      'Terreno': 'Land',
+      'Obra nueva': 'New Build',
+      'Nueva construcción': 'New Build',
+      'En venta': 'For sale',
+      'En alquiler': 'For rent',
+      'Piscina': 'Pool',
+      'Garaje': 'Garage',
+      'Terraza': 'Terrace',
+      'Ascensor': 'Elevator',
+      'Aire acondicionado': 'Air conditioning',
+      'Amueblado': 'Furnished',
+      'Semiamueblado': 'Partly furnished',
+      'Trastero': 'Storage room',
+      'Vistas al mar': 'Sea view',
+      'Primera linea': 'First line',
+      'Playa': 'Beach',
+      'Centro': 'Center',
+      'Reformado': 'Renovated'
+    },
+    es: {
+      'Any': 'Cualquiera',
+      'All': 'Todos',
+      'Any Type': 'Cualquier tipo',
+      'Any provider': 'Cualquier proveedor',
+      'For sale': 'En venta',
+      'For rent': 'En alquiler',
+      'Featured': 'Destacados',
+      'Date added (newest)': 'Fecha de alta (más reciente)',
+      'Date added (oldest)': 'Fecha de alta (más antigua)',
+      'Price (low to high)': 'Precio (de menor a mayor)',
+      'Price (high to low)': 'Precio (de mayor a menor)',
+      'Per day': 'Por día',
+      'Per week': 'Por semana',
+      'Per month': 'Por mes',
+      'Pending': 'Pendiente',
+      'Approved': 'Aprobado',
+      'Rejected': 'Rechazado',
+      'New': 'Nuevo',
+      'Called': 'Llamado',
+      'Contacted': 'Contactado',
+      'Signed': 'Firmado',
+      'Sold': 'Vendido',
+      'All statuses': 'Todos los estados',
+      'All products': 'Todos los productos',
+      'Visible in app': 'Visible en la app',
+      'Hidden in app': 'Oculto en la app',
+      'Has overrides': 'Con ajustes',
+      'Draft overrides': 'Ajustes en borrador',
+      'Search email, name, phone, code': 'Buscar por email, nombre, teléfono o código',
+      'Search title, location, contact': 'Buscar por título, ubicación o contacto',
+      'Search town, type, contact': 'Buscar por ciudad, tipo o contacto',
+      'Search name, SKU, WC id, category': 'Buscar nombre, SKU, id WC o categoría',
+      'Search locations': 'Buscar ubicaciones',
+      'Search topics…': 'Buscar temas…',
+      'Town, marina, pickup area': 'Ciudad, marina, zona de recogida',
+      'Town, pickup area': 'Ciudad, zona de recogida',
+      'Marina, town': 'Marina, ciudad',
+      'Any (e.g. 50000)': 'Cualquiera (p.ej. 50000)',
+      'you@email.com': 'tu@email.com',
+      'you@example.com': 'tu@email.com',
+      'Your name': 'Tu nombre',
+      'Select': 'Seleccionar',
+      'Apartment': 'Apartamento',
+      'Town House': 'Casa adosada',
+      'Commercial': 'Comercial',
+      'Land': 'Terreno',
+      'Penthouse': 'Ático',
+      'Investment': 'Inversión',
+      'New Build': 'Obra nueva',
+      'New build': 'Obra nueva',
+      'Other': 'Otro',
+      'Cars': 'Coches',
+      'Car': 'Coche',
+      'Boats': 'Barcos',
+      'Boat': 'Barco',
+      'Mixed (cars + boats)': 'Mixto (coches + barcos)',
+      'Client name': 'Nombre del cliente',
+      'Dealership / broker name': 'Concesionario / nombre del broker',
+      'Town / Marina / Pickup area': 'Ciudad / Marina / zona de recogida',
+      'Street + number (only for us, not published)': 'Calle + número (solo para nosotros, no se publica)',
+      'Condition, upgrades, parking, pool, orientation, nearby beach/golf, etc.': 'Estado, mejoras, aparcamiento, piscina, orientación, playa/golf cercanos, etc.',
+      'Paste image URLs (one per line). If you don\'t have links, send photos via WhatsApp after generating the message.': 'Pega URLs de imágenes (una por línea). Si no tienes enlaces, envía fotos por WhatsApp después de generar el mensaje.',
+      'Open filters': 'Abrir filtros',
+      'Close filters': 'Cerrar filtros',
+      'No location yet.': 'Sin ubicación todavía.',
+      'Close': 'Cerrar'
+    },
+    ro: {
+      'Any': 'Oricare',
+      'All': 'Toate',
+      'News': 'Știri',
+      'Trends': 'Tendințe',
+      'Services': 'Servicii',
+      'Property': 'Proprietăți',
+      'Market': 'Piață',
+      'Mortgage': 'Ipotecă',
+      'Finance': 'Finanțe',
+      'Any Type': 'Orice tip',
+      'Any provider': 'Orice furnizor',
+      'For sale': 'De vânzare',
+      'For rent': 'De închiriat',
+      'Featured': 'Recomandate',
+      'Date added (newest)': 'Data adăugării (cele mai noi)',
+      'Date added (oldest)': 'Data adăugării (cele mai vechi)',
+      'Price (low to high)': 'Preț (de la mic la mare)',
+      'Price (high to low)': 'Preț (de la mare la mic)',
+      'Per day': 'Pe zi',
+      'Per week': 'Pe săptămână',
+      'Per month': 'Pe lună',
+      'Pending': 'În așteptare',
+      'Approved': 'Aprobat',
+      'Rejected': 'Respins',
+      'New': 'Nou',
+      'Called': 'Apelat',
+      'Contacted': 'Contactat',
+      'Signed': 'Semnat',
+      'Sold': 'Vândut',
+      'Search locations': 'Caută locații',
+      'Search topics…': 'Caută subiecte…',
+      'Town, marina, pickup area': 'Oraș, marină, zonă preluare',
+      'Town, pickup area': 'Oraș, zonă preluare',
+      'Any (e.g. 50000)': 'Oricare (ex. 50000)',
+      'Select': 'Selectează',
+      'Apartment': 'Apartament',
+      'Town House': 'Casă înșiruită',
+      'Commercial': 'Comercial',
+      'Land': 'Teren',
+      'Penthouse': 'Penthouse',
+      'Investment': 'Investiție',
+      'New Build': 'Construcție nouă',
+      'New build': 'Construcție nouă',
+      'Other': 'Altul',
+      'Cars': 'Mașini',
+      'Car': 'Mașină',
+      'Boats': 'Bărci',
+      'Boat': 'Barcă',
+      'Client name': 'Nume client',
+      'Dealership / broker name': 'Dealer / nume broker',
+      'Town / Marina / Pickup area': 'Oraș / marină / zonă preluare',
+      'Open filters': 'Deschide filtrele',
+      'Close filters': 'Închide filtrele',
+      'Close': 'Închide',
+      'Clear': 'Șterge',
+      'Create catalog': 'Creează catalog',
+      'Saved': 'Salvate',
+      'Saved listings': 'Anunțuri salvate',
+      'Clear offline cache': 'Șterge cache-ul offline',
+      'Street Scout Inbox': 'Inbox Street Scout',
+      'Updated daily': 'Actualizat zilnic',
+      'My language': 'Limba mea',
+      'Work With Us': 'Lucrează cu noi',
+      'Work With Us (Verified Collaborators)': 'Lucrează cu noi (colaboratori verificați)',
+      'Street Scout (Earn €200–€500)': 'Street Scout (Câștigă €200–€500)',
+      'Sign in / Create account': 'Autentificare / Creează cont',
+      'How It Works': 'Cum funcționează',
+      'Open Street Scout': 'Deschide Street Scout',
+      'Email us': 'Trimite email',
+      'Dealer XML import tool': 'Instrument import XML dealer',
+      'See services': 'Vezi servicii',
+      'Open in shop': 'Deschide în magazin',
+      'Details': 'Detalii',
+      'Install support': 'Suport instalare',
+      'Secure handover': 'Predare sigură',
+      'No description available.': 'Nicio descriere disponibilă.',
+      'Why this matters': 'De ce contează',
+      'Request install': 'Solicită instalare',
+      'How we work': 'Cum lucrăm',
+      'Map View': 'Vizualizare hartă',
+      'Listing Details': 'Detalii anunț',
+      'Apartamento': 'Apartament',
+      'Piso': 'Apartament',
+      'Ático': 'Penthouse',
+      'Atico': 'Penthouse',
+      'Chalet': 'Vilă',
+      'Casa adosada': 'Casă înșiruită',
+      'Adosado': 'Casă înșiruită',
+      'Obra nueva': 'Construcție nouă',
+      'En venta': 'De vânzare',
+      'En alquiler': 'De închiriat',
+      'Piscina': 'Piscină',
+      'Garaje': 'Garaj',
+      'Terraza': 'Terasă',
+      'Ascensor': 'Lift',
+      'Aire acondicionado': 'Aer condiționat'
+    },
+    sv: {
+      'Any': 'Valfri',
+      'All': 'Alla',
+      'News': 'Nyheter',
+      'Trends': 'Trender',
+      'Services': 'Tjänster',
+      'Property': 'Fastighet',
+      'Market': 'Marknad',
+      'Mortgage': 'Bolån',
+      'Finance': 'Finans',
+      'Any Type': 'Valfri typ',
+      'Any provider': 'Valfri leverantör',
+      'For sale': 'Till salu',
+      'For rent': 'Uthyres',
+      'Featured': 'Utvalda',
+      'Date added (newest)': 'Tillagd datum (nyast)',
+      'Date added (oldest)': 'Tillagd datum (äldst)',
+      'Price (low to high)': 'Pris (lågt till högt)',
+      'Price (high to low)': 'Pris (högt till lågt)',
+      'Per day': 'Per dag',
+      'Per week': 'Per vecka',
+      'Per month': 'Per månad',
+      'Pending': 'Väntande',
+      'Approved': 'Godkänd',
+      'Rejected': 'Avvisad',
+      'New': 'Ny',
+      'Called': 'Ringd',
+      'Contacted': 'Kontaktad',
+      'Signed': 'Signerad',
+      'Sold': 'Såld',
+      'Search locations': 'Sök platser',
+      'Search topics…': 'Sök ämnen…',
+      'Town, marina, pickup area': 'Ort, marina, upphämtningsområde',
+      'Town, pickup area': 'Ort, upphämtningsområde',
+      'Any (e.g. 50000)': 'Valfritt (t.ex. 50000)',
+      'Select': 'Välj',
+      'Apartment': 'Lägenhet',
+      'Town House': 'Radhus',
+      'Commercial': 'Kommersiell',
+      'Land': 'Tomt',
+      'Penthouse': 'Takvåning',
+      'Investment': 'Investering',
+      'New Build': 'Nyproduktion',
+      'New build': 'Nyproduktion',
+      'Other': 'Annat',
+      'Cars': 'Bilar',
+      'Car': 'Bil',
+      'Boats': 'Båtar',
+      'Boat': 'Båt',
+      'Client name': 'Kundnamn',
+      'Dealership / broker name': 'Bilfirma / mäklarnamn',
+      'Town / Marina / Pickup area': 'Ort / marina / upphämtningsområde',
+      'Open filters': 'Öppna filter',
+      'Close filters': 'Stäng filter',
+      'Close': 'Stäng',
+      'Clear': 'Rensa',
+      'Create catalog': 'Skapa katalog',
+      'Saved': 'Sparade',
+      'Saved listings': 'Sparade objekt',
+      'Clear offline cache': 'Rensa offline-cache',
+      'Street Scout Inbox': 'Street Scout-inkorg',
+      'Updated daily': 'Uppdateras dagligen',
+      'My language': 'Mitt språk',
+      'Work With Us': 'Arbeta med oss',
+      'Work With Us (Verified Collaborators)': 'Arbeta med oss (verifierade samarbetspartners)',
+      'Street Scout (Earn €200–€500)': 'Street Scout (Tjäna €200–€500)',
+      'Sign in / Create account': 'Logga in / Skapa konto',
+      'How It Works': 'Så fungerar det',
+      'Open Street Scout': 'Öppna Street Scout',
+      'Email us': 'E-posta oss',
+      'Dealer XML import tool': 'Dealer XML-importverktyg',
+      'See services': 'Se tjänster',
+      'Open in shop': 'Öppna i butik',
+      'Details': 'Detaljer',
+      'Install support': 'Installationsstöd',
+      'Secure handover': 'Säker överlämning',
+      'No description available.': 'Ingen beskrivning tillgänglig.',
+      'Why this matters': 'Varför detta är viktigt',
+      'Request install': 'Begär installation',
+      'How we work': 'Så arbetar vi',
+      'Map View': 'Kartvy',
+      'Listing Details': 'Objektdetaljer',
+      'Apartamento': 'Lägenhet',
+      'Piso': 'Lägenhet',
+      'Ático': 'Takvåning',
+      'Atico': 'Takvåning',
+      'Chalet': 'Villa',
+      'Casa adosada': 'Radhus',
+      'Adosado': 'Radhus',
+      'Obra nueva': 'Nyproduktion',
+      'En venta': 'Till salu',
+      'En alquiler': 'Uthyres',
+      'Piscina': 'Pool',
+      'Garaje': 'Garage',
+      'Terraza': 'Terrass',
+      'Ascensor': 'Hiss',
+      'Aire acondicionado': 'Luftkonditionering'
     }
   };
 
@@ -2041,6 +3339,209 @@
     return out;
   };
 
+  const normalizeComparableText = (value) => String(value || '')
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .replace(/[“”"'.:,;!?()[\]{}]/g, '')
+    .trim();
+
+  const CORE_DYNAMIC_PRESERVED_TERMS = [
+    'Spanish Coast Properties',
+    'Costa Blanca South',
+    'Costa Blanca Sur',
+    'Costa Blanca Sud',
+    'Costa Blanca Syd',
+    'Torrevieja',
+    'Orihuela Costa',
+    'Guardamar',
+    'Guardamar del Segura',
+    'Quesada',
+    'Ciudad Quesada',
+    'Alicante',
+    'Murcia',
+    'La Mata',
+    'Rojales',
+    'San Miguel de Salinas',
+    'Pilar de la Horadada'
+  ];
+  const DYNAMIC_PRESERVE_FIELDS = ['town', 'province', 'location', 'area', 'marina', 'zone', 'urbanization', 'city', 'municipality'];
+  const dynamicPreservedTerms = new Set();
+  let dynamicPreservedTermsStamp = '';
+
+  const normalizeDynamicSourceText = (value) => String(value == null ? '' : value)
+    .replace(/\[\s*amp\s*,?\s*\]/gi, '&')
+    .replace(/&amp,/gi, '&')
+    .replace(/&amp(?!;)/gi, '&')
+    .replace(/\u00a0/g, ' ')
+    .replace(/\r\n?/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  const normalizePreservedTermKey = (value) => normalizeComparableText(normalizeDynamicSourceText(value))
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const addDynamicPreservedTerm = (value) => {
+    const text = normalizeDynamicSourceText(value);
+    if (!text) return;
+    if (!/[A-Za-zÀ-ÖØ-öø-ÿ]/.test(text)) return;
+    if (text.length > 120) return;
+    const key = normalizePreservedTermKey(text);
+    if (!key) return;
+    dynamicPreservedTerms.add(key);
+  };
+
+  const isReferenceLikeText = (value) => {
+    const text = String(value || '').trim();
+    if (!text) return false;
+    if (/^SCP-\d{3,6}$/i.test(text)) return true;
+    if (/^[A-Z]{2,8}[-_ ]\d{2,}$/i.test(text)) return true;
+    if (/^(?:REF|ID|IMV|REDSP)[:\s-]*[A-Z0-9-]{3,}$/i.test(text)) return true;
+    return false;
+  };
+
+  const hydrateDynamicPreservedTerms = () => {
+    const datasets = [
+      window.propertyData,
+      window.customPropertyData,
+      window.businessData,
+      window.businessListings,
+      window.vehicleData,
+      window.vehicleListings
+    ];
+    const stamp = datasets.map((arr) => (Array.isArray(arr) ? arr.length : 0)).join('|');
+    if (stamp === dynamicPreservedTermsStamp && dynamicPreservedTerms.size) return;
+    dynamicPreservedTermsStamp = stamp;
+    dynamicPreservedTerms.clear();
+
+    CORE_DYNAMIC_PRESERVED_TERMS.forEach(addDynamicPreservedTerm);
+    datasets.forEach((rows) => {
+      if (!Array.isArray(rows)) return;
+      rows.forEach((row) => {
+        if (!row || typeof row !== 'object') return;
+        DYNAMIC_PRESERVE_FIELDS.forEach((field) => addDynamicPreservedTerm(row[field]));
+      });
+    });
+  };
+
+  const isDynamicPreservedText = (value) => {
+    const raw = normalizeDynamicSourceText(value);
+    if (!raw) return false;
+    if (isReferenceLikeText(raw)) return true;
+    if (/^https?:\/\//i.test(raw)) return true;
+    if (/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/i.test(raw)) return true;
+
+    hydrateDynamicPreservedTerms();
+    const key = normalizePreservedTermKey(raw);
+    if (key && dynamicPreservedTerms.has(key)) return true;
+
+    if (raw.includes(',')) {
+      const parts = raw.split(',').map((part) => normalizePreservedTermKey(part)).filter(Boolean);
+      if (parts.length >= 2 && parts.every((part) => dynamicPreservedTerms.has(part))) return true;
+    }
+    return false;
+  };
+
+  const detectLanguageHints = (text) => {
+    const sourceText = String(text || '');
+    const lower = sourceText.toLowerCase();
+    const looksSpanish = /[áéíóúñ¿¡]/i.test(sourceText)
+      || /\b(de|la|el|en|con|para|venta|alquiler|playa|piso|villa|baño|habitacion|terraza|garaje|ascensor|obra nueva|trastero)\b/i.test(lower);
+    const looksRomanian = /[ăâîșşțţ]/i.test(sourceText)
+      || /\b(si|și|pentru|vanzare|vânzare|inchiriere|închiriere|apartament|terasa|terasă|garaj|mobilat)\b/i.test(lower);
+    const looksSwedish = /[åäö]/i.test(sourceText)
+      || /\b(och|for|för|till salu|uthyrning|lagenhet|lägenhet|terrass|garage|hiss)\b/i.test(lower);
+    const looksEnglish = /\b(the|and|with|for|sale|rent|beach|apartment|villa|bath|bedroom|property|new build|commercial|garage|terrace)\b/i.test(lower);
+    return { looksSpanish, looksRomanian, looksSwedish, looksEnglish };
+  };
+
+  const looksLikeTargetLanguage = (text, targetCode) => {
+    const tcode = normalizeLang(targetCode);
+    if (!tcode) return false;
+    const hints = detectLanguageHints(text);
+    if (tcode === 'es') return !!hints.looksSpanish;
+    if (tcode === 'ro') return !!hints.looksRomanian;
+    if (tcode === 'sv') return !!hints.looksSwedish;
+    if (tcode === 'en') return !!hints.looksEnglish;
+    return false;
+  };
+
+  const shouldRetryUnchangedTranslation = (sourceText, translatedText, targetCode) => {
+    const target = normalizeLang(targetCode) || DEFAULT_LANG;
+    if (target === DEFAULT_LANG) return false;
+
+    const source = normalizeDynamicSourceText(sourceText);
+    const translated = normalizeDynamicSourceText(translatedText);
+    if (!source || !translated) return false;
+    if (normalizeComparableText(source) !== normalizeComparableText(translated)) return false;
+    if (isDynamicPreservedText(source)) return false;
+    if (source.length < 3) return false;
+    if (!/[A-Za-zÀ-ÖØ-öø-ÿ]/.test(source)) return false;
+    if (looksLikeTargetLanguage(source, target)) return false;
+    return true;
+  };
+
+  const guessSourceCandidates = (text, targetCode, requestedSource = 'auto') => {
+    const requested = normalizeLang(requestedSource);
+    if (requested && requested !== 'auto') return [requested];
+
+    const hints = detectLanguageHints(text);
+    const candidates = [];
+    const add = (code) => {
+      const c = normalizeLang(code);
+      if (!c || c === normalizeLang(targetCode) || candidates.includes(c)) return;
+      candidates.push(c);
+    };
+
+    // Heuristic: many feed descriptions are Spanish, but keep broad language hints.
+    if (hints.looksSpanish) add('es');
+    if (hints.looksRomanian) add('ro');
+    if (hints.looksSwedish) add('sv');
+    if (hints.looksEnglish) add('en');
+
+    // Default likely source for content in this project.
+    add(DEFAULT_LANG);
+    add('es');
+    add('ro');
+    add('sv');
+
+    return candidates.length ? candidates : [DEFAULT_LANG];
+  };
+
+  const dynamicOverrideNormCache = new WeakMap();
+  const getDynamicOverrideNormMap = (dict) => {
+    if (!dict || typeof dict !== 'object') return new Map();
+    const cached = dynamicOverrideNormCache.get(dict);
+    if (cached) return cached;
+    const map = new Map();
+    Object.keys(dict).forEach((key) => {
+      const norm = normalizeComparableText(key);
+      if (!norm) return;
+      map.set(norm, dict[key]);
+    });
+    dynamicOverrideNormCache.set(dict, map);
+    return map;
+  };
+
+  const dynamicOverrideLookup = (text, targetCode) => {
+    const langCode = normalizeLang(targetCode);
+    const dict = STATIC_PHRASE_OVERRIDES[langCode] || null;
+    if (!dict && !isDynamicPreservedText(text)) return '';
+    const raw = String(text == null ? '' : text);
+    const trimmed = normalizeDynamicSourceText(raw);
+    if (!trimmed) return '';
+    if (isDynamicPreservedText(trimmed)) return trimmed;
+    if (!dict) return '';
+    if (Object.prototype.hasOwnProperty.call(dict, raw)) return String(dict[raw] || '');
+    if (Object.prototype.hasOwnProperty.call(dict, trimmed)) return String(dict[trimmed] || '');
+    const norm = normalizeComparableText(trimmed);
+    if (norm) {
+      const normMap = getDynamicOverrideNormMap(dict);
+      if (normMap.has(norm)) return String(normMap.get(norm) || '');
+    }
+    return '';
+  };
+
   const isAutoTranslatable = (value) => {
     if (typeof value !== 'string') return false;
     const trimmed = value.trim();
@@ -2055,14 +3556,31 @@
     return payload[0].map((part) => (Array.isArray(part) ? String(part[0] || '') : '')).join('');
   };
 
-  const translateChunkGoogle = async (texts, targetCode) => {
+  // Defensive cleanup for translator artifacts (segment markers / repeated underscores).
+  const sanitizeTranslatedText = (value) => {
+    let out = String(value || '');
+    if (!out) return '';
+    out = out
+      .replace(/\u200b/g, '')
+      .replace(/___+\s*SCP[_\s-]*SEGMENT[_\s-]*___+/gi, ' ')
+      .replace(/SCP[_\s-]*SEGMENT/gi, ' ')
+      .replace(/___+/g, ' ')
+      .replace(/\s*_\s*$/g, '')
+      .replace(/[_]{2,}/g, ' ')
+      .replace(/\s+([,.;:!?])/g, '$1')
+      .replace(/\s{2,}/g, ' ')
+      .trim();
+    return out;
+  };
+
+  const translateChunkGoogle = async (texts, targetCode, { sourceLang = DEFAULT_LANG } = {}) => {
     if (!Array.isArray(texts) || !texts.length) return [];
 
     const prepared = texts.map((text) => preserveVars(text));
     const joined = prepared.map((item) => item.prepared).join(AUTO_TRANSLATE_DELIMITER);
     const url = new URL('https://translate.googleapis.com/translate_a/single');
     url.searchParams.set('client', 'gtx');
-    url.searchParams.set('sl', DEFAULT_LANG);
+    url.searchParams.set('sl', normalizeLang(sourceLang) || 'auto');
     url.searchParams.set('tl', normalizeLang(targetCode));
     url.searchParams.set('dt', 't');
     url.searchParams.set('q', joined);
@@ -2086,8 +3604,103 @@
 
     return segments.map((value, idx) => {
       const restored = restoreVars(value, prepared[idx].tokens);
-      return applyGlossary(restored, targetCode);
+      const glossed = applyGlossary(restored, targetCode);
+      return sanitizeTranslatedText(glossed);
     });
+  };
+
+  const translateChunkMyMemory = async (texts, targetCode, { sourceLang = DEFAULT_LANG } = {}) => {
+    if (!Array.isArray(texts) || !texts.length) return [];
+    const target = normalizeLang(targetCode);
+    if (!target) return texts.map((text) => String(text || ''));
+    const out = [];
+
+    for (let i = 0; i < texts.length; i += 1) {
+      const sourceText = String(texts[i] || '');
+      const prepared = preserveVars(sourceText);
+      const sourceCandidates = guessSourceCandidates(sourceText, target, sourceLang);
+      let translatedOutput = '';
+      try {
+        for (let c = 0; c < sourceCandidates.length; c += 1) {
+          const source = sourceCandidates[c];
+          const url = new URL('https://api.mymemory.translated.net/get');
+          url.searchParams.set('q', prepared.prepared);
+          url.searchParams.set('langpair', `${source}|${target}`);
+          // eslint-disable-next-line no-await-in-loop
+          const res = await fetch(url.toString(), { method: 'GET', mode: 'cors', cache: 'no-store' });
+          if (!res.ok) continue;
+          // eslint-disable-next-line no-await-in-loop
+          const payload = await res.json();
+          const responseStatus = Number(payload && payload.responseStatus);
+          if (Number.isFinite(responseStatus) && responseStatus !== 200) continue;
+          const translated = String(payload && payload.responseData && payload.responseData.translatedText || '').trim();
+          const invalidMessage = /invalid source language|invalid target language|example:\s*langpair|error/i.test(translated);
+          if (!translated || translated.toLowerCase() === 'null' || invalidMessage) continue;
+
+          const restored = restoreVars(translated, prepared.tokens);
+          const normalizedSource = normalizeComparableText(sourceText);
+          const normalizedTranslated = normalizeComparableText(restored);
+          const unchanged = normalizedSource && normalizedTranslated && normalizedSource === normalizedTranslated;
+          translatedOutput = sanitizeTranslatedText(applyGlossary(restored, targetCode));
+
+          // If unchanged, try another source candidate (often en->target fails for Spanish text).
+          if (unchanged && c + 1 < sourceCandidates.length) continue;
+          break;
+        }
+      } catch {
+        translatedOutput = '';
+      }
+      out.push(sanitizeTranslatedText(translatedOutput) || sourceText);
+      if (i + 1 < texts.length) {
+        // eslint-disable-next-line no-await-in-loop
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      }
+    }
+    return out;
+  };
+
+  const translateChunk = async (texts, targetCode, options = {}) => {
+    try {
+      return await translateChunkGoogle(texts, targetCode, options);
+    } catch {
+      return translateChunkMyMemory(texts, targetCode, options);
+    }
+  };
+
+  // Keep translations resilient: if batch translation fails, fall back to one-by-one calls.
+  const translateChunkSafely = async (texts, targetCode, options = {}) => {
+    const sourceValues = Array.isArray(texts) ? texts.map((text) => String(text || '')) : [];
+    if (!sourceValues.length) return [];
+
+    try {
+      const batch = await translateChunk(sourceValues, targetCode, options);
+      if (Array.isArray(batch) && batch.length === sourceValues.length) {
+        return batch.map((value, idx) => sanitizeTranslatedText(value) || sourceValues[idx]);
+      }
+    } catch {
+      // fall back per item
+    }
+
+    const out = [];
+    for (let i = 0; i < sourceValues.length; i += 1) {
+      const sourceText = sourceValues[i];
+      let translatedText = sourceText;
+      try {
+        // eslint-disable-next-line no-await-in-loop
+        const single = await translateChunk([sourceText], targetCode, options);
+        if (Array.isArray(single) && single.length) {
+          translatedText = sanitizeTranslatedText(single[0]) || sourceText;
+        }
+      } catch {
+        translatedText = sourceText;
+      }
+      out.push(translatedText);
+      if (i + 1 < sourceValues.length) {
+        // eslint-disable-next-line no-await-in-loop
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      }
+    }
+    return out;
   };
 
   const translationChainFor = (targetLang) => {
@@ -2123,11 +3736,12 @@
 
       const base = DICT[DEFAULT_LANG] || {};
       const target = mergeLocaleObjects(DICT[targetCode], {});
-      const missingKeys = Object.keys(base).filter((key) => {
+      const allMissingKeys = Object.keys(base).filter((key) => {
         if (Object.prototype.hasOwnProperty.call(target, key)) return false;
         return isAutoTranslatable(base[key]);
       });
 
+      const missingKeys = allMissingKeys.slice(0, AUTO_TRANSLATE_WARMUP_LIMIT);
       if (!missingKeys.length) return false;
 
       let translatedAny = false;
@@ -2138,15 +3752,14 @@
         let translated = [];
         try {
           // Free endpoint, cached locally after first success.
-          translated = await translateChunkGoogle(batchTexts, targetCode);
+          translated = await translateChunkSafely(batchTexts, targetCode, { sourceLang: DEFAULT_LANG });
         } catch {
-          markAutoError(targetCode);
-          break;
+          translated = [];
         }
 
-        if (!Array.isArray(translated) || translated.length !== batchKeys.length) break;
+        if (!Array.isArray(translated) || translated.length !== batchKeys.length) continue;
         batchKeys.forEach((key, idx) => {
-          const text = String(translated[idx] || '').trim();
+          const text = sanitizeTranslatedText(translated[idx]) || '';
           if (text) target[key] = text;
         });
         translatedAny = true;
@@ -2161,9 +3774,639 @@
       saveAutoCache(targetCode, target);
       clearAutoError(targetCode);
       return true;
-    })();
+    })().then((changed) => {
+      if (!changed) delete localeReadyPromises[targetCode];
+      return changed;
+    }).catch((error) => {
+      delete localeReadyPromises[targetCode];
+      throw error;
+    });
 
     return localeReadyPromises[targetCode];
+  };
+
+  const pendingLocaleKeys = new Map();
+  const pendingLocaleFlushTimers = new Map();
+  const pendingLocaleFlushBusy = new Set();
+
+  const queueMissingLocaleKey = (targetCode, key) => {
+    const code = normalizeLang(targetCode);
+    const k = String(key || '').trim();
+    if (!code || !k) return;
+    if (code === DEFAULT_LANG) return;
+    if (!AUTO_TRANSLATE_ENABLED) return;
+    const base = DICT[DEFAULT_LANG] || {};
+    if (!Object.prototype.hasOwnProperty.call(base, k)) return;
+    if (!isAutoTranslatable(base[k])) return;
+    const target = DICT[code] || {};
+    if (Object.prototype.hasOwnProperty.call(target, k) && !shouldRetryUnchangedTranslation(base[k], target[k], code)) return;
+
+    const queue = pendingLocaleKeys.get(code) || new Set();
+    queue.add(k);
+    pendingLocaleKeys.set(code, queue);
+
+    if (pendingLocaleFlushTimers.has(code)) return;
+    const timer = setTimeout(() => {
+      pendingLocaleFlushTimers.delete(code);
+      flushMissingLocaleKeys(code).catch(() => {});
+    }, 120);
+    pendingLocaleFlushTimers.set(code, timer);
+  };
+
+  const flushMissingLocaleKeys = async (targetCode) => {
+    const code = normalizeLang(targetCode);
+    if (!code || code === DEFAULT_LANG) return false;
+    if (pendingLocaleFlushBusy.has(code)) return false;
+    const queue = pendingLocaleKeys.get(code);
+    if (!queue || !queue.size) return false;
+
+    pendingLocaleFlushBusy.add(code);
+    try {
+      const base = DICT[DEFAULT_LANG] || {};
+      const target = mergeLocaleObjects(DICT[code], {});
+      const keys = Array.from(queue).filter((k) => {
+        if (!Object.prototype.hasOwnProperty.call(base, k)) return false;
+        if (Object.prototype.hasOwnProperty.call(target, k) && !shouldRetryUnchangedTranslation(base[k], target[k], code)) return false;
+        return isAutoTranslatable(base[k]);
+      });
+      queue.clear();
+      if (!keys.length) return false;
+
+      let changed = false;
+      for (let i = 0; i < keys.length; i += ONDEMAND_LOCALE_BATCH_SIZE) {
+        const batchKeys = keys.slice(i, i + ONDEMAND_LOCALE_BATCH_SIZE);
+        const batchTexts = batchKeys.map((k) => String(base[k] || ''));
+
+        let translated = [];
+        try {
+          // Smaller batches improve reliability for browser-side free endpoints.
+          translated = await translateChunkSafely(batchTexts, code, { sourceLang: DEFAULT_LANG });
+        } catch {
+          translated = [];
+        }
+
+        if (Array.isArray(translated) && translated.length === batchKeys.length) {
+          batchKeys.forEach((k, idx) => {
+            const text = sanitizeTranslatedText(translated[idx]) || '';
+            if (!text) return;
+            target[k] = text;
+            changed = true;
+          });
+        }
+        if (i + ONDEMAND_LOCALE_BATCH_SIZE < keys.length) {
+          await new Promise((resolve) => setTimeout(resolve, 0));
+        }
+      }
+
+      if (!changed) return false;
+      registerLocale(code, target, { includeInSupported: true });
+      saveAutoCache(code, target);
+      clearAutoError(code);
+
+      try {
+        applyTranslations(document);
+        await translateDynamicDom(document).catch(() => {});
+        emitUpdated();
+      } catch {
+        // ignore refresh failures
+      }
+      return true;
+    } finally {
+      pendingLocaleFlushBusy.delete(code);
+      const queued = pendingLocaleKeys.get(code);
+      if (queued && queued.size && !pendingLocaleFlushTimers.has(code)) {
+        const timer = setTimeout(() => {
+          pendingLocaleFlushTimers.delete(code);
+          flushMissingLocaleKeys(code).catch(() => {});
+        }, 160);
+        pendingLocaleFlushTimers.set(code, timer);
+      }
+    }
+  };
+
+  const dynamicMemoryCache = new Map();
+  const dynamicMissMemoryCache = new Map();
+  const dynamicTextNodeState = new WeakMap();
+  const dynamicAttributeState = new WeakMap();
+
+  const hashString = (value) => {
+    const text = String(value || '');
+    let h = 2166136261;
+    for (let i = 0; i < text.length; i += 1) {
+      h ^= text.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return (h >>> 0).toString(36);
+  };
+
+  const dynamicCacheKey = (targetCode, sourceCode, sourceText) => {
+    const target = normalizeLang(targetCode) || DEFAULT_LANG;
+    const source = normalizeLang(sourceCode) || 'auto';
+    const text = String(sourceText || '');
+    const hash = hashString(`${target}|${source}|${text}`);
+    return `${DYNAMIC_CACHE_KEY_PREFIX}${target}:${source}:${text.length}:${hash}`;
+  };
+
+  const dynamicMissCacheKey = (targetCode, sourceCode, sourceText) => {
+    const target = normalizeLang(targetCode) || DEFAULT_LANG;
+    const source = normalizeLang(sourceCode) || 'auto';
+    const text = String(sourceText || '');
+    const hash = hashString(`${target}|${source}|${text}`);
+    return `${DYNAMIC_MISS_CACHE_KEY_PREFIX}${target}:${source}:${text.length}:${hash}`;
+  };
+
+  const readDynamicCache = (targetCode, sourceCode, sourceText) => {
+    const key = dynamicCacheKey(targetCode, sourceCode, sourceText);
+    const mem = dynamicMemoryCache.get(key);
+    if (mem && mem.s === sourceText && typeof mem.t === 'string') return mem.t;
+    try {
+      if (!window.localStorage) return '';
+      const raw = window.localStorage.getItem(key);
+      if (!raw) return '';
+      const parsed = JSON.parse(raw);
+      if (!parsed || parsed.s !== sourceText || typeof parsed.t !== 'string') return '';
+      dynamicMemoryCache.set(key, parsed);
+      return parsed.t;
+    } catch {
+      return '';
+    }
+  };
+
+  const deleteDynamicCache = (targetCode, sourceCode, sourceText) => {
+    const key = dynamicCacheKey(targetCode, sourceCode, sourceText);
+    dynamicMemoryCache.delete(key);
+    try {
+      if (!window.localStorage) return;
+      window.localStorage.removeItem(key);
+    } catch {
+      // ignore
+    }
+  };
+
+  const writeDynamicCache = (targetCode, sourceCode, sourceText, translatedText) => {
+    const key = dynamicCacheKey(targetCode, sourceCode, sourceText);
+    const payload = { s: sourceText, t: translatedText };
+    dynamicMemoryCache.set(key, payload);
+    try {
+      if (!window.localStorage) return;
+      window.localStorage.setItem(key, JSON.stringify(payload));
+    } catch {
+      // ignore storage quota errors
+    }
+  };
+
+  const readDynamicMissTs = (targetCode, sourceCode, sourceText) => {
+    const key = dynamicMissCacheKey(targetCode, sourceCode, sourceText);
+    const mem = Number(dynamicMissMemoryCache.get(key) || 0);
+    if (Number.isFinite(mem) && mem > 0) return mem;
+    try {
+      if (!window.localStorage) return 0;
+      const raw = Number(window.localStorage.getItem(key) || 0);
+      const ts = Number.isFinite(raw) ? raw : 0;
+      if (ts > 0) dynamicMissMemoryCache.set(key, ts);
+      return ts;
+    } catch {
+      return 0;
+    }
+  };
+
+  const markDynamicMiss = (targetCode, sourceCode, sourceText) => {
+    const key = dynamicMissCacheKey(targetCode, sourceCode, sourceText);
+    const now = Date.now();
+    dynamicMissMemoryCache.set(key, now);
+    try {
+      if (!window.localStorage) return;
+      window.localStorage.setItem(key, String(now));
+    } catch {
+      // ignore
+    }
+  };
+
+  const clearDynamicMiss = (targetCode, sourceCode, sourceText) => {
+    const key = dynamicMissCacheKey(targetCode, sourceCode, sourceText);
+    dynamicMissMemoryCache.delete(key);
+    try {
+      if (!window.localStorage) return;
+      window.localStorage.removeItem(key);
+    } catch {
+      // ignore
+    }
+  };
+
+  const isDynamicMissCoolingDown = (targetCode, sourceCode, sourceText) => {
+    if ((normalizeLang(targetCode) || DEFAULT_LANG) === DEFAULT_LANG) return false;
+    const ts = readDynamicMissTs(targetCode, sourceCode, sourceText);
+    if (!ts) return false;
+    return (Date.now() - ts) < DYNAMIC_MISS_RETRY_MS;
+  };
+
+  const isDynamicTranslatable = (value) => {
+    if (!isAutoTranslatable(value)) return false;
+    const text = String(value || '').trim();
+    if (!text) return false;
+    if (!/[A-Za-zÀ-ÖØ-öø-ÿ]/.test(text)) return false;
+    return true;
+  };
+
+  const buildDynamicBatches = (texts) => {
+    const out = [];
+    let chunk = [];
+    let chars = 0;
+    texts.forEach((text) => {
+      const value = String(text || '');
+      const len = value.length;
+      const exceeds = chunk.length >= DYNAMIC_BATCH_ITEM_LIMIT || (chars + len) > DYNAMIC_BATCH_CHAR_LIMIT;
+      if (chunk.length && exceeds) {
+        out.push(chunk);
+        chunk = [];
+        chars = 0;
+      }
+      chunk.push(value);
+      chars += len;
+    });
+    if (chunk.length) out.push(chunk);
+    return out;
+  };
+
+  const splitLongDynamicText = (text, maxChars = 700) => {
+    const source = normalizeDynamicSourceText(text);
+    if (!source) return [];
+    if (source.length <= maxChars) return [source];
+    const parts = [];
+    let cursor = 0;
+    while (cursor < source.length) {
+      let end = Math.min(cursor + maxChars, source.length);
+      if (end < source.length) {
+        const hardBreak = source.lastIndexOf('\n', end);
+        const dotBreak = source.lastIndexOf('. ', end);
+        const questionBreak = source.lastIndexOf('? ', end);
+        const exBreak = source.lastIndexOf('! ', end);
+        const commaBreak = source.lastIndexOf(', ', end);
+        const candidate = Math.max(hardBreak, dotBreak, questionBreak, exBreak, commaBreak);
+        if (candidate > cursor + Math.floor(maxChars * 0.45)) {
+          end = candidate + 1;
+        }
+      }
+      const chunk = source.slice(cursor, end).trim();
+      if (chunk) parts.push(chunk);
+      cursor = end;
+    }
+    return parts;
+  };
+
+  const translateLongDynamicText = async (text, targetCode, sourceCode) => {
+    const chunks = splitLongDynamicText(text);
+    if (!chunks.length) return String(text || '');
+    const translatedChunks = [];
+    for (let i = 0; i < chunks.length; i += 1) {
+      const chunk = chunks[i];
+      try {
+        // eslint-disable-next-line no-await-in-loop
+        const translated = await translateChunkSafely([chunk], targetCode, { sourceLang: sourceCode });
+        translatedChunks.push(sanitizeTranslatedText((translated && translated[0]) || chunk) || chunk);
+      } catch {
+        translatedChunks.push(chunk);
+      }
+      if (i + 1 < chunks.length) {
+        // eslint-disable-next-line no-await-in-loop
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      }
+    }
+    return translatedChunks.join('\n');
+  };
+
+  const translateDynamicBatch = async (texts, { targetLang, sourceLang = 'auto' } = {}) => {
+    const sourceValues = Array.isArray(texts) ? texts.map((v) => normalizeDynamicSourceText(v)) : [];
+    if (!sourceValues.length) return [];
+    const targetCode = normalizeLang(targetLang || lang || DEFAULT_LANG) || DEFAULT_LANG;
+    const sourceCode = normalizeLang(sourceLang) || 'auto';
+    if (!AUTO_TRANSLATE_ENABLED) return sourceValues;
+
+    const out = sourceValues.slice();
+    const lookup = new Map();
+    sourceValues.forEach((text, idx) => {
+      const key = String(text || '');
+      if (!lookup.has(key)) lookup.set(key, []);
+      lookup.get(key).push(idx);
+    });
+
+    const missing = [];
+    const missingLong = [];
+    Array.from(lookup.keys()).forEach((text) => {
+      if (!isDynamicTranslatable(text)) return;
+      const forced = dynamicOverrideLookup(text, targetCode);
+      if (forced) {
+        const normalizedForced = sanitizeTranslatedText(forced) || forced;
+        (lookup.get(text) || []).forEach((idx) => { out[idx] = normalizedForced; });
+        return;
+      }
+      const cached = sanitizeTranslatedText(readDynamicCache(targetCode, sourceCode, text));
+      if (cached) {
+        if (shouldRetryUnchangedTranslation(text, cached, targetCode)) {
+          deleteDynamicCache(targetCode, sourceCode, text);
+          if (!isDynamicMissCoolingDown(targetCode, sourceCode, text)) {
+            if (text.length > DYNAMIC_VALUE_MAX_LEN) missingLong.push(text);
+            else missing.push(text);
+          }
+          return;
+        }
+        clearDynamicMiss(targetCode, sourceCode, text);
+        (lookup.get(text) || []).forEach((idx) => { out[idx] = cached; });
+      } else {
+        if (isDynamicMissCoolingDown(targetCode, sourceCode, text)) return;
+        if (text.length > DYNAMIC_VALUE_MAX_LEN) missingLong.push(text);
+        else missing.push(text);
+      }
+    });
+
+    for (let i = 0; i < missingLong.length; i += 1) {
+      const text = missingLong[i];
+      // eslint-disable-next-line no-await-in-loop
+      const translatedText = await translateLongDynamicText(text, targetCode, sourceCode);
+      const value = String(translatedText || text).trim();
+      if (!value) continue;
+      if (shouldRetryUnchangedTranslation(text, value, targetCode)) {
+        markDynamicMiss(targetCode, sourceCode, text);
+        continue;
+      }
+      clearDynamicMiss(targetCode, sourceCode, text);
+      writeDynamicCache(targetCode, sourceCode, text, value);
+      (lookup.get(text) || []).forEach((idx) => { out[idx] = value; });
+    }
+
+    if (!missing.length) return out;
+
+    const batches = buildDynamicBatches(missing);
+    for (let i = 0; i < batches.length; i += 1) {
+      const batch = batches[i];
+      let translated = [];
+      try {
+        translated = await translateChunkSafely(batch, targetCode, { sourceLang: sourceCode });
+      } catch {
+        continue;
+      }
+      if (!Array.isArray(translated) || translated.length !== batch.length) continue;
+      batch.forEach((text, idx) => {
+        const translatedText = sanitizeTranslatedText(translated[idx]) || '';
+        if (!translatedText) return;
+        if (shouldRetryUnchangedTranslation(text, translatedText, targetCode)) {
+          markDynamicMiss(targetCode, sourceCode, text);
+          return;
+        }
+        clearDynamicMiss(targetCode, sourceCode, text);
+        writeDynamicCache(targetCode, sourceCode, text, translatedText);
+        (lookup.get(text) || []).forEach((targetIdx) => { out[targetIdx] = translatedText; });
+      });
+      if (i + 1 < batches.length) {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      }
+    }
+    return out;
+  };
+
+  const translateDynamicText = async (text, options = {}) => {
+    const source = normalizeDynamicSourceText(text);
+    if (!source) return source;
+    const out = await translateDynamicBatch([source], options);
+    return Array.isArray(out) && out.length ? String(out[0] || source) : source;
+  };
+
+  const collectDynamicElementNodes = (root, selector, targetCode) => {
+    if (!root || !selector || !root.querySelectorAll) return [];
+    const candidates = [];
+    if (root.nodeType === 1 && typeof root.matches === 'function' && root.matches(selector)) {
+      candidates.push(root);
+    }
+    candidates.push(...Array.from(root.querySelectorAll(selector)));
+    const elementNodes = candidates.filter((el) => {
+      if (!el) return false;
+      const source = normalizeDynamicSourceText(el.getAttribute('data-i18n-dynamic-source') || el.textContent || '');
+      if (!source) return false;
+      if (el.getAttribute('data-i18n-dynamic-source') == null) {
+        try { el.setAttribute('data-i18n-dynamic-source', source); } catch { /* ignore */ }
+      }
+      const doneLang = String(el.getAttribute('data-i18n-dynamic-lang') || '').trim();
+      return doneLang !== targetCode;
+    }).map((el) => ({
+      type: 'element',
+      node: el,
+      source: normalizeDynamicSourceText(el.getAttribute('data-i18n-dynamic-source') || '')
+    }));
+
+    return elementNodes;
+  };
+
+  const canTranslateValueAttribute = (el) => {
+    if (!el || String(el.tagName || '').toLowerCase() !== 'input') return false;
+    const type = String(el.getAttribute('type') || '').trim().toLowerCase();
+    return type === 'button' || type === 'submit' || type === 'reset';
+  };
+
+  const DYNAMIC_ATTRIBUTE_SPECS = [
+    { name: 'placeholder', i18nAttr: 'data-i18n-placeholder' },
+    { name: 'title', i18nAttr: 'data-i18n-title' },
+    { name: 'aria-label', i18nAttr: 'data-i18n-aria-label' },
+    { name: 'alt', i18nAttr: 'data-i18n-alt' },
+    { name: 'value', i18nAttr: 'data-i18n-value', canTranslate: canTranslateValueAttribute }
+  ];
+
+  const getAttributeStateMap = (node) => {
+    if (!node) return {};
+    const current = dynamicAttributeState.get(node);
+    if (current && typeof current === 'object') return current;
+    const next = {};
+    dynamicAttributeState.set(node, next);
+    return next;
+  };
+
+  const setAttributeState = (node, attrName, payload) => {
+    if (!node || !attrName) return;
+    const map = getAttributeStateMap(node);
+    map[attrName] = {
+      source: String((payload && payload.source) || ''),
+      lang: String((payload && payload.lang) || ''),
+      translated: String((payload && payload.translated) || '')
+    };
+    dynamicAttributeState.set(node, map);
+  };
+
+  const collectDynamicAttributeNodes = (root, targetCode) => {
+    if (!root || !root.querySelectorAll) return [];
+
+    const candidates = [];
+    if (root.nodeType === 9 && root.documentElement) candidates.push(root.documentElement);
+    if (root.nodeType === 1) candidates.push(root);
+    candidates.push(...Array.from(root.querySelectorAll('[placeholder], [title], [aria-label], [alt], input[type=\"button\"][value], input[type=\"submit\"][value], input[type=\"reset\"][value]')));
+    if (!candidates.length) return [];
+
+    const seen = new Set();
+    const items = [];
+    const excludedSelector = [
+      '[data-i18n-dynamic-ignore]',
+      'script',
+      'style',
+      'noscript',
+      'code',
+      'pre'
+    ].join(', ');
+
+    candidates.forEach((el) => {
+      if (!el || seen.has(el)) return;
+      seen.add(el);
+
+      if (el.closest(excludedSelector)) return;
+      const stateMap = getAttributeStateMap(el);
+
+      DYNAMIC_ATTRIBUTE_SPECS.forEach(({ name, i18nAttr, canTranslate }) => {
+        if (el.hasAttribute(i18nAttr)) return;
+        if (typeof canTranslate === 'function' && !canTranslate(el)) return;
+        const current = normalizeDynamicSourceText(el.getAttribute(name) || '');
+        if (!isDynamicTranslatable(current)) return;
+
+        const prev = stateMap[name] || null;
+        const source = prev && prev.source ? prev.source : current;
+        const doneLang = prev && prev.lang ? String(prev.lang) : '';
+        const translated = prev && prev.translated ? String(prev.translated) : '';
+        const externallyChanged = !!prev && doneLang === targetCode && current && translated && current !== translated;
+
+        if (externallyChanged) {
+          setAttributeState(el, name, { source: current, lang: '', translated: '' });
+          items.push({ type: 'attribute', node: el, attribute: name, source: current });
+        } else if (doneLang !== targetCode) {
+          items.push({ type: 'attribute', node: el, attribute: name, source });
+        }
+      });
+    });
+
+    return items;
+  };
+
+  const collectDynamicTextNodes = (root, scopeSelector, targetCode) => {
+    if (!root || !root.querySelectorAll) return [];
+
+    const scopeRoots = [];
+    if (scopeSelector) {
+      if (root.nodeType === 1 && typeof root.matches === 'function' && root.matches(scopeSelector)) {
+        scopeRoots.push(root);
+      }
+      scopeRoots.push(...Array.from(root.querySelectorAll(scopeSelector)));
+    }
+
+    // Fallback for pages that have static content without explicit dynamic scope markers.
+    if (!scopeRoots.length) {
+      if (root.nodeType === 9 && root.documentElement) scopeRoots.push(root.documentElement);
+      if (root.nodeType === 1) scopeRoots.push(root);
+    }
+    if (!scopeRoots.length) return [];
+
+    const uniqueScopeRoots = [];
+    const seenScopeRoots = new Set();
+    scopeRoots.forEach((scopeRoot) => {
+      if (!scopeRoot || seenScopeRoots.has(scopeRoot)) return;
+      seenScopeRoots.add(scopeRoot);
+      uniqueScopeRoots.push(scopeRoot);
+    });
+
+    const items = [];
+    const seenTextNodes = new WeakSet();
+    const excludedSelector = [
+      '[data-i18n]',
+      '[data-i18n-html]',
+      '[data-i18n-placeholder]',
+      '[data-i18n-title]',
+      '[data-i18n-aria-label]',
+      '[data-i18n-alt]',
+      '[data-i18n-value]',
+      '[data-i18n-dynamic]',
+      '[data-i18n-dynamic-ignore]',
+      'script',
+      'style',
+      'noscript',
+      'textarea',
+      'code',
+      'pre'
+    ].join(', ');
+
+    uniqueScopeRoots.forEach((scopeRoot) => {
+      if (!scopeRoot || typeof document.createTreeWalker !== 'function') return;
+      const walker = document.createTreeWalker(scopeRoot, NodeFilter.SHOW_TEXT);
+      let node = walker.nextNode();
+      while (node) {
+        const textNode = node;
+        if (seenTextNodes.has(textNode)) {
+          node = walker.nextNode();
+          continue;
+        }
+        seenTextNodes.add(textNode);
+        const parent = textNode.parentElement || null;
+        if (parent && !parent.closest(excludedSelector)) {
+          const current = normalizeDynamicSourceText(textNode.nodeValue || '');
+          if (isDynamicTranslatable(current)) {
+            const prev = dynamicTextNodeState.get(textNode) || null;
+            const source = prev && prev.source ? prev.source : current;
+            const doneLang = prev && prev.lang ? String(prev.lang) : '';
+            const translated = prev && prev.translated ? String(prev.translated) : '';
+            const externallyChanged = !!prev && doneLang === targetCode && current && translated && current !== translated;
+            if (externallyChanged) {
+              dynamicTextNodeState.set(textNode, { source: current, lang: '', translated: '' });
+              items.push({ type: 'text', node: textNode, source: current });
+            } else if (doneLang !== targetCode) {
+              items.push({ type: 'text', node: textNode, source });
+            }
+          }
+        }
+        node = walker.nextNode();
+      }
+    });
+
+    return items;
+  };
+
+  const translateDynamicDom = async (
+    root = document,
+    {
+      selector = '[data-i18n-dynamic]',
+      scopeSelector = '[data-i18n-dynamic-scope]',
+      sourceLang = 'auto'
+    } = {}
+  ) => {
+    if (!root || !root.querySelectorAll) return 0;
+    const targetCode = normalizeLang(lang || DEFAULT_LANG) || DEFAULT_LANG;
+    const effectiveScopeSelector = root && root.nodeType === 9 ? '' : scopeSelector;
+    const nodes = [
+      ...collectDynamicElementNodes(root, selector, targetCode),
+      ...collectDynamicAttributeNodes(root, targetCode),
+      ...collectDynamicTextNodes(root, effectiveScopeSelector, targetCode)
+    ];
+
+    if (!nodes.length) return 0;
+    const sourceTexts = nodes.map((item) => normalizeDynamicSourceText(item.source || ''));
+    const translated = await translateDynamicBatch(sourceTexts, { targetLang: targetCode, sourceLang });
+    nodes.forEach((item, idx) => {
+      const source = sourceTexts[idx];
+      const text = normalizeDynamicSourceText((translated && translated[idx]) || source || '');
+      if (!text) return;
+      const retryUnchanged = shouldRetryUnchangedTranslation(source, text, targetCode);
+      try {
+        if (item.type === 'text') {
+          if (!item.node || !item.node.parentElement) return;
+          item.node.nodeValue = text;
+          dynamicTextNodeState.set(item.node, { source, lang: retryUnchanged ? '' : targetCode, translated: text });
+          return;
+        }
+        if (item.type === 'attribute') {
+          if (!item.node || typeof item.node.setAttribute !== 'function') return;
+          item.node.setAttribute(item.attribute, text);
+          setAttributeState(item.node, item.attribute, { source, lang: retryUnchanged ? '' : targetCode, translated: text });
+          return;
+        }
+        item.node.textContent = text;
+        item.node.setAttribute('data-i18n-dynamic-lang', retryUnchanged ? '' : targetCode);
+      } catch {
+        // ignore detached nodes
+      }
+    });
+    return nodes.length;
   };
 
   let lang = detectLang();
@@ -2178,6 +4421,19 @@
 
   const t = (key, vars) => {
     const k = String(key || '');
+    const active = normalizeLang(lang || DEFAULT_LANG) || DEFAULT_LANG;
+    if (active !== DEFAULT_LANG) {
+      const activeDict = DICT[active] || {};
+      const baseDict = DICT[DEFAULT_LANG] || {};
+      if (Object.prototype.hasOwnProperty.call(baseDict, k)) {
+        const baseVal = String(baseDict[k] || '');
+        const hasActive = Object.prototype.hasOwnProperty.call(activeDict, k);
+        const activeVal = hasActive ? String(activeDict[k] || '') : '';
+        if (!hasActive || shouldRetryUnchangedTranslation(baseVal, activeVal, active)) {
+          queueMissingLocaleKey(active, k);
+        }
+      }
+    }
     const chain = translationChainFor(lang);
     let val = k;
     for (let i = 0; i < chain.length; i += 1) {
@@ -2231,6 +4487,109 @@
       if (!key) return;
       el.setAttribute('aria-label', t(key));
     });
+
+    root.querySelectorAll('[data-i18n-alt]').forEach((el) => {
+      const key = el.getAttribute('data-i18n-alt');
+      if (!key) return;
+      el.setAttribute('alt', t(key));
+    });
+
+    root.querySelectorAll('[data-i18n-value]').forEach((el) => {
+      const key = el.getAttribute('data-i18n-value');
+      if (!key) return;
+      el.setAttribute('value', t(key));
+    });
+  };
+
+  let domObserver = null;
+  let mutationFlushTimer = null;
+  let mutationFlushBusy = false;
+  const mutationRoots = new Set();
+
+  const normalizeMutationRoot = (node) => {
+    if (!node) return null;
+    if (node.nodeType === 9) return node.documentElement || null;
+    if (node.nodeType === 1) return node;
+    if (node.nodeType === 3) return node.parentElement || null;
+    return null;
+  };
+
+  const queueMutationRoot = (node) => {
+    const root = normalizeMutationRoot(node);
+    if (!root) return;
+    mutationRoots.add(root);
+  };
+
+  const flushMutationTranslations = async () => {
+    if (mutationFlushBusy) return;
+    mutationFlushBusy = true;
+    if (mutationFlushTimer) {
+      clearTimeout(mutationFlushTimer);
+      mutationFlushTimer = null;
+    }
+    try {
+      const roots = Array.from(mutationRoots);
+      mutationRoots.clear();
+      for (let i = 0; i < roots.length; i += 1) {
+        const root = roots[i];
+        if (!root || !root.querySelectorAll) continue;
+        if (root !== document.documentElement && document.documentElement && !document.documentElement.contains(root)) {
+          continue;
+        }
+        applyTranslations(root);
+        // eslint-disable-next-line no-await-in-loop
+        await translateDynamicDom(root).catch(() => {});
+      }
+    } finally {
+      mutationFlushBusy = false;
+      if (mutationRoots.size) {
+        mutationFlushTimer = setTimeout(() => { flushMutationTranslations(); }, 60);
+      }
+    }
+  };
+
+  const scheduleMutationFlush = () => {
+    if (mutationFlushTimer || mutationFlushBusy) return;
+    mutationFlushTimer = setTimeout(() => { flushMutationTranslations(); }, 60);
+  };
+
+  const startDomObserver = () => {
+    if (domObserver || typeof MutationObserver !== 'function') return;
+    const observeRoot = document.body || document.documentElement;
+    if (!observeRoot) return;
+
+    domObserver = new MutationObserver((mutations) => {
+      if (!Array.isArray(mutations) || !mutations.length) return;
+      mutations.forEach((mutation) => {
+        if (!mutation) return;
+        if (mutation.type === 'childList') {
+          if (mutation.addedNodes && mutation.addedNodes.length) {
+            Array.from(mutation.addedNodes).forEach((added) => {
+              queueMutationRoot(added);
+            });
+          } else {
+            queueMutationRoot(mutation.target);
+          }
+          return;
+        }
+        if (mutation.type === 'characterData') {
+          queueMutationRoot(mutation.target);
+          return;
+        }
+        if (mutation.type === 'attributes') {
+          queueMutationRoot(mutation.target);
+        }
+      });
+      if (mutationRoots.size) scheduleMutationFlush();
+    });
+
+    domObserver.observe(observeRoot, {
+      subtree: true,
+      childList: true,
+      characterData: true,
+      attributes: true,
+      attributeFilter: ['placeholder', 'title', 'aria-label', 'alt', 'value']
+    });
   };
 
   const emitUpdated = () => {
@@ -2259,10 +4618,12 @@
       return;
     }
     applyTranslations(document);
+    translateDynamicDom(document).catch(() => {});
     emitUpdated();
     ensureLocaleReady(lang).then((changed) => {
       if (!changed) return;
       applyTranslations(document);
+      translateDynamicDom(document).catch(() => {});
       emitUpdated();
     });
   };
@@ -2270,10 +4631,13 @@
   const init = () => {
     setHtmlLang();
     applyTranslations(document);
+    translateDynamicDom(document).catch(() => {});
+    startDomObserver();
     emitUpdated();
     ensureLocaleReady(lang).then((changed) => {
       if (!changed) return;
       applyTranslations(document);
+      translateDynamicDom(document).catch(() => {});
       emitUpdated();
     });
   };
@@ -2286,10 +4650,14 @@
     t,
     setLang,
     applyTranslations,
+    translateDynamicText,
+    translateDynamicBatch,
+    translateDynamicDom,
     registerLocale: (code, locale, options = {}) => {
       registerLocale(code, locale, options);
       if (normalizeLang(code) !== lang) return;
       applyTranslations(document);
+      translateDynamicDom(document).catch(() => {});
       emitUpdated();
     },
     ensureLocaleReady

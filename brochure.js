@@ -1,19 +1,33 @@
 (() => {
   const $ = (id) => document.getElementById(id);
+  const formatTemplate = (value, vars) => {
+    const text = value == null ? '' : String(value);
+    if (!vars || typeof vars !== 'object') return text;
+    return text.replace(/\{(\w+)\}/g, (match, key) => (
+      Object.prototype.hasOwnProperty.call(vars, key) ? String(vars[key]) : match
+    ));
+  };
+
   const t = (key, fallback, vars) => {
+    const k = String(key || '');
     try {
       if (window.SCP_I18N && typeof window.SCP_I18N.t === 'function') {
-        return window.SCP_I18N.t(key, vars);
+        const translated = window.SCP_I18N.t(k, vars);
+        if (translated != null) {
+          const out = String(translated);
+          if (out && out !== k) return out;
+        }
       }
     } catch {
       // ignore
     }
-    if (fallback !== undefined) return String(fallback);
-    return String(key || '');
+    if (fallback !== undefined) return formatTemplate(fallback, vars);
+    return k;
   };
 
   const refChip = $('brochure-ref');
   const refFoot = $('brochure-ref-foot');
+  const pageEl = $('brochure-page');
   const typeEl = $('brochure-type');
   const locationEl = $('brochure-location');
   const priceEl = $('brochure-price');
@@ -31,6 +45,48 @@
   const printBtn = $('brochure-print');
   const brandEl = $('brochure-brand');
   const footEl = $('brochure-foot');
+
+  let dynamicTranslateTimer = null;
+  let dynamicTranslateBusy = false;
+  const dynamicTranslateRoots = new Set();
+
+  const flushDynamicTranslateQueue = async () => {
+    if (dynamicTranslateBusy) return;
+    dynamicTranslateBusy = true;
+    if (dynamicTranslateTimer) {
+      clearTimeout(dynamicTranslateTimer);
+      dynamicTranslateTimer = null;
+    }
+    try {
+      const i18n = window.SCP_I18N;
+      if (!i18n || typeof i18n.translateDynamicDom !== 'function') return;
+      const roots = Array.from(dynamicTranslateRoots);
+      dynamicTranslateRoots.clear();
+      for (let i = 0; i < roots.length; i += 1) {
+        const root = roots[i];
+        if (!root || !root.querySelectorAll) continue;
+        if (root !== document && !document.contains(root)) continue;
+        try {
+          // eslint-disable-next-line no-await-in-loop
+          await i18n.translateDynamicDom(root);
+        } catch {
+          // ignore
+        }
+      }
+    } finally {
+      dynamicTranslateBusy = false;
+      if (dynamicTranslateRoots.size) {
+        dynamicTranslateTimer = setTimeout(() => { flushDynamicTranslateQueue(); }, 50);
+      }
+    }
+  };
+
+  const queueDynamicTranslate = (root) => {
+    const target = root && root.querySelectorAll ? root : document;
+    dynamicTranslateRoots.add(target);
+    if (dynamicTranslateTimer || dynamicTranslateBusy) return;
+    dynamicTranslateTimer = setTimeout(() => { flushDynamicTranslateQueue(); }, 50);
+  };
 
   const normalizeFeedText = (value) => {
     const raw = value === null || value === undefined ? '' : String(value);
@@ -245,6 +301,9 @@
   };
 
   const init = async () => {
+    if (pageEl) {
+      pageEl.setAttribute('data-i18n-dynamic-scope', '');
+    }
     const url = new URL(window.location.href);
     const ref = toText(url.searchParams.get('ref')).trim();
     const refUpper = ref.toUpperCase();
@@ -650,6 +709,8 @@
           <ul class="brochure-area-list">${list}</ul>
           <div class="brochure-area-footnote">${escapeHtml(note || t('nearby.note', 'Distances are approximate (straight-line). Data: OpenStreetMap contributors.'))}</div>
         `;
+        areaEl.setAttribute('data-i18n-dynamic-scope', '');
+        queueDynamicTranslate(areaEl);
       };
 
       const fallbackItems = buildItems([
@@ -744,6 +805,8 @@
 
     if (descEl) {
       descEl.innerHTML = formatDescriptionHtml(match.description);
+      descEl.setAttribute('data-i18n-dynamic-scope', '');
+      queueDynamicTranslate(descEl);
     }
 
     if (featuresEl) {
@@ -762,6 +825,8 @@
 
       const list = safe.length ? safe : fallback;
       featuresEl.innerHTML = list.slice(0, 18).map((f) => `<li>${escapeHtml(f)}</li>`).join('');
+      featuresEl.setAttribute('data-i18n-dynamic-scope', '');
+      queueDynamicTranslate(featuresEl);
     }
 
     if (galleryEl) {
@@ -773,6 +838,8 @@
           .map((src, idx) => `<div class="brochure-gallery-item"><img src="${src}" alt="Image ${idx + 1}" loading="lazy" referrerpolicy="no-referrer"></div>`)
           .join('');
       }
+      galleryEl.setAttribute('data-i18n-dynamic-scope', '');
+      queueDynamicTranslate(galleryEl);
     }
 
     updateShareLinks();
@@ -805,7 +872,15 @@
         window.print();
       });
     }
+
+    if (pageEl) {
+      queueDynamicTranslate(pageEl);
+    }
   };
+
+  window.addEventListener('scp:i18n-updated', () => {
+    if (pageEl) queueDynamicTranslate(pageEl);
+  });
 
   window.addEventListener('DOMContentLoaded', init);
 })();

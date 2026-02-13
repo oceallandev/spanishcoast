@@ -15,13 +15,28 @@
   const getClient = () => window.scpSupabase || null;
   const getBasket = () => window.SCP_BASKET || null;
 
+  const formatTemplate = (value, vars) => {
+    const text = value == null ? '' : String(value);
+    if (!vars || typeof vars !== 'object') return text;
+    return text.replace(/\{(\w+)\}/g, (match, key) => (
+      Object.prototype.hasOwnProperty.call(vars, key) ? String(vars[key]) : match
+    ));
+  };
+
   const t = (key, fallback, vars) => {
+    const k = String(key || '');
     try {
-      if (window.SCP_I18N && typeof window.SCP_I18N.t === 'function') return window.SCP_I18N.t(key, vars);
+      if (window.SCP_I18N && typeof window.SCP_I18N.t === 'function') {
+        const translated = window.SCP_I18N.t(k, vars);
+        if (translated != null) {
+          const out = String(translated);
+          if (out && out !== k) return out;
+        }
+      }
     } catch {
       // ignore
     }
-    return fallback !== undefined ? String(fallback) : String(key || '');
+    return fallback !== undefined ? formatTemplate(fallback, vars) : k;
   };
 
   const esc = (s) => toText(s).replace(/[&<>"']/g, (c) => ({
@@ -255,9 +270,9 @@
     const gen = meta && meta.generated_at ? toText(meta.generated_at) : '';
 
     const parts = [];
-    if (src) parts.push(`Source: ${src}`);
-    if (gen) parts.push(`Synced: ${gen}`);
-    if (storeUrl) parts.push(`Store: ${storeUrl}`);
+    if (src) parts.push(`${t('shop.meta.source_label', 'Source')}: ${src}`);
+    if (gen) parts.push(`${t('shop.meta.synced_label', 'Synced')}: ${gen}`);
+    if (storeUrl) parts.push(`${t('shop.meta.store_label', 'Store')}: ${storeUrl}`);
     metaEl.textContent = parts.length ? parts.join(' · ') : '';
   };
 
@@ -463,9 +478,9 @@
     if (!allProducts.length) {
       grid.innerHTML = `
         <div class="glass panel" style="grid-column:1/-1;">
-          <h3 style="margin-top:0;">No products loaded yet</h3>
+          <h3 style="margin-top:0;">${esc(t('shop.empty.title', 'No products loaded yet'))}</h3>
           <p class="muted" style="margin-bottom:0;">
-            The shop page is ready, but <code>shop-products.js</code> is empty. Sync from WooCommerce to populate it.
+            ${esc(t('shop.empty.body_prefix', 'The shop page is ready, but'))} <code>shop-products.js</code> ${esc(t('shop.empty.body_suffix', 'is empty. Sync from WooCommerce to populate it.'))}
           </p>
         </div>
       `;
@@ -477,7 +492,10 @@
     const filtered = allProducts.filter((p) => matches(p, filters));
     const sorted = sortProducts(filtered, filters.sort);
 
-    countEl.textContent = `${sorted.length} product${sorted.length === 1 ? '' : 's'}`;
+    const countLabel = sorted.length === 1
+      ? t('shop.count.product_single', 'product')
+      : t('shop.count.product_plural', 'products');
+    countEl.textContent = `${sorted.length} ${countLabel}`;
 
     grid.innerHTML = sorted.map((p) => {
       const name = toText(p && p.name, 'Product');
@@ -493,14 +511,16 @@
       const wa = whatsappHrefFor(p);
 
       const badge = esc(cat);
-      const status = isSale ? `<div class="card-status sale">On sale</div>` : `<div class="card-status sale" style="opacity:0.0; pointer-events:none"> </div>`;
+      const status = isSale
+        ? `<div class="card-status sale">${esc(t('shop.status.on_sale', 'On sale'))}</div>`
+        : `<div class="card-status sale" style="opacity:0.0; pointer-events:none"> </div>`;
       const ref = sku ? esc(sku) : (p && p.id != null ? `WC-${esc(p.id)}` : 'WC');
       const priceHtml = isSale && reg
         ? `<div class="price">${esc(price)} <span class="muted" style="text-decoration:line-through; font-weight:800; margin-left:0.35rem">${esc(reg)}</span></div>`
-        : `<div class="price">${esc(price) || 'Price on request'}</div>`;
+        : `<div class="price">${esc(price) || esc(t('shop.price_on_request', 'Price on request'))}</div>`;
 
       return `
-        <article class="property-card shop-card" data-wc-id="${esc(p && p.id)}" tabindex="0" role="button" aria-label="Open ${esc(name)} details">
+        <article class="property-card shop-card" data-wc-id="${esc(p && p.id)}" tabindex="0" role="button" aria-label="${esc(t('shop.card.aria_open_details', 'Open {name} details', { name }))}">
           <div class="card-img-wrapper">
             <img src="${esc(img)}" alt="${esc(name)}" loading="lazy" referrerpolicy="no-referrer"
               onerror="this.onerror=null;this.src='assets/placeholder.png'">
@@ -512,13 +532,13 @@
             <h3>${esc(name)}</h3>
             ${priceHtml}
             <div class="specs">
-              <div class="spec-item">🛠️ Install support</div>
-              <div class="spec-item">🔒 Secure handover</div>
+              <div class="spec-item">🛠️ ${esc(t('shop.spec.install_support', 'Install support'))}</div>
+              <div class="spec-item">🔒 ${esc(t('shop.spec.secure_handover', 'Secure handover'))}</div>
             </div>
             <div class="card-actions">
-              <button type="button" class="card-action" data-open-details="1">Details</button>
+              <button type="button" class="card-action" data-open-details="1">${esc(t('shop.actions.details', 'Details'))}</button>
               <button type="button" class="card-action card-action--basket" data-add-basket="1">${esc(t('shop.actions.add_to_basket', 'Add to basket'))}</button>
-              ${url ? `<a class="card-action" href="${esc(url)}" target="_blank" rel="noopener">Open in shop</a>` : `<span class="card-action card-action--disabled">Open in shop</span>`}
+              ${url ? `<a class="card-action" href="${esc(url)}" target="_blank" rel="noopener">${esc(t('shop.actions.open_in_shop', 'Open in shop'))}</a>` : `<span class="card-action card-action--disabled">${esc(t('shop.actions.open_in_shop', 'Open in shop'))}</span>`}
               <a class="card-action card-action--whatsapp" href="${esc(wa)}" target="_blank" rel="noopener">WhatsApp</a>
             </div>
           </div>
@@ -548,7 +568,7 @@
     const isSale = Boolean(p.on_sale);
     const priceHtml = isSale && reg
       ? `<div class="price">${esc(price)} <span class="muted" style="text-decoration:line-through; font-weight:800; margin-left:0.35rem">${esc(reg)}</span></div>`
-      : `<div class="price">${esc(price) || 'Price on request'}</div>`;
+      : `<div class="price">${esc(price) || esc(t('shop.price_on_request', 'Price on request'))}</div>`;
 
     const url = productUrlFor(p);
     const wa = whatsappHrefFor(p);
@@ -581,13 +601,13 @@
         <div class="location">${esc(catLine)}</div>
         ${priceHtml}
         <div class="modal-specs">
-          <div class="modal-spec-item">🛠️ Installation available</div>
-          <div class="modal-spec-item">🔒 Secure setup & handover</div>
-          <div class="modal-spec-item">📄 Documentation included</div>
+          <div class="modal-spec-item">🛠️ ${esc(t('shop.spec.install_support', 'Install support'))}</div>
+          <div class="modal-spec-item">🔒 ${esc(t('shop.spec.secure_handover', 'Secure handover'))}</div>
+          <div class="modal-spec-item">📄 ${esc(t('shop.spec.documentation', 'Documentation included'))}</div>
         </div>
         <div class="modal-cta">
           <button class="cta-button" id="shop-add-basket-btn" type="button">${esc(t('shop.actions.add_to_basket', 'Add to basket'))}</button>
-          ${url ? `<a class="cta-button" href="${esc(url)}" target="_blank" rel="noopener">Open in shop</a>` : `<span class="cta-button cta-button--outline" style="opacity:0.65;">No shop link</span>`}
+          ${url ? `<a class="cta-button" href="${esc(url)}" target="_blank" rel="noopener">${esc(t('shop.actions.open_in_shop', 'Open in shop'))}</a>` : `<span class="cta-button cta-button--outline" style="opacity:0.65;">${esc(t('shop.actions.no_shop_link', 'No shop link'))}</span>`}
           <a class="cta-button cta-button--outline" href="${esc(wa)}" target="_blank" rel="noopener">WhatsApp</a>
           <a class="cta-button cta-button--outline" href="${esc(mail)}">Email</a>
         </div>
@@ -600,14 +620,14 @@
         ${thumbHtml}
       </div>
       <div class="modal-details-section">
-        ${descHtml ? `<div class="desc">${descHtml}</div>` : `<div class="muted">No description available.</div>`}
+        ${descHtml ? `<div class="desc">${descHtml}</div>` : `<div class="muted">${esc(t('shop.no_description', 'No description available.'))}</div>`}
         <div class="features-list" style="margin-top:1.25rem;">
-          <h4>Why this matters</h4>
+          <h4>${esc(t('shop.why_title', 'Why this matters'))}</h4>
           <ul>
-            <li>Reduce operational friction (rentals, staff, suppliers)</li>
-            <li>Keep access controlled and auditable</li>
-            <li>Improve reliability with a clean network foundation</li>
-            <li>Less confusion at handover time</li>
+            <li>${esc(t('shop.why.1', 'Reduce operational friction (rentals, staff, suppliers)'))}</li>
+            <li>${esc(t('shop.why.2', 'Keep access controlled and auditable'))}</li>
+            <li>${esc(t('shop.why.3', 'Improve reliability with a clean network foundation'))}</li>
+            <li>${esc(t('shop.why.4', 'Less confusion at handover time'))}</li>
           </ul>
         </div>
       </div>

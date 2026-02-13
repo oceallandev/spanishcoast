@@ -151,7 +151,24 @@
     });
   };
 
+  const removeHeaderCallButtons = () => {
+    const selectors = [
+      '.site-header .header-right a[href^="tel:"]',
+      '.site-header .header-right .cta-button[href^="tel:"]',
+      '.mobile-menu-foot a[href^="tel:"]',
+      '.mobile-menu-foot .cta-button[href^="tel:"]'
+    ];
+    selectors.forEach((selector) => {
+      document.querySelectorAll(selector).forEach((el) => {
+        if (!el) return;
+        try { el.remove(); } catch { /* ignore */ }
+      });
+    });
+  };
+
   const refreshStaticLabels = () => {
+    removeHeaderCallButtons();
+
     setLinkText('.primary-nav .nav-link[data-section=\"home\"]', tr('nav.home', 'Home'));
     setLinkText('.primary-nav .nav-link[data-section=\"properties\"]', tr('nav.properties', 'Properties'));
     setLinkText('.primary-nav .nav-link[data-section=\"newbuilds\"]', tr('nav.new_builds', 'New Builds'));
@@ -172,9 +189,7 @@
     setLinkText('.mobile-menu-links a[href=\"account.html\"]', tr('nav.account', 'Account'));
 
     // Common CTA labels.
-    setLinkText('.header-cta[href^=\"tel:\"]', tr('nav.call', 'Call'));
     setLinkText('.mobile-menu-foot a[href^=\"mailto:\"]', tr('nav.email', 'Email'));
-    setLinkText('.mobile-menu-foot a[href^=\"tel:\"]', tr('nav.call', 'Call'));
     setLinkText('.contact-label', tr('nav.contact_us', 'Contact Us'));
 
     // Common button labels and aria-labels across pages.

@@ -50,6 +50,10 @@ Outputs:
 - `private/inmovilla/listing_ref_map.sql` (original refs mapping for privileged users, **never public**). Ignored by git.
 - `private/inmovilla/*.csv` and `private/inmovilla/*.sql` (PII, admin-only). These are **ignored by git**.
 
+Language normalization:
+- If a listing has Spanish-only title/description, importer auto-translates it to English first (base content for all UI languages).
+- Disable this behavior with: `--no-auto-en-from-es`
+
 Supabase:
 1. Run `supabase.sql` (creates auth tables + admin-only CRM + `listing_ref_map`).
 2. Import the generated:
@@ -62,6 +66,23 @@ Admin UI:
 
 Tip:
 - If you need to re-assign all SCP refs for the Inmovilla feed, run the importer once with `--reset-ref-map`.
+
+## Seed Legacy PropMLS Original Refs (MLSC...)
+
+Older SCP refs (for example `SCP-1980`, `SCP-1675`) are mapped in `reference_map.csv`.
+To make those original refs visible to privileged users in the app, generate a Supabase upsert:
+
+```bash
+python3 build_legacy_ref_map.py
+```
+
+This generates (gitignored):
+- `private/legacy/listing_ref_map.sql`
+- `private/legacy/sql_chunks/listing_ref_map.partXXX.sql`
+
+Supabase:
+1. Run `supabase.sql` if not already applied.
+2. Import `private/legacy/listing_ref_map.sql` (or chunked files under `private/legacy/sql_chunks/`).
 
 ## Import New Builds / Developers XML (Kyero v3 / RedSp)
 
@@ -78,9 +99,16 @@ This generates:
 - `private/redsp1/ref_map.json` (private, gitignored): stable SCP ref allocator state.
 - `private/redsp1/listing_ref_map.sql` (private, gitignored): Supabase upsert to map original refs -> SCP refs.
 
+Language normalization:
+- If RedSp/Kyero description is only in Spanish, importer auto-translates it to English first.
+- Disable with: `--no-auto-en-from-es`
+
 Supabase:
 1. Run `supabase.sql` (creates `listing_ref_map` + RLS).
 2. Import the generated `private/redsp1/listing_ref_map.sql` (or chunked SQL files under `private/redsp1/sql_chunks/`).
+
+Note:
+- New-build "Original ref" visibility depends on this RedSp map being imported in Supabase.
 
 ## Sync WooCommerce Shop Products (Smart Devices)
 

@@ -33,8 +33,11 @@
   };
 
   const normalize = (v) => String(v || '').trim();
-
-  const safeText = (v) => normalize(v).replace(/\s+/g, ' ').trim();
+  const normalizeFeedText = (v) => normalize(v)
+    .replace(/\[\s*amp\s*,?\s*\]/gi, '&')
+    .replace(/&amp,/gi, '&')
+    .replace(/&amp(?!;)/gi, '&');
+  const safeText = (v) => normalizeFeedText(v).replace(/\s+/g, ' ').trim();
 
   const BLOG_FAV_STORAGE_KEY = 'scp:blog_favourites:v1';
 
@@ -67,6 +70,137 @@
     const n = safeText(needle).toLowerCase();
     if (!h || !n) return false;
     return h.includes(n);
+  };
+
+  const normalizeForDedupe = (value) => {
+    const text = safeText(value);
+    if (!text) return '';
+    return text
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/&/g, ' and ')
+      .replace(/['’`´"]/g, '')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+  };
+
+  const firstSourceForPost = (post) => {
+    const sources = Array.isArray(post && post.sources) ? post.sources : [];
+    return sources.length ? (sources[0] || null) : null;
+  };
+
+  const sourceHostForPost = (post) => {
+    const source = firstSourceForPost(post);
+    const raw = safeText(source && source.url);
+    if (!raw) return '';
+    try {
+      const url = new URL(raw, window.location.href);
+      return safeText(url.hostname).replace(/^www\./i, '').toLowerCase();
+    } catch {
+      return '';
+    }
+  };
+
+  const sourceNameForPost = (post) => {
+    const source = firstSourceForPost(post);
+    return normalizeForDedupe(source && source.name);
+  };
+
+  const publishedDayForPost = (post) => safeText(post && post.publishedAt).slice(0, 10);
+
+  const qualityScoreForPost = (post) => {
+    const sections = Array.isArray(post && post.sections) ? post.sections.length : 0;
+    const sources = Array.isArray(post && post.sources) ? post.sources.length : 0;
+    const tags = Array.isArray(post && post.tags) ? post.tags.length : 0;
+    const excerptLen = safeText(post && post.excerpt).length;
+    const ctaLen = safeText(post && post.cta).length;
+    return (sections * 30) + (sources * 10) + (tags * 4) + excerptLen + ctaLen;
+  };
+
+  const dedupeKeyForPost = (post) => {
+    const title = normalizeForDedupe(post && post.title);
+    if (!title) return '';
+    const kind = normalizeForDedupe(post && post.kind) || 'news';
+    const lang = normalizeForDedupe(post && post.lang) || '';
+    const source = sourceNameForPost(post) || sourceHostForPost(post) || '';
+    const day = publishedDayForPost(post) || '';
+    return [kind, lang, title, source, day].join('|');
+  };
+
+  const sortPostsNewestFirst = (posts) => posts.slice().sort(
+    (a, b) => String(b && b.publishedAt || '').localeCompare(String(a && a.publishedAt || ''))
+  );
+
+  const dedupePosts = (posts) => {
+    const list = Array.isArray(posts) ? posts.filter((p) => p && typeof p === 'object') : [];
+    if (!list.length) return [];
+
+    const sorted = sortPostsNewestFirst(list);
+    const seenIds = new Set();
+    const keyed = new Map();
+
+    for (let i = 0; i < sorted.length; i += 1) {
+      const post = sorted[i];
+      const id = safeText(post.id);
+      if (id) {
+        if (seenIds.has(id)) continue;
+        seenIds.add(id);
+      }
+
+      const dedupeKey = dedupeKeyForPost(post) || `fallback|${id || ''}|${normalizeForDedupe(post.title)}|${publishedDayForPost(post)}`;
+      const existing = keyed.get(dedupeKey);
+      if (!existing) {
+        keyed.set(dedupeKey, post);
+        continue;
+      }
+
+      const nextScore = qualityScoreForPost(post);
+      const prevScore = qualityScoreForPost(existing);
+      if (nextScore > prevScore) keyed.set(dedupeKey, post);
+    }
+
+    return sortPostsNewestFirst(Array.from(keyed.values()));
+  };
+
+  let dynamicTranslateTimer = null;
+  let dynamicTranslateBusy = false;
+  const dynamicTranslateRoots = new Set();
+
+  const flushDynamicTranslateQueue = async () => {
+    if (dynamicTranslateBusy) return;
+    dynamicTranslateBusy = true;
+    if (dynamicTranslateTimer) {
+      clearTimeout(dynamicTranslateTimer);
+      dynamicTranslateTimer = null;
+    }
+    try {
+      const i18n = globalThis.SCP_I18N || null;
+      if (!i18n || typeof i18n.translateDynamicDom !== 'function') return;
+      const roots = Array.from(dynamicTranslateRoots);
+      dynamicTranslateRoots.clear();
+      for (let i = 0; i < roots.length; i += 1) {
+        const root = roots[i];
+        if (!root || !root.querySelectorAll) continue;
+        if (root !== document && !document.contains(root)) continue;
+        try {
+          // eslint-disable-next-line no-await-in-loop
+          await i18n.translateDynamicDom(root);
+        } catch { /* ignore */ }
+      }
+    } finally {
+      dynamicTranslateBusy = false;
+      if (dynamicTranslateRoots.size) {
+        dynamicTranslateTimer = setTimeout(() => { flushDynamicTranslateQueue(); }, 50);
+      }
+    }
+  };
+
+  const queueDynamicTranslate = (root) => {
+    const target = root && root.querySelectorAll ? root : document;
+    dynamicTranslateRoots.add(target);
+    if (dynamicTranslateTimer || dynamicTranslateBusy) return;
+    dynamicTranslateTimer = setTimeout(() => { flushDynamicTranslateQueue(); }, 50);
   };
 
   const getBlogData = () => {
@@ -277,6 +411,7 @@
 
     const wrap = document.createElement('div');
     wrap.className = 'blog-post';
+    wrap.setAttribute('data-i18n-dynamic-scope', '');
 
     const top = document.createElement('div');
     top.className = 'blog-post-top';
@@ -294,10 +429,12 @@
 
     const title = document.createElement('h2');
     title.className = 'blog-post-title';
+    title.setAttribute('data-i18n-dynamic', '');
     title.textContent = safeText(post.title) || (t('blog.post.untitled') || 'Untitled');
 
     const excerpt = document.createElement('p');
     excerpt.className = 'blog-post-excerpt';
+    excerpt.setAttribute('data-i18n-dynamic', '');
     excerpt.textContent = safeText(post.excerpt || '');
 
     const tagsWrap = document.createElement('div');
@@ -306,6 +443,7 @@
     for (const tag of tags) {
       const span = document.createElement('span');
       span.className = 'blog-tag';
+      span.setAttribute('data-i18n-dynamic', '');
       span.textContent = safeText(tag);
       tagsWrap.appendChild(span);
     }
@@ -322,11 +460,13 @@
       if (type === 'h') {
         const h = document.createElement('h3');
         h.className = 'blog-post-h';
+        h.setAttribute('data-i18n-dynamic', '');
         h.textContent = safeText(section.text);
         if (h.textContent) wrap.appendChild(h);
       } else if (type === 'p') {
         const p = document.createElement('p');
         p.className = 'blog-post-p';
+        p.setAttribute('data-i18n-dynamic', '');
         p.textContent = safeText(section.text);
         if (p.textContent) wrap.appendChild(p);
       } else if (type === 'ul') {
@@ -336,6 +476,7 @@
         ul.className = 'blog-post-ul';
         for (const item of items.slice(0, 12)) {
           const li = document.createElement('li');
+          li.setAttribute('data-i18n-dynamic', '');
           li.textContent = safeText(item);
           if (li.textContent) ul.appendChild(li);
         }
@@ -370,6 +511,7 @@
 
     const cta = document.createElement('div');
     cta.className = 'blog-post-cta';
+    cta.setAttribute('data-i18n-dynamic', '');
     cta.textContent = safeText(post.cta || '');
     if (cta.textContent) footer.appendChild(cta);
 
@@ -405,6 +547,7 @@
     wrap.appendChild(footer);
 
     els.modalBody.appendChild(wrap);
+    queueDynamicTranslate(els.modalBody);
 
     els.modal.style.display = 'block';
     els.modal.setAttribute('aria-hidden', 'false');
@@ -420,6 +563,7 @@
 
   const renderEmpty = ({ title, subtitle } = {}) => {
     els.grid.textContent = '';
+    els.grid.setAttribute('data-i18n-dynamic-scope', '');
     const card = document.createElement('div');
     card.className = 'catalog-card blog-empty';
     const content = document.createElement('div');
@@ -433,6 +577,7 @@
     content.appendChild(p);
     card.appendChild(content);
     els.grid.appendChild(card);
+    queueDynamicTranslate(els.grid);
   };
 
   const render = () => {
@@ -467,6 +612,7 @@
       .sort((a, b) => String(b.publishedAt || '').localeCompare(String(a.publishedAt || '')));
 
     els.grid.textContent = '';
+    els.grid.setAttribute('data-i18n-dynamic-scope', '');
 
     if (els.count) {
       els.count.textContent = `${filtered.length} ${t('blog.count.posts') || 'posts'}`;
@@ -522,10 +668,12 @@
       const titleText = safeText(post.title) || (t('blog.post.untitled') || 'Untitled');
 
       const h3 = document.createElement('h3');
+      h3.setAttribute('data-i18n-dynamic', '');
       h3.textContent = titleText;
 
       const meta = document.createElement('div');
       meta.className = 'catalog-meta';
+      meta.setAttribute('data-i18n-dynamic', '');
       meta.textContent = safeText(post.excerpt || '');
 
       const tags = document.createElement('div');
@@ -534,6 +682,7 @@
       for (const tag of tagList) {
         const span = document.createElement('span');
         span.className = 'blog-tag';
+        span.setAttribute('data-i18n-dynamic', '');
         span.textContent = safeText(tag);
         tags.appendChild(span);
       }
@@ -561,6 +710,8 @@
       });
       els.grid.appendChild(card);
     }
+
+    queueDynamicTranslate(els.grid);
   };
 
   const init = async () => {
@@ -571,7 +722,7 @@
     } catch { /* ignore */ }
 
     const data = getBlogData();
-    state.all = Array.isArray(data.posts) ? data.posts : [];
+    state.all = dedupePosts(Array.isArray(data.posts) ? data.posts : []);
     state.updatedAt = safeText(data.updatedAt || '');
 
     // If posts are empty, try fetching JSON (useful if the JS file failed to load).
@@ -581,7 +732,7 @@
         if (res && res.ok) {
           const json = await res.json();
           if (json && Array.isArray(json.posts)) {
-            state.all = json.posts;
+            state.all = dedupePosts(json.posts);
             state.updatedAt = safeText(json.updatedAt || '');
           }
         }
@@ -634,6 +785,13 @@
         if (event.target === els.modal) closeModal();
       });
     }
+
+    window.addEventListener('scp:i18n-updated', () => {
+      render();
+      if (els.modal && els.modal.style.display === 'block') {
+        queueDynamicTranslate(els.modalBody);
+      }
+    });
 
     window.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') closeModal();

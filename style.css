@@ -81,6 +81,16 @@ body[data-section="properties"] {
 }
 
 @media (max-width: 520px) {
+    .primary-nav {
+        display: none !important;
+    }
+
+    .mobile-menu-btn {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+
     .main-header {
         padding-left: max(1rem, env(safe-area-inset-left));
         padding-right: max(1rem, env(safe-area-inset-right));
@@ -103,7 +113,13 @@ body[data-section="properties"] {
 
     /* Make room for Filters + Map buttons in portrait mobile. */
     .header-cta {
-        display: none;
+        display: none !important;
+    }
+
+    /* Catalog creation is still available in-page; hide header chip on narrow screens
+       so filters/map controls never get clipped. */
+    .open-catalog-btn {
+        display: none !important;
     }
 
     .mobile-menu-btn {
@@ -184,6 +200,7 @@ body[data-section="properties"] {
     justify-content: space-between;
     align-items: center;
     gap: 1.5rem;
+    min-width: 0;
 }
 
 .header-left,
@@ -191,6 +208,20 @@ body[data-section="properties"] {
     display: flex;
     align-items: center;
     gap: 1.5rem;
+    min-width: 0;
+}
+
+.header-left {
+    flex: 1 1 auto;
+}
+
+.header-right {
+    flex: 0 1 auto;
+    justify-content: flex-end;
+}
+
+.header-right > * {
+    flex: 0 0 auto;
 }
 
 .lang-switch {
@@ -346,25 +377,62 @@ body[data-section="properties"] {
 
 @media (max-width: 520px) {
     .header-inner {
-        gap: 0.75rem;
+        gap: 0.55rem;
     }
 
     .header-left,
     .header-right {
-        gap: 0.75rem;
+        gap: 0.45rem;
+    }
+
+    .header-left {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .header-right {
+        max-width: none;
+        overflow: visible;
+        margin-left: auto;
+    }
+
+    /* Listing pages carry language + menu + filters + map in the header.
+       Collapse filter label to icon so Map/List always remains visible. */
+    body[data-section="properties"] .header-right {
+        max-width: calc(100% - 56px);
+        overflow: hidden;
+    }
+
+    body[data-section="properties"] .mobile-menu-btn {
+        display: none !important;
+    }
+
+    body[data-section="properties"] .open-filters-btn {
+        min-width: 40px;
+        padding: 0 0.62rem;
+        gap: 0;
+    }
+
+    body[data-section="properties"] .open-filters-btn > span[data-i18n] {
+        display: none;
     }
 
     /* Override the desktop padding so the Map/List button never clips in portrait. */
     .toggle-map-btn {
         height: 40px;
-        min-width: 60px;
-        padding: 0 0.7rem;
+        min-width: 56px;
+        padding: 0 0.62rem;
         font-size: 0.85rem;
         border-radius: 999px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         white-space: nowrap;
+    }
+
+    body[data-section="properties"] .toggle-map-btn {
+        min-width: 52px;
+        padding: 0 0.55rem;
     }
 }
 
@@ -1387,6 +1455,15 @@ body[data-section="properties"] .search-pill:hover {
         linear-gradient(135deg, rgba(14, 165, 233, 0.18) 0%, rgba(3, 7, 18, 0.9) 42%, rgba(3, 7, 18, 0.94) 100%);
 }
 
+/* Property filter rhythm: cleaner alignment and spacing across all filter boxes. */
+body[data-section="properties"] .pill-scroll {
+    gap: 0.58rem;
+}
+
+body[data-section="properties"] .pill-divider {
+    display: none;
+}
+
 .pill-scroll {
     display: flex;
     align-items: center;
@@ -1409,6 +1486,11 @@ body[data-section="properties"] .search-pill:hover {
     padding-left: 0.85rem;
     border-left: 1px solid var(--glass-border);
     background: linear-gradient(90deg, rgba(5, 5, 5, 0.0), rgba(5, 5, 5, 0.6));
+}
+
+body[data-section="properties"] .pill-actions {
+    gap: 0.5rem;
+    padding-left: 0.72rem;
 }
 
 .pill-advanced {
@@ -1468,6 +1550,8 @@ body[data-section="properties"] .search-pill.advanced-open .pill-advanced .pill-
 
 body[data-section="properties"] .pill-section label {
     color: rgba(186, 230, 253, 0.98);
+    min-height: 14px;
+    margin-left: 2px;
 }
 
 .pill-section input,
@@ -1489,6 +1573,9 @@ body[data-section="properties"] .pill-section select {
     border-radius: 10px;
     padding: 0.45rem 0.6rem;
     color: rgba(248, 250, 252, 0.98);
+    width: 100%;
+    min-width: 0;
+    height: 40px;
 }
 
 body[data-section="properties"] .pill-section input::placeholder {
@@ -1507,6 +1594,51 @@ body[data-section="properties"] .pill-section select:focus {
 
 .pill-section.location input {
     width: 180px;
+}
+
+body[data-section="properties"] .pill-section {
+    padding: 0;
+    gap: 0.34rem;
+    min-height: 64px;
+    justify-content: center;
+    min-width: 112px;
+}
+
+body[data-section="properties"] .pill-section.reference {
+    min-width: 122px;
+}
+
+body[data-section="properties"] .pill-section.location {
+    min-width: 200px;
+}
+
+body[data-section="properties"] .pill-section.price {
+    min-width: 146px;
+}
+
+body[data-section="properties"] .pill-section.type {
+    min-width: 150px;
+}
+
+body[data-section="properties"] .pill-section.deal {
+    min-width: 160px;
+}
+
+body[data-section="properties"] .pill-section.beach,
+body[data-section="properties"] .pill-section.seaview {
+    min-width: 128px;
+}
+
+body[data-section="properties"] .pill-section.specs {
+    min-width: 88px;
+}
+
+body[data-section="properties"] .pill-section.amenity {
+    min-width: 118px;
+}
+
+body[data-section="properties"] .pill-section.location input {
+    width: 100%;
 }
 
 .pill-section select {
@@ -1632,6 +1764,13 @@ body[data-section="properties"] .pill-section select:focus {
     cursor: pointer;
 }
 
+body[data-section="properties"] .search-trigger,
+body[data-section="properties"] .more-trigger,
+body[data-section="properties"] .clear-trigger,
+body[data-section="properties"] .close-filters-btn {
+    height: 40px;
+}
+
 .filters-backdrop {
     display: none;
     position: fixed;
@@ -1722,7 +1861,9 @@ body.filters-open .filters-backdrop {
     }
 
     body[data-section="properties"] .pill-section {
-        padding: 0.55rem 0.3rem;
+        padding: 0.45rem 0.1rem;
+        min-width: calc(50% - 0.35rem);
+        flex: 1 1 calc(50% - 0.35rem);
     }
 
     body[data-section="properties"] .pill-section input,
@@ -1743,6 +1884,11 @@ body.filters-open .filters-backdrop {
         margin-top: 0.25rem;
         align-self: flex-end;
     }
+
+    body[data-section="properties"] .pill-actions {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
 }
 
 @media (max-width: 520px) {
@@ -1757,6 +1903,13 @@ body.filters-open .filters-backdrop {
 
     .open-catalog-btn > span[data-i18n] {
         display: none;
+    }
+}
+
+@media (max-width: 640px) {
+    body[data-section="properties"] .pill-section {
+        min-width: 100%;
+        flex-basis: 100%;
     }
 }
 
@@ -1976,6 +2129,7 @@ body[data-section="properties"].ui-collapsed .city-bar {
     display: flex;
     gap: 0.6rem;
     align-items: flex-end;
+    flex-wrap: wrap;
 }
 
 .results-actions button {
@@ -2150,7 +2304,17 @@ body[data-section="properties"].ui-collapsed .city-bar {
 
     .results-actions {
         width: 100%;
-        justify-content: space-between;
+        justify-content: flex-start;
+        gap: 0.5rem;
+    }
+
+    .results-actions button {
+        flex: 1 1 calc(50% - 0.25rem);
+        min-width: 0;
+        min-height: 42px;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.2;
     }
 
     .catalog-builder-grid {
@@ -2584,6 +2748,14 @@ body[data-section="properties"].map-open .map-section {
     color: rgba(255, 255, 255, 0.72);
 }
 
+/* Freehand draw mode (mobile-first): keep gestures on the map surface. */
+.leaflet-container.scp-map--drawing {
+    cursor: crosshair;
+    touch-action: none !important;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
 /* Leaflet.Draw tooltips should match the site's dark theme. */
 .leaflet-draw-tooltip {
     background: rgba(2, 6, 23, 0.92);
@@ -2924,16 +3096,7 @@ body[data-section="properties"].map-open .map-section {
 
 .pill-section.reference input {
     width: 100%;
-    border: none;
-    background: transparent;
-    font-size: 14px;
-    color: white;
-    outline: none;
     font-family: 'Outfit', sans-serif;
-}
-
-.pill-section.reference input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
 }
 
 /* Property Card Reference */
@@ -3027,10 +3190,6 @@ body[data-section="properties"].map-open .map-section {
 
 /* Responsive */
 @media (max-width: 1024px) {
-    .header-inner {
-        padding: 0 1rem;
-    }
-
     .brand-name,
     .phone-number {
         display: none;
@@ -3486,6 +3645,18 @@ body[data-section="properties"].map-open .map-section {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Keep property-detail action labels optically centered across <a> and <button>. */
+.modal-cta .cta-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.2;
+    min-height: 44px;
+    vertical-align: middle;
+    gap: 0.35rem;
+}
+
 .cta-button.cta-button--outline {
     background: rgba(255, 255, 255, 0.04);
     color: rgba(248, 250, 252, 0.92);
@@ -3537,9 +3708,12 @@ body[data-section="properties"].map-open .map-section {
     color: rgba(248, 250, 252, 0.92);
     font-weight: 800;
     font-size: 0.9rem;
+    line-height: 1.2;
     text-decoration: none;
     cursor: pointer;
     transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    min-height: 44px;
+    text-align: center;
 }
 
 .share-icon {
@@ -3555,6 +3729,13 @@ body[data-section="properties"].map-open .map-section {
     display: block;
     width: 1.1rem;
     height: 1.1rem;
+}
+
+.share-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.2;
 }
 
 .share-icon--whatsapp { color: #25D366; }
@@ -3602,6 +3783,12 @@ body[data-section="properties"].map-open .map-section {
     padding: 0 2rem;
     display: flex;
     justify-content: flex-end;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+}
+
+.auth-actions .cta-button {
+    min-width: 0;
 }
 
 .auth-recovery {
@@ -3623,6 +3810,10 @@ body[data-section="properties"].map-open .map-section {
         padding: 0 1.2rem;
         margin: 0 0 1.1rem;
         justify-content: stretch;
+    }
+
+    .auth-actions .cta-button {
+        flex: 1 1 220px;
     }
 
     .auth-recovery {
@@ -5418,6 +5609,13 @@ body.crm-open .crm-drawer {
     color: rgba(226, 232, 240, 0.92);
 }
 
+.reel-auto-note {
+    margin-top: 0.85rem;
+    color: rgba(203, 213, 225, 0.95);
+    font-weight: 700;
+    line-height: 1.5;
+}
+
 .reel-status[data-tone="good"] {
     color: rgba(134, 239, 172, 0.92);
 }
@@ -5487,6 +5685,25 @@ body.crm-open .crm-drawer {
     flex-wrap: wrap;
     gap: 0.6rem;
     margin-top: 0.85rem;
+}
+
+.reel-share-wrap {
+    margin-top: 0.85rem;
+}
+
+.reel-share-primary {
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(120deg, #0ea5e9, #0284c7);
+    border-color: transparent;
+    font-weight: 900;
+}
+
+.reel-share-primary[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .reel-caption-head {
@@ -5934,6 +6151,17 @@ body.crm-open .crm-drawer {
     min-height: 100vh;
 }
 
+/* Client catalog reuses data-section="properties" for nav context,
+   but must keep normal page scrolling (not app-layout scroll lock). */
+.client-catalog-body[data-section="properties"] {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.client-catalog-body[data-section="properties"] .site-footer {
+    display: block;
+}
+
 .client-catalog-wrap {
     width: min(1120px, 100% - 2rem);
     margin: 1.6rem auto 2.2rem;
@@ -6056,5 +6284,330 @@ body.crm-open .crm-drawer {
     .client-catalog-card {
         break-inside: avoid;
         page-break-inside: avoid;
+    }
+}
+
+.tour-body {
+    background: #0b1220;
+    color: rgba(248, 250, 252, 0.94);
+    font-family: 'Outfit', sans-serif;
+}
+
+.tour-page {
+    max-width: 1320px;
+    margin: 1.2rem auto 2rem;
+    padding: 1.1rem;
+}
+
+.tour-stage {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(340px, 0.8fr);
+    gap: 1rem;
+    align-items: start;
+}
+
+.tour-viewer-card,
+.tour-card {
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.65), rgba(8, 13, 34, 0.72));
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+}
+
+.tour-viewer-card {
+    padding: 1rem;
+}
+
+.tour-viewer-head {
+    display: grid;
+    gap: 0.6rem;
+    margin-bottom: 0.85rem;
+}
+
+.tour-title {
+    margin: 0;
+    font-size: clamp(1.25rem, 2vw, 1.85rem);
+    font-weight: 900;
+    line-height: 1.15;
+}
+
+.tour-viewer {
+    position: relative;
+    min-height: 440px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(125, 211, 252, 0.2);
+    background: radial-gradient(circle at 35% 20%, rgba(14, 165, 233, 0.2), rgba(2, 6, 23, 0.95));
+}
+
+.tour-viewer canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}
+
+.tour-fallback-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
+    background: #020617;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.tour-hotspots {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.tour-hotspot {
+    position: absolute;
+    pointer-events: auto;
+    border: 1px solid rgba(125, 211, 252, 0.45);
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(2, 132, 199, 0.95), rgba(3, 105, 161, 0.94));
+    color: #f8fafc;
+    font-size: 0.76rem;
+    font-weight: 900;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    padding: 0.44rem 0.62rem;
+    white-space: nowrap;
+    box-shadow: 0 10px 24px rgba(2, 6, 23, 0.6);
+    transition: transform 0.16s ease, filter 0.16s ease;
+}
+
+.tour-hotspot:hover {
+    filter: brightness(1.12);
+}
+
+.tour-viewer-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 1.2rem;
+    text-align: center;
+    background: radial-gradient(circle at 45% 30%, rgba(14, 165, 233, 0.2), rgba(2, 6, 23, 0.84));
+    color: rgba(248, 250, 252, 0.95);
+    transition: opacity 0.24s ease;
+}
+
+.tour-viewer-overlay.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.tour-viewer-overlay strong {
+    font-size: 1.06rem;
+    font-weight: 900;
+}
+
+.tour-viewer-overlay span {
+    max-width: 40ch;
+    color: rgba(226, 232, 240, 0.95);
+    font-weight: 800;
+}
+
+.tour-viewer-actions {
+    margin-top: 0.85rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+}
+
+.tour-side {
+    display: grid;
+    gap: 0.9rem;
+}
+
+.tour-card {
+    padding: 0.9rem;
+}
+
+.tour-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.6rem;
+}
+
+.tour-card h2,
+.tour-card h3 {
+    margin: 0;
+    font-weight: 900;
+    font-size: 1.06rem;
+}
+
+.tour-mini-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.28rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(226, 232, 240, 0.95);
+    font-weight: 800;
+    font-size: 0.74rem;
+}
+
+.tour-dollhouse {
+    min-height: 260px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    background: #020617;
+}
+
+.tour-dollhouse-fallback {
+    min-height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: rgba(226, 232, 240, 0.95);
+}
+
+.tour-status {
+    margin-top: 0.7rem;
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: rgba(226, 232, 240, 0.94);
+    line-height: 1.45;
+}
+
+.tour-status[data-tone="good"] {
+    color: rgba(134, 239, 172, 0.94);
+}
+
+.tour-status[data-tone="warn"] {
+    color: rgba(251, 191, 36, 0.95);
+}
+
+.tour-status[data-tone="bad"] {
+    color: rgba(248, 113, 113, 0.95);
+}
+
+.tour-scene-list {
+    display: grid;
+    gap: 0.46rem;
+}
+
+.tour-scene-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.52rem;
+    width: 100%;
+    text-align: left;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(248, 250, 252, 0.94);
+    font-weight: 800;
+    padding: 0.55rem 0.65rem;
+    cursor: pointer;
+}
+
+.tour-scene-btn.is-active {
+    border-color: rgba(56, 189, 248, 0.6);
+    background: rgba(14, 165, 233, 0.18);
+}
+
+.tour-scene-dot {
+    width: 0.66rem;
+    height: 0.66rem;
+    border-radius: 999px;
+    background: rgba(125, 211, 252, 0.85);
+    box-shadow: 0 0 0 4px rgba(125, 211, 252, 0.16);
+    flex: 0 0 auto;
+}
+
+.tour-small {
+    margin: 0;
+    color: rgba(203, 213, 225, 0.92);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    font-weight: 700;
+}
+
+.tour-label {
+    display: block;
+    margin-top: 0.7rem;
+    margin-bottom: 0.35rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgba(148, 163, 184, 0.98);
+    font-weight: 900;
+}
+
+.tour-textarea,
+.tour-file {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(2, 6, 23, 0.58);
+    color: rgba(248, 250, 252, 0.96);
+    padding: 0.62rem 0.7rem;
+    font-weight: 700;
+    font-size: 0.87rem;
+}
+
+.tour-textarea {
+    resize: vertical;
+    min-height: 110px;
+    line-height: 1.45;
+}
+
+.tour-studio-actions {
+    margin-top: 0.55rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem;
+}
+
+@media (max-width: 1120px) {
+    .tour-stage {
+        grid-template-columns: 1fr;
+    }
+
+    .tour-viewer {
+        min-height: 380px;
+    }
+}
+
+@media (max-width: 720px) {
+    .tour-page {
+        padding: 0.75rem;
+    }
+
+    .tour-viewer-card,
+    .tour-card {
+        padding: 0.78rem;
+    }
+
+    .tour-viewer {
+        min-height: 312px;
+    }
+
+    .tour-viewer-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tour-studio-actions {
+        grid-template-columns: 1fr;
     }
 }

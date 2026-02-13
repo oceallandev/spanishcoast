@@ -2,13 +2,28 @@
   const qs = (id) => document.getElementById(id);
   const getClient = () => window.scpSupabase || null;
 
+  const formatTemplate = (value, vars) => {
+    const text = value == null ? '' : String(value);
+    if (!vars || typeof vars !== 'object') return text;
+    return text.replace(/\{(\w+)\}/g, (match, key) => (
+      Object.prototype.hasOwnProperty.call(vars, key) ? String(vars[key]) : match
+    ));
+  };
+
   const t = (key, fallback, vars) => {
+    const k = String(key || '');
     try {
-      if (window.SCP_I18N && typeof window.SCP_I18N.t === 'function') return window.SCP_I18N.t(key, vars);
+      if (window.SCP_I18N && typeof window.SCP_I18N.t === 'function') {
+        const translated = window.SCP_I18N.t(k, vars);
+        if (translated != null) {
+          const out = String(translated);
+          if (out && out !== k) return out;
+        }
+      }
     } catch {
       // ignore
     }
-    return fallback != null ? String(fallback) : String(key || '');
+    return fallback != null ? formatTemplate(fallback, vars) : k;
   };
 
   const toText = (v, fb = '') => (typeof v === 'string' ? v : v == null ? fb : String(v));

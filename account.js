@@ -14,6 +14,7 @@
   const dashPropertiesTile = document.getElementById('dash-properties-tile');
   const dashCrmTile = document.getElementById('dash-crm-tile');
   const dashShopTile = document.getElementById('dash-shop-tile');
+  const dashRefMapTile = document.getElementById('dash-refmap-tile');
   const partnerTile = document.getElementById('dash-partner-tile');
   const partnerK = document.getElementById('dash-partner-k');
   const partnerV = document.getElementById('dash-partner-v');
@@ -96,16 +97,29 @@
 
   const getClient = () => window.scpSupabase || null;
   const getBasket = () => window.SCP_BASKET || null;
+  const formatTemplate = (value, vars) => {
+    const text = value == null ? '' : String(value);
+    if (!vars || typeof vars !== 'object') return text;
+    return text.replace(/\{(\w+)\}/g, (match, key) => (
+      Object.prototype.hasOwnProperty.call(vars, key) ? String(vars[key]) : match
+    ));
+  };
+
   const t = (key, fallback, vars) => {
+    const k = String(key || '');
     try {
       if (window.SCP_I18N && typeof window.SCP_I18N.t === 'function') {
-        return window.SCP_I18N.t(key, vars);
+        const translated = window.SCP_I18N.t(k, vars);
+        if (translated != null) {
+          const out = String(translated);
+          if (out && out !== k) return out;
+        }
       }
     } catch {
       // ignore
     }
-    if (fallback !== undefined) return String(fallback);
-    return String(key || '');
+    if (fallback !== undefined) return formatTemplate(fallback, vars);
+    return k;
   };
 
   const setVisible = (el, yes, display = 'block') => {
@@ -127,13 +141,13 @@
   };
 
   const ROLE_META = {
-    admin: { label: 'Admin', partner: true },
-    partner: { label: 'Partner', partner: true },
-    agency_admin: { label: 'Agency admin', partner: true },
-    agent: { label: 'Agent', partner: true },
-    developer: { label: 'Developer', partner: true },
-    collaborator: { label: 'Collaborator', partner: true },
-    client: { label: 'Client', partner: false }
+    admin: { partner: true },
+    partner: { partner: true },
+    agency_admin: { partner: true },
+    agent: { partner: true },
+    developer: { partner: true },
+    collaborator: { partner: true },
+    client: { partner: false }
   };
 
   const QUICKSHARE_REF_KEY = 'scp:quickshare:ref';
@@ -248,7 +262,10 @@
   let sawAuthEvent = false;
 
   const clearOfflineCacheAndReload = async () => {
-    setStatus('Clearing offline cache…', 'This will refresh the page.');
+    setStatus(
+      t('account.status.clearing_cache_title', 'Clearing offline cache…'),
+      t('account.status.clearing_cache_hint', 'This will refresh the page.')
+    );
     try {
       if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
         const regs = await navigator.serviceWorker.getRegistrations();
@@ -318,7 +335,10 @@
   };
 
   const resetAuthStorageAndReload = async () => {
-    setStatus('Resetting login…', 'Clearing saved session data and offline cache.');
+    setStatus(
+      t('account.status.resetting_login_title', 'Resetting login…'),
+      t('account.status.resetting_login_hint', 'Clearing saved session data and offline cache.')
+    );
     clearAuthStorage();
     await clearOfflineCacheAndReload();
   };
@@ -349,13 +369,13 @@
     if (!magicForm) return;
     const btn = magicForm.querySelector('button[type="submit"]');
     if (!btn) return;
-    if (!btn.dataset.defaultText) btn.dataset.defaultText = btn.textContent || 'Send magic link';
+    if (!btn.dataset.defaultText) btn.dataset.defaultText = btn.textContent || t('account.magic.button', 'Send magic link');
     if (btn.dataset.busy === '1') return;
 
     const remaining = remainingMagicCooldownMs();
     if (remaining > 0) {
       btn.disabled = true;
-      btn.textContent = `Wait ${Math.ceil(remaining / 1000)}s`;
+      btn.textContent = t('account.status.wait_seconds', 'Wait {seconds}s', { seconds: Math.ceil(remaining / 1000) });
       if (!magicCooldownTimer) {
         magicCooldownTimer = window.setInterval(updateMagicCooldownUi, 1000);
       }
@@ -396,13 +416,13 @@
     if (!resetPasswordForm) return;
     const btn = resetPasswordForm.querySelector('button[type="submit"]');
     if (!btn) return;
-    if (!btn.dataset.defaultText) btn.dataset.defaultText = btn.textContent || 'Send reset link';
+    if (!btn.dataset.defaultText) btn.dataset.defaultText = btn.textContent || t('account.reset.button', 'Send reset link');
     if (btn.dataset.busy === '1') return;
 
     const remaining = remainingResetCooldownMs();
     if (remaining > 0) {
       btn.disabled = true;
-      btn.textContent = `Wait ${Math.ceil(remaining / 1000)}s`;
+      btn.textContent = t('account.status.wait_seconds', 'Wait {seconds}s', { seconds: Math.ceil(remaining / 1000) });
       if (!resetCooldownTimer) {
         resetCooldownTimer = window.setInterval(updateResetCooldownUi, 1000);
       }
@@ -451,7 +471,7 @@
         error: ''
       };
     } catch {
-      return { role: '', displayName: '', error: 'profiles lookup failed' };
+      return { role: '', displayName: '', error: t('account.error.profiles_lookup_failed', 'Profiles lookup failed') };
     }
   }
 
@@ -460,10 +480,22 @@
     return r || 'client';
   };
 
+  const roleLabel = (role) => {
+    const r = normalizeRole(role);
+    if (r === 'admin') return t('role.admin', 'Admin');
+    if (r === 'partner') return t('role.partner', 'Partner');
+    if (r === 'agency_admin') return t('role.agency_admin', 'Agency admin');
+    if (r === 'agent') return t('role.agent', 'Agent');
+    if (r === 'developer') return t('role.developer', 'Developer');
+    if (r === 'collaborator') return t('role.collaborator', 'Collaborator');
+    return t('role.client', 'Client');
+  };
+
   const setRoleBadge = (role) => {
     const r = normalizeRole(role);
-    const meta = ROLE_META[r] || { label: r || 'Client', partner: false };
-    if (dashRole) dashRole.textContent = meta.label.toUpperCase();
+    const meta = ROLE_META[r] || { partner: false };
+    const label = roleLabel(r || 'client');
+    if (dashRole) dashRole.textContent = String(label || '').toUpperCase();
   };
 
   const initialsFor = (displayName, email) => {
@@ -483,8 +515,68 @@
 
   const normalizeRef = (value) => String(value || '').trim().toUpperCase();
 
+  const isLoopbackHost = (hostname) => {
+    const host = String(hostname || '').trim().toLowerCase();
+    if (!host) return false;
+    if (host === 'localhost' || host.endsWith('.localhost')) return true;
+    if (host === '127.0.0.1' || host === '0.0.0.0' || host === '::1') return true;
+    return /^127\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(host);
+  };
+
+  const ensureTrailingSlash = (value) => {
+    const text = String(value || '').trim();
+    if (!text) return '';
+    return text.endsWith('/') ? text : `${text}/`;
+  };
+
+  const configuredSiteBase = () => {
+    try {
+      const raw = String((window.SCP_CONFIG && window.SCP_CONFIG.siteUrl) || '').trim();
+      if (!raw) return '';
+      const parsed = new URL(raw, window.location.href);
+      const path = parsed.pathname || '/';
+      const basePath = /\/[^/]+\.[a-z0-9]+$/i.test(path)
+        ? path.replace(/\/[^/]+\.[a-z0-9]+$/i, '/')
+        : ensureTrailingSlash(path);
+      return `${parsed.origin}${basePath}`;
+    } catch {
+      return '';
+    }
+  };
+
+  const canonicalSiteBase = () => {
+    try {
+      const canonical = document.querySelector('link[rel="canonical"][href]');
+      if (!canonical) return '';
+      const href = String(canonical.getAttribute('href') || '').trim();
+      if (!href) return '';
+      const parsed = new URL(href, window.location.href);
+      const path = parsed.pathname || '/';
+      const basePath = /\/[^/]+\.[a-z0-9]+$/i.test(path)
+        ? path.replace(/\/[^/]+\.[a-z0-9]+$/i, '/')
+        : ensureTrailingSlash(path);
+      return `${parsed.origin}${basePath}`;
+    } catch {
+      return '';
+    }
+  };
+
+  const publicSiteBase = (() => {
+    const configured = configuredSiteBase();
+    if (configured) return configured;
+    try {
+      const isLoopback = window.location.protocol === 'file:' || isLoopbackHost(window.location.hostname);
+      if (!isLoopback) return '';
+    } catch {
+      return '';
+    }
+    return canonicalSiteBase();
+  })();
+
   const buildAbsUrl = (path, params = {}) => {
-    const url = new URL(path, window.location.href);
+    const cleanPath = String(path || '').replace(/^\.?\//, '');
+    const base = publicSiteBase || window.location.href;
+    const url = new URL(cleanPath, base);
     Object.entries(params || {}).forEach(([k, v]) => {
       const val = v == null ? '' : String(v);
       if (!val) url.searchParams.delete(k);
@@ -571,13 +663,13 @@
   let lastAdminRows = [];
 
   const rolesForAdminUi = () => ([
-    { value: 'client', label: 'Client' },
-    { value: 'collaborator', label: 'Collaborator' },
-    { value: 'partner', label: 'Partner' },
-    { value: 'agent', label: 'Agent' },
-    { value: 'agency_admin', label: 'Agency admin' },
-    { value: 'developer', label: 'Developer' },
-    { value: 'admin', label: 'Admin' }
+    { value: 'client', label: roleLabel('client') },
+    { value: 'collaborator', label: roleLabel('collaborator') },
+    { value: 'partner', label: roleLabel('partner') },
+    { value: 'agent', label: roleLabel('agent') },
+    { value: 'agency_admin', label: roleLabel('agency_admin') },
+    { value: 'developer', label: roleLabel('developer') },
+    { value: 'admin', label: roleLabel('admin') }
   ]);
 
   const escapeHtml = (value) => {
@@ -602,7 +694,7 @@
       const role = r.role ? String(r.role) : 'client';
       const createdAt = r.created_at ? new Date(r.created_at).toLocaleString() : '';
       const title = email || name || uid;
-      const sub = `${uid}${createdAt ? ` · created ${createdAt}` : ''}${name && email ? ` · ${name}` : ''}`;
+      const sub = `${uid}${createdAt ? ` · ${t('account.admin.created_prefix', 'created')} ${createdAt}` : ''}${name && email ? ` · ${name}` : ''}`;
       const options = rolesForAdminUi().map((o) => `<option value="${escapeHtml(o.value)}"${o.value === role ? ' selected' : ''}>${escapeHtml(o.label)}</option>`).join('');
 
       return `
@@ -615,7 +707,7 @@
             <select class="admin-select" data-role>
               ${options}
             </select>
-            <button class="cta-button cta-button--outline" type="button" data-save>Save</button>
+            <button class="cta-button cta-button--outline" type="button" data-save>${escapeHtml(t('account.admin.save', 'Save'))}</button>
           </div>
         </div>
       `;
@@ -628,7 +720,7 @@
     if (!client) return;
 
     const q = (adminUserQ && adminUserQ.value ? adminUserQ.value : '').trim();
-    adminUserStatus.textContent = 'Loading users…';
+    adminUserStatus.textContent = t('account.admin.loading_users', 'Loading users…');
     adminUserList.innerHTML = '';
 
     // Try selecting email if present; otherwise retry without it.
@@ -655,17 +747,26 @@
     let out = await attempt(true);
     if (out && out.error && String(out.error.message || '').toLowerCase().includes('column') && String(out.error.message || '').toLowerCase().includes('email')) {
       out = await attempt(false);
-      if (adminUserStatus) adminUserStatus.textContent = 'Note: profiles.email column not found. Update `supabase.sql` to enable email search.';
+      if (adminUserStatus) adminUserStatus.textContent = t(
+        'account.admin.email_column_missing',
+        'Note: profiles.email column not found. Update `supabase.sql` to enable email search.'
+      );
     }
 
     const { data, error } = out || {};
     if (error) {
-      adminUserStatus.textContent = `Failed to load users: ${error.message || String(error)}. Ensure admin policies exist (run updated supabase.sql).`;
+      adminUserStatus.textContent = t(
+        'account.admin.load_failed',
+        'Failed to load users: {error}. Ensure admin policies exist (run updated supabase.sql).',
+        { error: error.message || String(error) }
+      );
       return;
     }
 
     const rows = Array.isArray(data) ? data : [];
-    adminUserStatus.textContent = rows.length ? `Showing ${rows.length} users` : 'No users found.';
+    adminUserStatus.textContent = rows.length
+      ? t('account.admin.showing_users', 'Showing {count} users', { count: rows.length })
+      : t('account.admin.no_users', 'No users found.');
     renderAdminUsers(rows);
   };
 
@@ -699,7 +800,7 @@
         if (!client) return;
 
         btn.disabled = true;
-        btn.textContent = 'Saving…';
+        btn.textContent = t('account.admin.saving', 'Saving…');
         try {
           const { error } = await withTimeout(
             client.from('profiles').update({ role }).eq('user_id', userId),
@@ -707,18 +808,28 @@
             'Update role'
           );
           if (error) {
-            btn.textContent = 'Failed';
-            if (adminUserStatus) adminUserStatus.textContent = `Role update failed: ${error.message || String(error)}`;
+            btn.textContent = t('account.admin.failed_short', 'Failed');
+            if (adminUserStatus) {
+              adminUserStatus.textContent = t('account.admin.role_update_failed', 'Role update failed: {error}', {
+                error: error.message || String(error)
+              });
+            }
           } else {
-            btn.textContent = 'Saved';
-            if (adminUserStatus) adminUserStatus.textContent = `Updated role for ${userId}`;
-            window.setTimeout(() => { btn.textContent = 'Save'; btn.disabled = false; }, 900);
+            btn.textContent = t('account.admin.saved_short', 'Saved');
+            if (adminUserStatus) {
+              adminUserStatus.textContent = t('account.admin.role_updated', 'Updated role for {userId}', { userId });
+            }
+            window.setTimeout(() => { btn.textContent = t('account.admin.save', 'Save'); btn.disabled = false; }, 900);
             return;
           }
         } catch (error) {
-          if (adminUserStatus) adminUserStatus.textContent = `Role update failed: ${(error && error.message) ? error.message : String(error)}`;
+          if (adminUserStatus) {
+            adminUserStatus.textContent = t('account.admin.role_update_failed', 'Role update failed: {error}', {
+              error: (error && error.message) ? error.message : String(error)
+            });
+          }
         }
-        window.setTimeout(() => { btn.textContent = 'Save'; btn.disabled = false; }, 1200);
+        window.setTimeout(() => { btn.textContent = t('account.admin.save', 'Save'); btn.disabled = false; }, 1200);
       });
     }
   };
@@ -1751,7 +1862,10 @@
     if (recoveryPanel) {
       setVisible(recoveryPanel, recoveryMode);
       if (recoveryMode) {
-        setStatus('Password recovery', 'Set a new password below.');
+        setStatus(
+          t('account.status.recovery_title', 'Password recovery'),
+          t('account.status.recovery_hint', 'Set a new password below.')
+        );
         if (signOutBtn) signOutBtn.disabled = true;
         setVisible(dashboardPanels, false);
         setVisible(accountWorkspace, false);
@@ -1773,13 +1887,19 @@
       const status = window.scpSupabaseStatus || null;
 
       if (!url || !key) {
-        setStatus('Supabase is not configured.', 'Fill `config.js` with your Supabase URL + anon/publishable key.');
+        setStatus(
+          t('account.status.supabase_not_configured_title', 'Supabase is not configured.'),
+          t('account.status.supabase_not_configured_hint', 'Fill `config.js` with your Supabase URL + anon/publishable key.')
+        );
       } else if (status && status.error) {
-        setStatus('Supabase init failed', String(status.error));
+        setStatus(t('account.status.supabase_init_failed', 'Supabase init failed'), String(status.error));
       } else if (status && status.enabled === false) {
-        setStatus('Supabase is not ready', 'The Supabase client did not initialise. Check the Diagnostics (?qa=1).');
+        setStatus(
+          t('account.status.supabase_not_ready_title', 'Supabase is not ready'),
+          t('account.status.supabase_not_ready_hint', 'The Supabase client did not initialise. Check the Diagnostics (?qa=1).')
+        );
       } else {
-        setStatus('Connecting...', 'Initialising authentication…');
+        setStatus(t('account.status.connecting', 'Connecting...'), t('account.status.initializing_auth', 'Initialising authentication…'));
       }
 
       if (signOutBtn) signOutBtn.disabled = true;
@@ -1811,11 +1931,21 @@
           const delay = Math.min(4000, 250 * sessionAbortRetries);
           if (sessionAbortTimer) window.clearTimeout(sessionAbortTimer);
           if (sessionAbortRetries <= 12) {
-            setStatus('Connecting…', `Auth session check aborted (storage=${storage}). Retrying in ${Math.ceil(delay / 1000)}s…`);
+            setStatus(
+              t('account.status.connecting_ellipsis', 'Connecting…'),
+              t('account.status.auth_session_retrying', 'Auth session check aborted (storage={storage}). Retrying in {seconds}s…', {
+                storage,
+                seconds: Math.ceil(delay / 1000)
+              })
+            );
             sessionAbortTimer = window.setTimeout(() => refresh(), delay);
           } else {
-            const hint = `Session check aborted (storage=${storage}). Try: Clear offline cache, then Reset login, then sign in again. If it persists, disable VPN/ad-block and open ?qa=1 for diagnostics.`;
-            setStatus('Auth session failed', hint);
+            const hint = t(
+              'account.status.auth_session_failed_hint',
+              'Session check aborted (storage={storage}). Try: Clear offline cache, then Reset login, then sign in again. If it persists, disable VPN/ad-block and open ?qa=1 for diagnostics.',
+              { storage }
+            );
+            setStatus(t('account.status.auth_session_failed_title', 'Auth session failed'), hint);
           }
           if (signOutBtn) signOutBtn.disabled = true;
           setVisible(dashboardPanels, false);
@@ -1824,8 +1954,11 @@
           setVisible(authStatus, true, 'block');
           return;
         } else {
-          const hint = `${msg} (storage=${storage})`;
-          setStatus('Auth session failed', hint);
+          const hint = t('account.status.auth_session_error_with_storage', '{message} (storage={storage})', {
+            message: msg,
+            storage
+          });
+          setStatus(t('account.status.auth_session_failed_title', 'Auth session failed'), hint);
           if (signOutBtn) signOutBtn.disabled = true;
           setVisible(dashboardPanels, false);
           setVisible(accountWorkspace, false);
@@ -1846,7 +1979,10 @@
 
     if (!user) {
       sessionAbortRetries = 0;
-      setStatus('Signed out', 'Sign in to sync favourites across devices.');
+      setStatus(
+        t('account.status.signed_out_title', 'Signed out'),
+        t('account.status.signed_out_hint', 'Sign in to sync favourites across devices.')
+      );
       dashboardUser = null;
       dashboardRole = 'client';
       if (signOutBtn) signOutBtn.disabled = true;
@@ -1865,12 +2001,14 @@
 
     const profileInfo = await getProfileInfo(client, user.id);
     const role = normalizeRole(profileInfo && profileInfo.role ? profileInfo.role : 'client');
-    const roleHint = !profileInfo.role && profileInfo && profileInfo.error ? ` Role unavailable: ${profileInfo.error}` : '';
-    const who = (profileInfo && profileInfo.displayName) ? profileInfo.displayName : (user.email || 'user');
+    const roleHint = !profileInfo.role && profileInfo && profileInfo.error
+      ? t('account.status.role_unavailable', ' Role unavailable: {error}', { error: profileInfo.error })
+      : '';
+    const who = (profileInfo && profileInfo.displayName) ? profileInfo.displayName : (user.email || t('account.common.user', 'user'));
 
     setStatus(
-      `Welcome, ${who}`,
-      `Your saved listings will sync on the Properties page.${roleHint}`
+      t('account.status.welcome', 'Welcome, {name}', { name: who }),
+      t('account.status.saved_sync_hint', 'Your saved listings will sync on the Properties page.{roleHint}', { roleHint })
     );
     if (signOutBtn) signOutBtn.disabled = false;
 
@@ -1881,6 +2019,7 @@
     setVisible(dashPropertiesTile, role === 'admin', 'block');
     setVisible(dashCrmTile, role === 'admin', 'block');
     setVisible(dashShopTile, role === 'admin', 'block');
+    setVisible(dashRefMapTile, role === 'admin', 'block');
 
     const meta = ROLE_META[role] || ROLE_META.client;
 
@@ -1888,11 +2027,11 @@
     dashboardRole = role;
 
     if (profileAvatar) profileAvatar.textContent = initialsFor(profileInfo && profileInfo.displayName ? profileInfo.displayName : '', user.email || '');
-    if (profileName) profileName.textContent = (profileInfo && profileInfo.displayName) ? String(profileInfo.displayName) : (user.email || 'User');
+    if (profileName) profileName.textContent = (profileInfo && profileInfo.displayName) ? String(profileInfo.displayName) : (user.email || t('account.common.user_title', 'User'));
     if (profileEmail) profileEmail.textContent = user.email || '';
     if (profileBadges) {
       const badges = [];
-      badges.push(`<span class="account-badge account-badge--accent">${escapeHtml(meta.label || role || 'Client')}</span>`);
+      badges.push(`<span class="account-badge account-badge--accent">${escapeHtml(roleLabel(role || 'client'))}</span>`);
       if (meta.partner) badges.push(`<span class="account-badge">${escapeHtml(t('account.badge.partner', 'Partner tools enabled'))}</span>`);
       if (normalizeRole(role) === 'collaborator') badges.push(`<span class="account-badge">${escapeHtml(t('account.badge.scout', 'Street Scout'))}</span>`);
       if (normalizeRole(role) === 'developer') badges.push(`<span class="account-badge">${escapeHtml(t('account.badge.newbuilds', 'New builds'))}</span>`);
@@ -1935,25 +2074,25 @@
       partnerTile.classList.toggle('account-tile--disabled', !isPartner);
       if (partnerK && partnerV && partnerDesc) {
         if (role === 'developer') {
-          partnerK.textContent = 'Developer tools';
-          partnerV.textContent = 'Developments & collaboration';
-          partnerDesc.textContent = 'Share projects, control branding, and coordinate viewings.';
+          partnerK.textContent = t('account.partner.developer.k', 'Developer tools');
+          partnerV.textContent = t('account.partner.developer.v', 'Developments & collaboration');
+          partnerDesc.textContent = t('account.partner.developer.d', 'Share projects, control branding, and coordinate viewings.');
         } else if (role === 'agency_admin' || role === 'agent') {
-          partnerK.textContent = 'Agency tools';
-          partnerV.textContent = 'White-label & collaboration';
-          partnerDesc.textContent = 'Share listings with your clients and keep your branding.';
+          partnerK.textContent = t('account.partner.agency.k', 'Agency tools');
+          partnerV.textContent = t('account.partner.agency.v', 'White-label & collaboration');
+          partnerDesc.textContent = t('account.partner.agency.d', 'Share listings with your clients and keep your branding.');
         } else if (role === 'collaborator' || role === 'partner') {
-          partnerK.textContent = 'Partner tools';
-          partnerV.textContent = 'White-label & collaboration';
-          partnerDesc.textContent = 'Brochures, links, and collaboration tools for partners.';
+          partnerK.textContent = t('account.partner.partner.k', 'Partner tools');
+          partnerV.textContent = t('account.partner.partner.v', 'White-label & collaboration');
+          partnerDesc.textContent = t('account.partner.partner.d', 'Brochures, links, and collaboration tools for partners.');
         } else if (role === 'admin') {
-          partnerK.textContent = 'Collaboration';
-          partnerV.textContent = 'White-label & partners';
-          partnerDesc.textContent = 'Tools and flows used by agencies, agents and developers.';
+          partnerK.textContent = t('account.partner.admin.k', 'Collaboration');
+          partnerV.textContent = t('account.partner.admin.v', 'White-label & partners');
+          partnerDesc.textContent = t('account.partner.admin.d', 'Tools and flows used by agencies, agents and developers.');
         } else {
-          partnerK.textContent = 'Partner access';
-          partnerV.textContent = 'Request collaboration';
-          partnerDesc.textContent = 'If you are an agency, agent or developer, ask us to enable partner tools.';
+          partnerK.textContent = t('account.partner.default.k', 'Partner access');
+          partnerV.textContent = t('account.partner.default.v', 'Request collaboration');
+          partnerDesc.textContent = t('account.partner.default.d', 'If you are an agency, agent or developer, ask us to enable partner tools.');
         }
       }
     }
@@ -2085,7 +2224,10 @@
   async function ensureLoaded() {
     // Prefer immediate refresh if the client is already initialised.
     if (window.scpSupabase) {
-      setStatus('Connecting...', 'Loading authentication…');
+      setStatus(
+        t('account.status.connecting', 'Connecting...'),
+        t('account.status.loading_auth', 'Loading authentication…')
+      );
       await runDiagnostics();
       // Let Supabase emit INITIAL_SESSION first (more reliable than racing getSession on some browsers).
       await sleep(900);
@@ -2103,7 +2245,10 @@
     }, { once: true });
 
     // Also run once now to show a useful status even if init already failed.
-    setStatus('Connecting...', 'Loading authentication…');
+    setStatus(
+      t('account.status.connecting', 'Connecting...'),
+      t('account.status.loading_auth', 'Loading authentication…')
+    );
     await refresh();
     await runDiagnostics();
   }
@@ -2113,24 +2258,30 @@
       event.preventDefault();
       const client = getClient();
       if (!client) {
-        setStatus('Supabase not ready', 'Reload the page. If it persists, click Clear offline cache or open ?qa=1 for diagnostics.');
+        setStatus(
+          t('account.status.supabase_not_ready_title', 'Supabase not ready'),
+          t('account.status.supabase_not_ready_reload', 'Reload the page. If it persists, click Clear offline cache or open ?qa=1 for diagnostics.')
+        );
         return;
       }
       const email = (signInEmail && signInEmail.value ? signInEmail.value : '').trim();
       const password = (signInPassword && signInPassword.value ? signInPassword.value : '').trim();
       if (!email || !password) return;
 
-      setStatus('Signing in…');
+      setStatus(t('account.status.signing_in', 'Signing in…'));
       const btn = signInForm.querySelector('button[type=\"submit\"]');
       const prev = btn ? btn.textContent : '';
       if (btn) {
         btn.disabled = true;
-        btn.textContent = 'Signing in…';
+        btn.textContent = t('account.status.signing_in', 'Signing in…');
       }
       try {
         const { data, error } = await withTimeout(client.auth.signInWithPassword({ email, password }), AUTH_TIMEOUT_MS, 'Sign-in');
         if (error) {
-          setStatus('Sign-in failed', error.message || 'Please try again.');
+          setStatus(
+            t('account.status.signin_failed_title', 'Sign-in failed'),
+            error.message || t('account.status.try_again', 'Please try again.')
+          );
           return;
         }
         await refresh({ sessionOverride: data && data.session ? data.session : undefined });
@@ -2139,14 +2290,17 @@
         const msg = (error && error.message) ? String(error.message) : String(error);
         const lower = msg.toLowerCase();
         if (lower.includes('timed out') || lower.includes('abort')) {
-          setStatus('Sign-in failed', 'Sign-in timed out. This is usually a network/VPN/ad-block issue reaching Supabase. Try “Reset login”, or switch network, then try again (open ?qa=1 for diagnostics).');
+          setStatus(
+            t('account.status.signin_failed_title', 'Sign-in failed'),
+            t('account.status.signin_timeout', 'Sign-in timed out. This is usually a network/VPN/ad-block issue reaching Supabase. Try “Reset login”, or switch network, then try again (open ?qa=1 for diagnostics).')
+          );
         } else {
-          setStatus('Sign-in failed', msg);
+          setStatus(t('account.status.signin_failed_title', 'Sign-in failed'), msg);
         }
       } finally {
         if (btn) {
           btn.disabled = false;
-          btn.textContent = prev || 'Sign in';
+          btn.textContent = prev || t('account.signin.button', 'Sign in');
         }
       }
     });
@@ -2157,19 +2311,22 @@
       event.preventDefault();
       const client = getClient();
       if (!client) {
-        setStatus('Supabase not ready', 'Reload the page. If it persists, click Clear offline cache or open ?qa=1 for diagnostics.');
+        setStatus(
+          t('account.status.supabase_not_ready_title', 'Supabase not ready'),
+          t('account.status.supabase_not_ready_reload', 'Reload the page. If it persists, click Clear offline cache or open ?qa=1 for diagnostics.')
+        );
         return;
       }
       const email = (signUpEmail && signUpEmail.value ? signUpEmail.value : '').trim();
       const password = (signUpPassword && signUpPassword.value ? signUpPassword.value : '').trim();
       if (!email || !password) return;
 
-      setStatus('Creating account…');
+      setStatus(t('account.status.creating_account', 'Creating account…'));
       const btn = signUpForm.querySelector('button[type=\"submit\"]');
       const prev = btn ? btn.textContent : '';
       if (btn) {
         btn.disabled = true;
-        btn.textContent = 'Creating…';
+        btn.textContent = t('account.status.creating_short', 'Creating…');
       }
       const redirectTo = `${window.location.origin}${window.location.pathname}`;
       try {
@@ -2179,18 +2336,27 @@
           options: { emailRedirectTo: redirectTo }
         }), AUTH_TIMEOUT_MS, 'Sign-up');
         if (error) {
-          setStatus('Sign-up failed', error.message || 'Please try again.');
+          setStatus(
+            t('account.status.signup_failed_title', 'Sign-up failed'),
+            error.message || t('account.status.try_again', 'Please try again.')
+          );
           return;
         }
-        setStatus('Check your email', 'Confirm your email address to finish creating your account.');
+        setStatus(
+          t('account.status.check_email_title', 'Check your email'),
+          t('account.status.check_email_hint', 'Confirm your email address to finish creating your account.')
+        );
         await refresh();
         await runDiagnostics();
       } catch (error) {
-        setStatus('Sign-up failed', (error && error.message) ? error.message : String(error));
+        setStatus(
+          t('account.status.signup_failed_title', 'Sign-up failed'),
+          (error && error.message) ? error.message : String(error)
+        );
       } finally {
         if (btn) {
           btn.disabled = false;
-          btn.textContent = prev || 'Create account';
+          btn.textContent = prev || t('account.signup.button', 'Create account');
         }
       }
     });
@@ -2201,7 +2367,10 @@
       event.preventDefault();
       const client = getClient();
       if (!client) {
-        setStatus('Supabase not ready', 'Reload the page. If it persists, click Clear offline cache or open ?qa=1 for diagnostics.');
+        setStatus(
+          t('account.status.supabase_not_ready_title', 'Supabase not ready'),
+          t('account.status.supabase_not_ready_reload', 'Reload the page. If it persists, click Clear offline cache or open ?qa=1 for diagnostics.')
+        );
         return;
       }
       const email = (magicEmail && magicEmail.value ? magicEmail.value : '').trim();
@@ -2209,17 +2378,20 @@
 
       const remaining = remainingMagicCooldownMs();
       if (remaining > 0) {
-        setStatus('Please wait', `Magic links are rate-limited. Try again in ${Math.ceil(remaining / 1000)}s.`);
+        setStatus(
+          t('account.status.please_wait', 'Please wait'),
+          t('account.status.magic_rate_limited', 'Magic links are rate-limited. Try again in {seconds}s.', { seconds: Math.ceil(remaining / 1000) })
+        );
         updateMagicCooldownUi();
         return;
       }
 
-      setStatus('Sending magic link…');
+      setStatus(t('account.status.sending_magic', 'Sending magic link…'));
       const btn = magicForm.querySelector('button[type=\"submit\"]');
       const prev = btn ? btn.textContent : '';
       if (btn) {
         btn.disabled = true;
-        btn.textContent = 'Sending…';
+        btn.textContent = t('account.status.sending_short', 'Sending…');
         btn.dataset.busy = '1';
       }
       const redirectTo = `${window.location.origin}${window.location.pathname}`;
@@ -2229,29 +2401,38 @@
           options: { emailRedirectTo: redirectTo }
         }), AUTH_TIMEOUT_MS, 'Magic link');
         if (error) {
-          const msg = error && error.message ? String(error.message) : 'Please try again.';
+          const msg = error && error.message ? String(error.message) : t('account.status.try_again', 'Please try again.');
           if (msg.toLowerCase().includes('rate limit')) {
             setMagicCooldown(MAGIC_RATE_LIMIT_COOLDOWN_MS);
-            setStatus('Failed to send link', 'Email rate limit exceeded. Wait a few minutes and try again. (To remove strict limits and improve deliverability, set a custom SMTP provider in Supabase Auth settings.)');
+            setStatus(
+              t('account.status.failed_send_link_title', 'Failed to send link'),
+              t('account.status.email_rate_limit', 'Email rate limit exceeded. Wait a few minutes and try again. (To remove strict limits and improve deliverability, set a custom SMTP provider in Supabase Auth settings.)')
+            );
           } else {
-            setStatus('Failed to send link', msg);
+            setStatus(t('account.status.failed_send_link_title', 'Failed to send link'), msg);
           }
           return;
         }
         setMagicCooldown(MAGIC_COOLDOWN_MS);
-        setStatus('Link sent', 'Check your inbox and click the sign-in link. If it does not log you in, add this page to Supabase Auth Redirect URLs.');
+        setStatus(
+          t('account.status.link_sent_title', 'Link sent'),
+          t('account.status.link_sent_hint', 'Check your inbox and click the sign-in link. If it does not log you in, add this page to Supabase Auth Redirect URLs.')
+        );
       } catch (error) {
         const msg = (error && error.message) ? String(error.message) : String(error);
         const lower = msg.toLowerCase();
         if (lower.includes('timed out') || lower.includes('abort')) {
-          setStatus('Failed to send link', 'Magic link timed out. This is usually a network/VPN/ad-block issue reaching Supabase. Try “Reset login”, or switch network, then try again.');
+          setStatus(
+            t('account.status.failed_send_link_title', 'Failed to send link'),
+            t('account.status.magic_timeout', 'Magic link timed out. This is usually a network/VPN/ad-block issue reaching Supabase. Try “Reset login”, or switch network, then try again.')
+          );
         } else {
-          setStatus('Failed to send link', msg);
+          setStatus(t('account.status.failed_send_link_title', 'Failed to send link'), msg);
         }
       } finally {
         if (btn) {
           btn.disabled = false;
-          btn.textContent = prev || 'Send magic link';
+          btn.textContent = prev || t('account.magic.button', 'Send magic link');
           delete btn.dataset.busy;
         }
         updateMagicCooldownUi();
@@ -2264,7 +2445,10 @@
       event.preventDefault();
       const client = getClient();
       if (!client) {
-        setStatus('Supabase not ready', 'Reload the page. If it persists, click Clear offline cache or open ?qa=1 for diagnostics.');
+        setStatus(
+          t('account.status.supabase_not_ready_title', 'Supabase not ready'),
+          t('account.status.supabase_not_ready_reload', 'Reload the page. If it persists, click Clear offline cache or open ?qa=1 for diagnostics.')
+        );
         return;
       }
 
@@ -2278,17 +2462,20 @@
 
       const remaining = remainingResetCooldownMs();
       if (remaining > 0) {
-        setStatus('Please wait', `Password reset emails are rate-limited. Try again in ${Math.ceil(remaining / 1000)}s.`);
+        setStatus(
+          t('account.status.please_wait', 'Please wait'),
+          t('account.status.reset_rate_limited', 'Password reset emails are rate-limited. Try again in {seconds}s.', { seconds: Math.ceil(remaining / 1000) })
+        );
         updateResetCooldownUi();
         return;
       }
 
-      setStatus('Sending reset link…');
+      setStatus(t('account.status.sending_reset', 'Sending reset link…'));
       const btn = resetPasswordForm.querySelector('button[type="submit"]');
       const prev = btn ? btn.textContent : '';
       if (btn) {
         btn.disabled = true;
-        btn.textContent = 'Sending…';
+        btn.textContent = t('account.status.sending_short', 'Sending…');
         btn.dataset.busy = '1';
       }
       const redirectTo = `${window.location.origin}${window.location.pathname}`;
@@ -2299,29 +2486,38 @@
           'Password reset'
         );
         if (error) {
-          const msg = error && error.message ? String(error.message) : 'Please try again.';
+          const msg = error && error.message ? String(error.message) : t('account.status.try_again', 'Please try again.');
           if (msg.toLowerCase().includes('rate limit')) {
             setResetCooldown(RESET_RATE_LIMIT_COOLDOWN_MS);
-            setStatus('Failed to send reset link', 'Email rate limit exceeded. Wait a few minutes and try again. (To remove strict limits and improve deliverability, set a custom SMTP provider in Supabase Auth settings.)');
+            setStatus(
+              t('account.status.failed_reset_title', 'Failed to send reset link'),
+              t('account.status.email_rate_limit', 'Email rate limit exceeded. Wait a few minutes and try again. (To remove strict limits and improve deliverability, set a custom SMTP provider in Supabase Auth settings.)')
+            );
           } else {
-            setStatus('Failed to send reset link', msg);
+            setStatus(t('account.status.failed_reset_title', 'Failed to send reset link'), msg);
           }
           return;
         }
         setResetCooldown(RESET_COOLDOWN_MS);
-        setStatus('Reset link sent', 'Check your inbox and click the link to set a new password.');
+        setStatus(
+          t('account.status.reset_link_sent_title', 'Reset link sent'),
+          t('account.status.reset_link_sent_hint', 'Check your inbox and click the link to set a new password.')
+        );
       } catch (error) {
         const msg = (error && error.message) ? String(error.message) : String(error);
         const lower = msg.toLowerCase();
         if (lower.includes('timed out') || lower.includes('abort')) {
-          setStatus('Failed to send reset link', 'Password reset timed out. This is usually a network/VPN/ad-block issue reaching Supabase. Try “Reset login”, or switch network, then try again.');
+          setStatus(
+            t('account.status.failed_reset_title', 'Failed to send reset link'),
+            t('account.status.reset_timeout', 'Password reset timed out. This is usually a network/VPN/ad-block issue reaching Supabase. Try “Reset login”, or switch network, then try again.')
+          );
         } else {
-          setStatus('Failed to send reset link', msg);
+          setStatus(t('account.status.failed_reset_title', 'Failed to send reset link'), msg);
         }
       } finally {
         if (btn) {
           btn.disabled = false;
-          btn.textContent = prev || 'Send reset link';
+          btn.textContent = prev || t('account.reset.button', 'Send reset link');
           delete btn.dataset.busy;
         }
         updateResetCooldownUi();
@@ -2348,27 +2544,36 @@
       event.preventDefault();
       const client = getClient();
       if (!client) {
-        setStatus('Supabase not ready', 'Reload the page and try again.');
+        setStatus(
+          t('account.status.supabase_not_ready_title', 'Supabase not ready'),
+          t('account.status.reload_and_try_again', 'Reload the page and try again.')
+        );
         return;
       }
       const p1 = (recoveryPassword && recoveryPassword.value ? recoveryPassword.value : '').trim();
       const p2 = (recoveryPassword2 && recoveryPassword2.value ? recoveryPassword2.value : '').trim();
       if (!p1 || !p2) return;
       if (p1.length < 8) {
-        setStatus('Password update failed', 'Password must be at least 8 characters.');
+        setStatus(
+          t('account.status.password_update_failed_title', 'Password update failed'),
+          t('account.status.password_min_length', 'Password must be at least 8 characters.')
+        );
         return;
       }
       if (p1 !== p2) {
-        setStatus('Password update failed', 'Passwords do not match.');
+        setStatus(
+          t('account.status.password_update_failed_title', 'Password update failed'),
+          t('account.status.password_mismatch', 'Passwords do not match.')
+        );
         return;
       }
 
-      setStatus('Updating password…');
+      setStatus(t('account.status.updating_password', 'Updating password…'));
       const btn = recoveryForm.querySelector('button[type="submit"]');
       const prev = btn ? btn.textContent : '';
       if (btn) {
         btn.disabled = true;
-        btn.textContent = 'Updating…';
+        btn.textContent = t('account.status.updating_short', 'Updating…');
       }
       try {
         const { error } = await withTimeout(
@@ -2377,7 +2582,10 @@
           'Update password'
         );
         if (error) {
-          setStatus('Password update failed', error.message || 'Please try again.');
+          setStatus(
+            t('account.status.password_update_failed_title', 'Password update failed'),
+            error.message || t('account.status.try_again', 'Please try again.')
+          );
           return;
         }
         recoveryMode = false;
@@ -2388,15 +2596,21 @@
         } catch {
           // ignore
         }
-        setStatus('Password updated', 'You can now sign in with your new password on any device.');
+        setStatus(
+          t('account.status.password_updated_title', 'Password updated'),
+          t('account.status.password_updated_hint', 'You can now sign in with your new password on any device.')
+        );
         await refresh();
         await runDiagnostics();
       } catch (error) {
-        setStatus('Password update failed', (error && error.message) ? error.message : String(error));
+        setStatus(
+          t('account.status.password_update_failed_title', 'Password update failed'),
+          (error && error.message) ? error.message : String(error)
+        );
       } finally {
         if (btn) {
           btn.disabled = false;
-          btn.textContent = prev || 'Update password';
+          btn.textContent = prev || t('account.recovery.update', 'Update password');
         }
       }
     });
@@ -2406,7 +2620,7 @@
     signOutBtn.addEventListener('click', async () => {
       const client = getClient();
       if (!client) return;
-      setStatus('Signing out…');
+      setStatus(t('account.status.signing_out', 'Signing out…'));
       await client.auth.signOut();
       await refresh({ sessionOverride: null });
     });

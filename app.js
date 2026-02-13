@@ -1,14 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const formatTemplate = (value, vars) => {
+        const text = value == null ? '' : String(value);
+        if (!vars || typeof vars !== 'object') return text;
+        return text.replace(/\{(\w+)\}/g, (match, key) => (
+            Object.prototype.hasOwnProperty.call(vars, key) ? String(vars[key]) : match
+        ));
+    };
+
     const t = (key, fallback, vars) => {
+        const k = String(key || '');
         try {
             if (window.SCP_I18N && typeof window.SCP_I18N.t === 'function') {
-                return window.SCP_I18N.t(key, vars);
+                const translated = window.SCP_I18N.t(k, vars);
+                if (translated != null) {
+                    const out = String(translated);
+                    if (out && out !== k) return out;
+                }
             }
         } catch (error) {
             // ignore
         }
-        if (fallback !== undefined) return String(fallback);
-        return String(key || '');
+        if (fallback !== undefined) return formatTemplate(fallback, vars);
+        return k;
     };
 
     const baseProperties = Array.isArray(propertyData) ? propertyData : [];
@@ -27,11 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
         maxLon: -0.25
     };
     const MAIN_DESTINATIONS = [
-        { value: 'all', label: t('city.all', 'All Destinations') },
-        { value: 'torrevieja', label: 'Torrevieja' },
-        { value: 'orihuela-costa', label: 'Orihuela Costa' },
-        { value: 'guardamar', label: 'Guardamar' },
-        { value: 'quesada', label: 'Quesada' }
+        { value: 'all', i18nKey: 'city.all', fallback: 'All Destinations' },
+        { value: 'torrevieja', i18nKey: 'city.torrevieja', fallback: 'Torrevieja' },
+        { value: 'orihuela-costa', i18nKey: 'city.orihuela_costa', fallback: 'Orihuela Costa' },
+        { value: 'guardamar', i18nKey: 'city.guardamar', fallback: 'Guardamar' },
+        { value: 'quesada', i18nKey: 'city.quesada', fallback: 'Quesada' }
     ];
     const EARTH_RADIUS_KM = 6371;
     const numberFormat = new Intl.NumberFormat('en-IE', { maximumFractionDigits: 0 });
@@ -94,6 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let supabaseClient = null;
     let supabaseUser = null;
     let supabaseRole = '';
+    let supabaseRoleResolved = false;
+    let supabaseRoleFetchPromise = null;
 
     // Allow deep-linking into "Saved" view from account.html.
     try {
@@ -227,6 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	    let spatialAroundMarker = null;
 	    let spatialDrawHandler = null;
 	    let spatialIsDrawing = false;
+	    let spatialFreehandSession = null;
 	    let filterTimer = null;
 	    let loadMoreObserver = null;
 	    let loadingMore = false;
@@ -391,6 +407,138 @@ document.addEventListener('DOMContentLoaded', () => {
             .toLowerCase()
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function isLoopbackHost(hostname) {
+        const host = toText(hostname).trim().toLowerCase();
+        if (!host) return false;
+        if (host === 'localhost' || host.endsWith('.localhost')) return true;
+        if (host === '127.0.0.1' || host === '0.0.0.0' || host === '::1') return true;
+        return /^127\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(host);
+    }
+
+    function ensureTrailingSlash(value) {
+        const text = toText(value).trim();
+        if (!text) return '';
+        return text.endsWith('/') ? text : `${text}/`;
+    }
+
+    function configuredSiteBase() {
+        try {
+            const raw = toText(window.SCP_CONFIG && window.SCP_CONFIG.siteUrl).trim();
+            if (!raw) return '';
+            const parsed = new URL(raw, window.location.href);
+            const path = parsed.pathname || '/';
+            const basePath = /\/[^/]+\.[a-z0-9]+$/i.test(path)
+                ? path.replace(/\/[^/]+\.[a-z0-9]+$/i, '/')
+                : ensureTrailingSlash(path);
+            return `${parsed.origin}${basePath}`;
+        } catch (error) {
+            return '';
+        }
+    }
+
+    function canonicalSiteBase() {
+        try {
+            const canonical = document.querySelector('link[rel="canonical"][href]');
+            if (!canonical) return '';
+            const href = toText(canonical.getAttribute('href')).trim();
+            if (!href) return '';
+            const parsed = new URL(href, window.location.href);
+            const path = parsed.pathname || '/';
+            const basePath = /\/[^/]+\.[a-z0-9]+$/i.test(path)
+                ? path.replace(/\/[^/]+\.[a-z0-9]+$/i, '/')
+                : ensureTrailingSlash(path);
+            return `${parsed.origin}${basePath}`;
+        } catch (error) {
+            return '';
+        }
+    }
+
+    const publicSiteBase = (() => {
+        const configured = configuredSiteBase();
+        if (configured) return configured;
+        try {
+            const isLoopback = window.location.protocol === 'file:' || isLoopbackHost(window.location.hostname);
+            if (!isLoopback) return '';
+        } catch (error) {
+            return '';
+        }
+        return canonicalSiteBase();
+    })();
+
+    function buildAppUrl(path, params = {}) {
+        const cleanPath = toText(path).replace(/^\.?\//, '');
+        const base = publicSiteBase || window.location.href;
+        const url = new URL(cleanPath, base);
+        Object.entries(params || {}).forEach(([key, rawValue]) => {
+            const value = rawValue == null ? '' : String(rawValue).trim();
+            if (!value) {
+                url.searchParams.delete(key);
+            } else {
+                url.searchParams.set(key, value);
+            }
+        });
+        return url.toString();
+    }
+
+    let dynamicTranslateTimer = null;
+    let dynamicTranslateBusy = false;
+    const dynamicTranslateRoots = new Set();
+
+    function translateDynamicText(value) {
+        const text = toText(value).trim();
+        if (!text) return Promise.resolve(text);
+        try {
+            const i18n = window.SCP_I18N;
+            if (!i18n || typeof i18n.translateDynamicText !== 'function') {
+                return Promise.resolve(text);
+            }
+            return i18n.translateDynamicText(text, {
+                targetLang: i18n.lang || '',
+                sourceLang: 'auto'
+            }).then((translated) => toText(translated, text));
+        } catch (error) {
+            return Promise.resolve(text);
+        }
+    }
+
+    async function flushDynamicTranslateQueue() {
+        if (dynamicTranslateBusy) return;
+        dynamicTranslateBusy = true;
+        if (dynamicTranslateTimer) {
+            window.clearTimeout(dynamicTranslateTimer);
+            dynamicTranslateTimer = null;
+        }
+        try {
+            const i18n = window.SCP_I18N;
+            if (!i18n || typeof i18n.translateDynamicDom !== 'function') return;
+            const roots = Array.from(dynamicTranslateRoots);
+            dynamicTranslateRoots.clear();
+            for (let i = 0; i < roots.length; i += 1) {
+                const root = roots[i];
+                if (!root || !root.querySelectorAll) continue;
+                if (root !== document && !document.contains(root)) continue;
+                try {
+                    // eslint-disable-next-line no-await-in-loop
+                    await i18n.translateDynamicDom(root);
+                } catch (error) {
+                    // ignore dynamic translation errors
+                }
+            }
+        } finally {
+            dynamicTranslateBusy = false;
+            if (dynamicTranslateRoots.size) {
+                dynamicTranslateTimer = window.setTimeout(flushDynamicTranslateQueue, 50);
+            }
+        }
+    }
+
+    function queueDynamicTranslate(root) {
+        const target = root && root.querySelectorAll ? root : document;
+        dynamicTranslateRoots.add(target);
+        if (dynamicTranslateTimer || dynamicTranslateBusy) return;
+        dynamicTranslateTimer = window.setTimeout(flushDynamicTranslateQueue, 50);
     }
 
     // When owner-submitted listings are approved, some may not include GPS coordinates.
@@ -899,20 +1047,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const mode = listingModeFor(property);
         const number = listingPriceNumber(property);
         if (!Number.isFinite(number)) {
-            return 'Price on request';
+            return t('common.price_on_request', 'Price on request');
         }
         const formatted = formatPrice(number);
         if (mode === 'rent') {
             const period = rentPeriodFor(property);
-            if (period === 'night') return `${formatted} / night`;
-            if (period === 'day') return `${formatted} / day`;
-            if (period === 'week') return `${formatted} / week`;
-            return `${formatted} / month`;
+            if (period === 'night') return `${formatted} / ${t('common.per_night', 'night')}`;
+            if (period === 'day') return `${formatted} / ${t('common.per_day', 'day')}`;
+            if (period === 'week') return `${formatted} / ${t('common.per_week', 'week')}`;
+            return `${formatted} / ${t('common.per_month', 'month')}`;
         }
         if (mode === 'traspaso') {
             const override = listingOverrideFor(property);
             if (override && Number.isFinite(Number(override.monthlyRent)) && Number(override.monthlyRent) > 0) {
-                return `${formatted} (Traspaso) + ${formatPrice(Number(override.monthlyRent))} / month rent`;
+                return t(
+                    'listing.traspaso_with_rent',
+                    '{price} (Traspaso) + {rent} / {month} {rentWord}',
+                    { price: formatted, rent: formatPrice(Number(override.monthlyRent)), month: t('common.per_month', 'month'), rentWord: t('listing.rent_word', 'rent') }
+                );
             }
             return `${formatted} (Traspaso)`;
         }
@@ -923,7 +1075,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const mode = listingModeFor(property);
         const number = listingPriceNumber(property);
         if (!Number.isFinite(number)) {
-            return mode === 'rent' ? 'Rent' : 'N/A';
+            return mode === 'rent' ? t('listing.rent_short', 'Rent') : t('common.na', 'N/A');
         }
         if (mode === 'rent') {
             const period = rentPeriodFor(property);
@@ -942,7 +1094,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function formatPrice(price) {
         const number = Number(price);
         if (!Number.isFinite(number) || number <= 0) {
-            return 'Price on request';
+            return t('common.price_on_request', 'Price on request');
         }
         return new Intl.NumberFormat('en-IE', {
             style: 'currency',
@@ -954,7 +1106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function formatMarkerPrice(price) {
         const number = Number(price);
         if (!Number.isFinite(number)) {
-            return 'N/A';
+            return t('common.na', 'N/A');
         }
         if (number >= 1000000) {
             return `${(number / 1000000).toFixed(1).replace('.0', '')}M€`;
@@ -1133,13 +1285,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function buildPropertyLink(reference) {
         // Always generate a stable, shareable URL for this listing.
-        const url = new URL('properties.html', window.location.href);
-        if (reference) {
-            url.searchParams.set('ref', reference);
-        } else {
-            url.searchParams.delete('ref');
-        }
-        return url.toString();
+        return buildAppUrl('properties.html', {
+            ref: reference || ''
+        });
     }
 
     function buildListingShareLink(reference) {
@@ -1149,8 +1297,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Only generate for the standard numeric SCP refs we pre-generate share pages for.
         if (!/^SCP-\d+/.test(ref)) return '';
         try {
-            const url = new URL(`share/listing/${encodeURIComponent(ref)}.html`, window.location.href);
-            return url.toString();
+            return buildAppUrl(`share/listing/${encodeURIComponent(ref)}.html`);
         } catch (error) {
             return '';
         }
@@ -1252,18 +1399,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const cleanRefs = Array.isArray(refs)
             ? refs.map((ref) => toText(ref).trim().toUpperCase()).filter(Boolean).slice(0, 24)
             : [];
-        const url = new URL('client-catalog.html', window.location.href);
-        if (cleanRefs.length) {
-            url.searchParams.set('refs', cleanRefs.join(','));
-        }
         const name = toText(clientName).trim();
-        if (name) {
-            url.searchParams.set('client', name);
-        }
-        if (whiteLabel) {
-            url.searchParams.set('wl', '1');
-        }
-        return url.toString();
+        return buildAppUrl('client-catalog.html', {
+            refs: cleanRefs.length ? cleanRefs.join(',') : '',
+            client: name,
+            wl: whiteLabel ? '1' : ''
+        });
     }
 
     function setCatalogBuilderStatus(text, tone = '') {
@@ -1396,7 +1537,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const originalRefCache = new Map(); // scpRef -> { original_ref, original_id, source } | null
+    async function ensureSupabaseRole(client, userId) {
+        const uid = toText(userId || (supabaseUser && supabaseUser.id)).trim();
+        if (!client || !uid) return '';
+        if (supabaseRoleResolved) return toText(supabaseRole).trim();
+        if (supabaseRoleFetchPromise) return supabaseRoleFetchPromise;
+
+        supabaseRoleFetchPromise = (async () => {
+            try {
+                const role = await supabaseGetRole(client, uid);
+                supabaseRole = toText(role).trim();
+                return supabaseRole;
+            } finally {
+                supabaseRoleResolved = true;
+                supabaseRoleFetchPromise = null;
+            }
+        })();
+        return supabaseRoleFetchPromise;
+    }
+
+    const originalRefCache = new Map(); // scpRef -> { original_ref, original_id, source }
 
     function isPrivilegedRole(role) {
         const r = toText(role).trim().toLowerCase();
@@ -1413,6 +1573,83 @@ document.addEventListener('DOMContentLoaded', () => {
         const up = s.toUpperCase().replace(/[^A-Z0-9]/g, '');
         if (!up) return '';
         return up.length <= 8 ? up : up.slice(0, 8);
+    }
+
+    function firstNonEmptyFromKeys(obj, keys) {
+        if (!obj || typeof obj !== 'object' || !Array.isArray(keys)) return '';
+        for (const key of keys) {
+            const value = toText(obj[key]).trim();
+            if (value) return value;
+        }
+        return '';
+    }
+
+    function getInlineOriginalRefMapping(property) {
+        if (!property || typeof property !== 'object') return null;
+
+        let originalRef = firstNonEmptyFromKeys(property, [
+            'original_ref',
+            'originalRef',
+            'source_ref',
+            'sourceRef',
+            'external_ref',
+            'externalRef',
+            'feed_ref',
+            'feedRef'
+        ]);
+        const originalId = firstNonEmptyFromKeys(property, [
+            'original_id',
+            'originalId',
+            'source_id',
+            'sourceId',
+            'external_id',
+            'externalId',
+            'feed_id',
+            'feedId'
+        ]);
+        const source = firstNonEmptyFromKeys(property, [
+            'source',
+            'provider',
+            'feed_source',
+            'feedSource'
+        ]);
+
+        // Some feeds only expose a provider-native ID. If it looks like a true external ref, use it.
+        if (!originalRef) {
+            const maybeId = toText(property.id).trim();
+            const lower = maybeId.toLowerCase();
+            const looksInternal = !maybeId
+                || lower.includes('scp-')
+                || lower.startsWith('imv-')
+                || lower.startsWith('redsp')
+                || lower.startsWith('custom-')
+                || lower.startsWith('demo-')
+                || lower.startsWith('legacy-');
+            const looksLikeExternal = /^[A-Z]{2,}[A-Z0-9-]{2,}$/i.test(maybeId)
+                && maybeId.length <= 40
+                && !maybeId.includes(' ')
+                && !maybeId.includes('/')
+                && !maybeId.includes('\\');
+            if (!looksInternal && looksLikeExternal) {
+                originalRef = maybeId;
+            }
+        }
+
+        if (!originalRef) return null;
+        return {
+            original_ref: originalRef,
+            original_id: originalId,
+            source
+        };
+    }
+
+    async function resolveOriginalRefForProperty(client, userId, property) {
+        const role = await ensureSupabaseRole(client, userId);
+        if (!isPrivilegedRole(role)) return null;
+        const scpRef = toText(property && property.ref).trim().toUpperCase();
+        const mapped = await supabaseMaybeGetOriginalRef(client, userId, scpRef);
+        if (mapped && toText(mapped.original_ref).trim()) return mapped;
+        return getInlineOriginalRefMapping(property);
     }
 
     async function copyTextToClipboard(text) {
@@ -1435,18 +1672,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function supabaseMaybeGetOriginalRef(client, userId, scpRef) {
-        const ref = toText(scpRef).trim();
+        const ref = toText(scpRef).trim().toUpperCase();
         if (!ref) return null;
-        if (originalRefCache.has(ref)) return originalRefCache.get(ref);
+        const cached = originalRefCache.get(ref);
+        if (cached) return cached;
 
-        let role = toText(supabaseRole).trim();
-        if (!role && userId) {
-            role = await supabaseGetRole(client, userId);
-        }
-        if (!isPrivilegedRole(role)) {
-            originalRefCache.set(ref, null);
-            return null;
-        }
+        const role = await ensureSupabaseRole(client, userId);
+        if (!isPrivilegedRole(role)) return null;
 
         try {
             const { data, error } = await client
@@ -1454,20 +1686,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 .select('original_ref,original_id,source')
                 .eq('scp_ref', ref)
                 .maybeSingle();
-            if (error || !data) {
-                originalRefCache.set(ref, null);
-                return null;
-            }
+            if (error || !data) return null;
             const original_ref = toText(data.original_ref).trim();
-            if (!original_ref) {
-                originalRefCache.set(ref, null);
-                return null;
-            }
+            if (!original_ref) return null;
             const mapped = { original_ref, original_id: toText(data.original_id).trim(), source: toText(data.source).trim() };
             originalRefCache.set(ref, mapped);
             return mapped;
         } catch (error) {
-            originalRefCache.set(ref, null);
             return null;
         }
     }
@@ -1569,7 +1794,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	    }
 
 	    function refreshOriginalRefButtonsUi() {
-	        const allowed = Boolean(supabaseClient && supabaseUser) && isPrivilegedRole(supabaseRole);
+	        const hasSession = Boolean(supabaseClient && supabaseUser);
+	        const allowed = hasSession && isPrivilegedRole(supabaseRole);
 	        const buttons = document.querySelectorAll('button[data-action="show-original-ref"]');
 	        buttons.forEach((btn) => {
 	            const ref = toText(btn.dataset.scpRef).trim();
@@ -1583,18 +1809,28 @@ document.addEventListener('DOMContentLoaded', () => {
 	                span.dataset.originalRef = '';
 	            });
 	        }
+	        if (hasSession && !supabaseRoleResolved && !supabaseRoleFetchPromise) {
+	            ensureSupabaseRole(supabaseClient, supabaseUser && supabaseUser.id)
+	                .then(() => refreshOriginalRefButtonsUi())
+	                .catch(() => {});
+	        }
 	    }
 
 		    async function initSupabaseFavoritesSync() {
 		        const client = getSupabase();
 		        supabaseClient = client;
+		        supabaseRoleResolved = false;
+		        supabaseRoleFetchPromise = null;
 		        updateSaveAlertButtonUi();
 		        if (!client) return;
 
 	        try {
 	            const { data } = await supabaseGetSessionSafe(client);
 		            supabaseUser = data && data.session ? data.session.user : null;
-		            supabaseRole = supabaseUser ? await supabaseGetRole(client, supabaseUser.id) : '';
+		            supabaseRole = '';
+		            supabaseRoleResolved = false;
+		            supabaseRoleFetchPromise = null;
+		            supabaseRole = supabaseUser ? await ensureSupabaseRole(client, supabaseUser.id) : '';
 		            refreshOriginalRefButtonsUi();
 		            updateSaveAlertButtonUi();
 
@@ -1622,7 +1858,10 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             client.auth.onAuthStateChange(async (event, session) => {
                 supabaseUser = session && session.user ? session.user : null;
-	                supabaseRole = supabaseUser ? await supabaseGetRole(client, supabaseUser.id) : '';
+	                supabaseRole = '';
+	                supabaseRoleResolved = false;
+	                supabaseRoleFetchPromise = null;
+	                supabaseRole = supabaseUser ? await ensureSupabaseRole(client, supabaseUser.id) : '';
 	                originalRefCache.clear();
 	                refreshOriginalRefButtonsUi();
 	                updateSaveAlertButtonUi();
@@ -1838,6 +2077,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `).join('');
             }
+            businessGrid.setAttribute('data-i18n-dynamic-scope', '');
+            queueDynamicTranslate(businessGrid);
         }
 
         if (vehicleGrid) {
@@ -1853,6 +2094,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `).join('');
             }
+            vehicleGrid.setAttribute('data-i18n-dynamic-scope', '');
+            queueDynamicTranslate(vehicleGrid);
         }
     }
 
@@ -2125,7 +2368,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	        }
 
 	        if (spatialIsDrawing) {
-	            setSpatialStatus(t('map.tools.status_drawing', 'Drawing perimeter: click to add points, double-click to finish.'));
+	            setSpatialStatus(t('map.tools.status_drawing', 'Draw a circle around the area with your finger (or mouse). Lift to finish.'));
 	            return;
 	        }
 	        if (spatialFilterMode === 'polygon') {
@@ -2146,7 +2389,322 @@ document.addEventListener('DOMContentLoaded', () => {
 	        spatialLayers = L.featureGroup().addTo(map);
 	    }
 
+	    function prefersFreehandSpatialDraw() {
+	        try {
+	            if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) return true;
+	        } catch (error) {
+	            // ignore
+	        }
+	        try {
+	            if (navigator && Number(navigator.maxTouchPoints) > 0) return true;
+	        } catch (error) {
+	            // ignore
+	        }
+	        return false;
+	    }
+
+	    function captureMapInteractionState() {
+	        if (!map) return null;
+	        const get = (ctrl) => !!(ctrl && typeof ctrl.enabled === 'function' && ctrl.enabled());
+	        return {
+	            dragging: get(map.dragging),
+	            touchZoom: get(map.touchZoom),
+	            doubleClickZoom: get(map.doubleClickZoom),
+	            boxZoom: get(map.boxZoom),
+	            keyboard: get(map.keyboard)
+	        };
+	    }
+
+	    function setMapInteractionsFromState(state) {
+	        if (!map || !state) return;
+	        const apply = (ctrl, enabled) => {
+	            if (!ctrl) return;
+	            try {
+	                if (enabled) {
+	                    if (typeof ctrl.enable === 'function') ctrl.enable();
+	                } else if (typeof ctrl.disable === 'function') {
+	                    ctrl.disable();
+	                }
+	            } catch (error) {
+	                // ignore
+	            }
+	        };
+	        apply(map.dragging, !!state.dragging);
+	        apply(map.touchZoom, !!state.touchZoom);
+	        apply(map.doubleClickZoom, !!state.doubleClickZoom);
+	        apply(map.boxZoom, !!state.boxZoom);
+	        apply(map.keyboard, !!state.keyboard);
+	    }
+
+	    function normalizeFreehandVertices(points, { maxPoints = 140, minStepPx = 8 } = {}) {
+	        if (!Array.isArray(points) || points.length < 3) return [];
+	        const compact = [];
+	        let prev = null;
+	        for (let i = 0; i < points.length; i += 1) {
+	            const pt = points[i];
+	            const lat = Number(pt && pt.lat);
+	            const lng = Number(pt && pt.lng);
+	            const x = Number(pt && pt.x);
+	            const y = Number(pt && pt.y);
+	            if (!Number.isFinite(lat) || !Number.isFinite(lng) || !Number.isFinite(x) || !Number.isFinite(y)) continue;
+	            if (!prev) {
+	                compact.push({ lat, lng, x, y });
+	                prev = { x, y };
+	                continue;
+	            }
+	            const dx = x - prev.x;
+	            const dy = y - prev.y;
+	            if (Math.sqrt((dx * dx) + (dy * dy)) < minStepPx) continue;
+	            compact.push({ lat, lng, x, y });
+	            prev = { x, y };
+	        }
+
+	        if (compact.length >= 3) {
+	            const first = compact[0];
+	            const last = compact[compact.length - 1];
+	            const dx = last.x - first.x;
+	            const dy = last.y - first.y;
+	            if (Math.sqrt((dx * dx) + (dy * dy)) < (minStepPx * 2.2)) {
+	                compact.pop();
+	            }
+	        }
+
+	        if (compact.length > maxPoints) {
+	            const step = Math.ceil(compact.length / maxPoints);
+	            const reduced = [];
+	            for (let i = 0; i < compact.length; i += step) reduced.push(compact[i]);
+	            const tail = compact[compact.length - 1];
+	            if (reduced[reduced.length - 1] !== tail) reduced.push(tail);
+	            return reduced.map((v) => ({ lat: v.lat, lng: v.lng }));
+	        }
+
+	        return compact.map((v) => ({ lat: v.lat, lng: v.lng }));
+	    }
+
+	    function stopSpatialFreehandDraw({ keepStatus = false } = {}) {
+	        const session = spatialFreehandSession;
+	        if (!session) return;
+	        spatialFreehandSession = null;
+	        spatialIsDrawing = false;
+
+	        try {
+	            if (session.container && session.listeners) {
+	                Object.entries(session.listeners).forEach(([eventName, handler]) => {
+	                    if (!handler) return;
+	                    session.container.removeEventListener(eventName, handler);
+	                });
+	            }
+	        } catch (error) {
+	            // ignore
+	        }
+
+	        try {
+	            if (session.container && session.pointerId != null && typeof session.container.releasePointerCapture === 'function') {
+	                session.container.releasePointerCapture(session.pointerId);
+	            }
+	        } catch (error) {
+	            // ignore
+	        }
+
+	        try {
+	            if (session.previewLayer) {
+	                if (spatialLayers && typeof spatialLayers.removeLayer === 'function') spatialLayers.removeLayer(session.previewLayer);
+	                else if (map && typeof map.removeLayer === 'function') map.removeLayer(session.previewLayer);
+	            }
+	        } catch (error) {
+	            // ignore
+	        }
+
+	        try {
+	            if (session.mapElement) session.mapElement.classList.remove('scp-map--drawing');
+	        } catch (error) {
+	            // ignore
+	        }
+	        setMapInteractionsFromState(session.interactionState);
+	        if (!keepStatus) syncSpatialUi();
+	    }
+
+	    function startSpatialFreehandDraw() {
+	        if (!map || typeof L === 'undefined' || !window.PointerEvent) {
+	            setSpatialStatus(t('map.tools.draw_unavailable', 'Perimeter tool is not available right now.'));
+	            return;
+	        }
+
+	        // Toggle behavior: tap Draw again to cancel drawing mode.
+	        if (spatialFreehandSession) {
+	            stopSpatialFreehandDraw();
+	            return;
+	        }
+
+	        mapHasUserInteracted = true;
+	        spatialIsDrawing = true;
+	        syncSpatialUi();
+
+	        try {
+	            if (spatialDrawHandler && typeof spatialDrawHandler.disable === 'function') spatialDrawHandler.disable();
+	        } catch (error) {
+	            // ignore
+	        }
+	        spatialDrawHandler = null;
+
+	        ensureSpatialLayers();
+
+	        const mapElement = typeof map.getContainer === 'function' ? map.getContainer() : null;
+	        if (!mapElement) {
+	            spatialIsDrawing = false;
+	            syncSpatialUi();
+	            setSpatialStatus(t('map.tools.draw_unavailable', 'Perimeter tool is not available right now.'));
+	            return;
+	        }
+
+	        const interactionState = captureMapInteractionState();
+	        // Keep map still while user draws the perimeter.
+	        setMapInteractionsFromState({
+	            dragging: false,
+	            touchZoom: false,
+	            doubleClickZoom: false,
+	            boxZoom: false,
+	            keyboard: false
+	        });
+
+	        mapElement.classList.add('scp-map--drawing');
+
+	        const minStepPx = prefersFreehandSpatialDraw() ? 7 : 5;
+	        const session = {
+	            mapElement,
+	            container: mapElement,
+	            interactionState,
+	            pointerId: null,
+	            points: [],
+	            previewLayer: null,
+	            listeners: null
+	        };
+
+	        const addPointFromEvent = (evt, { force = false } = {}) => {
+	            if (!evt) return false;
+	            let latlng = null;
+	            let px = null;
+	            try {
+	                latlng = map.mouseEventToLatLng(evt);
+	                px = map.mouseEventToContainerPoint(evt);
+	            } catch (error) {
+	                return false;
+	            }
+	            if (!latlng || !px) return false;
+	            const next = {
+	                lat: Number(latlng.lat),
+	                lng: Number(latlng.lng),
+	                x: Number(px.x),
+	                y: Number(px.y)
+	            };
+	            if (!Number.isFinite(next.lat) || !Number.isFinite(next.lng) || !Number.isFinite(next.x) || !Number.isFinite(next.y)) return false;
+	            const prev = session.points.length ? session.points[session.points.length - 1] : null;
+	            if (!force && prev) {
+	                const dx = next.x - prev.x;
+	                const dy = next.y - prev.y;
+	                if (Math.sqrt((dx * dx) + (dy * dy)) < minStepPx) return false;
+	            }
+	            session.points.push(next);
+	            if (session.previewLayer && typeof session.previewLayer.setLatLngs === 'function') {
+	                session.previewLayer.setLatLngs(session.points.map((p) => [p.lat, p.lng]));
+	            }
+	            return true;
+	        };
+
+	        const finishStroke = () => {
+	            const points = session.points.slice();
+	            stopSpatialFreehandDraw({ keepStatus: true });
+	            const vertices = normalizeFreehandVertices(points, { maxPoints: 120, minStepPx });
+	            if (vertices.length < 3) {
+	                syncSpatialUi();
+	                setSpatialStatus(t('map.tools.status_drawing', 'Draw a circle around the area with your finger (or mouse). Lift to finish.'));
+	                return;
+	            }
+	            const layer = L.polygon(vertices.map((v) => [v.lat, v.lng]), {
+	                color: '#38bdf8',
+	                weight: 3,
+	                opacity: 0.95,
+	                fillOpacity: 0.12
+	            });
+	            setSpatialPolygonFromLayer(layer, { silent: false });
+	        };
+
+	        const onPointerDown = (evt) => {
+	            if (!evt) return;
+	            if (evt.pointerType === 'mouse' && Number(evt.button) !== 0) return;
+	            if (session.pointerId != null) return;
+	            const target = evt.target;
+	            if (target && typeof target.closest === 'function' && target.closest('.scp-map-search')) return;
+	            session.pointerId = evt.pointerId;
+	            session.points = [];
+
+	            try {
+	                if (session.container && typeof session.container.setPointerCapture === 'function') {
+	                    session.container.setPointerCapture(evt.pointerId);
+	                }
+	            } catch (error) {
+	                // ignore
+	            }
+
+	            try {
+	                if (session.previewLayer) {
+	                    if (spatialLayers && typeof spatialLayers.removeLayer === 'function') spatialLayers.removeLayer(session.previewLayer);
+	                    else if (map && typeof map.removeLayer === 'function') map.removeLayer(session.previewLayer);
+	                }
+	                session.previewLayer = L.polyline([], {
+	                    color: '#38bdf8',
+	                    weight: 3,
+	                    opacity: 0.95,
+	                    dashArray: '6 4'
+	                });
+	                if (spatialLayers && typeof spatialLayers.addLayer === 'function') spatialLayers.addLayer(session.previewLayer);
+	                else if (map && typeof session.previewLayer.addTo === 'function') session.previewLayer.addTo(map);
+	            } catch (error) {
+	                // ignore
+	            }
+
+	            addPointFromEvent(evt, { force: true });
+	            if (typeof evt.preventDefault === 'function') evt.preventDefault();
+	        };
+
+	        const onPointerMove = (evt) => {
+	            if (!evt) return;
+	            if (session.pointerId == null || evt.pointerId !== session.pointerId) return;
+	            addPointFromEvent(evt);
+	            if (typeof evt.preventDefault === 'function') evt.preventDefault();
+	        };
+
+	        const onPointerUp = (evt) => {
+	            if (!evt) return;
+	            if (session.pointerId == null || evt.pointerId !== session.pointerId) return;
+	            finishStroke();
+	            if (typeof evt.preventDefault === 'function') evt.preventDefault();
+	        };
+
+	        const onPointerCancel = (evt) => {
+	            if (!evt) return;
+	            if (session.pointerId == null || evt.pointerId !== session.pointerId) return;
+	            stopSpatialFreehandDraw();
+	            syncSpatialUi();
+	            if (typeof evt.preventDefault === 'function') evt.preventDefault();
+	        };
+
+	        session.listeners = {
+	            pointerdown: onPointerDown,
+	            pointermove: onPointerMove,
+	            pointerup: onPointerUp,
+	            pointercancel: onPointerCancel
+	        };
+
+	        Object.entries(session.listeners).forEach(([eventName, handler]) => {
+	            session.container.addEventListener(eventName, handler, { passive: false });
+	        });
+
+	        spatialFreehandSession = session;
+	    }
+
 	    function clearSpatialFilter({ silent = false } = {}) {
+	        stopSpatialFreehandDraw({ keepStatus: true });
 	        spatialFilterMode = 'none';
 	        spatialPolygon = null;
 	        spatialAround = null;
@@ -2181,6 +2739,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	    }
 
 	    function setSpatialPolygonFromLayer(layer, { silent = false } = {}) {
+	        stopSpatialFreehandDraw({ keepStatus: true });
 	        if (!layer) return;
 	        const latlngs = typeof layer.getLatLngs === 'function' ? layer.getLatLngs() : null;
 	        const vertices = spatialVerticesFromLatLngs(latlngs);
@@ -2230,6 +2789,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	    }
 
 	    function setSpatialAroundFilter({ lat, lon, radiusKm }, { silent = false } = {}) {
+	        stopSpatialFreehandDraw({ keepStatus: true });
 	        const centerLat = Number(lat);
 	        const centerLon = Number(lon);
 	        const km = Number(radiusKm);
@@ -2390,7 +2950,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	        const key = toText(cityKey).trim().toLowerCase();
 	        if (!key || key === 'all') return t('city.all', 'All Destinations');
 	        const found = MAIN_DESTINATIONS.find((it) => toText(it && it.value).trim().toLowerCase() === key);
-	        if (found && found.label) return found.label;
+	        if (found) return t(found.i18nKey || '', found.fallback || key);
 	        return key.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
 	    }
 
@@ -2924,6 +3484,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const cached = pid ? imageOkCache.get(pid) : undefined;
                 if (cached === false) {
                     propertyGrid.innerHTML = '<p style="color:#94a3b8">This listing is hidden because its images are unavailable.</p>';
+                    propertyGrid.setAttribute('data-i18n-dynamic-scope', '');
+                    queueDynamicTranslate(propertyGrid);
                     return;
                 }
             }
@@ -2948,10 +3510,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                 `;
+                propertyGrid.setAttribute('data-i18n-dynamic-scope', '');
+                queueDynamicTranslate(propertyGrid);
                 return;
             }
 
             propertyGrid.innerHTML = '<p style="color:#94a3b8">No properties found for these filters.</p>';
+            propertyGrid.setAttribute('data-i18n-dynamic-scope', '');
+            queueDynamicTranslate(propertyGrid);
             return;
         }
 
@@ -2974,6 +3540,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const card = document.createElement('div');
             card.className = 'property-card';
+            card.setAttribute('data-i18n-dynamic-scope', '');
             card.style.animationDelay = `${(renderSequence % 6) * 0.08}s`;
             renderSequence += 1;
             card.dataset.propertyId = pid;
@@ -3004,8 +3571,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             card.innerHTML = `
                 <div class="card-img-wrapper">
-                    <img src="${imageUrl}" alt="${type}" loading="lazy">
-                    <div class="card-badge">${type}</div>
+                    <img src="${imageUrl}" alt="${escapeHtml(type)}" loading="lazy">
+                    <div class="card-badge" data-i18n-dynamic>${escapeHtml(type)}</div>
                     <div class="card-status ${listingMode}">${listingLabel}</div>
                     <button type="button" class="card-reel-btn" data-action="open-card-reel" aria-label="${escapeHtml(t('listing.play_reel', 'Play reel'))}">▶</button>
                     <button type="button" class="fav-btn ${isFav ? 'is-fav' : ''}" aria-label="${escapeHtml(t('listing.save_aria', 'Save listing'))}" aria-pressed="${isFav ? 'true' : 'false'}">${isFav ? '♥' : '♡'}</button>
@@ -3013,15 +3580,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="card-content">
                     <div class="card-ref-row">
                         <div class="card-ref">
-                            ${reference || escapeHtml(t('listing.reference_unavailable', 'Reference unavailable'))}
+                            ${reference ? escapeHtml(reference) : escapeHtml(t('listing.reference_unavailable', 'Reference unavailable'))}
                             <span class="card-orig-ref muted" data-card-original-ref style="display:none"></span>
                         </div>
                         <button type="button" class="ref-chip ref-chip--small" data-action="show-original-ref" style="display:none" aria-label="${escapeHtml(t('listing.original_ref_show', 'Show original reference'))}" title="${escapeHtml(t('listing.original_ref_show', 'Show original reference'))}">Orig</button>
                     </div>
-                    <h3>${type} ${escapeHtml(t('common.in', 'in'))} ${town}</h3>
+                    <h3><span data-i18n-dynamic>${escapeHtml(type)}</span> ${escapeHtml(t('common.in', 'in'))} ${escapeHtml(town)}</h3>
                     <div class="location">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        ${town}, ${province}
+                        <span data-i18n-dynamic>${escapeHtml(town)}, ${escapeHtml(province)}</span>
                     </div>
                     <div class="price">${formatListingPrice(property)}</div>
                     <div class="specs">
@@ -3062,10 +3629,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     event.stopPropagation();
                     if (!reference) return;
                     try {
-                        const reelUrl = new URL('reel.html', window.location.href);
-                        reelUrl.searchParams.set('ref', reference);
-                        reelUrl.searchParams.set('autoplay', '1');
-                        window.open(reelUrl.toString(), '_blank', 'noopener,noreferrer');
+                        const reelUrl = buildAppUrl('reel.html', { ref: reference, autoplay: '1' });
+                        window.open(reelUrl, '_blank', 'noopener,noreferrer');
                     } catch {
                         // ignore
                     }
@@ -3077,9 +3642,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const updateOrigBtnVisibility = () => {
                 if (!origBtn) return;
                 origBtn.dataset.scpRef = reference || '';
+                const hasInlineRef = Boolean(getInlineOriginalRefMapping(property));
                 const allowed = Boolean(reference)
                     && Boolean(supabaseClient && supabaseUser)
-                    && isPrivilegedRole(supabaseRole);
+                    && (isPrivilegedRole(supabaseRole) || (!supabaseRoleResolved && hasInlineRef));
                 origBtn.style.display = allowed ? 'inline-flex' : 'none';
             };
             updateOrigBtnVisibility();
@@ -3102,7 +3668,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                     if (!user) return;
-                    if (!isPrivilegedRole(supabaseRole)) return;
+                    const role = await ensureSupabaseRole(client, user.id);
+                    if (!isPrivilegedRole(role)) return;
                     if (!reference) return;
 
                     const already = (origSpan.dataset.originalRef || '').trim();
@@ -3118,7 +3685,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     origBtn.disabled = true;
                     origBtn.textContent = '…';
                     try {
-                        const mapped = await supabaseMaybeGetOriginalRef(client, user.id, reference);
+                        const mapped = await resolveOriginalRefForProperty(client, user.id, property);
                         if (!mapped || !mapped.original_ref) {
                             origBtn.textContent = t('listing.original_ref_no_ref', 'No ref');
                             window.setTimeout(() => { origBtn.textContent = prevText || t('modal.original_ref_short', 'Orig'); }, 1300);
@@ -3222,6 +3789,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // ignore
             }
         }
+
+        queueDynamicTranslate(propertyGrid);
     }
 
     function scrollToProperty(propertyId) {
@@ -3242,15 +3811,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const t = (key, fallback, vars) => {
+            const k = toText(key);
             try {
                 if (window.SCP_I18N && typeof window.SCP_I18N.t === 'function') {
-                    return window.SCP_I18N.t(key, vars);
+                    const translated = window.SCP_I18N.t(k, vars);
+                    if (translated != null) {
+                        const out = toText(translated);
+                        if (out && out !== k) return out;
+                    }
                 }
             } catch (error) {
                 // ignore
             }
-            if (fallback !== undefined) return toText(fallback);
-            return toText(key);
+            if (fallback !== undefined) return formatTemplate(toText(fallback), vars);
+            return k;
         };
 
         const pickAreaCopy = (twn) => {
@@ -3564,12 +4138,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const xText = `${shareCaptionNoUrl}\n#CostaBlancaSouth #SpainRealEstate`;
         const xShare = `https://twitter.com/intent/tweet?text=${encodeURIComponent(xText)}&url=${shareUrl}`;
         const dossierBody = encodeURIComponent(
-            `Hello Spanish Coast Properties,\n\nI would like to request a visit for this property.\n\nReference: ${reference || 'N/A'}\nType: ${type}\nLocation: ${town}, ${province}\nPrice: ${formatListingPrice(property)}\nApp link: ${propertyLink}${sourceUrl ? `\nOfficial page: ${sourceUrl}` : ''}\n\nPreferred dates/times:\n1) \n2) \n\nThank you.`
+            `Hello Spanish Coast Properties,\n\nI would like to request a visit for this property.\n\nReference: ${reference || t('common.na', 'N/A')}\nType: ${type}\nLocation: ${town}, ${province}\nPrice: ${formatListingPrice(property)}\nApp link: ${propertyLink}${sourceUrl ? `\nOfficial page: ${sourceUrl}` : ''}\n\nPreferred dates/times:\n1) \n2) \n\nThank you.`
         );
         const dossierMailto = `mailto:info@spanishcoastproperties.com?subject=${dossierSubject}&body=${dossierBody}`;
         const reportSubject = encodeURIComponent(`Listing issue report - ${reference || `${town} ${type}`}`);
         const reportBody = encodeURIComponent(
-            `Hello Spanish Coast Properties,\n\nI found an issue with this listing and would like to flag it.\n\nReference: ${reference || 'N/A'}\nLocation: ${town}, ${province}\nApp link: ${propertyLink}${sourceUrl ? `\nOfficial page: ${sourceUrl}` : ''}\n\nWhat seems wrong:\n- \n\n(If possible, add a screenshot or describe the problem.)\n\nThank you.`
+            `Hello Spanish Coast Properties,\n\nI found an issue with this listing and would like to flag it.\n\nReference: ${reference || t('common.na', 'N/A')}\nLocation: ${town}, ${province}\nApp link: ${propertyLink}${sourceUrl ? `\nOfficial page: ${sourceUrl}` : ''}\n\nWhat seems wrong:\n- \n\n(If possible, add a screenshot or describe the problem.)\n\nThank you.`
         );
 	        const reportMailto = `mailto:info@spanishcoastproperties.com?subject=${reportSubject}&body=${reportBody}`;
 	        const descriptionHtml = formatDescriptionHtml(description);
@@ -3579,22 +4153,22 @@ document.addEventListener('DOMContentLoaded', () => {
 	            setBrowserRef(reference, { push: shouldPush, state: { modalRef: reference } });
 	        }
 
-        const modalTitle = escapeHtml(`${type} ${t('common.in', 'in')} ${town}`);
+        const modalTitleHtml = `<span data-i18n-dynamic>${escapeHtml(type)}</span> ${escapeHtml(t('common.in', 'in'))} ${escapeHtml(town)}`;
 
         modalDetails.innerHTML = `
-            <div class="modal-body">
+            <div class="modal-body" data-i18n-dynamic-scope>
                 <div class="modal-info">
-                    <div class="card-badge">${type}</div>
+                    <div class="card-badge" data-i18n-dynamic>${escapeHtml(type)}</div>
                     <div class="modal-ref-row">
-                        <div class="modal-ref">${reference || escapeHtml(t('modal.ref_unavailable', 'Ref unavailable'))}</div>
+                        <div class="modal-ref">${reference ? escapeHtml(reference) : escapeHtml(t('modal.ref_unavailable', 'Ref unavailable'))}</div>
                         <button type="button" class="ref-chip ref-chip--small" data-action="copy-modal-original-ref" style="display:none" aria-label="${escapeHtml(t('modal.copy_original_ref', 'Copy original reference'))}" title="${escapeHtml(t('modal.copy_original_ref', 'Copy original reference'))}">${escapeHtml(t('modal.original_ref_short', 'Orig'))}</button>
                         <button type="button" class="ref-chip ref-chip--small" data-action="copy-modal-original-id" style="display:none" aria-label="${escapeHtml(t('modal.copy_original_id', 'Copy feed ID'))}" title="${escapeHtml(t('modal.copy_original_id', 'Copy feed ID'))}">${escapeHtml(t('modal.original_id_short', 'ID'))}</button>
                     </div>
                     <div class="modal-ref-sub muted" data-original-ref style="display:none"></div>
-                    <h2>${modalTitle}</h2>
+                    <h2>${modalTitleHtml}</h2>
                     <div class="location">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        ${town}, ${province}
+                        <span data-i18n-dynamic>${escapeHtml(town)}, ${escapeHtml(province)}</span>
                     </div>
                     <div class="price">${formatListingPrice(property)}</div>
                     <div class="modal-specs">
@@ -3640,26 +4214,26 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         <div data-nearby-area></div>
                     </div>
-                    <div class="desc">${descriptionHtml}</div>
+                    <div class="desc" data-modal-description>${descriptionHtml}</div>
                     <div class="features-list">
                         <h4>${escapeHtml(t('modal.amenities_title', 'Premium Amenities'))}</h4>
                         <ul>
                             ${features.length > 0
-                ? features.map((feature) => `<li>${feature}</li>`).join('')
+                ? features.map((feature) => `<li data-i18n-dynamic>${escapeHtml(feature)}</li>`).join('')
                 : `<li>${escapeHtml(t('modal.amenities_fallback_1', 'Premium finishes throughout'))}</li><li>${escapeHtml(t('modal.amenities_fallback_2', 'Advanced climate control'))}</li>`}
                         </ul>
                     </div>
-	                    <div class="modal-cta">
-	                        <button type="button" class="cta-button cta-button--outline" data-fav-toggle>${escapeHtml(isFav ? t('modal.fav_saved', '♥ Saved') : t('modal.fav_save', '♡ Save'))}</button>
-	                        <a href="brochure.html?ref=${encodeURIComponent(reference || '')}" class="cta-button cta-button--outline" target="_blank" rel="noopener">${escapeHtml(t('modal.brochure_pdf', 'Brochure (PDF)'))}</a>
-	                        <a href="reel.html?ref=${encodeURIComponent(reference || '')}&autoplay=1" class="cta-button cta-button--outline cta-button--reel-play" target="_blank" rel="noopener">▶ ${escapeHtml(t('modal.reel_play', 'Play Reel'))}</a>
-	                        <a href="reel.html?ref=${encodeURIComponent(reference || '')}" class="cta-button cta-button--outline" target="_blank" rel="noopener">${escapeHtml(t('modal.reel_video', 'Reel Studio'))}</a>
-	                        <a href="reel.html?ref=${encodeURIComponent(reference || '')}&app=tiktok&autoplay=1" class="cta-button cta-button--outline" target="_blank" rel="noopener">🎵 ${escapeHtml(t('modal.reel_tiktok', 'TikTok Video'))}</a>
-	                        <a href="tel:+34624867866" class="cta-button">${escapeHtml(t('modal.call_now', 'Call Now'))}</a>
-	                        <a href="${dossierMailto}" class="cta-button">${escapeHtml(t('modal.request_visit', 'Request to visit'))}</a>
-	                        ${sourceUrl ? `<a href="${escapeHtml(sourceUrl)}" class="cta-button" target="_blank" rel="noopener">${escapeHtml(t('modal.official_page', 'Official page'))}</a>` : ''}
-	                    </div>
-	                    <div class="share-row" aria-label="${escapeHtml(t('modal.share', 'Share'))}">
+		                    <div class="modal-cta" data-i18n-dynamic-ignore>
+		                        <button type="button" class="cta-button cta-button--outline" data-fav-toggle>${escapeHtml(isFav ? t('modal.fav_saved', '♥ Saved') : t('modal.fav_save', '♡ Save'))}</button>
+		                        <a href="brochure.html?ref=${encodeURIComponent(reference || '')}" class="cta-button cta-button--outline" target="_blank" rel="noopener">${escapeHtml(t('modal.brochure_pdf', 'Brochure (PDF)'))}</a>
+		                        <a href="reel.html?ref=${encodeURIComponent(reference || '')}&autoplay=1" class="cta-button cta-button--outline cta-button--reel-play" target="_blank" rel="noopener">▶ ${escapeHtml(t('modal.reel_play', 'Play Reel'))}</a>
+		                        <a href="reel.html?ref=${encodeURIComponent(reference || '')}&autoplay=1&share=1" class="cta-button cta-button--outline" target="_blank" rel="noopener">${escapeHtml(t('modal.share_video', 'Share video'))}</a>
+		                        <a href="tour.html?ref=${encodeURIComponent(reference || '')}" class="cta-button cta-button--outline" target="_blank" rel="noopener">${escapeHtml(t('modal.tour_3d', '3D Tour'))}</a>
+		                        <a href="tel:+34624867866" class="cta-button">${escapeHtml(t('modal.call_now', 'Call Now'))}</a>
+		                        <a href="${dossierMailto}" class="cta-button">${escapeHtml(t('modal.request_visit', 'Request to visit'))}</a>
+		                        ${sourceUrl ? `<a href="${escapeHtml(sourceUrl)}" class="cta-button" target="_blank" rel="noopener">${escapeHtml(t('modal.official_page', 'Official page'))}</a>` : ''}
+		                    </div>
+	                    <div class="share-row" data-i18n-dynamic-ignore aria-label="${escapeHtml(t('modal.share', 'Share'))}">
 	                        <button type="button" class="share-btn" data-share="native">
 	                            <span class="share-icon share-icon--native">${SHARE_ICON_SVG.native}</span>
 	                            <span class="share-label">${escapeHtml(t('modal.share.native', 'Share'))}</span>
@@ -3709,6 +4283,20 @@ document.addEventListener('DOMContentLoaded', () => {
 	            </div>
 	        `;
 
+        queueDynamicTranslate(modalDetails);
+        const modalDescEl = modalDetails.querySelector('[data-modal-description]');
+        const modalPropertyId = activeModalPropertyId;
+        if (modalDescEl) {
+            translateDynamicText(description).then((translatedDescription) => {
+                if (!translatedDescription) return;
+                if (translatedDescription === description) return;
+                if (activeModalPropertyId !== modalPropertyId) return;
+                if (!document.body.contains(modalDescEl)) return;
+                modalDescEl.innerHTML = formatDescriptionHtml(translatedDescription);
+                queueDynamicTranslate(modalDescEl);
+            });
+        }
+
         // Privileged users (via Supabase/RLS) can see the original system reference (e.g. Inmovilla ref).
         // Normal clients never receive this data because it's stored server-side behind RLS.
         const originalRefEl = modalDetails.querySelector('[data-original-ref]');
@@ -3740,7 +4328,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                     if (!user) return;
-                    const mapped = await supabaseMaybeGetOriginalRef(client, user.id, scpRef);
+                    const mapped = await resolveOriginalRefForProperty(client, user.id, property);
                     if (!mapped || !mapped.original_ref) return;
                     const baseLabel = t('modal.original_ref', 'Original ref');
                     const label = mapped.source ? `${baseLabel} (${mapped.source})` : baseLabel;
@@ -3896,10 +4484,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		                // (in-browser) and let the user share the file from the reel page.
 		                try {
 		                    if (reference) {
-		                        const reelUrl = new URL('reel.html', window.location.href);
-		                        reelUrl.searchParams.set('ref', reference);
-		                        reelUrl.searchParams.set('app', String(appName || '').toLowerCase());
-		                        window.open(reelUrl.toString(), '_blank', 'noopener,noreferrer');
+		                        const reelUrl = buildAppUrl('reel.html', {
+		                            ref: reference,
+		                            app: String(appName || '').toLowerCase(),
+		                            autoplay: '1',
+		                            share: '1'
+		                        });
+		                        window.open(reelUrl, '_blank', 'noopener,noreferrer');
 		                        return;
 		                    }
 		                } catch {
@@ -4164,11 +4755,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         cityButtonsContainer.innerHTML = '';
-        MAIN_DESTINATIONS.forEach(({ value, label }) => {
+        MAIN_DESTINATIONS.forEach(({ value, i18nKey, fallback }) => {
+            const label = t(i18nKey || '', fallback || value);
             const button = document.createElement('button');
             button.type = 'button';
             button.className = `city-btn ${selectedCity === value ? 'active' : ''}`;
             button.textContent = label;
+            button.setAttribute('data-i18n-dynamic-ignore', '');
             button.dataset.city = value;
 
             button.addEventListener('click', () => {
@@ -4283,6 +4876,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	    function startSpatialDrawPolygon() {
 	        if (!map || typeof L === 'undefined') return;
+	        stopSpatialFreehandDraw({ keepStatus: true });
+	        if (prefersFreehandSpatialDraw()) {
+	            startSpatialFreehandDraw();
+	            return;
+	        }
 	        if (!L.Draw || !L.Draw.Polygon) {
 	            setSpatialStatus(t('map.tools.draw_unavailable', 'Perimeter tool is not available right now.'));
 	            return;
@@ -4320,6 +4918,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	    function startSpatialAroundMe() {
 	        if (!map) return;
+	        stopSpatialFreehandDraw({ keepStatus: true });
+	        spatialIsDrawing = false;
 	        if (!navigator || !navigator.geolocation) {
 	            setSpatialStatus(t('map.tools.geo_unavailable', 'Geolocation is not available on this device.'));
 	            return;
@@ -5091,6 +5691,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Initialization ---
     renderCatalogs();
+
+	    window.addEventListener('scp:i18n-updated', () => {
+	        try {
+	            generateCityButtons();
+	            renderCatalogs();
+	            renderProperties({ reset: true });
+            if (propertyGrid) queueDynamicTranslate(propertyGrid);
+            if (modalDetails && modal && modal.style.display === 'block') queueDynamicTranslate(modalDetails);
+        } catch (error) {
+            // ignore translation refresh errors
+        }
+    });
 
     // Build price suggestions (10k increments starting at 50k).
     const priceSuggestions = document.getElementById('price-suggestions');

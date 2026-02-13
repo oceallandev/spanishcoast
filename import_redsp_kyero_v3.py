@@ -26,7 +26,13 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
-from import_inmovilla import ScpRefAllocator, write_csv, write_sql_upsert, write_sql_upsert_chunks
+from import_inmovilla import (
+    ScpRefAllocator,
+    prefer_english_text,
+    write_csv,
+    write_sql_upsert,
+    write_sql_upsert_chunks,
+)
 
 
 def _t(value: Any) -> str:
@@ -87,6 +93,11 @@ def _pick_lang(block: Optional[ET.Element], prefer: List[str]) -> str:
         if val:
             return val
     return _t(block.text)
+
+
+def _lang_text(block: Optional[ET.Element], lang: str) -> str:
+    el = _child(block, lang)
+    return _t(el.text if el is not None else "")
 
 
 def _int(value: Any) -> int:
@@ -182,6 +193,7 @@ def parse_kyero_v3_properties(
     source: str,
     force_new_build: bool = True,
     prefer_langs: Optional[List[str]] = None,
+    auto_translate_spanish_to_english: bool = True,
 ) -> List[Dict[str, Any]]:
     prefer_langs = prefer_langs or ["en", "es"]
     out: List[Tuple[Optional[datetime], Dict[str, Any]]] = []
@@ -212,7 +224,16 @@ def parse_kyero_v3_properties(
         lon = _float(_find_text(el, "location/longitude"))
 
         desc_block = _child(el, "desc")
-        desc = _pick_lang(desc_block, prefer_langs) if desc_block is not None else ""
+        if desc_block is not None:
+            desc = prefer_english_text(
+                _lang_text(desc_block, "en"),
+                _lang_text(desc_block, "es"),
+                auto_translate_spanish_to_english=auto_translate_spanish_to_english,
+            )
+            if not desc:
+                desc = _pick_lang(desc_block, prefer_langs)
+        else:
+            desc = ""
         desc = desc or "Property details coming soon."
         # Some Kyero/RedSp exports append a numeric supplier/account ID as a final line (e.g. "1073").
         # Strip it so it never leaks into the public UI.
@@ -325,6 +346,11 @@ def main(argv: List[str]) -> int:
     ap.add_argument("--out-js", default="newbuilds-listings.js", help="Output JS file (public, committed).")
     ap.add_argument("--reset-ref-map", action="store_true", help="Re-assign new SCP refs (DANGEROUS).")
     ap.add_argument(
+        "--no-auto-en-from-es",
+        action="store_true",
+        help="Do not auto-translate Spanish-only description fields to English during import.",
+    )
+    ap.add_argument(
         "--not-all-new-build",
         action="store_true",
         help="Do not force new_build=true for every listing (use Kyero <new_build> tag when present).",
@@ -362,6 +388,7 @@ def main(argv: List[str]) -> int:
         allocator=allocator,
         source=source,
         force_new_build=not bool(args.not_all_new_build),
+        auto_translate_spanish_to_english=not bool(args.no_auto_en_from_es),
     )
     allocator.save()
 

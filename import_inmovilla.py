@@ -17,6 +17,8 @@ import json
 import os
 import re
 import sys
+import urllib.parse
+import urllib.request
 from datetime import datetime, timezone
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
@@ -129,6 +131,92 @@ def _pick_lang(datos: Optional[ET.Element], base: str, prefer: List[int]) -> str
         if v:
             return v
     return ""
+
+
+_ES_HINT_RE = re.compile(
+    r"[áéíóúñ¿¡]|"
+    r"\b(de|la|el|en|con|para|venta|alquiler|playa|piso|villa|bañ(?:o|os)|"
+    r"habitaci(?:ó|o)n(?:es)?|terraza|garaje|ascensor|obra nueva|trastero|"
+    r"cocina|sal[oó]n|comedor|ubicaci[oó]n|superficie|parcela)\b",
+    re.IGNORECASE,
+)
+_TRANSLATE_CACHE: Dict[Tuple[str, str, str], str] = {}
+
+
+def _looks_spanish_text(value: str) -> bool:
+    text = _t(value)
+    if not text:
+        return False
+    if len(text) < 8:
+        return False
+    if not re.search(r"[A-Za-zÀ-ÖØ-öø-ÿ]", text):
+        return False
+    return bool(_ES_HINT_RE.search(text))
+
+
+def _read_google_translated_text(payload: Any) -> str:
+    if not isinstance(payload, list) or not payload:
+        return ""
+    first = payload[0]
+    if not isinstance(first, list):
+        return ""
+    out: List[str] = []
+    for part in first:
+        if isinstance(part, list) and part:
+            out.append(_t(part[0]))
+    return "".join(out).strip()
+
+
+def _translate_text_google(text: str, *, source_lang: str = "es", target_lang: str = "en", timeout: float = 8.0) -> str:
+    source = _t(source_lang).lower() or "auto"
+    target = _t(target_lang).lower() or "en"
+    value = _t(text)
+    if not value:
+        return ""
+    key = (source, target, value)
+    cached = _TRANSLATE_CACHE.get(key)
+    if cached is not None:
+        return cached
+    try:
+        params = urllib.parse.urlencode(
+            {
+                "client": "gtx",
+                "sl": source,
+                "tl": target,
+                "dt": "t",
+                "q": value,
+            }
+        )
+        url = f"https://translate.googleapis.com/translate_a/single?{params}"
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            raw = resp.read()
+        payload = json.loads(raw.decode("utf-8", errors="ignore"))
+        translated = _read_google_translated_text(payload) or value
+    except Exception:
+        translated = value
+    _TRANSLATE_CACHE[key] = translated
+    return translated
+
+
+def prefer_english_text(
+    english_value: str,
+    spanish_value: str,
+    *,
+    auto_translate_spanish_to_english: bool = True,
+) -> str:
+    en = _t(english_value)
+    if en:
+        return en
+    es = _t(spanish_value)
+    if not es:
+        return ""
+    if not auto_translate_spanish_to_english:
+        return es
+    if not _looks_spanish_text(es):
+        return es
+    translated = _translate_text_google(es, source_lang="es", target_lang="en")
+    return _t(translated) or es
 
 
 def _listing_mode(action: str) -> str:
@@ -316,7 +404,12 @@ class ScpRefAllocator:
         return rows
 
 
-def parse_inmovilla_properties(xml_path: str, allocator: Optional[ScpRefAllocator] = None) -> List[Dict[str, Any]]:
+def parse_inmovilla_properties(
+    xml_path: str,
+    allocator: Optional[ScpRefAllocator] = None,
+    *,
+    auto_translate_spanish_to_english: bool = True,
+) -> List[Dict[str, Any]]:
     out: List[Dict[str, Any]] = []
     prop_count = 0
 
@@ -355,8 +448,26 @@ def parse_inmovilla_properties(xml_path: str, allocator: Optional[ScpRefAllocato
         lat = _num(_get(datos, "ofertas_latitud"))
         lon = _num(_get(datos, "ofertas_altitud")) or _num(_get(datos, "ofertas_longitud"))
 
-        title = _pick_lang(datos, "ofertas_titulo", prefer=[2, 1])
-        desc = _pick_lang(datos, "ofertas_descrip", prefer=[2, 1])
+        title_en = _get(datos, "ofertas_titulo2")
+        title_es = _get(datos, "ofertas_titulo1")
+        desc_en = _get(datos, "ofertas_descrip2")
+        desc_es = _get(datos, "ofertas_descrip1")
+
+        title = prefer_english_text(
+            title_en,
+            title_es,
+            auto_translate_spanish_to_english=auto_translate_spanish_to_english,
+        )
+        desc = prefer_english_text(
+            desc_en,
+            desc_es,
+            auto_translate_spanish_to_english=auto_translate_spanish_to_english,
+        )
+
+        if not title:
+            title = _pick_lang(datos, "ofertas_titulo", prefer=[2, 1])
+        if not desc:
+            desc = _pick_lang(datos, "ofertas_descrip", prefer=[2, 1])
 
         # Public description: keep it clean and readable.
         description = desc or ""
@@ -748,6 +859,11 @@ def main(argv: List[str]) -> int:
     ap.add_argument("--out-private-dir", default="private/inmovilla", help="Output dir for private contacts/leads exports")
     ap.add_argument("--no-private", action="store_true", help="Skip generating private exports (contacts/leads)")
     ap.add_argument("--reset-ref-map", action="store_true", help="Reset local SCP ref map (will reassign refs)")
+    ap.add_argument(
+        "--no-auto-en-from-es",
+        action="store_true",
+        help="Do not auto-translate Spanish-only title/description fields to English during import.",
+    )
 
     args = ap.parse_args(argv)
 
@@ -757,7 +873,11 @@ def main(argv: List[str]) -> int:
     ref_map_path = os.path.join(priv_dir, "ref_map.json")
     allocator = ScpRefAllocator(ref_map_path, reset=bool(args.reset_ref_map))
 
-    props = parse_inmovilla_properties(args.properties_xml, allocator=allocator)
+    props = parse_inmovilla_properties(
+        args.properties_xml,
+        allocator=allocator,
+        auto_translate_spanish_to_english=not bool(args.no_auto_en_from_es),
+    )
     write_public_js(props, args.out_public_js)
     allocator.save()
 

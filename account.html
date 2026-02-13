@@ -12,8 +12,8 @@
 
     <meta name="theme-color" content="#030712">
     <link rel="manifest" href="manifest.webmanifest?v=20260211a">
-    <link rel="stylesheet" href="style.css?v=20260211a">
-    <script defer src="i18n.js?v=20260211b"></script>
+    <link rel="stylesheet" href="style.css?v=20260212b">
+    <script defer src="i18n.js?v=20260212h"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -365,6 +365,11 @@
                         <div class="account-tile-v" data-i18n="account.tiles.admin_shop_title">Shop editor</div>
                         <div class="muted" data-i18n="account.tiles.admin_shop_desc">Curate smart device products shown in the app.</div>
                     </a>
+                    <a class="glass panel account-tile" href="admin-ref-map.html" id="dash-refmap-tile" style="display:none">
+                        <div class="account-tile-k" data-i18n="account.tiles.admin">Admin</div>
+                        <div class="account-tile-v">Original refs map</div>
+                        <div class="muted">Import mapping so the Orig button shows the correct source reference.</div>
+                    </a>
                     <a class="glass panel account-tile" href="collaborate.html" id="dash-partner-tile">
                         <div class="account-tile-k" id="dash-partner-k" data-i18n="account.tiles.partner_tools">Partner tools</div>
                         <div class="account-tile-v" id="dash-partner-v" data-i18n="account.tiles.partner_tools_title">White-label & collaboration</div>
@@ -378,15 +383,16 @@
                             <h2 style="margin:0;" data-i18n="account.admin.title">Admin Dashboard</h2>
                             <div class="muted" data-i18n="account.admin.subtitle">Manage favourites inbox, roles, and collaborators.</div>
                         </div>
-                        <div class="account-admin-actions">
-                            <a class="cta-button" href="admin-favourites.html" data-i18n="account.admin.btn.fav_inbox">Favourites Inbox</a>
-                            <a class="cta-button cta-button--outline" href="admin-vehicles.html">Vehicle Inbox</a>
-                            <a class="cta-button cta-button--outline" href="admin-properties.html">Property Inbox</a>
-                            <a class="cta-button cta-button--outline" href="admin-crm.html" data-i18n="account.admin.btn.crm">CRM</a>
-                            <a class="cta-button cta-button--outline" href="admin-shop.html" data-i18n="account.admin.btn.shop">Shop Editor</a>
-                            <a class="cta-button cta-button--outline" href="admin-scout.html" data-i18n="account.admin.btn.scout">Street Scout Inbox</a>
+                            <div class="account-admin-actions">
+                                <a class="cta-button" href="admin-favourites.html" data-i18n="account.admin.btn.fav_inbox">Favourites Inbox</a>
+                                <a class="cta-button cta-button--outline" href="admin-vehicles.html">Vehicle Inbox</a>
+                                <a class="cta-button cta-button--outline" href="admin-properties.html">Property Inbox</a>
+                                <a class="cta-button cta-button--outline" href="admin-crm.html" data-i18n="account.admin.btn.crm">CRM</a>
+                                <a class="cta-button cta-button--outline" href="admin-shop.html" data-i18n="account.admin.btn.shop">Shop Editor</a>
+                                <a class="cta-button cta-button--outline" href="admin-ref-map.html">Original refs map</a>
+                                <a class="cta-button cta-button--outline" href="admin-scout.html" data-i18n="account.admin.btn.scout">Street Scout Inbox</a>
+                            </div>
                         </div>
-                    </div>
 
                     <div class="divider"></div>
 
@@ -447,8 +453,8 @@
     </footer>
 
     <script defer src="basket.js?v=20260211a"></script>
-    <script defer src="account.js?v=20260211a"></script>
-    <script defer src="site.js?v=20260211a"></script>
+    <script defer src="account.js?v=20260212a"></script>
+    <script defer src="site.js?v=20260211e"></script>
 </body>
 
 </html>

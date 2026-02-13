@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reel Video | Spanish Coast Properties</title>
     <meta name="robots" content="noindex,nofollow">
+    <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/reel.html">
 
     <meta name="theme-color" content="#030712">
-    <link rel="stylesheet" href="style.css?v=20260211a">
-    <script defer src="i18n.js?v=20260211a"></script>
+    <link rel="stylesheet" href="style.css?v=20260212b">
+    <script defer src="i18n.js?v=20260212h"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -23,8 +24,7 @@
         </div>
         <div class="brochure-toolbar-right">
             <button id="reel-toggle-brand" class="brochure-pill" type="button">White-label: Off</button>
-            <button id="reel-generate" class="brochure-pill brochure-pill--primary" type="button" data-i18n="reel.create_video">Create video</button>
-            <button id="reel-share" class="brochure-pill" type="button" data-i18n="reel.share" disabled>Share</button>
+            <button id="reel-play" class="brochure-pill brochure-pill--primary" type="button" data-i18n="reel.play_video">Play video</button>
             <a id="reel-download" class="brochure-pill" href="#" download data-i18n="reel.download" hidden>Download</a>
         </div>
     </div>
@@ -44,35 +44,8 @@
                     <h1 class="reel-title" id="reel-title">…</h1>
                     <div class="reel-meta" id="reel-meta"></div>
                     <div class="reel-status" id="reel-status" aria-live="polite"></div>
-                    <div class="reel-controls" id="reel-controls">
-                        <label class="reel-control">
-                            <span class="reel-control-label" data-i18n="reel.controls.duration">Duration</span>
-                            <select id="reel-duration" class="reel-select">
-                                <option value="7" data-i18n="reel.duration.quick">7s (Quick)</option>
-                                <option value="9" data-i18n="reel.duration.recommended" selected>9s (Recommended)</option>
-                                <option value="12" data-i18n="reel.duration.standard">12s</option>
-                                <option value="15" data-i18n="reel.duration.detailed">15s (Detailed)</option>
-                            </select>
-                        </label>
-                        <label class="reel-control">
-                            <span class="reel-control-label" data-i18n="reel.controls.audio">Audio</span>
-                            <select id="reel-audio" class="reel-select">
-                                <option value="none" data-i18n="reel.audio.none">No music</option>
-                                <option value="ambient" data-i18n="reel.audio.ambient" selected>Ambient</option>
-                                <option value="upbeat" data-i18n="reel.audio.upbeat">Upbeat</option>
-                            </select>
-                        </label>
-                        <label class="reel-check">
-                            <input id="reel-caption-overlay" type="checkbox" checked>
-                            <span data-i18n="reel.controls.overlay_caption">Show on-screen captions</span>
-                        </label>
-                    </div>
-                    <div class="reel-actions" id="reel-actions" hidden>
-                        <button id="reel-share-instagram" class="view-toggle-btn" type="button">Instagram</button>
-                        <button id="reel-share-tiktok" class="view-toggle-btn" type="button">TikTok</button>
-                        <button id="reel-share-facebook" class="view-toggle-btn" type="button">Facebook</button>
-                        <button id="reel-copy-caption" class="view-toggle-btn" type="button" data-i18n="reel.copy_caption">Copy caption</button>
-                        <a id="reel-captions-download" class="view-toggle-btn" href="#" download hidden data-i18n="reel.download_captions">Download captions</a>
+                    <div class="reel-auto-note" data-i18n="reel.auto_mode_note">
+                        We automatically build the best short reel from listing media and key details.
                     </div>
                 </div>
 
@@ -82,6 +55,19 @@
                         <div class="reel-caption-note" data-i18n="reel.caption.note">Paste into Instagram/TikTok if needed.</div>
                     </div>
                     <textarea id="reel-caption" class="reel-caption" rows="6" readonly></textarea>
+                    <div class="reel-share-wrap">
+                        <button id="reel-share" class="view-toggle-btn reel-share-primary" type="button" data-i18n="reel.share_video" disabled>Share video</button>
+                        <div class="reel-actions" id="reel-actions" hidden>
+                            <button id="reel-share-instagram" class="view-toggle-btn" type="button">Instagram</button>
+                            <button id="reel-share-tiktok" class="view-toggle-btn" type="button">TikTok</button>
+                            <button id="reel-share-facebook" class="view-toggle-btn" type="button">Facebook</button>
+                            <button id="reel-share-whatsapp" class="view-toggle-btn" type="button">WhatsApp</button>
+                            <button id="reel-share-telegram" class="view-toggle-btn" type="button">Telegram</button>
+                            <button id="reel-share-linkedin" class="view-toggle-btn" type="button">LinkedIn</button>
+                            <button id="reel-copy-caption" class="view-toggle-btn" type="button" data-i18n="reel.copy_caption">Copy caption</button>
+                            <a id="reel-captions-download" class="view-toggle-btn" href="#" download hidden data-i18n="reel.download_captions">Download captions</a>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="reel-card" id="reel-play-wrap" hidden>
@@ -109,7 +95,7 @@
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script defer src="config.js?v=20260211a"></script>
     <script defer src="supabase-init.js?v=20260211a"></script>
-    <script defer src="reel.js?v=20260211a"></script>
+    <script defer src="reel.js?v=20260212d"></script>
 </body>
 
 </html>

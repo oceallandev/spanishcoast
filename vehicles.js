@@ -5,6 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
   let listings = Array.isArray(window.vehicleListings) ? window.vehicleListings : [];
   const providers = Array.isArray(window.vehicleProviders) ? window.vehicleProviders : [];
 
+  const formatTemplate = (value, vars) => {
+    const text = value == null ? '' : String(value);
+    if (!vars || typeof vars !== 'object') return text;
+    return text.replace(/\{(\w+)\}/g, (match, key) => (
+      Object.prototype.hasOwnProperty.call(vars, key) ? String(vars[key]) : match
+    ));
+  };
+
   const filtersBar = document.getElementById('filters-bar');
   const toggleMapBtn = document.getElementById('toggle-map-btn');
   const openFiltersBtn = document.getElementById('open-filters-btn');
@@ -45,9 +53,82 @@ document.addEventListener('DOMContentLoaded', () => {
   let touchStartY = null;
   let touchStartTime = 0;
 
-  const toText = (v, fb = '') => (typeof v === 'string' ? v : v == null ? fb : String(v));
+  const normalizeFeedText = (value) => {
+    const raw = value == null ? '' : String(value);
+    if (!raw) return raw;
+    return raw
+      .replace(/\[\s*amp\s*,?\s*\]/gi, '&')
+      .replace(/&amp,/gi, '&')
+      .replace(/&amp(?!;)/gi, '&');
+  };
+  const toText = (v, fb = '') => (typeof v === 'string' ? normalizeFeedText(v) : v == null ? fb : normalizeFeedText(v));
   const norm = (v) => toText(v).trim().toLowerCase();
   const forcedCategory = norm(document.body && document.body.dataset ? document.body.dataset.vehicleCategory : '');
+  const t = (key, fallback, vars) => {
+    try {
+      const i18n = window.SCP_I18N;
+      if (i18n && typeof i18n.t === 'function') {
+        const value = i18n.t(key, vars);
+        if (value && value !== key) return value;
+      }
+    } catch {}
+    if (fallback !== undefined) return formatTemplate(fallback, vars);
+    return String(key || '');
+  };
+
+  const categoryLabel = (item) => {
+    const cat = norm(item && item.category);
+    return cat === 'boat'
+      ? t('vehicles.category.boat', 'Boat')
+      : t('vehicles.category.car', 'Car');
+  };
+
+  const dealLabel = (item) => {
+    const deal = norm(item && item.deal);
+    if (deal === 'rent') return t('vehicles.deal.rent', 'For Rent');
+    if (deal === 'sale') return t('vehicles.deal.sale', 'For Sale');
+    return t('vehicles.deal.offer', 'Offer');
+  };
+
+  let dynamicTranslateTimer = null;
+  let dynamicTranslateBusy = false;
+  const dynamicTranslateRoots = new Set();
+
+  const flushDynamicTranslateQueue = async () => {
+    if (dynamicTranslateBusy) return;
+    dynamicTranslateBusy = true;
+    if (dynamicTranslateTimer) {
+      clearTimeout(dynamicTranslateTimer);
+      dynamicTranslateTimer = null;
+    }
+    try {
+      const i18n = window.SCP_I18N;
+      if (!i18n || typeof i18n.translateDynamicDom !== 'function') return;
+      const roots = Array.from(dynamicTranslateRoots);
+      dynamicTranslateRoots.clear();
+      for (let i = 0; i < roots.length; i += 1) {
+        const root = roots[i];
+        if (!root || !root.querySelectorAll) continue;
+        if (root !== document && !document.contains(root)) continue;
+        try {
+          // eslint-disable-next-line no-await-in-loop
+          await i18n.translateDynamicDom(root);
+        } catch {}
+      }
+    } finally {
+      dynamicTranslateBusy = false;
+      if (dynamicTranslateRoots.size) {
+        dynamicTranslateTimer = setTimeout(() => { flushDynamicTranslateQueue(); }, 50);
+      }
+    }
+  };
+
+  const queueDynamicTranslate = (root) => {
+    const target = root && root.querySelectorAll ? root : document;
+    dynamicTranslateRoots.add(target);
+    if (dynamicTranslateTimer || dynamicTranslateBusy) return;
+    dynamicTranslateTimer = setTimeout(() => { flushDynamicTranslateQueue(); }, 50);
+  };
 
   const esc = (s) =>
     toText(s)
@@ -59,12 +140,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const n = Number(item && item.price);
     const currency = toText(item && item.currency, 'EUR').toUpperCase();
     const period = norm(item && item.pricePeriod);
-    if (!Number.isFinite(n) || n <= 0) return 'Price on request';
+    if (!Number.isFinite(n) || n <= 0) return t('pricing.on_request', 'Price on request');
     const num = new Intl.NumberFormat('en-IE', { maximumFractionDigits: 0 }).format(n);
     const base = currency === 'EUR' ? `€${num}` : `${num} ${currency}`;
-    if (period === 'day') return `${base} / day`;
-    if (period === 'week') return `${base} / week`;
-    if (period === 'month') return `${base} / month`;
+    if (period === 'day') return t('pricing.per_day', '{price} / day', { price: base });
+    if (period === 'week') return t('pricing.per_week', '{price} / week', { price: base });
+    if (period === 'month') return t('pricing.per_month', '{price} / month', { price: base });
     return base;
   };
 
@@ -98,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
           providerName: toText(r && r.provider_name, 'Spanish Coast Properties'),
           category: toText(r && r.category, 'car'),
           deal: toText(r && r.deal, 'sale'),
-          title: toText(r && r.title, 'Vehicle'),
+          title: toText(r && r.title, t('listing.vehicle', 'Vehicle')),
           brand: toText(r && r.brand, ''),
           model: toText(r && r.model, ''),
           year: r && r.year != null ? r.year : null,
@@ -203,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .slice()
       .sort((a, b) => toText(a.name).localeCompare(toText(b.name)))
       .map((p) => `<option value="${esc(p.id)}">${esc(p.name)}</option>`);
-    providerFilter.innerHTML = `<option value="any">Any provider</option>${opts.join('')}`;
+    providerFilter.innerHTML = `<option value="any">${esc(t('filters.any_provider', 'Any provider'))}</option>${opts.join('')}`;
   }
 
   function getFilters() {
@@ -297,11 +378,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const lon = Number(it.longitude);
       if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
 
-      const title = toText(it.title, 'Vehicle');
+      const title = toText(it.title, t('listing.vehicle', 'Vehicle'));
       const price = formatPrice(it);
       const providerName = toText(it.providerName, '');
-      const category = norm(it.category) === 'boat' ? '🛥️ Boat' : '🚗 Car';
-      const deal = norm(it.deal) === 'rent' ? 'Rent' : norm(it.deal) === 'sale' ? 'Sale' : 'Offer';
+      const isBoat = norm(it.category) === 'boat';
+      const category = `${isBoat ? '🛥️' : '🚗'} ${categoryLabel(it)}`;
+      const deal = dealLabel(it);
 
       const marker = window.L.marker([lat, lon]);
       marker.bindPopup(`<strong>${esc(title)}</strong><br>${esc(category)} · ${esc(deal)}<br>${esc(price)}${providerName ? `<br>${esc(providerName)}` : ''}`);
@@ -329,9 +411,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function cardHtml(it) {
     const id = toText(it.id);
-    const title = toText(it.title, 'Vehicle');
-    const category = norm(it.category) === 'boat' ? 'Boat' : 'Car';
-    const deal = norm(it.deal) === 'rent' ? 'For Rent' : norm(it.deal) === 'sale' ? 'For Sale' : 'Offer';
+    const title = toText(it.title, t('listing.vehicle', 'Vehicle'));
+    const isBoat = norm(it.category) === 'boat';
+    const category = categoryLabel(it);
+    const deal = dealLabel(it);
     const price = formatPrice(it);
     const loc = toText(it.location, 'Costa Blanca South');
     const imgs = Array.isArray(it.images) ? it.images : [];
@@ -339,8 +422,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const providerName = toText(it.providerName, '');
 
     return `
-      <article class="property-card" data-vehicle-id="${esc(id)}">
-        <a class="business-card-link" href="#" data-vehicle-open="${esc(id)}" aria-label="View vehicle details">
+      <article class="property-card" data-vehicle-id="${esc(id)}" data-i18n-dynamic-scope>
+        <a class="business-card-link" href="#" data-vehicle-open="${esc(id)}" aria-label="${esc(t('vehicles.card.open_details', 'View vehicle details'))}">
           <div class="card-img-wrapper">
             <img src="${esc(img)}" alt="${esc(title)}" loading="lazy" referrerpolicy="no-referrer"
               onerror="this.onerror=null;this.src='assets/placeholder.png'">
@@ -348,15 +431,15 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="card-status">${esc(deal)}</div>
           </div>
           <div class="card-content">
-            <div class="card-ref">${providerName ? esc(providerName) : 'Partner listing'}</div>
-            <h3>${esc(title)}</h3>
+            <div class="card-ref" data-i18n-dynamic>${providerName ? esc(providerName) : esc(t('vehicles.partner_listing', 'Partner listing'))}</div>
+            <h3 data-i18n-dynamic>${esc(title)}</h3>
             <div class="location">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              ${esc(loc)}
+              <span data-i18n-dynamic>${esc(loc)}</span>
             </div>
             <div class="price">${esc(price)}</div>
             <div class="specs">
-              <div class="spec-item">${category === 'Boat' ? '🛥️' : '🚗'} ${esc(category)}</div>
+              <div class="spec-item">${isBoat ? '🛥️' : '🚗'} ${esc(category)}</div>
               <div class="spec-item">📌 ${esc(deal)}</div>
             </div>
           </div>
@@ -369,6 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!gridEl) return;
     const f = getFilters();
     const filtered = sortItems(listings.filter((it) => matches(it, f)), f);
+    gridEl.setAttribute('data-i18n-dynamic-scope', '');
 
     if (resultsCount) resultsCount.textContent = String(filtered.length);
 
@@ -376,27 +460,30 @@ document.addEventListener('DOMContentLoaded', () => {
       gridEl.innerHTML = `
         <article class="catalog-card">
           <div class="catalog-content">
-            <h3>No vehicles found</h3>
-            <div class="catalog-meta">Add partner feeds to <code>feeds/vehicles/</code> and <code>feeds/boats/</code>, then run <code>python3 build_vehicles_data.py</code>.</div>
-            <div class="catalog-body">If you want to list your vehicles for rent or sale, email us and we will onboard your feed.</div>
+            <h3>${esc(t('vehicles.empty.title', 'No vehicles found'))}</h3>
+            <div class="catalog-meta">${esc(t('vehicles.empty.meta', 'Add partner feeds to feeds/vehicles and feeds/boats, then run python3 build_vehicles_data.py.'))}</div>
+            <div class="catalog-body">${esc(t('vehicles.empty.body', 'If you want to list your vehicles for rent or sale, email us and we will onboard your feed.'))}</div>
           </div>
         </article>
       `;
+      queueDynamicTranslate(gridEl);
       updateMap([]);
       return;
     }
 
     gridEl.innerHTML = filtered.map(cardHtml).join('');
+    queueDynamicTranslate(gridEl);
     updateMap(filtered);
   }
 
   function openModal(it) {
     if (!modal || !modalDetails) return;
-    const title = toText(it.title, 'Vehicle');
+    const title = toText(it.title, t('listing.vehicle', 'Vehicle'));
     const price = formatPrice(it);
     const loc = toText(it.location, 'Costa Blanca South');
-    const category = norm(it.category) === 'boat' ? 'Boat' : 'Car';
-    const deal = norm(it.deal) === 'rent' ? 'Rent' : norm(it.deal) === 'sale' ? 'Sale' : 'Offer';
+    const isBoat = norm(it.category) === 'boat';
+    const category = categoryLabel(it);
+    const deal = dealLabel(it);
     const imgs = Array.isArray(it.images) ? it.images : [];
     const provider = providerById.get(toText(it.providerId)) || null;
     const providerName = provider ? toText(provider.name) : toText(it.providerName);
@@ -415,24 +502,27 @@ document.addEventListener('DOMContentLoaded', () => {
       shareUrl = `${window.location.origin}${window.location.pathname}`;
     }
     const mailBody = encodeURIComponent(
-      `Hi Spanish Coast Properties,\n\nI am interested in this ${category.toLowerCase()} (${deal.toLowerCase()}):\n- ${title}\n- ${loc}\n- ${price}\n\nLink: ${shareUrl}\n\nMy phone:\nMy preferred dates (if rental):\n\nThank you.`
+      `${t('vehicles.mail.greeting', 'Hi Spanish Coast Properties,')}\n\n${t('vehicles.mail.interested', 'I am interested in this {category} ({deal}):', {
+        category: category.toLowerCase(),
+        deal: deal.toLowerCase()
+      })}\n- ${title}\n- ${loc}\n- ${price}\n\n${t('vehicles.mail.link', 'Link')}: ${shareUrl}\n\n${t('vehicles.mail.phone', 'My phone')}:\n${t('vehicles.mail.preferred_dates', 'My preferred dates (if rental)')}:\n\n${t('vehicles.mail.thanks', 'Thank you.')}`
     );
-    const mailTo = `mailto:${encodeURIComponent(providerEmail)}?subject=${encodeURIComponent(`Vehicle inquiry - ${title}`)}&body=${mailBody}`;
+    const mailTo = `mailto:${encodeURIComponent(providerEmail)}?subject=${encodeURIComponent(`${t('vehicles.mail.subject_prefix', 'Vehicle inquiry')} - ${title}`)}&body=${mailBody}`;
 
     modalDetails.innerHTML = `
-      <div class="modal-body">
-        <h2 style="margin-bottom:0.25rem">${esc(title)}</h2>
+      <div class="modal-body" data-i18n-dynamic-scope>
+        <h2 style="margin-bottom:0.25rem" data-i18n-dynamic>${esc(title)}</h2>
         <div class="price" style="margin: 0.4rem 0 0.8rem">${esc(price)}</div>
         <div class="specs" style="margin-bottom:0.9rem">
-          <div class="spec-item">${category === 'Boat' ? '🛥️' : '🚗'} ${esc(category)}</div>
+          <div class="spec-item">${isBoat ? '🛥️' : '🚗'} ${esc(category)}</div>
           <div class="spec-item">📌 ${esc(deal)}</div>
-          <div class="spec-item">📍 ${esc(loc)}</div>
+          <div class="spec-item" data-i18n-dynamic>📍 ${esc(loc)}</div>
         </div>
         <div class="modal-actions" style="display:flex; flex-wrap:wrap; gap:0.6rem; margin-bottom:0.9rem">
-          <a class="cta-button" href="${mailTo}">Request details</a>
-          ${providerPhone ? `<a class="cta-button" href="tel:${esc(providerPhone)}">Call provider</a>` : ''}
-          ${providerWebsite ? `<a class="cta-button" href="${esc(providerWebsite)}" target="_blank" rel="noreferrer">Website</a>` : ''}
-          <button class="cta-button" type="button" id="vehicle-share-btn">Share</button>
+          <a class="cta-button" href="${mailTo}">${esc(t('vehicles.actions.request_details', 'Request details'))}</a>
+          ${providerPhone ? `<a class="cta-button" href="tel:${esc(providerPhone)}">${esc(t('vehicles.actions.call_provider', 'Call provider'))}</a>` : ''}
+          ${providerWebsite ? `<a class="cta-button" href="${esc(providerWebsite)}" target="_blank" rel="noreferrer">${esc(t('vehicles.actions.website', 'Website'))}</a>` : ''}
+          <button class="cta-button" type="button" id="vehicle-share-btn">${esc(t('vehicles.actions.share', 'Share'))}</button>
         </div>
         ${imgs.length ? `
           <div class="gallery-grid">
@@ -442,9 +532,10 @@ document.addEventListener('DOMContentLoaded', () => {
             `).join('')}
           </div>
         ` : ''}
-        ${it.description ? `<div class="catalog-meta" style="margin-top:1rem; line-height:1.7">${esc(it.description)}</div>` : ''}
+        ${it.description ? `<div class="catalog-meta" style="margin-top:1rem; line-height:1.7" data-i18n-dynamic>${esc(it.description)}</div>` : ''}
       </div>
     `;
+    queueDynamicTranslate(modalDetails);
 
     // Hook gallery click to lightbox.
     lightboxImages = imgs.slice();
@@ -463,8 +554,8 @@ document.addEventListener('DOMContentLoaded', () => {
             await navigator.share({ title, text: `${title}\n${price}\n${loc}`, url: shareUrl });
           } else {
             await navigator.clipboard.writeText(shareUrl);
-            shareBtn.textContent = 'Copied';
-            setTimeout(() => (shareBtn.textContent = 'Share'), 1200);
+            shareBtn.textContent = t('vehicles.actions.copied', 'Copied');
+            setTimeout(() => (shareBtn.textContent = t('vehicles.actions.share', 'Share')), 1200);
           }
         } catch {}
       });
@@ -571,7 +662,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const next = !mapSection.classList.contains('active');
       mapSection.classList.toggle('active', next);
       document.body.classList.toggle('map-open', next);
-      toggleMapBtn.textContent = next ? 'List' : 'Map';
+      toggleMapBtn.textContent = next ? t('ui.list', 'List') : t('ui.map', 'Map');
       if (next) {
         ensureMap();
         // Now that the map is visible, draw markers for the current filters.
@@ -653,5 +744,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (e.key === 'ArrowLeft' && document.body.classList.contains('lightbox-open')) showNext(-1);
     if (e.key === 'ArrowRight' && document.body.classList.contains('lightbox-open')) showNext(1);
+  });
+
+  window.addEventListener('scp:i18n-updated', () => {
+    render();
+    if (modal && modal.style.display === 'block' && modalDetails) {
+      queueDynamicTranslate(modalDetails);
+    }
   });
 });

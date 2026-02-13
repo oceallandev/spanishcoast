@@ -1,15 +1,70 @@
 // Render Businesses/Vehicles catalogs without loading the heavy property app.
 (() => {
+  const formatTemplate = (value, vars) => {
+    const text = value == null ? '' : String(value);
+    if (!vars || typeof vars !== 'object') return text;
+    return text.replace(/\{(\w+)\}/g, (match, key) => (
+      Object.prototype.hasOwnProperty.call(vars, key) ? String(vars[key]) : match
+    ));
+  };
+
   const t = (key, fallback, vars) => {
+    const k = String(key || '');
     try {
       if (window.SCP_I18N && typeof window.SCP_I18N.t === 'function') {
-        return window.SCP_I18N.t(key, vars);
+        const translated = window.SCP_I18N.t(k, vars);
+        if (translated != null) {
+          const out = String(translated);
+          if (out && out !== k) return out;
+        }
       }
     } catch {
       // ignore
     }
-    if (fallback !== undefined) return String(fallback);
-    return String(key || '');
+    if (fallback !== undefined) return formatTemplate(fallback, vars);
+    return k;
+  };
+
+  let dynamicTranslateTimer = null;
+  let dynamicTranslateBusy = false;
+  const dynamicTranslateRoots = new Set();
+
+  const flushDynamicTranslateQueue = async () => {
+    if (dynamicTranslateBusy) return;
+    dynamicTranslateBusy = true;
+    if (dynamicTranslateTimer) {
+      clearTimeout(dynamicTranslateTimer);
+      dynamicTranslateTimer = null;
+    }
+    try {
+      const i18n = window.SCP_I18N;
+      if (!i18n || typeof i18n.translateDynamicDom !== 'function') return;
+      const roots = Array.from(dynamicTranslateRoots);
+      dynamicTranslateRoots.clear();
+      for (let i = 0; i < roots.length; i += 1) {
+        const root = roots[i];
+        if (!root || !root.querySelectorAll) continue;
+        if (root !== document && !document.contains(root)) continue;
+        try {
+          // eslint-disable-next-line no-await-in-loop
+          await i18n.translateDynamicDom(root);
+        } catch {
+          // ignore
+        }
+      }
+    } finally {
+      dynamicTranslateBusy = false;
+      if (dynamicTranslateRoots.size) {
+        dynamicTranslateTimer = setTimeout(() => { flushDynamicTranslateQueue(); }, 50);
+      }
+    }
+  };
+
+  const queueDynamicTranslate = (root) => {
+    const target = root && root.querySelectorAll ? root : document;
+    dynamicTranslateRoots.add(target);
+    if (dynamicTranslateTimer || dynamicTranslateBusy) return;
+    dynamicTranslateTimer = setTimeout(() => { flushDynamicTranslateQueue(); }, 50);
   };
 
   const businessGrid = document.getElementById('business-grid');
@@ -63,7 +118,7 @@
     const n = Number(price);
     if (!Number.isFinite(n) || n <= 0) return '';
     if (currency !== 'EUR') return formatPrice(price, currency);
-    if (n >= 1_000_000) return `€${(n / 1_000_000).toFixed(1).replace(/\\.0$/, '')}M`;
+    if (n >= 1_000_000) return `€${(n / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
     if (n >= 10_000) return `€${Math.round(n / 1000)}k`;
     return `€${new Intl.NumberFormat('en-IE', { maximumFractionDigits: 0 }).format(n)}`;
   };
@@ -103,7 +158,7 @@
     })();
 
     return `
-      <article class="property-card business-card" data-href="${escAttr(href)}" tabindex="0" role="link" aria-label="Open ${escAttr(title)}">
+      <article class="property-card business-card" data-href="${escAttr(href)}" tabindex="0" role="link" aria-label="Open ${escAttr(title)}" data-i18n-dynamic-scope>
         <div class="card-img-wrapper">
           <img src="${esc(img)}" alt="${esc(title)}" loading="lazy" referrerpolicy="no-referrer"
             onerror="this.onerror=null;this.src='assets/placeholder.png'">
@@ -224,6 +279,9 @@
     }
   };
 
+  let rerenderBusinesses = null;
+  let rerenderVehicles = null;
+
   if (businessGrid) {
     let wiredBusinessCardClicks = false;
 
@@ -321,13 +379,18 @@
           t('catalog.businesses.none_meta', 'Try switching the filter to All.'),
           t('catalog.businesses.none_body', 'If you tell us your budget and preferred sector, we will shortlist the best opportunities.')
         );
+        businessGrid.setAttribute('data-i18n-dynamic-scope', '');
+        queueDynamicTranslate(businessGrid);
         updateBusinessMap([]);
         return;
       }
 
       businessGrid.innerHTML = filtered.map((b) => businessCard(b)).join('');
+      businessGrid.setAttribute('data-i18n-dynamic-scope', '');
+      queueDynamicTranslate(businessGrid);
       updateBusinessMap(filtered);
     };
+    rerenderBusinesses = renderBusinesses;
 
     if (businessKindFilter) {
       businessKindFilter.addEventListener('change', renderBusinesses);
@@ -376,5 +439,27 @@
         card(v.title || t('listing.vehicle', 'Vehicle'), v.category || 'Car / Boat', v.description || '')
       ).join('');
     }
+    vehicleGrid.setAttribute('data-i18n-dynamic-scope', '');
+    queueDynamicTranslate(vehicleGrid);
+    rerenderVehicles = () => {
+      if (vehicleItems.length === 0) {
+        vehicleGrid.innerHTML = card(
+          t('catalog.vehicles.soon_title', 'Vehicles coming soon'),
+          t('catalog.vehicles.soon_meta', 'Cars and boats for sale or rent.'),
+          t('catalog.vehicles.soon_body', 'Tell us what you need and we will source options and manage the process.')
+        );
+      } else {
+        vehicleGrid.innerHTML = vehicleItems.map((v) =>
+          card(v.title || t('listing.vehicle', 'Vehicle'), v.category || 'Car / Boat', v.description || '')
+        ).join('');
+      }
+      vehicleGrid.setAttribute('data-i18n-dynamic-scope', '');
+      queueDynamicTranslate(vehicleGrid);
+    };
   }
+
+  window.addEventListener('scp:i18n-updated', () => {
+    if (typeof rerenderBusinesses === 'function') rerenderBusinesses();
+    if (typeof rerenderVehicles === 'function') rerenderVehicles();
+  });
 })();

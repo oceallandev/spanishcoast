@@ -24,13 +24,28 @@
 
   const getClient = () => window.scpSupabase || null;
   const i18n = window.SCP_I18N || null;
+  const formatTemplate = (value, vars) => {
+    const text = value == null ? '' : String(value);
+    if (!vars || typeof vars !== 'object') return text;
+    return text.replace(/\{(\w+)\}/g, (match, key) => (
+      Object.prototype.hasOwnProperty.call(vars, key) ? String(vars[key]) : match
+    ));
+  };
+
   const t = (key, fallback, vars) => {
+    const k = String(key || '');
     try {
-      if (i18n && typeof i18n.t === 'function') return i18n.t(key, vars);
+      if (i18n && typeof i18n.t === 'function') {
+        const translated = i18n.t(k, vars);
+        if (translated != null) {
+          const out = String(translated);
+          if (out && out !== k) return out;
+        }
+      }
     } catch {
       // ignore
     }
-    return fallback == null ? String(key) : String(fallback);
+    return fallback == null ? k : formatTemplate(fallback, vars);
   };
 
   const escapeHtml = (value) => {
@@ -482,4 +497,3 @@
   window.addEventListener('scp:supabase:ready', () => refreshAuthState(), { once: true });
   window.setTimeout(refreshAuthState, 60);
 })();
-

@@ -8,6 +8,7 @@ import unicodedata
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 from urllib.error import URLError, HTTPError
+from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
 import xml.etree.ElementTree as ET
 
@@ -674,6 +675,95 @@ def write_outputs(out_js: str, out_json: str, data: dict):
         f.write(";\n")
 
 
+def _post_source_name(post: dict) -> str:
+    if not isinstance(post, dict):
+        return ""
+    sources = post.get("sources")
+    if not isinstance(sources, list) or not sources:
+        return ""
+    first = sources[0] if isinstance(sources[0], dict) else {}
+    return _safe_text(first.get("name") or "")
+
+
+def _post_source_host(post: dict) -> str:
+    if not isinstance(post, dict):
+        return ""
+    sources = post.get("sources")
+    if not isinstance(sources, list) or not sources:
+        return ""
+    first = sources[0] if isinstance(sources[0], dict) else {}
+    raw = _safe_text(first.get("url") or "")
+    if not raw:
+        return ""
+    try:
+        host = (urlsplit(raw).hostname or "").lower()
+        return host[4:] if host.startswith("www.") else host
+    except Exception:
+        return ""
+
+
+def _post_quality_score(post: dict) -> int:
+    if not isinstance(post, dict):
+        return 0
+    sections = post.get("sections")
+    tags = post.get("tags")
+    sources = post.get("sources")
+    excerpt = _safe_text(post.get("excerpt") or "")
+    cta = _safe_text(post.get("cta") or "")
+    return (
+        (len(sections) if isinstance(sections, list) else 0) * 30
+        + (len(sources) if isinstance(sources, list) else 0) * 10
+        + (len(tags) if isinstance(tags, list) else 0) * 4
+        + len(excerpt)
+        + len(cta)
+    )
+
+
+def _post_dedupe_signature(post: dict) -> str:
+    if not isinstance(post, dict):
+        return ""
+    title = _slugify(_safe_text(post.get("title") or ""))
+    if not title:
+        return ""
+    kind = _slugify(_safe_text(post.get("kind") or "news"))
+    lang = _slugify(_safe_text(post.get("lang") or ""))
+    source = _slugify(_post_source_name(post) or _post_source_host(post) or "")
+    day = _safe_text(post.get("publishedAt") or "")[:10]
+    return "|".join([kind, lang, title, source, day])
+
+
+def _dedupe_posts(posts: list) -> list:
+    if not isinstance(posts, list) or not posts:
+        return []
+    best_by_key = {}
+    order = []
+    seen_ids = set()
+
+    for p in posts:
+        if not isinstance(p, dict):
+            continue
+        post_id = _safe_text(p.get("id") or "")
+        if post_id:
+            if post_id in seen_ids:
+                continue
+            seen_ids.add(post_id)
+
+        key = _post_dedupe_signature(p)
+        if not key:
+            key = f"fallback|{post_id}|{_slugify(_safe_text(p.get('title') or ''))}|{_safe_text(p.get('publishedAt') or '')[:10]}"
+
+        existing = best_by_key.get(key)
+        if existing is None:
+            best_by_key[key] = p
+            order.append(key)
+            continue
+
+        if _post_quality_score(p) > _post_quality_score(existing):
+            best_by_key[key] = p
+
+    return [best_by_key[k] for k in order if k in best_by_key]
+
+
 def main():
     ap = argparse.ArgumentParser(description="Sync blog content from RSS + Google Trends into static files.")
     ap.add_argument("--sources", default="blog-sources.json", help="Path to blog-sources.json")
@@ -768,6 +858,7 @@ def main():
         merged.append(p)
     merged.sort(key=lambda p: str(p.get("publishedAt") or ""), reverse=True)
 
+    merged = _dedupe_posts(merged)
     merged = merged[: max(1, int(args.max_posts))]
 
     out = {
