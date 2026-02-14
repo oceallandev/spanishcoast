@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SCP Reset</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #030712;
+        --panel: rgba(255, 255, 255, 0.06);
+        --border: rgba(255, 255, 255, 0.12);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.72);
+        --accent: #19b6ff;
+        --danger: #ff4d4f;
+        --ok: #22c55e;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        background: radial-gradient(1200px 800px at 20% 10%, rgba(25, 182, 255, 0.22), transparent 60%),
+          radial-gradient(900px 600px at 85% 20%, rgba(34, 197, 94, 0.12), transparent 55%),
+          var(--bg);
+        color: var(--text);
+        font: 16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+        display: grid;
+        place-items: center;
+        padding: 18px;
+      }
+      .card {
+        width: min(860px, 100%);
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 18px;
+        box-shadow: 0 20px 70px rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(10px);
+      }
+      h1 {
+        margin: 0 0 8px 0;
+        font-size: 22px;
+        letter-spacing: -0.02em;
+      }
+      p {
+        margin: 8px 0;
+        color: var(--muted);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-top: 14px;
+      }
+      .btnrow {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+      button,
+      a.btn {
+        appearance: none;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text);
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-weight: 650;
+        letter-spacing: -0.01em;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      button.primary {
+        border-color: rgba(25, 182, 255, 0.35);
+        background: linear-gradient(180deg, rgba(25, 182, 255, 0.25), rgba(25, 182, 255, 0.12));
+      }
+      button.danger {
+        border-color: rgba(255, 77, 79, 0.35);
+        background: linear-gradient(180deg, rgba(255, 77, 79, 0.22), rgba(255, 77, 79, 0.1));
+      }
+      .status {
+        border: 1px dashed rgba(255, 255, 255, 0.18);
+        border-radius: 12px;
+        padding: 10px 12px;
+        color: var(--muted);
+        white-space: pre-wrap;
+        word-break: break-word;
+        min-height: 42px;
+      }
+      .badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 12px;
+        margin-left: 8px;
+      }
+      .ok {
+        color: var(--ok);
+      }
+      .bad {
+        color: var(--danger);
+      }
+      code {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+        padding: 2px 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <h1>
+        Reset SCP Offline Cache
+        <span class="badge" id="env-badge">checking…</span>
+      </h1>
+      <p>
+        Use this page if the app got stuck after a deploy (for example after GitHub Pages was temporarily private/public),
+        or if you see a generic <code>Script error</code> and the app doesn’t start.
+      </p>
+      <div class="grid">
+        <div class="status" id="status">Ready.</div>
+      </div>
+      <div class="btnrow">
+        <button class="primary" id="btn-reset" type="button">Clear cache + reset</button>
+        <button class="danger" id="btn-unreg" type="button">Unregister Service Worker only</button>
+        <a class="btn" id="btn-go" href="index.html">Go to app</a>
+      </div>
+      <p style="margin-top: 14px">
+        Tip: after resetting, sign in again on <code>Account</code>.
+      </p>
+    </main>
+
+    <script>
+      (function () {
+        const statusEl = document.getElementById('status');
+        const envBadge = document.getElementById('env-badge');
+        const btnGo = document.getElementById('btn-go');
+
+        const setStatus = (msg, tone) => {
+          statusEl.textContent = String(msg || '');
+          statusEl.classList.remove('ok', 'bad');
+          if (tone === 'ok') statusEl.classList.add('ok');
+          if (tone === 'bad') statusEl.classList.add('bad');
+        };
+
+        const params = new URLSearchParams(location.search);
+        const go = params.get('go') || 'index.html';
+        btnGo.href = go;
+
+        const hasSW = !!(navigator.serviceWorker && navigator.serviceWorker.getRegistrations);
+        envBadge.textContent = hasSW ? 'service worker detected' : 'no service worker';
+
+        async function unregisterAllServiceWorkers() {
+          if (!hasSW) return 0;
+          const regs = await navigator.serviceWorker.getRegistrations();
+          let count = 0;
+          for (const reg of regs) {
+            try {
+              const ok = await reg.unregister();
+              if (ok) count++;
+            } catch {
+              // ignore
+            }
+          }
+          return count;
+        }
+
+        async function clearAllCaches() {
+          if (!window.caches || !caches.keys) return 0;
+          const keys = await caches.keys();
+          let count = 0;
+          for (const k of keys) {
+            try {
+              const ok = await caches.delete(k);
+              if (ok) count++;
+            } catch {
+              // ignore
+            }
+          }
+          return count;
+        }
+
+        async function clearStorage() {
+          try {
+            // Keep it conservative; clear known app keys only.
+            const prefixes = ['scp_', 'SCP_', 'supabase.auth.', 'sb-', 'supabase-'];
+            const keys = [];
+            for (let i = 0; i < localStorage.length; i++) keys.push(localStorage.key(i));
+            keys.filter(Boolean).forEach((k) => {
+              const lk = String(k);
+              if (prefixes.some((p) => lk.startsWith(p))) localStorage.removeItem(lk);
+            });
+          } catch {
+            // ignore
+          }
+          try {
+            const prefixes = ['scp_', 'SCP_'];
+            const keys = [];
+            for (let i = 0; i < sessionStorage.length; i++) keys.push(sessionStorage.key(i));
+            keys.filter(Boolean).forEach((k) => {
+              const lk = String(k);
+              if (prefixes.some((p) => lk.startsWith(p))) sessionStorage.removeItem(lk);
+            });
+          } catch {
+            // ignore
+          }
+        }
+
+        async function fullReset() {
+          setStatus('Resetting…', '');
+          const unreg = await unregisterAllServiceWorkers();
+          const cachesCleared = await clearAllCaches();
+          await clearStorage();
+          setStatus(`Done.\n- Unregistered SW: ${unreg}\n- Cleared caches: ${cachesCleared}\n\nRedirecting to ${go}…`, 'ok');
+          setTimeout(() => location.assign(go), 900);
+        }
+
+        async function unregOnly() {
+          setStatus('Unregistering service workers…', '');
+          const unreg = await unregisterAllServiceWorkers();
+          setStatus(`Done.\n- Unregistered SW: ${unreg}\n\nNow reload the app.`, unreg ? 'ok' : '');
+        }
+
+        document.getElementById('btn-reset').addEventListener('click', () => {
+          fullReset().catch((e) => setStatus(`Reset failed: ${(e && e.message) ? e.message : String(e)}`, 'bad'));
+        });
+        document.getElementById('btn-unreg').addEventListener('click', () => {
+          unregOnly().catch((e) => setStatus(`Unregister failed: ${(e && e.message) ? e.message : String(e)}`, 'bad'));
+        });
+
+        if (params.get('auto') === '1') {
+          fullReset().catch(() => {});
+        }
+      })();
+    </script>
+  </body>
+</html>
+
