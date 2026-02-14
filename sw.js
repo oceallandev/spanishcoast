@@ -1,5 +1,5 @@
 /* Minimal same-origin service worker for instant repeat loads on mobile WebKit/Android. */
-const CACHE_NAME = 'scp-cache-20260213c';
+const CACHE_NAME = 'scp-cache-20260214b';
 
 const PRECACHE_PATHS = [
   './',
@@ -68,7 +68,7 @@ const PRECACHE_PATHS = [
   './inmovilla-listings.js?v=20260211d',
   './newbuilds-listings.js?v=20260213b',
   './brochure.js?v=20260213c',
-  './reel.js?v=20260212d',
+  './reel.js?v=20260214a',
   './tour.js?v=20260212d',
   './tour-data.js?v=20260212a',
   './blog.js?v=20260211l',
@@ -86,7 +86,7 @@ const PRECACHE_PATHS = [
   './admin-properties.js?v=20260211d',
   './admin-crm.js?v=20260211d',
   './admin-shop.js?v=20260212a',
-  './admin-scout.js?v=20260211d',
+  './admin-scout.js?v=20260214b',
   './street-scout.js?v=20260212a',
   './data.js?v=20260211d',
   './businesses-data.js?v=20260211d',

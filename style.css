@@ -4786,6 +4786,60 @@ body[data-section="properties"].map-open .map-section {
     background: rgba(2, 6, 23, 0.55);
 }
 
+.admin-thumb-btn {
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 14px;
+}
+
+.admin-thumb-btn:focus-visible {
+    outline: 2px solid rgba(56, 189, 248, 0.9);
+    outline-offset: 2px;
+}
+
+.admin-phone-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.admin-ocr-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 0.85rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(248, 250, 252, 0.94);
+    font-weight: 900;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    white-space: nowrap;
+}
+
+.admin-ocr-btn:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(14, 165, 233, 0.24);
+}
+
+.admin-ocr-btn:disabled {
+    opacity: 0.62;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.admin-ocr-hint {
+    margin-top: 0.35rem;
+    font-size: 0.78rem;
+}
+
 /* --- Admin CRM --- */
 .crm-table {
     table-layout: fixed;

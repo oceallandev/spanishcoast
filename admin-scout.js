@@ -12,6 +12,14 @@
     return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   };
 
+  const debounce = (fn, delayMs) => {
+    let t = 0;
+    return (...args) => {
+      try { window.clearTimeout(t); } catch { /* ignore */ }
+      t = window.setTimeout(() => fn(...args), Math.max(0, Number(delayMs) || 0));
+    };
+  };
+
   const toCsvCell = (v) => {
     const s = v == null ? '' : String(v);
     const q = s.replace(/"/g, '""');
@@ -47,6 +55,297 @@
   let lastRows = [];
   let realtimeChannel = null;
   let lastSeenNewest = '';
+
+  // --- Lightbox (photo preview) ---
+  let scoutLightbox = null;
+  let scoutLightboxImg = null;
+  let scoutLightboxCaption = null;
+  let scoutLightboxClose = null;
+  let scoutLightboxUrl = '';
+
+  function ensureLightbox() {
+    if (scoutLightbox && scoutLightboxImg) return;
+
+    scoutLightbox = document.createElement('div');
+    scoutLightbox.className = 'lightbox';
+    scoutLightbox.id = 'scout-lightbox';
+    scoutLightbox.setAttribute('role', 'dialog');
+    scoutLightbox.setAttribute('aria-modal', 'true');
+    scoutLightbox.setAttribute('aria-label', 'Street Scout photo preview');
+
+    scoutLightboxImg = document.createElement('img');
+    scoutLightboxImg.id = 'scout-lightbox-img';
+    scoutLightboxImg.alt = '';
+    scoutLightboxImg.loading = 'eager';
+    scoutLightboxImg.decoding = 'async';
+    scoutLightboxImg.referrerPolicy = 'no-referrer';
+
+    scoutLightboxCaption = document.createElement('div');
+    scoutLightboxCaption.className = 'lightbox-caption';
+    scoutLightboxCaption.id = 'scout-lightbox-caption';
+
+    scoutLightboxClose = document.createElement('button');
+    scoutLightboxClose.type = 'button';
+    scoutLightboxClose.className = 'close-lightbox';
+    scoutLightboxClose.setAttribute('aria-label', 'Close');
+    scoutLightboxClose.textContent = '×';
+
+    scoutLightbox.appendChild(scoutLightboxImg);
+    document.body.appendChild(scoutLightbox);
+    document.body.appendChild(scoutLightboxClose);
+    document.body.appendChild(scoutLightboxCaption);
+
+    const close = () => {
+      if (!scoutLightbox) return;
+      scoutLightbox.style.display = 'none';
+      document.body.classList.remove('lightbox-open');
+      scoutLightboxUrl = '';
+      if (scoutLightboxImg) scoutLightboxImg.src = '';
+      if (scoutLightboxCaption) scoutLightboxCaption.textContent = '';
+    };
+
+    scoutLightboxClose.addEventListener('click', close);
+    scoutLightbox.addEventListener('click', (event) => {
+      if (event.target === scoutLightbox) close();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && document.body.classList.contains('lightbox-open')) close();
+    });
+    scoutLightboxImg.addEventListener('click', () => {
+      if (!scoutLightboxUrl) return;
+      try { window.open(scoutLightboxUrl, '_blank', 'noopener'); } catch { /* ignore */ }
+    });
+  }
+
+  function openScoutPhoto(url, caption) {
+    const src = String(url || '').trim();
+    if (!src || src.includes('assets/placeholder.png')) {
+      setStatus('No photo available for this lead.');
+      return;
+    }
+    ensureLightbox();
+    if (!scoutLightbox || !scoutLightboxImg) return;
+    scoutLightboxUrl = src;
+    scoutLightboxImg.src = src;
+    scoutLightbox.style.display = 'flex';
+    document.body.classList.add('lightbox-open');
+    if (scoutLightboxCaption) {
+      scoutLightboxCaption.textContent = caption ? String(caption) : 'Tip: click the photo to open full-size in a new tab.';
+    }
+  }
+
+  // --- OCR (phone extraction) ---
+  let ocrReadyPromise = null;
+  let ocrWorker = null;
+  const scanningIds = new Set();
+
+  function ensureTesseract() {
+    if (window.Tesseract) return Promise.resolve(window.Tesseract);
+    if (ocrReadyPromise) return ocrReadyPromise;
+    ocrReadyPromise = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@4.1.1/dist/tesseract.min.js';
+      s.async = true;
+      s.onload = () => resolve(window.Tesseract);
+      s.onerror = () => reject(new Error('Failed to load OCR library'));
+      document.head.appendChild(s);
+    });
+    return ocrReadyPromise;
+  }
+
+  async function ensureOcrWorker({ onProgress } = {}) {
+    if (ocrWorker) return ocrWorker;
+    const Tesseract = await ensureTesseract();
+    if (!Tesseract || typeof Tesseract.createWorker !== 'function') {
+      throw new Error('OCR library unavailable');
+    }
+    ocrWorker = Tesseract.createWorker({
+      logger: (m) => {
+        if (!m || !onProgress) return;
+        try { onProgress(m); } catch { /* ignore */ }
+      }
+    });
+    await ocrWorker.load();
+    await ocrWorker.loadLanguage('eng');
+    await ocrWorker.initialize('eng');
+    try {
+      await ocrWorker.setParameters({
+        tessedit_char_whitelist: '0123456789+() -./',
+        preserve_interword_spaces: '1'
+      });
+    } catch {
+      // Not critical; keep defaults.
+    }
+    return ocrWorker;
+  }
+
+  async function fetchAsBlobUrl(url) {
+    const res = await fetch(url, { mode: 'cors', cache: 'no-store' });
+    if (!res.ok) throw new Error(`Image fetch failed (${res.status})`);
+    const blob = await res.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    return { blobUrl, revoke: () => URL.revokeObjectURL(blobUrl) };
+  }
+
+  async function loadImage(src) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error('Failed to load image'));
+      img.decoding = 'async';
+      img.referrerPolicy = 'no-referrer';
+      img.src = src;
+    });
+  }
+
+  function preprocessForOcr(img) {
+    const maxW = 1600;
+    const w0 = img.naturalWidth || img.width || 1;
+    const h0 = img.naturalHeight || img.height || 1;
+    const scale = Math.min(1, maxW / w0);
+    const w = Math.max(1, Math.round(w0 * scale));
+    const h = Math.max(1, Math.round(h0 * scale));
+    const canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    if (!ctx) return canvas;
+    ctx.drawImage(img, 0, 0, w, h);
+    try {
+      const imgData = ctx.getImageData(0, 0, w, h);
+      const d = imgData.data;
+      const contrast = 1.18;
+      for (let i = 0; i < d.length; i += 4) {
+        const r = d[i];
+        const g = d[i + 1];
+        const b = d[i + 2];
+        let y = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        y = (y - 128) * contrast + 128;
+        y = Math.max(0, Math.min(255, y));
+        d[i] = y;
+        d[i + 1] = y;
+        d[i + 2] = y;
+      }
+      ctx.putImageData(imgData, 0, 0);
+    } catch {
+      // Ignore preprocessing errors; OCR can still run on the raw canvas.
+    }
+    return canvas;
+  }
+
+  function uniq(arr) {
+    const seen = new Set();
+    return arr.filter((v) => {
+      const key = String(v || '').trim();
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+
+  function normalizePhoneCandidate(raw) {
+    let s = String(raw || '').trim();
+    if (!s) return '';
+    s = s.replace(/[^\d+]/g, '');
+    if (s.startsWith('00')) s = `+${s.slice(2)}`;
+    if (s.includes('+')) {
+      s = s[0] === '+' ? `+${s.slice(1).replace(/\+/g, '')}` : s.replace(/\+/g, '');
+    }
+    const digits = s.replace(/\D/g, '');
+    if (!s.startsWith('+') && digits.startsWith('34') && digits.length === 11) s = `+${digits}`;
+    if (!s.startsWith('+') && digits.length === 9) s = `+34${digits}`;
+    return s;
+  }
+
+  function scorePhoneCandidate(phone) {
+    const s = String(phone || '');
+    const digits = s.replace(/\D/g, '');
+    let score = digits.length;
+    if (s.startsWith('+34')) score += 10;
+    if (digits.length === 11 && digits.startsWith('34')) score += 8;
+    if (digits.length === 9 && /^[6789]/.test(digits)) score += 6;
+    return score;
+  }
+
+  function extractPhoneCandidates(text) {
+    const t = String(text || '').replace(/[\u200B-\u200D\uFEFF]/g, '');
+    const matches = t.match(/(?:\+|00)?\s*\d[\d\s().\-\/]{6,}\d/g) || [];
+    const cleaned = matches.map((m) => normalizePhoneCandidate(m)).filter(Boolean);
+    const filtered = cleaned.filter((c) => {
+      const digits = c.replace(/\D/g, '');
+      return digits.length >= 8 && digits.length <= 15;
+    });
+    const unique = uniq(filtered);
+    unique.sort((a, b) => scorePhoneCandidate(b) - scorePhoneCandidate(a));
+    return unique;
+  }
+
+  async function scanPhoneFromRow(rowEl) {
+    const id = rowEl ? rowEl.getAttribute('data-id') : '';
+    if (!id) return;
+    if (scanningIds.has(id)) return;
+    const btn = rowEl.querySelector('button[data-action="scan-phone"]');
+    const hint = rowEl.querySelector('[data-role="phone-hint"]');
+    const phoneInput = rowEl.querySelector('[data-field="phone"]');
+    const photoUrl = String(rowEl.getAttribute('data-photo-url') || '').trim();
+    if (!photoUrl) {
+      setStatus('No photo URL to scan.');
+      return;
+    }
+
+    const updateHintProgress = debounce((text) => {
+      if (hint) hint.textContent = text || '';
+    }, 120);
+
+    scanningIds.add(id);
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Scanning…';
+    }
+    if (hint) hint.textContent = 'Scanning photo for phone number…';
+    setStatus('OCR: preparing…');
+
+    let revoke = null;
+    try {
+      const worker = await ensureOcrWorker({
+        onProgress: (m) => {
+          if (!m || m.status !== 'recognizing text') return;
+          const p = Math.round((Number(m.progress) || 0) * 100);
+          if (p > 0) updateHintProgress(`Scanning… ${p}%`);
+        }
+      });
+
+      const blob = await fetchAsBlobUrl(photoUrl);
+      revoke = blob.revoke;
+      const img = await loadImage(blob.blobUrl);
+      const canvas = preprocessForOcr(img);
+      const result = await worker.recognize(canvas);
+      const text = result && result.data && result.data.text ? String(result.data.text) : '';
+
+      const candidates = extractPhoneCandidates(text);
+      if (!candidates.length) {
+        if (hint) hint.textContent = 'No phone detected. Open the photo and enter it manually.';
+        setStatus('OCR finished: no phone detected.');
+        return;
+      }
+
+      const best = candidates[0];
+      if (phoneInput) phoneInput.value = best;
+      if (hint) hint.textContent = candidates.length > 1 ? `Detected: ${candidates.join('  •  ')}` : `Detected: ${best}`;
+      setStatus(`OCR finished: detected ${best} (please verify).`);
+    } catch (err) {
+      const msg = err && err.message ? String(err.message) : 'Unknown error';
+      if (hint) hint.textContent = 'OCR failed. Open the photo and enter the phone manually.';
+      setStatus(`OCR failed: ${msg}`);
+    } finally {
+      try { if (revoke) revoke(); } catch { /* ignore */ }
+      scanningIds.delete(id);
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = 'Scan';
+      }
+    }
+  }
 
   async function loadRows({ silent = false } = {}) {
     const client = getClient();
@@ -130,8 +429,8 @@
       }).join('');
 
       return `
-        <tr data-id="${escape(row.id)}">
-          <td>${imgTag}</td>
+        <tr data-id="${escape(row.id)}" data-photo-url="${escape(row._photoUrl || '')}">
+          <td><button class="admin-thumb-btn" type="button" data-action="open-photo" aria-label="Open photo">${imgTag}</button></td>
           <td>${escape(time)}</td>
           <td>${escape(row.user_email || '')}</td>
           <td>
@@ -144,7 +443,13 @@
             <input class="admin-input" data-field="commission_eur" style="min-width:120px" value="${escape(row.commission_eur != null ? row.commission_eur : '')}" aria-label="Commission">
           </td>
           <td>${locLink}</td>
-          <td><input class="admin-input" data-field="phone" style="min-width:150px" value="${escape(row.phone || '')}" aria-label="Phone"></td>
+          <td>
+            <div class="admin-phone-row">
+              <input class="admin-input" data-field="phone" style="min-width:150px" value="${escape(row.phone || '')}" aria-label="Phone">
+              <button class="admin-ocr-btn" type="button" data-action="scan-phone">Scan</button>
+            </div>
+            <div class="muted admin-ocr-hint" data-role="phone-hint"></div>
+          </td>
           <td><input class="admin-input" data-field="scp_ref" style="min-width:140px" value="${escape(row.scp_ref || '')}" aria-label="SCP ref"></td>
           <td><span class="muted" title="${escape(scoutNotes)}">${escape(scoutNotesShort)}</span></td>
           <td><input class="admin-input" data-field="admin_notes" style="min-width:240px" value="${escape(row.admin_notes || '')}" aria-label="Admin notes"></td>
@@ -301,6 +606,12 @@
       const action = btn.getAttribute('data-action') || '';
       const row = btn.closest('tr');
       if (!row) return;
+      if (action === 'open-photo') {
+        const id = row.getAttribute('data-id') || '';
+        const url = row.getAttribute('data-photo-url') || '';
+        openScoutPhoto(url, id ? `Lead ${id} (click photo to open full-size)` : '');
+      }
+      if (action === 'scan-phone') scanPhoneFromRow(row);
       if (action === 'save') saveRow(row);
       if (action === 'mark-paid') markPaid(row);
     });

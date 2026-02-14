@@ -32,6 +32,9 @@
     title: $('reel-title'),
     meta: $('reel-meta'),
     status: $('reel-status'),
+    duration: $('reel-duration'),
+    audio: $('reel-audio'),
+    overlayCaption: $('reel-overlay-caption'),
     canvas: $('reel-canvas'),
     overlay: $('reel-canvas-overlay'),
     previewSub: $('reel-preview-sub'),
@@ -418,9 +421,8 @@
       return Math.max(6, Math.min(30, Math.round(Number(durationOverride))));
     }
     const imageCount = imageUrlsFor(listing).length;
-    if (imageCount >= 14) return 12;
-    if (imageCount >= 9) return 11;
-    if (imageCount >= 6) return 10;
+    if (imageCount >= 14) return 15;
+    if (imageCount >= 9) return 12;
     return 9;
   };
 
@@ -432,8 +434,10 @@
     const tags = `${normalize(listing && listing.description)} ${normalize(Array.isArray(listing && listing.features) ? listing.features.join(' ') : '')}`;
     if (type.includes('business') || mode === 'business' || mode === 'traspaso') return 'corporate';
     if (type.includes('villa') || type.includes('luxury') || tags.includes('sea view')) return 'cinematic';
-    if (mode === 'rent' || type.includes('apartment')) return 'chill';
-    return 'ambient';
+    if (type.includes('plot') || type.includes('land')) return 'ambient';
+    if (mode === 'rent') return 'chill';
+    if (type.includes('apartment')) return 'lofi';
+    return 'sunset';
   };
 
   const createOptions = ({ listing = null, durationOverride = NaN, audioOverride = '', captionsOverride = '' } = {}) => {
@@ -596,6 +600,114 @@
     });
   };
 
+  const semiRatio = (semitones) => {
+    const n = Number(semitones);
+    if (!Number.isFinite(n)) return 1;
+    return Math.pow(2, n / 12);
+  };
+
+  const createNoiseBuffer = (ctx, seconds = 1) => {
+    try {
+      const sr = Number(ctx && ctx.sampleRate) || 44100;
+      const len = Math.max(1, Math.floor(sr * Math.max(0.25, Number(seconds) || 1)));
+      const buf = ctx.createBuffer(1, len, sr);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < len; i += 1) {
+        data[i] = (Math.random() * 2 - 1) * 0.9;
+      }
+      return buf;
+    } catch {
+      return null;
+    }
+  };
+
+  const scheduleNoiseHit = (ctx, output, noiseBuffer, {
+    time = 0,
+    duration = 0.12,
+    gain = 0.08,
+    filterType = 'highpass',
+    filterFreq = 6500,
+    filterQ = 0.7,
+    attack = 0.002,
+    release = 0.08
+  } = {}) => {
+    if (!noiseBuffer) return;
+    try {
+      const src = ctx.createBufferSource();
+      src.buffer = noiseBuffer;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = filterType;
+      filter.frequency.setValueAtTime(Math.max(40, Number(filterFreq) || 40), time);
+      filter.Q.setValueAtTime(Math.max(0.0001, Number(filterQ) || 0.0001), time);
+
+      const amp = ctx.createGain();
+      amp.gain.setValueAtTime(0.00001, time);
+      amp.gain.linearRampToValueAtTime(Math.max(0.00001, gain), time + Math.max(0.001, attack));
+      amp.gain.linearRampToValueAtTime(0.00001, time + Math.max(0.02, duration - Math.max(0.01, release)));
+
+      src.connect(filter);
+      filter.connect(amp);
+      amp.connect(output);
+
+      src.start(time);
+      src.stop(time + Math.max(0.05, duration));
+    } catch {
+      // ignore
+    }
+  };
+
+  const scheduleKick = (ctx, output, {
+    time = 0,
+    duration = 0.24,
+    gain = 0.16,
+    pitch = 140,
+    pitchEnd = 48
+  } = {}) => {
+    try {
+      const osc = ctx.createOscillator();
+      osc.type = 'sine';
+      const amp = ctx.createGain();
+      amp.gain.setValueAtTime(0.00001, time);
+      amp.gain.exponentialRampToValueAtTime(Math.max(0.00001, gain), time + 0.008);
+      amp.gain.exponentialRampToValueAtTime(0.00001, time + Math.max(0.08, duration));
+
+      osc.frequency.setValueAtTime(Math.max(40, Number(pitch) || 80), time);
+      osc.frequency.exponentialRampToValueAtTime(Math.max(35, Number(pitchEnd) || 45), time + Math.max(0.06, duration * 0.75));
+
+      osc.connect(amp);
+      amp.connect(output);
+      osc.start(time);
+      osc.stop(time + Math.max(0.08, duration) + 0.05);
+    } catch {
+      // ignore
+    }
+  };
+
+  const scheduleClap = (ctx, output, noiseBuffer, time, gain = 0.09) => {
+    scheduleNoiseHit(ctx, output, noiseBuffer, {
+      time,
+      duration: 0.16,
+      gain,
+      filterType: 'bandpass',
+      filterFreq: 1800,
+      filterQ: 0.9,
+      attack: 0.002,
+      release: 0.12
+    });
+    // A short second hit gives a more natural clap feel.
+    scheduleNoiseHit(ctx, output, noiseBuffer, {
+      time: time + 0.028,
+      duration: 0.12,
+      gain: gain * 0.55,
+      filterType: 'bandpass',
+      filterFreq: 2100,
+      filterQ: 0.9,
+      attack: 0.002,
+      release: 0.1
+    });
+  };
+
   const primeMusicContext = async () => {
     const Ctx = window.AudioContext || window.webkitAudioContext;
     if (!Ctx) return null;
@@ -652,28 +764,84 @@
     }
 
     const output = ctx.createMediaStreamDestination();
+
+    // Master bus + light mastering chain so the synth doesn't sound harsh/cheap.
     const master = ctx.createGain();
+    const compressor = ctx.createDynamicsCompressor();
+    const hp = ctx.createBiquadFilter();
+    const lp = ctx.createBiquadFilter();
     const masterGainByMode = {
-      ambient: 0.82,
-      upbeat: 0.96,
-      chill: 0.78,
-      cinematic: 0.88,
-      tropical: 0.94,
-      house: 0.96,
-      lofi: 0.76,
-      piano: 0.82,
-      sunset: 0.84,
-      corporate: 0.9
+      ambient: 0.78,
+      upbeat: 0.82,
+      chill: 0.74,
+      cinematic: 0.84,
+      tropical: 0.8,
+      house: 0.85,
+      lofi: 0.72,
+      piano: 0.78,
+      sunset: 0.8,
+      corporate: 0.8
     };
-    master.gain.value = masterGainByMode[mode] || 0.84;
-    master.connect(output);
+    master.gain.value = masterGainByMode[mode] || 0.78;
+
+    try {
+      compressor.threshold.value = -24;
+      compressor.knee.value = 22;
+      compressor.ratio.value = 10;
+      compressor.attack.value = 0.004;
+      compressor.release.value = 0.22;
+    } catch {
+      // ignore
+    }
+
+    hp.type = 'highpass';
+    hp.frequency.value = 28;
+    hp.Q.value = 0.7;
+
+    lp.type = 'lowpass';
+    lp.frequency.value = (mode === 'house' || mode === 'upbeat') ? 15000 : 12000;
+    lp.Q.value = 0.75;
+
+    master.connect(compressor);
+    compressor.connect(hp);
+    hp.connect(lp);
+    lp.connect(output);
+
+    // Subtle delay for depth (kept conservative to avoid muddy exports).
+    const noiseBuffer = createNoiseBuffer(ctx, 1.1);
+    let monitorTap = lp;
+    try {
+      const delay = ctx.createDelay(0.5);
+      delay.delayTime.value = mode === 'cinematic' ? 0.26 : 0.18;
+      const feedback = ctx.createGain();
+      feedback.gain.value = mode === 'house' ? 0.18 : 0.22;
+      const delayLP = ctx.createBiquadFilter();
+      delayLP.type = 'lowpass';
+      delayLP.frequency.value = 5200;
+      delayLP.Q.value = 0.7;
+      const wet = ctx.createGain();
+      wet.gain.value = mode === 'cinematic' ? 0.16 : 0.11;
+      const send = ctx.createGain();
+      send.gain.value = mode === 'house' ? 0.06 : 0.08;
+
+      delay.connect(feedback);
+      feedback.connect(delay);
+      delay.connect(delayLP);
+      delayLP.connect(wet);
+      wet.connect(compressor);
+
+      master.connect(send);
+      send.connect(delay);
+    } catch {
+      // ignore (delay nodes not available)
+    }
 
     // Keep the graph "alive" on mobile Safari while keeping playback silent for the user.
     let monitor = null;
     try {
       monitor = ctx.createGain();
       monitor.gain.value = 0.00001;
-      master.connect(monitor);
+      monitorTap.connect(monitor);
       monitor.connect(ctx.destination);
     } catch {
       // ignore
@@ -681,417 +849,676 @@
 
     const start = ctx.currentTime + 0.02;
     const end = start + Math.max(2, Number(durationSec) || 9);
+    const MAJ = [1, semiRatio(4), semiRatio(7), 2];
+    const MIN = [1, semiRatio(3), semiRatio(7), 2];
+    const FIFTH = semiRatio(7);
     switch (mode) {
       case 'ambient': {
-        const progression = [196, 220, 247, 262, 247, 220];
+        const chords = [
+          { root: 130.81, intervals: MAJ }, // C
+          { root: 110.0, intervals: MIN }, // Am
+          { root: 87.31, intervals: MAJ }, // F
+          { root: 98.0, intervals: MAJ } // G
+        ];
         let tSec = start;
         let idx = 0;
-        while (tSec < end - 0.2) {
-          scheduleTone(ctx, master, {
-            time: tSec,
-            duration: 1.1,
-            frequency: progression[idx % progression.length],
-            type: 'sine',
-            gain: 0.05,
-            attack: 0.05,
-            release: 0.24
-          });
-          scheduleTone(ctx, master, {
-            time: tSec + 0.06,
-            duration: 0.75,
-            frequency: progression[idx % progression.length] * 2,
-            type: 'triangle',
-            gain: 0.022,
-            attack: 0.03,
-            release: 0.18
-          });
-          idx += 1;
-          tSec += 0.96;
-        }
-        break;
-      }
-      case 'upbeat': {
-        const melody = [220, 247, 262, 294, 330, 294, 262, 247];
-        let tSec = start;
-        let step = 0;
-        while (tSec < end - 0.15) {
-          scheduleTone(ctx, master, {
-            time: tSec,
-            duration: 0.19,
-            frequency: melody[step % melody.length],
-            type: 'square',
-            gain: 0.038,
-            attack: 0.01,
-            release: 0.08
-          });
-          if (step % 2 === 0) {
-            scheduleTone(ctx, master, {
-              time: tSec,
-              duration: 0.3,
-              frequency: melody[step % melody.length] / 2,
-              type: 'triangle',
-              gain: 0.018,
-              attack: 0.01,
-              release: 0.14
-            });
-          }
-          step += 1;
-          tSec += 0.32;
-        }
-        break;
-      }
-      case 'chill': {
-        const roots = [174.61, 196, 220, 246.94];
-        let tSec = start;
-        let idx = 0;
-        while (tSec < end - 0.18) {
-          const root = roots[idx % roots.length];
+        while (tSec < end - 0.35) {
+          const chord = chords[idx % chords.length];
           scheduleChord(ctx, master, {
             time: tSec,
-            duration: 0.86,
-            root,
-            intervals: [1, 1.25, 1.5],
-            type: 'triangle',
-            gain: 0.038,
-            attack: 0.05,
-            release: 0.24
-          });
-          scheduleTone(ctx, master, {
-            time: tSec + 0.04,
-            duration: 0.82,
-            frequency: root / 2,
-            type: 'sine',
-            gain: 0.018,
-            attack: 0.02,
-            release: 0.2
-          });
-          if (idx % 2 === 0) {
-            scheduleTone(ctx, master, {
-              time: tSec + 0.48,
-              duration: 0.18,
-              frequency: root * 2,
-              type: 'sine',
-              gain: 0.012,
-              attack: 0.01,
-              release: 0.1
-            });
-          }
-          idx += 1;
-          tSec += 0.84;
-        }
-        break;
-      }
-      case 'cinematic': {
-        const roots = [110, 123.47, 146.83, 164.81, 146.83, 123.47];
-        let tSec = start;
-        let idx = 0;
-        while (tSec < end - 0.2) {
-          const root = roots[idx % roots.length];
-          scheduleChord(ctx, master, {
-            time: tSec,
-            duration: 1.25,
-            root,
-            intervals: [1, 1.5, 2],
+            duration: 2.15,
+            root: chord.root,
+            intervals: chord.intervals,
             type: 'sawtooth',
-            gain: 0.028,
-            attack: 0.2,
-            release: 0.42
+            gain: 0.016,
+            attack: 0.22,
+            release: 0.85
           });
-          scheduleTone(ctx, master, {
-            time: tSec + 0.02,
-            duration: 1.0,
-            frequency: root / 2,
-            type: 'sine',
-            gain: 0.02,
-            attack: 0.11,
-            release: 0.28
-          });
-          if (idx % 2 === 0) {
-            scheduleTone(ctx, master, {
-              time: tSec + 0.56,
-              duration: 0.42,
-              frequency: root * 2.5,
-              type: 'triangle',
-              gain: 0.011,
-              attack: 0.08,
-              release: 0.2
-            });
-          }
-          idx += 1;
-          tSec += 1.05;
-        }
-        break;
-      }
-      case 'tropical': {
-        const melody = [329.63, 392, 440, 523.25, 440, 392, 349.23, 392];
-        const bass = [98, 110, 123.47, 110];
-        let tSec = start;
-        let step = 0;
-        while (tSec < end - 0.12) {
-          const lead = melody[step % melody.length];
-          scheduleTone(ctx, master, {
-            time: tSec,
-            duration: 0.17,
-            frequency: lead,
-            type: 'triangle',
-            gain: 0.03,
-            attack: 0.01,
-            release: 0.08
-          });
-          if (step % 2 === 0) {
-            scheduleTone(ctx, master, {
-              time: tSec,
-              duration: 0.22,
-              frequency: bass[Math.floor(step / 2) % bass.length],
-              type: 'sine',
-              gain: 0.018,
-              attack: 0.008,
-              release: 0.12
-            });
-          }
-          if (step % 4 === 2) {
-            scheduleTone(ctx, master, {
-              time: tSec + 0.14,
-              duration: 0.1,
-              frequency: lead * 0.5,
-              type: 'square',
-              gain: 0.012,
-              attack: 0.005,
-              release: 0.06
-            });
-          }
-          step += 1;
-          tSec += 0.28;
-        }
-        break;
-      }
-      case 'house': {
-        const bassline = [110, 110, 123.47, 98, 110, 123.47, 130.81, 123.47];
-        const beat = 60 / 126;
-        let tSec = start;
-        let beatIdx = 0;
-        while (tSec < end - 0.08) {
-          scheduleTone(ctx, master, {
-            time: tSec,
-            duration: 0.12,
-            frequency: 52,
-            type: 'sine',
-            gain: 0.06,
-            attack: 0.004,
-            release: 0.09
-          });
-          scheduleTone(ctx, master, {
-            time: tSec,
-            duration: 0.28,
-            frequency: bassline[beatIdx % bassline.length],
-            type: 'triangle',
-            gain: 0.022,
-            attack: 0.01,
-            release: 0.16
-          });
-          if (beatIdx % 2 === 1) {
-            scheduleTone(ctx, master, {
-              time: tSec + beat * 0.52,
-              duration: 0.08,
-              frequency: 800,
-              type: 'square',
-              gain: 0.011,
-              attack: 0.002,
-              release: 0.05
-            });
-          }
-          if (beatIdx % 4 === 0) {
-            scheduleTone(ctx, master, {
-              time: tSec + beat * 0.24,
-              duration: 0.16,
-              frequency: 440,
-              type: 'sawtooth',
-              gain: 0.015,
-              attack: 0.01,
-              release: 0.09
-            });
-          }
-          beatIdx += 1;
-          tSec += beat;
-        }
-        break;
-      }
-      case 'lofi': {
-        const roots = [196, 174.61, 146.83, 164.81];
-        let tSec = start;
-        let idx = 0;
-        while (tSec < end - 0.2) {
-          const root = roots[idx % roots.length];
           scheduleChord(ctx, master, {
-            time: tSec,
-            duration: 0.72,
-            root,
-            intervals: [1, 1.2, 1.5],
-            type: 'triangle',
-            gain: 0.028,
-            attack: 0.03,
-            release: 0.2
-          });
-          scheduleTone(ctx, master, {
             time: tSec + 0.02,
-            duration: 0.88,
-            frequency: root / 2,
-            type: 'sine',
-            gain: 0.017,
-            attack: 0.02,
-            release: 0.28
-          });
-          scheduleTone(ctx, master, {
-            time: tSec + 0.46,
-            duration: 0.06,
-            frequency: 520,
+            duration: 2.1,
+            root: chord.root * 2,
+            intervals: chord.intervals,
             type: 'triangle',
-            gain: 0.006,
-            attack: 0.002,
-            release: 0.04
+            gain: 0.0085,
+            attack: 0.12,
+            release: 0.75
           });
-          idx += 1;
-          tSec += 0.92;
-        }
-        break;
-      }
-      case 'piano': {
-        const notes = [261.63, 329.63, 392, 523.25, 392, 329.63, 293.66, 349.23];
-        let tSec = start;
-        let idx = 0;
-        while (tSec < end - 0.1) {
-          const note = notes[idx % notes.length];
           scheduleTone(ctx, master, {
             time: tSec,
-            duration: 0.3,
-            frequency: note,
-            type: 'triangle',
-            gain: 0.028,
-            attack: 0.005,
-            release: 0.18
-          });
-          scheduleTone(ctx, master, {
-            time: tSec + 0.01,
-            duration: 0.34,
-            frequency: note * 2,
+            duration: 2.2,
+            frequency: chord.root / 2,
             type: 'sine',
-            gain: 0.008,
-            attack: 0.004,
-            release: 0.16
+            gain: 0.011,
+            attack: 0.3,
+            release: 0.95
           });
           if (idx % 2 === 0) {
             scheduleTone(ctx, master, {
-              time: tSec,
-              duration: 0.44,
-              frequency: note / 2,
-              type: 'sine',
-              gain: 0.013,
+              time: tSec + 1.0,
+              duration: 0.26,
+              frequency: chord.root * 4,
+              type: 'triangle',
+              gain: 0.004,
               attack: 0.01,
-              release: 0.22
+              release: 0.18
             });
           }
           idx += 1;
-          tSec += 0.38;
+          tSec += 2.25;
         }
         break;
       }
       case 'sunset': {
-        const melody = [220, 246.94, 277.18, 329.63, 277.18, 246.94, 220, 196];
+        const bpm = 92;
+        const beat = 60 / bpm;
+        const bar = beat * 4;
+        const chords = [
+          { root: 130.81, intervals: MAJ }, // C
+          { root: 110.0, intervals: MIN }, // Am
+          { root: 87.31, intervals: MAJ }, // F
+          { root: 98.0, intervals: MAJ } // G
+        ];
+        const lead = [329.63, 392, 440, 392, 349.23, 392, 329.63, 293.66];
         let tSec = start;
-        let step = 0;
-        while (tSec < end - 0.12) {
-          const note = melody[step % melody.length];
+        let barIdx = 0;
+        while (tSec < end - 0.25) {
+          const chord = chords[barIdx % chords.length];
+
+          scheduleChord(ctx, master, {
+            time: tSec,
+            duration: bar * 1.15,
+            root: chord.root,
+            intervals: chord.intervals,
+            type: 'triangle',
+            gain: 0.017,
+            attack: 0.08,
+            release: 0.55
+          });
+
           scheduleTone(ctx, master, {
             time: tSec,
-            duration: 0.42,
-            frequency: note,
+            duration: beat * 0.95,
+            frequency: chord.root,
             type: 'sine',
-            gain: 0.027,
-            attack: 0.02,
-            release: 0.2
+            gain: 0.028,
+            attack: 0.01,
+            release: 0.18
           });
           scheduleTone(ctx, master, {
-            time: tSec + 0.06,
-            duration: 0.3,
-            frequency: note * 1.5,
+            time: tSec + beat * 2,
+            duration: beat * 0.95,
+            frequency: chord.root * FIFTH,
+            type: 'sine',
+            gain: 0.024,
+            attack: 0.01,
+            release: 0.18
+          });
+
+          for (let step = 0; step < 8; step += 1) {
+            const tt = tSec + step * (beat / 2);
+            scheduleNoiseHit(ctx, master, noiseBuffer, {
+              time: tt,
+              duration: 0.05,
+              gain: step % 2 === 0 ? 0.018 : 0.012,
+              filterType: 'highpass',
+              filterFreq: 7000,
+              filterQ: 0.6,
+              attack: 0.001,
+              release: 0.03
+            });
+
+            if (step === 0 || step === 4) {
+              scheduleKick(ctx, master, { time: tt, gain: 0.145, pitch: 135, pitchEnd: 52, duration: 0.22 });
+            }
+            if (step === 2 || step === 6) {
+              scheduleClap(ctx, master, noiseBuffer, tt, 0.08);
+            }
+            if (step % 2 === 1) {
+              const note = lead[(barIdx * 4 + step) % lead.length];
+              scheduleTone(ctx, master, {
+                time: tt + 0.01,
+                duration: 0.18,
+                frequency: note,
+                type: 'triangle',
+                gain: 0.018,
+                attack: 0.01,
+                release: 0.12
+              });
+              scheduleTone(ctx, master, {
+                time: tt + 0.012,
+                duration: 0.16,
+                frequency: note * 2,
+                type: 'sine',
+                gain: 0.004,
+                attack: 0.008,
+                release: 0.1
+              });
+            }
+          }
+
+          barIdx += 1;
+          tSec += bar;
+        }
+        break;
+      }
+      case 'chill': {
+        const bpm = 80;
+        const beat = 60 / bpm;
+        const bar = beat * 4;
+        const chords = [
+          { root: 130.81, intervals: MAJ },
+          { root: 110.0, intervals: MIN },
+          { root: 87.31, intervals: MAJ },
+          { root: 98.0, intervals: MAJ }
+        ];
+        let tSec = start;
+        let barIdx = 0;
+        while (tSec < end - 0.25) {
+          const chord = chords[barIdx % chords.length];
+          scheduleChord(ctx, master, {
+            time: tSec,
+            duration: bar * 1.2,
+            root: chord.root,
+            intervals: chord.intervals,
             type: 'triangle',
-            gain: 0.012,
-            attack: 0.014,
+            gain: 0.018,
+            attack: 0.12,
+            release: 0.7
+          });
+          for (let step = 0; step < 8; step += 1) {
+            const tt = tSec + step * (beat / 2);
+            if (step % 2 === 0) {
+              scheduleNoiseHit(ctx, master, noiseBuffer, {
+                time: tt,
+                duration: 0.06,
+                gain: 0.012,
+                filterType: 'highpass',
+                filterFreq: 6800,
+                filterQ: 0.6,
+                attack: 0.001,
+                release: 0.04
+              });
+            }
+            if (step === 0 || step === 4) scheduleKick(ctx, master, { time: tt, gain: 0.11, pitch: 125, pitchEnd: 52, duration: 0.22 });
+            if (step === 2 || step === 6) scheduleClap(ctx, master, noiseBuffer, tt, 0.06);
+          }
+          scheduleTone(ctx, master, {
+            time: tSec,
+            duration: bar * 0.95,
+            frequency: chord.root / 2,
+            type: 'sine',
+            gain: 0.016,
+            attack: 0.03,
+            release: 0.32
+          });
+          barIdx += 1;
+          tSec += bar;
+        }
+        break;
+      }
+      case 'upbeat': {
+        const bpm = 112;
+        const beat = 60 / bpm;
+        const bar = beat * 4;
+        const chords = [
+          { root: 130.81, intervals: MAJ },
+          { root: 110.0, intervals: MIN },
+          { root: 87.31, intervals: MAJ },
+          { root: 98.0, intervals: MAJ }
+        ];
+        const lead = [392, 440, 523.25, 440, 392, 349.23, 392, 329.63];
+        let tSec = start;
+        let barIdx = 0;
+        while (tSec < end - 0.25) {
+          const chord = chords[barIdx % chords.length];
+          scheduleChord(ctx, master, {
+            time: tSec,
+            duration: bar * 1.05,
+            root: chord.root,
+            intervals: chord.intervals,
+            type: 'sawtooth',
+            gain: 0.013,
+            attack: 0.05,
+            release: 0.35
+          });
+          for (let step = 0; step < 8; step += 1) {
+            const tt = tSec + step * (beat / 2);
+            scheduleNoiseHit(ctx, master, noiseBuffer, {
+              time: tt,
+              duration: 0.045,
+              gain: 0.02,
+              filterType: 'highpass',
+              filterFreq: 7600,
+              filterQ: 0.55,
+              attack: 0.001,
+              release: 0.028
+            });
+            if (step === 0 || step === 2 || step === 4 || step === 6) {
+              scheduleKick(ctx, master, { time: tt, gain: 0.15, pitch: 150, pitchEnd: 55, duration: 0.2 });
+            }
+            if (step === 2 || step === 6) {
+              scheduleClap(ctx, master, noiseBuffer, tt, 0.085);
+            }
+            if (step % 2 === 1) {
+              const note = lead[(barIdx * 4 + step) % lead.length];
+              scheduleTone(ctx, master, {
+                time: tt + 0.005,
+                duration: 0.16,
+                frequency: note,
+                type: 'triangle',
+                gain: 0.02,
+                attack: 0.01,
+                release: 0.1
+              });
+              scheduleTone(ctx, master, {
+                time: tt + 0.007,
+                duration: 0.16,
+                frequency: note * 2,
+                type: 'sine',
+                gain: 0.0045,
+                attack: 0.01,
+                release: 0.1
+              });
+            }
+          }
+          scheduleTone(ctx, master, {
+            time: tSec,
+            duration: beat * 1.0,
+            frequency: chord.root,
+            type: 'sine',
+            gain: 0.03,
+            attack: 0.01,
+            release: 0.18
+          });
+          scheduleTone(ctx, master, {
+            time: tSec + beat * 2,
+            duration: beat * 1.0,
+            frequency: chord.root * FIFTH,
+            type: 'sine',
+            gain: 0.026,
+            attack: 0.01,
+            release: 0.18
+          });
+          barIdx += 1;
+          tSec += bar;
+        }
+        break;
+      }
+      case 'house': {
+        const bpm = 124;
+        const beat = 60 / bpm;
+        const bassline = [110, 110, 123.47, 98, 110, 123.47, 130.81, 123.47];
+        let tSec = start;
+        let stepIdx = 0;
+        while (tSec < end - 0.12) {
+          scheduleKick(ctx, master, { time: tSec, gain: 0.165, pitch: 150, pitchEnd: 52, duration: 0.2 });
+          scheduleNoiseHit(ctx, master, noiseBuffer, {
+            time: tSec + beat * 0.5,
+            duration: 0.05,
+            gain: 0.022,
+            filterType: 'highpass',
+            filterFreq: 8200,
+            filterQ: 0.5,
+            attack: 0.001,
+            release: 0.03
+          });
+          scheduleTone(ctx, master, {
+            time: tSec + beat * 0.02,
+            duration: beat * 0.95,
+            frequency: bassline[stepIdx % bassline.length],
+            type: 'triangle',
+            gain: 0.02,
+            attack: 0.01,
             release: 0.14
           });
-          if (step % 2 === 0) {
+          if (stepIdx % 4 === 2) {
+            scheduleClap(ctx, master, noiseBuffer, tSec + beat, 0.065);
+          }
+          stepIdx += 1;
+          tSec += beat;
+        }
+        scheduleChord(ctx, master, {
+          time: start + 0.06,
+          duration: Math.max(1.6, end - start - 0.3),
+          root: 98,
+          intervals: MAJ,
+          type: 'sawtooth',
+          gain: 0.008,
+          attack: 0.28,
+          release: 0.55
+        });
+        break;
+      }
+      case 'lofi': {
+        const bpm = 78;
+        const beat = 60 / bpm;
+        const bar = beat * 4;
+        const chords = [
+          { root: 110.0, intervals: MIN },
+          { root: 98.0, intervals: MAJ },
+          { root: 87.31, intervals: MAJ },
+          { root: 130.81, intervals: MAJ }
+        ];
+        try {
+          if (noiseBuffer) {
+            const vinyl = ctx.createBufferSource();
+            vinyl.buffer = noiseBuffer;
+            vinyl.loop = true;
+            const filt = ctx.createBiquadFilter();
+            filt.type = 'highpass';
+            filt.frequency.value = 2800;
+            filt.Q.value = 0.7;
+            const amp = ctx.createGain();
+            amp.gain.value = 0.0035;
+            vinyl.connect(filt);
+            filt.connect(amp);
+            amp.connect(master);
+            vinyl.start(start);
+            vinyl.stop(end + 0.1);
+          }
+        } catch {
+          // ignore
+        }
+        let tSec = start;
+        let barIdx = 0;
+        while (tSec < end - 0.25) {
+          const chord = chords[barIdx % chords.length];
+          scheduleChord(ctx, master, {
+            time: tSec,
+            duration: bar * 1.3,
+            root: chord.root,
+            intervals: chord.intervals,
+            type: 'triangle',
+            gain: 0.016,
+            attack: 0.14,
+            release: 0.8
+          });
+          scheduleKick(ctx, master, { time: tSec, gain: 0.12, pitch: 130, pitchEnd: 52, duration: 0.22 });
+          scheduleKick(ctx, master, { time: tSec + beat * 2, gain: 0.1, pitch: 120, pitchEnd: 52, duration: 0.22 });
+          scheduleClap(ctx, master, noiseBuffer, tSec + beat, 0.058);
+          scheduleClap(ctx, master, noiseBuffer, tSec + beat * 3, 0.058);
+          for (let step = 0; step < 8; step += 1) {
+            if (step % 2 === 0) {
+              scheduleNoiseHit(ctx, master, noiseBuffer, {
+                time: tSec + step * (beat / 2),
+                duration: 0.06,
+                gain: 0.01,
+                filterType: 'highpass',
+                filterFreq: 6500,
+                filterQ: 0.7,
+                attack: 0.001,
+                release: 0.04
+              });
+            }
+          }
+          scheduleTone(ctx, master, {
+            time: tSec,
+            duration: bar * 0.95,
+            frequency: chord.root / 2,
+            type: 'sine',
+            gain: 0.014,
+            attack: 0.04,
+            release: 0.3
+          });
+          barIdx += 1;
+          tSec += bar;
+        }
+        break;
+      }
+      case 'piano': {
+        const bpm = 96;
+        const beat = 60 / bpm;
+        const bar = beat * 4;
+        const chords = [
+          { root: 130.81, intervals: MAJ },
+          { root: 110.0, intervals: MIN },
+          { root: 87.31, intervals: MAJ },
+          { root: 98.0, intervals: MAJ }
+        ];
+        let tSec = start;
+        let idx = 0;
+        while (tSec < end - 0.2) {
+          const chord = chords[idx % chords.length];
+          scheduleChord(ctx, master, {
+            time: tSec,
+            duration: bar * 0.75,
+            root: chord.root * 2,
+            intervals: chord.intervals,
+            type: 'triangle',
+            gain: 0.014,
+            attack: 0.005,
+            release: 0.28
+          });
+          scheduleTone(ctx, master, {
+            time: tSec,
+            duration: bar * 0.65,
+            frequency: chord.root,
+            type: 'sine',
+            gain: 0.012,
+            attack: 0.008,
+            release: 0.32
+          });
+          const arpNotes = [chord.root * 2, chord.root * 2 * semiRatio(4), chord.root * 2 * semiRatio(7), chord.root * 4];
+          for (let s = 0; s < 4; s += 1) {
+            const tt = tSec + beat * (0.5 + s * 0.5);
             scheduleTone(ctx, master, {
-              time: tSec,
-              duration: 0.5,
-              frequency: note / 2,
+              time: tt,
+              duration: 0.22,
+              frequency: arpNotes[s % arpNotes.length],
               type: 'sine',
-              gain: 0.014,
-              attack: 0.01,
-              release: 0.24
+              gain: 0.01,
+              attack: 0.004,
+              release: 0.16
             });
           }
-          step += 1;
-          tSec += 0.48;
+          idx += 1;
+          tSec += bar;
+        }
+        break;
+      }
+      case 'tropical': {
+        const bpm = 100;
+        const beat = 60 / bpm;
+        const bar = beat * 4;
+        const chords = [
+          { root: 98.0, intervals: MAJ },
+          { root: 110.0, intervals: MIN },
+          { root: 130.81, intervals: MAJ },
+          { root: 87.31, intervals: MAJ }
+        ];
+        const marimba = [523.25, 659.25, 783.99, 659.25, 587.33, 659.25, 523.25, 493.88];
+        let tSec = start;
+        let barIdx = 0;
+        while (tSec < end - 0.22) {
+          const chord = chords[barIdx % chords.length];
+          scheduleChord(ctx, master, {
+            time: tSec,
+            duration: bar * 1.1,
+            root: chord.root,
+            intervals: chord.intervals,
+            type: 'triangle',
+            gain: 0.012,
+            attack: 0.02,
+            release: 0.35
+          });
+          for (let step = 0; step < 8; step += 1) {
+            const tt = tSec + step * (beat / 2);
+            scheduleNoiseHit(ctx, master, noiseBuffer, {
+              time: tt,
+              duration: 0.045,
+              gain: 0.016,
+              filterType: 'highpass',
+              filterFreq: 7600,
+              filterQ: 0.6,
+              attack: 0.001,
+              release: 0.03
+            });
+            if (step === 0 || step === 4) scheduleKick(ctx, master, { time: tt, gain: 0.12, pitch: 135, pitchEnd: 55, duration: 0.2 });
+            if (step % 2 === 1) {
+              const note = marimba[(barIdx * 4 + step) % marimba.length];
+              scheduleTone(ctx, master, {
+                time: tt,
+                duration: 0.14,
+                frequency: note,
+                type: 'sine',
+                gain: 0.016,
+                attack: 0.003,
+                release: 0.09
+              });
+              scheduleTone(ctx, master, {
+                time: tt + 0.01,
+                duration: 0.12,
+                frequency: note * 2,
+                type: 'triangle',
+                gain: 0.004,
+                attack: 0.003,
+                release: 0.08
+              });
+            }
+          }
+          scheduleTone(ctx, master, {
+            time: tSec,
+            duration: bar * 0.9,
+            frequency: chord.root / 2,
+            type: 'sine',
+            gain: 0.013,
+            attack: 0.03,
+            release: 0.28
+          });
+          barIdx += 1;
+          tSec += bar;
+        }
+        break;
+      }
+      case 'cinematic': {
+        const chords = [
+          { root: 98.0, intervals: MIN },
+          { root: 110.0, intervals: MIN },
+          { root: 87.31, intervals: MAJ },
+          { root: 82.41, intervals: MIN }
+        ];
+        let tSec = start;
+        let idx = 0;
+        while (tSec < end - 0.4) {
+          const chord = chords[idx % chords.length];
+          scheduleChord(ctx, master, {
+            time: tSec,
+            duration: 2.6,
+            root: chord.root,
+            intervals: chord.intervals,
+            type: 'sawtooth',
+            gain: 0.016,
+            attack: 0.35,
+            release: 1.1
+          });
+          scheduleTone(ctx, master, {
+            time: tSec,
+            duration: 2.8,
+            frequency: chord.root / 2,
+            type: 'sine',
+            gain: 0.016,
+            attack: 0.4,
+            release: 1.2
+          });
+          if (idx % 2 === 0) {
+            scheduleTone(ctx, master, {
+              time: tSec + 1.2,
+              duration: 0.55,
+              frequency: chord.root * 4,
+              type: 'triangle',
+              gain: 0.006,
+              attack: 0.12,
+              release: 0.42
+            });
+          }
+          idx += 1;
+          tSec += 2.35;
         }
         break;
       }
       case 'corporate': {
+        const bpm = 108;
+        const beat = 60 / bpm;
+        const bar = beat * 4;
         const motif = [261.63, 293.66, 329.63, 392, 349.23, 329.63];
         let tSec = start;
         let step = 0;
-        while (tSec < end - 0.1) {
-          const note = motif[step % motif.length];
-          scheduleTone(ctx, master, {
-            time: tSec,
-            duration: 0.16,
-            frequency: note,
-            type: 'square',
-            gain: 0.028,
-            attack: 0.007,
-            release: 0.08
-          });
-          scheduleTone(ctx, master, {
-            time: tSec,
-            duration: 0.28,
-            frequency: note / 2,
-            type: 'triangle',
-            gain: 0.012,
-            attack: 0.01,
-            release: 0.16
-          });
-          if (step % 4 === 0) {
-            scheduleChord(ctx, master, {
-              time: tSec + 0.06,
-              duration: 0.32,
-              root: note / 2,
-              intervals: [1, 1.25],
-              type: 'sawtooth',
-              gain: 0.011,
+        while (tSec < end - 0.18) {
+          scheduleKick(ctx, master, { time: tSec, gain: 0.12, pitch: 135, pitchEnd: 55, duration: 0.18 });
+          scheduleClap(ctx, master, noiseBuffer, tSec + beat, 0.055);
+          scheduleClap(ctx, master, noiseBuffer, tSec + beat * 3, 0.055);
+          for (let i = 0; i < 6; i += 1) {
+            const tt = tSec + i * (beat * 0.5);
+            const note = motif[(step + i) % motif.length];
+            scheduleTone(ctx, master, {
+              time: tt,
+              duration: 0.18,
+              frequency: note,
+              type: 'triangle',
+              gain: 0.016,
               attack: 0.01,
               release: 0.1
             });
+            scheduleTone(ctx, master, {
+              time: tt,
+              duration: 0.22,
+              frequency: note / 2,
+              type: 'sine',
+              gain: 0.009,
+              attack: 0.01,
+              release: 0.14
+            });
+            if (i % 2 === 0) {
+              scheduleNoiseHit(ctx, master, noiseBuffer, {
+                time: tt,
+                duration: 0.045,
+                gain: 0.012,
+                filterType: 'highpass',
+                filterFreq: 7600,
+                filterQ: 0.55,
+                attack: 0.001,
+                release: 0.03
+              });
+            }
           }
           step += 1;
-          tSec += 0.3;
+          tSec += bar;
         }
         break;
       }
       default: {
-        const progression = [196, 220, 247, 262, 247, 220];
+        const chords = [
+          { root: 130.81, intervals: MAJ },
+          { root: 110.0, intervals: MIN },
+          { root: 87.31, intervals: MAJ },
+          { root: 98.0, intervals: MAJ }
+        ];
         let tSec = start;
         let idx = 0;
-        while (tSec < end - 0.2) {
+        while (tSec < end - 0.35) {
+          const chord = chords[idx % chords.length];
+          scheduleChord(ctx, master, {
+            time: tSec,
+            duration: 2.15,
+            root: chord.root,
+            intervals: chord.intervals,
+            type: 'triangle',
+            gain: 0.016,
+            attack: 0.18,
+            release: 0.8
+          });
           scheduleTone(ctx, master, {
             time: tSec,
-            duration: 1.1,
-            frequency: progression[idx % progression.length],
+            duration: 2.2,
+            frequency: chord.root / 2,
             type: 'sine',
-            gain: 0.05,
-            attack: 0.05,
-            release: 0.24
+            gain: 0.011,
+            attack: 0.3,
+            release: 0.95
           });
           idx += 1;
-          tSec += 0.96;
+          tSec += 2.25;
         }
       }
     }
@@ -1515,7 +1942,18 @@
   let lastVideoBlob = null;
   let lastVideoFile = null;
   let lastCaptionsBlob = null;
+  let lastRenderKey = '';
+  let lastVideoHadAudio = false;
+  let lastPrimedAttemptKey = '';
   let isBusy = false;
+
+  const renderKeyFor = ({ whiteLabel, durationSec, audioMode, showOverlayCaptions } = {}) => {
+    const wl = whiteLabel ? '1' : '0';
+    const dur = Number.isFinite(Number(durationSec)) ? String(Math.round(Number(durationSec))) : '0';
+    const audio = normalizeAudioMode(audioMode, 'none');
+    const caps = showOverlayCaptions ? '1' : '0';
+    return `${wl}|d=${dur}|a=${audio}|c=${caps}`;
+  };
 
   const setBusy = (busy) => {
     isBusy = busy;
@@ -1528,6 +1966,8 @@
     lastVideoBlob = null;
     lastVideoFile = null;
     lastCaptionsBlob = null;
+    lastRenderKey = '';
+    lastVideoHadAudio = false;
     if (currentObjectUrl) {
       try {
         URL.revokeObjectURL(currentObjectUrl);
@@ -1886,6 +2326,8 @@
     lastVideoBlob = new Blob(chunks, { type: mimeType || (chunks[0] && chunks[0].type) || 'video/webm' });
     lastVideoFile = new File([lastVideoBlob], downloadFileName({ ref, town, ext }), { type: lastVideoBlob.type });
     currentObjectUrl = URL.createObjectURL(lastVideoBlob);
+    lastRenderKey = renderKeyFor({ whiteLabel, durationSec, audioMode, showOverlayCaptions });
+    lastVideoHadAudio = !!audioEnabled;
 
     if (els.download) {
       els.download.hidden = false;
@@ -2064,7 +2506,7 @@
     const beds = safeInt(listing.beds);
     const baths = safeInt(listing.baths);
     const built = builtAreaFor(listing);
-    const reelOptions = createOptions({
+    let reelOptions = createOptions({
       listing,
       durationOverride: durationParam,
       audioOverride: audioParam,
@@ -2142,10 +2584,17 @@
     };
 
     const triggerCreate = async (autoPlayPreview = false, { primeAudio = false } = {}) => {
+      const currentWl = document.body.classList.contains('reel-wl');
+      const requestedKey = renderKeyFor({
+        whiteLabel: currentWl,
+        durationSec: reelOptions.durationSec,
+        audioMode: reelOptions.audioMode,
+        showOverlayCaptions: reelOptions.showOverlayCaptions
+      });
       const primedAudioContext = (primeAudio && reelOptions.audioMode !== 'none') ? await primeMusicContext() : null;
       await createVideo({
         listing,
-        whiteLabel: document.body.classList.contains('reel-wl'),
+        whiteLabel: currentWl,
         durationSec: reelOptions.durationSec,
         audioMode: reelOptions.audioMode,
         showOverlayCaptions: reelOptions.showOverlayCaptions,
@@ -2153,25 +2602,48 @@
         primedAudioContext,
         allowAudioFallback: true
       });
+      if (primeAudio && reelOptions.audioMode !== 'none') {
+        lastPrimedAttemptKey = requestedKey;
+      }
       return !!lastVideoFile;
     };
 
     const ensureVideoReady = async ({ autoPlayPreview = false, primeAudio = false } = {}) => {
-      if (lastVideoFile) {
+      const currentWl = document.body.classList.contains('reel-wl');
+      const requestedKey = renderKeyFor({
+        whiteLabel: currentWl,
+        durationSec: reelOptions.durationSec,
+        audioMode: reelOptions.audioMode,
+        showOverlayCaptions: reelOptions.showOverlayCaptions
+      });
+      const wantsAudio = normalizeAudioMode(reelOptions.audioMode, 'none') !== 'none';
+      const matches = !!(lastVideoFile && lastRenderKey && lastRenderKey === requestedKey);
+      const shouldPrimeRetry = primeAudio && wantsAudio && !lastVideoHadAudio && lastPrimedAttemptKey !== requestedKey;
+
+      if (matches && !shouldPrimeRetry) {
         if (autoPlayPreview) await playPreviewVideo();
         return true;
       }
+
       if (createTask) {
         const ok = await createTask;
-        if (ok && autoPlayPreview) await playPreviewVideo();
-        return !!ok;
+        const matchesNow = !!(lastVideoFile && lastRenderKey && lastRenderKey === requestedKey);
+        const shouldPrimeRetryNow = primeAudio && wantsAudio && !lastVideoHadAudio && lastPrimedAttemptKey !== requestedKey;
+        if (ok && matchesNow && !shouldPrimeRetryNow) {
+          if (autoPlayPreview) await playPreviewVideo();
+          return true;
+        }
       }
+
+      // Options changed (or audio was blocked on mobile). Regenerate for the requested key.
+      clearVideo();
       createTask = (async () => {
         const ok = await triggerCreate(autoPlayPreview, { primeAudio });
         return !!ok;
       })().finally(() => {
         createTask = null;
       });
+
       const ok = await createTask;
       if (ok && autoPlayPreview) await playPreviewVideo();
       return !!ok;
@@ -2190,6 +2662,84 @@
       if (!els.actions) return;
       setSharePanel(els.actions.hidden);
     };
+
+    // Controls (duration, audio, captions)
+    const populateSelect = (el, options, value) => {
+      if (!el) return;
+      const items = Array.isArray(options) ? options : [];
+      const desired = String(value == null ? '' : value);
+      el.innerHTML = items.map((opt) => {
+        const v = String(opt && opt.value != null ? opt.value : '');
+        const label = toText(opt && opt.label, v);
+        const selected = v === desired ? ' selected' : '';
+        return `<option value="${escapeHtml(v)}"${selected}>${escapeHtml(label)}</option>`;
+      }).join('');
+      if (desired) el.value = desired;
+    };
+
+    const durationChoices = [
+      { value: 7, label: t('reel.duration.quick', '7s (Quick)') },
+      { value: 9, label: t('reel.duration.recommended', '9s (Recommended)') },
+      { value: 12, label: t('reel.duration.standard', '12s') },
+      { value: 15, label: t('reel.duration.detailed', '15s (Detailed)') }
+    ];
+    const audioChoices = REEL_AUDIO_MODES.map((mode) => ({
+      value: mode,
+      label: t(`reel.audio.${mode}`, REEL_AUDIO_LABEL_FALLBACK[mode] || mode)
+    }));
+
+    populateSelect(els.duration, durationChoices, reelOptions.durationSec);
+    populateSelect(els.audio, audioChoices, reelOptions.audioMode);
+    if (els.overlayCaption) {
+      els.overlayCaption.checked = !!reelOptions.showOverlayCaptions;
+    }
+
+    const updateUrlOptions = () => {
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set('dur', String(reelOptions.durationSec));
+        url.searchParams.set('audio', String(reelOptions.audioMode || 'none'));
+        url.searchParams.set('captions', reelOptions.showOverlayCaptions ? '1' : '0');
+        window.history.replaceState({}, '', url.toString());
+      } catch {
+        // ignore
+      }
+    };
+
+    let optionsRegenTimer = 0;
+    const onOptionsChanged = () => {
+      updateUrlOptions();
+      updatePreviewSub();
+      setSharePanel(false);
+      clearVideo();
+      setStatus(t('reel.status.auto_generating', 'Generating your reel…'), { tone: 'normal' });
+      if (optionsRegenTimer) window.clearTimeout(optionsRegenTimer);
+      optionsRegenTimer = window.setTimeout(() => {
+        void ensureVideoReady({ autoPlayPreview: false, primeAudio: false });
+      }, 450);
+    };
+
+    if (els.duration) {
+      els.duration.addEventListener('change', () => {
+        const v = Number(els.duration.value);
+        if (Number.isFinite(v) && v >= 6) {
+          reelOptions.durationSec = Math.round(v);
+        }
+        onOptionsChanged();
+      });
+    }
+    if (els.audio) {
+      els.audio.addEventListener('change', () => {
+        reelOptions.audioMode = normalizeAudioMode(els.audio.value, suggestAudioForListing(listing));
+        onOptionsChanged();
+      });
+    }
+    if (els.overlayCaption) {
+      els.overlayCaption.addEventListener('change', () => {
+        reelOptions.showOverlayCaptions = !!els.overlayCaption.checked;
+        onOptionsChanged();
+      });
+    }
 
     const onToggleBrand = () => {
       const next = !document.body.classList.contains('reel-wl');

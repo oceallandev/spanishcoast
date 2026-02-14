@@ -47,6 +47,20 @@
                     <div class="reel-auto-note" data-i18n="reel.auto_mode_note">
                         We automatically build the best short reel from listing media and key details.
                     </div>
+                    <div class="reel-controls" id="reel-controls" aria-label="Reel controls" data-i18n-aria-label="reel.tools_label">
+                        <div class="reel-control">
+                            <div class="reel-control-label" data-i18n="reel.controls.duration">Duration</div>
+                            <select id="reel-duration" class="reel-select" aria-label="Duration"></select>
+                        </div>
+                        <div class="reel-control">
+                            <div class="reel-control-label" data-i18n="reel.controls.audio">Audio</div>
+                            <select id="reel-audio" class="reel-select" aria-label="Audio"></select>
+                        </div>
+                        <label class="reel-check">
+                            <input id="reel-overlay-caption" type="checkbox" checked>
+                            <span data-i18n="reel.controls.overlay_caption">Show on-screen captions</span>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="reel-card" id="reel-caption-wrap" hidden>
@@ -95,7 +109,7 @@
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script defer src="config.js?v=20260211a"></script>
     <script defer src="supabase-init.js?v=20260211a"></script>
-    <script defer src="reel.js?v=20260212d"></script>
+    <script defer src="reel.js?v=20260214a"></script>
 </body>
 
 </html>
