@@ -131,6 +131,23 @@
     return { text: toText(listing && listing.description, ''), localized: false };
   };
 
+  const descriptionNeedsEnglishTranslation = (text) => {
+    const sourceText = toText(text).trim();
+    if (!sourceText) return false;
+    const lower = sourceText.toLowerCase();
+    const looksEnglish = /\b(the|and|with|for|sale|rent|beach|apartment|villa|bath|bedroom|property|new build|commercial|garage|terrace)\b/i.test(lower);
+    if (looksEnglish) return false;
+
+    const looksSpanish = /[áéíóúñ¿¡]/i.test(sourceText)
+      || /\b(de|la|el|con|para|venta|alquiler|playa|piso|apartamento|villa|bañ(?:o|os)|habitaci(?:o|ó)n(?:es)?|terraza|garaje|ascensor|obra nueva|trastero|piscina|dormitorio|dormitorios)\b/i.test(lower);
+    const looksRomanian = /[ăâîșşțţ]/i.test(sourceText)
+      || /\b(și|pentru|vânzare|vanzare|închiriere|inchiriere|apartament|terasă|terasa|garaj|mobilat)\b/i.test(lower);
+    const looksSwedish = /[åäö]/i.test(sourceText)
+      || /\b(och|för|till salu|uthyrning|lagenhet|lägenhet|bostad|terrass|hiss)\b/i.test(lower);
+
+    return looksSpanish || looksRomanian || looksSwedish;
+  };
+
   const translateDynamicText = (value) => {
     const text = toText(value).trim();
     if (!text) return Promise.resolve(text);
@@ -858,7 +875,7 @@
       if (descInfo.localized) {
         // Exact feed language version (RedSp v4) — keep it as-is.
         descEl.setAttribute('data-i18n-dynamic-ignore', '');
-      } else if (lang !== 'en' && baseDescription) {
+      } else if (baseDescription && (lang !== 'en' || descriptionNeedsEnglishTranslation(baseDescription))) {
         // Translate whole description string for consistency (fallback to per-node translation).
         descEl.setAttribute('data-i18n-dynamic-ignore', '');
         translateDynamicText(baseDescription).then((translated) => {

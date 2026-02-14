@@ -1316,6 +1316,26 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    function descriptionNeedsEnglishTranslation(text) {
+        const sourceText = toText(text).trim();
+        if (!sourceText) return false;
+        const lower = sourceText.toLowerCase();
+
+        // Heuristic: some feeds provide Spanish-only descriptions. Translate those to EN so the
+        // default (EN) experience still feels native.
+        const looksEnglish = /\b(the|and|with|for|sale|rent|beach|apartment|villa|bath|bedroom|property|new build|commercial|garage|terrace)\b/i.test(lower);
+        if (looksEnglish) return false;
+
+        const looksSpanish = /[áéíóúñ¿¡]/i.test(sourceText)
+            || /\b(de|la|el|con|para|venta|alquiler|playa|piso|apartamento|villa|bañ(?:o|os)|habitaci(?:o|ó)n(?:es)?|terraza|garaje|ascensor|obra nueva|trastero|piscina|dormitorio|dormitorios)\b/i.test(lower);
+        const looksRomanian = /[ăâîșşțţ]/i.test(sourceText)
+            || /\b(și|pentru|vânzare|vanzare|închiriere|inchiriere|apartament|terasă|terasa|garaj|mobilat)\b/i.test(lower);
+        const looksSwedish = /[åäö]/i.test(sourceText)
+            || /\b(och|för|till salu|uthyrning|lagenhet|lägenhet|bostad|terrass|hiss)\b/i.test(lower);
+
+        return looksSpanish || looksRomanian || looksSwedish;
+    }
+
     function buildPropertyLink(reference) {
         // Always generate a stable, shareable URL for this listing.
         return buildAppUrl('properties.html', {
@@ -4330,16 +4350,19 @@ document.addEventListener('DOMContentLoaded', () => {
             // If we already have an exact language version from the feed (RedSp v4), do not re-translate it.
             // If we need to translate, we translate the whole string and then keep the subtree out of the
             // auto DOM translator to avoid double-translating sentence-by-sentence.
-            if (descriptionLocalized || langCode !== 'en') {
+            const needsEnglish = langCode === 'en' && descriptionNeedsEnglishTranslation(description);
+            const translateWhole = !descriptionLocalized && !!toText(description).trim() && (langCode !== 'en' || needsEnglish);
+            if (descriptionLocalized || translateWhole) {
                 modalDescEl.setAttribute('data-i18n-dynamic-ignore', '');
             } else {
                 modalDescEl.removeAttribute('data-i18n-dynamic-ignore');
             }
+            modalDescEl.dataset.translateWhole = translateWhole ? '1' : '';
         }
 
         queueDynamicTranslate(modalDetails);
 
-        if (modalDescEl && !descriptionLocalized && langCode !== 'en') {
+        if (modalDescEl && modalDescEl.dataset.translateWhole === '1') {
             translateDynamicText(description).then((translatedDescription) => {
                 if (activeModalPropertyId !== modalPropertyId) return;
                 if (!document.body.contains(modalDescEl)) return;
