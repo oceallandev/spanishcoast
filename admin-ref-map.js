@@ -177,7 +177,8 @@
       const source = String(sourceRaw || 'inmovilla').trim() || 'inmovilla';
       const original_id = String(originalIdRaw || '').trim() || null;
 
-      if (!/^SCP-\\d+$/i.test(scp)) {
+      // Validate refs like "SCP-2932". (Note: RegExp literals don't need \\d escaping.)
+      if (!/^SCP-\d+$/i.test(scp)) {
         warnings.push(t('refmap.warn.scp_format', 'Skipping row with invalid SCP ref: {ref}', { ref: scp }));
         continue;
       }
@@ -387,4 +388,3 @@
 
   boot();
 })();
-
