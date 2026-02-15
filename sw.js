@@ -1,5 +1,5 @@
 /* Minimal same-origin service worker for instant repeat loads on mobile WebKit/Android. */
-const CACHE_NAME = 'scp-cache-20260215c';
+const CACHE_NAME = 'scp-cache-20260215d';
 
 const PRECACHE_PATHS = [
   './',
@@ -78,12 +78,12 @@ const PRECACHE_PATHS = [
   './blog-posts.js?v=20260211d',
   './blog-posts.json',
   './network-data.js?v=20260215c',
-  './network.js?v=20260215c',
-  './network-profile.js?v=20260215c',
+  './network.js?v=20260215d',
+  './network-profile.js?v=20260215d',
   './config.js?v=20260211d',
   './i18n.js?v=20260213b',
   './supabase-init.js?v=20260211d',
-  './account.js?v=20260212a',
+  './account.js?v=20260215d',
   './guide.js?v=20260211d',
   './shop.js?v=20260212a',
   './basket.js?v=20260211d',

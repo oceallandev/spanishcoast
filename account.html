@@ -406,6 +406,64 @@
                         <div id="admin-user-status" class="muted" style="margin-top:0.5rem;"></div>
                         <div id="admin-user-list" class="account-admin-users-list"></div>
                     </div>
+
+                    <div class="divider"></div>
+
+                    <h3 style="margin:0;" data-i18n="account.admin.network.title">Network profiles</h3>
+                    <div class="muted" style="margin-top:0.35rem;" data-i18n="account.admin.network.subtitle">Suspend a public Network profile (agency/agent/developer/development/collaborator).</div>
+                    <div class="account-admin-users">
+                        <div class="account-admin-users-bar">
+                            <input id="admin-network-q" class="admin-input" type="text" placeholder="Search network profiles (e.g. adrian, costa-blanca-developments)" data-i18n-placeholder="account.admin.network.search_placeholder">
+                            <button id="admin-network-refresh" class="cta-button cta-button--outline" type="button" data-i18n="account.admin.search">Search</button>
+                        </div>
+                        <div id="admin-network-status" class="muted" style="margin-top:0.5rem;"></div>
+                        <div id="admin-network-list" class="account-admin-users-list"></div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <h3 style="margin:0;" data-i18n="account.admin.newsletter.title">Newsletter</h3>
+                    <div class="muted" style="margin-top:0.35rem;" data-i18n="account.admin.newsletter.subtitle">Send an email update to all users, a role group, or specific emails.</div>
+
+                    <form id="admin-newsletter-form" class="form-grid">
+                        <label>
+                            <span data-i18n="account.admin.newsletter.audience">Audience</span>
+                            <select id="admin-newsletter-audience" class="admin-select">
+                                <option value="all" data-i18n="account.admin.newsletter.audience_all">All users</option>
+                                <option value="role" data-i18n="account.admin.newsletter.audience_role">By role</option>
+                                <option value="emails" data-i18n="account.admin.newsletter.audience_emails">Specific emails</option>
+                            </select>
+                        </label>
+                        <label id="admin-newsletter-role-row" style="display:none">
+                            <span data-i18n="account.admin.newsletter.role">Role</span>
+                            <select id="admin-newsletter-role" class="admin-select">
+                                <option value="client">Client</option>
+                                <option value="collaborator">Collaborator</option>
+                                <option value="partner">Partner</option>
+                                <option value="agent">Agent</option>
+                                <option value="agency_admin">Agency admin</option>
+                                <option value="developer">Developer</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </label>
+                        <label id="admin-newsletter-emails-row" style="display:none">
+                            <span data-i18n="account.admin.newsletter.emails">Emails</span>
+                            <textarea id="admin-newsletter-emails" placeholder="one@example.com, two@example.com" data-i18n-placeholder="account.admin.newsletter.emails_placeholder"></textarea>
+                        </label>
+                        <label>
+                            <span data-i18n="account.admin.newsletter.subject">Subject</span>
+                            <input id="admin-newsletter-subject" type="text" placeholder="Monthly update" required data-i18n-placeholder="account.admin.newsletter.subject_placeholder">
+                        </label>
+                        <label>
+                            <span data-i18n="account.admin.newsletter.body">Message</span>
+                            <textarea id="admin-newsletter-body" placeholder="Write a short, useful update..." required data-i18n-placeholder="account.admin.newsletter.body_placeholder"></textarea>
+                        </label>
+                        <div class="account-admin-actions">
+                            <button id="admin-newsletter-test" class="cta-button cta-button--outline" type="button" data-i18n="account.admin.newsletter.send_test">Send test to me</button>
+                            <button id="admin-newsletter-send" class="cta-button" type="submit" data-i18n="account.admin.newsletter.send">Send newsletter</button>
+                        </div>
+                        <div id="admin-newsletter-status" class="muted" aria-live="polite"></div>
+                    </form>
                 </div>
             </div>
 
@@ -453,7 +511,8 @@
     </footer>
 
     <script defer src="basket.js?v=20260211a"></script>
-    <script defer src="account.js?v=20260212a"></script>
+    <script defer src="network-data.js?v=20260215c"></script>
+    <script defer src="account.js?v=20260215d"></script>
     <script defer src="site.js?v=20260215a"></script>
 </body>
 

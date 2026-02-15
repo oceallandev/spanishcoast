@@ -10,6 +10,12 @@
   if (!data || !grid || !queryEl || !kindEl || !countEl) return;
 
   const i18n = window.SCP_I18N || null;
+  const client = window.scpSupabase || null;
+
+  let viewerRole = 'client';
+  let isAdmin = false;
+  let stateByKey = {};
+
   const t = (key, fallback, vars) => {
     try {
       if (i18n && typeof i18n.t === 'function') {
@@ -18,6 +24,64 @@
       }
     } catch { /* ignore */ }
     return fallback;
+  };
+
+  const withTimeout = async (promise, ms, label) => {
+    let timer;
+    try {
+      return await Promise.race([
+        promise,
+        new Promise((_, reject) => {
+          timer = window.setTimeout(() => reject(new Error(`${label || 'Request'} timed out after ${ms}ms`)), ms);
+        })
+      ]);
+    } finally {
+      if (timer) window.clearTimeout(timer);
+    }
+  };
+
+  const AUTH_TIMEOUT_MS = 6000;
+
+  const loadViewerRole = async () => {
+    if (!client || !client.auth) return;
+    try {
+      const out = await withTimeout(client.auth.getSession(), AUTH_TIMEOUT_MS, 'Session check');
+      const session = out && out.data ? out.data.session : null;
+      const user = session && session.user ? session.user : null;
+      if (!user || !user.id) return;
+
+      const { data: profile, error } = await withTimeout(
+        client.from('profiles').select('role').eq('user_id', user.id).maybeSingle(),
+        AUTH_TIMEOUT_MS,
+        'Load role'
+      );
+      if (!error && profile && profile.role) viewerRole = String(profile.role);
+      isAdmin = viewerRole === 'admin';
+    } catch {
+      // ignore
+    }
+  };
+
+  const loadProfileStates = async () => {
+    if (!client) return;
+    try {
+      const { data: rows, error } = await withTimeout(
+        client.from('network_profile_state').select('kind,slug,suspended,reason,updated_at').limit(5000),
+        AUTH_TIMEOUT_MS,
+        'Load network state'
+      );
+      if (error) return;
+      const map = {};
+      (Array.isArray(rows) ? rows : []).forEach((r) => {
+        const kind = String(r && r.kind ? r.kind : '').trim().toLowerCase();
+        const slug = String(r && r.slug ? r.slug : '').trim();
+        if (!kind || !slug) return;
+        map[`${kind}:${slug}`] = r;
+      });
+      stateByKey = map;
+    } catch {
+      // ignore
+    }
   };
 
   const esc = (s) => String(s == null ? '' : s)
@@ -55,6 +119,19 @@
 
   const items = flatten();
 
+  const stateFor = (item) => {
+    if (!item) return null;
+    const kind = String(item.kind || '').trim().toLowerCase();
+    const slug = String(item.slug || item.id || '').trim();
+    if (!kind || !slug) return null;
+    return stateByKey[`${kind}:${slug}`] || null;
+  };
+
+  const isSuspended = (item) => {
+    const st = stateFor(item);
+    return !!(st && st.suspended);
+  };
+
   const getLocationText = (item) => {
     const loc = item && item.location ? item.location : null;
     if (!loc || typeof loc !== 'object') return '';
@@ -85,6 +162,8 @@
     const langText = esc(getLanguagesText(item) || '');
     const label = esc(kindLabel(item.kind));
     const verified = !!item.verified;
+    const suspended = isSuspended(item);
+    const suspendedTag = suspended && isAdmin ? `<span class="network-tag network-tag--danger">${esc(t('network.suspended', 'Suspended'))}</span>` : '';
     const tags = getTags(item);
     const img =
       esc(item.photo_url || item.logo_url || item.hero_url || item.cover_url || 'assets/placeholder.png');
@@ -113,7 +192,9 @@
             ${langText ? `<div class="network-meta">🗣️ <span data-i18n-dynamic-ignore>${langText}</span></div>` : ''}
           </div>
 
-          ${tags.length ? `<div class="network-tags">${tags.map((tag) => `<span class="network-tag" data-i18n-dynamic-ignore>${esc(tag)}</span>`).join('')}</div>` : ''}
+          ${(suspendedTag || tags.length)
+            ? `<div class="network-tags">${suspendedTag}${tags.map((tag) => `<span class="network-tag" data-i18n-dynamic-ignore>${esc(tag)}</span>`).join('')}</div>`
+            : ''}
 
           <div class="network-open-hint" data-i18n="network.card.open_hint">Tap card to open profile</div>
         </div>
@@ -138,6 +219,7 @@
     const matches = items.filter((item) => {
       if (!item) return false;
       if (kind !== 'all' && item.kind !== kind) return false;
+      if (isSuspended(item) && !isAdmin) return false;
       if (!query) return true;
 
       const bag = [
@@ -206,6 +288,10 @@
     if (q) queryEl.value = q;
   } catch { /* ignore */ }
 
+  // Render immediately, then refresh after loading suspensions + viewer role.
   render();
+  (async () => {
+    await Promise.all([loadViewerRole(), loadProfileStates()]);
+    render();
+  })();
 })();
-

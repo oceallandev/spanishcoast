@@ -61,6 +61,20 @@
   const adminUserRefresh = document.getElementById('admin-user-refresh');
   const adminUserStatus = document.getElementById('admin-user-status');
   const adminUserList = document.getElementById('admin-user-list');
+  const adminNetworkQ = document.getElementById('admin-network-q');
+  const adminNetworkRefresh = document.getElementById('admin-network-refresh');
+  const adminNetworkStatus = document.getElementById('admin-network-status');
+  const adminNetworkList = document.getElementById('admin-network-list');
+  const adminNewsletterForm = document.getElementById('admin-newsletter-form');
+  const adminNewsletterAudience = document.getElementById('admin-newsletter-audience');
+  const adminNewsletterRoleRow = document.getElementById('admin-newsletter-role-row');
+  const adminNewsletterRole = document.getElementById('admin-newsletter-role');
+  const adminNewsletterEmailsRow = document.getElementById('admin-newsletter-emails-row');
+  const adminNewsletterEmails = document.getElementById('admin-newsletter-emails');
+  const adminNewsletterSubject = document.getElementById('admin-newsletter-subject');
+  const adminNewsletterBody = document.getElementById('admin-newsletter-body');
+  const adminNewsletterTest = document.getElementById('admin-newsletter-test');
+  const adminNewsletterStatus = document.getElementById('admin-newsletter-status');
   const diagnosticsPanel = document.getElementById('diagnostics');
   const diagLines = document.getElementById('diag-lines');
   const clearCacheBtn = document.getElementById('clear-offline-cache');
@@ -770,6 +784,313 @@
     renderAdminUsers(rows);
   };
 
+  let lastNetworkItems = [];
+  let lastNetworkStates = {};
+
+  const normalizeText = (value) => String(value || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim();
+
+  const networkKindLabel = (kind) => {
+    const k = String(kind || '').trim().toLowerCase();
+    if (k === 'agency') return t('network.kind.agency', 'Agency');
+    if (k === 'agent') return t('network.kind.agent', 'Agent');
+    if (k === 'developer') return t('network.kind.developer', 'Developer');
+    if (k === 'development') return t('network.kind.development', 'Development');
+    if (k === 'collaborator') return t('network.kind.collaborator', 'Collaborator');
+    return t('common.na', 'N/A');
+  };
+
+  const flattenNetworkData = () => {
+    const d = window.scpNetworkData || null;
+    if (!d || typeof d !== 'object') return [];
+    const out = [];
+    const push = (kind, list) => {
+      (Array.isArray(list) ? list : []).forEach((x) => {
+        if (!x) return;
+        out.push({ kind, ...x });
+      });
+    };
+    push('agency', d.agencies);
+    push('agent', d.agents);
+    push('developer', d.developers);
+    push('development', d.developments);
+    push('collaborator', d.collaborators);
+    return out;
+  };
+
+  const networkKey = (kind, slug) => `${String(kind || '').trim().toLowerCase()}:${String(slug || '').trim()}`;
+
+  const loadNetworkStates = async () => {
+    const client = getClient();
+    if (!client) return;
+    const { data, error } = await withTimeout(
+      client.from('network_profile_state').select('kind,slug,suspended,reason,updated_at,updated_by').limit(5000),
+      AUTH_TIMEOUT_MS,
+      'Load network states'
+    );
+    if (error) throw error;
+    const map = {};
+    (Array.isArray(data) ? data : []).forEach((r) => {
+      const k = networkKey(r.kind, r.slug);
+      if (!k || k === ':') return;
+      map[k] = r;
+    });
+    lastNetworkStates = map;
+  };
+
+  const renderNetworkAdminList = () => {
+    if (!adminNetworkList || !adminNetworkStatus) return;
+    if (!lastNetworkItems.length) {
+      adminNetworkList.innerHTML = '';
+      adminNetworkStatus.textContent = t('account.admin.network.empty', 'No network profiles found (load network-data.js first).');
+      return;
+    }
+
+    const q = normalizeText(adminNetworkQ && adminNetworkQ.value ? adminNetworkQ.value : '');
+    const matches = lastNetworkItems.filter((it) => {
+      if (!it) return false;
+      if (!q) return true;
+      const bag = [
+        it.kind,
+        networkKindLabel(it.kind),
+        it.name,
+        it.slug,
+        it.id,
+        it.headline,
+        it.location && typeof it.location === 'object' ? `${it.location.town || ''} ${it.location.province || ''}` : ''
+      ].map(normalizeText).filter(Boolean).join(' | ');
+      return bag.includes(q);
+    });
+
+    adminNetworkStatus.textContent = matches.length
+      ? t('account.admin.network.showing', 'Showing {count} profiles', { count: matches.length })
+      : t('account.admin.network.no_match', 'No profiles match your search.');
+
+    adminNetworkList.innerHTML = matches.slice(0, 200).map((it) => {
+      const kind = String(it.kind || '').trim().toLowerCase();
+      const slug = String(it.slug || it.id || '').trim();
+      const key = networkKey(kind, slug);
+      const st = lastNetworkStates[key] || null;
+      const suspended = !!(st && st.suspended);
+      const reason = suspended && st && st.reason ? String(st.reason) : '';
+      const name = it.name ? String(it.name) : slug;
+      const loc = it.location && typeof it.location === 'object'
+        ? [it.location.town, it.location.province].map((x) => String(x || '').trim()).filter(Boolean).join(', ')
+        : '';
+      const badge = suspended ? `<span class="network-pill network-pill--danger">${escapeHtml(t('network.suspended', 'Suspended'))}</span>` : '';
+      const sub = `${networkKindLabel(kind)} · ${slug}${loc ? ` · ${loc}` : ''}`;
+      const href = `network-profile.html?type=${encodeURIComponent(kind)}&slug=${encodeURIComponent(slug)}`;
+
+      return `
+        <div class="admin-user-row" data-net-row data-kind="${escapeHtml(kind)}" data-slug="${escapeHtml(slug)}">
+          <div class="admin-user-main">
+            <div class="admin-user-title">${escapeHtml(name)} ${badge}</div>
+            <div class="admin-user-sub">${escapeHtml(sub)}</div>
+          </div>
+          <div class="admin-user-actions">
+            <label class="account-toggle">
+              <input type="checkbox" data-net-suspended${suspended ? ' checked' : ''}>
+              <span>${escapeHtml(t('network.suspended', 'Suspended'))}</span>
+            </label>
+            <input class="admin-input admin-input--compact" type="text" data-net-reason value="${escapeHtml(reason)}"
+              placeholder="${escapeHtml(t('account.admin.network.reason_placeholder', 'Reason (optional)'))}">
+            <a class="cta-button cta-button--outline" href="${escapeHtml(href)}" target="_blank" rel="noopener">${escapeHtml(t('account.admin.network.view', 'View'))}</a>
+            <button class="cta-button cta-button--outline" type="button" data-net-save>${escapeHtml(t('account.admin.save', 'Save'))}</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  };
+
+  const loadNetworkAdmin = async () => {
+    if (!adminNetworkStatus) return;
+    lastNetworkItems = flattenNetworkData();
+    if (!lastNetworkItems.length) {
+      adminNetworkStatus.textContent = t('account.admin.network.missing_data', 'Network data not loaded yet.');
+      if (adminNetworkList) adminNetworkList.innerHTML = '';
+      return;
+    }
+
+    adminNetworkStatus.textContent = t('account.admin.network.loading', 'Loading network profile states…');
+    if (adminNetworkList) adminNetworkList.innerHTML = '';
+    try {
+      await loadNetworkStates();
+      renderNetworkAdminList();
+    } catch (error) {
+      const msg = error && error.message ? String(error.message) : String(error || '');
+      adminNetworkStatus.textContent = t('account.admin.network.load_failed', 'Failed to load network states: {error}', { error: msg });
+      lastNetworkStates = {};
+      renderNetworkAdminList();
+    }
+  };
+
+  const saveNetworkState = async (kind, slug, suspended, reason, btn) => {
+    const client = getClient();
+    if (!client) return;
+    if (!kind || !slug) return;
+    if (!dashboardUser || !dashboardUser.id) return;
+
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = t('account.admin.saving', 'Saving…');
+    }
+    if (adminNetworkStatus) adminNetworkStatus.textContent = t('account.admin.network.saving', 'Saving network state…');
+
+    try {
+      const payload = {
+        kind,
+        slug,
+        suspended: !!suspended,
+        reason: suspended ? (String(reason || '').trim() || null) : null,
+        updated_by: dashboardUser.id
+      };
+      const { error } = await withTimeout(
+        client.from('network_profile_state').upsert(payload, { onConflict: 'kind,slug' }),
+        AUTH_TIMEOUT_MS,
+        'Save network state'
+      );
+      if (error) throw error;
+
+      // Update local cache so UI reflects instantly.
+      lastNetworkStates[networkKey(kind, slug)] = { ...payload };
+      if (adminNetworkStatus) {
+        adminNetworkStatus.textContent = t('account.admin.network.saved', 'Saved network state for {slug}', { slug });
+      }
+      renderNetworkAdminList();
+      if (btn) btn.textContent = t('account.admin.saved_short', 'Saved');
+    } catch (error) {
+      const msg = error && error.message ? String(error.message) : String(error || '');
+      if (adminNetworkStatus) {
+        adminNetworkStatus.textContent = t('account.admin.network.save_failed', 'Save failed: {error}', { error: msg });
+      }
+      if (btn) btn.textContent = t('account.admin.failed_short', 'Failed');
+    } finally {
+      if (btn) {
+        window.setTimeout(() => {
+          btn.textContent = t('account.admin.save', 'Save');
+          btn.disabled = false;
+        }, 1000);
+      }
+    }
+  };
+
+  let newsletterWired = false;
+  const wireNewsletterUi = () => {
+    if (newsletterWired) return;
+    if (!adminNewsletterForm || !adminNewsletterAudience || !adminNewsletterStatus) return;
+    newsletterWired = true;
+
+    // Populate role options using localized labels.
+    if (adminNewsletterRole) {
+      adminNewsletterRole.innerHTML = rolesForAdminUi()
+        .map((r) => `<option value="${escapeHtml(r.value)}">${escapeHtml(r.label)}</option>`)
+        .join('');
+      adminNewsletterRole.value = 'client';
+    }
+
+    const syncAudience = () => {
+      const mode = String(adminNewsletterAudience.value || 'all');
+      setVisible(adminNewsletterRoleRow, mode === 'role', '');
+      setVisible(adminNewsletterEmailsRow, mode === 'emails', '');
+    };
+
+    adminNewsletterAudience.addEventListener('change', syncAudience);
+    syncAudience();
+
+    const parseEmails = (raw) => {
+      const text = String(raw || '');
+      const parts = text.split(/[\s,;]+/g).map((x) => x.trim()).filter(Boolean);
+      const uniq = new Set();
+      parts.forEach((p) => {
+        const lower = p.toLowerCase();
+        if (!lower.includes('@')) return;
+        uniq.add(lower);
+      });
+      return Array.from(uniq);
+    };
+
+    const send = async (mode, opts) => {
+      const client = getClient();
+      if (!client) return;
+
+      const subject = adminNewsletterSubject ? String(adminNewsletterSubject.value || '').trim() : '';
+      const body = adminNewsletterBody ? String(adminNewsletterBody.value || '').trim() : '';
+      if (!subject || !body) {
+        adminNewsletterStatus.textContent = t('account.admin.newsletter.missing_fields', 'Subject and message are required.');
+        return;
+      }
+
+      adminNewsletterStatus.textContent = t('account.admin.newsletter.sending', 'Sending…');
+      const payload = {
+        audience: { type: mode },
+        subject,
+        body,
+        language: (window.SCP_I18N && window.SCP_I18N.lang) ? String(window.SCP_I18N.lang) : 'en',
+        ...(opts || {})
+      };
+
+      try {
+        const out = await withTimeout(
+          client.functions.invoke('send-newsletter', { body: payload }),
+          AUTH_TIMEOUT_MS,
+          'Send newsletter'
+        );
+        if (out && out.error) throw out.error;
+        const res = out && out.data ? out.data : null;
+        const sent = res && typeof res.sent === 'number' ? res.sent : null;
+        const failed = res && typeof res.failed === 'number' ? res.failed : null;
+        adminNewsletterStatus.textContent = t(
+          'account.admin.newsletter.sent',
+          'Sent. Success: {sent} · Failed: {failed}',
+          { sent: sent == null ? '?' : sent, failed: failed == null ? '?' : failed }
+        );
+      } catch (error) {
+        const msg = error && error.message ? String(error.message) : String(error || '');
+        const hint = msg.toLowerCase().includes('404') || msg.toLowerCase().includes('not found')
+          ? t('account.admin.newsletter.not_deployed', 'Newsletter backend not deployed yet. Deploy the Supabase Edge Function `send-newsletter`.')
+          : '';
+        adminNewsletterStatus.textContent = [t('account.admin.newsletter.failed', 'Send failed: {error}', { error: msg }), hint].filter(Boolean).join(' ');
+      }
+    };
+
+    if (adminNewsletterTest) {
+      adminNewsletterTest.addEventListener('click', async () => {
+        if (!dashboardUser || !dashboardUser.email) {
+          adminNewsletterStatus.textContent = t('account.admin.newsletter.no_user', 'Sign in first.');
+          return;
+        }
+        await send('emails', { audience: { type: 'emails', emails: [String(dashboardUser.email)] } });
+      });
+    }
+
+    adminNewsletterForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const mode = String(adminNewsletterAudience.value || 'all');
+      if (mode === 'role') {
+        const role = adminNewsletterRole ? String(adminNewsletterRole.value || '').trim() : '';
+        if (!role) {
+          adminNewsletterStatus.textContent = t('account.admin.newsletter.pick_role', 'Pick a role.');
+          return;
+        }
+        await send('role', { audience: { type: 'role', role } });
+        return;
+      }
+      if (mode === 'emails') {
+        const emails = parseEmails(adminNewsletterEmails ? adminNewsletterEmails.value : '');
+        if (!emails.length) {
+          adminNewsletterStatus.textContent = t('account.admin.newsletter.pick_emails', 'Add at least one email.');
+          return;
+        }
+        await send('emails', { audience: { type: 'emails', emails } });
+        return;
+      }
+      await send('all', { audience: { type: 'all' } });
+    });
+  };
+
   const wireAdminUi = () => {
     if (adminWired) return;
     if (!adminPanel) return;
@@ -831,6 +1152,43 @@
         }
         window.setTimeout(() => { btn.textContent = t('account.admin.save', 'Save'); btn.disabled = false; }, 1200);
       });
+    }
+
+    // Network profiles suspension tool.
+    if (adminNetworkRefresh) adminNetworkRefresh.addEventListener('click', loadNetworkAdmin);
+    if (adminNetworkQ) {
+      adminNetworkQ.addEventListener('input', () => {
+        renderNetworkAdminList();
+      });
+      adminNetworkQ.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          loadNetworkAdmin();
+        }
+      });
+    }
+    if (adminNetworkList) {
+      adminNetworkList.addEventListener('click', async (e) => {
+        const btn = e && e.target ? e.target.closest('[data-net-save]') : null;
+        if (!btn) return;
+        const row = btn.closest('[data-net-row]');
+        if (!row) return;
+        const kind = String(row.getAttribute('data-kind') || '').trim().toLowerCase();
+        const slug = String(row.getAttribute('data-slug') || '').trim();
+        const suspendedEl = row.querySelector('input[data-net-suspended]');
+        const reasonEl = row.querySelector('input[data-net-reason]');
+        const suspended = !!(suspendedEl && suspendedEl.checked);
+        const reason = reasonEl && reasonEl.value ? String(reasonEl.value) : '';
+        await saveNetworkState(kind, slug, suspended, reason, btn);
+      });
+    }
+
+    // Newsletter tool.
+    wireNewsletterUi();
+
+    // Lazy-load network state list on first admin open.
+    if (adminNetworkStatus && !lastNetworkItems.length) {
+      loadNetworkAdmin().catch(() => {});
     }
   };
 

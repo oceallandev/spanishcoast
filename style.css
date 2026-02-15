@@ -4623,6 +4623,12 @@ body[data-section="properties"].map-open .map-section {
     outline: none;
 }
 
+.admin-input--compact {
+    flex: 0 1 240px;
+    min-width: 180px;
+    padding: 0.75rem 0.85rem;
+}
+
 .admin-input:focus {
     border-color: rgba(14, 165, 233, 0.35);
     box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.18);
@@ -6804,6 +6810,12 @@ body.crm-open .crm-drawer {
     -webkit-user-select: none;
 }
 
+.network-tag--danger {
+    border-color: rgba(248, 113, 113, 0.30);
+    background: rgba(248, 113, 113, 0.10);
+    color: rgba(254, 226, 226, 0.92);
+}
+
 .network-open-hint {
     margin-top: 0.1rem;
     display: inline-flex;
@@ -6964,6 +6976,29 @@ body.crm-open .crm-drawer {
     color: rgba(224, 242, 254, 0.98);
     font-weight: 900;
     font-size: 0.78rem;
+}
+
+.network-pill--danger {
+    border-color: rgba(248, 113, 113, 0.26);
+    background: rgba(248, 113, 113, 0.12);
+    color: rgba(254, 226, 226, 0.98);
+}
+
+.network-suspend-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.85rem 1rem;
+    border-radius: 18px;
+    border: 1px solid rgba(248, 113, 113, 0.22);
+    background: rgba(248, 113, 113, 0.08);
+    margin: 0 1.2rem 1rem;
+}
+
+.network-suspend-banner__text {
+    color: rgba(254, 226, 226, 0.92);
+    font-weight: 850;
+    line-height: 1.4;
 }
 
 .network-profile__grid {
