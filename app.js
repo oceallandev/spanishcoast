@@ -3638,7 +3638,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         <button type="button" class="ref-chip ref-chip--small" data-action="show-original-ref" style="display:none" aria-label="${escapeHtml(t('listing.original_ref_show', 'Show original reference'))}" title="${escapeHtml(t('listing.original_ref_show', 'Show original reference'))}">Orig</button>
                     </div>
-                    <h3><span data-i18n-dynamic>${escapeHtml(type)}</span> ${escapeHtml(t('common.in', 'in'))} ${escapeHtml(town)}</h3>
+                    <h3>
+                        <span data-i18n-dynamic>${escapeHtml(type)}</span>
+                        <span data-i18n="common.in">${escapeHtml(t('common.in', 'in'))}</span>
+                        <span data-i18n-dynamic>${escapeHtml(town)}</span>
+                    </h3>
                     <div class="location">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                         <span data-i18n-dynamic>${escapeHtml(town)}, ${escapeHtml(province)}</span>
@@ -4214,7 +4218,11 @@ document.addEventListener('DOMContentLoaded', () => {
 	            setBrowserRef(reference, { push: shouldPush, state: { modalRef: reference } });
 	        }
 
-        const modalTitleHtml = `<span data-i18n-dynamic>${escapeHtml(type)}</span> ${escapeHtml(t('common.in', 'in'))} ${escapeHtml(town)}`;
+        const modalTitleHtml = [
+            `<span data-i18n-dynamic>${escapeHtml(type)}</span>`,
+            `<span data-i18n="common.in">${escapeHtml(t('common.in', 'in'))}</span>`,
+            `<span data-i18n-dynamic>${escapeHtml(town)}</span>`
+        ].join(' ');
 
         modalDetails.innerHTML = `
             <div class="modal-body" data-i18n-dynamic-scope>
