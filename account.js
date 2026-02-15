@@ -26,6 +26,13 @@
   const profileEmail = document.getElementById('profile-email');
   const profileBadges = document.getElementById('profile-badges');
   const profileNote = document.getElementById('profile-note');
+  const profileEditToggle = document.getElementById('profile-edit-toggle');
+  const profileEditForm = document.getElementById('profile-edit-form');
+  const profileEditName = document.getElementById('profile-edit-name');
+  const profileEditAvatarFile = document.getElementById('profile-edit-avatar-file');
+  const profileEditAvatarUrl = document.getElementById('profile-edit-avatar-url');
+  const profileEditLangs = document.getElementById('profile-edit-langs');
+  const profileEditStatus = document.getElementById('profile-edit-status');
   const roleHubTitle = document.getElementById('role-hub-title');
   const roleHubActions = document.getElementById('role-hub-actions');
   const roleHubBody = document.getElementById('role-hub-body');
@@ -65,6 +72,10 @@
   const adminNetworkRefresh = document.getElementById('admin-network-refresh');
   const adminNetworkStatus = document.getElementById('admin-network-status');
   const adminNetworkList = document.getElementById('admin-network-list');
+  const adminClaimsQ = document.getElementById('admin-claims-q');
+  const adminClaimsRefresh = document.getElementById('admin-claims-refresh');
+  const adminClaimsStatus = document.getElementById('admin-claims-status');
+  const adminClaimsList = document.getElementById('admin-claims-list');
   const adminNewsletterForm = document.getElementById('admin-newsletter-form');
   const adminNewsletterAudience = document.getElementById('admin-newsletter-audience');
   const adminNewsletterRoleRow = document.getElementById('admin-newsletter-role-row');
@@ -256,6 +267,44 @@
   // Supabase can be slow to respond on some networks, and free-tier projects can "wake up" after
   // a period of inactivity. Keep this fairly generous so users don't get logged out / stuck.
   const AUTH_TIMEOUT_MS = 60000;
+
+  // Affiliate referral claim: if this browser has a stored ?aff=CODE, bind it to this user
+  // after sign-in (best-effort, safe when the DB function isn't deployed yet).
+  let affiliateClaimBusy = false;
+  const getAffiliateApi = () => {
+    try {
+      return window.SCP_AFFILIATE && typeof window.SCP_AFFILIATE === 'object' ? window.SCP_AFFILIATE : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const maybeClaimAffiliateReferral = async (client, user) => {
+    if (affiliateClaimBusy) return;
+    if (!client || !user || !user.id) return;
+    const api = getAffiliateApi();
+    if (!api) return;
+
+    const code = (typeof api.getAttributionCode === 'function') ? String(api.getAttributionCode() || '').trim() : '';
+    if (!code) return;
+    if (typeof api.shouldAttemptClaim === 'function' && !api.shouldAttemptClaim(user.id)) return;
+
+    affiliateClaimBusy = true;
+    try {
+      const out = await withTimeout(
+        client.rpc('affiliate_claim_referral', { code }),
+        AUTH_TIMEOUT_MS,
+        'Affiliate referral claim'
+      );
+      if (out && !out.error && typeof api.markClaimed === 'function') {
+        api.markClaimed(user.id);
+      }
+    } catch {
+      // ignore
+    } finally {
+      affiliateClaimBusy = false;
+    }
+  };
 
   // If a browser/VPN/ad-block causes AbortError during auth init, don't lock the user out.
   // We'll retry a few times and keep the UI usable.
@@ -527,6 +576,427 @@
     return out && out.trim() ? out : 'SC';
   };
 
+  // Profile editor (user metadata).
+  const PROFILE_LANG_CHOICES = [
+    { code: 'en', flag: '🇬🇧', labelKey: 'lang.en', fallback: 'English' },
+    { code: 'es', flag: '🇪🇸', labelKey: 'lang.es', fallback: 'Spanish' },
+    { code: 'ro', flag: '🇷🇴', labelKey: 'lang.ro', fallback: 'Romanian' },
+    { code: 'sv', flag: '🇸🇪', labelKey: 'lang.sv', fallback: 'Swedish' },
+    { code: 'de', flag: '🇩🇪', labelKey: 'lang.de', fallback: 'German' },
+    { code: 'fr', flag: '🇫🇷', labelKey: 'lang.fr', fallback: 'French' },
+    { code: 'nl', flag: '🇳🇱', labelKey: 'lang.nl', fallback: 'Dutch' }
+  ];
+
+  const normLang = (value) => String(value || '').trim().toLowerCase();
+  const uniq = (values) => {
+    const out = [];
+    const seen = new Set();
+    for (const v of Array.isArray(values) ? values : []) {
+      const key = String(v || '');
+      if (!key) continue;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(key);
+    }
+    return out;
+  };
+
+  const readUserMeta = (user) => {
+    try {
+      if (!user || !user.user_metadata || typeof user.user_metadata !== 'object') return {};
+      return user.user_metadata || {};
+    } catch {
+      return {};
+    }
+  };
+
+  const profileDisplayNameFor = (user, profileInfo) => {
+    const meta = readUserMeta(user);
+    const fromMeta = String(meta.scp_display_name || meta.display_name || meta.full_name || meta.name || '').trim();
+    const fromProfiles = String((profileInfo && profileInfo.displayName) ? profileInfo.displayName : '').trim();
+    const fromEmail = String((user && user.email) ? user.email : '').trim().split('@')[0] || '';
+    return fromMeta || fromProfiles || fromEmail || t('account.common.user_title', 'User');
+  };
+
+  const profileSpokenLanguagesFor = (user) => {
+    const meta = readUserMeta(user);
+    const raw = meta.scp_spoken_languages;
+    const list = Array.isArray(raw) ? raw : [];
+    return uniq(list.map(normLang).filter(Boolean));
+  };
+
+  const profileAvatarMetaFor = (user) => {
+    const meta = readUserMeta(user);
+    return {
+      url: String(meta.scp_avatar_url || '').trim(),
+      bucket: String(meta.scp_avatar_bucket || '').trim(),
+      path: String(meta.scp_avatar_path || '').trim()
+    };
+  };
+
+  const profileLangLabel = (code) => {
+    const c = normLang(code);
+    const hit = PROFILE_LANG_CHOICES.find((l) => l.code === c);
+    if (hit) return t(hit.labelKey, hit.fallback);
+    return c ? c.toUpperCase() : '';
+  };
+
+  const profileLangFlag = (code) => {
+    const c = normLang(code);
+    const hit = PROFILE_LANG_CHOICES.find((l) => l.code === c);
+    return hit ? hit.flag : '';
+  };
+
+  const setAvatarInitials = (initials) => {
+    if (!profileAvatar) return;
+    profileAvatar.classList.remove('account-avatar--image');
+    profileAvatar.textContent = String(initials || 'SC');
+  };
+
+  const setAvatarImage = (url, { fallbackInitials } = {}) => {
+    if (!profileAvatar) return;
+    const src = String(url || '').trim();
+    if (!src) {
+      setAvatarInitials(fallbackInitials || 'SC');
+      return;
+    }
+    profileAvatar.classList.add('account-avatar--image');
+    profileAvatar.textContent = '';
+    const img = document.createElement('img');
+    img.loading = 'lazy';
+    img.referrerPolicy = 'no-referrer';
+    img.alt = '';
+    img.src = src;
+    img.addEventListener('error', () => {
+      setAvatarInitials(fallbackInitials || 'SC');
+    }, { once: true });
+    profileAvatar.appendChild(img);
+  };
+
+  const resolveAvatarUrl = async (client, user) => {
+    const meta = profileAvatarMetaFor(user);
+    if (client && meta.bucket && meta.path) {
+      try {
+        const { data, error } = await client.storage.from(meta.bucket).createSignedUrl(meta.path, 60 * 60 * 24 * 7);
+        const url = data && data.signedUrl ? String(data.signedUrl) : '';
+        if (!error && url) return url;
+      } catch {
+        // ignore
+      }
+    }
+    return meta.url || '';
+  };
+
+  const randId = () => {
+    try {
+      if (window.crypto && typeof window.crypto.randomUUID === 'function') return window.crypto.randomUUID();
+    } catch {
+      // ignore
+    }
+    return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  };
+
+  const compressImageFile = async (file, { maxSide = 512, quality = 0.85 } = {}) => {
+    if (!file) throw new Error('Missing file');
+    if (!file.type || !file.type.startsWith('image/')) throw new Error('Not an image');
+
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    try {
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = () => reject(new Error('Failed to read image'));
+        img.src = url;
+      });
+
+      const srcW = img.naturalWidth || img.width || 0;
+      const srcH = img.naturalHeight || img.height || 0;
+      if (!srcW || !srcH) throw new Error('Invalid image dimensions');
+
+      const scale = Math.min(1, maxSide / Math.max(srcW, srcH));
+      const outW = Math.max(1, Math.round(srcW * scale));
+      const outH = Math.max(1, Math.round(srcH * scale));
+
+      const canvas = document.createElement('canvas');
+      canvas.width = outW;
+      canvas.height = outH;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Canvas not supported');
+      ctx.drawImage(img, 0, 0, outW, outH);
+
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', quality));
+      if (!blob) throw new Error('Failed to encode JPEG');
+      return blob;
+    } finally {
+      try { URL.revokeObjectURL(url); } catch { /* ignore */ }
+    }
+  };
+
+  // Profile editor UI wiring.
+  let profileEditorWired = false;
+  let profileEditorClient = null;
+  let profileEditorUser = null;
+  let profileEditorRole = 'client';
+  let profileEditorProfileInfo = null;
+  let profileLangButtons = [];
+  let profileLangSelection = new Set();
+  let pendingAvatarFile = null;
+
+  const updateLangButtonState = () => {
+    for (const btn of profileLangButtons) {
+      const code = btn && btn.dataset ? normLang(btn.dataset.code) : '';
+      const on = code ? profileLangSelection.has(code) : false;
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+  };
+
+  const setLangSelection = (langs) => {
+    profileLangSelection = new Set((Array.isArray(langs) ? langs : []).map(normLang).filter(Boolean));
+    updateLangButtonState();
+  };
+
+  const ensureLangGrid = () => {
+    if (!profileEditLangs) return;
+    if (profileLangButtons.length) return;
+    profileEditLangs.innerHTML = '';
+    profileLangButtons = PROFILE_LANG_CHOICES.map((lang) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'lang-chip';
+      btn.dataset.code = lang.code;
+      btn.setAttribute('aria-pressed', 'false');
+      btn.innerHTML = `<span class="lang-chip-flag">${lang.flag}</span><span class="lang-chip-code">${escapeHtml(lang.code)}</span><span class="lang-chip-name">${escapeHtml(profileLangLabel(lang.code))}</span>`;
+      btn.addEventListener('click', () => {
+        const code = normLang(btn.dataset.code);
+        if (!code) return;
+        if (profileLangSelection.has(code)) profileLangSelection.delete(code);
+        else profileLangSelection.add(code);
+        updateLangButtonState();
+      });
+      profileEditLangs.appendChild(btn);
+      return btn;
+    });
+  };
+
+  const setProfileEditStatus = (text) => {
+    if (!profileEditStatus) return;
+    profileEditStatus.textContent = String(text || '');
+  };
+
+  const showProfileEditor = (yes) => {
+    if (profileEditForm) profileEditForm.style.display = yes ? 'grid' : 'none';
+    if (profileEditToggle) {
+      profileEditToggle.textContent = yes ? t('account.profile.close', 'Close') : t('account.profile.edit', 'Edit profile');
+    }
+    if (!yes) {
+      setProfileEditStatus('');
+      pendingAvatarFile = null;
+      try { if (profileEditAvatarFile) profileEditAvatarFile.value = ''; } catch { /* ignore */ }
+    }
+  };
+
+  const populateProfileEditor = async () => {
+    if (!profileEditorUser) return;
+    ensureLangGrid();
+    const displayName = profileDisplayNameFor(profileEditorUser, profileEditorProfileInfo);
+    const avatarMeta = profileAvatarMetaFor(profileEditorUser);
+    const langs = profileSpokenLanguagesFor(profileEditorUser);
+    if (profileEditName) profileEditName.value = displayName && displayName !== t('account.common.user_title', 'User') ? displayName : '';
+    if (profileEditAvatarUrl) profileEditAvatarUrl.value = avatarMeta.url || '';
+    setLangSelection(langs);
+  };
+
+  const uploadAvatarIfAny = async () => {
+    if (!profileEditorClient) throw new Error('Supabase not configured');
+    if (!profileEditorUser || !profileEditorUser.id) throw new Error('Signed out');
+    if (!pendingAvatarFile) return null;
+
+    const bucket = 'avatars';
+    const blob = await compressImageFile(pendingAvatarFile, { maxSide: 512, quality: 0.86 });
+    const path = `${profileEditorUser.id}/${randId()}.jpg`;
+    const { error: upErr } = await profileEditorClient.storage.from(bucket).upload(path, blob, {
+      contentType: 'image/jpeg',
+      upsert: false,
+      cacheControl: '3600'
+    });
+    if (upErr) throw new Error(upErr.message || 'Upload failed');
+
+    // Best-effort signed URL for immediate preview (bucket is expected to be private).
+    let signedUrl = '';
+    try {
+      const { data: urlData } = await profileEditorClient.storage.from(bucket).createSignedUrl(path, 60 * 60 * 24 * 7);
+      signedUrl = urlData && urlData.signedUrl ? String(urlData.signedUrl) : '';
+    } catch {
+      // ignore
+    }
+
+    // Best-effort cleanup of previous avatar.
+    const prev = profileAvatarMetaFor(profileEditorUser);
+    if (prev.bucket && prev.path) {
+      try { await profileEditorClient.storage.from(prev.bucket).remove([prev.path]); } catch { /* ignore */ }
+    }
+
+    return { bucket, path, signedUrl };
+  };
+
+  const saveProfileEdits = async () => {
+    const client = profileEditorClient;
+    const user = profileEditorUser;
+    if (!client) throw new Error('Supabase not configured');
+    if (!user) throw new Error('Signed out');
+
+    const name = String(profileEditName && profileEditName.value ? profileEditName.value : '').trim().slice(0, 80);
+    const avatarUrl = String(profileEditAvatarUrl && profileEditAvatarUrl.value ? profileEditAvatarUrl.value : '').trim().slice(0, 600);
+    const langs = Array.from(profileLangSelection || []).map(normLang).filter(Boolean);
+
+    let nextAvatarUrl = avatarUrl;
+    let nextAvatarBucket = '';
+    let nextAvatarPath = '';
+
+    if (pendingAvatarFile) {
+      const uploaded = await uploadAvatarIfAny();
+      if (uploaded) {
+        nextAvatarUrl = uploaded.signedUrl || '';
+        nextAvatarBucket = uploaded.bucket;
+        nextAvatarPath = uploaded.path;
+      }
+    } else if (avatarUrl) {
+      // External URL wins; clear storage refs so we don't keep requesting signed URLs.
+      nextAvatarBucket = '';
+      nextAvatarPath = '';
+    } else {
+      nextAvatarUrl = '';
+      nextAvatarBucket = '';
+      nextAvatarPath = '';
+    }
+
+    const { data, error } = await client.auth.updateUser({
+      data: {
+        scp_display_name: name || null,
+        scp_avatar_url: nextAvatarUrl || null,
+        scp_avatar_bucket: nextAvatarBucket || null,
+        scp_avatar_path: nextAvatarPath || null,
+        scp_spoken_languages: langs,
+        scp_profile_updated_at: new Date().toISOString()
+      }
+    });
+    if (error) throw new Error(error.message || 'Update failed');
+
+    if (data && data.user) {
+      profileEditorUser = data.user;
+      dashboardUser = data.user;
+    }
+    pendingAvatarFile = null;
+    try { if (profileEditAvatarFile) profileEditAvatarFile.value = ''; } catch { /* ignore */ }
+    return data && data.user ? data.user : user;
+  };
+
+  const ensureProfileEditorWired = () => {
+    if (profileEditorWired) return;
+    profileEditorWired = true;
+
+    if (profileEditToggle) {
+      profileEditToggle.addEventListener('click', async () => {
+        const open = profileEditForm && profileEditForm.style.display !== 'none';
+        showProfileEditor(!open);
+        if (!open) await populateProfileEditor();
+      });
+    }
+
+    if (profileEditAvatarFile) {
+      profileEditAvatarFile.addEventListener('change', () => {
+        const file = profileEditAvatarFile.files && profileEditAvatarFile.files[0] ? profileEditAvatarFile.files[0] : null;
+        pendingAvatarFile = file && file.type && file.type.startsWith('image/') ? file : null;
+        if (pendingAvatarFile) {
+          setProfileEditStatus(t('account.profile.avatar_ready', 'Image selected. Tap Save to upload.'));
+          // When uploading a file, ignore any pasted URL to avoid confusion.
+          if (profileEditAvatarUrl) profileEditAvatarUrl.value = '';
+        } else {
+          setProfileEditStatus('');
+        }
+      });
+    }
+
+    if (profileEditForm) {
+      profileEditForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (!profileEditorUser) {
+          setProfileEditStatus(t('account.profile.sign_in_first', 'Please sign in first.'));
+          return;
+        }
+
+        const saveBtn = document.getElementById('profile-edit-save');
+        const prev = saveBtn ? saveBtn.textContent : '';
+        if (saveBtn) {
+          saveBtn.disabled = true;
+          saveBtn.textContent = t('common.saving', 'Saving…');
+        }
+        setProfileEditStatus('');
+
+        try {
+          const updatedUser = await saveProfileEdits();
+          setProfileEditStatus(t('common.saved', 'Saved.'));
+          await populateProfileEditor();
+
+          // Refresh avatar + badges immediately (onAuthStateChange will also catch USER_UPDATED).
+          const displayName = profileDisplayNameFor(updatedUser, profileEditorProfileInfo);
+          const role = normalizeRole(profileEditorRole || 'client');
+          const meta = ROLE_META[role] || ROLE_META.client;
+          const initials = initialsFor(displayName, updatedUser.email || '');
+          setAvatarInitials(initials);
+          if (profileName) profileName.textContent = displayName || updatedUser.email || t('account.common.user_title', 'User');
+          if (profileBadges) {
+            const badges = [];
+            badges.push(`<span class="account-badge account-badge--accent">${escapeHtml(roleLabel(role || 'client'))}</span>`);
+            if (meta.partner) badges.push(`<span class="account-badge">${escapeHtml(t('account.badge.partner', 'Partner tools enabled'))}</span>`);
+            if (role === 'collaborator') badges.push(`<span class="account-badge">${escapeHtml(t('account.badge.scout', 'Street Scout'))}</span>`);
+            if (role === 'developer') badges.push(`<span class="account-badge">${escapeHtml(t('account.badge.newbuilds', 'New builds'))}</span>`);
+            const langs = profileSpokenLanguagesFor(updatedUser);
+            langs.forEach((code) => {
+              const label = profileLangLabel(code);
+              const flag = profileLangFlag(code);
+              const short = String(code || '').toUpperCase();
+              badges.push(`<span class="account-badge" title="${escapeHtml(label)}">${escapeHtml(flag ? `${flag} ` : '')}${escapeHtml(short)}</span>`);
+            });
+            profileBadges.innerHTML = badges.join('');
+          }
+          resolveAvatarUrl(profileEditorClient, updatedUser).then((url) => {
+            if (!dashboardUser || dashboardUser.id !== updatedUser.id) return;
+            if (!url) return;
+            setAvatarImage(url, { fallbackInitials: initials });
+          });
+        } catch (error) {
+          const msg = (error && error.message) ? error.message : String(error);
+          setProfileEditStatus(`${t('common.save_failed', 'Save failed')}: ${msg}`);
+        } finally {
+          if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.textContent = prev || t('account.profile.save', 'Save');
+          }
+        }
+      });
+    }
+  };
+
+  const setProfileEditorContext = async (client, user, role, profileInfo) => {
+    profileEditorClient = client || null;
+    profileEditorUser = user || null;
+    profileEditorRole = role || 'client';
+    profileEditorProfileInfo = profileInfo || null;
+    ensureProfileEditorWired();
+    if (!profileEditorUser) {
+      showProfileEditor(false);
+      return;
+    }
+    // Keep button labels in sync even if form is currently hidden.
+    if (profileEditToggle && (!profileEditForm || profileEditForm.style.display === 'none')) {
+      profileEditToggle.textContent = t('account.profile.edit', 'Edit profile');
+    }
+    if (profileEditForm && profileEditForm.style.display !== 'none') {
+      await populateProfileEditor();
+    }
+  };
+
   const normalizeRef = (value) => String(value || '').trim().toUpperCase();
 
   const isLoopbackHost = (hostname) => {
@@ -786,6 +1256,7 @@
 
   let lastNetworkItems = [];
   let lastNetworkStates = {};
+  let lastClaims = [];
 
   const normalizeText = (value) => String(value || '')
     .toLowerCase()
@@ -804,7 +1275,7 @@
   };
 
   const flattenNetworkData = () => {
-    const d = window.scpNetworkData || null;
+    const d = window.scpNetworkDataMerged || window.scpNetworkData || null;
     if (!d || typeof d !== 'object') return [];
     const out = [];
     const push = (kind, list) => {
@@ -966,6 +1437,158 @@
       if (adminNetworkStatus) {
         adminNetworkStatus.textContent = t('account.admin.network.save_failed', 'Save failed: {error}', { error: msg });
       }
+      if (btn) btn.textContent = t('account.admin.failed_short', 'Failed');
+    } finally {
+      if (btn) {
+        window.setTimeout(() => {
+          btn.textContent = t('account.admin.save', 'Save');
+          btn.disabled = false;
+        }, 1000);
+      }
+    }
+  };
+
+  const claimStatusLabel = (status) => {
+    const s = String(status || '').trim().toLowerCase();
+    if (s === 'reviewing') return t('account.admin.claims.status_reviewing', 'Reviewing');
+    if (s === 'approved') return t('account.admin.claims.status_approved', 'Approved');
+    if (s === 'rejected') return t('account.admin.claims.status_rejected', 'Rejected');
+    if (s === 'closed') return t('account.admin.claims.status_closed', 'Closed');
+    return t('account.admin.claims.status_new', 'New');
+  };
+
+  const renderClaimsAdminList = () => {
+    if (!adminClaimsList || !adminClaimsStatus) return;
+
+    const q = normalizeText(adminClaimsQ && adminClaimsQ.value ? adminClaimsQ.value : '');
+    const rows = Array.isArray(lastClaims) ? lastClaims : [];
+    const matches = rows.filter((r) => {
+      if (!r) return false;
+      if (!q) return true;
+      const bag = [
+        r.id,
+        r.kind,
+        r.slug,
+        r.requester_email,
+        r.requester_name,
+        r.requested_action,
+        r.status,
+        r.message
+      ].map(normalizeText).filter(Boolean).join(' | ');
+      return bag.includes(q);
+    });
+
+    adminClaimsStatus.textContent = matches.length
+      ? t('account.admin.claims.showing', 'Showing {count} claims', { count: matches.length })
+      : t('account.admin.claims.none', 'No claims yet.');
+
+    adminClaimsList.innerHTML = matches.slice(0, 250).map((r) => {
+      const id = String(r.id || '').trim();
+      const kind = String(r.kind || '').trim().toLowerCase();
+      const slug = String(r.slug || '').trim();
+      const status = String(r.status || 'new').trim().toLowerCase();
+      const action = String(r.requested_action || 'edit').trim().toLowerCase();
+      const email = String(r.requester_email || '').trim();
+      const name = String(r.requester_name || '').trim();
+      const createdAt = r.created_at ? new Date(r.created_at).toLocaleString() : '';
+      const msg = String(r.message || '').trim();
+      const notes = String(r.admin_notes || '').trim();
+      const href = `network-profile.html?type=${encodeURIComponent(kind)}&slug=${encodeURIComponent(slug)}`;
+
+      const badge = `<span class="network-pill${status === 'new' ? '' : (status === 'approved' ? ' network-pill--ok' : (status === 'rejected' ? ' network-pill--danger' : ''))}">${escapeHtml(claimStatusLabel(status))}</span>`;
+      const title = `${networkKindLabel(kind)} · ${slug}`;
+      const sub = [email || null, name || null, action ? `action:${action}` : null, createdAt || null].filter(Boolean).join(' · ');
+
+      return `
+        <div class="admin-user-row" data-claim-row data-claim-id="${escapeHtml(id)}">
+          <div class="admin-user-main">
+            <div class="admin-user-title">${escapeHtml(title)} ${badge}</div>
+            <div class="admin-user-sub">${escapeHtml(sub)}</div>
+            ${msg ? `<div class="muted" style="margin-top:0.45rem; white-space:pre-wrap">${escapeHtml(msg)}</div>` : ''}
+          </div>
+          <div class="admin-user-actions">
+            <select class="admin-select" data-claim-status>
+              ${['new', 'reviewing', 'approved', 'rejected', 'closed'].map((s) => (
+                `<option value="${escapeHtml(s)}"${s === status ? ' selected' : ''}>${escapeHtml(claimStatusLabel(s))}</option>`
+              )).join('')}
+            </select>
+            <input class="admin-input admin-input--compact" type="text" data-claim-notes value="${escapeHtml(notes)}"
+              placeholder="${escapeHtml(t('account.admin.claims.notes_placeholder', 'Admin notes (optional)'))}">
+            <a class="cta-button cta-button--outline" href="${escapeHtml(href)}" target="_blank" rel="noopener">${escapeHtml(t('account.admin.network.view', 'View'))}</a>
+            <button class="cta-button cta-button--outline" type="button" data-claim-save>${escapeHtml(t('account.admin.save', 'Save'))}</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  };
+
+  const loadClaimsAdmin = async () => {
+    if (!adminClaimsStatus) return;
+    const client = getClient();
+    if (!client) return;
+    if (!dashboardUser || !dashboardUser.id) return;
+
+    adminClaimsStatus.textContent = t('account.admin.claims.loading', 'Loading claims…');
+    if (adminClaimsList) adminClaimsList.innerHTML = '';
+
+    try {
+      const { data, error } = await withTimeout(
+        client.from('network_profile_claims')
+          .select('id,kind,slug,requester_email,requester_name,requested_action,message,status,created_at,admin_notes')
+          .order('created_at', { ascending: false })
+          .limit(500),
+        AUTH_TIMEOUT_MS,
+        'Load claims'
+      );
+      if (error) throw error;
+      lastClaims = Array.isArray(data) ? data : [];
+      renderClaimsAdminList();
+    } catch (error) {
+      const msg = error && error.message ? String(error.message) : String(error || '');
+      if (adminClaimsStatus) {
+        adminClaimsStatus.textContent = t('account.admin.claims.load_failed', 'Failed to load claims: {error}', { error: msg });
+      }
+      lastClaims = [];
+      renderClaimsAdminList();
+    }
+  };
+
+  const saveClaimAdmin = async (claimId, status, notes, btn) => {
+    const client = getClient();
+    if (!client) return;
+    if (!claimId) return;
+    if (!dashboardUser || !dashboardUser.id) return;
+
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = t('account.admin.saving', 'Saving…');
+    }
+    if (adminClaimsStatus) adminClaimsStatus.textContent = t('account.admin.claims.saving', 'Saving claim…');
+
+    try {
+      const payload = {
+        status: String(status || 'new'),
+        admin_notes: String(notes || '').trim() || null,
+        reviewed_by: dashboardUser.id,
+        reviewed_at: new Date().toISOString()
+      };
+      const { error } = await withTimeout(
+        client.from('network_profile_claims').update(payload).eq('id', claimId),
+        AUTH_TIMEOUT_MS,
+        'Save claim'
+      );
+      if (error) throw error;
+
+      // Update local cache.
+      lastClaims = (Array.isArray(lastClaims) ? lastClaims : []).map((r) => (
+        r && String(r.id) === String(claimId) ? { ...r, ...payload } : r
+      ));
+      if (adminClaimsStatus) adminClaimsStatus.textContent = t('account.admin.claims.saved', 'Saved.');
+      renderClaimsAdminList();
+      if (btn) btn.textContent = t('account.admin.saved_short', 'Saved');
+    } catch (error) {
+      const msg = error && error.message ? String(error.message) : String(error || '');
+      if (adminClaimsStatus) adminClaimsStatus.textContent = t('account.admin.claims.save_failed', 'Save failed: {error}', { error: msg });
       if (btn) btn.textContent = t('account.admin.failed_short', 'Failed');
     } finally {
       if (btn) {
@@ -1183,12 +1806,45 @@
       });
     }
 
+    // Profile claims tool.
+    if (adminClaimsRefresh) adminClaimsRefresh.addEventListener('click', loadClaimsAdmin);
+    if (adminClaimsQ) {
+      adminClaimsQ.addEventListener('input', () => {
+        renderClaimsAdminList();
+      });
+      adminClaimsQ.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          loadClaimsAdmin();
+        }
+      });
+    }
+    if (adminClaimsList) {
+      adminClaimsList.addEventListener('click', async (e) => {
+        const btn = e && e.target ? e.target.closest('[data-claim-save]') : null;
+        if (!btn) return;
+        const row = btn.closest('[data-claim-row]');
+        if (!row) return;
+        const claimId = String(row.getAttribute('data-claim-id') || '').trim();
+        const statusEl = row.querySelector('select[data-claim-status]');
+        const notesEl = row.querySelector('input[data-claim-notes]');
+        const status = statusEl && statusEl.value ? String(statusEl.value) : 'new';
+        const notes = notesEl && notesEl.value ? String(notesEl.value) : '';
+        await saveClaimAdmin(claimId, status, notes, btn);
+      });
+    }
+
     // Newsletter tool.
     wireNewsletterUi();
 
     // Lazy-load network state list on first admin open.
     if (adminNetworkStatus && !lastNetworkItems.length) {
       loadNetworkAdmin().catch(() => {});
+    }
+
+    // Lazy-load claims on first admin open.
+    if (adminClaimsStatus && !lastClaims.length) {
+      loadClaimsAdmin().catch(() => {});
     }
   };
 
@@ -2343,6 +2999,7 @@
       );
       dashboardUser = null;
       dashboardRole = 'client';
+      await setProfileEditorContext(client, null, 'client', null);
       if (signOutBtn) signOutBtn.disabled = true;
       setVisible(dashboardPanels, false);
       setVisible(accountWorkspace, false);
@@ -2362,7 +3019,7 @@
     const roleHint = !profileInfo.role && profileInfo && profileInfo.error
       ? t('account.status.role_unavailable', ' Role unavailable: {error}', { error: profileInfo.error })
       : '';
-    const who = (profileInfo && profileInfo.displayName) ? profileInfo.displayName : (user.email || t('account.common.user', 'user'));
+    const who = profileDisplayNameFor(user, profileInfo);
 
     setStatus(
       t('account.status.welcome', 'Welcome, {name}', { name: who }),
@@ -2384,8 +3041,18 @@
     dashboardUser = user;
     dashboardRole = role;
 
-    if (profileAvatar) profileAvatar.textContent = initialsFor(profileInfo && profileInfo.displayName ? profileInfo.displayName : '', user.email || '');
-    if (profileName) profileName.textContent = (profileInfo && profileInfo.displayName) ? String(profileInfo.displayName) : (user.email || t('account.common.user_title', 'User'));
+    // If user arrived via an affiliate link, bind the referral now.
+    await maybeClaimAffiliateReferral(client, user);
+
+    const displayName = profileDisplayNameFor(user, profileInfo);
+    const initials = initialsFor(displayName, user.email || '');
+    setAvatarInitials(initials);
+    resolveAvatarUrl(client, user).then((url) => {
+      if (!dashboardUser || dashboardUser.id !== user.id) return;
+      if (!url) return;
+      setAvatarImage(url, { fallbackInitials: initials });
+    });
+    if (profileName) profileName.textContent = displayName || user.email || t('account.common.user_title', 'User');
     if (profileEmail) profileEmail.textContent = user.email || '';
     if (profileBadges) {
       const badges = [];
@@ -2393,12 +3060,21 @@
       if (meta.partner) badges.push(`<span class="account-badge">${escapeHtml(t('account.badge.partner', 'Partner tools enabled'))}</span>`);
       if (normalizeRole(role) === 'collaborator') badges.push(`<span class="account-badge">${escapeHtml(t('account.badge.scout', 'Street Scout'))}</span>`);
       if (normalizeRole(role) === 'developer') badges.push(`<span class="account-badge">${escapeHtml(t('account.badge.newbuilds', 'New builds'))}</span>`);
+      const langs = profileSpokenLanguagesFor(user);
+      langs.forEach((code) => {
+        const label = profileLangLabel(code);
+        const flag = profileLangFlag(code);
+        const short = String(code || '').toUpperCase();
+        badges.push(`<span class="account-badge" title="${escapeHtml(label)}">${escapeHtml(flag ? `${flag} ` : '')}${escapeHtml(short)}</span>`);
+      });
       profileBadges.innerHTML = badges.join('');
     }
     if (profileNote) {
       const content = roleHubContentFor(role);
       profileNote.textContent = content && content.note ? String(content.note) : '';
     }
+
+    await setProfileEditorContext(client, user, role, profileInfo);
 
     renderRoleHub(role);
 

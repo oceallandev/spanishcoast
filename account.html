@@ -12,6 +12,7 @@
 
     <meta name="theme-color" content="#030712">
     <link rel="stylesheet" href="style.css?v=20260212b">
+    <script src="scp-affiliate.js?v=20260215c"></script>
     <script defer src="i18n.js?v=20260215c"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -204,6 +205,35 @@
                             </div>
                             <div class="account-profile-badges" id="profile-badges"></div>
                             <div class="account-profile-note muted" id="profile-note"></div>
+
+                            <div class="account-profile-actions">
+                                <button id="profile-edit-toggle" class="cta-button cta-button--outline" type="button" data-i18n="account.profile.edit">Edit profile</button>
+                            </div>
+
+	                            <form id="profile-edit-form" class="form-grid account-profile-form" style="display:none; margin-top:1rem;">
+	                                <label>
+	                                    <span data-i18n="account.profile.display_name">Display name</span>
+	                                    <input id="profile-edit-name" type="text" placeholder="Your name" data-i18n-placeholder="account.profile.display_name_placeholder">
+	                                </label>
+	                                <label>
+	                                    <span data-i18n="account.profile.avatar_upload">Upload profile image</span>
+	                                    <input id="profile-edit-avatar-file" type="file" accept="image/*">
+	                                    <div class="muted profile-avatar-hint" data-i18n="account.profile.avatar_upload_note">Optional. If upload is not enabled yet, paste an image URL below.</div>
+	                                </label>
+	                                <label class="profile-span-2">
+	                                    <span data-i18n="account.profile.avatar_url">Profile image URL</span>
+	                                    <input id="profile-edit-avatar-url" type="url" inputmode="url" autocapitalize="none" spellcheck="false" placeholder="https://…" data-i18n-placeholder="account.profile.avatar_url_placeholder">
+	                                </label>
+                                <div class="profile-lang-block">
+                                    <div class="profile-lang-label" data-i18n="account.profile.languages">Spoken languages</div>
+                                    <div class="profile-lang-grid" id="profile-edit-langs" aria-label="Spoken languages"></div>
+                                    <div class="muted" style="margin-top:0.35rem;" data-i18n="account.profile.languages_note">Choose the languages you can communicate in.</div>
+                                </div>
+                                <div class="form-actions">
+                                    <button id="profile-edit-save" class="cta-button" type="submit" data-i18n="account.profile.save">Save</button>
+                                </div>
+                                <div class="muted" id="profile-edit-status" aria-live="polite"></div>
+                            </form>
                         </div>
 
                         <div class="glass panel account-role-hub" id="role-hub-panel">
@@ -533,6 +563,11 @@
     <script defer src="network-redsp.js?v=20260215h"></script>
     <script defer src="network-merge.js?v=20260215f"></script>
     <script defer src="account.js?v=20260215e"></script>
+    <script src="utils-module.js?v=20260215c"></script>
+    <script src="map-module.js?v=20260215c"></script>
+    <script src="supabase-module.js?v=20260215c"></script>
+    <script src="ui-module.js?v=20260215c"></script>
+    <script src="filter-module.js?v=20260215c"></script>
     <script defer src="site.js?v=20260215c"></script>
 </body>
 
