@@ -72,6 +72,78 @@
     });
   };
 
+  const ensureMobileMenuShell = () => {
+    const existingPanel = document.getElementById('mobile-menu');
+    const existingBackdrop = document.getElementById('mobile-menu-backdrop');
+    const existingBtn = document.getElementById('mobile-menu-btn');
+
+    // Some pages (admin tools, catalog, brochure/reel/tour pages) don't include the mobile menu markup.
+    // When primary-nav is hidden on small screens, that makes navigation disappear. Inject a consistent menu.
+    if (!existingBackdrop) {
+      const backdrop = document.createElement('div');
+      backdrop.id = 'mobile-menu-backdrop';
+      backdrop.className = 'mobile-menu-backdrop';
+      backdrop.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(backdrop);
+    }
+
+    if (!existingPanel) {
+      const panel = document.createElement('aside');
+      panel.id = 'mobile-menu';
+      panel.className = 'mobile-menu';
+      panel.setAttribute('aria-hidden', 'true');
+      panel.innerHTML = `
+        <div class="mobile-menu-head">
+          <div class="mobile-menu-title">Spanish Coast Properties</div>
+          <button id="mobile-menu-close" class="mobile-menu-close" type="button">✕</button>
+        </div>
+        <nav class="mobile-menu-links" aria-label="Mobile menu">
+          <a href="index.html">Home</a>
+          <a href="properties.html">Properties</a>
+          <a href="new-builds.html">New Builds</a>
+          <a href="businesses.html">Businesses</a>
+          <a href="vehicles.html">Vehicles</a>
+          <a href="services.html">Services</a>
+          <a href="blog.html">Blog</a>
+          <a href="account.html">Account</a>
+        </nav>
+        <div class="mobile-menu-foot">
+          <a class="cta-button" href="mailto:info@spanishcoastproperties.com">Email</a>
+          <a class="cta-button" href="tel:+34624867866">Call</a>
+        </div>
+      `;
+      document.body.appendChild(panel);
+    }
+
+    if (!existingBtn) {
+      const btn = document.createElement('button');
+      btn.id = 'mobile-menu-btn';
+      btn.className = 'mobile-menu-btn no-print';
+      btn.type = 'button';
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-label', tr('ui.menu', 'Menu'));
+      btn.textContent = '☰';
+
+      const container =
+        document.querySelector('.header-right')
+        || document.querySelector('.brochure-toolbar-right')
+        || document.querySelector('.brochure-toolbar-left')
+        || null;
+      if (container) {
+        container.insertBefore(btn, container.firstChild);
+      } else {
+        // Safety fallback for rare pages without a header/toolbar.
+        btn.style.position = 'fixed';
+        btn.style.top = '12px';
+        btn.style.right = '12px';
+        btn.style.zIndex = '5200';
+        document.body.appendChild(btn);
+      }
+    }
+  };
+
+  ensureMobileMenuShell();
+
   // Make New Builds discoverable without having to update every page header/footer manually.
   ensureNavLink('.primary-nav', { href: 'new-builds.html', text: t('nav.new_builds') || 'New Builds', section: 'newbuilds', afterHref: 'properties.html' });
   ensureNavLink('.mobile-menu-links', { href: 'new-builds.html', text: t('nav.new_builds') || 'New Builds', afterHref: 'properties.html' });
@@ -155,8 +227,8 @@
     const selectors = [
       '.site-header .header-right a[href^="tel:"]',
       '.site-header .header-right .cta-button[href^="tel:"]',
-      '.mobile-menu-foot a[href^="tel:"]',
-      '.mobile-menu-foot .cta-button[href^="tel:"]'
+      '.main-header .header-right a[href^="tel:"]',
+      '.main-header .header-right .cta-button[href^="tel:"]'
     ];
     selectors.forEach((selector) => {
       document.querySelectorAll(selector).forEach((el) => {
