@@ -6984,6 +6984,12 @@ body.crm-open .crm-drawer {
     color: rgba(254, 226, 226, 0.98);
 }
 
+.network-pill--ok {
+    border-color: rgba(34, 197, 94, 0.26);
+    background: rgba(34, 197, 94, 0.12);
+    color: rgba(220, 252, 231, 0.98);
+}
+
 .network-suspend-banner {
     display: flex;
     align-items: center;
@@ -7005,6 +7011,43 @@ body.crm-open .crm-drawer {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1rem;
+}
+
+.network-bio p {
+    margin: 0;
+}
+
+.network-bio p + p {
+    margin-top: 0.85rem;
+}
+
+.network-bio__lead {
+    color: rgba(248, 250, 252, 0.92);
+    font-weight: 900;
+    letter-spacing: -0.01em;
+}
+
+.network-bio__list {
+    margin: 0.85rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.45rem;
+}
+
+.network-bio__list li {
+    position: relative;
+    padding-left: 1.05rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+}
+
+.network-bio__list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: rgba(56, 189, 248, 0.55);
 }
 
 .network-rel-grid {

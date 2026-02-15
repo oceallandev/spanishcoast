@@ -177,7 +177,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "DESIGN VILLA WITH ALL THE LUXURIES",
+      "bio": "Detached villa with 3 bedrooms, 3 bathrooms, with a SOUTH orientation. It has a 12 m2 porch / pergola on the ground floor and a 45 m2 solarium on the roof.\n\nIt has a terrace, private garden and access door to the car. It is designed with high quality materials using the most careful technology and providing the greatest comfort\n\n6.5x3.3 swimming pool with colored lights, designer tile, brick staircase, 1.20 waterfall and bench to sit under the waterfall.\n\nThis residence is located in one of the most beautiful and quiet areas between Ciudad Quesada and Pueblo Bravo, near the Natural Park of Las Lagunas de La Mata and Torrevieja and very close to the beaches of Guardamar and the La Marquesa golf course.",
       "stats": {
         "listings": 1
       }
@@ -207,7 +207,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD LUXURY VILLA IN CAMPOAMOR",
+      "bio": "New Build villa with the most exclusive design located in Campoamor only 250m from the beach.\n\nVilla build over 3 floors, has 4 bedrooms, 4 bathrooms, guest toilet, open plan kitchen with the lounge area, fitted wardrobes, private garden, terrace with infinity pool and garage.\n\nYou can expect nothing but the best from this stunning villa. A design for the most discerning clients, who want to choose their dream home that is also fully adapted to their personal needs and preferences.\n\nWith the option to completely personalise this villa to your own taste with the help of our professional architects and designers. Located in a AAA location and close to the sea, this very special villa can become the perfect home for you and your family.\n\nThe construction of this impressive infinity pool with glass walls and its open design guarantee maximum lux and wonderful views. In addition, the large solarium with outdoor kitchen, too, is a real highlight.\n\nCampoamor is surrounded by many beaches including La Glea, Aguamarina, Campoamor, La Zenia, Cabo Roig and Playa Flamenca.\n\nThere are three excellent championship 18-hole golf courses within five kilometres of the development including Golf Villamartin, Real Club de Golf de Campoamor and Golf Las Ramblas de Campoamor.\n\nYou can benefit from all the facilities this area has to offer, including La Zenia Boulevard shopping centre, international restaurants, sport centres, schools, health centres, hospital, bus service.\u2026",
       "stats": {
         "listings": 4
       }
@@ -237,7 +237,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "3 BEDROOM BUNGALOWS IN EXCLUSIVE RESIDENTIAL IN GRAN ALACANT!",
+      "bio": "Discover this exclusive residential of bungalows from 86.28m\u00b2 with a garden from 64m\u00b2, and with 2 or 3 bedrooms. It is a private urbanization, which has a communal pool, garden areas and children's play area for the enjoyment of free time.\n\nThe residential is located in the Cape of Santa Pola, between the mountains and the Carabass\u00ed beach. With the provision of all services, highlighting a Shopping Center a few meters away, with fashion, a wide area of \u200b\u200bleisure, services and restaurants, gas station, bus stop, etc ... It borders the main road, on the one hand, and the Mediterranean Sea on its east side, with fine sandy beaches and extensive pine forests.\n\nThe bungalows are on two floors, with high quality finishes, large parking spaces and terraces to enjoy the sun all year round! It is delivered with the installation of two air conditioners, a kitchen with an oven, an induction ceramic hob and an extraction hood.\n\n-12 km from Alicante-Elche International Airport\n-6 km from Santa Pola\n-23 km from Alicante\n\nEnjoy the comfort of the spaces in a privileged area!",
       "stats": {
         "listings": 2
       }
@@ -267,7 +267,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Semi-Detached Villas by the Sea in La Marina - El Pinet Beach",
+      "bio": "Exclusive Mediterranean Living Near the Beach\nThis new residential development of semi-detached villas in La Marina, just 500 meters from El Pinet Beach, offers an unbeatable combination of modern design and a privileged natural environment. Located next to the Las Salinas Natural Park, residents can enjoy golden sandy beaches, crystal-clear waters, protected dunes, and a centuries-old pine forest \u2013 the perfect place to live all year round or enjoy as a holiday retreat.\n\nModern Mediterranean Villas Designed for Comfort\nThe villas are distributed over two floors, featuring:\n3 spacious bedrooms and 3 bathrooms\nGround floor with open-plan kitchen and living room, one bedroom, one bathroom, and access to the private garden with parking space\nFirst floor with two bedrooms, both ensuite, and a large terrace connected to the master bedroom\nEach home has been designed with bright, comfortable interiors and high-quality finishes, creating a unique and welcoming atmosphere.\n\nFully Equipped with Premium Features\nThese villas are delivered with:\nFully fitted kitchen with induction hob, extractor hood, oven, fridge and pre-installation for dishwasher\nModern cabinetry with premium finishes\nFully installed ducted air conditioning\nElectric shutters\n\nCommunity pool surrounded by landscaped gardens\n\nA Prime Location on the Costa Blanca\nLiving in La Marina means enjoying all the conveniences of a well-serviced town while being surrounded by nature and the Mediterranean Sea. Within walking distance you will find shops, restaurants, and essential services.\u2026",
       "stats": {
         "listings": 2
       }
@@ -297,7 +297,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "LUXURY AND DESIGN APARTMENT NEXT TO THE GOLF COURSE",
+      "bio": "Luxury apartment consisting of 4 large bedrooms, 3 bathrooms, one of the rooms en suite with private bathroom. It has a kitchen open to the living-dining room, a 22 m2 terrace overlooking the outdoor garden and a parking space + storage room.\n\nThe common areas have an outdoor community pool, an indoor sauna with fitness.\n\nSurrounded by golf courses such as La Finca, La Marquesa, Villamartin, Las Colinas and Campoamor Golf. Close to big cities like Alicante and Murcia. Rojales is just 5 km from the sandy beaches of Guardamar, El Moncayo and La Mata. A little further away we find the beaches of Torrevieja and Orihuela Costa, where the famous Habaneras and La Zenia Boulevard shopping centers are located.",
       "stats": {
         "listings": 2
       }
@@ -327,7 +327,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "DESIGNER VILLA BY THE SEA",
+      "bio": "Design villa with a total area of \u200b\u200b250 square meters with views of Guardamar and the sea.\n\nIt has 3 bedrooms with private bathroom and with terraces overlooking the Sierra del Recorral. From the infinity pool you can enjoy the beautiful views and the natural environment of Rojales. The natural light on the ground floor thanks to the English patio, ensures that you can also maximize the use of this space for additional bedrooms, storage spaces or for the leisure area that you have always dreamed of having.\n\nThe exclusive and sustainable villas of the Residencial are designed to fully enjoy the magnificent views towards the Guardamar skyline. A combination of views of the sea, nature and the luxurious lifestyle within walking distance of Ciudad Quesada and Rojales with all the amenities at hand.\n\nIts sustainable design, its high-quality finishes and its unique location make this residential one of the best promotions that the Costa Blanca offers.",
       "stats": {
         "listings": 1
       }
@@ -357,7 +357,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "&#13; FANTASTIC MEDITERRANEAN VILLA 60 m TO THE BEACH AND WITH SEA VIEWS!!!!&#13;&#13; A unique opportunity - to buy a modern house 1 minute from the beach with direct sea views, in the best part of the town of Torrevieja - La Mata, area with very well developed infrastructure. It is a small fishing village with all the necessary services for day to day life, with 9 km of fine sandy beaches and with a climate that offers you 300 days of sunshine a year with an average temperature of 20\u00baC.&#13;&#13; Detached villa\u2026",
+      "bio": "A unique opportunity - to buy a modern house 1 minute from the beach with direct sea views, in the best part of the town of Torrevieja - La Mata, area with very well developed infrastructure. It is a small fishing village with all the necessary services for day to day life, with 9 km of fine sandy beaches and with a climate that offers you 300 days of sunshine a year with an average temperature of 20\u00baC.\n\nDetached villa in an area of wide avenues and unbeatable location, with a plot of 320 m\u00b2 and private swimming pool.\n\nTotal constructed area of 310 m\u00b2. Consists of 4 double bedrooms (2 en suite), 4 bathrooms, 2 living rooms and kitchen, plus private parking, terraces and solarium with sea views.\n\nLa Mata is connected by bus with Torrevieja and Alicante. There are 2 hospitals nearby. Golf courses 6 km. Alicante airport 42 km.",
       "stats": {
         "listings": 1
       }
@@ -387,7 +387,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern Style Villas in La Romana, Alicante",
+      "bio": "Exclusive New Build Homes in a Charming Spanish Village\nThese Modern-style new build villas in La Romana are designed for those seeking peace, comfort, and the authentic Spanish lifestyle. Located on plots of 370 m\u00b2 in a residential area on the outskirts of the village, the homes are just a short walk from the town center, where you can enjoy traditional restaurants, shops, and all daily services. Surrounded by vineyards, almond groves, and mountain landscapes, La Romana offers a unique rural setting while being only 30 minutes from the coast.\n\nSpacious Design with Modern Comfort\nEach villa offers 127 m\u00b2 of built space distributed across 3 bedrooms and 2 bathrooms, including a master suite with ensuite bathroom. The open-plan living and dining area integrates seamlessly with a furnished kitchen and direct access to the terrace and private pool. Additional features include a storage room/laundry area and private parking within the plot. For those who want extra outdoor space, there is the option to add a rooftop solarium at an additional cost.\n\nPremium Features Included\nThese villas are built with quality finishes and come fully equipped with:\nPrivate pool of 6 x 3.5 m\nAir conditioning with heat pump (installation and unit included)\nModern kitchen with white cabinetry and granite countertops\nLED lighting throughout the home and on the porch\nDouble glazing, white interior doors, and built-in wardrobes\n\nDelivery is scheduled 14 months from reservation, ensuring a brand-new, personalized home.\n\nIdeal Location in the Alicante Countryside\u2026",
       "stats": {
         "listings": 3
       }
@@ -417,7 +417,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD MODERN VILLA IN ASPE",
+      "bio": "New Build modern and innovative design villa in La Romana, Aspe.\nVilla with 3 bedrooms, 2 bathroom open plan kitchen with living room, terrace, private garden with the pool and parking space.\n\nThe Villas are pre installed for A/C hot and cold and electric blinds to all the windows. As well you will have a choice of tiles and kitchen so the villa will be finished to your own style and colour.\n\nNear Aspe is a very special Town of La Romana within easy walking distance from our development.\n\nLa Romana has a prosperous economy based on the agriculture that surrounds the town and this prosperity is reflected in the picturesque palm tree lined streets that are very well maintained.\n\nThere is a medical centre, several supermarkets, hardware, shops, banks ,bakers restaurants & bars and cafes and a Saturday street market where you can buy locally grown vegetables and fresh fish.\n\nThe region is renowned for the growing of eating grapes and also producing a wide range of wines which can be sampled in the traditional bars along with many different tasty local tapas and you can also visit the many Bodegas that are closely to the Town.\n\nFor golf lovers there are two excellent golf courses Font de Llop in Aspe and Alenda Golf in Monforte del Cid just 15 minutes drive.\n\nThe beaches and Alicante Airport are closely just 30 minutes drive\n\nLa Romana is a safe and friendly place to live and owning a property in La Romana puts you at the heart of a genuine community \u2013 with all the amenities you need for day-to-day living on your doorstep.",
       "stats": {
         "listings": 2
       }
@@ -447,7 +447,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "HOUSING IN A CONSOLIDATED URBANIZATION ON THE COAST",
+      "bio": "It consists of 3 double bedrooms with 4 bathrooms, living room - dining room, kitchen.\nPrivate Pool, Solarium / Terraces, Air Conditioning, Underfloor Heating and Sanitary Hot Water with Aerothermics.\n\nLocated in Los Altos, (Together Los Balcones). Southeast oriented.\n\nIT HAS all the services, Schools, Hospitals, Supermarkets a few meters away. Distance to the sea 3 minutes by car.\n\nThis villa is located in one of the privileged areas of the Costa Blanca South, more specifically in Los Altos, 5 minutes from Playa Punta Prima, Cala Ferry, close to all services; restaurants, cafes, shops, malls, schools, hospitals, as well as freeway access.",
       "stats": {
         "listings": 1
       }
@@ -477,7 +477,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD MODERN VILLAS IN BENIJOFAR",
+      "bio": "New Build villas located in Benij\u00f3far, a privileged area of the Costa Blanca, equipped with all services, 20 minutes from Alicante Airport, near the beautiful beaches of Guardamar and several golf courses.\nIt is a modern style villas consisting of spacious living-dining room with an open-plan kitchen, 3 bedrooms( one of them en-suite) and 2 bathrooms.\nIt also has a private plot with terrace, parking area, private pool, Mediterranean-style garden with great views.\nThe house also has hot and cold air conditioning, video intercom and security door.\n\nBenijofar it is a lovely village with a charming church and all services such as supermarkets, pharmacies, banks, restaurants and natural park located very close to the villas.\nThere are several golf courses close by as well as water parks in nearby Rojales and Torrevieja.\nBenij\u00f3far located a few minutes from the N-332 and AP-7.\nJust 30 minutes from Alicante airport, 10 minutes from the beaches of Guardamar and Torrevieja.",
       "stats": {
         "listings": 1
       }
@@ -507,7 +507,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD MODERN VILLAS IN BENIJOFAR",
+      "bio": "New Build villas located in Benij\u00f3far, a privileged area of the Costa Blanca, equipped with all services, 20 minutes from Alicante Airport, near the beautiful beaches of Guardamar and several golf courses.\nIt is a modern style villas consisting of spacious living-dining room with an open-plan kitchen, 2 bedrooms( one of them en-suite) and 2 bathrooms.\nIt also has a private plot with terrace, parking area, private pool, Mediterranean-style garden with great views. The house also has hot and cold air conditioning, video intercom and security door.\n\nBenijofar it is a lovely village with a charming church and all services such as supermarkets, pharmacies, banks, restaurants and natural park located very close to the villas.\nThere are several golf courses close by as well as water parks in nearby Rojales and Torrevieja.\nBenij\u00f3far located a few minutes from the N-332 and AP-7.\nJust 30 minutes from Alicante airport, 10 minutes from the beaches of Guardamar and Torrevieja.",
       "stats": {
         "listings": 1
       }
@@ -537,7 +537,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD MODERN VILLAS IN BENIJOFAR",
+      "bio": "New Build villas located in Benij\u00f3far, a privileged area of the Costa Blanca, equipped with all services, 20 minutes from Alicante Airport, near the beautiful beaches of\nGuardamar and several golf courses.\nIt is a modern style villas consisting of spacious living-dining room with an open-plan kitchen, 3 bedrooms( one of them en-suite) and 2 bathrooms. It also has a private plot with terrace, parking area, private pool, Mediterranean-style garden with great views.\nThe house also has hot and cold air conditioning, video intercom and security door.\n\nBenijofar it is a lovely village with a charming church and all services such as supermarkets, pharmacies, banks, restaurants and natural park located very close to the villas.\nThere are several golf courses close by as well as water parks in nearby Rojales and Torrevieja.\nBenij\u00f3far located a few minutes from the N-332 and AP-7.\nJust 30 minutes from Alicante airport, 10 minutes from the beaches of Guardamar and Torrevieja.",
       "stats": {
         "listings": 1
       }
@@ -567,7 +567,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD MODERN VILLAS IN BENIJOFAR",
+      "bio": "New Build villas located in Benij\u00f3far, a privileged area of the Costa Blanca, equipped with all services, 20 minutes from Alicante Airport, near the beautiful beaches of Guardamar and several golf courses.\nIt is a modern style villas consisting of spacious living-dining room with an open-plan kitchen, 3 bedrooms( one of them en-suite) and 3 bathrooms. It also has a private plot with terrace, parking area, private pool, Mediterranean-style garden with great views. The house also has hot and cold air conditioning, video intercom and security door.\n\nBenijofar it is a lovely village with a charming church and all services such as supermarkets, pharmacies, banks, restaurants and natural park located very close to the villas.\nThere are several golf courses close by as well as water parks in nearby Rojales and Torrevieja.\nBenij\u00f3far located a few minutes from the N-332 and AP-7.\nJust 30 minutes from Alicante airport, 10 minutes from the beaches of Guardamar and Torrevieja.",
       "stats": {
         "listings": 1
       }
@@ -597,7 +597,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD MODERN VILLAS IN BENIJOFAR",
+      "bio": "New Build villas located in Benij\u00f3far, a privileged area of the Costa Blanca, equipped with all services, 20 minutes from Alicante Airport, near the beautiful beaches of Guardamar and several golf courses.\nIt is a modern style villas consisting of spacious living-dining room with an open-plan kitchen, 3 bedrooms( one of them en-suite) and 4 bathrooms. It also has a private plot with terrace, parking area, private pool, Mediterranean-style garden with great views. The house also has hot and cold air conditioning, video intercom and security door.\n\nBenijofar it is a lovely village with a charming church and all services such as supermarkets, pharmacies, banks, restaurants and natural park located very close to the villas.\nThere are several golf courses close by as well as water parks in nearby Rojales and Torrevieja.\nBenij\u00f3far located a few minutes from the N-332 and AP-7.\nJust 30 minutes from Alicante airport, 10 minutes from the beaches of Guardamar and Torrevieja.",
       "stats": {
         "listings": 1
       }
@@ -627,7 +627,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New residential complex at Los Balcones(Torrevieja)",
+      "bio": "This is an exclusive residential complex comprising of 30 apartments located in Los Balcones de Torrevieja, one of the best areas of touristic interest on the Costa Blanca.\n\nWhere you can enjoy fabulous views thanks to its location as this residential is surrounded by the unbeatable and privileged natural setting of the Laguna Rosa de Torrevieja as well as its proximity to the renowned beaches of Torrevieja and Orihuela Costa.\n\nAt this residential you will find homes with a modern style and top-quality finishings, homes with 2 to 3 bedrooms, as well as private outside areas with a terrace, solarium and/or garden, where you can enjoy the magnificent views. The complex also has large communal areas equipped with a large communal swimming pool, green zones and parking.",
       "stats": {
         "listings": 1
       }
@@ -657,7 +657,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "DESIGN BUNGALOW BY THE SEA",
+      "bio": "Residential in a newly developed area just 250m from the sea. Excellent location very close to the urban center of Torrevieja and surrounded by services, shops and restaurants. The Torrevieja General Hospital and the marina are also nearby.\n\nExcellent residential with a beautiful garden, swimming pool and fitness area. Enjoy this complete, modern, and charming bungalow with a minimalist design.",
       "stats": {
         "listings": 2
       }
@@ -687,7 +687,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Exclusive New Build Villas 300 m from the Beach in Torre de la Horadada",
+      "bio": "Luxury Coastal Living in a Prime Location\nDiscover this exclusive new build villa project in Torre de la Horadada, one of the most sought after coastal towns in the south of Alicante. Located just 300 m from the Mediterranean Sea and within walking distance of shops, restaurants and daily services, these villas offer an exceptional opportunity to enjoy the Costa Blanca lifestyle. Torre de la Horadada is known for its relaxed atmosphere, beautiful promenade and fine sandy beaches, making it ideal for both permanent living and holiday use.\n\nLast Key Ready Villa Fully Equipped\nThis boutique development consists of only four independent villas, with the last unit available key ready and fully furnished. The villa is delivered complete with furniture, appliances and ducted air conditioning, allowing you to move in immediately and start enjoying your new home by the sea. Set on a private plot of approximately 207 m2, the villa offers around 130 m2 of built space distributed over ground floor, first floor and a private rooftop solarium.\n\nModern Design with Private Pool and Solarium\nThe villa features a contemporary design with open and bright spaces. Inside, you will find three spacious bedrooms and three bathrooms, a living dining area with an open plan kitchen, and direct access to the garden and private swimming pool. The rooftop solarium provides an ideal space to relax, sunbathe or enjoy open views, creating a perfect outdoor living area all year round.\n\nHigh Quality Specifications and Comfort\u2026",
       "stats": {
         "listings": 1
       }
@@ -717,7 +717,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "LUXURY VILLA ON THE BEACH",
+      "bio": "A 2 minute walk from the beach and the possibility of enjoying more than 300 days of sunshine a year with an average temperature of 20\u00ba C !!!\n\nVilla with 4 bedrooms and 4 bathrooms, fully equipped. Built on a large plot to enjoy its garden and private pool, Aerothermal system and Air Conditioning.\n\nThis exclusive area of \u200b\u200bCampoamor is located just 500 m from the Aguamarina Beaches, Campoamor (Orihuela Costa). All services such as Golf Courses, Seaports, Restaurants, bars, supermarkets, banks, medical centers, pharmacies and shopping centers such as La Zenia Boulevard are easily accessible.\n\nThe villa is located in the vicinity of the National Highway 332 and 5 minutes from the closest entrance to the AP-7 highway, which facilitates the access and exit roads of the area and the connection with the various national roads and nearby towns .\n\nYou can enjoy Murcia 40 minutes by car, Alicante 45 minutes. Alicante airports at 26 km and Corvera (Murcia) at 30 km. And 7 km to the nearest golf course, having available up to 6 golf courses in the surroundings.",
       "stats": {
         "listings": 1
       }
@@ -747,7 +747,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "MODERN NEW BUILD VILLAS IN VILLAMARTIN",
+      "bio": "MODERN NEW BUILD VILLAS IN VILLAMARTIN\n\nNew build villas with 2 models to choose from: 1 or 2 floors. All with 3 bedrooms and 2 or 3 bathrooms, private swimming pool, parking inside the plot and private solarium.\n\nThe plot is fenced around the perimeter with access gates for vehicles and pedestrians.\n\nThe surface of the plot is divided between the parking area finished with printed concrete, a lawn area and a paved area with the same flooring as inside.\n\nThe interior carpentry has a high security armoured entrance door. Both the interior doors and the wardrobes are lacquered in white.\n\nIn the kitchen we find furniture finished in white and quartz worktop in a colour matching the floor of the house.\n\nIn the bathrooms there are shower trays and integrated glass screens as well as bathroom furniture and wall-mounted sanitary ware.\n\nThe villa has pre-installations for ducted air conditioning.\n\nThese fantastic properties are located close to Villamartin Plaza and the Villamartin golf course, where you will find numerous bars and restaurants, supermarkets, banks, a taxi rank and the local bus stop.\n\nThe beaches of Orihuela Costa are only a 5 minute drive away, as is the new Zenia Boulevard shopping centre (the largest shopping centre in the province of Alicante).\n\nThe airports of Alicante and Murcia are a 45 minute drive away.",
       "stats": {
         "listings": 1
       }
@@ -777,7 +777,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "THE MEDITERRANEAN LIFESTYLE ALL ON ONE LEVEL",
+      "bio": "The village of Daya Nueva is the perfect combination of a peaceful and comfortable rural lifestyle and the vibrant coastal areas of the Costa Blanca, just a short drive away.\n\nThis development of semi-detached and detached new-build villas has been designed with great attention to detail and built to a high standard. All villas will have their own private pool.\n\nYOUR OWN SPACE TO LIVE, ALL ON ONE LEVEL\nA bright, fresh and modern approach has been incorporated into the design.\n\nLocated in a small village in the south of the province of Alicante. The village is called Daya Nueva.\n\nNewly built single-storey villas in the new part of Daya Nueva. Just a few minutes' walk from the village centre. The property consists of 3 bedrooms, 2 bathrooms and a private 18m2 swimming pool. Living/dining room with double-height ceiling, open kitchen, natural light and option for a solarium at an extra cost. The master bedroom has the option of a walk-in wardrobe and en-suite bathroom.\n\nLocated in a new and quiet residential area, about 10 minutes from the beach of La Marina del Pinet and Guardamar del Segura. Easy access to the A-70 motorway and approximately 25 minutes from Alicante International Airport.",
       "stats": {
         "listings": 2
       }
@@ -807,7 +807,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Magnificent apartment between the sea and the golf!",
+      "bio": "Cozy apartment with 2 bedrooms and 2 bathrooms\n\nThe residence is located in a quiet and safe area and is fully equipped (it has all possible comforts). In the immediate vicinity you will find for example 4 magnificent golf courses, a large shopping area (la Zenia Boulevard), several beaches, supermarkets, bars and restaurants, etc. It is a luxury residence, all the apartments and houses are spacious and comfortable.\n\nThe residence has private parking and is equipped with lifts.\nIn the complex there is a communal swimming pool (large swimming pool, children's pool and jacuzzi with hot water). Also a playground and several green spaces.\n\nIn short: the ideal place to rest and enjoy the region, to live in Spain.",
       "stats": {
         "listings": 3
       }
@@ -837,7 +837,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW APARTMENTS FOR SALE IN GRAN ALACANT, AT 20 MINUTES FROM ALICANTE and ELCHE, COSTA BLANCA",
+      "bio": "New development with 170 apartments in Gran Alacant, with views of the Mediterranean Sea and direct access to the blue flag beach of El Carabassi.\n\nThe 2 and 3 bedroom, 2 bathroom apartments have a carefully designed distribution and enjoy beautiful views of the sea, the beach and the pool and private gardens at the development.\n\nThese new apartments are built to a very high standard and form a lovely residential with pool, private underground parking, storeroom, garden areas, outdoor fitness equipment, parking area for bicycles and a children\u2019s play area. The development is just a 15 minutes walk from the beach at El Carabassi.\n\nThe natural surroundings, a magnificent location between the towns of El Altet and Santa Pola, and the stunning sand dune beaches make the new Iconic apartments from Taylor Wimpey Espa\u00f1a one of the best possible choices if you wish to buy a home on the Costa Blanca.\n\nDeveloper with over 60 years building homes in Spain.\n\nProperty typologies: Apartment, Penthouse, Groundfloor\nIncludes: Underground parking, Storeroom, Communal swimming pool, Communal garden, Utility room, Air conditioning, Heating",
       "stats": {
         "listings": 1
       }
@@ -867,7 +867,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Contemporary New Build Villas with Private Pool in La Finca Golf Resort, Algorfa",
+      "bio": "Exclusive Living in a Prestigious Golf Community\nExperience luxury, tranquility and modern Mediterranean living in these brand new villas located in the renowned La Finca Golf Resort in Algorfa, Costa Blanca South. This sought after residential area is surrounded by lush greenery, rolling fairways and peaceful scenery, offering the perfect setting for a relaxed yet sophisticated lifestyle. The charming town of Algorfa provides a traditional Spanish atmosphere and excellent services, while being just a short drive from beautiful beaches, shopping areas and vibrant coastal towns.\n\nElegant Two Level Villas with 4 Bedrooms\nThese contemporary villas are designed to offer comfort, space and functionality. The homes are distributed across two floors:\n\nGround floor\nThree spacious bedrooms with fitted wardrobes\nTwo fully equipped bathrooms, including one en suite\nBright open plan living and dining area with large sliding glass doors\nModern kitchen with breakfast bar\nDirect access to a covered terrace, garden and pool area\n\nUpper floor\nMaster bedroom with en suite bathroom and walk in wardrobe\nTwo private terraces totaling 36 square meters, ideal for enjoying sunshine and views\n\nThe villas include fully installed ducted air conditioning, motorized shutters, underfloor heating in bathrooms and private parking within the plot.\n\nOutdoor Living with Private Pool\nEnjoy the warm Mediterranean climate from the comfort of your own garden.\u2026",
       "stats": {
         "listings": 2
       }
@@ -897,7 +897,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILT GROUND FLOOR BUNGALOW IN LA FINCA GOLF!",
+      "bio": "That ground floor bungalow, with spectacular views of the Algorfa golf course- La Finca Golf offers apart from spectacular views, and the enjoyment of relaxing in a quiet environment, the proximity to nearby towns such as Almoradi and Rojales, for have the necessary comforts on a day-to-day basis. The beach is about 15 minutes by car, for lovers of swimming in the sea and walks along the shores of the Mediterranean.\n\nThe bungalow has 2 bedrooms, 2 bathrooms, with a large terrace and private garden, as well as having access to the community garden and the community pool. The two bathrooms have underfloor heating, the house has centralized air conditioning, and comes with shower screens\n\nEnjoy your favorite sport in the best climate in a Mediterranean environment!",
       "stats": {
         "listings": 1
       }
@@ -927,7 +927,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Luxury villa on the first line of the Golf course",
+      "bio": "It has an elevator on all floors of the villa, terraces overlooking the golf course, sports area, sauna, and private pool. It is located in a location with medical services, Swedish school, public schools, playgrounds, 15 minutes from the beaches of Guardamar and 5 minutes from the old town of Rojales.",
       "stats": {
         "listings": 1
       }
@@ -957,7 +957,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "BEAUTIFUL BIG VILLA WITH VIEWS TO THE GOLF COURSE \"LA MARQUESA\"!",
+      "bio": "This beautiful villa, located 50 meters from the La Marquesa golf course, apart from having clear and beautiful views and offering the tranquility of being in a quiet environment, is a few meters from the commercial center with shops, supermarket, bars and international restaurants . Just 5 minutes from the town of Rojales with all services and 15 minutes from the spectacular blue flag beaches of Guardamar del Segura. Alicante-Elche airport is 35 minutes away.\n\nThe villa has 335 m2 of plot area, 433 m2 of built area, distributed in 3 floors, one of them being a semi-basement diaphanous of 126 m2. The villa has 3 bedrooms and 2 bathrooms. The 3x6 m pool and the large terraces in the garden and pool area will allow you to enjoy the sun and the Costa Blanca climate throughout the year. In addition, the villa has a solarium and a large parking area.\n\nLive in a large modern villa, enjoying golf, beach, climate and Mediterranean lifestyle!",
       "stats": {
         "listings": 2
       }
@@ -987,7 +987,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL AT PLAYA FLAMENCA!!!",
+      "bio": "From a well established developer we are proud to offer this just released new residential just 500 m away from sea at popular Playa Flamenca (Orihuela Costa).\n\nResidential with nice comunal pools, jacuzzis and nice common gardens. All services like supermarkets, bars and restaurants, etc are within walking distance in a very central spot at Orihuela Costa.\n\nWide variety of types to choose from: 2, 3 or 4 bedroom apartments. Low floors with private gardens or top floors with private solariums. All houses come with a parking space and a storage room included in the price.\n\nZenia Boulevard shopping center 1km away and several golf courses like Villamartin, Campoamor within 5 km from this residential will make an ideal location for your holidays or your permanent living.",
       "stats": {
         "listings": 6
       }
@@ -1017,7 +1017,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD BUNGALOWS IN SAN MIGUEL DE SALINAS",
+      "bio": "New Build residential of independent villas and design bungalows, located in Ciudad de las Comunicaciones, in San Miguel de Salinas.\n\nBeautiful bungalows will allow you to choose between 2 and 3 bedrooms, upstairs with a solarium or downstairs with a garden, even a basement option if you want extra space.\n\nAll properties comes with parking space.\n\nThe Residential has a nice communal area with garden and swimming pool.\n\nResidential located close to the Las Colinas and Campoamor golf courses, offers exceptional views of the Torrevieja and La Mata lagoons.\n\nSan Miguel de Salinas is a municipality in the Valencian Community, Spain. Located in the south of the province of Alicante, in the region of Vega Baja del Segura near the Region of Murcia.\n\nAlicante airport located 35 minutes drive away and Murcias Corvera airport is about 1 hour drive away.",
       "stats": {
         "listings": 2
       }
@@ -1047,7 +1047,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "BEAUTIFUL VILLA IN LOS ALTOS, TORREVIEJA",
+      "bio": "Key Ready New villa in Los Altos located few minutes away from Hospital of Torrevieja and pink salt lake.\n\nMediterranean style villa with 3 bedrooms, 4 bathrooms, lounge with chimnea, big kitchen, terrace, double garage, private garden with pool and parking space.\n\nLos Altos is a popular residential area in the south of Torrevieja, close to the salt lake.\nWithin walking distance are all kinds of services such as bars, shops, supermarkets, pharmacies, etc. Making it a perfect place to live all year round.\n\nIn addition, it is only 2 km from the beautiful beaches.\n\nTorrevieja is a Spanish town in the province of Alicante, on the Costa Blanca.\nIt is known for its typically Mediterranean climate and coastline. It has boardwalks with resorts along its sandy beaches.\nThe small Museum of the Sea and Salt houses exhibitions on the fishing and salt history of the city.\nIn the interior, the Lagunas de La Mata-Torrevieja Natural Park has trails and two salty lagoons, one pink and the other green.\nAlicante airport located 40 minutes away and Murcia airport about 1 hour away.",
       "stats": {
         "listings": 1
       }
@@ -1077,7 +1077,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "BEAUTIFUL TOWNHOUSE IN LOS ALTOS, TORREVIEJA",
+      "bio": "Key Ready New townhouse in Los Altos located few minutes away from Hospital of Torrevieja and pink salt lake.\n\nMediterranean style townhouse with 2 bedrooms, 3 bathrooms, lounge, kitchen, terraces, garage and solarium with view over pink salt lake.\n\nLos Altos is a popular residential area in the south of Torrevieja, close to the salt lake.\nWithin walking distance are all kinds of services such as bars, shops, supermarkets, pharmacies, etc. Making it a perfect place to live all year round.\n\nIn addition, it is only 2 km from the beautiful beaches.\n\nTorrevieja is a Spanish town in the province of Alicante, on the Costa Blanca.\nIt is known for its typically Mediterranean climate and coastline. It has boardwalks with resorts along its sandy beaches.\nThe small Museum of the Sea and Salt houses exhibitions on the fishing and salt history of the city.\nIn the interior, the Lagunas de La Mata-Torrevieja Natural Park has trails and two salty lagoons, one pink and the other green.\nAlicante airport located 40 minutes away and Murcia airport about 1 hour away.",
       "stats": {
         "listings": 1
       }
@@ -1107,7 +1107,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN ORIHUELA COSTA",
+      "bio": "Residential of 8 New Build exclusive contemporary villas in Los dolses, Orihuela Costa.\n\nBeautiful villas with 3 bedrooms and 2 bathrooms, living room, kitchen, gallery and terrace build on the plots from 150m2 up to 223m2, has garden with private pool and parkinf space.\n\nAs an option you can have a solarium at an extra cost.\n\nResidential located in the best residential area of Orihuela Costa, it has all the services, perfectly communicated 2 minutes from the A-7 motorway.\n\nLos Dolses located near very popular Villamartin area with tourists and residents, most of the community consists of Western European expatriates who have settled there in the last 15 years, virtually transforming the original village into a vibrant all year round destination.\n\nThere a 3 golf courses nearby and the blue flag beaches are just a short 10 minute drive away.\n\nAlicante & Murcia airports are 45 minutes drive away.",
       "stats": {
         "listings": 1
       }
@@ -1137,7 +1137,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN ROJALES",
+      "bio": "New Build residential of villas and townhouses in Rojales.\n\nBeautiful villa build over 2 floors with 3 bedrooms, 2 bathrooms, open plan kitchen with lounge area and big terrace.\n\nVillas build on independent plots where you have garden with parking and space for a private pool.\nPrivate pool is an options at an extra cost.\n\nThere a 3 golf courses nearby and the blue flag beaches are just a short 10 minute drive away.\n\nRojales it is a lovely village with all services such as supermarkets, pharmacies, banks, restaurants and natural park located very close to the villas.\n\nThere are several golf courses close by as well as water parks in nearby Rojales and Torrevieja.\n\nAlicante & Murcia airports are 45 minutes drive away.",
       "stats": {
         "listings": 1
       }
@@ -1167,7 +1167,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Villas with Golf Views in Ciudad Quesada",
+      "bio": "Exclusivity and Nature next to La Marquesa Golf Course\nDiscover these elegant new build villas in Ciudad Quesada, located in one of the most privileged areas of the Costa Blanca, with stunning views of La Marquesa Golf Course. This residential environment combines tranquillity, luxury and nature, just a 10-minute drive from the beaches of Guardamar del Segura and 35 km from Alicante International Airport.\n\nSpacious and Modern Homes\nEach villa is spread over 3 floors and offers a contemporary and functional design. They feature:\n\n4 spacious bedrooms\n3 full bathrooms\nOpen-plan ground floor with access to a large terrace\nPrivate lift\n4 x 10 m heated private swimming pool with relaxation bench and jacuzzi\n\nThe construction stands out for its energy efficiency and quality finishes:\n\nWhite PVC exterior carpentry with double glazing\nMotorised blinds on all windows\nSecurity entrance door\nAerothermal system for hot water supply\nPre-installation of ducted air conditioning\nInstallation of 5 kW photovoltaic solar panels\n\nA residential environment with all amenities\nCiudad Quesada, part of the municipality of Rojales, has established itself as an ideal destination for both year-round living and holiday stays. This development offers:\n\nSupermarkets, shops and medical centres\nInternational restaurants and bars\nPharmacies, banks, academies and more\nAccess to nature with the La Mata lagoon just a few minutes away\n\nIn addition, the La Marquesa Golf Course allows you to enjoy an active and relaxed lifestyle surrounded by green areas.\n\nConnectivity and nearby points of interest\u2026",
       "stats": {
         "listings": 1
       }
@@ -1197,7 +1197,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD SEMI-DETACHED TOWNHOUSE IN PILAR DE LA HORADADA",
+      "bio": "New Build modern townhouses built in a quiet part of Pilar de la Horadada with proximity to everything you need.\n\nTownhouses has 3 bedrooms, 2 bathrooms, open plan kitchen, living room with direct access to the cozy pool area, terrace at the back with parking space , terrace and large roof solarium.\n\nPilar de la Horadada is a typical Spanish village in the most southern part of the Costa Blanca.\n\nThe large main street has supermarkets, lots of shops, restaurants and bars and some lovely squares.\n\nThe beautiful beaches of Torre de la Horadada and Mil Palmeras with fine sand promenade is just 5 minutes away.\n\nThe airports of Corvera (Murcia) and Alicante are respectively 40 and 55 minutes away.",
       "stats": {
         "listings": 2
       }
@@ -1227,7 +1227,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD CORNER TOWNHOUSES IN FORMENTERA DEL SEGURA",
+      "bio": "New Build unique residential of townhouses with a living area of 157m2, have an \"Ibiza\" style look, with soft and warm earth colours it immediately feels like an oasis of peace.\n\nTownhouses have 3 bedrooms and 2 bathrooms, open plan kitchen with living area, swimming pool of 18 meters built between terrace and parking space, private solarium with views over the beautiful countryside and valley of Formentera Del Segura.\n\nThe living room and kitchen area are made of glass, which ensures that the maximum amount of light enters the house.\n\nPopular village of Formentera Del Segura juts a short drive from the villages of Benijofar and Rojales, and only a 10 minute drive to the golden sandy beaches of Guardamar Del Segura.\n\nThis Traditional Spanish town within easy walking distance of all its amenities, with everything you could need.\n\nComplex located 30 minutes from Alicante airport and 1 hour Murcia - Corvera airport.",
       "stats": {
         "listings": 1
       }
@@ -1257,7 +1257,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL OF VILLAS IN SAN MIGUEL DE SALINAS",
+      "bio": "New Build villas with 4 bedrooms and 3 bathrooms, open plan kitchen with living room-dining room.\n\nAll villas have a terrace and solarium, a private garden with private swimming pool, and a driveway.\n\nThey are all built with high-quality materials using advanced technology for our clients\u2019 comfort and convenience.\n\nThis residential is ideal for lovers of nature and harmony.\n\nSan Miguel de Salinas is a municipality in the Valencian Community, Spain. Located in the south of the province of Alicante, in the region of Vega Baja del Segura near the Region of Murcia.\n\nJust 7 kilometres from the beaches of Orihuela Costa, surrounded by golf courses, the most important shopping centre in the area that has all kinds of services, as well as bars, restaurants, clothing stores, supermarkets, etc., and with very good communication.\n\nComplex located 30 minutes from Alicante airport and 1 hour Murcia - Corvera airport.",
       "stats": {
         "listings": 2
       }
@@ -1287,7 +1287,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL OF VILLAS IN LOS MONTESINOS",
+      "bio": "New Build villas with 3 bedrooms and 3 bathrooms, open plan kitchen with living room-dining room.\n\nAll villas have a terrace, a private swimming pool, a private garden, and a driveway.\n\nBasements are also available at an extra cost.\n\nThey are all built with high-quality materials using advanced technology for our clients\u2019 comfort and convenience.\n\nThe typical town of Los Montesinos is strategically located 10 minutes by car from the beaches and leisure of Torrevieja (with all the services of a big city: theatre, 2 hospitals, international schools, etc.), from several golf courses and with easy access to the A7 motorway to reach Alicante airport in 20 min.\n\nIn the urbanization there are supermarkets and bars for day-to-day service, being a rural and quiet environment.\n\nThe climate in this area guarantees 300 days of sunshine a year with an average temperature of 20\u00baC, which, together with the rich gastronomy and cultural and sports activities available in its surroundings, makes this area an ideal place to establish a second residence for vacation or a quiet place to live permanently.",
       "stats": {
         "listings": 1
       }
@@ -1317,7 +1317,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL OF BUNGALOW APARTMENTS IN LOS BALCONES",
+      "bio": "New Build UNIQUE residential complex in Los Balcones.\n\nResidential consist of 136 luxury bungalow apartments built with top quality materials. Each one has magical views of the Laguna Rosa de Torrevieja and the Mediterranean Sea.\n\nThe houses have more than 131m2 distributed in a spacious living-dining room with an open-plan kitchen, 2 large bedrooms and 2 full bathrooms.\n\nYou can choose between ground floor bungalows with their 2 large private terraces to enjoy the climate of the Costa Blanca.\n\nOr first floor bungalows of 178m2 with its 85m2 solarium with panoramic views of the Laguna Rosa and the Mediterranean Sea\n\nComplex offers idyllic landscaped common areas with 3 swimming pool areas, Jacuzzi areas, fitness area, paddle tennis court, mini golf, children\u2019s area, charging point for electric vehicles\u2026 and much more! Its Premium facilities and green areas will allow you to enjoy with your family and friends the 320 days of sunshine that the Costa Blanca offers.\n\n\u200b\u200bLos Balcones located just outside Torrevieja with all accessible services, just 5 minutes from Playa de los N\u00e1ufragos, supermarkets, the school and the La Zenia Boulevard Shopping Centre, and a minute from Torrevieja University Hospital.\n\nComplex located 40 minutes from Alicante airport and 1 hour Murcia - Corvera airport.",
       "stats": {
         "listings": 1
       }
@@ -1347,7 +1347,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN PINAR DE CAMPOVERDE",
+      "bio": "Modern residential of newly built villas in Pinar de Campoverde.\n\nSmall development of only 5 villas, built on one floor with a distribution of 3 bedrooms and 2 bathrooms, open plan living and dining area, fully equipped kitchen, with central island views to the private swimming pool, on independent plots starting at\n300,00 m2. There is also a large solarium to enjoy the sun and the beautiful views all year round.\n\nThe villas are in a privileged location next to the Rio Seco nature reserve and close to amenities, sports facilities and the nearby golf course of Lo Romero, the Spanish town of Pilar de la Horadada and only a 15 minute drive to the white sandy beaches of La Torre De la Horadada.\n\nThe perfect place if you want to be in a quiet location, surrounded by nature and close to all amenities, golf and beautiful beaches.",
       "stats": {
         "listings": 1
       }
@@ -1377,7 +1377,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL OF BUNGALOW APARTMENTS IN LOS BALCONES, TORREVIEJA",
+      "bio": "New Build residential complex with magnificent pink salt lake views in Los Balcones.\n\nComplex consist of 104 bungalow apartments with 2 and 3 bedrooms, top floor bungalow has private solariums with panoramic views to the salt lake and ground floors bungalows have big terraces overlooking the green area.\n\nThese bungalows share beautiful green areas and 2 large swimming pools.\nOptional underground parking and storage spaces are available.\n\nThis residential offers modern design, selected materials, apartments finished to very highest specification using only top quality materials.\n\nThe Residential will be built up to a hillside, in this way the view and also the air is clear and unique quality.\n\nLos Balcones located just outside Torrevieja with all accessible services, just 5 minutes from Playa de Los N\u00e1ufragos, supermarkets, the school and the La Zenia Boulevard Shopping Centre, and a minute from Torrevieja University Hospital.\n\nFurthermore you will find 4 golf courses within a short drive, including the award winning Las Colinas Golf & Country Club.\n\nComplex located 40 minutes from Alicante airport and 1 hour Murcia - Corvera airport.",
       "stats": {
         "listings": 4
       }
@@ -1407,7 +1407,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "2 NEW BUILD VILLAS IN TORREVIEJA",
+      "bio": "2 New Beautiful villas in Torrevieja.\n\nVillas has 4 bedrooms, 4 bathrooms, open plan kitchen with the lounge area, fitted wardrobes, private garden with the pool and off road parking space, private solarium and basement.\n\nVillas located 15 minutes walk to the famous Playa de La Mata (5 minutes by car).\n\nTorrevieja is a Spanish town in the province of Alicante, on the Costa Blanca.\nIt is known for its typically Mediterranean climate and coastline. It has boardwalks with resorts along its sandy beaches.\n\nThe small Museum of the Sea and Salt houses exhibitions on the fishing and salt history of the city.\n\nIn the interior, the Lagunas de La Mata-Torrevieja Natural Park has trails and two salty lagoons, one pink and the other green.\n\nAlicante airport located 40 minutes away and Murcia airport about 1 hour away.",
       "stats": {
         "listings": 1
       }
@@ -1437,7 +1437,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN VISTABELLA GOLF RESORT",
+      "bio": "New Build luxury villas built over 2 floors situated in Vistabela golf resort, between San Miguel and Los Montesinos in the Orihuela Costa.\n\nVillas with 3 bedrooms, 3 bathrooms, an open plan living room with the kitchen, private garden with the pool and parking space.\n\nAn options you can have a private solarium at an extra cost.\n\nAt Vistabella Golf there is space for everyone. The course is designed so that each player can enjoy it from start to finish. Its undulating streets, strategic bunkers or lakes are some of the features that make it one of the most attractive designs in the area, where every stroke is a challenge and a pleasure for the senses.\n\nThe 18 Holes of Vistabella Golf, par 72 and more than 6,000 meters in length have been designed following the guidelines of the modern fields with 4 tees of great amplitude in each hole, wide fairways and raised bunkers.\n\nThe Vistabella Golf club house & restaurant & local bars & shops are within 5 minutes walk. The busy town of San Miguel de Salinas & Los Montesinos are 5 minutes drive away & the lovely Blue flag beaches at Guardamar are just 15 minutes drive away.\n\nAlicante airport is 35 minutes away & the new Corvera Murcia airport is 45 minutes away.",
       "stats": {
         "listings": 1
       }
@@ -1467,7 +1467,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL OF BUNGALOW APARTMENTS IN VISTABELLA",
+      "bio": "New Build residential complex on bungalow apartments in Vistabella near the golf course.\n\nComplex with communal facilities and swimming pool consist of 2 and 3 bedrooms bungalows, on the ground floor with private garden and top floor with private solarium, open plan kitchen with the lounge area, fitted wardrobes, terrace.\n\nEach apartment has private parking.\n\nAn options storeroom at an extra cost.\n\nAt Vistabella Golf there is space for everyone. The course is designed so that each player can enjoy it from start to finish. Its undulating streets, strategic bunkers or lakes are some of the features that make it one of the most attractive designs in the area, where every stroke is a challenge and a pleasure for the senses.\n\nThe 18 Holes of Vistabella Golf, par 72 and more than 6,000 meters in length have been designed following the guidelines of the modern fields with 4 tees of great amplitude in each hole, wide fairways and raised bunkers.\n\nThe Vistabella Golf club house & restaurant & local bars & shops are within 5 minutes walk. The busy town of San Miguel de Salinas & Los Montesinos are 5 minutes drive away & the lovely Blue flag beaches at Guardamar are just 15 minutes drive away.\n\nAlicante airport is 35 minutes away & the new Corvera Murcia airport is 45 minutes away.",
       "stats": {
         "listings": 1
       }
@@ -1497,7 +1497,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN PILAR DE LA HORADADA ON THE GOLF COURSE",
+      "bio": "New Build an exclusive and luxurious project of villas at Lo Romero golf, Pilar de la Horadada.\n\nNew Build community villas will be the excellent homes for you and your family. With a layout of three bedrooms and three bathrooms, apart from its 45 m2 of terrace, the house will have all kinds of commodities to make your stay a wonderful one.\n\nIt is only 100 m from the golf course and 5 min from the entertainment venues, including the beach, just 6 km away.\n\nIt has southeast orientation.\n\nIn addition, it has private parking space and fitted closets. And not only that, these villas have at your disposal a communal pool, an ideal area for barbecues and an outdoor lounge area to relax.\n\nPilar de la Horadada is a typical Spanish village in the most southern part of the Costa Blanca.\n\nThe large main street has supermarkets, lots of shops, restaurants and bars and some lovely squares.\n\nThe beautiful beaches of Torre de la Horadada and Mil Palmeras with fine sand promenade is just 5 minutes away.\n\nLo Romero Golf is the perfect course for golfers who are passionate about golf and the Island of Golf is an ideal course for golfers for all levels of ability.\n\nThe airports of Corvera (Murcia) and Alicante are respectively 40 and 55 minutes away.",
       "stats": {
         "listings": 2
       }
@@ -1527,7 +1527,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL COMPLEX IN LAS COLINAS GOLF",
+      "bio": "New Build developments consists of 15 luxury apartments with huge terrases overlooking the surrounding natural green area.\n\nWe have made a combinations of modern and traditional Mediterranean Arhcitecture. Our idea from the beginning has been to make the apartments, with a material description inclutding amongst others, underfloor heating with water, quooker tap, air renewal system, sound reducing ceilings, laquered kitchens, smart home system and much more.\n\nWhen taking the privileged location and views into consideration we believe that complex offers the ideal conditions to meet the criteria of clients with exquisite taste.\n\nThe thirt floor consists of 3 apartments:\n2 apartments comes with 3 bedrooms, 3 bathrooms and a guest toilet and 1 apartment comes with 2 bedrooms, 2 bathrooms.\nFrom the apartments you have direct access to big terraces in the same level as the apartment. You have furthermore a staircase taking you to solarium, where each top floor apartment has a private swimming pool, a toilet, an outdoor kitchen with a small lift from the kitchen downstairs and much more.\n\nOn Las Colinas Golf & Country Club you will furthermore find a wide variaty of amenities for the property owners such as tennis, padel-tennis, fitness, massage, golf, trekking and much more. Inside Las Colinas Golf & Country Club you will also find a number of restaurants as well as a minimarket with fresh baked bread and much more.\u2026",
       "stats": {
         "listings": 1
       }
@@ -1557,7 +1557,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL COMPLEX IN PUNTA PRIMA",
+      "bio": "Beautiful New Build residential complex of apartment, bungalows and villas located in Punta Prima, Torrevieja.\n\nModern 94 bungalows and apartments with 2 and 3 bedrooms, 2 bathrooms, open plan kitchen with spacious living room, fitted wardrobes.\n\nGround floor bungalows with private garden, top floor bungalows with private solarium and apartments with spacious terraces.\n\nAll properties has underground parking space.\n\nThe residential will consist of 1,980m2 of community green areas, 2,620m2 of private green areas, children's play area, community pools, jacuzzi and gym area.\n\nComplex located near sports centres, shopping areas, restaurants and just 10 minutes walk from the beach of Punta Prima.\n\nPunta Prima, located just 5 km from Torrevieja, is characterised by its good communication and health infrastructures, its proximity to Alicante airport, and the number of services open all year round.\n\nJust 10 km away are the golf courses of Villamartin, Campoamor, Las Ramblas, Las Colinas and Lo Romero, as well as the shopping centres of La Zenia and Habaneras.",
       "stats": {
         "listings": 2
       }
@@ -1587,7 +1587,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN ALGORFA",
+      "bio": "New Build Mediterranean style villas in La Finca Golf course, Algorfa.\n\nNew Build villas with 3 bedrooms, 2 bathrooms, an open plan kitchen with living area where patio doors leading out into the garden with swimming pool and off road parking.\n\nVillas located in La Finca Golf resort, in the municipality of Algorfa, in the Vega Baja area of the Costa Blanca South.\n\nOnly 15 minutes drive from the sandy beaches of Guardamar del Segura, and only 35 minutes from Alicante airport.\n\nThe larger towns of Almoradi, Benij\u00f3far and Ciudad Quesada are a short drive away.\n\nTorrevieja and Orihuela Costa, with their large shopping centres, are 15 minutes away.",
       "stats": {
         "listings": 3
       }
@@ -1617,7 +1617,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW SEMI-DETACHED VILLAS IN DAYA NUEVA",
+      "bio": "New build semi-detached villas in the new part of Daya Nueva. Just a few minutes walk to the centre of the town.\n\nVillas has 3 bedrooms, 2 bathrooms, private garden with the pool, dining - living room with open plan kitchen, bedroom with fitted wardrobes, en suite bathroom on the ground floor and on the first floor 2 bedrooms, fitted wardrobes and bathroom.\n\nNueva Daya is the perfect blend between a relaxing and comfortable rural lifestyle and the vibrant coastal areas of the Costa Blanca.\n\nNew quiet residential area, approximately 10 minutes from the beach of La Marina del Pinet and Guardamar del Segura. Easy access to the highway A-70 and approximately 25 minutes from the international airport of Alicante.",
       "stats": {
         "listings": 1
       }
@@ -1647,7 +1647,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENCIAL IN LOS BALCONES, TORREVIEJA",
+      "bio": "New Build residential complex of semi-detached villas and bungalows located in Los Balcones with the views to the pink lake.\n\nNew Build top floor bungalows has 2 bedrooms, 2 bathrooms, open plan kitchen with spacious living room, fitted wardrobes, terrace, private solarium and underground parking space.\n\nNew exclusive residential with big communal areas; gardens, garden-gym, playground, 2 big communal swimming pools - one of them for adults, and the other one for children.\n\nLos Balcones is a small town located near Torrevieja south.\n\nTorrevieja is a Spanish town in the province of Alicante, on the Costa Blanca.\n\nIt is known for its typically Mediterranean climate and coastline. It has boardwalks with resorts along its sandy beaches.\n\nThe small Museum of the Sea and Salt houses exhibitions on the fishing and salt history of the city.\n\nIn the interior, the Lagunas de La Mata-Torrevieja Natural Park has trails and two salty lagoons, one pink and the other green.\n\nAlicante airport located 40 minutes away and Murcia airport about 1 hour away.",
       "stats": {
         "listings": 1
       }
@@ -1677,7 +1677,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL COMPLEX IN LOMAS DE CABO ROIG",
+      "bio": "New Build Luxury Residential complex located in Lomas de Cabo Roig.\n\nComplex of 24 apartments and penthouses with 2 and 3 bedrooms, 2 bathrooms, with great common areas, garden & play area around, big swimming pool (including children area and jacuzzi) relax/BBQ, fitness Club and Coworking area, public toilet and underground parking.\n\nComplex has installed a fully equipped gym and fully equipped coworking area with beautiful garden views.\n\nThe luxurious experience architectural excellence ensures an intimate complex, providing security, and privacy .\n\nLomas de Cabo Roig located one kilometer inland from the coastline of Cabo Roig with beautiful beaches, part of the Orihuela Costa.\n\nIt is situated in an area which is well connected by roads, has plenty of facilities, and shopping centres nearby.\n\nLomas de Cabo Roig located 30 minutes from Alicante airport and 1 hour Murcia - Corvera airport.",
       "stats": {
         "listings": 1
       }
@@ -1707,7 +1707,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN TORRE DE LA HORADADA",
+      "bio": "Exclusive Residential of 2 luxury villas with sea views in \u201cLas Higuericas\u201d beach, Torre de la Horadada.\n\nEach villa has independent access from the surrounding streets, as there is no adjacent building.\nLow traffic streets with large green areas around the residential, these aspects are ideal for young family members.\nThe villas feature a plot of 336m\u00b2 or 338m\u00b2, and a built area of 211m\u00b2.\n\nThe villas are built with three bedrooms; however it is also possible to build them with 4 bedrooms. One of the bedrooms is done with a completed bathroom. The kitchen is fully finished, with high quality materials chosen by the owner, including the appliances. Following an open concept, the dining room is surrounded with large windows, providing a source of pleasant day light, with direct access to the swimming pool and finished gardens with illumination, irrigation and local vegetation.\n\nThanks to its design and interior distribution, a microclimate that extends to each living space is achieved in all villas. Furthermore, with the thermal and acoustic insulation, a harmonic and comfortable ambient is obtained. All this translates to the villa being sustainable and respectful with the environment.\n\nSelected finishes, using premium quality materials, customized luxury design and maximum comfort paired with hot and cold conduct air conditioning included in all areas, means the enjoyment of the villa is achieved in warm summers and also in soft winters, being possible to live here the whole year.\n\nWithout forgetting a covered garage and parking with independent entrance for 2 cars.\u2026",
       "stats": {
         "listings": 1
       }
@@ -1737,7 +1737,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN TORREVIEJA",
+      "bio": "New Build Project of 3 villas in a quiet residential area Aguas Nuevas of Torrevieja, province of Alicante.\n\nBeautiful villa has 3 bedrooms, 3 bathrooms, living room - dining room - kitchen, 2 terraces, balcony, basement - garage, solarium.\n\nVillas located 10 minutes walk from the sea, next to the park, shops, restaurants, cafes.\n\nTorrevieja is a Spanish town in the province of Alicante, on the Costa Blanca.\n\nIt is known for its typically Mediterranean climate and coastline. It has boardwalks with resorts along its sandy beaches.\n\nThe small Museum of the Sea and Salt houses exhibitions on the fishing and salt history of the city.\n\nIn the interior, the Lagunas de La Mata-Torrevieja Natural Park has trails and two salty lagoons, one pink and the other green.\n\nAlicante airport located 40 minutes away and Murcia airport about 1 hour away.",
       "stats": {
         "listings": 1
       }
@@ -1767,7 +1767,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD 4 SEMI-DETACHED VILLAS IN PILAR DE LA HORADADA",
+      "bio": "New Build 4 semi-detached villas located in Pilar de la Horadada.\n\nVillas build over 2 floors and has private solarium, has 3 bedrooms, 3 bathrooms, open plan kitchen with the living room, garden with private pool and parking space.\n\nVillas located a few meters from all services and the centre.\n\nPilar de la Horadada is a typical Spanish village in the most southern part of the Costa Blanca.\n\nThe large main street has supermarkets, lots of shops, restaurants and bars and some lovely squares.\n\nThe beautiful beaches of Torre de la Horadada and Mil Palmeras with fine sand promenade is just 5 minutes away.\n\nIn Pilar de la Horadada there is also a well-developed cycling and walking path network, and there is also a large offer of various sports activities.\n\nLo Romero 18 hole golf course is just a short drive from town.\nThe airports of Corvera (Murcia) and Alicante are respectively 40 and 55 minutes away.",
       "stats": {
         "listings": 1
       }
@@ -1797,7 +1797,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL COMPLEX IN TORRE DE LA HORADADA",
+      "bio": "New Build residential complex of bungalow apartments in Torre de la Horadada only 450m from the beach.\n\nAll properties has 3 bedrooms, 2 bathrooms, open plan kitchen with the lounge area, fitted wardrobes and terrace.\n\nBeautiful bungalows on the ground floor has private garden with the pool, bungalow on the top floor has private solarium with the pool.\n\nAll properties has private parking.\n\nTorre de la Horadada is located south of Alicante in a beautiful location on the coast.\n\nThe beautiful beaches of Torre de la Horadada and Mil Palmeras have fine sand beautiful promenade.\n\nThere are lots of restaurants, bars and shops, also water sports, diving and snorkelling.\n\nIt is well connected just 40 minutes from Alicante and Murcias Corvera airports, with large commercial shopping centres and multiple golf courses all within easy reach.",
       "stats": {
         "listings": 1
       }
@@ -1827,7 +1827,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL IN EL RASO, GUARDAMAR DEL SEGURA",
+      "bio": "New Build residential complex of modern style apartment in El Raso, Guardamar del Segura!\n\nThis apartments have 3 bedrooms, 2 bathrooms, open plan salon with kitchen, ground floor with private garden, middle floor with terrace and top floor with private solarium.\n\nComplex with swimming pool, green areas, golf greens, Spa, playground, bio-healthy machines and sports areas.\n\nComplex located in green area close to the salt lake, all amenities, walking distance to commercial centre, bars and restaurants.\n\nEl Raso is a part of Guardamar del Segura.\n\nGuardamar del Segura is a town located on the Costa Blanca South. With its 11 kilometres of natural beach and its large pine forest.\n\nGuardamar del Segura has a large port with activities throughout the year, it has a large sports centre with paddle tennis, tennis, soccer and a large heated swimming pool that works all year round. It also has a library where there is free wifi and computers.\n\nGuardamar del Segura is only 20km away from the Alicante - Elche (El Altet) airport, where there are many flights every day with connections to the main European cities, due to the demand for tourists on the Costa Blanca.",
       "stats": {
         "listings": 3
       }
@@ -1857,7 +1857,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN ALGORFA GOLF RESORT",
+      "bio": "New Build residential of independent villas in La Finca Golf course, Algorfa.\n\nVillas build over 1 floor and consists of 3 bedrooms, 2 bathrooms, open plan kitchen, the living room with open views to the terrace, solarium, private garden with the pool and parking.\n\nResidential complex located in La Finca Golf resort, in the municipality of Algorfa, in the Vega Baja area of the Costa Blanca South.\n\nOnly 15 minutes drive from the sandy beaches of Guardamar del Segura, and only 35 minutes from Alicante airport.\n\nThe larger towns of Almoradi, Benij\u00f3far and Ciudad Quesada are a short drive away.\n\nTorrevieja and Orihuela Costa, with their large shopping centres, are 15 minutes away.",
       "stats": {
         "listings": 1
       }
@@ -1887,7 +1887,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN LOS MONTESINOS",
+      "bio": "New construction project located in La Herrada (Los Montesinos), in a privileged location close to the best beaches of Guardamar and with all the amenities offered by a large municipality such as Los Montesinos.\n\nThis project has 32 villas, some semi-detached on 2 floors and others independent on a single floor, which are delivered with the best equipment, including solarium, bath screens, garden finished with artificial grass of the best quality, decorative gardening elements, and pre-installation for solar panels, electrical socket and door motor for vehicles.\n\nVilla has 3 bedrooms, 3 bathrooms, open plan kitchen with lounge, fitted wardrobes, terrace.\n\nThe typical village of Los Montesinos is strategically located 10 minutes drive from the beaches and leisure of Torrevieja (with all the services of a big city: theatre, 2 hospitals, international schools, etc.), several golf courses and with easy access to the A7 motorway to reach Alicante airport in 20 minutes.\n\nIn the urbanization there are supermarkets and bars for the daily service, being a rural and quiet environment.\n\nThe climate of this area guarantees 300 days of sunshine a year with an average temperature of 20\u00baC, which together with the rich gastronomy and the cultural and sporting offer of its surroundings, make this area an ideal place to establish a second holiday home or a quiet place to live permanently.",
       "stats": {
         "listings": 1
       }
@@ -1917,7 +1917,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL COMPLEX IN VILLAMARTIN",
+      "bio": "New Build residential complex of a total of 94 modern 2 bedrooms apartments and penthouses in Villamartin.\n\nYou can choose from ground floor apartments with garden, apartments with cosy terraces or penthouses with sunny roof terraces and fantastic views\n\nOpen plan kitchen and the living room, 2 spacious bedrooms with fitted wardrobes, 2 bathrooms, laundry room.\n\nThe properties are delivered with white goods, LED lighting package, underfloor heating and shower screens in bathrooms, ducted A/C installed, Legrand smart home system installed, aerothermal system for hot water, motorized blinds and private parking space.\n\nResidential will offer a large communal swimming pool, green areas, sauna, children's playground and gym.\n\nExcellent location close to shops and golf courses.\n\nThe Villamartin area is very popular with tourists and residents, most of the community consists of Western European expatriates who have settled there in the last 15 years, virtually transforming the original village into a vibrant all year round destination.\n\nThere a 3 golf courses nearby and the blue flag beaches are just a short 10 minute drive away.\n\nAlicante & Murcia airports are 45 minutes drive away.",
       "stats": {
         "listings": 1
       }
@@ -1947,7 +1947,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN ROJALES",
+      "bio": "New Build residential of villas in Rojales.\n\nBeautiful villas with 3 bedrooms, 2 bathrooms, open plan kitchen with lounge area and terrace.\n\nVillas build on independent plots where you have garden with parking and private pool.\n\nPrivate solarium is an options at an extra cost.\n\nINTERIOR FEATURES\nOur villas are designed to clients\u2019 individual preferences, allowing you to fully customise many aspects of the build and giving you a choice of finishing materials and styles;\n\u25cf Interior doors and wardrobes in a variety of styles and colours\n\u25cf A huge choice of floor tiles throughout the house and wall tiles in the bathrooms and kitchen\n\u25cf Window frames can be custom coloured.\n\u25cf Choice of fixtures and fittings, from taps and bathroom suites, to light switches\n\u25cf Custom kitchens, built to your specification including a choice of colours, work surfaces and overall layout.\n\nWe also include many interior \u201cextras\u201d as standard;\n\u25cf Heated floors in the bathrooms\n\u25cf A pre-installed air conditioning system, using ducted channels, creating an efficient and discrete installation.\n\u25cf The latest Mineral Polyester materials in our shower floors and kitchen sinks.\n\nEXTERIOR FEATURES\nOur villas already represent great value, but to offer even more, we include a list of exterior \u201cextras\u201d as standard;\n\u25cf A choice of exterior house colours and styles, including the ability to fully customise the appearance of your new villa\n\u25cf A private swimming pool in a choice of colour and style with coloured LED lighting system\n\u25cf Feature, full height exterior plot walls\u2026",
       "stats": {
         "listings": 1
       }
@@ -1977,7 +1977,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD APARTMENTS IN TORREVIEJA",
+      "bio": "New Build apartments and penthouses in Torrevieja.\n\nNew Build residential of 12 exclusive 1 and 2 bedrooms, 1 and 2 bathrooms apartments and penthouses, with open plan kitchen and living area, large, fitted wardrobes, fully equipped bathrooms with underfloor heating.\nAll motorised aluminium blinds.\nArmoured entrance door with security lock.\nPre-installation of air conditioning and heating.\n\nNew Build residential complex with modern design and high quality finishes has a beautiful communal solarium.\n\nTorrevieja is a Spanish town in the province of Alicante, on the Costa Blanca.\nIt is known for its typically Mediterranean climate and coastline. It has boardwalks with resorts along its sandy beaches.\n\nThe small Museum of the Sea and Salt houses exhibitions on the fishing and salt history of the city.\n\nIn the interior, the Lagunas de La Mata-Torrevieja Natural Park has trails and two salty lagoons, one pink and the other green.\n\nAlicante airport located 40 minutes away and Murcia airport about 1 hour away",
       "stats": {
         "listings": 1
       }
@@ -2007,7 +2007,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN HONDON DE LAS NIEVES",
+      "bio": "Modern New Build villas in Hondon de las Nieves.\n\nVillas composed over two floors and basement with English courtyard, has 3 bedrooms, 3 bathrooms, guest toilet, open plan kitchen with the lounge area, fitted wardrobes, terrace and private solarium.\n\nThe spacious plots have a private garden with a swimming pool, a barbecue area, and the possibility to add a parking space.\n\nHond\u00f3n de las Nieves is a town in the Valencian Community, Spain.\nIt is located in the southwest of the province of Alicante, in the region of Vinalop\u00f3 Medio.\n\nThe beaches and Alicante Airport are closely just 30 minutes drive away.",
       "stats": {
         "listings": 1
       }
@@ -2037,7 +2037,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL COMPLEX IN SANTA POLA",
+      "bio": "Modern gated residential complex comprising 3 blocks of apartmwnts with large landscaped communal areas including a swimming pool with water beds, children's playground, pergola and bicycle parking.\n\nThe residential has 3 and 2 bedrooms apartments, both types include 2 full bathrooms, open plan kitchen with living room, fitted wardrobes, terrace, parking space.\n\nThey have a common garden , swimming pool with beach-type entrance, equipped with showers and a large wooden pergola. It has landscaped areas with palm trees and vegetation, all of which are illuminated. In the central part of the pool there is a shallower area where the water beds are located.\n\nThe municipality of Santa Pola is located on the popular Costa Blanca on the Mediterranean, south of Alicante and in the Bajo Vinalop\u00f3 region.\n\nThe city is in an enviable geographical position, surrounded by natural landscapes and with a special microclimate, which offers a mild climate all year round. Its urban center is bounded by the Castle Fortress and the port to the east and west, and is bordered by the Santa Pola Salinas Natural Park and the Sierra and Cabo de Santa Pola, an ancient reef today characterized by its reef leafy pine trees.\n\nSanta Pola located 21 km. from Alicante, the provincial capital with excellent infrastructure and 15 km. away from the international Airport \u201cElche-Alicante\u201d.",
       "stats": {
         "listings": 3
       }
@@ -2067,7 +2067,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL IN SAN FULGENCIO",
+      "bio": "Residential complex of independent and semi-detached villas in San Fulgencio.\n\nThe houses consist of 2-3 bedrooms, 3 bathrooms, living room and separate kitchen, 2 terraces on the ground floor, one terrace on the 2nd floor and a solarium on the roof.\n\nEach property has private garden and parking space.\n\nThere is a large communal swimming pool.\n\nSan Fulgencio is a comfortable and convenient area, known for its excellent infrastructure. In the immediate vicinity of cafes, restaurants, bars, pharmacies, 3 large supermarkets: Lidl, Aldi, Mercadona.\n\nResidential complex is located 10 minutes by car from the beach and also 10 minutes from the most famous in this area leisure and family center \u00a8La Marina Resort\u00a8 with a water park, camping, gym, spa, restaurants, shops and cafes.\n\nResidential complex has a unique location \u2013 30 minutes by car from the airport, 40 minutes from the city of Alicante and 20 minutes from the city of Torrevieja.",
       "stats": {
         "listings": 2
       }
@@ -2097,7 +2097,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN SAN MIGUEL DE SALINAS",
+      "bio": "Exclusive new residential complex offering luxury villas with plots from 300 m2 and an impressive 8x3,5m swimming pool. Optional basement and solarium\n\nThese modern homes offer 3 bedrooms, 3 bathrooms, a spacious living-dining room and a fully equipped kitchen, as well as a garden, and swimming pool.\n\nThe villas stand out for their bright and open spaces, which offer exceptional views and a layout that optimises every corner of the home to the maximum. High quality finishes and interiors merge into a contemporary concept of luxury, combining the elegance, comfort and refinement that buyers desire.\n\nThe design and construction of this residential complex has taken into account fundamental aspects such as energy efficiency and the use of top quality materials, thus guaranteeing a sustainable and long-lasting lifestyle.\n\nSan Miguel de Salinas is a municipality in the Valencian Community, Spain.\nLocated in the south of the province of Alicante, in the region of Vega Baja del Segura near the Region of Murcia.\n\nSan Miguel de Salinas located close to the Las Colinas and Campoamor golf courses, offers exceptional views of the Torrevieja and La Mata lagoons.\n\nAlicante airport located 35 minutes drive away and Murcias Corvera airport is about 1 hour drive away.",
       "stats": {
         "listings": 1
       }
@@ -2127,7 +2127,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD QUADS IN DOLORES",
+      "bio": "New Build residential of modern quads in Dolores.\n\nQuads build over 2 floors, has 3 bedrooms, 3 bathrooms, open plan kitchen, living room with direct access to the terrace, private garden with the pool and parking space.\n\nDolores is a town located in the comarca of Vega Baja del Segura in southern Alicante province, Spain.\n\nThe town is in the heart of the Segura huerta about 10 km from the nearest beaches in La Marina and Guardamar.\n\nComplex located 30 minutes from Alicante airport and 1 hour Murcia - Corvera airport.",
       "stats": {
         "listings": 1
       }
@@ -2157,7 +2157,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD BUNGALOWS IN HONDON DE LAS NIEVES",
+      "bio": "New Build 4 bungalows located in Hond\u00f3n de las Nieves (Alicante)\n\nAll bungalows have 3 bedrooms with fitted wardrobes, 2 bathrooms, large living room, fitted kitchen and terrace.\n\nThe properties are available on the ground floor with front and rear terrace/garden and on the top floor with terrace and private solarium.\nThe first floor properties have photovoltaic panels on the roof for energy saving.\n\nThe kitchens are fully furnished and finished with granite or synthetic agglomerate worktops (silestone or simular).\nThe bathrooms are finished with high quality sanitary ware and taps with built-in cistern.\n\nThese homes have pre-installation for ducted air conditioning with heat pump, forced ventilation with heat recovery, aerothermal system for domestic hot water, the most modern thermal and acoustic insulation, aluminium exterior carpentry with thermal bridge break and shutters.\n\nHond\u00f3n de las Nieves is a town in the Valencian Community, Spain.\n\nIt is located in the southwest of the province of Alicante, in the region of Vinalop\u00f3 Medio.\n\nThe beaches and Alicante Airport are closely just 30 minutes drive away.",
       "stats": {
         "listings": 2
       }
@@ -2187,7 +2187,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN SAN FULGENCIO",
+      "bio": "New Build villas San Fulgencio, just 5 km from the beach.\n\nThe villas offer 3 bedrooms, 2 bathrooms and spacious kitchen, dining room, living room, swimming pool with waterfall and two pools: splash pool measuring 1.95x2.60 m and 0.6 m deep, and pool measuring 5.60x2.60 m, between 1 and 1.5 m variable depth.\n\nA large south facing porch allows the continuity of the living room with the outside, opening up to a modern and functional outdoor space where you can enjoy the private swimming pool, barbecue, chillout and large garden area that surrounds it.\n\nThe simple and clear lines of the furniture contribute to its integration with the rest of the house. Wooden details add warmth to the atmosphere. Bathrooms where colour combined with natural and warm tones, create a cosy atmosphere, which together with the direct relationship with the outside ,allows you to connect with nature, achieving great moments of relaxation. The master bedroom has a private patio, which together with the light that penetrates through its windows, creates a relaxing atmosphere, perfect for rest and relaxation.\n\nSan Fulgencio is a pleasant village with several restaurants and shops and the location is very good with its proximity to the fantastic beaches of La Marina and the slightly larger town of Guardamar.\n\nThe town of San Fulgencio is situated around 30 minutes from Alicante-Elche airport, 6 km from the nearest golf course and just 5 km from the nearest beach.",
       "stats": {
         "listings": 1
       }
@@ -2217,7 +2217,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD SEMI-DETACHED VILLA IN DAYA NUEVA",
+      "bio": "New Built 2 floors semi-detached villa in Daya Nueva.\n\nNew Build villa with 2 bedrooms, 2 bathrooms, open plan kitchen with the lounge area, fitted wardrobes, private garden with the pool and parking space.\n\nProperty located only few minutes walk to the village centre with restaurants, bars and shops.\n\nDaya Nueva is a small idyllic village surrounded by scenic countryside, It is a rural village surrounded by orange and lemon groves.\n\nIt has a town hall a summer only outside swimming pool, a few bars and restaurants and a number of parks dotted around the urbanisation areas on the edge of the village.\n\nThe beach of Guardarmar is a 10 minute drive and Alicante airport only 25 minutes away.\n\nThe Golf courses of La Marquesa golf in Ciudad Quesada and La Finca Golf In Algorfa are both within 10 minutes drive.",
       "stats": {
         "listings": 1
       }
@@ -2247,7 +2247,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Elegant New Build Villas in Los Montesinos \u2013 Modern Comfort in a Serene Setting",
+      "bio": "Spacious New Villas in the Heart of Los Montesinos, La Herrada\n\nLocated in the tranquil neighborhood of La Herrada, Los Montesinos, these new build villas offer a perfect blend of modern living and peaceful surroundings. Each villa in this beautiful development has been thoughtfully designed to maximize comfort and functionality, featuring three bedrooms and two bathrooms, ideal for families or couples. The open-plan kitchen connects seamlessly with a spacious lounge, providing a cozy and inviting space for gatherings. Additionally, fitted wardrobes and electric blinds enhance convenience and style.\n\nThese villas are situated within easy walking distance of Los Montesinos village, offering quick access to essential services like restaurants, pharmacies, and shops, making everyday life easy and enjoyable.\n\nModern Features and Amenities\n\nEach villa includes:\n\nOptional private pool\nOptional Solarium: For an additional cost, enhance your property with a solarium, ideal for sunbathing or stargazing.\nPrivate Garden and Off-Road Parking: Each villa boasts a private garden and off-road parking, adding security and personal outdoor space.\nQuality Finishes: From electric blinds to guardian sun glass windows, the villas include premium fixtures. The bathrooms also feature underfloor heating for added comfort in cooler months.\nWhite Goods Included: The villas come with essential kitchen appliances included, adding convenience and value.\n\nPrime Location Near Top Points of Interest\u2026",
       "stats": {
         "listings": 1
       }
@@ -2277,7 +2277,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLA IN TORRE DE LA HORADADA",
+      "bio": "Modern New Build villa near Higuericas beach in Torre de la Horadada.\n\nThe villa consists of a plot of 618 m\u00b2, with 344 m\u00b2 constructed.\n\nVilla has 5 bedrooms: two of them with complete bathroom and dressing room. Kitchen furnished with top quality materials to be chosen by the owner, including electrical appliances, following an open concept with the dining room surrounded by large windows that provide throughout the day a pleasant light and direct access to the pool and private garden areas completely finished.\n\nAir conditioning (hot/cold) by ducts included. Taking care to the smallest detail in the finishes, using the highest quality materials, personalized design and luxury without forgetting the maximum comfort, we achieve the enjoyment of housing both in summer and in the mild winter, making it habitable throughout the year.\n\nIn addition to a covered garage area for 2 vehicles and parking for another car.\n\nVilla located 100m from the Higuericas beach, in Torre de la Horadada, a paradise in all aspects, where you can enjoy the immensity of the Mediterranean Sea, the promenade, refreshing swims in the sea, water sports, sailing, surfing, snorkelling and just 8 km from Lo Romero Golf, one of the 21 golf courses on the Costa Blanca.\n\n5 minutes from the marina of La Torre de la Horadada and 10 minutes from the marinas of San Pedro del Pinatar, and the best restaurants where you can enjoy the best Mediterranean cuisine.\u2026",
       "stats": {
         "listings": 1
       }
@@ -2307,7 +2307,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN SAN FULGENCIO",
+      "bio": "New Build residential of 3 Modern villas in San Fulgencio.\n\nVillas build on the plots of 500 m2 and located in residential area with all services within walking distance and short distance from the best SPA center and Water Park in the zone.\n\nVillas build over 2 floors and have 3 bedrooms, 3 bathrooms, an open plan kitchen with living room, fitted wardrobes, terraces, private garden with the pool and parking space.\n\nAn options for private solarium at an extra cost.\n\nSan Fulgencio is a pleasant village with several restaurants and shops and the location is very good with its proximity to the fantastic beaches of La Marina and the slightly larger town of Guardamar.\n\nThe town of San Fulgencio is situated around 30 minutes from Alicante-Elche airport, 6km from the nearest golf course and just 7km from the nearest beach.",
       "stats": {
         "listings": 1
       }
@@ -2337,7 +2337,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN PINAR DE CAMPOVERDE",
+      "bio": "Modern New Build villas in Pinar de Campoverde.\n\nVillas build over 1 floor and has 3 bedrooms, 3 bathrooms, open plan kitchen with the lounge area, fitted wardrobes, terrace, basement, private garden with the pool and parking space.\n\nVillas located in Pinar de Campoverde (Alicante), surrounded by services, sports facilities, near several Golf Courses such as Las Colinas and Lo Romero Golf, plus being 10 minute far from Mar Menor and Mediterranean beaches.\n\nThe beautiful beaches of Torre de la Horadada and Mil Palmeras with fine sand promenade is 10 minutes drive away.\n\nThe airports of Corvera (Murcia) and Alicante are respectively 40 and 55 minutes away.",
       "stats": {
         "listings": 1
       }
@@ -2367,7 +2367,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEWLY BUILT VILLAS WITH POOL IN HONDON DE LAS NIEVES",
+      "bio": "Discover the elegance and comfort of these beautiful detached villas ranging from 108 to 128 m2, designed to offer you an exceptional lifestyle, all on one floor.\n\nEnjoy the privacy offered by this villa, where you can relax in your own garden, create an oasis of tranquillity, or cool off in your private pool to enjoy the warm summer days.\n\nThe property is distributed into two large areas:\nDay area: Here we find a spacious living-dining room with an open-plan kitchen (kitchen furniture included) that connects to the large modern porch through two large windows, leading to the landscaped outdoor area and the pool.\n\nAs an extra space, there is a laundry area strategically located in the layout of the house, which is easily accessible from anywhere in the property.\n\nRest area: In this area there are 3 bedrooms. The master bedroom has a large dressing room and en-suite bathroom. There is also a second bathroom for the other bedrooms and the rest of the house.\n\nLocated in a quiet, residential area, this villa allows you to enjoy the privacy and tranquillity you desire, while being within easy reach of amenities, shops, supermarkets and restaurants. It is the perfect balance between peaceful seclusion and the comforts of modern living.\nIn this development in Hond\u00f3n de las Nieves, every day is an opportunity to connect with the world.\n\nHond\u00f3n de las Nieves is a municipality in the Valencian Community, Spain.\nIt is located in the south-west of the province of Alicante, in the Vinalop\u00f3 Medio region.\n\nThe beaches and Alicante airport are very close by, only 30 minutes away by car.",
       "stats": {
         "listings": 3
       }
@@ -2397,7 +2397,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN ROJALES",
+      "bio": "New Build modern villas in Rojales.\n\nVillas build over 2 floosr, with 3 bedrooms and 3 bathrooms, open plan kitchen with the lounge area, fitted wardrobes, terrace, private garden with the pool and parking space.\n\nAn options for a solarium and basement at an extra cost.\n\nAll with first class materials and the best finishes.\n\nVillas located only 10 minutes from La Marquesa golf course in a quiet area and the coast.\n\nRojales is a traditionally agricultural town that has become one of the favorite destinations in the interior of Vega Baja, thanks to its strategic location near the N-332 and the AP-7.\n\nIts excellent accesses allow you to reach Alicante airport in 20 minutes and enjoy the beaches of Guardamar, La Mata or Torrevieja in 15 minutes.\nRojales offers a rich and varied gastronomic and leisure offer, and has the prestigious golf course La Marquesa Golf.\n\nRojales it is a lovely village with all services such as supermarkets, pharmacies, banks, restaurants and natural park located very close to the villas.\n\nLa Marquesa Golf is one of the most historic courses on the Costa Blanca, with 18 holes and one as special as the 17th hole at Sawgrass. Tradition, quality and experience come together to offer golfers who visit us a unique experience, full of history where.",
       "stats": {
         "listings": 1
       }
@@ -2427,7 +2427,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS NEAR ROJALES",
+      "bio": "New Build project of 4 modern villas in Las Heredades, near Rojales.\n\nVillas build over 2 floors, has 3 bedrooms, 3 bathrooms, open plan kitchen with living room, fitted wardrobes, terrace.\nOptional private pool.\n\nRojales it is a lovely village with all services such as supermarkets, pharmacies, banks, restaurants and natural park located very close to the villas.\n\nThere are several golf courses close by as well as water parks in nearby Rojales and Torrevieja.\n\nAlicante & Murcia airports are 45 minutes drive away.",
       "stats": {
         "listings": 1
       }
@@ -2457,7 +2457,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL OF BUNGALOW APARTMENTS IN VISTABELLA",
+      "bio": "New Build residential of modern design bungalow apartments in Vistabella.\n\nModern bungalows with 2 and 3 bedrooms, open plan kitchen and the lounge area, fitted wardrobe, off road parking space.\n\nTownhouses and semi-detached houses with private garden and solarium.\n\nResidential has beautifully designed communal gardens with lovely communal swimming pool.\n\nThese lovely spacious apartments are being built with top quality products & materials.\n\nAt Vistabella Golf there is space for everyone. The course is designed so that each player can enjoy it from start to finish. Its undulating streets, strategic bunkers or lakes are some of the features that make it one of the most attractive designs in the area, where every stroke is a challenge and a pleasure for the senses.\n\nThe 18 Holes of Vistabella Golf, par 72 and more than 6,000 meters in length have been designed following the guidelines of the modern fields with 4 tees of great amplitude in each hole, wide fairways and raised bunkers.\n\nThe Vistabella Golf club house & restaurant & local bars & shops are within 5 minutes walk.\n\nThe busy town of San Miguel de Salinas & Los Montesinos are 5 minutes drive away & the lovely Blue flag beaches at Guardamar are just 15 minutes drive away.\n\nAlicante airport is 35 minutes away & the new Corvera Murcia airport is 45 minutes away.",
       "stats": {
         "listings": 3
       }
@@ -2487,7 +2487,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Newly built villas located in La Romana.",
+      "bio": "Newly built villas located in La Romana.\n\nNewly built villas with several models to choose from, with 2 or 3 bedrooms, one or two floors, and built with slabs or a frame structure. The exact price will be calculated depending on the model and plot chosen.\n\nAll villas are built on rustic plots of over 10,000 m2, of which 2,500 m2 will be fenced.\n\nThe villas have an open-plan kitchen with living room, fitted wardrobes, private swimming pool, porch and outdoor parking space.\n\nThere are several plots to choose from. The price has been calculated based on a plot priced at \u20ac73,000 (if another plot is chosen, the difference will be paid according to the price of the plot).\n\nSelf-build project, delivery in approximately 12 months from the granting of the licence.\n\nIf you are looking for a peaceful setting, close to typical Spanish villages away from mass tourism, surrounded by mountains, with a very large plot and about 30 minutes from the sea, this is your home.\n\nLa Romana is a typical Spanish village with all the amenities you need for everyday life, surrounded by mountains and with several natural areas nearby where you can go hiking or mountain biking.\n\nLocated 30 minutes from Alicante airport.",
       "stats": {
         "listings": 4
       }
@@ -2517,7 +2517,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL COMPLEX IN PILAR DE LA HORADADA",
+      "bio": "New Build residential of apartments and penthouses with exceptional finishes in Pilar de la Horadada.\n\nGround floor apartments with private gardens, middle floor apartments with large terraces and top floor penthouses with private solariums.\n\nThe kitchen is delivered fully furnished, leaving enough space for you to choose the appliances according to your preferences.\n\nOnly noble materials have been used, such as interior carpentry made entirely of wood and exterior Climalit/aluminium windows, ideal both for their design and for the high thermal-acoustic level they have.\n\nAll the terraces are south-facing.\n\nAutomatic gates in the residential, both for pedestrian access and vehicle access.\n\nThe building is surrounded by gardens, it will also have a communal swimming pool, parking inside the complex and each property has its own private storage room.\n\nIn the vicinity of this residential complex you will find all the facilities of public transport, schools, supermarkets, shopping centres, golf courses and fantastic municipal parks with their children's playgrounds.\n\nEverything at your fingertips so that you can enjoy an excellent location.\n\nPilar de la Horadada is a typical Spanish village in the most southern part of the Costa Blanca.\n\nThe large main street has supermarkets, lots of shops, restaurants and bars and some lovely squares.\n\nThe beautiful beaches of Torre de la Horadada and Mil Palmeras with fine sand promenade is just 5 minutes away.\n\nThe airports of Corvera (Murcia) and Alicante are respectively 40 and 55 minutes away.",
       "stats": {
         "listings": 6
       }
@@ -2547,7 +2547,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN PILAR DE LA HORADADA",
+      "bio": "New Build villas located in Pilar de la Horadada.\n\nVillas build over 2 floors has 3 bedrooms, 2 bathrooms, guest toilet, open plan kitchen with the living room, basement, terrace and solarium, garden with private pool.\nPrivate parking in the basement.\n\nFitted wardrobes in bedrooms with floor to ceiling white lacquered doors equipped with drawers, hanging rails and high storage area. Furnished dressing room.\n\nPre-installation of air conditioning (split) in bedrooms and in lounge. Installation of underfloor heating throughout the house.\n\nVillas located a few meters from all services and the centre.\n\nPilar de la Horadada is a typical Spanish village in the most southern part of the Costa Blanca.\n\nThe large main street has supermarkets, lots of shops, restaurants and bars and some lovely squares.\n\nThe beautiful beaches of Torre de la Horadada and Mil Palmeras with fine sand promenade is just 5 minutes away.\n\nIn Pilar de la Horadada there is also a well-developed cycling and walking path network, and there is also a large offer of various sports activities.\n\nLo Romero 18 hole golf course is just a short drive from town.\nThe airports of Corvera (Murcia) and Alicante are respectively 40 and 55 minutes away.",
       "stats": {
         "listings": 1
       }
@@ -2577,7 +2577,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD APARTMENTS IN TORREVIEJA",
+      "bio": "New Build avant-garde design five-storey development in Torrevieja with 34 exclusive properties offers a variety of living options, from stylish apartments to penthouses with breathtaking panoramic views.\n\nEvery corner of residential has been carefully planned to maximise space and natural light, creating bright and welcoming environments that invite well-being.\n\nResidential majestically located in the heart of Torrevieja, consolidating itself as a residential development full of elegance and modernity. Its strategic location ensures that residents will feel part of this amazing city with easy access to a variety of services and attractions.\n\nIt is a unique opportunity to invest in a sophisticated lifestyle in the heart of Torrevieja!\n\nIts unrivalled location, avant-garde design and meticulous attention to detail ensure that this residential development is much more than a place to live: it is a home where dreams take shape and life is lived to the fullest.\n\nTorrevieja is a Spanish town in the province of Alicante, on the Costa Blanca.\nIt is known for its typically Mediterranean climate and coastline. It has boardwalks with resorts along its sandy beaches.\n\nThe small Museum of the Sea and Salt houses exhibitions on the fishing and salt history of the city.\n\nIn the interior, the Lagunas de La Mata-Torrevieja Natural Park has trails and two salty lagoons, one pink and the other green.\n\nAlicante airport located 40 minutes away and Murcia airport about 1 hour away.",
       "stats": {
         "listings": 3
       }
@@ -2607,7 +2607,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New build villas in Pinoso on rural plots",
+      "bio": "You can choose villas with traditional Spanish touches or super modern, bright and clean finishes. There are several sizes to choose from, with 3 to 6 bedrooms and 1 or 2 floors.\n\nDifferent legal plots available to choose from (rustic with a minimum of 10,000 m2), some within walking distance of the town, some completely private and the most popular ones are 5-10 minutes' drive from a town. We have a plot to suit every taste, all with stunning views and all with mains water + electricity included in the price and high-speed internet available. The published price includes \u20ac30,000 for the plot. If the chosen plot costs more, the difference will be paid.\n\nFrom the largest and best builder in the area, we use top quality materials for a perfect finish.\n\nAll houses include a 2m stamped concrete terrace around the pool (colour and pattern of your choice), 1m around the house, enclosed entrance, 3,000 m\u00b2 fencing, pre-installation of ducted air conditioning, standard kitchen, security door, German tilt-and-turn windows (or sliding windows if preferred), built-in fireplace (traditional finish), pre-installation of television and internet, gravel path around the house, septic tank.\n\nThe bathrooms include shower column, shower tray or bathtub, washbasin units (various colours to choose from) with sinks, taps and mirrors, as well as a large selection of wall tiles.\nWide selection of ceramic floor tiles, in different colours, wood effect, etc.\u2026",
       "stats": {
         "listings": 12
       }
@@ -2637,7 +2637,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New-build residential complex of modern bungalows and townhouses in Pilar de la Horadada.",
+      "bio": "New-build residential complex of modern bungalows and townhouses in Pilar de la Horadada.\n\nThe new-build townhouses have 3 bedrooms, 3 bathrooms, an open-plan kitchen with a spacious living-dining room, built-in wardrobes, and a terrace.\nAll homes have a private parking space and storage room.\n\nGround floor bungalows with private garden and top floor bungalows with private solarium\nAll properties have a private parking space and storage.\n\nPilar de la Horadada is a typical Spanish village in the most southern part of the Costa Blanca.\n\nThe large main street has supermarkets, lots of shops, restaurants and bars and some lovely squares.\n\nThe beautiful beaches of Torre de la Horadada and Mil Palmeras with fine sand promenade is just 5 minutes away.\n\nThe airports of Corvera (Murcia) and Alicante are respectively 40 and 55 minutes away",
       "stats": {
         "listings": 1
       }
@@ -2667,7 +2667,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL IN TORREVIEJA",
+      "bio": "New Build residential just 5 minutes walk from Los Locos beach, in the centre of Torrevieja.\n\nThis residential has 16 properties, with 1, 2 or 3 bedrooms and 1 and 2 bathrooms, all with terraces from 7m2 to 55m2, facing South or West, with community solarium, jacuzzi, chillaut area and sauna.\nAn options underground parking space at an extra cost.\n\nTorrevieja is a Spanish town in the province of Alicante, on the Costa Blanca.\nIt is known for its typically Mediterranean climate and coastline. It has boardwalks with resorts along its sandy beaches.\n\nThe small Museum of the Sea and Salt houses exhibitions on the fishing and salt history of the city.\n\nIn the interior, the Lagunas de La Mata-Torrevieja Natural Park has trails and two salty lagoons, one pink and the other green.\n\nAlicante airport located 40 minutes away and Murcia airport about 1 hour away.",
       "stats": {
         "listings": 6
       }
@@ -2697,7 +2697,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Newly built private residential complex consisting of 3-bedroom townhouses, premium 2-bedroom flats and premium 2- or 3-bedroom penthouses with private communal areas and luxury services.",
+      "bio": "Newly built private residential complex consisting of 3-bedroom townhouses, premium 2-bedroom flats and premium 2- or 3-bedroom penthouses with private communal areas and luxury services.\n\nModern design apartments in a protected park area with citrus gardens and salt lakes, this beautiful modern development offers the ultimate quality of life that comes with being close to nature and high-tech living.\n\nModern urbanization, built with comfort in mind. Our elegant design, unmatched building quality, and attention to detail bring your Spanish dreams to life.\n\nLatest tech to keep your home ready from your phone. Smart alarm, cameras, intercom, appliances, air conditioning and etc.\n\nEnjoy endless summer fun with a big salt-water pool in your own community! No need to travel, our sparkling pool offers space for swimming, sunbathing, and relaxation. Dive into paradise , right under your home.\n\nGet ready for a hole-in-one good time! Imagine having a mini golf course right under your home! Endless entertainment for all ages. Whether you\u2019re perfecting your swing or just looking for a fun activity to do with friends and family, our mini golf course has got you covered.\n\nHaving a co-working space and coffee corner right under your home offers a great deal of versatility. It allows you to have a dedicated area for work and productivity, separate from the distractions and relaxation of your living space. This can be especially beneficial for those who work from home.\n\nIndulge in the luxury of a spa experience within your community. Relax and rejuvenate in comfort!\u2026",
       "stats": {
         "listings": 3
       }
@@ -2727,7 +2727,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD SEMI-DETACHED VILLAS IN PILAR DE LA HORADADA",
+      "bio": "New Build semi-detached villas located in Pilar de la Horadada.\n\nVillas build on 1 floor and has private solarium, 3 bedrooms, 2 bathrooms, open plan kitchen with the living room, garden with parking space.\n\nAn options for a private pool at an extra cost.\n\nProperties located a few meters from all services and the centre.\n\nPilar de la Horadada is a typical Spanish village in the most southern part of the Costa Blanca.\n\nThe large main street has supermarkets, lots of shops, restaurants and bars and some lovely squares.\n\nThe beautiful beaches of Torre de la Horadada and Mil Palmeras with fine sand promenade is just 5 minutes away.\n\nIn Pilar de la Horadada there is also a well-developed cycling and walking path network, and there is also a large offer of various sports activities.\n\nLo Romero 18 hole golf course is just a short drive from town.\nThe airports of Corvera (Murcia) and Alicante are respectively 40 and 55 minutes away.",
       "stats": {
         "listings": 4
       }
@@ -2757,7 +2757,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL OF BUNGALOW APARTMENTS IN LOS BALCONES",
+      "bio": "Discover the perfect harmony between luxury and comfort in our ground-floor apartments with a garden or upper-floor apartments featuring a balcony and solarium.\nThe residences consist of 2 bedrooms and 2 bathrooms, with the option of a third bedroom to suit your needs. Each apartment offers spectacular views of the pink lagoon of Torrevieja, creating a unique experience where nature becomes an integral part of your daily life.\n\nThe common areas are an extension of your own private oasis. Immerse yourself in our infinity pool while enjoying panoramic views of the pink lagoon, play with the little ones in the playground, or stroll through the landscaped green areas.\n\nStrategically nestled, places you minutes away from the beaches of Torrevieja, the bustling Zenia Boulevard shopping center, and a variety of amenities such as supermarkets, pharmacies, and restaurants. The proximity to golf courses and the highway exit to Alicante Airport ensures easy access to everything you love.\n\nThis properties are more than a home; it is a lifestyle that embraces natural beauty, modern comfort, and convenience. Exceptional residential is the perfect place to live the life you've always imagined. Welcome to new residential, where each day is a masterpiece of luxury and serenity!",
       "stats": {
         "listings": 4
       }
@@ -2787,7 +2787,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN TORREVIEJA",
+      "bio": "New Build villas in Torreta, Torrevieja.\n\nBeautiful New Build villas build over 2 floor with 3 bedrooms, 3 bathrooms, open plan kitchen with lounge area, fitted wardrobes, terrace and private solarium in some units.\n\nVilla comming with garden with private pool and parking space on the plot.\n\nTorrevieja is a Spanish town in the province of Alicante, on the Costa Blanca.\n\nIt is known for its typically Mediterranean climate and coastline. It has boardwalks with resorts along its sandy beaches.\n\nThe small Museum of the Sea and Salt houses exhibitions on the fishing and salt history of the city.\n\nIn the interior, the Lagunas de La Mata-Torrevieja Natural Park has trails and two salty lagoons, one pink and the other green.\n\nAlicante airport located 40 minutes away and Murcia airport about 1 hour away.",
       "stats": {
         "listings": 1
       }
@@ -2817,7 +2817,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL IN BENIJOFAR",
+      "bio": "New Build residential with communal rooftop pool located in the centre of the charming village of Benijofar.\n\nYou can choose modern apartments with terraces or penthouses with solarium.\n\nNew Build modern properties with an open plan kitchen and living room, 2 and 3 bedrooms, 2 bathrooms, terraces.\n\nAn options underground parking space at an extra cost.\n\nBenijofar it is a lovely village with a charming church and an attractive square/plaza located inland on the Southern Costa Blanca, close to the tourist resorts of Guardamar del Segura and Torrevieja.\n\nBenijofar is also a popular place to stay for the summer holidays as it is close enough to the coastal resorts yet quiet enough to be able to get away from it all.\n\nThere are several golf courses close by as well as water parks in nearby Rojales and Torrevieja.\n\nThe nearest and best beaches to Benijofar are about fifteen minutes away by car and are some of the best beaches on the Southern Costa Blanca, at Guardamar del Segura and Torrevieja. There are also regular bus services from Benijofar to Guardamar del Segura and Torrevieja with easy access to the beaches.\n\n20 minutes drive to Alicante airport with regular flights all over Europe.",
       "stats": {
         "listings": 4
       }
@@ -2847,7 +2847,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL COMPLEX IN PILAR DE LA HORADADA ON THE GOLF COURSE",
+      "bio": "New Build residential is the perfect place to enjoy the Mediterranean lifestyle alongside golf.\nAn exclusive residential complex of apartments, all with terraces, on the ground floor plus garden and penthouses plus solarium, designed to offer maximum space, light and comfort.\nIn addition, the properties will have a parking space, community pool and garden area.\n\nThe sophisticated and modern architecture used, as well as its careful selection of qualities, make our homes unique projects, aimed at demanding clients, who are looking for a good investment and quality of life.\n\nLo Romero Golf Resort is located in a privileged area of the municipality of Pilar de la Horadada (Alicante), in the heart of the Costa Blanca.\nThe 18-hole golf course is close to beautiful beaches with crystal-clear waters and is perfectly connected by road to the cities of Alicante and Murcia, as well the airports of Corvera (Murcia) and Alicante are respectively 40 and 55 minutes away.\n\nPilar de la Horadada is a typical Spanish village in the most southern part of the Costa Blanca.\n\nThe large main street has supermarkets, lots of shops, restaurants and bars and some lovely squares.\n\nThe beautiful beaches of Torre de la Horadada and Mil Palmeras with fine sand promenade is just 5 minutes away.",
       "stats": {
         "listings": 1
       }
@@ -2877,7 +2877,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN MIL PALMERAS",
+      "bio": "New Build residential of villas in Mila Palmeras designed to enjoy the Mediterranean climate.\nEach villa has magnificent terraces, solarium and a beautiful garden with a designer swimming pool. With an unbeatable orientation, close to the beach and within a consolidated urbanization with sports facilities and leisure areas.\n\nThe properties have spacious rooms distributed over 2 floors. On the ground floor, linked to the garden, we find a bright living-dining room plus kitchen as well as a double bedroom and bathroom.\nOn the first floor there are 2 further double bedrooms each with their own bathroom. A fantastic solarium completes the whole on the roof floor.\n\nMil Palmeras is situated in a privileged area of Torre de la Horadada. Its tranquillity as well as its proximity to the beach and all kinds of services make it an unbeatable enclave.\n\nVillasl located close to the sandy beach with a promenade between Campoamor and Torre de la Horadada , all amenities you need such schools, restaurants, sports facilities etc which are open all year round.\n\nThe village has a little square and a great \u2018restaurant alley\u2019 which is packed with international restaurants and the Lo Monte Natural Park which is a special reserve for birds.\n\nThe natural park of Rio Seco is also here for lovers of nature and hiking.\n\nMurcia and Alicante airports located 45 minutes away.",
       "stats": {
         "listings": 1
       }
@@ -2907,7 +2907,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN SAN MIGUEL DE SALINAS",
+      "bio": "New Build detached villas located in San Miguel de Salinas.\n\nModern designs villas created to enjoy the Spanish sun.\n\nVillas build over 1 floor, has 3 bedrooms, 2 bathrooms, open plan kitchen with spacious living room, fitted wardrobes, terrace and private solarium.\n\nEach villa has an independent plot with parking space.\nAn options for a private pool at an extra cost.\n\nSan Miguel de Salinas located close to the Las Colinas and Campoamor golf courses, offers exceptional views of the Torrevieja and La Mata lagoons.\n\nSan Miguel de Salinas is a municipality in the Valencian Community, Spain. Located in the south of the province of Alicante, in the region of Vega Baja del Segura near the Region of Murcia.\n\nAlicante airport located 35 minutes drive away and Murcias Corvera airport is about 1 hour drive away.",
       "stats": {
         "listings": 1
       }
@@ -2937,7 +2937,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Newly built villas on spacious rural plots in Pinoso, Alicante",
+      "bio": "Newly built villas on spacious rural plots in Pinoso, Alicante\n\nQuiet Mediterranean living in the heart of nature\nDiscover this exclusive project of newly built villas in Pinoso, a charming town in the interior of the province of Alicante known for its traditional Spanish character, beautiful mountainous landscapes and peaceful surroundings. Perfect for those seeking privacy and space, these villas are built on rustic plots of over 10,000 m\u00b2 and offer the perfect combination of modern comfort and country living, just 45 km from the coast.\n\nCustomisable villas with multiple layout options\nChoose from several villa models with 2, 3 or 4 bedrooms and 2 bathrooms (one of them en suite), all designed on a single floor for maximum comfort. The final price is calculated based on the chosen design, the construction system (slab or structure) and the selected plot. For this advertisement, a plot priced at \u20ac73,000 has been considered. If another plot is chosen, the difference will be paid or charged depending on the price of the plot.\n\nEach villa has a spacious open-plan kitchen and living room, fitted wardrobes and high-quality finishes throughout. Large windows fill the homes with natural light and provide a seamless integration between indoor and outdoor spaces.\n\nExceptional outdoor spaces with private swimming pool\nEach property is located in a fenced area of approximately 2,500 m\u00b2 within a 10,000 m\u00b2 rustic plot, ensuring great privacy and space. The villas include an 8 x 4 m private swimming pool, a porch, a storage room and private outdoor parking.\u2026",
       "stats": {
         "listings": 6
       }
@@ -2967,7 +2967,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL IN ALGORFA",
+      "bio": "New Build residential of 41 stylish apartments and penthouses in Algorfa.\n\nResidential consist of 1, 2, and 3-bedroom apartments, with 1 or 2 bathrooms, open plan kitchen with the lounge area, fitted wardrobes.\nModern penthouses has private solarium.\n\nPre-installation of hot/cold air conditioning, supply via ducts and return via grilles in dropped ceiling.\nKitchen and front in compact PVC, equipped with lower and upper cabinets, drawer fronts and doors in a combination of white laminate and wood laminate.\nEnergy label A.\n\nAccess to a communal pool for relaxation and leisure. On-site gym for health and fitness enthusiasts.\n\nNestled in the heart of a traditional village, Algorfa offers the perfect blend of Spanish charm and modern amenities, making it an ideal destination for both tourists and locals.\n\nResidential located within walking distance to the Town Centre, schools, and La finca Golf course.\nOnly 15 minutes away from beautiful beaches and hospitals.\nA short 35-minute drive to the airport.",
       "stats": {
         "listings": 7
       }
@@ -2997,7 +2997,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD GATED URBANIZATION IN TORREVIEJA ONLY 700M FROM THE BEACH",
+      "bio": "New Build residential complex of 362 apartments with large community areas in Torrevieja.\n\nYou can choose between luxury 2 bedrooms and 2 bathrooms apartments , 3 bedrooms and 2 bathrooms penthouses with private solarium and 2 bedroom, 2 bathroom ground floor apartments with private garden.\n\n-Modern designs and quality finishes and materials\n-Almost all apartments will have sea views\n-All apartments comes with large front terraces facing the community areas\n-Communal areas with two swimming pools for adults, children's pool, children's area, gym, sports area and spa,\nbicycle parking and vehicle parking area\n-700 meters to La Mata Beach, 10 minutes walking\n-In front of Torremarina Shopping Center with Mercadona, restaurants, cafes and other shops\n\nTorrevieja is a Spanish town in the province of Alicante, on the Costa Blanca.\n\nIt is known for its typically Mediterranean climate and coastline. It has boardwalks with resorts along its sandy beaches.\n\nThe small Museum of the Sea and Salt houses exhibitions on the fishing and salt history of the city.\n\nIn the interior, the Lagunas de La Mata-Torrevieja Natural Park has trails and two salty lagoons, one pink and the other green.\nAlicante airport located 40 minutes away and Murcia airport about 1 hour away.",
       "stats": {
         "listings": 3
       }
@@ -3027,7 +3027,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLAS IN PILAR DE LA HORADADA ON THE GOLF COURSE",
+      "bio": "New Build residential of 6 detached villas in Pilar de la Horadada.\n\nNew Build villas build over 2 floors, has 3 bedrooms, 2 bathrooms, guest toilet, open plan kitchen with the lounge area, fitted wardrobes, private garden with the pool and off road parking space.\n\nPilar de la Horadada is the southernmost town and municipality on the Costa Blanca in the province of Alicante.\n\nThe city is located on the border between the Comunidad Valenciana and the Murcia region.\n\nThe town of Pilar de la Horadada is a typical Spanish town located just 2 km from the coast and the popular beaches of Torre de la Horadada.\n\nIn the centre of Pilar de la Horadada you will find all amenities: shops, patisseries, banks, etc. along the main street 'Calle Mayor'. You will also experience a wonderful atmosphere near the local church on the 'Plaza de la Iglesia' where there are several cafes.\n\nIn Pilar de la Horadada there is also a well-developed cycling and walking path network, and there is also a large offer of various sports activities.\n\nLo Romero 18 hole golf course is just a short drive from town.\n\nThe airports of Corvera (Murcia) and Alicante are respectively 40 and 55 minutes away.",
       "stats": {
         "listings": 2
       }
@@ -3057,7 +3057,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL IN ORIHUELA COSTA",
+      "bio": "New Build Residential complex of bungalow apartments and townhouses in Orihuela Costa.\n\nNew Build townhouses has 3 berooms, 2 bathrooms, open plan kitchen with living room, fitted wardrobes, terrace and solarium, private garden.\n\nEach property has parking space.\n\nResidential with communal swimming pool.\n\nLocated in one of the new areas of Orihuela Costa, you will find close to all the necessary services.\n\nOnly 10 minutes from the sandy beaches, Villa Mart\u00edn Golf course and La Zenia Boulevard shopping centre\n\nComplex located 40 minutes from Alicante airport and 1 hour Murcia - Corvera airport.",
       "stats": {
         "listings": 1
       }
@@ -3087,7 +3087,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD SEMI-DETACHED VILLAS IN DOLORES",
+      "bio": "New Build development of villas in Dolores, Alicante.\nThis exclusive properties has an elegant and modern design. Homes with top quality finishes, designed to combine wellbeing and comfort.\n\nModern villas and semi-detached villas with plots of more than 200 m2. All properties very bright with 3 large bedrooms and 3 fully equipped private bathrooms. There is also an additional guest toilet.\n\nWith its large plot, the homes have a garden with a separate swimming pool and a parking space on the plot.\n\nLiving in Dolores is a wonderful choice for those looking for a quiet and authentic life on the Costa Blanca. This charming Spanish village, located in the Vega Baja region, will offer you numerous benefits.\n\nDolores is a town located in the province of Alicante with perfect communications, it is only 30 minutes from Alicante-Elche Airport, and has all the necessary services and amenities including supermarkets, restaurants, bars and schools.\n\nIt is a town with great charm, surrounded by stunning natural landscapes, such as the Natural Park of Lagunas de la Mata and Torrevieja, you can enjoy the best beaches of the Costa Blanca located just a few minutes drive away, its gastronomy and above all the tranquility and harmony that the area will provide you with.",
       "stats": {
         "listings": 1
       }
@@ -3117,7 +3117,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL IN GUARDAMAR DEL SEGURA",
+      "bio": "New Build residential of apartments and penthouses in Guardamar del Segura.\n\nThis outstanding building is the perfect choice thanks to its proximity to the beach and a wide range of services. Its facilities will include a swimming pool and rooftop solarium, providing a space for residents to relax and enjoy.\n\nModern properties with 2 and 3 bedrooms, 2 bathrooms, a bright living-dining room with integrated kitchen and a cosy terrace.\n\nAll properties will be equipped with air conditioning and home automation, allowing residents to control and automate various aspects of the home, providing comfort and energy efficiency. The kitchen will feature high quality appliances, including oven, dishwasher, fridge-freezer, extractor hood and induction hob, ensuring a functional and modern space for cooking and enjoying meals with company.\n\nIn addition, there is the option to purchase a parking space and storage room in the same building, providing greater convenience and storage space for residents.\n\nResidential is in a privileged location, close to the beach and surrounded by a wide variety of services and amenities, such as restaurants, shops, supermarkets and leisure areas.\nGuardamar del Segura, known for its beautiful fine sandy beaches and natural environment, offers a quiet and relaxed lifestyle, without renouncing the necessary facilities within easy reach.",
       "stats": {
         "listings": 1
       }
@@ -3147,7 +3147,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL COMPLEX IN SANTA POLA",
+      "bio": "New Build modern gated residential complex consisting of 1, 2 and 3 bedroom apartments and penthouses with 2 complete bathrooms. The complex consists of 4 staircases of flats with spacious landscaped communal areas, including swimming pool, relaxation area and gymnasium.\nAll properties have been carefully designed to provide you with an exceptional living experience, with high quality finishes and a modern style. Enjoy the spacious terraces, where you can relax, enjoy al fresco dining and watch the most spectacular sunsets.\n\nThe location is simply unbeatable: next to the centre of Santa Pola and the palm grove, and only a few minutes from the promenade, you will be close to a wide range of restaurants, bars and supermarkets.\nExcellent connection with the national road 332, which connects all the southern Costa Blanca, and with the airport in only 15 minutes.",
       "stats": {
         "listings": 5
       }
@@ -3177,7 +3177,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Exclusive New-Build Villas in Algorfa Golf Course Area",
+      "bio": "Discover these stunning new-build villas in Algorfa, nestled in the serene surroundings of one of Spain\u2019s most prestigious golf resorts, La Finca Golf & Spa Resort. Located in the southern part of Alicante Province, this exclusive development combines luxurious living with the benefits of resort-style amenities, creating the ideal home for golf enthusiasts and those seeking a relaxed Mediterranean lifestyle.\n\nElegant 3-Bedroom Villas with Private Pool and Modern Design\n\nEach villa is thoughtfully designed over two spacious floors, featuring 3 bedrooms and 2 bathrooms. The open-plan kitchen flows seamlessly into the living area, where large windows and sliding glass doors provide abundant natural light and direct access to the terrace and private pool. A convenient private parking space is included on the plot, enhancing the ease and exclusivity of these homes.\n\nPremium Features and Smart Home Technology\n\nThese villas come with a range of high-end features to provide maximum comfort and security. Enjoy the convenience of private indoor parking, electric shutters, ducted air-conditioning, and a sophisticated home automation system. Additionally, a fully fitted alarm system ensures peace of mind. The south/southwest orientation allows for optimal natural lighting year-round, reducing energy consumption by providing warmth and brightness from sunrise to sunset.\n\nBright, Open-Concept Living Spaces with Traditional Touches\u2026",
       "stats": {
         "listings": 2
       }
@@ -3207,7 +3207,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD BUILD RESIDENTIAL COMPLEX IN BENIJOFAR",
+      "bio": "New Build residential complex in the quiet area of Benijofar.\n\nResidential made up of 35 apartments and penthouses with 2, 3 and 4 bedrooms and 2 bathrooms, open plan kitchen with the lounge area, fitted wardrobes, terraces.\n\nThe penthouses also have a large private solarium where you can enjoy the beautiful summer sunsets.\n\nNew Build residential complex has a large green area with a swimming pool.\nAn options underground parking space and storage at an extra cost.\n\nBenijofar it is a lovely village with a charming church and all services such as supermarkets, pharmacies, banks, restaurants and natural park located very close to the villas.\n\nThere are several golf courses close by as well as water parks in nearby Rojales and Torrevieja.\n\nThe best beaches of Guardamar are only 10 minutes away by car with more than 11 km of white sand dunes and crystal clear waters.\nBenij\u00f3far located a few minutes from the N-332 and AP-7.\n\nJust 30 minutes from Alicante airport, 10 minutes from the beaches of Guardamar and Torrevieja.",
       "stats": {
         "listings": 8
       }
@@ -3237,7 +3237,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL COMPLEX IN EL RASO",
+      "bio": "New Build closed residential complex of touristic apartments in El Raso, Guardamar del Segura.\n\nThis new residential complex will consist of 78 touristic apartments and penthouses distributed on the ground floor, first floor, and second floor + solarium.\nAll properties will have a parking space and storage room in the basement, which will be accessible from the community stairs or from the elevator on each floor.\n\nThe common areas will include a pool area, reception/meeting room, outdoor gym, p\u00e9tanque area, mini-golf, and spa.\n\nDETAILS TO HIGHLIGHT IN OUR NEW DEVELOPMENT:\nRENTAL-ALLOWED HOUSING: These apartments offer something that no other can in this residential area. You can enjoy your home for 4 months a year for personal use, and the rest of the year it can be rented out, where you can obtain profitability without having to worry about anything, as a specialized rental company will manage everything for you.\n\nFULLY FURNISHED HOMES: all the homes in our new project will be fully furnished and ready to live in, with lighting, furniture, appliances, and fully finished bathrooms.\n\nVARIOUS TYPES OF HOUSING TO CHOOSE FROM: We offer various types of housing to choose from in different orientations. 2 bedrooms + 2 bathrooms and 3 bedrooms + 2 bathrooms types. All 3-bedroom homes will be corner units, making them even more exclusive for clients. Among these, we offer homes with South, East, and West orientations. All with terraces/porches facing the green area and Laguna de La Mata.\u2026",
       "stats": {
         "listings": 4
       }
@@ -3267,7 +3267,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD MODERN VILLA IN BENIJOFAR",
+      "bio": "New Build villa located in Benij\u00f3far, a privileged area of the Costa Blanca, equipped with all services, 20 minutes from Alicante Airport, near the beautiful beaches of Guardamar and several golf courses.\nIt is a modern style villa consisting of an open-plan kitchen with spacious living-dining room, 3 bedrooms and 2 bathrooms.\nIt also has a private plot with terrace, parking area, private pool.\n\nAn options for a solarium at an extra cost.\n\nBenijofar it is a lovely village with a charming church and all services such as supermarkets, pharmacies, banks, restaurants and natural park located very close to the villas.\nThere are several golf courses close by as well as water parks in nearby Rojales and Torrevieja.\nBenij\u00f3far located a few minutes from the N-332 and AP-7.\nJust 30 minutes from Alicante airport, 10 minutes from the beaches of Guardamar and Torrevieja.",
       "stats": {
         "listings": 1
       }
@@ -3297,7 +3297,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD TOWNHOUSES IN ROJALES",
+      "bio": "New Build modern residential of townhouses and semi-detached villas in Rojales.\n\nProperties has 3 bedrooms, 2 bathrooms, guest toilet, open plan kitchen with living area and direct access to the terrace, private garden with the parking space.\n\nAn options for a solarium and a private pool at an extra cost.\n\nRojales it is a lovely village with all services such as supermarkets, pharmacies, banks, restaurants and natural park located very close by.\n\nThere a 3 golf courses nearby and the blue flag beaches are just a short 10 minute drive away, as well as water parks in nearby Rojales and Torrevieja.\n\nAlicante & Murcia airports are 45 minutes drive away.",
       "stats": {
         "listings": 1
       }
@@ -3327,7 +3327,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Newly built residential development of detached and semi-detached villas in La Zenia, Orihuela Costa.",
+      "bio": "Newly built residential development of detached and semi-detached villas in La Zenia, Orihuela Costa.\n\nModern homes built on 2 floors, with 3 bedrooms, 2 bathrooms, open-plan kitchen with living room, built-in wardrobes, ducted air conditioning, solarium, private garden with swimming pool and parking space.\n\nLa Zenia is located on the Costa Blanca South just south of the major town of Torrevieja. This stretch of the coast is known as the Orihuela Costa.\n\nLa Zenia is a small but busy beach tourist resort. It has many restaurants, bars, shops and good facilities due to the large number of people who live here all the year round.\n\nThere are many Irish bars including the well-known Paddy's. Most bars show Sky Sports and it is easy to find a good all-day English breakfast in one of the many cafes and restaurants.\n\nShopping Centre La Zenia Boulevard you can enjoy fashion, leisure and restoration all in the same place.\n\nComplex located 40 minutes from Alicante airport and 1 hour Murcia - Corvera airport.",
       "stats": {
         "listings": 1
       }
@@ -3357,7 +3357,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD RESIDENTIAL COMPLEX IN TORRE DE LA HORADADA",
+      "bio": "New Build residential complex of bungalow apartments with communal pool in Torre de la Horadada located 800m from the beach.\n\nAll properties has 2-3 bedrooms, 2 bathrooms, open plan kitchen with the lounge area, fitted wardrobes and terrace.\nAll properties has private gardens and parking space. Plus bungalows on the top floor has private solarium.\n\nTorre de la Horadada is located south of Alicante in a beautiful location on the coast.\n\nThe beautiful beaches of Torre de la Horadada and Mil Palmeras have fine sand beautiful promenade.\n\nThere are lots of restaurants, bars and shops, also water sports, diving and snorkelling.\n\nIt is well connected just 40 minutes from Alicante and Murcias Corvera airports, with large commercial shopping centres and multiple golf courses all within easy reach.",
       "stats": {
         "listings": 5
       }
@@ -3387,7 +3387,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "NEW BUILD VILLA IN ROJALES",
+      "bio": "New Built villa for sale in a great location in Rojales, next to the La Marquesa Golf courses.\nVilla has 4 bedrooms, 3 bathrooms, American-style kitchen, living-dining room, 3 terraces, garage, leisure room, yard, private pool.\nOn the ground floor of the house you will find a garage, a leisure room and a fully equipped bathroom. On the first floor of the house you will find a living room, an American-style kitchen fully equipped with high-quality appliances, two bedrooms with built-in wardrobes, and a terrace with wonderful views. On the top floor of the house, the master bedroom with two terraces and a fully equipped bathroom.\nAir conditioning system, swimming pool, heated floors in bathrooms are included in the price.\nThis residence also has a community pool.\n\nRojales located 15 minutes drive to some of the most beautiful beaches of Guardamar del Segura and Torrevieja. The proximity to these beaches offers a series of benefits and virtues that make living here a unique experience. In addition to daily enjoyment, living close to these beaches offers opportunities for an active and healthy lifestyle. Water sports such as surfing, paddle surfing and scuba diving are readily available, as are walks along the shore or hiking trails through the nearby dunes and natural parks.\n\nMain Airports: - Alicante-Elche Airport (ALC): About 38 km away, it can be reached in approximately 35 minutes by car.\nMurcia-Corvera Airport (RMU): Located about 65 km away, it can be reached in about 50 minutes by car.\u2026",
       "stats": {
         "listings": 1
       }
@@ -3417,7 +3417,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Bungalow Residential Complex in Pilar de la Horadada",
+      "bio": "Exclusive Modern Bungalows in Pilar de la Horadada\nThis new development offers 16 stylish bungalows in the desirable town of Pilar de la Horadada, located in the southernmost part of Costa Blanca. Choose between 2 or 3-bedroom options, each featuring 2 bathrooms. Ground-floor units come with spacious front and rear terraces, providing direct access to the communal pool and garden, while top-floor units boast a large private rooftop solarium.\n\nSpacious Living with Modern Features\nEach bungalow includes a bright and open living/dining area and a fully equipped kitchen with large sliding doors that connect the indoor and outdoor spaces seamlessly. Bedrooms feature built-in wardrobes. Ducted air conditioning is installed, and the complex includes an elevator for easy access to upper floors. Private parking spaces are also included for all units.\n\nPrime Location in Pilar de la Horadada\nPilar de la Horadada is a traditional Spanish town with a lively main street offering supermarkets, shops, restaurants, and bars. The beautiful beaches of Torre de la Horadada and Mil Palmeras are just 5 minutes away. The development is conveniently located 40 km from Corvera Airport (Murcia) and 55 km from Alicante Airport, making it an ideal location for both permanent living and holiday getaways.",
       "stats": {
         "listings": 2
       }
@@ -3447,7 +3447,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Townhouses for Sale in Cox \u2013 44 Modern Homes with Great Amenities",
+      "bio": "Discover a new residential development of 44 modern townhouses in Cox, Alicante. These homes are available in 2- and 3-bedroom layouts, each featuring a private solarium, terraces, patios, and private parking. The community offers access to shared areas, including a communal swimming pool, creating an ideal environment for relaxation.\n\nPrime Location with Excellent Connectivity\nThis development is located just 40 km from Alicante International Airport, making travel easy and convenient. Cox is well-connected to major cities: Orihuela is only 8 km away, Elche 20 km, Alicante 48 km, and Murcia 25 km. Golf enthusiasts will appreciate the nearby courses such as La Finca (12 km) and Vistabella (14 km).\n\nEasy Access to Major Roads\nCox provides easy access to the AP-7 motorway and the Autov\u00eda del Mediterr\u00e1neo (A-7), as well as local routes to surrounding areas such as Granja de Rocamora and Callosa de Segura. The town and surrounding areas boasts a population of over 35,000, offering a peaceful yet vibrant lifestyle.\n\nLocal Amenities and Attractions\nResidents will enjoy a wide range of local amenities, including shops, schools, sports facilities, medical centers, and quick access to the beaches of the Costa Blanca, such as Guardamar del Segura and Torrevieja.\n\nIncluded Features\nEach home comes with a landscaped garden, LED lighting, electric shutters, solar panel pre-installation, fitted wardrobes, a security door, a fully equipped kitchen with Silestone countertops, and much more.",
       "stats": {
         "listings": 2
       }
@@ -3477,7 +3477,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Mediterranean Villas in Benij\u00f3far",
+      "bio": "Modern and Stylish Villas in Benij\u00f3far\nLocated on the outskirts of the charming town of Benij\u00f3far, these stunning, contemporary villas offer the perfect blend of modern design and traditional Spanish living. Benij\u00f3far, situated in the heart of Costa Blanca, is just 30 minutes by car from Alicante city and its international airport. The area is also conveniently located 8 km from golden sandy beaches and 10 minutes from two top-quality golf courses.\n\nSpacious Villas with Private Pools\nEach villa sits on a generous plot of over 400 m\u00b2, featuring a private pool (7x3.5 m) and 3 bedrooms with 2 bathrooms, all on a single floor. Optional extras include a solarium and storage room. The villas are built to the highest standards, with top-quality finishes such as Sch\u00fcco windows, motorized shutters, photovoltaic solar panels, and an automatic irrigation system for the garden.\n\nTraditional Spanish Town with Modern Amenities\nBenij\u00f3far is a traditional Spanish town known for its vibrant fiestas, weekly street markets, and picturesque town square. It borders Ciudad Quesada, just 2 minutes away by car, offering a wide range of amenities including restaurants, bars, shops, live entertainment, a summer water park, and a country club.\n\nThis ideal location offers a perfect year-round residence to enjoy the sun, sea, and your own private pool in a peaceful, traditional setting.",
       "stats": {
         "listings": 1
       }
@@ -3507,7 +3507,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern Apartments in Pilar de la Horadada \u2013 Exclusive New Build Residential Complex",
+      "bio": "Discover a new residential development of 12 stylish apartments with spacious common areas located in the vibrant town of Pilar de la Horadada, Costa Blanca. This gated community offers modern amenities and is designed to provide comfort and convenience in a prime location, close to all essential services and popular attractions.\n\nExceptional Amenities for a Comfortable Lifestyle\nThe residential complex features a private outdoor garage, bicycle parking with electric charging points, expansive landscaped gardens, and a modern swimming pool with a beach area and sunbeds. There are also changing rooms and restrooms for added convenience. The project is built with high-quality materials, energy-saving systems, and cutting-edge technologies like remote door opening.\n\nThoughtfully Designed Apartments\nChoose from 2-bedroom apartments with open-plan kitchens, spacious living areas, and terraces. Ground floor apartments come with private gardens, while upper-floor apartments feature terraces and solariums. Each apartment is designed to maximize space and natural light, with a south-facing orientation for optimal comfort. Modern features include LED lighting, pre-installed air conditioning, fully equipped bathrooms, and contemporary kitchen appliances.\n\nPrime Location Close to Beaches and Golf Courses\nPilar de la Horadada offers easy access to daily necessities, sports facilities, and beautiful beaches just 3 km away. The town is well connected, with Murcia Airport 40 km and Alicante Airport 75 km away.\u2026",
       "stats": {
         "listings": 1
       }
@@ -3537,7 +3537,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern Apartments Just 250m from El Cura Beach in Torrevieja",
+      "bio": "New Development in Prime Location\n\nThis newly built apartment building is located just 250 meters from the famous El Cura Beach in Torrevieja, offering residents easy access to one of the most popular beaches in the area. The building consists of 17 units, featuring 1 and 2-bedroom apartments, each with 1 or 2 bathrooms. Additionally, there are penthouses available with private solariums and stunning sea views, perfect for enjoying the Mediterranean lifestyle.\n\nPremium Amenities for Relaxation\n\nResidents can take advantage of the rooftop community pool and solarium, ideal for unwinding after a day at the beach. The building also offers optional underground parking spaces and storage rooms, available for an additional cost, providing extra convenience and security for residents.\n\nVibrant City Life in Torrevieja\n\nTorrevieja is a lively city known for its year-round cultural and recreational activities, making it a great destination for both permanent residents and vacationers. With a mild climate and over 300 days of sunshine annually, the area is perfect for those who enjoy outdoor activities and beach life.\n\nIdeal Location with Easy Access to Points of Interest\n\nThis property is ideally located close to all essential services, including supermarkets, restaurants, and entertainment venues. Major points of interest are easily accessible:\n\nAlicante Airport is just 45 km away.\nSeveral Golf Courses within 7-10 km.\nZenia Boulevard Shopping Center is only 8 km away.\nThe port of Torrevieja is just 2 km from the building.\u2026",
       "stats": {
         "listings": 5
       }
@@ -3567,7 +3567,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Development in the Heart of Torrevieja",
+      "bio": "Located in the vibrant center of Torrevieja, this new build development offers the perfect combination of modern living and accessibility. Situated just 300 meters from a wide array of services, including restaurants, bars, supermarkets, taxis, bus stops, pharmacies, and banks, this property provides unparalleled convenience in one of the most sought-after areas of the city.\n\nProximity to Beaches and Entertainment\n\nOne of the standout features of this property is its close proximity to the stunning beaches of Torrevieja, located just 600 meters away. Whether you\u2019re looking to relax by the sea or explore the local area, you\u2019ll find yourself close to some of the best coastal spots. Additionally, the renowned shopping center \u201cLas Habaneras\u201d is just 1 km away, offering a variety of shops, entertainment, and dining options. For outdoor enthusiasts, the beautiful \"Parque Europa\" is also nearby, perfect for leisurely walks and family outings.\n\nModern Design and Amenities\n\nThis residential building is comprised of 17 units, featuring studio apartments as well as 1, 2, and 3-bedroom layouts. Designed with modern living in mind, each unit offers spacious interiors and high-quality finishes. Residents can enjoy a community rooftop area with a heated glass swimming pool, perfect for year-round relaxation.\n\nAdditional Storage and Location Perks\n\nThe building also offers optional large storage rooms located in the basement, providing extra space for your belongings.\u2026",
       "stats": {
         "listings": 4
       }
@@ -3597,7 +3597,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern Apartments Near Playa del Cura in Torrevieja",
+      "bio": "Discover this exclusive residential development, located just a few meters from Playa del Cura in Torrevieja, Alicante. This is one of the few residential complexes in the area that offers close proximity to both the beach and the vibrant city center, making it a highly sought-after location.\n\nPrime Location in Torrevieja\n\nSituated only 160 meters from the famous Playa del Cura and the scenic Paseo Mar\u00edtimo Juan Aparicio, this development offers residents the chance to live in one of the most desirable coastal locations on the Costa Blanca. Torrevieja is well-known for its sunny weather, with an average temperature of 19\u00baC and over 320 days of sunshine per year. The area is perfect for year-round living, offering not only beautiful beaches but also excellent infrastructure, gastronomy, and a variety of cultural and recreational activities.\n\nExceptional Amenities\n\nThe development includes a wide range of communal amenities designed for relaxation and enjoyment. The solarium features a stunning pool with a jacuzzi function, providing the perfect space for residents to unwind and enjoy the Mediterranean climate. Sun loungers around the pool offer an ideal spot to soak up the sun, while the barbecue and dining area are perfect for entertaining family and friends in a cozy, social environment.\n\nSpacious and Bright Apartments\n\nChoose from 1, 2, or 3-bedroom apartments, each designed to maximize comfort and quality of life by the sea.\u2026",
       "stats": {
         "listings": 1
       }
@@ -3627,7 +3627,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Quads and Townhouses in Dolores",
+      "bio": "This modern residential development in Dolores features newly built quads and townhouses. Designed with contemporary style and comfort in mind, each home is spread over two floors, offering 3 bedrooms and 3 bathrooms. The open-plan kitchen seamlessly connects with the living room, which leads directly to a private terrace and garden. Every home also comes with its own private pool and parking space.\n\nHigh-Quality Finishes and Modern Amenities\n\nThese homes are constructed using high-quality materials and finishes. Exterior carpentry is made of aluminum with thermal break, and the bathrooms feature glass shower enclosures. LED lighting is installed throughout the property, ensuring energy efficiency and a modern ambiance. These features combine to create a comfortable, stylish living environment for you and your family.\n\nPrime Location Near Daily Services\n\nLocated on the outskirts of the charming town of Dolores, these homes are just a short walk from essential day-to-day services, including shops, restaurants, and local amenities. Dolores is part of the Vega Baja del Segura region, in the southern part of Alicante province, known for its agricultural landscapes and relaxed pace of life.\n\nClose to Key Points of Interest\n\nLa Marina Beach: 10 km\nGuardamar Beach: 10 km\nAlicante Airport: 30 km\nMurcia-Corvera Airport: 60 km\nGolf Courses: 15 km\nShopping Centers: 12 km\n\nPerfect for Enjoying the Costa Blanca Lifestyle\u2026",
       "stats": {
         "listings": 2
       }
@@ -3657,7 +3657,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Semi detached villas in Dolores",
+      "bio": "This modern residential development in Dolores features newly built semi detached villas. Designed with contemporary style and comfort in mind, each home is spread over two floors, offering 3 bedrooms and 3 bathrooms. The open-plan kitchen seamlessly connects with the living room, which leads directly to a private terrace and garden. Every home also comes with its own private pool and parking space.\n\nHigh-Quality Finishes and Modern Amenities\n\nThese homes are constructed using high-quality materials and finishes. Exterior carpentry is made of aluminum with thermal break, and the bathrooms feature glass shower enclosures. LED lighting is installed throughout the property, ensuring energy efficiency and a modern ambiance. These features combine to create a comfortable, stylish living environment for you and your family.\n\nPrime Location Near Daily Services\n\nLocated on the outskirts of the charming town of Dolores, these homes are just a short walk from essential day-to-day services, including shops, restaurants, and local amenities. Dolores is part of the Vega Baja del Segura region, in the southern part of Alicante province, known for its agricultural landscapes and relaxed pace of life.\n\nClose to Key Points of Interest\n\nLa Marina Beach: 10 km\nGuardamar Beach: 10 km\nAlicante Airport: 30 km\nMurcia-Corvera Airport: 60 km\nGolf Courses: 15 km\nShopping Centers: 12 km\n\nPerfect for Enjoying the Costa Blanca Lifestyle\u2026",
       "stats": {
         "listings": 1
       }
@@ -3687,7 +3687,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Residential Development in Torrevieja, Just 1 km from the Sea",
+      "bio": "Modern Apartments with 2 and 3 Bedrooms\n\nLocated in the vibrant Altos del Sol area of Torrevieja, this new residential development offers a variety of apartment options with 2 and 3 bedrooms. Ground-floor units come with private gardens, while top-floor units feature private solariums for exclusive outdoor relaxation. Additionally, the complex includes one townhome, catering to those looking for added space and privacy. Each unit includes an underground parking space, and storage rooms are available as an optional feature.\n\nSpacious Communal Areas and Family-Friendly Amenities\n\nThe residential complex is thoughtfully designed with ample communal spaces, featuring landscaped gardens that create a peaceful environment. Families can enjoy a large community swimming pool with a dedicated children\u2019s area, perfect for relaxing and socializing under the warm Mediterranean sun. The development is located around 1 km from \"Playa de Los Locos,\" offering convenient beach access for residents.\n\nTop-Quality Finishes and Energy-Efficient Features\n\nThese homes stand out for their high-quality finishes and attention to detail. Each unit is equipped with a 600W photovoltaic solar panel system, providing an eco-friendly energy solution. Additional premium features include built-in barbecues on the solariums, armored front doors, built-in wardrobes with interior fittings, bathroom furniture with shower screens, and underfloor heating in bathrooms, ensuring comfort and style in every corner.\n\nIdeal Location Near Services and Attractions\u2026",
       "stats": {
         "listings": 3
       }
@@ -3717,7 +3717,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New construction bungalows in Dolores",
+      "bio": "Residential with ground floor properties with garden or top floor with private solarium, with 3 bedrooms and 2 bathrooms, are located in Dolores (Alicante), a privileged area of the Costa Blanca, located next to the Natural Park El Hondo, surrounded by nature and equipped with all the services.\n\nIt is 25 minutes from Alicante airport, close to the beautiful beaches of Guardamar del Segura and just a few minutes from the main golf courses in the area. Its excellent location makes the development a perfect option for those looking for peace and quiet.\n\nEach property has its own parking space and a storage room in most of the units.\n\nAnd with a beautiful communal swimming pool with toilet to relax after a day of work or sightseeing.\n\nHigh quality finishes and modern amenities\n\nThese homes are built with high quality materials and finishes. The exterior carpentry is made of aluminium with thermal bridge break, the bathrooms have bathroom furniture with mirror. The lighting installed throughout the property guarantees energy efficiency and a modern atmosphere. Built-in wardrobes lined on the inside. These features combine to create a comfortable and stylish living environment for you and your family.\n\nPrime location close to daily amenities\n\nSituated on the outskirts of the charming town of Dolores, these homes are just a short walk from essential day-to-day amenities including shops, restaurants and local services. Dolores is part of the Vega Baja del Segura region in the south of Alicante province, known for its agricultural landscapes and relaxed pace of life.\u2026",
       "stats": {
         "listings": 2
       }
@@ -3747,7 +3747,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Exclusive New Construction Bungalows in La Finca Golf, Algorfa",
+      "bio": "Discover Your New Home in La Finca Golf\n\nWelcome to a luxurious new residential development in the heart of La Finca Golf, located in the picturesque town of Algorfa on Spain\u2019s Costa Blanca. This exclusive complex of 40 modern bungalows is designed for those seeking a blend of elegance, comfort, and natural beauty. Choose from spacious 2 or 3-bedroom layouts, with options for ground-floor homes featuring private gardens or upper-floor residences with private solariums\u2014perfect for relaxing and taking in the breathtaking views of the golf course.\n\nPrime Location in La Finca Golf, Algorfa\n\nSituated within the renowned La Finca Golf resort, this community offers a peaceful, scenic environment while being close to local amenities. La Finca Golf\u2019s ideal location places it just 4 km from Algorfa's town center, 15 km from the vibrant coastal town of Torrevieja, and 45 km from Alicante International Airport, making it convenient for both locals and international residents. Major points of interest nearby include La Zenia Boulevard Shopping Center (20 km), Playa Flamenca Beach (19 km), and Villamart\u00edn Golf Course (18 km). Additionally, the Mediterranean port of Alicante is only 40 minutes by car, providing a gateway to coastal adventures.\n\nLuxury Living with Exceptional Amenities\n\nDesigned to create a resort-like experience, the community offers an array of exceptional amenities. Residents can enjoy a stunning community pool with designated areas for children and adults, perfect for relaxation or social gatherings.\u2026",
       "stats": {
         "listings": 2
       }
@@ -3777,7 +3777,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Your Dream Home with Salt Lake Views \u2013 Customizable Luxury Villa in El Chaparral",
+      "bio": "Experience the Best of El Chaparral, with Stunning Salt Lake Sunsets\n\nNestled in the heart of El Chaparral, this luxurious villa offers the perfect blend of privacy, tranquility, and convenience. Located in a picturesque neighborhood known for its beautiful salt lake views and vibrant local amenities, this property offers a lifestyle like no other. Imagine basking in stunning sunsets from your own terrace, while enjoying the peace and natural beauty of this exceptional area. Just a short 5 km drive from the beaches of Torrevieja and only 45 km from Alicante Airport, this villa brings the best of Spanish coastal living to your doorstep.\n\nSpacious and Customizable Layout to Fit Your Lifestyle\n\nSet on an expansive 930 m\u00b2 plot, this villa\u2019s design is as impressive as its surroundings. The standard layout features four spacious bedrooms and three bathrooms, providing ample space for families, guests, or personal retreats. The open-concept living room flows seamlessly into a modern kitchen, creating a welcoming and bright space with large windows that fill the home with natural light. Whether you\u2019re entertaining friends or enjoying a quiet evening, the spacious living area and terrace offer the perfect setting.\n\nCustomize the layout to reflect your unique style and needs. From selecting materials to deciding on the finishing touches, you are in full control, ensuring your villa becomes a true reflection of your vision.\n\nLuxurious Amenities, Including a 5x10 Meter Pool\n\nThis villa offers a wealth of high-end amenities to enhance your lifestyle.\u2026",
       "stats": {
         "listings": 1
       }
@@ -3807,7 +3807,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Luxury New Build Semi-Detached Villas in Benij\u00f3far, Costa Blanca",
+      "bio": "Prime Location in Benij\u00f3far with Convenient Access to Amenities\n\nDiscover a new level of luxury living in the charming town of Benij\u00f3far, a highly sought-after area on Spain\u2019s Costa Blanca. These newly built semi-detached villas are situated in a vibrant neighborhood with a perfect blend of modernity and local charm, offering easy access to all essential services and attractions. Just 10 km from the golden beaches of Guardamar del Segura and 30 km from Alicante Airport, the villas are strategically positioned for convenience and lifestyle.\n\nSpacious and Modern Design with Premium Finishes\n\nEach villa is designed with a contemporary aesthetic, featuring clean lines and high-quality finishes. The layout includes three spacious bedrooms and three bathrooms, providing ample space for families or guests. The open-plan living-dining area seamlessly connects to a fully equipped kitchen, offering a perfect space for entertainment and family gatherings. Large windows allow plenty of natural light, creating a bright and welcoming atmosphere throughout the home.\n\nPrivate Outdoor Spaces with Pool and Solarium\n\nThese villas include private outdoor spaces designed for relaxation and enjoyment of the Mediterranean climate. The tiled garden features a 2.5x5m swimming pool, perfect for cooling off on warm days, and ample parking space. The properties also come with a rooftop solarium, where you can enjoy views of the surrounding area. The solarium is equipped for a potential jacuzzi installation, making it a perfect spot to unwind and enjoy the sunset.\u2026",
       "stats": {
         "listings": 1
       }
@@ -3837,7 +3837,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Apartments in Torrevieja, Just 150m from Playa del Cura",
+      "bio": "Prime Location in Torrevieja, Close to Beaches and Amenities\n\nExperience coastal living at its best with these brand-new apartments and penthouses in Torrevieja, located a mere 150 meters from Playa del Cura. These exclusive residences are nestled in a vibrant neighborhood with all essential amenities within reach, including shops, restaurants, and cafes. Perfectly positioned on Spain\u2019s Costa Blanca, Torrevieja offers residents a Mediterranean climate and relaxed lifestyle with easy access to both Alicante Airport (45 km) and Murcia Airport (65 km).\n\nModern Design with Spacious Layouts and Quality Finishes\n\nThis new residential complex consists of 12 luxurious apartments and penthouses, offering 2 and 3-bedroom units designed for modern comfort. Each unit features an open-plan American-style kitchen that seamlessly flows into the living room, creating an ideal space for relaxation and entertainment. Bedrooms include fitted wardrobes with drawers, while bathrooms boast underfloor heating, high-quality fixtures, and shower enclosures. Large, double-glazed windows with thermal and acoustic insulation provide a quiet, temperature-controlled living environment, ensuring your home is a peaceful retreat.\n\nPremium Exterior and Energy-Efficient Features\n\nBuilt with energy efficiency in mind, these apartments come with high-quality aluminum exterior carpentry with thermal break technology and automatic motorized shutters. Each unit is pre-installed for climate control through ducted air conditioning and heating, ensuring year-round comfort.\u2026",
       "stats": {
         "listings": 2
       }
@@ -3867,7 +3867,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Construction Residences Just 200 Meters from Las Higuericas Beach",
+      "bio": "Modern Homes in Torre de la Horadada\nLocated in the picturesque coastal town of Torre de la Horadada, this new development is perfectly positioned just 200 meters from the stunning Las Higuericas Beach. Offering modern duplexes, ground-floor bungalows with private gardens, top-floor bungalows with solariums, and elegant apartments, this community blends contemporary design with a touch of exclusivity. Homes are available in 2- and 3-bedroom layouts, catering to various lifestyle needs.\n\nExceptional Community Amenities\nEvery residence comes equipped with a private parking space, spacious terraces, landscaped green areas, and access to a communal swimming pool. Thoughtfully designed to enhance comfort and convenience, these homes offer a perfect setting for relaxation and enjoyment.\n\nPremium Features for Maximum Comfort\nEach property includes:\nMotorized blinds in all rooms.\nReinforced front doors for added security.\nUnderfloor heating in bathrooms.\nBathroom furniture and shower screens.\nExterior lighting for terraces and gardens.\nAppliances included: extractor hood, ceramic hob, oven, refrigerator, dishwasher, microwave, and washing machine.\nAdditionally, the ground-floor bungalows and solariums feature hot and cold water showers, while all homes benefit from an energy-efficient aerothermal system for hot water.\n\nPrime Location in Torre de la Horadada\nThis development is situated in a vibrant yet peaceful area, with easy access to essential amenities and attractions:\nLas Higuericas Beach: Just 200 meters away.\nMurcia Airport: Approximately 30 km.\u2026",
       "stats": {
         "listings": 2
       }
@@ -3897,7 +3897,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Key Ready Apartments for Sale in Lomas de Campoamor, Orihuela Costa",
+      "bio": "Discover the Exclusive Lomas de Campoamor Residential Complex\nSituated in the sought-after area of Lomas de Campoamor, Orihuela Costa, this key-ready residential complex offers the perfect blend of comfort, convenience, and style. Built in 2008 but never lived in, the final units are now available for sale, presenting a unique opportunity to own a brand-new property in a prime consolidated location.\n\nSpacious Apartments with Modern Features\nThese ready-to-move-in apartments boast 2 bedrooms and 2 bathrooms with expansive terraces, perfect for enjoying the sunny Mediterranean climate. Each apartment features a fully furnished kitchen with upper and lower cabinets, a dedicated utility area, and pre-installation for air conditioning. Additional highlights include:\n\nDouble-glazed lacquered aluminium windows with roll-up blinds.\nReinforced main entrance door for enhanced security.\nMarble bathroom countertops.\nGas installation for heating, hot water, and kitchen needs.\nPre-installation of radiator heating.\n\nCommunity Amenities for Relaxed Living\nThe residential complex offers excellent communal facilities, including a beautifully landscaped garden and a large communal swimming pool, ideal for relaxation and socializing.\n\nPrime Location with Proximity to Key Attractions\nLocated next to the prestigious Real Club de Golf Campoamor, these apartments are perfect for golf enthusiasts. The nearby La Fuente Commercial Centre is just a short walk away, providing easy access to restaurants, cafes, shops, and essential services.\u2026",
       "stats": {
         "listings": 2
       }
@@ -3927,7 +3927,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Construction Villas on the Frontline of Lo Romero Golf",
+      "bio": "Luxury Villas in Lo Romero Golf Resort\nDiscover 7 exclusive new construction villas situated on the frontline of Lo Romero Golf, offering a perfect blend of luxury, comfort, and breathtaking views of the golf course. These residences stand out for their prime location and modern architectural design, ideal for discerning buyers looking for a smart investment and an exceptional quality of life.\n\nModern Design with Premium Features\nEach villa boasts a sophisticated, contemporary style with high-end finishes. The homes include 3 spacious bedrooms, 3 bathrooms, an open-plan kitchen connected to the living room, built-in wardrobes, and private gardens with a swimming pool. Additional features include:\n\nReinforced security entrance doors\nMotorized blinds matching the carpentry, with thermal and acoustic insulation\nDouble-glazed Climalit windows with anti-breakage safety glass\nAerothermal water heating system for energy efficiency\nPhotovoltaic solar panels for electrical energy production\nPre-installation of ducted air conditioning\nCarport with a pergola in elegant oxidized brown tones\nNatural stone masonry walls separating the private gardens and the golf course\n\nPrime Location in Pilar de la Horadada\nLocated in the charming Lo Romero Golf Resort, the villas enjoy a privileged setting in Pilar de la Horadada, a quintessential Spanish town in southern Costa Blanca. The 18-hole golf course is surrounded by beautiful landscapes and lies just a short drive from crystal-clear Mediterranean beaches.\n\nProximity to Key Points of Interest\u2026",
       "stats": {
         "listings": 1
       }
@@ -3957,7 +3957,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Exclusive Mediterranean Living in Lo Marab\u00fa, Ciudad Quesada",
+      "bio": "Prime Location with Nature and Convenience\nDiscover the charm of living in Lo Marab\u00fa, Ciudad Quesada, an exclusive residential area that combines modern comfort with the beauty of Mediterranean nature. Nestled in a prime location, this development offers easy access to essential services while providing a serene, tranquil environment. Just a short drive away, you\u2019ll find the stunning salt lagoons of La Mata and Torrevieja, a paradise for nature enthusiasts, photographers, and those seeking wellness.\n\nBeautiful Beaches and Outdoor Activities\nOnly 15 minutes away by car, the unspoiled beaches of Guardamar del Segura and Torrevieja invite you to enjoy golden dunes and crystal-clear waters. These coastal gems offer opportunities for relaxation, water sports, and picturesque walks along the shore. For outdoor enthusiasts, the area boasts numerous hiking and cycling trails, while golf lovers will appreciate the proximity to several prestigious golf courses, providing a first-class sporting experience.\n\nHigh-Quality Homes and Amenities\nThis residential complex features thoughtfully designed homes, including:\n\nBungalows: Ground-floor units with private gardens or top-floor options with solariums. All bungalows include two bedrooms, two bathrooms, a parking space, and a storage room, set around a central communal area with a swimming pool and landscaped gardens.\n\nVillas: Independent properties with three bedrooms and three bathrooms, available in one- or two-story layouts. Each villa includes a private pool, a solarium, and parking within the plot.\u2026",
       "stats": {
         "listings": 5
       }
@@ -3987,7 +3987,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern Living Steps from Las Higuericas Beach in Torre de la Horadada",
+      "bio": "Prime Location Near the Mediterranean Coast\nExperience the best of coastal living with this stunning new development located just 150 meters from Las Higuericas Beach in Torre de la Horadada. Known for its golden sands and crystal-clear waters, this beachside town offers a perfect blend of relaxation and modern amenities. Whether you\u2019re seeking a tranquil retreat or a vibrant lifestyle, Torre de la Horadada provides the ideal setting for your dream home.\n\nThoughtfully Designed Residences\nChoose from modern ground-floor bungalows with private gardens or top-floor bungalows featuring spacious solariums. Each 2-bedroom property is designed with contemporary aesthetics and functionality in mind, offering:\n\nPrivate parking spaces.\nLarge terraces for outdoor enjoyment.\nPremium features that enhance comfort and convenience.\n\nExceptional Community Amenities\nThe development boasts an array of communal features designed to elevate your living experience:\nLandscaped green spaces for relaxation.\nA refreshing communal swimming pool.\nA paddle court for sports enthusiasts.\nConvenient lift access from the underground parking.\n\nPremium Features for Modern Comfort\nEvery home is equipped with high-quality finishes, including:\nSecurity entrance doors for peace of mind.\nWindows with thermal break for enhanced sound insulation.\nFitted wardrobes with LED lighting.\nPre-installed ducted A/C for year-round comfort.\nElegant bathroom fixtures, mirrors, and glass shower screens.\nElectric blinds and exterior lighting for added convenience.\nAerothermal water heaters for energy efficiency.\u2026",
       "stats": {
         "listings": 2
       }
@@ -4017,7 +4017,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Exclusive New-Build Villas in Algorfa Near La Finca Golf Resort",
+      "bio": "Tranquil Living in a Prime Location\nDiscover these luxurious new-build villas in the picturesque town of Algorfa, nestled on expansive rustic plots exceeding 10,000 m\u00b2. Situated just 2 km from La Finca Golf Resort and close to Almorad\u00ed Tennis Club, these properties are designed for those who value privacy, elegance, and proximity to top-tier recreational amenities.\n\nLocated in the heart of the Costa Blanca South, Algorfa offers a serene setting surrounded by nature, with easy access to the golden sands of Guardamar Beach, only a short drive away. This idyllic location ensures a lifestyle that balances relaxation and convenience.\n\nSpacious 4-Bedroom Villas with Customization Options\nThese elegant villas feature four spacious bedrooms, with the option to add a fifth bedroom, solarium, or underground level for an additional cost. Designed with an open-concept layout, the homes boast:\nA modern kitchen seamlessly integrated with the living area.\nLarge windows and sliding glass doors for abundant natural light and ventilation.\nDirect access to a private terrace and pool, perfect for enjoying sunny Mediterranean days.\nPrivate parking on the plot for added convenience.\n\nPremium Features for Modern Comfort\nEach villa is equipped with high-quality finishes and state-of-the-art features to ensure maximum comfort and sustainability:\nLED lighting throughout.\nMotorized electric blinds for ease of use.\nAutomated entrance gate for enhanced security.\nAriston aerothermal water heater for energy efficiency.\nUnderfloor heating in bathrooms for added luxury.\u2026",
       "stats": {
         "listings": 1
       }
@@ -4047,7 +4047,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Discover Modern Living at the New Residential Development in San Miguel de Salinas",
+      "bio": "Spacious Apartments with Stunning Amenities\nThis new construction residential complex in San Miguel de Salinas offers contemporary 2- and 3-bedroom apartments with expansive terraces, thoughtfully distributed across seven floors. The gated community provides top-notch facilities, including separate swimming pools for adults and children, lush green areas, a children\u2019s playground, and an adult wellness zone with a biosaludable circuit.\n\nPrime Location on the Costa Blanca\nNestled in the charming town of San Miguel de Salinas, this development enjoys a strategic location on the Costa Blanca. It\u2019s within walking distance of the town center, where you\u2019ll find all the essential services for daily living, including shops, restaurants, and healthcare facilities.\n\nThe property is a short drive from several points of interest:\nLas Colinas and Campoamor Golf Courses: Just 7 km away, perfect for golf enthusiasts.\nBeaches of Orihuela Costa and Torrevieja: Located approximately 10 km from the residence, offering beautiful sandy shores.\nShopping Centers: Zenia Boulevard, a popular shopping destination, is only 9 km away.\nAlicante Airport: A convenient 50 km drive.\nMurcia Corvera Airport: About 55 km away, ideal for regional connections.\n\nHigh-Quality Specifications\nEach apartment is designed with modern finishes and functionality in mind:\nFully equipped kitchens with induction cooktops and extractor hoods.\nPorcelain tile flooring throughout.\nCompact roller shutters for added privacy and convenience.\nWhite laminated wardrobes with overhead storage in bedrooms.\u2026",
       "stats": {
         "listings": 5
       }
@@ -4077,7 +4077,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Apartments and Bungalows in Mil Palmeras",
+      "bio": "Modern Residential Complex in a Prime Location\nDiscover a stunning new residential complex in the charming coastal area of Mil Palmeras, offering a selection of high-quality apartments and bungalows designed to meet modern living standards. Nestled just 600 meters from the sandy beaches of Mil Palmeras, this development combines comfort, style, and convenience.\n\nSpacious and Stylish Apartments and Bungalows\nChoose from 2- or 3-bedroom apartments, each featuring 2 bathrooms and spacious terraces. Alternatively, opt for bungalows with 2 bedrooms and 2 bathrooms, available in ground-floor units with private gardens or top-floor units with exclusive solariums.\n\nHigh-Quality Finishes for Modern Living\nThis development offers exceptional features and finishes:\nPVC exterior carpentry with thermal break and double-glazed \u201cClimalit\u201d low-emissivity windows.\nReinforced entrance doors for added security.\nBathrooms equipped with vanities, mirrors, and modern fixtures.\nBuilt-in wardrobes with interior LED lighting, drawers, and hanging rails.\nHot water supplied through aerothermal technology for energy efficiency.\nPre-installation for ducted air conditioning and heating in living areas and bedrooms.\nExclusive Community Amenities\n\nThe complex is fully gated and boasts:\nBeautifully landscaped communal gardens.\nSparkling swimming pools for residents.\nOptional underground parking spaces and storage rooms for added convenience.\n\nPrime Location in Mil Palmeras\u2026",
       "stats": {
         "listings": 7
       }
@@ -4107,7 +4107,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Villas for Sale in Torrevieja \u2013 2 km from the Sea",
+      "bio": "Discover these stunning new villas located in the sought-after area of Torrevieja, just 2 km from the Mediterranean coast. Offering the perfect blend of luxury, comfort, and practicality, these 3-bedroom, 2-bathroom homes are designed for those who seek a sophisticated lifestyle with all the benefits of coastal living.\n\nSpacious Design and High-Quality Finishes\nThese one-story villas have been thoughtfully designed for maximum comfort and ease of living. With an open-plan layout, they provide ample space for relaxation and entertainment. The villas feature high-quality finishes including thermal break aluminum windows, Climalit double glazing, and pre-installation for ducted air conditioning. For added convenience, the homes include electric shutters, modern bathrooms with resin shower trays and built-in black faucets, and private parking in the underground garage with additional storage space.\n\nPrivate Pool and Solarium with Stunning Views\nStep outside to your private oasis, where you can enjoy the luxury of a private pool in your own garden. From the rooftop solarium, take in the breathtaking views of the La Mata Salt Lagoon and the surrounding area, and enjoy spectacular sunsets each evening. The property is situated in the highest part of Torrevieja, ensuring both privacy and impressive vistas.\n\nExclusive Community Amenities\nThe development offers several communal amenities, including landscaped garden areas, a calisthenics circuit, and a petanque area, perfect for both relaxation and recreation.\u2026",
       "stats": {
         "listings": 1
       }
@@ -4137,7 +4137,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New build bungalows in Pilar de la Horadada",
+      "bio": "Modern homes close to the beach\nDiscover this exclusive new build residential complex in Pilar de la Horadada, offering bungalows just 2 km from the beach. Designed for comfort and style, these homes are an excellent opportunity to enjoy life on the Costa Blanca.\n\nSpacious and stylish homes\nThis development offers 2 or 3 bedroom homes with 2 bathrooms and private parking. Choose from:\nGround floor bungalows with private garden.\nTop floor bungalows with private solarium.\n\nEach property is built with high-quality materials and modern finishes, including:\nDucted air conditioning pre-installation.\nAluminum exterior carpentry, double glazing, and injected aluminum shutters.\nSecurity entrance door for added peace of mind.\nAerothermal system for efficient hot water production.\nBuilt-in wardrobes in bedrooms.\nFully equipped bathrooms with furniture and shower screens.\n\nExclusive Community Features\nThis private residential complex boasts a beautiful communal pool and landscaped gardens, creating an ideal space for relaxation. Located just outside the town center, residents can walk to supermarkets, restaurants, bars, schools, and other essential services.\n\nPrime Location in Pilar de la Horadada\nPilar de la Horadada is a charming Spanish town in the southernmost part of the Costa Blanca. It offers a vibrant main street with numerous shops, supermarkets, restaurants, and picturesque squares.\n\nThe stunning beaches of Torre de la Horadada and Mil Palmeras are only 5 minutes away, featuring fine golden sand a scenic promenade.\u2026",
       "stats": {
         "listings": 3
       }
@@ -4167,7 +4167,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Homes in Vistabella Golf Resort, Orihuela",
+      "bio": "Exclusive Residential Development in a Prime Golf Location\nDiscover this new development in Vistabella Golf Resort, offering 48 modern homes with a perfect blend of Mediterranean charm, warmth, and modernity. This unique residential complex provides semi-detached villas, townhouses, and detached villas, each designed for comfort, efficiency, and an exclusive lifestyle.\n\nA Variety of Home Options to Suit Your Needs\nThis development offers three distinct property types, each with high-quality finishes and energy-efficient features:\n\n12 Semi-Detached Villas with 2 bedrooms and 2 bathrooms on a single level.\nPrivate pool and parking on the plot.\nOption to add a solarium at an additional cost.\n3 photovoltaic solar panels included.\n\n30 Townhouses with 3 bedrooms and 3 bathrooms.\nMultiple terraces and a private solarium.\nCommunity pool, children\u2019s play area, and landscaped gardens.\nAerothermal system for energy efficiency.\n\n6 Detached Villas with 4 bedrooms, 3 bathrooms, and 1 guest toilet.\nSpacious plots of over 300m\u00b2.\nPrivate garden, swimming pool, and 8 photovoltaic solar panels.\n\nAll properties include:\nAutomated blinds.\nUnderfloor heating in bathrooms.\nPre-installed ducted air conditioning.\nEnergy Efficiency Certificate A for sustainable living.\n\nLive in the Heart of Vistabella Golf Resort\nLocated between San Miguel de Salinas and Los Montesinos, in the Orihuela municipality, Vistabella Golf Resort offers a premium lifestyle in a natural setting.\u2026",
       "stats": {
         "listings": 3
       }
@@ -4197,7 +4197,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New build homes in Pilar de la Horadada with private pool",
+      "bio": "Modern homes close to the beach\nDiscover this exclusive new build residential complex in Pilar de la Horadada, which offers bungalows just 2.5 km from the beach. Designed for comfort and style, these homes are an excellent opportunity to enjoy life on the Costa Blanca.\n\nSpacious and stylish homes\nThis development offers 2 or 3 bedroom homes with 2 bathrooms and private parking. Choose from:\nGround floor bungalows with private garden.\nTop floor bungalows with open terrace.\n1 Townhouse with 3 bedrooms and corner plot.\n\nEach property is built with high quality materials and modern finishes, including:\nAll properties have private swimming pool.\nPre-installation of ducted air conditioning.\nAluminium exterior carpentry with thermal break and double glazing.\nSecurity entrance door for peace of mind.\nAerothermal system for efficient hot water production.\nFitted wardrobes in bedrooms.\n\nPrivileged location in Pilar de la Horadada\nPilar de la Horadada is a charming Spanish town in the southernmost part of the Costa Blanca. It offers a vibrant main street with numerous shops, supermarkets, restaurants and picturesque squares.\n\nThe stunning beaches of Torre de la Horadada and Mil Palmeras are only 5 minutes away, with fine golden sand a picturesque promenade. The town also offers well-developed cycle paths and hiking trails, as well as a variety of sporting activities.\n\nConvenient access to key destinations\nLo Romero Golf Course - 5 km (10 minutes drive).\nCorvera Airport (Murcia) - 40 km (40 minutes drive).\nAlicante Airport - 55 km (55 minutes drive).\u2026",
       "stats": {
         "listings": 2
       }
@@ -4227,7 +4227,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern Townhouses in Dolores with comunal pool",
+      "bio": "Contemporary Homes Designed for Comfort and Style\nDiscover this exclusive residential complex of 20 modern townhouses in Dolores, offering a perfect blend of space, style, and high-quality finishes. With up to 133 m\u00b2 of living space, including expansive terraces, these homes are available in two or three-bedroom layouts, allowing you to choose the design that best suits your lifestyle.\n\nEach property spans three floors, including a private solarium, providing breathtaking open views and an ideal space for relaxation. The interiors feature integrated LED lighting, contemporary finishes, and an open-concept layout that enhances natural light.\n\nPremium Features & Optional Upgrades\nSpacious and bright interiors with high-quality finishes\nThree floors, including a rooftop solarium\nCommunity swimming pool, perfect for relaxation\nOptional private jacuzzi or rooftop pool (with extra cost)\nPrivate parking space for each home\nModern kitchens and bathrooms designed for functionality and elegance\n\nPrime Location \u2013 A Tranquil Setting with Excellent Connectivity\nLocated in Dolores, a charming town in the Vega Baja region of Alicante, this development offers the perfect balance of peaceful living and easy access to essential services. The area is known for its beautiful natural surroundings, agricultural landscapes, and relaxed atmosphere.\n\nDistances to Key Points of Interest:\nBeaches of La Marina & Guardamar del Segura \u2013 10 km (10 minutes)\nAlicante Airport \u2013 30 km (25 minutes)\nMurcia-Corvera Airport \u2013 60 km (45 minutes)\nGolf courses \u2013 10 km (10 minutes)\u2026",
       "stats": {
         "listings": 2
       }
@@ -4257,7 +4257,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New-Build One-Story Villas with Private Pool in Torrevieja",
+      "bio": "Modern Villas in the Exclusive Los Balcones Area\nDiscover these stunning new-build villas, perfectly located in the Los Balcones urbanization of Torrevieja. Designed for comfort and elegance, these single-story homes offer spacious interiors, high-quality finishes, and a private pool, making them the perfect choice for those seeking a modern Mediterranean lifestyle.\n\nSituated in a quiet and well-connected area, these villas are surrounded by a wide range of services, including restaurants, bars, shopping centers, and healthcare facilities, ensuring convenience and a high quality of life.\n\nSpacious and Functional Design\nEach of the 8 independent villas is built on a generous 400m\u00b2+ plot, providing ample outdoor space. The homes feature:\n\n3 spacious bedrooms and 2 fully equipped bathrooms.\nA large open-plan living and dining area, designed for natural light and comfort.\nA modern open kitchen, seamlessly integrated into the living space.\nPrivate swimming pool, perfect for cooling off and entertaining.\nParking space for two cars on the plot.\nPrivate solarium with open views, ideal for sunbathing and relaxation.\nOptional basement available for additional living or storage space (at an extra cost).\n\nHigh-Quality Features and Finishes\nBuilt with premium materials and designed for a luxurious lifestyle, these villas include:\nUnderfloor heating in bathrooms, ensuring comfort year-round.\nLighting package included, enhancing ambiance and functionality.\nA range of customization options, allowing buyers to tailor finishes to their preferences.\u2026",
       "stats": {
         "listings": 1
       }
@@ -4287,7 +4287,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Regenerated Residential Complex in Lomas de Cabo Roig \u2013 Renovated Apartments",
+      "bio": "Apartments in a Prime Location\nDiscover this exclusive opportunity to own a renovated apartment in Lomas de Cabo Roig, a sought-after area in Orihuela Costa. This residential complex, originally built in 2008, is undergoing a renovation of some units and will be delivered in June 2025. A show home is available for viewing, allowing you to see the quality finishes firsthand.\n\nProperty Options to Suit Every Need\nThis development offers 27 refurbished apartments, with a variety of layouts:\n\n1 and 2-bedroom units, ideal for holiday homes or investment.\nGround-floor apartments with private gardens, perfect for outdoor living.\nMiddle-floor apartments with spacious terraces, ideal for enjoying the Mediterranean climate.\nPenthouses with private solariums, offering open views and maximum privacy.\nEach home is delivered with shower screens in the bathrooms and fully equipped kitchens with appliances, ensuring a turnkey solution for buyers.\n\nExclusive Community Amenities\nThe residential complex is designed for comfort and relaxation, featuring:\nA communal swimming pool surrounded by beautiful landscaped gardens.\nAn elevator for easy access to all floors.\nOptional underground parking spaces available at an additional cost.\n\nAn Unbeatable Location in Orihuela Costa\nLomas de Cabo Roig is a prestigious residential area located just 2 km from the coastline of Cabo Roig, home to some of the most beautiful beaches in Orihuela Costa. The area is well-connected by road and offers a wide range of services, including shops, restaurants, supermarkets, and shopping centers.\u2026",
       "stats": {
         "listings": 4
       }
@@ -4317,7 +4317,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Exclusive New Build Bungalows in Pilar de la Horadada - Unique Style and Privileged Location",
+      "bio": "A Unique Style that Defines your New Home\nThis new development of 2 and 3 bedroom bungalows in Pilar de la Horadada stands out for its modern design and undulating structure, which gives each home a unique personality.\n\nYou will be able to choose between:\n\nGround floors with front garden and back patio.\nTop floors with private solarium.\nThe residential complex has a communal swimming pool and spacious communal areas designed for the relaxation and enjoyment of the whole family.\n\nIn addition, the development offers an outdoor gym, communal jacuzzi and parking area for bicycles, as well as a parking space assigned to each property with the option of charging electric vehicles, designed to offer you maximum comfort and quality of life.\n\nBright and high quality interiors\nEach home has been designed to offer an experience of comfort and functionality. Open-plan spaces maximise the feeling of spaciousness and light, while neutral tones and wood finishes create an elegant and welcoming ambience.\n\nSpacious and bright bedrooms, with the master bedroom offering access to a private terrace.\nOpen concept kitchen, integrated into the living room for convenience.\nModern bathrooms with top quality materials.\n\nPilar de la Horadada - Quality of Life on the Costa Blanca\nLocated in the province of Alicante, Pilar de la Horadada is a coastal town that combines tradition with a relaxed atmosphere. It is known for its beautiful beaches, such as Playa de las Higuericas, with golden sand crystal clear Mediterranean waters.\u2026",
       "stats": {
         "listings": 4
       }
@@ -4347,7 +4347,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Bungalows with Sea Views in La Mata, Torrevieja",
+      "bio": "Privileged Location 300 Metres from the Beach\nThis exclusive new development is located in La Mata, Torrevieja, one of the most sought after areas of the Costa Blanca. Just 300 metres from the beach, this development offers an exceptional natural setting with panoramic sea views and easy access to all essential amenities.\n\nLa Mata is a vibrant area with a special charm, surrounded by promenades, restaurants, caf\u00e9s and supermarkets, making it the perfect destination for both year-round living and enjoying a second home by the sea.\n\nModern Design and Energy Efficiency\nThis development stands out for its elegant Mediterranean architecture with an avant-garde touch. Designed under the Passivhaus standard, it guarantees a sustainable construction that provides maximum thermal comfort and energy efficiency, reducing consumption and environmental impact.\n\nThe homes feature high quality finishes, spacious rooms and abundant natural light, achieving a perfect balance between design and functionality.\n\nHousing Options for All Lifestyles\nGround floor flats with a large private garden with sea views and enough space for a private swimming pool. They also include a semi-basement with the possibility of adding additional bedrooms.\nTop floor flats with large balcony, private solarium and spectacular sea views, perfect for enjoying the Mediterranean sun.\n\nExclusive Communal Areas\nThis development offers spaces designed for comfort and relaxation:\n\nCommunal infinity pool, ideal for cooling off with panoramic views.\nUnderground parking space included in each property.\u2026",
       "stats": {
         "listings": 2
       }
@@ -4377,7 +4377,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Exclusive New Development Residential Complex in Orihuela Costa",
+      "bio": "Privileged Location in the Heart of the Costa Blanca\nThis modern gated residential complex is located in Orihuela Costa, one of the most sought after areas of the Costa Blanca, just 4 km from the beaches of Orihuela Costa. Its excellent location allows you to enjoy the Mediterranean sun all year round, with access to a wide range of leisure, golf and services.\n\nJust 5 minutes by car, you will find the Villamartin golf course and the La Zenia Boulevard shopping centre, the largest in the province of Alicante, with more than 150 shops, restaurants and entertainment areas.\n\nModern Design and Exclusive Homes\nThis development offers a selection of newly built homes designed to the highest standards of quality and comfort:\n\n7 townhouses of 2 and 3 bedrooms with access to a communal swimming pool.\n2 detached villas with 3 bedrooms and 3 bathrooms, each with private swimming pool.\nOptional: underground parking spaces and storage rooms for an additional cost.\n\nExclusive Qualities and Features\nEach property has been designed with a modern and functional approach, including:\nLandscaped exteriors with artificial grass next to the swimming pool.\nAerothermal heating for greater energy efficiency.\nKitchen with quartz breakfast bar, seating area and 50 cm metal sink.\nStaircase with glass and stainless steel handrail.\nFully fitted bathrooms with wall units, mirror and shower screen.\nPre-installation for ducted air conditioning.\nBuilt-in wardrobes in each bedroom, with sliding doors and soft closing system.\nSecurity entrance door for peace of mind.\n\nProximity to points of interest\u2026",
       "stats": {
         "listings": 2
       }
@@ -4407,7 +4407,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Exclusive Semi-detached Villas and Quads in Bigastro, Alicante",
+      "bio": "Mediterranean Style Homes in the Heart of the Vega Baja\nThis new residential complex in Bigastro, a charming village in the Vega Baja, offers 8 quads and 2 semi-detached villas designed in an elegant Mediterranean style. Located in a quiet and well communicated area, these properties are ideal for those looking for a perfect combination of comfort, privacy and proximity to all amenities.\n\nSpacious and Functional Design\nEach property has been designed to offer spaciousness and comfort, with 4 bedrooms and 3 bathrooms distributed over 2 floors.\n\nGround floor: One bedroom, bathroom, open plan kitchen open to the living room, laundry room and access to the garden.\nUpstairs: 3 bedrooms, including the master bedroom with ensuite bathroom.\nPrivate solarium of 40 m\u00b2, ideal for enjoying the Mediterranean climate and open views.\nPrivate garden with option of swimming pool, available for an additional cost.\nPrivate garage of more than 60 m\u00b2 in basement, with direct access to the property.\n\nBigastro: Tranquillity and Connectivity\nBigastro is a cosy municipality in the south of Alicante, known for its peaceful surroundings and its excellent connection to the main towns and beaches of the Costa Blanca.\n\nOrihuela - 5 km (5 minutes by car).\nGuardamar beaches - 25 km (15 minutes by car).\nTorrevieja - 30 km (25 minutes by car).\nAlicante Airport - 55 km (30 minutes by car).\nZenia Boulevard Shopping Centre - 30 km (25 minutes by car).\u2026",
       "stats": {
         "listings": 1
       }
@@ -4437,7 +4437,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Exclusive New Development in Pilar de la Horadada, Costa Blanca, Spain",
+      "bio": "Modern Homes Close to the Sea\nDiscover this new residential complex in Pilar de la Horadada, a privileged location on the Costa Blanca. Only 2 km from the beach, this project offers a wide variety of 3 bedroom, 2 bathroom properties, with private parking included in the price.\n\nThe development has spacious communal areas, including a communal swimming pool, landscaped gardens and a children's play area, ideal for the whole family to enjoy.\n\nDifferent Typologies to suit your Lifestyle\nThis development offers various housing options:\n\nGround floor apartments with private gardens.\nMiddle floor flats with large terraces.\nPenthouses with private solarium.\nGround floor bungalows with private garden.\nTop floor bungalows with private garden and solarium.\nTownhouses and semi-detached houses with garden and solarium.\nAll homes have been designed in a modern and functional style, using high quality materials and contemporary finishes.\n\nEquipment and Qualities\nThe properties are equipped with:\n\nPre-installation of ducted air conditioning.\nExterior aluminium carpentry with thermal break and double glazing.\nReinforced access door for greater security.\nAerothermal system for efficient hot water production.\nBuilt-in wardrobes with LED lighting.\nBathroom furniture and screens included.\n\nPilar de la Horadada: A Privileged Place to Live in\nPilar de la Horadada is a coastal town at the southern end of the Costa Blanca, with an exceptional climate and an excellent quality of life. Its lively main street offers a wide variety of shops, supermarkets, restaurants and essential services.\u2026",
       "stats": {
         "listings": 6
       }
@@ -4467,7 +4467,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Residential Development in San Miguel de Salinas",
+      "bio": "Exclusive Apartments in a Unique Natural Environment\nDiscover this new development in San Miguel de Salinas, an exclusive residential complex made up of 5 blocks of flats with spacious communal areas, designed to offer comfort and quality of life.\n\nThis gated complex has a spectacular communal garden of almost 10,000 m\u00b2, distributed over three levels and integrated with three communal swimming pools, surrounded by natural lawns and a carefully selected range of trees and plants.\n\nThe homes have been designed to take advantage of natural light and unobstructed views, offering an ideal option both as a second home and for year-round living.\n\nTypes of homes available\nIn this exclusive residential complex, you can choose between:\n\nGround floors with large private gardens.\nIntermediate floors with terraces of more than 20 m\u00b2.\nPenthouses with terraces and private rooftop solarium.\nCurrently available is Block 1, comprising 42 homes with excellent value for money.\n\nFirst Class Quality and Equipment\nAll homes come fully equipped, including:\n\nElectrical appliances included in the kitchen.\nFully equipped bathrooms, with furniture, screens and LED lighting system.\nComplete installation of ducted air conditioning.\nParking space and storage room included in the price.\nWe also have show flats in another similar project, so that you can see the quality of the finishes before delivery.\n\nStrategic Location on the Costa Blanca\nSan Miguel de Salinas is a charming town in the Vega Baja del Segura region, just a few minutes from the best beaches and golf courses on the Costa Blanca.\u2026",
       "stats": {
         "listings": 6
       }
@@ -4497,7 +4497,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Exclusive New Build Villas in Ciudad Quesada - Design, Comfort and Privileged Location",
+      "bio": "High Quality Homes in a Privileged Setting\nDiscover these 7 stunning detached villas in Ciudad Quesada - Rojales, one of the most sought after areas of the Costa Blanca South. With a modern and elegant design, these properties are designed for those looking for a luxury home, whether as a permanent residence or a holiday home.\n\nLocated in a privileged natural environment, close to the Salt Lakes of La Mata and Torrevieja, these villas enjoy a unique microclimate that guarantees an exceptional quality of life all year round.\n\nDifferent Models to Choose From\nThe development offers two types of villas, adapted to different needs and lifestyles:\n\nTwo-storey villas with 3 double bedrooms and 3 full bathrooms.\nSingle-storey villas with 3 bedrooms and 2 bathrooms.\n\nAll the properties have:\n\nPrivate rooftop solarium, ideal for enjoying the sun and panoramic views.\nPrivate swimming pool and landscaped garden, perfect for relaxing and entertaining.\nPrivate parking space.\nIn addition, a fully equipped show home is available, where you can appreciate the quality of the materials and luxury finishes.\n\nHigh End Equipment and Finishes\nThese villas have been designed to ensure maximum comfort and energy efficiency:\n\nFully equipped kitchen with appliances included.\nPre-installation of ducted air conditioning.\nLarge open spaces and large windows, which provide excellent natural light.\nModern finishes and high quality materials throughout.\n\nStrategic Location and Nearby Connections\u2026",
       "stats": {
         "listings": 2
       }
@@ -4527,7 +4527,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern Apartments with Stunning Vineyard Views in Hond\u00f3n de las Nieves",
+      "bio": "Stylish New-Build Apartments in a Peaceful Valley Setting\nDiscover these contemporary apartments in Hond\u00f3n de las Nieves, a charming town nestled in a picturesque valley surrounded by olive groves and almond trees. This exclusive residential complex offers 1, 2, and 3-bedroom apartments, all designed to provide comfort, energy efficiency, and breathtaking views of the Vinalop\u00f3 vineyards.\n\nLocated in the Vinalop\u00f3 Medio region, this tranquil area is perfect for those seeking a relaxed Mediterranean lifestyle with easy access to nature and essential services.\n\nHigh-Quality Features for Modern Living\nEach apartment is built with premium materials and finishes, ensuring both style and functionality:\n\nSpacious interiors with open-plan layouts.\nFully furnished kitchens with granite countertops.\nHigh-end bathrooms with built-in cisterns and top-quality sanitary fittings.\nEnergy-efficient design with aerothermal water heating.\nPre-installed ducted air conditioning for year-round comfort.\nDouble-glazed aluminum windows with thermal insulation.\nReinforced security entrance door for added peace of mind.\nPrivate garage on the ground floor included.\nElevator access for convenience.\nAdditionally, solar panels are installed on the rooftop to enhance energy efficiency and reduce utility costs.\n\nPrime Location in Hond\u00f3n de las Nieves\nHond\u00f3n de las Nieves is a charming Spanish village known for its wine production, traditional culture, and scenic landscapes.\u2026",
       "stats": {
         "listings": 3
       }
@@ -4557,7 +4557,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Exclusive New Build Apartments with Views of the Vineyards in Hond\u00f3n de las Nieves",
+      "bio": "Modern Homes in a Unique Natural Setting\nDiscover this new development of flats in Hond\u00f3n de las Nieves, a charming village set in a beautiful valley surrounded by olive and almond groves. This development offers 15 exclusive 2 and 3 bedroom homes, all designed to offer maximum comfort, energy efficiency and stunning views of the Vinalop\u00f3 vineyards.\n\nLocated in Vinalop\u00f3 Medio, this peaceful enclave is ideal for those seeking a relaxed Mediterranean lifestyle, with easy access to nature and all essential services.\n\nHigh Quality Features and Modern Design\nEach flat has been designed with top quality materials and a functional layout, offering:\n\nSpacious and open-plan living spaces, ideal for modern living.\nFully fitted kitchens with granite worktops.\nTop of the range bathrooms with built-in cisterns and top quality sanitary ware.\nEnergy efficiency with aerothermal system for hot water.\nPre-installation of ducted air conditioning, guaranteeing comfort in all seasons.\nAluminium windows with double glazing, providing thermal and acoustic insulation.\nReinforced security entrance door for peace of mind.\nParking space and storage room in basement, included in the price.\nLift in the building, ensuring accessibility and comfort.\nSolar panels on the rooftop to improve energy efficiency and reduce maintenance costs.\nIn addition, the residential has a communal swimming pool, perfect for enjoying the Mediterranean climate.\n\nPrivileged location in Hond\u00f3n de las Nieves\u2026",
       "stats": {
         "listings": 6
       }
@@ -4587,7 +4587,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Exclusive New Build Properties in Lo Marab\u00fa, Ciudad Quesada",
+      "bio": "Modern Design and Maximum Comfort in a Mediterranean Setting\nDiscover this spectacular residential complex in Lo Marab\u00fa, Ciudad Quesada, comprising 80 2 and 3 bedroom homes with 2 bathrooms. Designed with a modern and efficient approach, these properties offer spacious terraces, cross ventilation and high quality finishes to maximise comfort and energy efficiency.\n\nThe ground floor properties have private gardens, while the top floor properties have private solariums with pre-installation for a Jacuzzi and outdoor shower. In addition, the development has communal swimming pools surrounded by gardens, creating a perfect environment for relaxation and conviviality.\n\nHigh Quality Features for an Exclusive Lifestyle\nEach home has been designed to offer maximum comfort, with top quality materials and a contemporary design:\n\nLarge sliding aluminium windows with thermal break.\nMotorised blinds for greater comfort.\nClimalit 4+4/14/4/4+4 glazing for thermal and acoustic insulation.\nArmoured front door with security lock.\nFully fitted kitchens with electrical appliances included.\nBathrooms with furniture, mirrors and shower screens.\n150L aerothermal system for hot water.\nComplete installation of ducted air conditioning (hot/cold).\nLighting in all rooms already incorporated.\nParking space included.\n\nThanks to its double fa\u00e7ade design, the homes offer natural cross ventilation, providing coolness in summer and reducing energy consumption in air conditioning.\n\nPrivileged location in Ciudad Quesada\u2026",
       "stats": {
         "listings": 4
       }
@@ -4617,7 +4617,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Apartments in Jacarilla, Alicante \u2013 Tranquility and Comfort",
+      "bio": "Modern Apartments with Private Parking and Storage\nDiscover this exclusive new-build residential complex in Jacarilla, offering 37 modern apartments designed for comfort and convenience. Choose between 2- and 3-bedroom layouts, with options that include:\n\n7 ground-floor apartments featuring private interior patios.\n\n30 first- and second-floor units with terraces with open views of the surrounding countryside.\n\nPrivate parking space and storage room included with every apartment.\n\nEach home is equipped with fully fitted bathrooms, a furnished kitchen, and pre-installation for air conditioning. The living rooms and bedrooms benefit from electric shutters, providing both convenience and security.\n\nPrime Location in Jacarilla \u2013 A Peaceful Village with Excellent Connectivity\nLocated in the heart of Vega Baja, Alicante, Jacarilla is a charming traditional Spanish village known for its agricultural heritage, citrus groves, and scenic landscapes. Despite its tranquil setting, Jacarilla offers easy access to essential services, including supermarkets, restaurants, pharmacies, and more.\n\nThe town enjoys excellent road connections:\n\nOrihuela City \u2013 10 km.\nGuardamar del Segura & Mediterranean Beaches \u2013 15 km.\nTorrevieja \u2013 20 km.\nAlicante-Elche Airport (ALC) \u2013 50 km (40 minutes by car).\nGolf Courses (Vistabella Golf, La Finca Golf & La Marquesa Golf) \u2013 Within 10-15 km.\n\nCommunity Amenities \u2013 Relax and Enjoy\nThe residential complex is designed to offer relaxation and leisure, featuring:\n\nChill-out swimming pool at rooftop (8x3m, 80 cm deep).\u2026",
       "stats": {
         "listings": 3
       }
@@ -4647,7 +4647,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Residential Complex in San Fulgencio",
+      "bio": "Contemporary Apartments with Exceptional Features\nDiscover this new residential development in San Fulgencio, offering 2 and 3-bedroom apartments designed for comfort, style, and convenience. The complex features:\n\nGround-floor apartments with private gardens\nPenthouses with private solariums, pergolas, electrical outlets, and water points\n\nEach property includes a private parking space, and the development boasts a communal Mediterranean-style swimming pool with an 85 m\u00b2 water sheet, surrounded by beautifully landscaped gardens.\n\nHigh-Quality Finishes and Modern Design\nThese homes are built with premium materials and modern features to ensure energy efficiency and a high standard of living:\n\nElectric blinds in bedrooms\nDouble-glazed exterior carpentry with thermal break technology\nFully equipped bathrooms with vanity units, mirrors, and shower screens\nLED lighting throughout the property\nPre-installed ducted air conditioning for climate control\n\nPrime Location Close to Beaches, Golf, and Amenities\nSan Fulgencio is a charming Spanish town with a selection of restaurants, shops, and essential services within walking distance. Its strategic location offers quick access to some of the best attractions on the Costa Blanca:\n\nAlicante-Elche International Airport \u2013 30 km (30 min)\nLa Marina Beach \u2013 7 km (10 min)\nGuardamar del Segura \u2013 10 km (12 min)\nLa Marquesa Golf Course (Ciudad Quesada) \u2013 6 km (8 min)\nTorrevieja city center \u2013 18 km (20 min)\nShopping centers, restaurants, and leisure options \u2013 within a short drive\n\nThe Ideal Home for Coastal Living\u2026",
       "stats": {
         "listings": 4
       }
@@ -4677,7 +4677,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Villas with Private Pool in La Finca Golf Algorfa Costa Blanca South",
+      "bio": "Exclusive Villas in a Prestigious Golf Resort\nThis new residential development of only 8 villas and semi detached homes is located in the renowned La Finca Golf Resort in Algorfa, in the heart of Costa Blanca South. Surrounded by nature, golf views and open landscapes across the Vega Baja countryside, these properties offer privacy, space and a high standard of living in one of the most sought after golf communities in the area.\n\nLa Finca Golf is an 18 hole par 72 course designed by Pepe Gancedo and opened in 2002. It has hosted numerous prestigious amateur and professional tournaments and is known for its beautiful design, excellent maintenance and peaceful environment. The resort also offers a hotel, spa, restaurants and sports facilities, creating a complete lifestyle destination.\n\nSpacious Villas with Flexible Layouts and Basement\nThe homes are available in three different sizes, offering 3, 4 or even 6 bedrooms, and 2 to 4 bathrooms. Each property is distributed over three levels including the main living floor, the bedroom floor and a semi basement level. This versatile layout allows owners to adapt the space to their needs, whether for additional bedrooms, a leisure area, office, gym or guest accommodation.\n\nAll villas feature an open plan kitchen connected to the living room, large terraces with open views, a private swimming pool, private garden and on plot parking.\n\nQuality Features and Modern Installations\nThese homes are designed with comfort and energy efficiency in mind.\u2026",
       "stats": {
         "listings": 3
       }
@@ -4707,7 +4707,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Luxury Tourist Apartments Just 150m from Las Higuericas Beach \u2013 Torre de la Horadada",
+      "bio": "Exclusive New Development with Rental License Included\nWelcome to a new residential complex in Torre de la Horadada, just 150 meters from the golden sands of Las Higuericas Beach. This modern project offers 48 fully furnished tourist apartments, all delivered with a short-term rental license, making it an ideal investment for holiday rentals or personal enjoyment.\n\nChoose from 42 units with 3 bedrooms and 2 bathrooms or 6 units with 2 bedrooms and 2 bathrooms, all thoughtfully designed to maximize comfort, style, and functionality.\n\nLayouts Designed for Coastal Living\nEach property is tailored to meet different lifestyle needs:\n\nGround floor units feature spacious private gardens with views of the communal areas.\nFirst-floor apartments offer large terraces, some with partial sea views.\nPenthouses boast private solariums with sea views and outdoor kitchens, pergolas, jacuzzis, and artificial grass.\n\nAll homes include a private underground parking space and storage room, with first-phase completion scheduled for summer 2026.\n\nFully Equipped and Move-In Ready\nThese homes come fully equipped for immediate occupancy, including:\n\nComplete Mediterranean-style furniture and d\u00e9cor\nFully fitted kitchens with appliances\nIndependent utility rooms\nUnderfloor heating throughout\nDucted air conditioning (hot/cold)\nBed linens and household goods\nWindows feature electric shutters and Climasun thermal-acoustic glass, while energy-efficient aerothermal systems provide hot water.\n\nResort-Style Communal Areas for Year-Round Enjoyment\u2026",
       "stats": {
         "listings": 3
       }
@@ -4737,7 +4737,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Bungalows with Comunal Pool in Pilar de la Horadada \u2013 Costa Blanca South",
+      "bio": "Modern Residences Close to the Beach and Town Centre\nDiscover this exclusive new development of 16 modern bungalows located in Pilar de la Horadada, a charming town in the southernmost part of the Costa Blanca. The residential complex offers properties with 2 or 3 bedrooms and 2 fully equipped bathrooms, designed to combine comfort, functionality, and Mediterranean style.\n\nThe development is situated just 3.5 km from the beaches of Torre de la Horadada, and within walking distance to the town centre, where you\u2019ll find supermarkets, restaurants, shops, and all essential services.\n\nPremium Features and Functional Design\nEach bungalow is built with quality materials and designed for year-round living or holiday enjoyment. Key features include:\n\nGround floor units with private garden\nTop floor units with private solarium and summer kitchen\nFully furnished kitchen with appliances included\nFitted wardrobes with drawers\nModern bathrooms with Rain-effect showers, mirrors, and screens\nPre-installed ducted air conditioning\n110-litre aerothermal hot water system for energy efficiency\nOutdoor and indoor lighting (excluding decorative fixtures)\nAluminium exterior carpentry with thermal break and double glazing\nAssigned parking space for each unit\nCommunal swimming pool for residents\n\nThese homes are ideal for those seeking an easy-to-maintain property near the coast, perfect for permanent living, holidays, or as an investment for short or long-term rental.\n\nIdeal Location for a Relaxed Mediterranean Lifestyle\u2026",
       "stats": {
         "listings": 1
       }
@@ -4767,7 +4767,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Bungalows in Pilar de la Horadada Near the Beach and Town Centre",
+      "bio": "Contemporary Living in the Heart of Costa Blanca\nWelcome to a boutique residential complex of 12 new build bungalows located in Pilar de la Horadada, a vibrant coastal town at the southern tip of the Costa Blanca. This prime location offers the perfect blend of tranquil Mediterranean living and convenience, with all essential services, shops, restaurants, and amenities within walking distance. The beautiful sandy beaches of Torre de la Horadada and Mil Palmeras are just 3 km away, ideal for relaxed beach days or water sports.\n\nChoice of Ground Floor or Top Floor Bungalows\nThis exclusive development offers two types of modern homes to suit your lifestyle:\n\nGround floor bungalows with 3 bedrooms, 2 bathrooms, and large private front and rear terraces with direct access to the communal pool and gardens.\nTop floor bungalows with 2 bedrooms, 2 bathrooms, and an expansive private rooftop solarium, complete with a summer kitchen, pergola, and guest toilet.\n\nAll homes feature bright open-plan living areas, fully equipped kitchens, ducted air conditioning, and private parking. Bedrooms include built-in wardrobes and the bathrooms benefit from underfloor heating for added comfort.\n\nPremium Features for Modern Mediterranean Living\nThe homes are designed with high-quality finishes and practical features, including:\n\nArmoured front door with aluminium finish\nElectric shutters in living room and bedrooms\nAerothermal hot water system\nKitchen appliances from BALAY or equivalent\u2026",
       "stats": {
         "listings": 2
       }
@@ -4797,7 +4797,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New residential development in San Miguel de Salinas, a stone's throw from the centre",
+      "bio": "Spacious apartments with impressive amenities\nThis newly built residential complex in San Miguel de Salinas offers modern 2-bedroom apartments with spacious terraces, carefully distributed over seven floors. The gated community offers first-class facilities, including separate swimming pools for adults and children, lush green areas, a children's playground and a petanque area.\n\nPrivileged location on the Costa Blanca\nNestled in the charming town of San Miguel de Salinas, this development enjoys a strategic location on the Costa Blanca. It is within walking distance of the town centre, where you will find all the essential services for daily life, including shops, restaurants and health centres.\n\nThe property is a short drive from several points of interest:\nLas Colinas and Campoamor Golf Courses: Just 7 km away, perfect for golf lovers.\nBeaches of Orihuela Costa and Torrevieja: Located approximately 10 km from the residence, they offer beautiful sandy shores.\nShopping Centres: Zenia Boulevard, a popular shopping destination, is only 9 km away.\nAlicante Airport: 50 km away.\nMurcia Corvera Airport: About 55 km away, ideal for regional connections.\n\nHigh-quality specifications\nEach apartment is designed with modern finishes and functionality in mind:\nFully equipped kitchens with appliances included.\nMotorised blinds.\nSecurity entrance door.\nHot water by aerothermal energy.\nFully installed ducted air conditioning.\nLAUNCH OFFER: Furniture pack included for the first units sold.\nIn addition, all apartments include a designated parking space.\n\nAbout San Miguel de Salinas\u2026",
       "stats": {
         "listings": 2
       }
@@ -4827,7 +4827,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern New Build Apartments in Guardamar del Segura Near the Beach",
+      "bio": "Exclusive Development in the Heart of Guardamar\nDiscover this brand new residential building offering 13 stylish apartments located in the centre of Guardamar del Segura, one of the most desirable towns on the Southern Costa Blanca. Designed with comfort and functionality in mind, this development features 1 and 2-bedroom apartments just 550 metres from the beach, and a short walk to shops, supermarkets, restaurants, public transport, and other essential services.\n\nContemporary Design and Quality Finishes\nEach apartment features an open-plan American-style kitchen, a bright living-dining area, built-in wardrobes, and a private terrace. The building includes a lift for 6 people, and all residents have access to a communal rooftop solarium with showers and artificial grass\u2014perfect for enjoying the sun and sea breeze.\n\nHigh-quality specifications include:\n\nAluminium windows with thermal break system\nArmoured front door for extra security\nAerothermal hot water system\nSuspended bathroom furniture with integrated sink, mirror, and sliding shower screens\nPre-installation for ducted air conditioning\n\nIdeal Location with Great Connectivity\nGuardamar del Segura is a charming coastal town known for its 11 km of natural beaches, lush pine forest, and relaxed Mediterranean lifestyle. This apartment complex is ideally situated to enjoy all that the town has to offer, including:\n\nGuardamar Marina \u2013 1.5 km\nSupermarkets, town hall, and health centre \u2013 within 500 m\nBus station \u2013 300 m\nBeaches \u2013 550 m\nLa Marquesa Golf (Ciudad Quesada) \u2013 6.5 km\nAlicante Airport (El Altet) \u2013 20 km\u2026",
       "stats": {
         "listings": 3
       }
@@ -4857,7 +4857,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Townhouses and Corner Townhouses in Pilar de la Horadada",
+      "bio": "Contemporary Living in the Heart of the Costa Blanca\nWelcome to this exclusive new development of 12 modern townhouses and corner townhouses, located in the vibrant coastal town of Pilar de la Horadada, at the southern tip of the Costa Blanca. This prime location offers a perfect balance of Mediterranean lifestyle and convenience, with all daily services, shops, bars, and restaurants within walking distance. The golden beaches of Torre de la Horadada and Mil Palmeras are just 3 km away, ideal for beach days, water sports, and long walks along the promenade.\n\nVersatile Property Types to Suit Your Lifestyle\nThe development includes several home layouts designed for comfort and functionality:\n\n2 or 3-bedroom townhouses, each with 2 bathrooms and 1 guest toilet\nPrivate front and rear gardens\nPrivate parking within the plot\nFirst-floor terrace and private rooftop solarium with open views\nCorner units available with larger plots for added outdoor space\n\nAll properties feature bright and open-plan living areas, fully equipped kitchens with upper and lower cabinetry, and modern finishes throughout.\n\nPrime Location with Excellent Accessibility\nPilar de la Horadada is well connected to key locations across the Costa Blanca and Costa C\u00e1lida, making it ideal for permanent living, vacations, or rental investment. Main points of interest nearby include:\n\nBeaches of Torre de la Horadada and Mil Palmeras \u2013 3 km\nLo Romero Golf Course \u2013 6 km\nCorvera Airport (Murcia) \u2013 40 km\nAlicante International Airport \u2013 55 km\nZenia Boulevard Shopping Centre \u2013 14 km\nSan Pedro del Pinatar Marina \u2013 11 km\u2026",
       "stats": {
         "listings": 3
       }
@@ -4887,7 +4887,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Homes in La Canalosa with Communal Pool",
+      "bio": "Rural Tranquillity with Modern Amenities\nWelcome to this exclusive residential development in La Canalosa, a charming hamlet in Hond\u00f3n de las Nieves, Alicante. This new-build development offers a peaceful lifestyle surrounded by nature, with all the amenities you need to enjoy everyday life. With a total of 8 homes with 2 bedrooms and 1 bathroom, it is the ideal option for those seeking peace, comfort and connection with the natural environment.\n\nProperty Types to Suit All Tastes\nThe ground floor properties have front terraces and rear patios, and three of them offer space to park your car within the private plot. The upper floor properties have a private solarium with storage room, ideal for enjoying the sun all year round and the excellent Mediterranean climate that characterises the area.\n\nSpecifications and Features\nEach home has been designed with a practical and modern approach:\n\nPre-installation of ducted air conditioning\nSecurity entrance door\nBathroom cabinet with mirror\nHigh-quality exterior carpentry\n\nThe residential complex also has a communal swimming pool surrounded by landscaped areas, perfect for relaxing and enjoying time with the family.\n\nNatural surroundings and healthy lifestyle\nLa Canalosa is the ideal destination for those who value a simple, healthy lifestyle surrounded by nature. Its rural landscapes invite you to take walks in the open air, go hiking, cycling or simply enjoy the silence and beauty of the surroundings. Just a few minutes away, Hond\u00f3n de las Nieves offers additional services, local history and a renowned wine tradition.\u2026",
       "stats": {
         "listings": 1
       }
@@ -4917,7 +4917,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Apartments 200 Metres from the Sea in Torrevieja",
+      "bio": "Modern Homes in a Prime Location\nDiscover this new development in the heart of Torrevieja, just 200 metres from Acequi\u00f3n Beach, one of the most popular beaches in the city. This residential building has 11 homes distributed in a quiet environment, ideal for those looking to live near the sea without giving up urban amenities. The location offers walking distance to the centre of Torrevieja, parks, restaurants, supermarkets and all the services you need for everyday life.\n\nDistances to key points:\n\nAcequi\u00f3n Beach: 0.2 km\nTorrevieja town centre: 0.7 km\nMarina Salinas marina: 1.5 km\nTorrevieja University Hospital: 5.5 km\nVillamart\u00edn golf course: 10 km\nHabaneras Shopping Centre: 3 km\nAlicante Airport: 45 km\n\nDifferent Types to Suit All Needs\nThe building offers a selection of studios, 1 and 2 bedroom apartments, and penthouses with large private terraces. All homes have a storage room included on the ground floor and access to modern communal facilities that enhance the level of comfort and lifestyle.\n\nCommunal Areas for Wellbeing and Enjoyment\nThe roof terrace of the building has been designed as a premium communal area with:\nSwimming pool\nSolarium\nSauna\nBarbecue area\nPerfect for enjoying the Mediterranean climate of Torrevieja all year round.\n\nHigh-end finishes in every home\nThe homes have been built with top-quality materials and contemporary design:\n\nPVC exterior carpentry with Guardian Sun double glazing\nMotorised blinds with thermal insulation\nSecurity entrance door with lock\u2026",
       "stats": {
         "listings": 2
       }
@@ -4947,7 +4947,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Newly built bungalows in San Miguel de Salinas with 2 communal swimming pools",
+      "bio": "Mediterranean Lifestyle in a Natural Setting\nDiscover this modern residential development of new-build bungalows in San Miguel de Salinas, a town in the south of the province of Alicante, in the Vega Baja del Segura region. This charming municipality combines proximity to the sea with the tranquillity of nature, making it an ideal place for both permanent residence and holidays.\n\nHousing Options for All Lifestyles\nThe residential complex offers bungalow-style apartments with 2 or 3 bedrooms distributed in two options:\n\nGround floor with private garden and storage room\nUpper floor with private solarium\nEach home has been designed with a modern and functional approach, providing comfort, natural light and outdoor spaces to enjoy the Mediterranean climate all year round.\n\nCommunal Areas for Family Enjoyment\nThis residential complex is completely enclosed and has excellent communal areas:\n\n2 large communal swimming pools for adults and children\nOver 2,600 m\u00b2 of landscaped green areas\nChildren's play area\nThese facilities make the residential complex an ideal place for families, couples and retirees looking for quality of life in a safe and relaxed environment.\n\nModern Qualities and Energy Efficiency\nThe homes feature high-quality materials and meticulous finishes:\n\nFully fitted kitchen\nExterior carpentry with thermal break and double glazing\nReinforced entrance door\nBathroom furniture included\nPre-installation of split air conditioning in living room and bedrooms\n\nExcellent Location Close to Golf, Beaches and Services\u2026",
       "stats": {
         "listings": 2
       }
@@ -4977,7 +4977,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Newly Built Bungalows with Solarium or Garden in Pilar de la Horadada",
+      "bio": "Modern Residential Development on the Southern Costa Blanca\nLocated in the charming municipality of Pilar de la Horadada, this new residential development of bungalows offers a comfortable, Mediterranean lifestyle in one of the most attractive areas of the Costa Blanca. Pilar de la Horadada is known for its welcoming atmosphere, excellent climate and extensive sandy beaches such as Las Higuericas and Mil Palmeras, ideal for enjoying with the family or practising water sports.\n\nLayout and Types of Properties\nThe complex consists of 28 modern bungalows available in 2 and 3 bedroom versions, distributed as follows:\n\nGround floors with private garden\nUpper floors with private solarium and assigned storage room\n\nMany of the properties are south-facing, ensuring excellent natural light, and offer views of the communal pool or the adjacent park.\n\nFunctional and well-equipped spaces\nEach property has been designed with spacious and functional spaces:\n\nOpen-plan kitchen with large living-dining room\nBuilt-in wardrobes\nPrivate terrace in each unit\nParking space included\n\nIn addition, the properties feature:\n\nHot water via aerothermal system\nPre-installation of air conditioning\nPVC exterior carpentry with double glazing and aluminium shutters\nBathroom furniture included\n\nCommunal Areas and Natural Environment\nThe residential complex includes a communal swimming pool surrounded by green areas, perfect for enjoying the sun and tranquillity. Just 4 km from Las Higuericas Beach, it can be easily reached on foot or by bike along the pleasant promenade that connects to the sea.\u2026",
       "stats": {
         "listings": 2
       }
@@ -5007,7 +5007,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Apartments with River Views in Guardamar del Segura",
+      "bio": "Exclusive Residential Development of Only 9 Modern Homes\nThis new residential development in Guardamar del Segura, Alicante, offers a unique opportunity to live in a privileged location with unobstructed views of the Segura River and the Vega Baja. The building consists of only 9 exclusive homes, one per floor, ensuring privacy, tranquillity and comfort.\n\nSpacious Homes with Large Terraces\nEach apartment has 3 bedrooms and 2 bathrooms, as well as spacious outdoor areas:\n\nGround floor with 120 m\u00b2 private garden\nMiddle floors with 18 m\u00b2 terraces\nPenthouse with terrace and 78 m\u00b2 private solarium\n\nThese properties have been designed in a contemporary style, ideal for both permanent residences and holidays on the Costa Blanca.\n\nFirst-class facilities and quality\nThe homes are delivered with excellent finishes, designed to offer comfort and efficiency:\n\nReinforced entrance door\nBathrooms with wall-mounted washbasins, mirror, wall-to-wall shower tray and glass screen\nAerothermal system for domestic hot water (100 litres)\nParking space included in the price\n\nIdeal location near the sea and all amenities\nThe residential complex is located just 1.4 km from the beach and a few minutes from the port of Guardamar, the natural pine forest and a vibrant shopping area with supermarkets, restaurants and essential services.\n\nApproximate distances to key points:\n\nGuardamar town centre: 1.2 km (15 minutes on foot)\nNearest beach: 1.4 km\nMarina: 1 km\nReina Sof\u00eda Park: 1.5 km\nLa Marquesa golf course (Ciudad Quesada): 9 km\nHabaneras shopping centre (Torrevieja): 13 km\u2026",
       "stats": {
         "listings": 3
       }
@@ -5037,7 +5037,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Luxury New Build Villa for Sale in La Zenia, Orihuela Costa",
+      "bio": "Exclusive Living Near the Beach on the Costa Blanca\nLocated just 1 km from the sandy beaches of La Zenia, this stunning luxury villa in Orihuela Costa offers the perfect balance of comfort, design and Mediterranean lifestyle. With 4 spacious bedrooms, each with its own en-suite bathroom, plus a guest toilet, this home is ideal for families or those seeking a spacious holiday retreat near the sea.\n\nPremium Design and Outdoor Features\nSet on a generous 580m2 private plot, the villa is designed with high-quality finishes and attention to detail. It features:\n\nSouth-southeast orientation for optimal natural light\nLarge private pool with integrated jacuzzi\nChill-out area with automatic bioclimatic pergola, outdoor kitchen and exterior toilet.\nPrivate underground garage with space for multiple vehicles\nBeautiful landscaped garden ideal for outdoor living\n\nThis property allows you to enjoy the sunny climate of the Costa Blanca year-round.\n\nAdvanced Technology and Comfort\nBuilt for modern living, the villa includes state-of-the-art features:\n\nArmoured security entrance door\nElectric underfloor heating with room-by-room temperature control\nZoned air conditioning system (hot and cold) via ducts\nPre-installation for home automation to manage blinds, climate and technical security\nDouble-glazed aluminium windows with injected polyurethane for superior insulation\nDesigner bathrooms with LED lighting, suspended vanities, and sliding safety glass shower screens\nThe hot water system is powered by aerothermal heat pump technology, enhancing energy efficiency.\n\nPrime Location in La Zenia\u2026",
       "stats": {
         "listings": 1
       }
@@ -5067,7 +5067,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Sustainable New Build Townhouses in Pilar de la Horadada, Costa Blanca",
+      "bio": "Modern Homes with Technology and Energy Efficiency\nDiscover this exclusive new build development located in Pilar de la Horadada, one of the most attractive areas of the southern Costa Blanca. This townhouse project combines contemporary design, sustainability and technology to offer a comfortable, efficient and connected lifestyle.\n\nThe residential complex consists of 8 semi-detached villas with 3 bedrooms and 3 bathrooms, all with private swimming pools, solariums with summer kitchens and parking within the plot. In addition, one of the properties is delivered fully furnished and ready to move into, with 2 bedrooms and 2 bathrooms.\n\nElegant and Functional Interior Spaces\nEach home has been designed with attention to detail:\n\nFully equipped kitchen with Siemens appliances or similar\nBathrooms with countertop sinks, single-lever taps and safety glass screens\nPre-installation of ducted air conditioning\nAerothermal system for domestic hot water\nInterior and exterior LED lighting, including decorative strips in the kitchen, living room and bathrooms\n\nThe homes also incorporate a home automation system for controlling blinds, outdoor lighting, air conditioning and the pool, as well as a photovoltaic installation with 6 solar panels for self-consumption.\n\nPrivate Outdoor Areas and Solarium with Summer Kitchen\nEnjoy a large outdoor space with:\n\nPrivate pool with shower and LED spotlights\nGarden with integrated spotlights\nSolarium with aluminium outdoor kitchen, worktop and sink\n\nEverything has been designed so that you can enjoy the Mediterranean climate all year round.\u2026",
       "stats": {
         "listings": 1
       }
@@ -5097,7 +5097,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Newly built villas located in the municipality of Aspe.",
+      "bio": "Newly built villas with several models to choose from, with 2, 3 or 4 bedrooms, on one or two floors and built with slabs or with a structure: depending on the model and the plot chosen, the exact price will be calculated.\n\nAll the villas are built on rustic plots of over 10,000 m2, of which around 2,500 m2 will be fenced off.\n\nThe villas have an open-plan kitchen with living room, built-in wardrobes, private swimming pool, porch, storage room and outdoor parking space.\n\nThere are several plots to choose from. The price is based on a plot priced at \u20ac75 000 (if another plot is chosen, the difference will be paid or credited according to the price of the plot).\n\nSelf-build project, delivery in approximately 12 months from the granting of the licence.\n\nIf you are looking for a quiet environment, close to typical Spanish villages away from tourist crowds, surrounded by mountains, with a very large plot and about 30 minutes from the sea, this is your home.\n\nAspe is a typical Spanish village with all the amenities for everyday life, surrounded by mountains and with several natural areas nearby where you can go hiking or mountain biking.\n\nLocated 25 km from the beach, 9 km from Elche and about 20 km from Alicante airport.",
       "stats": {
         "listings": 6
       }
@@ -5127,7 +5127,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern Townhouses with Solarium and Basement in Rafal, Alicante",
+      "bio": "Spacious Homes in a Peaceful, Well-Connected Setting\nLocated in the charming town of Rafal, in the heart of the Vega Baja region of Alicante, this newly regenerated residential development offers a unique opportunity to enjoy space, comfort, and quality of life in a relaxed Mediterranean environment. Set in a quiet area next to the municipal sports complex, this community is just a short walk from the town centre, where you will find all essential daily services.\n\nExclusive Community of Just 9 Townhouses\nThis boutique development consists of only 9 spacious townhouses, each with over 200 m\u00b2 of built area including a 66 m\u00b2 basement with private parking for 2 vehicles. The homes are distributed across three floors, featuring:\n\n4 bedrooms\n2 full bathrooms (one en-suite)\n1 guest toilet on the ground floor\nMultiple terraces, including a private solarium on the second floor\nCommunal pool with artificial grass area\n\nEnjoy open countryside views from the upper floors, and benefit from abundant natural light and generous interior spaces designed for modern family living.\n\nHigh-Quality Finishes and Energy Efficiency\nThese homes are built with quality and sustainability in mind:\nSecurity entrance door\nAluminium windows with thermal break and double glazing\nMotorised shutters in bedrooms and living room\nResin shower trays with glass screens\nPre-installed ducted air conditioning\nHot water via aerothermal system\nPrivate off-street parking\nCome and visit the Show House to appreciate the wonderful finishings!\u2026",
       "stats": {
         "listings": 1
       }
@@ -5157,7 +5157,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Boutique Development of New Build Homes with Private Pools in Pilar de la Horadada",
+      "bio": "Exclusive Residential in a Prime Costa Blanca Location\nDiscover this boutique new-build development of just 10 exclusive homes in Pilar de la Horadada, a charming coastal town in the south of the Costa Blanca. Located on the outskirts of town, this modern project offers open views towards green park areas while being only 2 km from the Mediterranean beaches of Torre de la Horadada. Enjoy the convenience of having all essential services within walking distance, including supermarkets, restaurants, banks, schools and health services.\n\nChoice of Layouts with Private Outdoor Spaces\nThis new development offers a variety of 2- and 3-bedroom layouts to suit different needs and lifestyles:\n\nGround floor houses feature a private garden, pool with beach-style area and fully landscaped exteriors with automatic irrigation.\nTop floor houses boast a private solarium with summer kitchen, pergola, outdoor toilet and private pool with built-in jacuzzi, plus a dedicated bicycle storage room at ground floor.\nSemi-detached villas offer generous indoor and outdoor space with a private garden and pool, ideal for family living or long stays.\n\nAll homes include a private parking space.\n\nPremium Features and High-Quality Finishes\nDesigned with comfort, efficiency and style in mind, all homes come equipped with:\n\nDucted air conditioning fully installed\nElectric shutters and reinforced front doors\nLED lighting package for indoor and outdoor areas\nFitted kitchens with BOSCH or SIEMENS appliances\nStylish bathrooms with underfloor heating, mirrors, vanity units and shower screens\u2026",
       "stats": {
         "listings": 1
       }
@@ -5187,7 +5187,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern New Build Villas with Optional Private Pool in Pilar de la Horadada",
+      "bio": "Exclusive Development of 4 Contemporary Homes\n\nThis limited collection of four newly built semi-detached and terraced villas is located in a peaceful area of Pilar de la Horadada, just a few minutes from the town centre and 3 km from the Mediterranean beaches. Designed with a focus on comfort, style and energy efficiency, each home offers spacious living with the option to add a private pool and on-plot parking.\n\nElegant Design and Outdoor Living\n\nEach villa includes three bedrooms and two full bathrooms, thoughtfully laid out across a bright and open-plan interior. A private garden and a generous rooftop solarium with pre-installation for an outdoor kitchen provide the perfect spaces to enjoy the Costa Blanca\u2019s year-round sunshine. The optional private pool adds an extra level of comfort for relaxing or entertaining.\n\nHigh-Quality Features and Finishes\n\nThe homes are equipped with modern materials and finishes to ensure lasting quality and convenience:\n\nArmoured front door for added security\nExterior carpentry in PVC with thermal break for improved insulation\nFully furnished bathrooms with shower screens\nUnderfloor heating in bathrooms for added comfort\nAerothermal system for domestic hot water\nPre-installed ducted air conditioning throughout\n\nLive in Pilar de la Horadada: A Town Full of Charm\n\nPilar de la Horadada is a traditional Spanish town known for its friendly atmosphere and excellent infrastructure. The town offers everything you need for daily living, including supermarkets, restaurants, boutiques, and charming plazas.\u2026",
       "stats": {
         "listings": 1
       }
@@ -5217,7 +5217,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern Villas with Private Pool in Vistabella Golf Resort, Orihuela",
+      "bio": "New Build Villas in the Heart of the Costa Blanca Golf Scene\nDiscover this exclusive residential development of 42 new build villas, located within the prestigious Vistabella Golf Resort, in the municipality of Orihuela. These modern homes offer a perfect blend of luxury, comfort, and outdoor living, just steps from an 18-hole golf course and essential amenities.\n\nSet in a peaceful natural environment between San Miguel de Salinas and Los Montesinos, Vistabella is ideal for golf enthusiasts and those seeking a high-quality lifestyle under the Mediterranean sun.\n\nSpacious Homes with Premium Features\nEach villa is designed with a contemporary layout over two floors, offering 3 bedrooms and 2 bathrooms. The first floor features an uncovered terrace, and there is an optional rooftop solarium available for an additional cost.\n\nKey features include:\n\nPrivate pool included with every villa\nOn-plot parking with motorized gate\nUnderfloor heating in bathrooms\nWalk-in showers with glass screens\nModern bathroom furniture with mirrors and lighting\nFully equipped kitchens with integrated fridge, extractor hood, hob, oven, dishwasher, and washing machine\nMotorized aluminum shutters in bedrooms\nHigh-performance Guardian Sun glass in windows\nBuilt-in wardrobes with drawers in all bedrooms\nPre-installed ducted air conditioning\nReinforced front door with six locking points\n\nPrime Location with Excellent Connectivity\u2026",
       "stats": {
         "listings": 1
       }
@@ -5247,7 +5247,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Villas with Private Pool in Daya Nueva, Costa Blanca",
+      "bio": "Modern Semi-Detached and Detached Villas with Excellent Design\n\nDiscover this exclusive development of three newly built villas, both semi-detached and detached, located in the charming village of Daya Nueva, in the southern part of Alicante province. These stylish properties are designed with comfort, light, and privacy in mind, offering an exceptional living experience just minutes from the beaches of La Marina and Guardamar del Segura.\n\nEach villa features a bright and spacious living-dining area, an open-plan kitchen with a breakfast bar, three bedrooms, three full bathrooms, and a guest toilet. Enjoy the Mediterranean climate on the two upper terraces, relax by your private swimming pool, or park conveniently on your own plot.\n\nComfort and Quality in Every Detail\n\nThese homes have been designed to maximize natural light and outdoor living. Key features include:\n\nPrivate swimming pool and on-plot parking\nTwo uncovered terraces on the upper floor\nOptional rooftop solarium for additional outdoor space (at extra cost)\nFully furnished bathrooms with shower screens\nDucted air conditioning pre-installation\nAutomated aluminium shutters in bedrooms, kitchen, and bathrooms\n\nThe open-concept ground floor blends the kitchen, dining, and lounge areas into a cohesive and bright living space that opens directly to the terrace and pool area \u2014 perfect for relaxing or entertaining.\n\nPrime Location Close to All Amenities\u2026",
       "stats": {
         "listings": 1
       }
@@ -5277,7 +5277,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern Townhouses and Semi-Detached Homes in Pilar de la Horadada",
+      "bio": "Discover this exclusive residential development featuring only six modern semi-detached and terraced homes in the tranquil town of Pilar de la Horadada, on the southern tip of the Costa Blanca. Designed with contemporary architecture and high-quality finishes, these new-build properties offer a perfect blend of comfort and style in a sought-after location.\n\nSpacious Three and Four Bedroom Layouts\n\nEach home boasts spacious living areas with an open-plan kitchen and living room designed to maximise natural light. Choose from three or four-bedroom floor plans, with two or three bathrooms depending on the model. Ground-floor layouts include two terraces: a front terrace with space for private parking and a rear terrace with direct access to the communal pool. The first floor features an additional terrace off the bedrooms, while upstairs a rooftop solarium provides panoramic views and an ideal space for outdoor entertaining.\n\nHigh-Quality Interior Finishes\n\nInteriors are appointed with premium materials, including smooth plaster walls, porcelain tile flooring throughout, and fitted wardrobes in each bedroom. The open kitchens come fully equipped with modern cabinetry. Additional comforts include pre-installation for ducted air conditioning and aerothermal systems for energy-efficient hot water.\n\nCommunity Amenities and Private Parking\n\nResidents enjoy a well-maintained communal pool, perfect for relaxation on sunny days. Each home includes a private on-plot parking space, ensuring security and convenience.\n\nPilar de la Horadada: Traditional Charm on the Costa Blanca\u2026",
       "stats": {
         "listings": 2
       }
@@ -5307,7 +5307,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Villas with Private Pool in Oasis de la Marina, Costa Blanca",
+      "bio": "Modern homes in a quiet location near the beach\n\nDiscover this exclusive development of 15 detached and semi-detached new-build villas, located in the Oasis de La Marina residential area in the municipality of San Fulgencio. These elegant, contemporary-designed homes are built on one floor and are just 4.5 km from the spectacular beaches of the Costa Blanca. An ideal setting for both permanent living and holiday getaways, in a quiet but well-connected area.\n\nFunctional layout and design for maximum comfort\nEach villa has a practical and bright layout, designed for enjoying the Mediterranean lifestyle:\n3 bedrooms with fitted wardrobes\n2 full bathrooms with furniture and glass screens\nFully equipped open-plan kitchen with extractor hood and osmosis system\nSpacious living-dining room with direct access to the garden\nPrivate solarium\nPrivate garden with swimming pool and solarium area\nParking space on the plot\n\nComplete equipment and energy efficiency\nThese villas are designed with high-quality materials and energy-efficient solutions:\nHot and cold air conditioning system\nInstallation of photovoltaic solar panels\nInterior and exterior LED lighting\nElectric aluminium blinds\nPrivate pool in each property\nPrivate parking within the plot\n\nNatural surroundings and nearby amenities\nOasis de La Marina is a quiet residential area surrounded by nature, between the towns of San Fulgencio, La Marina and Guardamar del Segura. The location offers proximity to all the necessary amenities for everyday life, as well as leisure and sports options.\n\nNearby points of interest:\u2026",
       "stats": {
         "listings": 2
       }
@@ -5337,7 +5337,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Newly built luxury villa for sale in La Zenia, Orihuela Costa",
+      "bio": "Newly built luxury villa for sale in La Zenia, Orihuela Costa\n\nExclusive beachside living on the Costa Blanca\nLocated just 600 metres from the sandy beaches of La Zenia, this stunning luxury villa in Orihuela Costa offers the perfect balance between comfort, design and Mediterranean lifestyle. With 4 spacious bedrooms, each with its own en-suite bathroom, plus a guest toilet, this house is ideal for families or those looking for a spacious holiday retreat close to the sea.\n\nPremium design and exterior features\nSet on a generous private plot of 670 m2, the villa is designed with high-quality finishes and attention to detail. It features:\n\nSouth-southeast orientation for optimal natural light\nLarge private swimming pool\nPrivate underground garage with space for 2 vehicles and surface parking for several additional vehicles.\nBeautiful landscaped garden ideal for outdoor living\n\nThis property allows you to enjoy the sunny climate of the Costa Blanca all year round.\n\nPrivileged location in La Zenia\nLa Zenia is a highly sought-after residential area in Orihuela Costa, known for its lively community, year-round amenities and proximity to the beach. Residents enjoy access to:\n\nLa Zenia Boulevard shopping centre: 2.5 km\nVillamart\u00edn golf course: 4.5 km\nTorrevieja town centre: 9 km\nAlicante Airport: 40 km\nMurcia-Corvera Airport: 60 km\n\nSurrounded by restaurants, bars, international schools and supermarkets, La Zenia is one of the most dynamic areas on the southern Costa Blanca.\n\nSecure your dream villa in La Zenia\u2026",
       "stats": {
         "listings": 1
       }
@@ -5367,7 +5367,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Villas in San Fulgencio with Private Pool and Modern Design",
+      "bio": "Exclusive development of 7 detached south-facing villas on the Costa Blanca\nDiscover this attractive development of 7 modern detached villas in San Fulgencio, a charming municipality in the province of Alicante. Designed in a contemporary style and south-facing to maximise natural light, these homes combine comfort, quality and an ideal location on the southern Costa Blanca.\n\nFunctional layout and outdoor spaces\nThe villas are spread over two floors and offer an excellent interior layout:\n3 spacious bedrooms, one of them on the ground floor\n2 full bathrooms and 1 additional toilet\nFully furnished open-plan kitchen with appliances included\nBright living room with access to the outside\n\nOutside, each property has:\nA 3x5 metre private swimming pool\nParking within the plot\nTwo open terraces on the upper floor, ideal for enjoying the sun all day long\n\nSuperior qualities and energy efficiency\nThe villas are built with high-end materials and focused on sustainability:\nElectric blinds\nExterior carpentry with double glazing\nAerothermal system for hot water\nPre-installation for ducted air conditioning\nBathrooms fitted with furniture, screens and mirrors\n\nStrategic location in San Fulgencio\nSan Fulgencio offers the tranquillity of a residential environment with all amenities close at hand, such as restaurants, supermarkets, pharmacies and more. In addition, its excellent location allows easy access to the main points of interest in the area:\n\nLa Marina Beach \u2013 7 km\nGuardamar del Segura \u2013 10 km\nLa Marquesa Golf Course (Ciudad Quesada) \u2013 6 km\nTorrevieja town centre \u2013 18 km\u2026",
       "stats": {
         "listings": 1
       }
@@ -5397,7 +5397,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern New-Build Apartments in Santa Pola Just 500 Meters from the Beach",
+      "bio": "Prime Location in the Heart of Santa Pola\nThis exclusive new development is located in the vibrant center of Santa Pola, one of the most charming coastal towns in the province of Alicante. Just 500 meters from the beach and the marina, residents can enjoy the Mediterranean lifestyle with everything at their doorstep. Alicante city is only 20 km away, and Alicante-Elche International Airport is just 15 km, providing excellent connectivity.\n\nContemporary Apartments Designed for Comfort\nThe building consists of 15 modern homes with 2 bedrooms and 2 bathrooms, as well as optional units with 1 or 3 bedrooms and optional storage spaces to suit different needs. Every apartment is designed with bright and spacious interiors, featuring open-plan living and dining areas connected to furnished kitchens. Large sliding doors lead to private terraces, perfect for enjoying the mild climate of the Costa Blanca.\n\nSpacious Master Suites and Premium Features\nMaster bedrooms measure up to 20 m\u00b2 and include ensuite bathrooms, with some layouts offering generous walk-in wardrobes. The penthouses boast expansive solariums equipped with barbecue areas, pre-installation for a jacuzzi, outdoor showers, and TV and electricity connections, making them perfect for outdoor entertaining all year round.\n\nEnjoy the Mediterranean Lifestyle\nSanta Pola is renowned for its natural beauty and endless leisure opportunities. The town offers pristine beaches and coves ideal for sunbathing, snorkeling, and water sports.\u2026",
       "stats": {
         "listings": 2
       }
@@ -5427,7 +5427,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Newly built bungalows in Pilar de la Horadada",
+      "bio": "Newly built bungalows in Pilar de la Horadada\n\nModern homes near the beach\nDiscover this exclusive new residential complex in Pilar de la Horadada, offering bungalows and semi-detached houses less than 2 km from the beach. Designed for comfort and style, these homes are an excellent opportunity to enjoy life on the Costa Blanca.\n\nSpacious and stylish homes\nThis development offers 2- and 3-bedroom homes with 2 bathrooms and private parking. Choose from:\nGround floor bungalows with private gardens.\nFirst floor bungalows with private solariums.\nSemi-detached houses with basements and large plots.\n\nEach property is built with high-quality materials and modern finishes, including:\nDucted air conditioning.\nAluminium exterior carpentry, double glazing and injected aluminium shutters.\nSecurity entrance door for added peace of mind.\nAerothermal system for efficient hot water production.\nFitted wardrobes in bedrooms.\nFully equipped bathrooms with furniture and shower screens.\n\nExclusive community features\nThis private residential complex has a beautiful communal swimming pool and landscaped gardens, creating an ideal space for relaxation. Located on the outskirts of the town centre, residents can walk to supermarkets, restaurants, bars, schools and other essential amenities.\n\nPrime location in Pilar de la Horadada\nPilar de la Horadada is a charming Spanish town in the southernmost part of the Costa Blanca. It offers a vibrant main street with numerous shops, supermarkets, restaurants and picturesque squares.\u2026",
       "stats": {
         "listings": 2
       }
@@ -5457,7 +5457,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Semi-Detached and Terraced Villas in Dolores, Alicante",
+      "bio": "Discover this exclusive new development of 20 modern semi-detached and terraced villas in Dolores, a charming town located in the heart of the Vega Baja region, in the province of Alicante. Surrounded by orchards and natural beauty, Dolores offers a peaceful lifestyle just a short drive from the Mediterranean coast.\n\nContemporary Villas with Private Pools\nEach home in this new development is thoughtfully designed over two floors and features:\n3 spacious bedrooms\n2 full bathrooms and 1 guest toilet\nOpen-plan kitchen with island, furnished and equipped with appliances\nBright living-dining area with direct access to the terrace\nPrivate garden with swimming pool, filtration system, and LED lighting\nOn-site parking within the plot\n\nThese villas combine functionality and style, offering everything needed for modern Mediterranean living.\n\nHigh-Efficiency Features and Modern Comforts\nBuilt to the highest standards, the homes include:\nDucted air conditioning installation on both floors\n250-liter aerothermal water heating system\nElectric underfloor heating in bathrooms\nMotorized blinds\nLED lighting throughout the interior and exterior\n3kW photovoltaic solar panels for improved energy efficiency\n\nThese features ensure a sustainable and comfortable home environment year-round.\n\nIdeal Location Near the Coast and Amenities\nDolores is a well-connected and growing town just 12 km from the stunning beaches of La Marina and Guardamar del Segura. The area offers essential services including shops, restaurants, schools, and health centers.\u2026",
       "stats": {
         "listings": 1
       }
@@ -5487,7 +5487,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Luxury Villas in Orihuela Costa \u2013 Less Than 4 km from the Beach",
+      "bio": "Experience premium coastal living in this exclusive new development of 10 independent villas located in Los Altos, one of the most sought-after areas of Orihuela Costa, Alicante. Designed with comfort, style, and functionality in mind, these luxury villas offer the perfect blend of modern architecture and Mediterranean lifestyle, just minutes from the sea and essential services.\n\nSpacious Villas with Private Pools and Solariums\nEach villa is distributed across two floors plus a rooftop solarium and includes:\n3 bedrooms, including 2 with ensuite bathrooms\n3 fully equipped bathrooms\nOpen-plan kitchen connected to the living room\nLarge windows providing natural light and direct access to the terrace\nPrivate garden with a semi-covered terrace and swimming pool\nOn-site private parking\n\nThese homes are ideal for families, retirees, or investors seeking a high-quality residence near the beach on the Costa Blanca.\n\nPremium Finishes and Energy-Efficient Systems\nBuilt to high specifications, each villa features:\nPorcelanosa tiles throughout the property\nAerothermal water heating system for energy efficiency\nModern bathrooms with furniture and shower screens\nMotorized blinds in all bedrooms\nSpacious rooftop solarium perfect for sunbathing or relaxing outdoors\n\nAll materials and finishes are carefully selected to offer a refined, durable, and eco-conscious home.\n\nPrime Location in Los Altos, Orihuela Costa\nLocated less than 4 km from the beaches of Punta Prima and Playa Flamenca, this residential complex offers easy access to the best of Orihuela Costa.\u2026",
       "stats": {
         "listings": 1
       }
@@ -5517,7 +5517,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Stylish Residential Building 60 m away from El Acequion Beach at Torrevieja",
+      "bio": "23 Functional Homes with a selection of 1, 2 and 3 bedroom apartments, and penthouses with large private terraces. Optional parking spaces at underground for additional convenience.\n\nEnjoy life just steps from the Mediterranean. Surrounded by everything you need \u2014 supermarkets, schools, restaurants, parks, and beach bars \u2014 making it the perfect place to live year-round or enjoy as a second home.\n\nEach unit is thoughtfully designed to maximize natural light, space, and functionality \u2014 with some houses with private terraces or laundry rooms.\n\nOn the rooftop, residents can enjoy a communal solarium with a relaxing lounge area and a swimming pool, perfect for soaking up the sun and sea breeze all year round.\n\nDistances to key points:\nAcequi\u00f3n Beach: 60 m\nTorrevieja town centre: 500 m\nMarina Salinas marina: 1.5 km\nTorrevieja University Hospital: 5.5 km\nVillamart\u00edn golf course: 10 km\nHabaneras Shopping Centre: 3 km\nAlicante Airport: 45 km\n\nHigh-end finishes in every home\nThe homes have been built with top-quality materials and contemporary design:\nExterior carpentry in aluminium with thermal break and double glazing\nMotorised blinds at bedrooms.\nArmoured entrance door\nKitchen equipped with wall and base units\nHot water produced by aerothermal system\nAir conditioning pre installation\nBaths with furnitures, mirrors and fixed glass at showers.\nLift in the building\n\nLive a stone's throw from the sea and the town centre\nTorrevieja is one of the most dynamic and growing coastal towns on the Costa Blanca, famous for its climate, beaches, salt flats and cultural life.\u2026",
       "stats": {
         "listings": 4
       }
@@ -5547,7 +5547,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Apartments in Guardamar del Segura \u2013 Modern Living Just 1.4 km from the Beach",
+      "bio": "Discover a new residential development in Guardamar del Segura, Alicante, offering just 19 exclusive, modern homes designed for comfortable, contemporary living on the Costa Blanca. Ideally located just 1.4 km from the beach and a short walk from the town center, this development combines style, practicality, and a prime coastal setting.\n\nExclusive Residential Project with Limited Availability\nThis boutique development features 2 and 3-bedroom apartments with a range of layouts to suit different needs:\nGround-floor units with spacious private terraces\nMid-level apartments with generous balconies or open terraces.\nA spectacular penthouse with a private solarium and swimming pool\n\nEach property showcases elegant, curved architectural lines, glass railings, and modern finishes\u2014ideal for both year-round residence or a luxurious holiday retreat.\n\nPremium Finishes and Energy-Efficient Features\nDesigned for comfort and sustainability, each home includes:\nReinforced front door for added security\nFully furnished kitchen with appliances included\nEnergy-efficient aerothermal system for hot water\nPrivate parking space included in the price\n\nThe building also features a communal swimming pool and landscaped garden areas, perfect for enjoying the sunny Mediterranean climate.\n\nPrime Location in Guardamar del Segura\nSituated in a well-connected and vibrant part of Guardamar, this development provides easy access to nature, beaches, and essential services. Residents enjoy proximity to supermarkets, restaurants, medical centers, parks, and the town\u2019s famous pine forest and dunes.\u2026",
       "stats": {
         "listings": 5
       }
@@ -5577,7 +5577,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Villas at Vistabella Golf Resort \u2013 Orihuela",
+      "bio": "Experience modern Mediterranean living in the heart of the Costa Blanca with these stunning new build villas at Vistabella Golf Resort. Located between San Miguel de Salinas and Los Montesinos, in the municipality of Orihuela, this exclusive development offers luxury, comfort, and an unbeatable location for golf enthusiasts and lifestyle seekers alike.\n\nTwo Distinct Villa Models\nBuyers can choose between two elegant designs:\nSingle-level villas with 3 bedrooms, 2 bathrooms, and a rooftop solarium.\nTwo-story villas with 4 bedrooms, 3 bathrooms, and a first-floor solarium terrace.\n\nBoth models are set on plots of approximately 300 m\u00b2 and include a private pool and on-site parking.\n\nPremium Quality and Modern Comfort\nEvery villa comes with luxury finishes, including fully installed ducted air conditioning, fitted kitchens with appliances, exterior lighting, electric shutters, and elegant shower screens in the bathrooms. The combination of style and functionality ensures a home that is both beautiful and practical.\n\nExclusive Golf Resort Lifestyle\nVistabella Golf Resort is a gated community with an 18-hole golf course, paddle tennis courts, a bowling green, a supermarket, and a wide variety of bars and restaurants. Future upgrades will elevate the resort to a true 5-star destination, with planned additions such as a champagne bar, sushi bar, spa hotel, artificial beach, tennis court, football pitch, and gourmet bar.\n\nPrime Costa Blanca Location\nThe resort offers excellent access to the region\u2019s best beaches, golf courses, and services.\u2026",
       "stats": {
         "listings": 2
       }
@@ -5607,7 +5607,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern New Build Apartments in Central Torrevieja \u2013 Just 600 m from the Sea",
+      "bio": "Modern New Build Apartments in Central Torrevieja \u2013 Just 600 m from the Sea\nDiscover this exclusive boutique development of only 8 modern new build apartments, perfectly located in the heart of Torrevieja. Just 600 m from Playa de Los Locos and 650 m from the famous Playa del Cura with its lively promenade, these homes offer the ideal blend of beachside living and urban convenience.\n\nContemporary Design and Smart Layouts\nChoose between stylish 1-bedroom apartments with 1 bathroom or spacious 2-bedroom units with 2 bathrooms. Each property is designed with a modern, functional layout that maximizes natural light and comfort. High-quality finishes ensure durability and elegance, making these homes perfect for both permanent living and holiday stays.\n\nExclusive Building Amenities\nResidents can relax in the communal rooftop solarium or take a dip in the shared rooftop pool, the perfect place to unwind after a day at the beach. Optional rooftop storage rooms are available at an additional cost, providing extra convenience and security.\n\nVibrant Lifestyle in Torrevieja\nTorrevieja is a lively coastal city renowned for its year-round cultural and leisure activities. With over 300 days of sunshine annually, the area is ideal for outdoor living, beach days, water sports, and evening walks along the seafront. All essential services, including supermarkets, restaurants, caf\u00e9s, and entertainment venues, are within walking distance.\n\nExcellent Location and Connectivity\nThis central location offers quick access to key attractions and amenities:\nPlaya de Los Locos: 600 m\u2026",
       "stats": {
         "listings": 3
       }
@@ -5637,7 +5637,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Exclusive development of 24 tourist apartments 200 metres from the sea \u2013 La Torre/Mil Palmeras residential complex",
+      "bio": "New and exclusive boutique development of 24 luxury tourist apartments, located in a privileged enclave on the southern Costa Blanca, in the established Mil Palmeras residential complex, belonging to the municipality of Pilar de la Horadada (Alicante). This project is being developed on the second line of the sea, just 200 metres away, next to one of the best beaches in the region, in a residential and tourist area that is highly sought after for its quality of life, natural environment and comprehensive leisure facilities. The surrounding area has beach bars, restaurants, sports facilities, promenades and large green areas, making this one of the most attractive locations on the Mediterranean coast.\n\nThe apartments, designed in a contemporary and functional style, offer high-quality finishes, large terraces with sea views and interior spaces designed for comfort, enjoyment and tourist profitability. The development will include extensive landscaped communal areas, a communal swimming pool, a reception area and a social lounge, providing ideal spaces for relaxation, socialising and well-being.\n\n2-bedroom homes with 1 bathroom, dressing room, living-dining room with integrated kitchen and large terraces with sea views. One parking space and 1 storage room are included per home. The properties are delivered furnished, with appliances and fully installed ducted air conditioning.\n\nPrivileged location in Mil Palmeras\u2026",
       "stats": {
         "listings": 3
       }
@@ -5667,7 +5667,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Villa in Rojales \u2013 Modern Design and Prime Location",
+      "bio": "Discover this stunning new build villa in Ciudad Quesada, Rojales, designed with a perfect balance of style, comfort, and functionality. Surrounded by nature and close to all essential services, this home is an ideal choice for those seeking quality living in the heart of the Costa Blanca.\n\nSpacious Layout with High-End Features\n\nThis villa has been carefully designed to maximize natural light and open spaces. It includes:\nA large basement with excellent ventilation and natural light, ideal for multiple uses.\nGround floor with a double-height living room, open-plan kitchen with island, one bedroom, and a bathroom.\nUpper floor with two en-suite bedrooms, each with access to private terraces.\nThe villa also offers a private 9x3.5 m swimming pool, landscaped garden areas, and multiple terraces for outdoor relaxation.\n\nQuality Finishes and Modern Comfort\nBuilt with premium materials, this property is equipped with:\nFully furnished bathrooms with mirrors\nDucted air conditioning\nUnderfloor heating in bathrooms\nAerothermal hot water system\nParking space for several vehicles\n\nPrime Location in Rojales\nLocated in the charming town of Rojales, this villa enjoys proximity to essential services such as supermarkets, pharmacies, banks, restaurants, and natural parks. Just 10 minutes from La Marquesa Golf, one of the most prestigious courses in the Costa Blanca, residents can enjoy a top golfing experience surrounded by tradition and quality.\n\nExcellent Connectivity and Nearby Attractions\nRojales is strategically positioned, offering excellent road connections:\nLa Marquesa Golf \u2013 3 km\u2026",
       "stats": {
         "listings": 1
       }
@@ -5697,7 +5697,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Bungalows in San Miguel de Salinas \u2013 Nature, Golf and Comfort",
+      "bio": "Discover this new residential development in San Miguel de Salinas, located in the sought-after area of \u201cLa Ca\u00f1ada\u201d, surrounded by a protected pine forest between the prestigious golf courses of Campoamor and Las Colinas. Just 7 km from the Mediterranean coast, this residential offers the perfect blend of tranquility, nature, and easy access to all amenities.\n\nSpacious and Modern Homes\nThe development offers two property types to suit different lifestyles:\nGround floor bungalows: 2 bedrooms, 2 bathrooms, two large private gardens, and surface parking.\nTop floor bungalows: 2 bedrooms, 2 bathrooms, spacious solarium with sea views, and surface parking.\nEach home features generous dimensions and can be adapted into a 3-bedroom layout (optional at an extra cost), with kitchen appliances included.\n\nHigh-Quality Finishes\nDesigned for comfort and functionality, all properties include:\nFully equipped bathrooms with furniture, mirrors, and shower screens\nAerothermal hot water system\nBuilt-in LED ceiling lights\n\nExclusive Community Areas\nThe residential features over 1,700 m2 of landscaped green areas with palm trees and Mediterranean plants. Residents can enjoy a large swimming pool with jacuzzi, a children\u2019s pool, and sunbathing areas, making it the ideal setting to enjoy the Costa Blanca climate all year round.\n\nPrivileged Location in San Miguel de Salinas\nThis quiet residential is located less than 3 km from the charming town of San Miguel de Salinas, with all daily services at hand.\u2026",
       "stats": {
         "listings": 4
       }
@@ -5727,7 +5727,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern, newly built apartments in the centre of Torrevieja, just 200 m from the sea",
+      "bio": "Discover this exclusive boutique development of just 8 modern, newly built apartments, perfectly located in the heart of Torrevieja. Just 200 m from the sea in the heart of the city, these homes offer the ideal combination of seaside living and urban amenities.\n\nContemporary design and smart layouts\nChoose from 4 studios or 4 two-bedroom apartments with 1 bathroom. Each property is designed with a modern and functional layout that maximises natural light and comfort. High-quality finishes ensure durability and elegance, making these homes perfect for both year-round living and holiday getaways.\n\nExclusive building amenities\nResidents can relax in the communal rooftop solarium. Security entrance doors, fully installed air conditioning, underfloor heating in bathrooms and communal lift.\n\nDynamic lifestyle in Torrevieja\nTorrevieja is a lively coastal town famous for its cultural and leisure activities throughout the year. With over 300 days of sunshine a year, the area is ideal for enjoying the outdoors, beach days, water sports and evening strolls along the promenade. All essential amenities, including supermarkets, restaurants, caf\u00e9s and entertainment venues, are within walking distance.\n\nExcellent location and connectivity\nThis central location offers quick access to all major attractions and amenities:\nSeafront promenade: 200m\nPlaya del Cura beach: 550m\nTorrevieja marina: 500m\nZenia Boulevard shopping centre: 8km\nGolf courses: 7-10km\nAlicante airport: 45km\n\nYour Mediterranean home awaits\u2026",
       "stats": {
         "listings": 6
       }
@@ -5757,7 +5757,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Luxury New Build Semi-Detached Villas in Benij\u00f3far \u2013 Costa Blanca Living",
+      "bio": "Privileged Location in Benij\u00f3far\nThese exclusive new build semi-detached villas are located in the charming town of Benij\u00f3far, one of the most sought-after areas on the Costa Blanca. Known for its mix of tradition and modern lifestyle, Benij\u00f3far offers all essential services including supermarkets, pharmacies, banks, restaurants, and local shops. The development is strategically positioned just 10 km from the golden beaches of Guardamar del Segura and only 30 km from Alicante Airport, making it an ideal location for both permanent living and holiday stays.\n\nSpacious and Modern Design\nEach villa has been designed with a contemporary style, maximizing space and natural light. The distribution includes three bedrooms (one on the ground floor and two on the first floor) and three bathrooms (including one in the basement), making them perfect for families and guests. The open-plan living room with dining area flows seamlessly into the fully fitted kitchen, creating a warm and functional environment. Large windows enhance brightness throughout the home.\n\nPremium Features and Extras\nThese villas stand out for their high-quality finishes and thoughtful details:\n66 m2 basement with bathroom, gallery and laundry area\nPrivate pool, solarium with barbecue and sink\nDecorative fireplace in the living room\nPrivate parking within the plot\nElevator from basement to top floor\n3 photovoltaic solar panels and LED lighting throughout\nPre-installed air conditioning\nFully fitted bathrooms with furniture and shower screens\nPlot sizes from 200 m2\n\nLifestyle and Surroundings\u2026",
       "stats": {
         "listings": 1
       }
@@ -5787,7 +5787,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern New Build Apartments in the Heart of Torrevieja, Just 600 m from the Sea",
+      "bio": "Exclusive Boutique Development in Central Torrevieja\nDiscover an exclusive residential project of only 7 modern new build apartments, ideally located in the vibrant center of Torrevieja, Alicante. Just 600 m from the seafront, these stylish homes perfectly combine the advantages of coastal living with the convenience of an urban lifestyle, offering easy access to shops, restaurants, and leisure options.\n\nContemporary Design and Smart Layouts\nChoose between 1 or 2 bedroom apartments, each with 2 bathrooms (one en-suite). The open layouts are designed to maximize space and natural light, ensuring both comfort and functionality. Premium finishes such as security entrance doors, fitted wardrobes with textile finishes, aluminum carpentry with thermal break, and motorized shutters in the living room guarantee durability and style. Kitchens and bathrooms feature high-quality fixtures, with shower screens and built-in mirrors included. Pre-installed ducted air conditioning for year-round comfort.\n\nExclusive Amenities for Residents\nThis modern building has been designed for convenience and relaxation. Residents can enjoy:\nRooftop solarium with community pool\nBicycle and e-scooter parking area on the ground floor\nElevator with access to all levels including the rooftop\n\nDynamic Lifestyle on the Costa Blanca\nTorrevieja is a lively coastal city known for its sunny climate with over 300 days of sunshine per year, cultural events, and Mediterranean lifestyle.\u2026",
       "stats": {
         "listings": 3
       }
@@ -5817,7 +5817,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Residential Development in La Siesta, Torrevieja",
+      "bio": "Modern Apartments with Excellent Amenities\nThis new residential development in La Siesta, Torrevieja offers spacious and contemporary apartments designed for comfort and style. The homes feature 2 bedrooms and 2 bathrooms (one ensuite) with large terraces, distributed across 7 low-rise blocks surrounding an impressive communal area. The gated community provides first-class facilities including adult and children\u2019s swimming pools, landscaped gardens, a barbecue area, children\u2019s playground, padel court, and petanque zone, making it ideal for both relaxation and leisure.\n\nPrime Location in the Costa Blanca\nLocated in the growing neighborhood of La Hoya, between the natural salt lagoons of La Mata and Torrevieja, this development offers a perfect balance of tranquility and convenience. Just 3.5 km from the beaches of Torrevieja, residents will enjoy quick access to daily amenities such as supermarkets, restaurants, health centers, cycling routes, and the La Mata Natural Park for hiking. The vibrant city center of Torrevieja, with theaters, cinemas, shopping malls, hospitals, and the Aquopolis water park, is just a short drive away.\n\nDistances to Main Points of Interest\nTorrevieja beaches: 3.5 km\nLa Marquesa Golf in Ciudad Quesada: 7 km\nHabaneras Shopping Center: 2 km\nAlicante Airport: 40 km\nMurcia Corvera Airport: 60 km\n\nHigh-Quality Specifications\nEach apartment is built with modern finishes and designed for maximum functionality:\nFully equipped kitchens with appliances included\nMotorized shutters\nReinforced security entrance door\u2026",
       "stats": {
         "listings": 3
       }
@@ -5827,7 +5827,7 @@
       "ref": "SCP-Dev-0194",
       "slug": "scp-dev-0194",
       "name": "Orihuela Villas",
-      "headline": "New Build Villa in Las Colinas Golf &amp; Country Club, Orihuela",
+      "headline": "New Build Villa in Las Colinas Golf & Country Club, Orihuela",
       "location": {
         "town": "Orihuela",
         "province": "Alicante",
@@ -5847,7 +5847,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Villa in Las Colinas Golf &amp; Country Club, Orihuela",
+      "bio": "Exclusive Location in Costa Blanca South\nThis stunning new build villa is located in Las Colinas Golf & Country Club, one of the most prestigious resorts in Orihuela Costa. Nestled in a lush 330-hectare valley surrounded by Mediterranean forest and green areas, the community offers an exclusive lifestyle with maximum privacy. The resort is just 40 km from Alicante Airport and 60 km from Murcia\u2013Corvera Airport, with beautiful Mediterranean beaches only a short drive away.\n\nModern Villa with Spacious Layout\nDesigned with elegance and comfort in mind, this villa is distributed across two floors plus a basement. It features 3 bedrooms, each with ensuite bathrooms, and a guest toilet. The ground floor includes an open-plan kitchen connected to the living room, two bedrooms, and access to a large terrace with a private 60 m2 swimming pool and landscaped garden. The first floor offers a private bedroom suite, while the basement includes a spacious garage for two cars with natural light and ventilation via an English patio.\n\nPremium Qualities and Technology\nBuilt with the highest standards, this villa includes:\nFully installed ducted air conditioning\nHeating and hot water via aerothermal system\nInterior LED lighting included\nFully equipped bathrooms with furniture and shower screens\nKitchen fitted with premium appliances\nHome automation system for maximum comfort and efficiency\n\nResort Lifestyle and Services\nLas Colinas Golf & Country Club is internationally recognized for its championship 18-hole golf course, considered one of the best in Spain.\u2026",
       "stats": {
         "listings": 1
       }
@@ -5877,7 +5877,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern Apartments Just 250m from Playa del Cura in Torrevieja",
+      "bio": "Exclusive New Development in the Heart of Torrevieja\nThis exclusive residential project of 12 modern apartments is located just 250 meters from Playa del Cura, one of the most popular beaches in Torrevieja. Designed with a perfect balance of elegance, functionality, and Mediterranean lifestyle, the building offers a variety of layouts with 1 or 2 bedrooms, including apartments with terraces and penthouses with private solariums. Its central location provides easy access to shops, restaurants, leisure areas, and all essential services, while still maintaining a sense of comfort and tranquility.\n\nPremium Amenities for a Modern Lifestyle\nThe development includes 130 m\u00b2 of communal areas designed for relaxation and entertainment. Residents can enjoy:\nSwimming pool on the ground floor with a children\u2019s area\nGym and sauna\nRooftop solarium with chill-out areas and lush vegetation\n\nEvery apartment is built with high-quality materials and finishes, ensuring both comfort and durability. Features include:\nFully furnished bathrooms with shower screens\nPre-installation of ducted air conditioning\nHigh-quality PVC exterior carpentry with solar control glass\nReinforced security entrance door\n\nThe Vibrant Life of Torrevieja\nTorrevieja is a lively coastal city on the Costa Blanca, renowned for its year-round cultural and recreational activities. With over 300 days of sunshine annually and a mild Mediterranean climate, the area is ideal for beach lovers, outdoor enthusiasts, and those seeking a vibrant lifestyle.\u2026",
       "stats": {
         "listings": 3
       }
@@ -5907,7 +5907,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern New Build Villas in Dolores, Alicante",
+      "bio": "Contemporary Living in the Heart of the Vega Baja\nDiscover this exclusive new build villa development in Dolores, a charming town in the Vega Baja del Segura region, south of Alicante. Known for its traditional Spanish character and surrounded by lush countryside, Dolores offers a peaceful lifestyle while providing all daily amenities within walking distance \u2014 shops, restaurants, schools, and local services.\n\nSituated just 12 km from the beaches of La Marina and Guardamar del Segura, and with easy access to the AP-7 motorway, this residential area is perfectly connected to the main coastal towns of the Costa Blanca.\n\nElegant Modern Villas with Private Pool\nThese modern two-story villas have been designed for comfort, functionality, and style. On the ground floor, you\u2019ll find a bright open-plan kitchen connected to the living-dining area, with large sliding doors opening directly to the terrace and private garden with swimming pool. The ground floor also features one bedroom with an ensuite bathroom, a guest toilet, and a convenient outdoor laundry area.\n\nOn the first floor, there are two additional bedrooms, a bathroom, and access to a large 60 m2 open terrace, perfect for sunbathing or relaxing while enjoying the Mediterranean climate. Each home includes private parking inside the plot.\n\nQuality Finishes and Modern Comfort\nBuilt with high-quality materials and contemporary design, these villas come fully equipped for year-round living. Main features include:\nExterior carpentry with thermal bridge break\nMotorized blinds\nHot water system powered by aerothermal energy\u2026",
       "stats": {
         "listings": 1
       }
@@ -5937,7 +5937,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern New Build Apartments Just 150 m from the Sea in Torrevieja",
+      "bio": "Exclusive Boutique Development by the Beach\nThis new development offers just 3 modern apartments in a privileged location, only 150 meters from Los N\u00e1ufragos beach in Torrevieja. Originally part of a commercial space built in 1989, the property has been fully renovated and transformed into stylish one-bedroom, one-bathroom homes designed for modern coastal living.\n\nContemporary Design and Ready-to-Move-In Comfort\nEach apartment has been completely refurbished with top-quality finishes and is delivered fully furnished and equipped. Features include:\nOpen-plan kitchen with furniture and appliances included\nDesigner furniture, lighting, curtains, televisions, and decoration\nAir conditioning hot/cold by splits in both living room and bedroom\nBathroom with furniture, mirror, and shower screen\nFront terrace with space for a table and chairs\n\nThis turnkey solution ensures you can enjoy your new home without the hassle of furnishing or equipping it. Delivery is scheduled for February 2026, once licenses and utility connections are finalized, making it nearly a move-in-ready opportunity.\n\nPrime Central Location in Torrevieja\nLocated just a short walk from the sea and 10 minutes from the city center, these apartments enjoy an unbeatable position. Within 300 meters you will find restaurants, supermarkets, pharmacies, banks, and public transport options. The Torrevieja Marina is only 1 km away, and essential services such as the Hospital de Torrevieja and Las Habaneras Shopping Center are within easy reach.\n\nEasy Access to Key Destinations\nBeach of Los N\u00e1ufragos: 150 m\u2026",
       "stats": {
         "listings": 1
       }
@@ -5967,7 +5967,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Residential Complex in Los Balcones, Torrevieja",
+      "bio": "Modern Homes in a Privileged Location\nThis exclusive new development in Los Balcones, Torrevieja consists of 20 modern bungalows, perfectly designed for comfort and style. Located just 4 km from the beaches of Torrevieja and close to shops, restaurants, and essential services, this project offers an ideal setting for both permanent living and holiday getaways on the Costa Blanca.\n\nLos Balcones is one of the most sought-after residential areas of Torrevieja, offering a peaceful atmosphere while being only a short drive from the vibrant city center. The area features supermarkets, local amenities, and the public hospital, with regular bus connections into town.\n\nProperty Layouts to Suit Your Lifestyle\nGround-floor bungalows: 3 bedrooms and 3 bathrooms, including a master bedroom with ensuite on the main floor, open-plan living room with kitchen, guest toilet, and spacious terrace. A staircase leads to the lower ground level with 2 additional bedrooms, 2 bathrooms, laundry room, and patio.\nTop-floor bungalows: 2 bedrooms, 2 bathrooms, open-plan kitchen with large living area, terrace, and private solarium, perfect for enjoying the Mediterranean sun.\nAll homes include private parking spaces.\n\nHigh-Quality Finishes and Comfort Features\nEvery bungalow has been designed with top specifications to guarantee maximum comfort:\nArmored front door and motorized aluminum shutters\nDouble-glazed windows with solar control\nFully installed ducted air conditioning\nAerothermal hot water system\nFitted kitchen with appliances\nLED lighting inside and outside\u2026",
       "stats": {
         "listings": 2
       }
@@ -5997,7 +5997,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Villas for Sale in Las Heredades, Costa Blanca",
+      "bio": "Modern Villas in a Peaceful and Well-Connected Area\nDiscover this exclusive development of 5 contemporary villas located in Las Heredades, a charming and quiet village near Rojales and Almorad\u00ed, in the heart of the Costa Blanca South. This peaceful residential area offers an authentic Spanish lifestyle surrounded by nature while remaining close to all amenities, golf courses, and the Mediterranean beaches of Guardamar del Segura and Torrevieja, just 12 km away.\n\nElegant and Functional Design\nThese newly built villas feature a modern Mediterranean design that combines comfort, style, and practicality. Each property is distributed over two floors, offering bright and spacious interiors that blend seamlessly with outdoor living spaces.\n\nThe villas include 3 bedrooms and 3 bathrooms, an open-plan kitchen with fully integrated appliances, and a spacious living-dining area with direct access to the terrace and garden. Built with high-quality materials and attention to detail, these homes ensure a comfortable and energy-efficient lifestyle all year round.\n\nPrivate Outdoor Spaces and Premium Features\nEach villa is built on its own private plot with:\nPrivate swimming pool (6x3 m)\nLandscaped garden with automatic irrigation system\nPrivate parking space for two vehicles\nTerraces and outdoor seating areas perfect for enjoying the Mediterranean climate\n\nAdditional features include:\nAir conditioning through ducts\nLED lighting throughout the interior and exterior\nBuilt-in wardrobes in all bedrooms\nFully furnished kitchen with modern appliances\u2026",
       "stats": {
         "listings": 1
       }
@@ -6027,7 +6027,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Exclusive New Build Residences in Pilar de la Horadada, Costa Blanca",
+      "bio": "Modern Mediterranean Living Near the Beach\nDiscover this exclusive new development of just 8 contemporary homes in Pilar de la Horadada, located within walking distance to the town center and only 3.5 km from the beautiful beaches of Torre de la Horadada and Mil Palmeras. This charming coastal town, situated in the southernmost part of the Costa Blanca, is known for its relaxed atmosphere, traditional Spanish charm, and excellent amenities. Residents enjoy a wide range of services including supermarkets, restaurants, shops, and leisure areas, all just a few minutes away.\n\nElegant Homes Designed for Comfort and Style\nThe development offers a selection of ground-floor apartments with front terraces and private gardens, or top-floor apartments featuring spacious terraces and private solariums. Each home includes 3 bedrooms and 2 bathrooms, one of them ensuite, designed with modern lines and high-quality finishes to ensure maximum comfort.\n\nThe residential complex features a communal swimming pool surrounded by landscaped gardens, creating an inviting and peaceful environment for relaxation and leisure. Every property also includes a private parking space and a storage room.\n\nHigh-Quality Finishes and Premium Features\nThese new build homes have been constructed with top-quality materials and attention to detail. Key specifications include:\nAluminum exterior carpentry in anthracite grey with thermal break (CORTIZO brand)\nQuadruple glazing with solar protection\nElectric aluminum shutters in bedrooms\nSuspended toilets and walk-in showers with integrated flooring\u2026",
       "stats": {
         "listings": 2
       }
@@ -6057,7 +6057,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern New Build Villa in Do\u00f1a Pepa, Rojales - Luxury Living on the Costa Blanca",
+      "bio": "Exclusive Contemporary Villa in a Prestigious Residential Area\nThis modern new build villa in Do\u00f1a Pepa, Rojales offers an exceptional combination of comfort, design, and Mediterranean lifestyle. Located in one of the most sought-after areas of the Costa Blanca South, this elegant single-level villa with basement is designed to maximize space, natural light, and functionality. The peaceful residential environment is surrounded by all essential services, golf courses, and just a short drive from the best beaches of the Mediterranean.\n\nElegant Design and Functional Layout\nBuilt on one level plus a basement, the villa features 3 bedrooms, 2 bathrooms (one en suite), and 1 guest toilet. The spacious open-plan living area connects the modern fully equipped kitchen with the dining and lounge areas, all opening onto a beautiful terrace with a private 9.5 x 3.3 m swimming pool. The basement includes a garage for two cars and additional storage space. An exterior staircase leads to a private rooftop solarium of approximately 60 m\u00b2, ideal for sunbathing or enjoying panoramic views.\n\nPremium Quality and Energy Efficiency\nEvery detail of this property reflects superior quality and comfort. The villa comes with:\nFurnished kitchen with high-end appliances\nUnderfloor heating in bathrooms\nAerothermal system for air conditioning and hot water\nLED lighting both indoors and outdoors\nPrivate landscaped garden\nPrivate parking space\n\nThese features ensure optimal energy efficiency and a luxurious yet sustainable lifestyle.\n\nPerfect Location in Rojales, Costa Blanca South\u2026",
       "stats": {
         "listings": 1
       }
@@ -6087,7 +6087,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Villas in La Finca Golf, Algorfa: Modern Luxury in the Heart of the Costa Blanca",
+      "bio": "Exclusive Development of 6 Independent Villas\nThis exclusive collection of six new build villas in La Finca Golf, Algorfa offers an exceptional opportunity to enjoy luxury, comfort, and Mediterranean living in one of the most prestigious golf resorts on the Costa Blanca South. Designed with elegance and functionality in mind, these contemporary homes feature spacious interiors, private gardens, and premium-quality finishes.\n\nElegant Design and Spacious Layout\nEach villa is distributed across the ground floor and basement, offering more than 300 m\u00b2 of living space. The layout includes 4 bedrooms, all with en-suite bathrooms, an additional guest toilet, and a bright open-plan kitchen and living room with direct access to the terrace and pool area. The basement provides a garage, laundry area, and storage room, ensuring practicality and convenience.\n\nLarge windows flood the interior with natural light and create a seamless connection between indoor and outdoor spaces, perfect for enjoying the mild Mediterranean climate all year round.\n\nPremium Features and Energy Efficiency\nEvery villa is built to the highest standards, incorporating top-quality materials and advanced energy-efficient systems:\nFully furnished kitchen equipped with appliances.\nBaths with underfloor heating, fitted furnitures with mirror ans shower screens.\nAerothermal hot water system.\nDucted air conditioning with Airzone control.\n4kW photovoltaic solar panels for energy savings.\nMotorized blinds in bedrooms.\nLED lighting throughout the interior and exterior.\nPrivate swimming pool and landscaped garden.\u2026",
       "stats": {
         "listings": 1
       }
@@ -6117,7 +6117,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Mediterranean Apartments Just 100 m from the Beach in Torre de la Horadada",
+      "bio": "Exclusive Seaside Living on the Costa Blanca\nDiscover this new residential project in Torre de la Horadada, ideally located just 100 meters from the sea, between Playa de los Jesuitas and Playa del Conde, two of the most beautiful beaches in the area. This exclusive development features only 6 modern Mediterranean-style apartments, offering a unique blend of coastal charm and contemporary comfort in one of the most sought-after locations on the Costa Blanca South.\n\nSituated in a quiet, picturesque coastal village, these homes are surrounded by essential services such as supermarkets, restaurants, cafes, and shops \u2014 all within walking distance. The area is renowned for its relaxed atmosphere, crystal-clear waters, and family-friendly environment.\n\nElegant Design and Quality Finishes\nEach apartment includes 2 bedrooms and 1 or 2 bathrooms, thoughtfully designed to maximize space and natural light. The interiors feature:\nSecurity entrance door for added peace of mind\nBuilt-in wardrobes in bedrooms, fully lined and finished\nModern bathrooms equipped with furniture, mirrors, and shower screens\nPre-installation of ducted air conditioning for year-round comfort\nThese high-quality finishes create bright and functional living spaces, perfect for both permanent residence and holiday use.\n\nRooftop Solarium with Pool and Chill-Out Area\nThe standout feature of this development is the communal rooftop solarium, accessible by stairs or elevator.\u2026",
       "stats": {
         "listings": 3
       }
@@ -6147,7 +6147,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Development Apartments in Central Guardamar del Segura, Costa Blanca",
+      "bio": "Prime Location Near the Beach\nDiscover this exceptional new-build residential complex located in the heart of Guardamar del Segura, a charming coastal town renowned for its natural dunes, pine forests, and golden sandy beaches. Ideally situated just 1 km from the beach and within walking distance to shops, restaurants, supermarkets, and leisure services, this project offers the perfect balance of convenience and Mediterranean lifestyle.\n\nStylish Homes Designed for Comfort\nThis modern development consists of 2 and 3-bedroom apartments with 2 bathrooms (including one en-suite). Buyers can choose between ground-floor units with terrace and patio, middle-floor apartments with terrace, or penthouses with private solarium, ideal for enjoying the sun and sea breeze year-round.\n\nEach property includes an open-plan kitchen integrated with a spacious living room, fitted wardrobes, and a private rooftop storage room. Optional parking spaces on the ground floor are available for added convenience.\n\nPremium Qualities and Energy Efficiency\nDesigned to offer modern comfort and efficiency, the homes include high-quality finishes:\nFully equipped bathrooms with vanity unit, mirror, and screens\nSecurity reinforced entrance door\nAerothermal hot-water system\nDouble-glazed windows with thermal break\nElevator with access to all floors\n\nBeautiful Communal Spaces\nThe complex features attractive green areas, a community swimming pool, and a communal rooftop solarium, providing residents with relaxing outdoor spaces in the sun.\n\nEnjoy the Best of Guardamar\u2026",
       "stats": {
         "listings": 5
       }
@@ -6177,7 +6177,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Villas in La Monta\u00f1osa Urbanization, Hond\u00f3n de las Nieves",
+      "bio": "Peaceful Mediterranean Living in Alicante Countryside\nDiscover an exclusive collection of new build villas located in La Monta\u00f1osa, a quiet residential area near the charming village of Hond\u00f3n de las Nieves. Known for its traditional Spanish atmosphere, beautiful mountain scenery and relaxed lifestyle, this inland location offers the ideal balance between tranquility and convenience. Enjoy a rural setting surrounded by nature while being only 30 km from the beaches of the Costa Blanca and vibrant coastal towns.\n\nCustomizable Single Level Villas with Modern Comfort\nThis residential project offers customizable villas designed on one floor for maximum comfort and easy living. Choose from different architectural styles, including ibicenco, modern and Mediterranean designs, all featuring 3 bedrooms and 2 bathrooms, one of them en suite. Built sizes range between 100 and 125 square meters, with spacious open plan living areas, furnished kitchens, fitted wardrobes and large windows that fill the home with natural light.\n\nEach villa is built on private plots starting from 400 square meters, giving you space, privacy and the opportunity to enjoy outdoor living in a peaceful environment. The final price depends on the villa model, construction system and selected plot. This reference price includes a plot valued at 99,000 euros, with adjustments made if a different plot is chosen.\n\nOutdoor Spaces Designed for Relaxation\nEnjoy the Mediterranean lifestyle with private gardens, a 6 x 3 meter swimming pool, a covered porch and private parking inside the plot.\u2026",
       "stats": {
         "listings": 4
       }
@@ -6207,7 +6207,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Semi-Detached Villas with Private Pool in La Finca Golf Resort, Algorfa",
+      "bio": "Exclusive Mediterranean Living in La Finca Golf\nDiscover this exceptional new residential development located within the prestigious La Finca Golf Resort in Algorfa, Costa Blanca South. You can choose between 2/3 bedroom apartments with comunal pool or semi-detached or detached villas with private pools. Surrounded by lush fairways and natural landscapes, this community offers an idyllic lifestyle in a peaceful and secure environment.\n\nThe charming town of Algorfa is known for its traditional Spanish character, excellent gastronomy and relaxed atmosphere, making it an ideal destination for both holiday homes and permanent living.\n\nModern Semi-Detached Villas with Private Pool\nThese beautifully designed semi-detached villas feature 3 bedrooms and 2 bathrooms, combining functionality, comfort and modern style.\nLayout details\nGround floor\nBright open plan living and dining room connected to a furnished kitchen\nLarge sliding doors providing direct access to the garden and private swimming pool\nTwo spacious bedrooms with built in wardrobes\nOne full bathroom\nPrivate parking within the plot\n\nUpper floor\nStudio space with a bathroom ideal for office, lounge or guest area\nAccess to a 30 m2 private open terrace, perfect for sunbathing and relaxing\n\nHigh Quality Features and Finishes\nBuilt to premium standards, these villas offer contemporary comforts for year round living, including\nBuilt in wardrobes in all bedrooms\nElectric shutters in living room and bedrooms\nFully equipped bathrooms with mirrors and shower screens\nDucted air conditioning fully installed\u2026",
       "stats": {
         "listings": 6
       }
@@ -6237,7 +6237,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Mediterranean apartments just 140 metres from the beach in Torre de la Horadada",
+      "bio": "Exclusive seaside living on the Costa Blanca\nDiscover this new residential project in Torre de la Horadada, ideally located just 140 metres from the sea, between El Conde and El Puerto beaches and next to the marina. This exclusive development comprises just 8 modern Mediterranean-style apartments, offering a unique combination of coastal charm and contemporary comfort in one of the most sought-after locations on the southern Costa Blanca.\n\nLocated in a quiet and picturesque coastal village, these homes are surrounded by essential amenities such as supermarkets, restaurants, caf\u00e9s and shops, all within walking distance. The area is known for its relaxed atmosphere, crystal clear waters and family-friendly environment.\n\nElegant design and quality finishes\nEach apartment has 1, 2 or 3 bedrooms and 1 or 2 bathrooms, carefully designed to maximise space and natural light. The interiors feature:\nSecurity entrance door for peace of mind\nFitted wardrobes in the bedrooms, fully lined and finished\nModern bathrooms equipped with furniture, mirrors and shower screens\nPre-installation of ducted air conditioning for year-round comfort\nThese high-quality finishes create bright and functional spaces, perfect for both permanent residence and holiday use.\n\nRoof-top solarium with swimming pool and chill-out area\nThe highlight of this development is the communal roof-top solarium, which is accessible by stairs or lift. Residents can enjoy a roof-top swimming pool, an outdoor kitchen area, barbecue and pergola-covered dining areas, and a sunbathing area with artificial grass.\u2026",
       "stats": {
         "listings": 4
       }
@@ -6267,7 +6267,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern New Build Apartments in Central Torrevieja Costa Blanca",
+      "bio": "Exclusive Residential Development With Premium Amenities\nDiscover a select new construction project of 35 modern apartments in the heart of Torrevieja. Offering 1, 2 or 3 bedroom layouts and 2 or 3 bathrooms, this residence also features luxury penthouses with private solariums. Designed for comfort and style, this community blends contemporary architecture with high quality finishes and exceptional shared facilities.\n\nPrime Location in Central Torrevieja\nLocated just 600 meters from Acequion Beach, this development enjoys one of the most privileged positions in Torrevieja. With supermarkets, restaurants, medical services, shops and public transport all within walking distance, this is the perfect choice for those seeking a comfortable Mediterranean lifestyle close to everything. Torrevieja is famous for its mild Mediterranean climate, beautiful sandy beaches and vibrant seaside promenades, making it a top destination on the Costa Blanca.\n\nResort Style Facilities for Wellness and Relaxation\nThe building includes an exceptional range of communal amenities. On the ground floor you will find a heated swimming pool, a social club space and a fully equipped gym. The rooftop solarium provides a true relaxation oasis with sun loungers, a Finnish sauna, barbecue area and mini pool jacuzzi. Both stairs and lift access lead to the rooftop, offering comfort and accessibility for all residents.\n\nHigh Quality Homes With Contemporary Design\u2026",
       "stats": {
         "listings": 1
       }
@@ -6297,7 +6297,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern Apartments for Sale Just 250 m from El Cura Beach in Torrevieja, Costa Blanca",
+      "bio": "Exclusive New Development Near the Sea\nThis new residential complex of 16 contemporary homes is designed to capture the essence of Mediterranean living. Located just 250 meters from El Cura Beach in Torrevieja (Alicante), this development offers a perfect blend of comfort, design, and location. With all services nearby and excellent public transport connections, including the main bus station within walking distance, it provides an ideal setting for both year-round living and holidays by the sea.\n\nModern Design and Functional Living Spaces\nThe development includes a selection of 1- and 2-bedroom homes with 1 or 2 bathrooms, offering different layouts to suit every lifestyle. Each residence is characterized by bright, open spaces, elegant finishes, and excellent build quality. Features include fitted wardrobes, pre-installation of ducted air conditioning, elevator access, and high-quality materials throughout.\n\nThe ground floor apartments and standard units boast private terraces ideal for relaxing outdoors, while the penthouses feature spacious private solariums \u2014 perfect for sunbathing, hosting dinners, or enjoying the beautiful Mediterranean sunsets.\n\nExclusive Communal Areas for Your Enjoyment\nThe residential complex is designed for comfort and social living. Residents can enjoy a spectacular rooftop communal area featuring a swimming pool, sunbathing spaces with loungers, and landscaped zones \u2014 a peaceful retreat for summer relaxation.\n\nPrime Location in Torrevieja\u2026",
       "stats": {
         "listings": 5
       }
@@ -6327,7 +6327,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Bungalows and Townhouses in Cox, Alicante",
+      "bio": "Exclusive Residential Development of 26 Homes\nDiscover this new residential community in Cox, a charming town in the Vega Baja region of Alicante. The project offers 26 modern homes, including bungalows and townhouses with 2 or 3 bedrooms, designed to deliver comfort, privacy and Mediterranean living at its finest. Cox is known for its peaceful environment, traditional gastronomy and beautiful natural surroundings, making it an ideal location for families, holidaymakers and investors alike.\n\nProperty Options Tailored to Your Lifestyle\nChoose from a variety of home types adapted to different needs:\nGround floor bungalows with private garden\nTop floor bungalows with terrace and private solarium\nTownhouses with garden, multiple terraces and private solarium\nAll ground floor bungalows and townhouses include private parking inside the plot, ensuring convenience and security. Each home is designed with functional layouts, abundant natural light and a traditional aesthetic with modern interiors.\n\nQuality Features and Modern Comforts\nThe homes are equipped with essential high quality features that enhance daily living. These include interior and exterior LED lighting, electric shutters, built in wardrobes, security entrance door and pre installation for solar panels. Kitchens come fully furnished with appliances, while bathrooms include furniture, mirror and shower screens. The solariums also feature outdoor summer kitchens, ideal for entertaining and enjoying the Mediterranean climate.\n\nCommunity Amenities for All Residents\u2026",
       "stats": {
         "listings": 5
       }
@@ -6357,7 +6357,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "MODERN DESIGN VILLA WITH GOLF VIEWS",
+      "bio": "Designer villa in one of the most exclusive locations on the Costa Blanca. With spectacular views over the Finca Golf Resort, this modern house with Mediterranean touches of 4 bedrooms and 3 bathrooms, takes you to a privileged corner where you can enjoy the good climate in its more than 150 square metres and its basement of more than 80m2.\n\nIt stands out for the use of the best qualities as well as a large garden that allows us to enjoy absolute privacy and a dreamlike private swimming pool that will make every moment an unforgettable memory.\n\nLocated on the La Finca golf course in Algorfa, 20 minutes from the wonderful beaches of Guardamar.",
       "stats": {
         "listings": 1
       }
@@ -6387,7 +6387,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern New Build Villas for Sale in Rafal: Costa Blanca Living with Style and Comfort",
+      "bio": "Contemporary Villas in a Charming Spanish Village\nDiscover these exceptional new build villas located on the outskirts of Rafal, a traditional and picturesque town in the heart of the Costa Blanca. Rafal offers a peaceful lifestyle surrounded by orchards, local shops, caf\u00e9s and friendly neighbourhoods, while still providing excellent access to major amenities. The town is just 30 km from Alicante and its international airport, and only a short drive from beautiful Mediterranean beaches and top golf courses.\n\nPremium Villas Designed for Modern Living\nEach villa is set on a generous plot of more than 370 m\u00b2, offering ample outdoor space, privacy and comfort. These single level homes feature 3 spacious bedrooms and 2 modern bathrooms, perfectly designed for both family life and holiday living. The expansive outdoor area includes a private swimming pool of 7 x 3.5 m, over 100 m\u00b2 of open terrace, and a 15 m\u00b2 covered porch ideal for relaxing in the shade.\n\nBuyers also have the option to add a rooftop solarium and storage room at an additional cost, creating even more space to enjoy the Mediterranean climate and panoramic views.\n\nHigh Quality Construction and Energy Efficiency\nThese villas are built to exceptional standards with premium materials and advanced energy saving features. Highlights include\nWindows by Sch\u00fcco for maximum insulation and durability\nMotorised shutters\nPhotovoltaic solar panels for reduced energy consumption\nAutomatic garden irrigation system\nMotorised vehicle access gate\nHeated bathroom floors\u2026",
       "stats": {
         "listings": 1
       }
@@ -6417,7 +6417,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Apartments in the Heart of Torrevieja Just 400 m from Playa del Cura",
+      "bio": "Prime Location in Central Torrevieja\nThis new residential building enjoys an unbeatable location in the center of Torrevieja, only 400 m from Playa del Cura. Surrounded by shops, supermarkets, restaurants and daily services, it offers everything you need within walking distance. The area also provides access to parks, leisure zones and green areas, creating a perfect balance between urban convenience and moments of relaxation.\n\nModern Homes With 2 and 3 Bedrooms\nThe development offers a selection of 2 and 3 bedroom apartments, including penthouses, some of them with private solariums. Each home is designed with a contemporary style, featuring open plan layouts, large terraces and integrated American style kitchens. Bathrooms come fully equipped with furniture, shower screens and underfloor heating. The kitchens include appliances, and each apartment has preinstallation for ducted air conditioning. Optional underground parking and storage rooms are available.\n\nResort Style Facilities for Wellbeing\nResidents can enjoy a range of exclusive amenities. The ground floor features a fully equipped gym, ideal for daily workouts. The rooftop solarium provides a true relaxation oasis with sunbeds, a Finnish sauna and a mini pool. Both the elevator and stairs connect directly to the rooftop for maximum convenience and accessibility.\n\nLiving in a Unique Natural and Coastal Environment\nTorrevieja is known for its warm Mediterranean climate, with an average annual temperature of 20\u00baC, making it a perfect place to live year round.\u2026",
       "stats": {
         "listings": 5
       }
@@ -6447,7 +6447,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern New Build Villas in La Herrada Los Montesinos With Private Pool",
+      "bio": "Exclusive Residential Project in a Peaceful Environment\nLocated in the prestigious La Herrada urbanisation in Los Montesinos, this exclusive development of 16 modern villas offers privacy, comfort and an excellent quality of life. La Herrada is known for its quiet residential atmosphere, its proximity to daily services and its privileged setting between the famous salt lakes of Torrevieja and La Mata. It is an ideal location for those seeking a relaxed and healthy Mediterranean lifestyle in the south of the Costa Blanca.\n\nContemporary Design With Optimised Interior Spaces\nEach villa has 110 m\u00b2 of well planned living space distributed over two floors, designed to maximise natural light and functionality. Built on plots starting from 185 m\u00b2, the properties offer generous outdoor areas perfect for sunbathing, entertaining or relaxing by the private pool.\n\nComfortable Layout Across Two Floors\nThe ground floor features an open plan living room with a fully integrated kitchen and direct access to the garden and pool area. This level also includes one bedroom, a full bathroom and a convenient laundry room.\nOn the upper floor, there are two spacious bedrooms, each with its own bathroom, one of them en suite. Both bedrooms enjoy access to a private open terrace of 17 m\u00b2. For those who want even more outdoor space, there is an optional rooftop solarium available at an additional cost.\n\nHigh Quality Finishes and Modern Features\nThe villas include quality finishes such as bathroom furniture, mirrors, shower screens and underfloor heating in all bathrooms.\u2026",
       "stats": {
         "listings": 1
       }
@@ -6477,7 +6477,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern New Build Apartments in the Heart of Torrevieja",
+      "bio": "Prime Location Just 150 m from the Sea\nThis exceptional new development is located in the very centre of Torrevieja, just 150 m from the natural swimming pools and seafront promenade, and only 500 m from Playa del Cura. Surrounded by an extensive range of services including shops, supermarkets, parks, caf\u00e9s and restaurants, the area offers everything you need within a short walk. Its combination of urban convenience and coastal tranquillity makes it one of the most attractive residential areas in the city.\n\nContemporary Apartments With 1 and 2 Bedrooms\nThe development offers modern apartments featuring 1 or 2 bedrooms and 1 or 2 bathrooms, including two exclusive penthouses with private solarium, barbecue and private pool. All homes are designed with open layouts that maximise natural light, incorporating spacious terraces and stylish American style kitchens.\nEach apartment includes a fully equipped kitchen with appliances, complete bathrooms with furniture, shower screens and underfloor heating, as well as interior lighting. There is also preinstallation for ducted air conditioning, ensuring year round comfort.\n\nAttractive Communal Areas for Relaxation\nResidents can enjoy excellent communal facilities designed for wellbeing and leisure. The ground floor features a refreshing communal pool and a relaxing sauna. The rooftop terrace offers a shared solarium, ideal for sunbathing and taking in the Mediterranean atmosphere.\n\nEnjoy a Unique Coastal and Natural Environment\u2026",
       "stats": {
         "listings": 3
       }
@@ -6507,7 +6507,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern New Build Residences Just 800 m from El Pinet Beach",
+      "bio": "Exclusive Residential Complex in La Marina \u2013 Elche\nDiscover this modern residential complex of 64 new build properties located in El Pinet, one of the most sought after coastal areas between La Marina and Elche. Just 800 m from the fine sandy beach of El Pinet, the development offers the perfect balance between Mediterranean lifestyle, nature and everyday convenience. The area is surrounded by protected dunes, pine forests and the famous Salinas de Santa Pola, creating a peaceful and natural environment ideal for year round living.\n\nHomes With 2 or 3 Bedrooms and Multiple Layout Options\nChoose from a variety of property types to suit your lifestyle. Options include ground floor homes with private gardens, middle floor apartments with spacious terraces or penthouses with private terraces and solarium. All units have been designed with modern lines, functional layouts and abundant natural light.\n\nHigh Quality Finishes and Ready to Move In\nEvery home comes fully equipped and furnished, offering exceptional value and comfort.\nFeatures include:\nKitchens fully equipped with appliances\nInterior and exterior lighting included\nPreinstallation for ducted air conditioning\nElectric shutters\nBathrooms with furniture, mirrors and shower screens\nUnderground parking space and storage room\n\nAttractive Communal Areas for Relaxation and Leisure\nThe complex offers a range of amenities designed to enhance your lifestyle. Enjoy a large communal swimming pool, children\u2019s play area and beautifully landscaped gardens.\u2026",
       "stats": {
         "listings": 3
       }
@@ -6537,7 +6537,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern Semi Detached Villas in Daya Nueva with Contemporary Design and Excellent Connectivity",
+      "bio": "Peaceful Living in Daya Nueva\nThese new semi detached villas are located in the charming town of Daya Nueva in the south of Alicante. Known for its peaceful rural atmosphere, Daya Nueva offers a comfortable lifestyle surrounded by orchards and open landscapes, while being just a short drive from the vibrant coastal areas of the Costa Blanca. The town provides essential services, restaurants and local shops, and sits only 10 km from the beaches of La Marina del Pinet and Guardamar del Segura. The Alicante International Airport is approximately 25 km away, making it highly accessible for international homeowners. Golf lovers will appreciate being within 12 km of La Marquesa Golf and 15 km from Vistabella Golf.\n\nElegant Architecture and Quality Construction\nThis exclusive development has been designed with great attention to detail, incorporating a bright, fresh and modern architectural style. The curved lines of the facade create a unique contemporary look, while high quality finishes ensure lasting comfort.\n\nFunctional Layout Across Two Floors\nEach villa is distributed over two levels in the new residential area of Daya Nueva, within walking distance to the town center.\nThe ground floor includes a living and dining area with an open plan kitchen, direct access to the garden, a bedroom with ensuite bathroom and walk in wardrobe, a guest toilet and a private parking space on the plot. A private pool can be added at an additional cost.\nThe upper floor features two more bedrooms, a full bathroom and a 19 m2 open terrace with pleasant open views.\n\nComfort and Modern Features\u2026",
       "stats": {
         "listings": 1
       }
@@ -6567,7 +6567,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern Independent Villas in Monteazul Benijofar with Optional Pool and Solarium",
+      "bio": "Prime Location Between Benijofar and Ciudad Quesada\nThese modern independent villas are located in the sought after Monteazul urbanization, a peaceful residential area situated between Benijofar and Ciudad Quesada. The neighborhood offers an excellent balance between comfort, tranquillity and convenience, with bars, restaurants, supermarkets and essential daily services just a short walk away. The beautiful beaches of Guardamar del Segura are approximately 9 km from the development, while Alicante International Airport lies around 38 km away. Golf enthusiasts can enjoy La Marquesa Golf at just 5 km and Vistabella Golf at 14 km. The marina of Torrevieja is located about 14 km from the villas.\n\nStylish Single Level Living\nEach villa is thoughtfully designed on one floor, offering a practical and comfortable layout perfect for both holidays and year round living. The homes feature 3 bedrooms and 2 bathrooms, including a master bedroom with an ensuite bathroom and a spacious walk in wardrobe. A separate laundry room and private parking space on the plot add extra convenience.\n\nHigh Quality Interiors and Modern Features\nThe villas include fitted bathrooms with furniture, mirror and shower screen. Additional features include ducted air conditioning pre installation, fully furnished kitchens and motorized shutters in all bedrooms, ensuring comfort and modern functionality in every space.\n\nOptional Private Pool and Solarium\u2026",
       "stats": {
         "listings": 1
       }
@@ -6597,7 +6597,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern New Build Apartments in the Center of Guardamar del Segura",
+      "bio": "Exclusive Living in the Heart of Guardamar del Segura\nDiscover this exceptional new development located in the very center of Guardamar del Segura, one of the most sought after coastal towns in the Costa Blanca South. Known for its 11 km of sandy beaches and its impressive protected pine forest, Guardamar combines natural beauty with a vibrant year round atmosphere. This modern building is ideally positioned just 700 m from the beach and directly in front of the Guardamar pine forest, offering open panoramic views from most of the homes and sea views from top floors and comunal rooftop solarium.\n\nStylish Homes with High Quality Features\nThe development consists of 13 contemporary apartments designed with comfort, light and quality in mind. Buyers can choose between 3 or 4 bedroom layouts with 2, 3 or 4 bathrooms, laundry room and large terraces that maximize the stunning natural surroundings. The kitchens come fully furnished and equipped with Siemens appliances and an osmosis system. Additional features include motorized shutters, reinforced front door, electric underfloor heating in bathrooms and pre installation for ducted air conditioning. Optional underground parking spaces are available for added convenience.\n\nExceptional Communal Areas for Relaxation\nResidents can enjoy an exclusive rooftop solarium featuring a designer swimming pool with breathtaking views of the Mediterranean Sea and the expansive pine forest. The building includes a lift to ensure comfortable access to all floors, making daily life practical and enjoyable.\n\nThe Guardamar Lifestyle\u2026",
       "stats": {
         "listings": 3
       }
@@ -6627,7 +6627,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Exclusive New Build Bungalows with Private Pool in Pilar de la Horadada",
+      "bio": "Modern Living in a Prime Costa Blanca Location\nDiscover an exclusive new development of only two premium bungalows located in the heart of Pilar de la Horadada, a charming coastal town in the Costa Blanca known for its fine sandy beaches, peaceful ambiance and Mediterranean lifestyle. The residential complex is situated just 2.5 km from the beach and within walking distance of supermarkets, shops, restaurants and essential daily services. With excellent road connections and Alicante Airport only 45 km away, this location offers the perfect balance between tranquility, comfort and accessibility.\n\nTwo Unique Homes Designed for Comfort\nThe project features two elegant 2 bedroom, 2 bathroom homes, designed with high quality finishes and modern layouts. One of the bathrooms is ensuite, providing additional privacy and convenience. Each property offers its own distinctive outdoor living experience to match different lifestyle preferences.\n\nGround Floor Bungalow with Spacious Garden and Private Pool\nThe ground floor unit includes a generous 75 m2 garden ideal for outdoor dining, sunbathing and leisure. A private pool is included, along with private parking inside the plot. Large windows and open spaces create a bright and welcoming atmosphere throughout the home.\n\nPenthouse Bungalow with Private Solarium and Pool\nThe upper floor residence offers a fenced parking space on the ground level and access via an exterior staircase.\u2026",
       "stats": {
         "listings": 2
       }
@@ -6657,7 +6657,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Luxury New Build Villas Next to La Finca Golf in Algorfa",
+      "bio": "Exclusive Villas in a Prestigious Golf Environment\nThis boutique development of only 8 luxury independent villas is located in second line of the renowned La Finca Golf Resort in Algorfa. Set in a peaceful and well established residential area, these new build villas offer privacy, comfort and an exceptional Mediterranean lifestyle surrounded by nature and golf landscapes. The location is ideal for those seeking tranquility while remaining close to services, leisure options and the best beaches of the Costa Blanca.\n\nAlgorfa is a charming Spanish town known for its relaxed atmosphere, traditional restaurants and proximity to top golf resorts. La Finca Golf is one of the most prestigious golf complexes in the area, offering an 18 hole championship course, hotel, spa, sports facilities and quality dining options.\n\nModern Single Level Design with Mediterranean Character\nAll villas are designed on one single level, maximizing comfort and functionality. The L shaped layout clearly separates the living and kitchen areas from the sleeping quarters, creating bright and well balanced interiors. Large windows allow natural light to flow throughout the home and connect seamlessly with the outdoor areas.\n\nEach villa offers 3 spacious bedrooms and 2 modern bathrooms, built on generous plots of over 400 sqm. Outdoor spaces include a private swimming pool, landscaped garden with automatic irrigation, on plot parking and a large private solarium ideal for enjoying the sun all year round.\n\nHigh Quality Features and Energy Efficiency\u2026",
       "stats": {
         "listings": 1
       }
@@ -6687,7 +6687,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern New Build Apartments in La Hoya, Torrevieja",
+      "bio": "Contemporary Homes with Premium Amenities\nDiscover this exceptional new residential development in La Hoya, Torrevieja, offering modern 2 and 3 bedroom apartments with 2 bathrooms, including one ensuite, and a separate laundry room. Designed for comfort and style, the complex features low rise buildings arranged around an impressive communal area. Residents will enjoy outstanding shared amenities including adult and children swimming pools, landscaped gardens, a children playground, indoor and outdoor gyms, padel courts, bike parking and a complete spa area with sauna.\n\nChoose the Home That Fits Your Lifestyle\nThe development offers several property types to suit different preferences. Ground floor apartments include a private garden ideal for outdoor living. Middle floor units feature generous terraces perfect for relaxing or dining outdoors. Penthouse apartments offer the ultimate luxury with private rooftop solariums where you can enjoy the Mediterranean climate and panoramic views.\n\nPrime Location Between Salt Lakes and the Sea\nLa Hoya is a growing residential area ideally located between the natural salt lakes of La Mata and Torrevieja. This peaceful and well connected neighbourhood offers quick access to all essential amenities such as supermarkets, restaurants, health centres and cycling routes. The beautiful beaches of Torrevieja are only 3.5 km away, while the nearby Natural Park of La Mata is perfect for hiking and outdoor activities.\u2026",
       "stats": {
         "listings": 6
       }
@@ -6717,7 +6717,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern Apartments of New Construction in Catral",
+      "bio": "Contemporary Living in the Heart of Catral\nDiscover this exclusive new development offering only 7 modern apartments in a prime location next to the town center of Catral. Situated in the Vega Baja region of Alicante, Catral is known for its charming Mediterranean atmosphere, convenient services and excellent access to the coast. This residential project transforms a former unused commercial space in a 2008 building into stylish homes designed for comfort and modern living.\n\nSpacious and Stylish Apartments Ready to Move In\nEach unit offers a generous 94 m2 layout featuring an open plan living and dining area connected to a fully furnished kitchen, a laundry room, an 18 m2 terrace and 2 bathrooms. The distribution includes one bedroom and an additional office room that can serve as a guest space or multifunctional area.\nTwo of the apartments are nearly ready to move into, making this development an exceptional opportunity for buyers seeking a new home without waiting for lengthy completion times.\n\nHigh Quality Finishes and Modern Features\nThe apartments have been completely renovated with premium materials and are equipped with:\nElectric shutters\nDecorative natural stone wall in the dining area\nAerothermal system for hot water\nTwo solar panels with inverter\nFully installed ducted air conditioning for hot and cold air\nBathrooms with vanity units and mirrors\nKitchens furnished with upper and lower cabinets\n\nThese features ensure excellent energy efficiency, contemporary style and maximum comfort all year round.\n\nCentral Location Close to All Services\u2026",
       "stats": {
         "listings": 1
       }
@@ -6747,7 +6747,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Luxury Villas in La Finca Golf, Algorfa",
+      "bio": "Exclusive One floor Villas next to the Golf La Finca in Costa Blanca South\nDiscover this exclusive new build residential project of 11 independent villas located within the prestigious La Finca Golf Resort in Algorfa, one of the most sought after areas of the Vega Baja, Costa Blanca South. Surrounded by green landscapes, citrus groves and rolling fairways, this location offers tranquillity, privacy and a high quality Mediterranean lifestyle, while remaining close to all essential services and coastal attractions.\n\nModern Single Level Villas with Private Pool and Solarium\nEach villa is thoughtfully designed on one level, offering comfort and functionality throughout. The properties feature 3 spacious bedrooms and 2 modern bathrooms, an open plan American style kitchen, and a bright living and dining area with large windows that open directly onto the terrace and private garden. Outdoors, each villa enjoys a private swimming pool, parking space within the plot, and an impressive 150 sqm private solarium, ideal for enjoying the sun all year round.\n\nFor buyers seeking additional space, there is the option to add a basement or a fourth bedroom on an upper level at an extra cost, allowing you to tailor the home to your personal needs.\n\nHigh Quality Specifications and Elegant Finishes\nThese villas are built with premium materials and finishes to ensure comfort, efficiency and modern style. Features include a reinforced security entrance door, motorized shutters, fully furnished kitchens equipped with appliances, and bathrooms complete with furniture, mirrors and shower screens.\u2026",
       "stats": {
         "listings": 1
       }
@@ -6777,7 +6777,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Apartments in Benijofar with a central location",
+      "bio": "Contemporary Residential Living in Benijofar\nThis exclusive new development in Benijofar offers just 11 modern homes designed to combine contemporary architecture, comfort and high quality materials. The project includes ground floor and first floor apartments with spacious terraces, as well as penthouses with terraces and private solariums. Located in a central yet peaceful area of Benijofar and facing a large green zone, the residential enjoys excellent natural light throughout the day and a pleasant open outlook.\n\nModern Apartments with Premium Features\nEach property has been carefully designed to meet high standards of quality and functionality. All homes include a private garage space and storage room in the basement, with convenient lift access. Residents can also enjoy a stylish communal swimming pool surrounded by landscaped common areas, ideal for relaxing and socializing.\n\nThe penthouses stand out with their generous solariums, offering the option to install an outdoor kitchen and featuring a jacuzzi, creating a unique outdoor space perfect for entertaining or unwinding under the Mediterranean sun.\n\nHigh Quality Finishes and Energy Efficiency\nThe residential has been built with great attention to durability, efficiency and modern aesthetics. Features include:\nPreinstallation of ducted air conditioning and heating\nExterior carpentry with thermal break and double glazing\nAerothermal system for domestic hot water\nFurnished kitchens with appliances included\nInterior and exterior lighting package included\nBathrooms with vanity units, mirrors and shower screens\u2026",
       "stats": {
         "listings": 6
       }
@@ -6807,7 +6807,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Apartments in Bigastro Costa Blanca",
+      "bio": "Modern Residential Living in Vega Baja del Segura\nThis new residential development is located in the heart of the Vega Baja del Segura region, in the charming town of Bigastro, Alicante. Known for its peaceful atmosphere and traditional surroundings, Bigastro offers an excellent balance between nature, comfort and proximity to the main coastal destinations of the Costa Blanca. Just minutes from Orihuela and within easy reach of Torrevieja and Guardamar del Segura, this location is ideal for those seeking tranquillity without giving up connectivity and services.\n\nContemporary Apartments with Outdoor Spaces\nThe building consists of ground floor plus three levels and offers modern apartments with 2 bedrooms, 1 bathroom and 1 guest toilet, with enough space to add an additional shower. Each home has been designed to maximise space and natural light. Ground floor apartments feature large terraces or private gardens, middle floor properties offer spacious terraces, and penthouses enjoy private solariums, perfect for outdoor living all year round.\n\nQuality Finishes and Included Features\nAll apartments are delivered with high quality specifications designed for comfort and efficiency. Features include full air conditioning installation by ducts, furnished kitchens equipped with appliances, electric shutters, and bathrooms fitted with furniture, mirrors and shower screens. An underground parking space is included with every home, and selected units also benefit from a private storage room.\n\nCommunal Areas and Mediterranean Lifestyle\u2026",
       "stats": {
         "listings": 3
       }
@@ -6837,7 +6837,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Apartments in Rojales Close to Golf and Beaches",
+      "bio": "Modern Living in a Growing Area of Rojales\nThis new residential development is located in a modern expansion area of the charming town of Rojales, in the heart of the Costa Blanca South. The project consists of 14 new build homes in its first phase, designed to offer comfort, quality and an excellent location. The residential area allows easy walking access to all daily services such as supermarkets, restaurants, banks and pharmacies, making it ideal for both permanent living and holiday use.\n\nChoice of Ground Floor or Top Floor Homes\nThe development offers contemporary apartments with 2 bedrooms and 2 bathrooms, including a master bedroom with en suite bathroom. Buyers can choose between ground floor properties with spacious private terraces, perfect for outdoor living, or top floor homes featuring a terrace and a private solarium ideal for sunbathing and relaxing. Some of the top floor apartments are accessible by lift, adding extra convenience and accessibility.\n\nQuality Finishes and Energy Efficiency\nAll homes are built with high quality materials and modern specifications. The bathrooms include underfloor heating, fitted furniture with mirrors and shower screens. Kitchens are fully furnished and equipped with electrical appliances, offering a modern and functional design. Motorised shutters are included, along with pre installation for ducted air conditioning. Each property also benefits from the installation of 1 kW photovoltaic solar panels, contributing to improved energy efficiency and reduced running costs and Preinstallation for a private jacuzzi.\u2026",
       "stats": {
         "listings": 2
       }
@@ -6867,7 +6867,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Corner Quad Villas with Private Pool in Dolores, Alicante",
+      "bio": "Modern Villas in a Peaceful Vega Baja Setting\nThis exclusive new residential project is located in an expansion area of the charming town of Dolores, Alicante, within easy walking distance of the village center and surrounded by the open fields of the fertile Vega Baja region. Dolores offers a relaxed Mediterranean lifestyle with all daily services close at hand, while enjoying excellent connections to the coast and nearby cities. This location is ideal for those seeking tranquillity without sacrificing convenience.\n\nContemporary Single Level Homes with Outdoor Living\nThe development consists of only 14 modern corner quad villas, all distributed on one level for maximum comfort and accessibility. Each property offers 3 spacious bedrooms and 2 bathrooms, including a master bedroom with en suite bathroom. Designed to provide privacy and functionality, all homes feature a private swimming pool, parking within the plot and generous outdoor areas to enjoy the Mediterranean climate all year round. There is also the option to add a private solarium at an additional cost, creating extra space for sunbathing or relaxation.\n\nBright Open Plan Design\nInside, the villas offer a bright and elegant open plan living and dining area with a modern integrated kitchen and peninsula. Large sliding doors with recessed rails create a seamless transition between indoor and outdoor spaces, providing direct access to the garden, pool and parking area. This thoughtful layout enhances natural light and creates a welcoming atmosphere for everyday living and entertaining.\u2026",
       "stats": {
         "listings": 1
       }
@@ -6897,7 +6897,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Villas in La Finca Golf Resort Algorfa",
+      "bio": "Exclusive New Development in a Prestigious Golf Setting\nThis new residential development of 53 modern villas is located in the renowned La Finca Golf Resort in Algorfa, one of the most sought after areas of the Costa Blanca South. Surrounded by lush green landscapes, citrus groves and the rolling fairways of the golf course, this location offers tranquillity, privacy and a high quality Mediterranean lifestyle, while remaining close to essential services and the coast.\n\nChoice of Villa Models and Layouts\nThe project offers a wide selection of detached and semi detached villas in three different sizes of approximately 98 m2, 111 m2 or 135 m2. Homes are available on one or two levels and all feature three bedrooms and two bathrooms. The larger models also include a guest toilet. Villas on one level enjoy a spacious private rooftop solarium, while two level homes feature a large open terrace on the upper floor. Some units include a basement and others offer this option at an additional cost. All villas come with a private swimming pool and parking space within the plot.\n\nIbiza Style Design and Outdoor Living\nThe villas stand out for their elegant Ibiza style design with soft curved lines and bright white finishes that blend perfectly with the natural surroundings. Spacious outdoor areas are designed to enjoy the mild climate all year round, offering ideal spaces for relaxing, entertaining and making the most of outdoor living in a peaceful golf environment.\n\nHigh Quality Specifications and Comfort\u2026",
       "stats": {
         "listings": 3
       }
@@ -6927,7 +6927,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Ibiza Style Townhouses in Dolores Costa Blanca",
+      "bio": "Exclusive Residential Villas in a Peaceful Setting\nThis boutique residential development consists of just 6 new build townhouses with elegant Ibiza style architecture, located in the charming town of Dolores in the south of Alicante province. Set in a new expansion area close to the town center, these homes offer a quiet residential environment while remaining within walking distance of local services such as shops, restaurants, supermarkets and medical facilities. Dolores is surrounded by the fertile countryside of Vega Baja, known for its relaxed atmosphere and excellent quality of life.\n\nSingle Level Design with Spacious Outdoor Areas\nEach villa is designed on one single level to provide maximum comfort and accessibility. The interior layout includes an open plan kitchen connected to a bright living and dining area, three spacious bedrooms and two modern bathrooms. Outside, each property features a private plot with terrace, landscaped garden, private swimming pool and an on plot parking space (except 2 units). A highlight of these homes is the generous private solarium, offering open views of the surrounding countryside and the perfect space to enjoy the Mediterranean climate all year round.\n\nModern Finishes and Energy Efficient Features\nThese new build villas are constructed with modern materials and quality finishes. Features include electric shutters, a complete interior and exterior lighting package, and bathrooms fitted with furniture, mirrors and shower screens.\u2026",
       "stats": {
         "listings": 1
       }
@@ -6957,7 +6957,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Villa in La Zenia that redefines the concept of Mediterranean luxury",
+      "bio": "Just 700 metres from La Zenia beach, one of the most exclusive beaches on the Orihuela Costa, this stunning villa combines contemporary design, exclusive surroundings and an unrivalled location. A home designed for those seeking the exceptional: privacy, absolute comfort and a unique seaside living experience.\n\nSet on a spacious 592 m\u00b2 plot, this detached luxury villa has 3 bedrooms and 4 bathrooms and is spread over two floors with spacious and bright rooms. On the ground floor, a spectacular open-plan living-dining room flows into the designer kitchen and opens through large windows onto the private garden and swimming pool with jacuzzi, creating a perfect continuity between indoors and outdoors. This area becomes a true oasis of relaxation, ideal for enjoying the privileged climate of the Costa Blanca. The rear of the property has independent access and private parking for 2 cars, ensuring comfort and privacy. On this same floor there is a master bedroom with a dressing room and en-suite bathroom, as well as an additional guest bathroom. The first floor has two additional bedrooms, both with en-suite bathrooms, dressing rooms and direct access to a large terrace with spectacular open views of the surroundings. On the top floor is the private solarium, equipped with a shower and summer kitchen, an exclusive space to enjoy golden sunsets over the sea and golf course.\u2026",
       "stats": {
         "listings": 1
       }
@@ -6987,7 +6987,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Apartments in Benijofar Modern Living in a Prime Location",
+      "bio": "Exclusive New Development on the Costa Blanca South\nThis new residential development consists of 18 modern apartments located at the entrance of Benijofar, within walking distance of the town centre. Set in one of the fastest growing areas of the Costa Blanca South, the project combines contemporary architecture, quality materials and a strategic location, ideal for both permanent living and investment.\n\nApartment Types to Suit Every Lifestyle\nThe development offers spacious apartments with three bedrooms and two bathrooms, including one ensuite. Buyers can choose between ground floor homes with large terraces and private gardens, middle floor apartments with generous terraces, or penthouses with terrace and private solarium. The solarium include pre installation for a summer kitchen, perfect for enjoying the Mediterranean climate.\n\nModern Design and High Level Comfort\nEach apartment has been carefully designed to provide bright and open living spaces with a modern and functional layout. The homes feature an open plan living and dining area, a fully fitted kitchen with upper and lower cabinets, and high quality finishes throughout. The bedrooms are spacious and comfortable, while the bathrooms are fitted with modern materials and elegant details.\n\nThe residential complex includes a communal swimming pool and landscaped gardens, creating a relaxing environment for residents.\u2026",
       "stats": {
         "listings": 3
       }
@@ -7017,7 +7017,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Apartments in Torrevieja Just 400 m from Playa del Cura",
+      "bio": "Prime Location in the Heart of Torrevieja\nDiscover these brand new apartments and penthouses in one of the most sought after areas of Torrevieja, only 400 m from Playa del Cura and just 150 m from the seafront promenade. Located in the city centre, this vibrant neighborhood offers all essential services within walking distance, including supermarkets, shops, restaurants, cafes and public transport. Torrevieja is a well known coastal city on the Costa Blanca, famous for its mild Mediterranean climate, lively atmosphere and year round lifestyle by the sea.\n\nModern Apartments with Spacious Layouts\nThis exclusive new development consists of only 12 apartments and penthouses with 2 or 3 bedrooms, designed to offer comfort, functionality and contemporary style. Middle floor apartments feature generous terraces, while the penthouses enjoy an additional private solarium, ideal for sunbathing or outdoor dining. All homes include an open plan kitchen connected to the living and dining area, creating bright and welcoming interiors. Bedrooms come with fitted wardrobes, and bathrooms are fully equipped with furniture, mirrors and shower screens. Optional underground parking spaces and storage rooms are available at an extra cost.\n\nQuality Finishes and Energy Efficient Features\nThe apartments are built with high quality materials and a strong focus on energy efficiency. Exterior aluminum carpentry includes thermal break technology and double glazing for thermal and acoustic insulation. Motorized shutters add comfort and security.\u2026",
       "stats": {
         "listings": 4
       }
@@ -7047,7 +7047,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Newly built apartments in Torrevieja Just 600 metres from Playa del Cura beach",
+      "bio": "Prime location in the heart of Torrevieja\nDiscover these brand new apartments and penthouses in one of the most sought-after areas of Torrevieja, just 600 metres from Playa del Cura beach and 300 metres from the seafront promenade. Located in the city centre, this lively neighbourhood offers all essential amenities within walking distance, including supermarkets, shops, restaurants, caf\u00e9s and public transport. Torrevieja is a well-known coastal town on the Costa Blanca, famous for its mild Mediterranean climate, lively atmosphere and year-round seaside lifestyle.\n\nModern apartments with spacious layouts\nThis exclusive new development consists of only 12 one- and three-bedroom apartments and penthouses, designed for comfort, functionality and contemporary style. The apartments on the middle floors feature spacious terraces, while the penthouses enjoy an additional private solarium, ideal for sunbathing or al fresco dining. All homes include an open-plan kitchen connected to the living-dining room, creating bright and welcoming interiors. The bedrooms have fitted wardrobes and the bathrooms are fully equipped with furniture, mirrors and shower screens. Optional parking spaces are available at an additional cost.\n\nQuality finishes and energy-efficient features\nThe flats are built with high-quality materials and a strong focus on energy efficiency. The aluminium exterior joinery includes thermal break technology and double glazing for thermal and acoustic insulation. Motorised shutters add convenience and security.\u2026",
       "stats": {
         "listings": 4
       }
@@ -7077,7 +7077,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Villa with Private Pool in Vistabella, Jacarilla",
+      "bio": "Exclusive New Build Villa in a Natural and Golf Setting\nThis new build villa under self promotion regime is located in the peaceful area of Vistabella, within the municipality of Jacarilla. Set in a natural environment between the Vistabella Golf course and the La Pedrera reservoir, this property offers privacy, open views and a relaxed Mediterranean lifestyle. The area is ideal for those seeking tranquility while remaining close to the coast, golf courses and everyday services.\n\nVistabella is a well known residential area popular with international buyers thanks to its golf course, local restaurants and proximity to Orihuela Costa and Torrevieja. Jacarilla maintains its traditional Spanish charm, offering local shops, services and a friendly atmosphere all year round.\n\nModern Single Level Layout with Spacious Outdoor Areas\nThe villa is distributed on one single floor and has been designed to combine comfort, functionality and natural light. It offers 3 bedrooms and 2 bathrooms, including a master bedroom with ensuite bathroom. The open plan living and dining area connects seamlessly with the modern kitchen, creating a bright and welcoming living space.\n\nA covered terrace of 22 sqm provides direct access to the private garden, where a private swimming pool and landscaped areas invite you to enjoy the outdoor lifestyle. The generous 750 sqm plot also includes on plot parking space for two vehicles.\n\nPrivate Solarium with Open Views\nOne of the highlights of this villa is the impressive private solarium of 120 sqm, accessed via an external staircase.\u2026",
       "stats": {
         "listings": 1
       }
@@ -7107,7 +7107,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Tourist Licensed Apartments with Lagoon Views in El Raso Guardamar del Segura",
+      "bio": "Exclusive Gated Residential Complex in El Raso\nThis new build gated residential complex is located in El Raso, a well established and highly demanded residential area of Guardamar del Segura. Surrounded by nature and close to all essential services, El Raso is known for its peaceful environment, proximity to the Natural Park of La Mata Lagoon and excellent connections to the coast. This location offers the perfect balance between tranquility, leisure and investment potential on the Costa Blanca South.\n\nModern Tourist Licensed Apartments with Flexible Use\nThe development will consist of 108 new build tourist licensed apartments and penthouses distributed across ground floor homes with private garden, first floor apartments with spacious terraces, and second floor units with terrace and private solarium. All properties are designed to maximize natural light, outdoor living and views towards green areas and the Laguna de La Mata.\n\nOne of the key highlights of this project is that all properties come with a tourist rental license. Owners can enjoy personal use for up to 4 months per year and rent the property for the rest of the year, generating rental income managed by a professional rental company for complete peace of mind.\n\nFully Furnished and Ready to Move In Homes\nAll apartments will be delivered fully furnished and ready to move in. The price includes furniture, lighting, electrical appliances and fully finished bathrooms, making this an ideal turnkey investment. Buyers can choose between 2 or 3 bedroom layouts, all with 2 bathrooms.\u2026",
       "stats": {
         "listings": 6
       }
@@ -7137,7 +7137,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Luxury New Build Villas in Las Filipinas, Orihuela Costa",
+      "bio": "Exclusive Villas Near the Beaches of Orihuela Costa\nDiscover an exclusive new development of only 7 independent luxury villas located in Las Filipinas, a well established residential area in Orihuela Costa. This peaceful neighborhood offers a relaxed Mediterranean atmosphere with all essential services nearby, including supermarkets, restaurants, bars and shopping centers. Situated less than 5 km from the beautiful sandy beaches of the Costa Blanca, these villas combine modern architecture, comfort and functionality in a prime coastal setting.\n\nTwo Contemporary Villa Models to Choose From\nThe development offers two stylish villa designs, both featuring a private swimming pool and parking space within the plot:\n\nThe single level model includes 3 bedrooms and 2 bathrooms, one of them en suite. It offers 113 m2 built on generous plots of almost 300 m2, ideal for easy living on one floor.\n\nThe two level model plus basement offers 260 m2 built on plots of more than 220 m2. This layout includes 3 bedrooms, 3 bathrooms, two terraces on the first floor and a spacious basement. The basement can be customized as an office, games room, gym or private cinema, providing flexible living space for modern lifestyles.\n\nBoth models offer the option to add a private solarium at an extra cost. The single level villa also has the option to add a basement as an extra.\n\nModern Design and High Quality Features\nEach villa is designed with open plan living spaces that connect the kitchen and lounge area, creating a bright and welcoming environment.\u2026",
       "stats": {
         "listings": 2
       }
@@ -7167,7 +7167,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Residential Apartments in Los Balcones, Torrevieja",
+      "bio": "Modern Homes in a Prime Residential Area\nDiscover this attractive new build residential complex located in Los Balcones, one of the most popular and established neighborhoods on the outskirts of Torrevieja. Set in a peaceful environment with excellent access to all essential services, this development is just 4 km from the sandy beaches of the Costa Blanca. Los Balcones is known for its relaxed atmosphere, wide streets, green areas and proximity to hospitals, supermarkets, restaurants and shopping centers, making it ideal for year round living or holiday use.\n\nContemporary Apartments with Private Outdoor Spaces\nThe complex consists of 52 modern apartments built on a total surface of 6700 m2. Each property includes a private parking space and a storage room in the underground. The homes offer 2 or 3 bedrooms and 2 bathrooms, one of them en suite.\n\nBuyers can choose between ground floor apartments with a private garden or upper floor homes with a spacious terrace and a private solarium. These layouts are designed to maximize natural light and provide comfortable indoor and outdoor living spaces to enjoy the Mediterranean climate all year round.\n\nCommunal Areas Designed for Relaxation\nThe project is arranged into four blocks surrounding a large central communal area. This green heart of the development features a swimming pool with a dedicated children area and beautifully landscaped gardens. These shared spaces are perfect for relaxation, socializing and family time in a safe and friendly environment.\n\nQuality Features and Energy Efficient Design\u2026",
       "stats": {
         "listings": 4
       }
@@ -7197,7 +7197,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern New Build Villa on a Large Rustic Plot in Pinoso",
+      "bio": "Contemporary Living in a Peaceful Rural Setting\nDiscover this stylish new build villa located on a spacious rustic plot of 10.700 m2 on the outskirts of Pinoso, Alicante. Designed for those seeking privacy, tranquility and a close connection to nature, this modern home combines contemporary architecture with the charm of the Spanish countryside. Surrounded by vineyards, almond and olive groves, the property offers a serene lifestyle just a short drive from all local services.\n\nSpacious Single Level Villa with Private Pool\nThe villa is distributed on one level and features 3 bedrooms and 2 bathrooms, one of them en suite. The open plan layout follows an L shape design, separating the living area from the sleeping quarters for added comfort and privacy. The day area boasts high ceilings that enhance the sense of space and flood the interior with natural light.\n\nOutside, you will enjoy a private terrace and swimming pool, perfect for relaxing and entertaining under the Mediterranean sun. The property also includes a covered parking area for two cars, all set within a large rustic plot that offers endless possibilities for gardening, leisure areas or simply enjoying the surrounding views.\n\nModern Features and Quality Finishes\nThis new build villa comes equipped with ducted air conditioning for year round comfort. The kitchen is fully fitted and equipped with appliances, offering a functional and elegant space for daily living.\u2026",
       "stats": {
         "listings": 1
       }
@@ -7227,7 +7227,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern New Build Semi Detached Villas in Benferri Alicante",
+      "bio": "Exclusive New Development in Benfis Park\nDiscover this new promotion of 10 modern semi detached villas located in Benfis Park, Benferri, in the heart of the Vega Baja region of Alicante. This charming town offers a peaceful residential atmosphere with well kept streets and a welcoming community, ideal for families, retirees or anyone seeking a relaxed lifestyle under the Mediterranean sun. Benferri combines rural charm with excellent access to nearby towns, beaches and major transport links.\n\nSpacious Villas with Private Solarium\nEach villa offers a total built area of 222 sqm and is distributed over three floors plus a private solarium. The basement level includes a garage with space for two cars and a storage room. The ground floor features a bright open plan living and dining area with a modern kitchen, a laundry room and a guest toilet, with direct access to a terrace that surrounds the home. On the first floor there are three bedrooms and two bathrooms, one of them ensuite, as well as two terraces serving two of the bedrooms. The top floor offers a private solarium of approximately 39 sqm, perfect for sunbathing, outdoor dining or relaxing with open views.\n\nModern Features and Optional Pool\nThe villas come with a fully fitted kitchen including electrical appliances, and pre installation for ducted air conditioning. A private swimming pool is available as an optional extra, allowing buyers to further personalize their home.\u2026",
       "stats": {
         "listings": 1
       }
@@ -7257,7 +7257,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Scandinavian Style Homes in Aguas Nuevas Torrevieja",
+      "bio": "Exclusive New Residential Development\nWelcome to this exciting new residential project located in Aguas Nuevas, one of the most desirable areas of Torrevieja. This modern development offers a total of 31 homes, including 16 stylish apartments and 15 spacious villas, all designed with high quality materials and layouts adapted to contemporary Mediterranean living. The project combines comfort, design and an excellent location close to the sea and all daily services.\n\nScandinavian Inspired Design and Natural Light\nThe homes are inspired by Scandinavian architecture, featuring open plan interiors, clean lines and large windows that flood every space with natural light. This design creates bright, airy and welcoming homes with a strong sense of space and comfort, ideal for both permanent living and holidays on the Costa Blanca.\n\nModern Apartments with Private Outdoor Areas\nThe apartments offer 2 bedrooms and 2 bathrooms, including a master bedroom with ensuite bathroom. Ground floor units enjoy private gardens, while middle floor apartments and penthouses feature generous terraces perfect for outdoor dining and relaxation. All apartment blocks are equipped with lifts, ensuring comfort and accessibility for all residents.\n\nSpacious Villas with Private Pool\nThe villas offer 3 bedrooms and 3 bathrooms distributed over two floors plus a private solarium. Each villa includes a private swimming pool and underfloor heating powered by aerothermal energy, providing comfort and energy efficiency throughout the year.\u2026",
       "stats": {
         "listings": 3
       }
@@ -7287,7 +7287,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Newly built apartments in Torrevieja, just 600 metres from Playa del Cura beach",
+      "bio": "Prime location in the heart of Torrevieja\nDiscover these brand new apartments and penthouses in one of the most sought-after areas of Torrevieja, just 600 metres from Playa del Cura beach and 400 metres from the seafront promenade. Located in the city centre, this lively neighbourhood offers all essential amenities within walking distance, including supermarkets, shops, restaurants, caf\u00e9s and public transport. Torrevieja is a well-known coastal town on the Costa Blanca, famous for its mild Mediterranean climate, lively atmosphere and year-round seaside lifestyle.\n\nModern apartments with spacious layouts\nThis exclusive new development consists of only 14 apartments and penthouses, including studios and 1 or 2-bedroom properties, designed to offer comfort, functionality and contemporary style. All homes feature an open-plan kitchen connected to the living-dining room, equipped with appliances, creating bright and welcoming interiors. The bedrooms have fitted wardrobes and the bathrooms are fully equipped with furniture, mirrors, underfloor heating and shower screens.\n\nQuality finishes and energy-efficient features\nThe apartments are built with high-quality materials and a strong focus on energy efficiency. The exterior aluminium joinery includes thermal break technology and double glazing for thermal and acoustic insulation. Motorised blinds add comfort and security. Each home has pre-installation for air conditioning and ducted heating, reinforced entrance doors, a lighting pack and white lacquered interior doors.\u2026",
       "stats": {
         "listings": 4
       }
@@ -7317,7 +7317,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "Modern New Build Apartments in the Center of San Miguel de Salinas",
+      "bio": "Contemporary Living in a Healthy Mediterranean Environment\nLocated in the charming town of San Miguel de Salinas, just 10 km from the Mediterranean Sea, this new residential development offers the perfect balance between modern comfort and natural surroundings. The area is well known for its nearby salt lakes and exceptional microclimate, considered one of the healthiest in Europe. This peaceful yet vibrant town allows residents to enjoy the authentic Mediterranean lifestyle while being within walking distance of shops, restaurants, supermarkets and all essential services.\n\nSan Miguel de Salinas sits slightly inland on the Costa Blanca South, offering open views, fresh air and easy access to beaches, golf courses and shopping areas.\n\nStylish Apartments Designed for Comfort and Efficiency\nThe project consists of two modern buildings separated by a landscaped communal garden area. A total of 56 contemporary apartments are available with 1, 2 or 3 bedrooms, each featuring a private terrace. Every home has been designed with comfort, aesthetics and energy efficiency in mind, using high quality materials and modern insulation systems.\n\nEach apartment includes:\nArmored entrance door\nBathrooms with vanity units\nPre installation of ducted air conditioning\nEnergy certificate rating A\n\nThe layout and orientation of the homes ensure natural light throughout the day, creating bright and welcoming interiors ideal for both permanent living and holiday use.\n\nExceptional Communal Areas for Relaxation and Social Life\u2026",
       "stats": {
         "listings": 7
       }
@@ -7347,7 +7347,7 @@
       },
       "verified": false,
       "claimable": true,
-      "bio": "New Build Townhouses with Solarium and Basement Garage in Bigastro Vega Baja",
+      "bio": "Exclusive Development of Only Two Modern Homes\nThis boutique new build project consists of just two townhouses in the peaceful town of Bigastro, located in the Vega Baja area of the Costa Blanca South. Designed with a practical layout across several levels, these homes combine space, comfort and energy efficiency in a well connected residential setting.\n\nBigastro is known for its quiet atmosphere, traditional Spanish character and excellent access to nearby towns, beaches and services. It offers a relaxed lifestyle while being close to everything needed for daily living, making it ideal for both permanent residence and holiday use.\n\nSpacious Layout Across Four Levels\nEach property is distributed over basement, ground floor, first floor and rooftop solarium, providing generous interior and exterior living areas.\n\nThe 59 m2 basement is designed as a private garage with motorized access door, offering secure parking and additional storage space.\n\nOn the ground floor, you will find a bright open plan living room with kitchen, a guest toilet and two terraces, one at the front and one at the rear, allowing natural light and ventilation throughout the day.\n\nThe first floor features 3 bedrooms and 2 bathrooms, one of them ensuite, plus an additional terrace. On the top level, a private rooftop solarium of approximately 40 m2 provides the perfect space to relax, sunbathe or create an outdoor chill out area.\n\nQuality Features and Energy Efficient Systems\nThese homes are built with modern materials and thoughtful details to ensure comfort and efficiency, including:\u2026",
       "stats": {
         "listings": 1
       }
@@ -7362,7 +7362,7 @@
       "Costa Blanca South - Inland"
     ],
     "unique_developments": 240,
-    "generated_at_utc": "2026-02-15T17:40:48Z"
+    "generated_at_utc": "2026-02-15T18:42:02Z"
   }
 };
 })();

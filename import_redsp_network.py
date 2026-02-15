@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import html
 import json
 import os
 import re
@@ -82,8 +83,35 @@ def _clean_desc(value: str) -> str:
     desc = _t(value)
     if not desc:
         return ""
+
+    # Decode HTML entities such as "&#13;" and "&nbsp;".
+    # Note: some feeds double-encode, so we also handle leftover literals below.
+    try:
+        desc = html.unescape(desc)
+    except Exception:
+        pass
+
+    # Handle leftover literals when double-encoded.
+    desc = desc.replace("&#13;", "\n").replace("&#10;", "\n")
+
+    # Normalize basic HTML formatting into plain text.
+    desc = re.sub(r"<br\s*/?>", "\n", desc, flags=re.IGNORECASE)
+    desc = re.sub(r"</p\s*>", "\n\n", desc, flags=re.IGNORECASE)
+    desc = re.sub(r"<p\b[^>]*>", "", desc, flags=re.IGNORECASE)
+    desc = re.sub(r"</li\s*>", "\n", desc, flags=re.IGNORECASE)
+    desc = re.sub(r"<li\b[^>]*>", "- ", desc, flags=re.IGNORECASE)
+    desc = re.sub(r"<[^>]+>", " ", desc)
+
+    # Normalize newlines + whitespace.
+    desc = desc.replace("\r\n", "\n").replace("\r", "\n")
+    desc = desc.replace("\u00a0", " ")
+    desc = re.sub(r"[ \t]*\n[ \t]*", "\n", desc)
+    desc = re.sub(r"\n{3,}", "\n\n", desc)
+    desc = re.sub(r"[ \t]{2,}", " ", desc)
+    desc = desc.strip()
+
     # Some exports append a numeric supplier/account ID as a final line (e.g. "1073").
-    m = re.search(r"(?:&#13;|\r?\n)+\s*(\d{3,6})\s*$", desc)
+    m = re.search(r"(?:\n)+\s*(\d{3,6})\s*$", desc)
     if m:
         try:
             n = int(m.group(1))
@@ -91,6 +119,7 @@ def _clean_desc(value: str) -> str:
             n = None
         if n is not None and n < 1900:
             desc = desc[: m.start()].strip()
+
     return desc
 
 
@@ -100,12 +129,67 @@ def _first_sentence(value: str, max_len: int = 240) -> str:
         return ""
     # Split on a period followed by space, or line breaks.
     parts = re.split(r"(?:\.\s+|\r?\n+|&#13;)+", s)
-    first = _t(parts[0])
+
+    first = ""
+    for p in parts:
+        cand = _t(p)
+        if cand:
+            first = cand
+            break
     if not first:
         first = s
     if len(first) > max_len:
         return first[: max_len - 1].rstrip() + "…"
     return first
+
+
+def _cmp_key(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", _t(value).lower()).strip()
+
+
+def _strip_leading_duplicate(desc: str, heading: str) -> str:
+    d = _t(desc)
+    if not d:
+        return ""
+    h = _t(heading)
+    if not h:
+        return d
+    hk = _cmp_key(h)
+    if not hk:
+        return d
+
+    parts = [p.strip() for p in re.split(r"\n{2,}", d) if _t(p)]
+    if parts and _cmp_key(parts[0]) == hk:
+        return "\n\n".join(parts[1:]).strip()
+    return d
+
+
+def _truncate_text(value: str, max_len: int = 1400) -> str:
+    s = _t(value)
+    if not s:
+        return ""
+    if len(s) <= max_len:
+        return s
+
+    cut = s[: max_len - 1].rstrip()
+    window = 280
+    best = -1
+    best_sep = ""
+    for sep in ("\n\n", "\n", ". ", "! ", "? "):
+        idx = cut.rfind(sep)
+        if idx >= max(0, len(cut) - window) and idx > best:
+            best = idx
+            best_sep = sep
+    if best >= 0:
+        if best_sep in (". ", "! ", "? "):
+            cut = cut[: best + 1].rstrip()
+        else:
+            cut = cut[:best].rstrip()
+    else:
+        sp = cut.rfind(" ")
+        if sp >= max(0, len(cut) - 120):
+            cut = cut[:sp].rstrip()
+    return cut + "…"
 
 
 def _pick_lang(el: Optional[ET.Element], prefer: Tuple[str, ...]) -> str:
@@ -668,9 +752,12 @@ def main(argv: List[str]) -> int:
 
         type_label = _pluralize(ptype) if ptype and _t(ptype).lower() not in ("property", "properties") else "Homes"
         name = f"{town} {type_label}" if town else "New build homes"
-        headline = _first_sentence(devm_title.get(devref, ""), max_len=180) or "New build development."
-        bio = devm_desc.get(devref, "") or ""
-        bio = _first_sentence(bio, max_len=520) or "Development details coming soon."
+        title_clean = _clean_desc(devm_title.get(devref, ""))
+        headline = _first_sentence(title_clean, max_len=180) or "New build development."
+
+        bio_clean = _clean_desc(devm_desc.get(devref, "") or "")
+        bio_clean = _strip_leading_duplicate(bio_clean, title_clean or headline)
+        bio = _truncate_text(bio_clean, max_len=1600) or "Development details coming soon."
         hero = devm_hero.get(devref, "") or "assets/placeholder.png"
 
         tags = [ptype, "New build"]

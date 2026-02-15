@@ -23,6 +23,124 @@
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 
+  const decodeHtmlEntities = (raw) => {
+    const s = String(raw == null ? '' : raw);
+    if (!s) return '';
+    if (!s.includes('&')) return s;
+    try {
+      // textarea decodes entities but does not execute/parse tags as HTML.
+      const ta = document.createElement('textarea');
+      ta.innerHTML = s;
+      return ta.value;
+    } catch {
+      // Minimal fallback for the most common new-build feed artifacts.
+      return s
+        .replace(/&#13;/g, '\n')
+        .replace(/&#10;/g, '\n')
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/&amp;/gi, '&')
+        .replace(/&lt;/gi, '<')
+        .replace(/&gt;/gi, '>')
+        .replace(/&quot;/gi, '"');
+    }
+  };
+
+  const normalizeBioText = (raw) => {
+    let s = decodeHtmlEntities(raw);
+    if (!s) return '';
+
+    // Handle leftover entity literals (some feeds double-encode).
+    s = s.replace(/&#(?:13|10);/g, '\n');
+
+    // Normalize basic HTML formatting to text blocks.
+    s = s
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<\/p\s*>/gi, '\n\n')
+      .replace(/<p\b[^>]*>/gi, '')
+      .replace(/<\/li\s*>/gi, '\n')
+      .replace(/<li\b[^>]*>/gi, '- ')
+      .replace(/<[^>]+>/g, ' ');
+
+    // Normalize whitespace.
+    s = s
+      .replace(/\r\n?/g, '\n')
+      .replace(/\u00a0/g, ' ')
+      .replace(/[\t ]*\n[\t ]*/g, '\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .replace(/[\t ]{2,}/g, ' ')
+      .trim();
+
+    return s;
+  };
+
+  const compareKey = (value) => String(value || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+
+  const renderBioHtml = (raw, { headline = '' } = {}) => {
+    const text = normalizeBioText(raw);
+    if (!text) return '';
+
+    const blocks = [];
+    const lines = text.split('\n');
+    let para = [];
+    let list = [];
+
+    const flushPara = () => {
+      if (!para.length) return;
+      const joined = para.join(' ').replace(/[\t ]{2,}/g, ' ').trim();
+      para = [];
+      if (!joined) return;
+      blocks.push({ type: 'p', text: joined });
+    };
+
+    const flushList = () => {
+      if (!list.length) return;
+      const items = list.map((x) => String(x || '').trim()).filter(Boolean);
+      list = [];
+      if (!items.length) return;
+      blocks.push({ type: 'ul', items });
+    };
+
+    lines.forEach((lineRaw) => {
+      const line = String(lineRaw || '').trim();
+      if (!line) {
+        flushPara();
+        flushList();
+        return;
+      }
+      const m = line.match(/^(?:[-*•]|\u2022)\s+(.*)$/);
+      if (m) {
+        flushPara();
+        const item = String(m[1] || '').trim();
+        if (item) list.push(item);
+        return;
+      }
+      flushList();
+      para.push(line);
+    });
+    flushPara();
+    flushList();
+
+    // Drop duplicated heading/title if the feed repeats it at the top.
+    const headKey = compareKey(headline);
+    if (headKey && blocks.length && blocks[0].type === 'p' && compareKey(blocks[0].text) === headKey) {
+      blocks.shift();
+    }
+
+    // Render safe HTML blocks (we escape all text).
+    return blocks.map((b, idx) => {
+      if (b.type === 'ul') {
+        return `<ul class="network-bio__list">${b.items.map((it) => `<li>${esc(it)}</li>`).join('')}</ul>`;
+      }
+      const cls = idx === 0 ? ' class="network-bio__lead"' : '';
+      return `<p${cls}>${esc(b.text)}</p>`;
+    }).join('');
+  };
+
   const withTimeout = async (promise, ms, label) => {
     let timer;
     try {
@@ -236,13 +354,15 @@
 
     const label = kindLabel(kind);
     const name = esc(entity.name || '');
-    const headline = esc(entity.headline || '');
+    const headlineRaw = String(entity.headline || '').trim();
+    const headline = esc(headlineRaw);
     const loc = esc(fmtLocation(entity.location) || '');
     const langs = esc(fmtLangs(entity.languages) || '');
     const tags = Array.isArray(entity.tags) ? entity.tags.map((x) => String(x || '').trim()).filter(Boolean).slice(0, 10) : [];
     const img = esc(entity.photo_url || entity.logo_url || entity.hero_url || entity.cover_url || 'assets/placeholder.png');
     const verified = !!entity.verified;
-    const bio = esc(entity.bio || '');
+    const bioRaw = String(entity.bio || '');
+    const bioHtml = renderBioHtml(bioRaw, { headline: headlineRaw });
     const profileRefRaw = String(entity.ref || entity.scp_ref || '').trim();
 
     try {
@@ -374,13 +494,15 @@
         </div>
       </div>
 
-      <div class="network-profile__grid">
-        <section class="simple-section">
-          <h2 data-i18n="network.profile.about">About</h2>
-          ${bio ? `<p>${bio}</p>` : `<p class="muted">${esc(t('network.profile.no_bio', 'No bio yet.'))}</p>`}
-        </section>
+        <div class="network-profile__grid">
+          <section class="simple-section">
+            <h2 data-i18n="network.profile.about">About</h2>
+            ${bioHtml
+      ? `<div class="network-bio" data-i18n-dynamic-ignore>${bioHtml}</div>`
+      : `<p class="muted">${esc(t('network.profile.no_bio', 'No bio yet.'))}</p>`}
+          </section>
 
-        <section class="simple-section">
+          <section class="simple-section">
           <h2 data-i18n="network.profile.relationships">Relationships</h2>
           <div class="network-rel-grid">
             ${agency ? `
