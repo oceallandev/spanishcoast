@@ -9,6 +9,7 @@
     agencies: [
       {
         id: 'agency_scp',
+        ref: 'SCP-Age-0001',
         slug: 'spanish-coast-properties',
         name: 'Spanish Coast Properties',
         headline: 'Concierge-style property, business, and vehicle deals in Costa Blanca South.',
@@ -33,6 +34,7 @@
     agents: [
       {
         id: 'agent_adrian',
+        ref: 'SCP-Age-0002',
         slug: 'adrian',
         name: 'Adrian',
         headline: 'Property advisor and operations lead.',
@@ -54,6 +56,7 @@
       },
       {
         id: 'agent_dev_sales',
+        ref: 'SCP-Age-0003',
         slug: 'newbuild-sales-team',
         name: 'New Build Sales Team',
         headline: 'Developer-side sales and viewing coordination.',
@@ -73,6 +76,7 @@
     developers: [
       {
         id: 'dev_partner_1',
+        ref: 'SCP-Dev-0001',
         slug: 'costa-blanca-developments',
         name: 'Costa Blanca Developments',
         headline: 'New build partner (Costa Blanca South).',
@@ -89,8 +93,9 @@
     ],
     developments: [
       {
-        id: 'devm_p01939',
-        slug: 'bigastro-townhouses-p01939',
+        id: 'devm_bigastro_townhouses',
+        ref: 'SCP-Dev-0002',
+        slug: 'bigastro-townhouses',
         name: 'Bigastro Townhouses',
         headline: 'Boutique development: 2 townhouses with solarium + basement garage.',
         location: { town: 'Bigastro', province: 'Alicante', costa: 'Costa Blanca South' },
@@ -98,18 +103,14 @@
         tags: ['Town house', 'New build', 'Pool', 'Solarium'],
         hero_url: 'assets/placeholder.png',
         verified: true,
-        source_refs: {
-          // Example mapping for REDSP v4:
-          // <development_ref>P01939</development_ref>
-          redsp: { development_ref: 'P01939' }
-        },
         bio:
-          'Example development profile mapped to a REDSP development ref (P01939). You can link this to imported new-build listings later.'
+          'Example development profile. You can link this to imported new-build listings later.'
       }
     ],
     collaborators: [
       {
         id: 'col_architects',
+        ref: 'SCP-Col-0001',
         slug: 'licence-architect-partners',
         name: 'Licence and Architect Partners',
         kind: 'architects',
@@ -127,4 +128,3 @@
     ]
   };
 })();
-

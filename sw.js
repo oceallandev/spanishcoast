@@ -1,5 +1,5 @@
 /* Minimal same-origin service worker for instant repeat loads on mobile WebKit/Android. */
-const CACHE_NAME = 'scp-cache-20260215d';
+const CACHE_NAME = 'scp-cache-20260215f';
 
 const PRECACHE_PATHS = [
   './',
@@ -17,6 +17,8 @@ const PRECACHE_PATHS = [
   './client-catalog.html',
   './property-add.html',
   './account.html',
+  './affiliate.html',
+  './affiliate-terms.html',
   './guide.html',
   './shop.html',
   './admin-favourites.html',
@@ -24,6 +26,7 @@ const PRECACHE_PATHS = [
   './admin-properties.html',
   './admin-crm.html',
   './admin-shop.html',
+  './admin-affiliates.html',
   './admin-ref-map.html',
   './admin-scout.html',
   './viewing-trip.html',
@@ -77,13 +80,16 @@ const PRECACHE_PATHS = [
   './blog.js?v=20260211l',
   './blog-posts.js?v=20260211d',
   './blog-posts.json',
-  './network-data.js?v=20260215c',
-  './network.js?v=20260215d',
-  './network-profile.js?v=20260215d',
+  './network-data.js?v=20260215f',
+  './network-redsp.js?v=20260215f',
+  './network-merge.js?v=20260215f',
+  './network.js?v=20260215e',
+  './network-profile.js?v=20260215f',
   './config.js?v=20260211d',
   './i18n.js?v=20260213b',
   './supabase-init.js?v=20260211d',
   './account.js?v=20260215d',
+  './affiliate.js?v=20260215a',
   './guide.js?v=20260211d',
   './shop.js?v=20260212a',
   './basket.js?v=20260211d',
@@ -92,6 +98,7 @@ const PRECACHE_PATHS = [
   './admin-properties.js?v=20260211d',
   './admin-crm.js?v=20260211d',
   './admin-shop.js?v=20260212a',
+  './admin-affiliates.js?v=20260215a',
   './admin-ref-map.js?v=20260214c',
   './admin-scout.js?v=20260214b',
   './street-scout.js?v=20260212a',
@@ -203,6 +210,8 @@ self.addEventListener('fetch', (event) => {
     || url.pathname.endsWith('/blog-posts.js')
     || url.pathname.endsWith('/blog-posts.json')
     || url.pathname.endsWith('/network-data.js')
+    || url.pathname.endsWith('/network-redsp.js')
+    || url.pathname.endsWith('/network-merge.js')
   ) {
     event.respondWith((async () => {
       const cache = await caches.open(CACHE_NAME);

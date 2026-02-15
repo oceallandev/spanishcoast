@@ -1,6 +1,6 @@
 // Network profile page renderer.
 (() => {
-  const data = window.scpNetworkData || null;
+  const data = window.scpNetworkDataMerged || window.scpNetworkData || null;
   const root = document.getElementById('network-profile');
   if (!data || !root) return;
 
@@ -243,29 +243,89 @@
     const img = esc(entity.photo_url || entity.logo_url || entity.hero_url || entity.cover_url || 'assets/placeholder.png');
     const verified = !!entity.verified;
     const bio = esc(entity.bio || '');
+    const profileRefRaw = String(entity.ref || entity.scp_ref || '').trim();
 
     try {
       document.title = `${entity.name || label} | Spanish Coast Properties`;
     } catch { /* ignore */ }
 
-    const sources = (() => {
-      if (!entity.source_refs || typeof entity.source_refs !== 'object') return '';
-      const redspRef = entity.source_refs.redsp && entity.source_refs.redsp.development_ref ? String(entity.source_refs.redsp.development_ref) : '';
-      if (!redspRef) return '';
-      return `
-        <div class="network-kv">
-          <div class="network-kv__k">${esc(t('network.profile.source_refs', 'Source refs'))}</div>
-          <div class="network-kv__v">
-            <span class="network-pill" data-i18n-dynamic-ignore>REDSP: ${esc(redspRef)}</span>
-          </div>
+    const refRow = `
+      <div class="network-kv">
+        <div class="network-kv__k" data-i18n="network.profile.ref">Reference</div>
+        <div class="network-kv__v">
+          ${profileRefRaw
+    ? `<span class="network-pill" data-i18n-dynamic-ignore>${esc(profileRefRaw)}</span>`
+    : `<span class="muted">${esc(t('common.na', 'N/A'))}</span>`}
         </div>
-      `;
-    })();
+      </div>
+    `;
+
+    const adminSourceRow = isAdmin ? `
+      <div class="network-kv">
+        <div class="network-kv__k" data-i18n="network.profile.source_ref">Source ref</div>
+        <div class="network-kv__v" style="display:flex; flex-wrap:wrap; gap:0.45rem; align-items:center;">
+          <button class="ref-chip ref-chip--small" type="button" id="network-source-ref-btn">${esc(t('network.profile.source_ref_btn', 'Show'))}</button>
+          <span class="network-pill" id="network-source-ref-out" style="display:none" data-i18n-dynamic-ignore></span>
+        </div>
+      </div>
+    ` : '';
 
     const suspendedBanner = suspended && isAdmin ? `
       <div class="network-suspend-banner" role="status">
         <span class="network-pill network-pill--danger">${esc(t('network.suspended', 'Suspended'))}</span>
         <span class="network-suspend-banner__text">${esc(reason || t('network.suspended_reason_unknown', 'No reason provided.'))}</span>
+      </div>
+    ` : '';
+
+    const claimMailto = (() => {
+      const subj = encodeURIComponent(`Profile claim: ${kind}:${slug}`);
+      const body = encodeURIComponent(
+        `Hello Spanish Coast Properties,\n\n` +
+        `I would like to request control over this public Network profile:\n` +
+        `${profileRefRaw ? `- Reference: ${profileRefRaw}\n` : ''}` +
+        `- Type: ${kind}\n` +
+        `- Slug: ${slug}\n` +
+        `- Name: ${entity.name || ''}\n\n` +
+        `Please include your contact details, proof of ownership/representation, and whether you want to edit or delete the profile.\n`
+      );
+      return `mailto:info@spanishcoastproperties.com?subject=${subj}&body=${body}`;
+    })();
+
+    const claimCard = entity && entity.claimable ? `
+      <div class="network-sidecard">
+        <div class="network-sidecard__title" data-i18n="network.profile.claim.title">Own this profile?</div>
+        <div class="muted" style="margin-top:0.35rem" data-i18n="network.profile.claim.subtitle">
+          If you represent this profile, you can request to edit or delete it.
+        </div>
+        <div class="form-actions" style="margin-top:0.75rem">
+          <button class="cta-button cta-button--outline" type="button" id="profile-claim-open" data-i18n="network.profile.claim.open_btn">Request control</button>
+          <a class="cta-button cta-button--outline" href="${esc(claimMailto)}" data-i18n="network.profile.claim.email_btn">Email us</a>
+        </div>
+        <form id="profile-claim-form" class="form-grid" style="display:none; margin-top:0.85rem">
+          <label>
+            <span data-i18n="network.profile.claim.action">Action</span>
+            <select id="profile-claim-action" class="admin-select">
+              <option value="edit" data-i18n="network.profile.claim.action_edit">Edit this profile</option>
+              <option value="delete" data-i18n="network.profile.claim.action_delete">Delete this profile</option>
+            </select>
+          </label>
+          <label>
+            <span data-i18n="network.profile.claim.name">Your name</span>
+            <input id="profile-claim-name" type="text" placeholder="Your full name" data-i18n-placeholder="network.profile.claim.name_placeholder">
+          </label>
+          <label>
+            <span data-i18n="network.profile.claim.email">Your email</span>
+            <input id="profile-claim-email" type="email" placeholder="you@company.com" data-i18n-placeholder="network.profile.claim.email_placeholder" required>
+          </label>
+          <label>
+            <span data-i18n="network.profile.claim.message">Message</span>
+            <textarea id="profile-claim-message" placeholder="Add proof (website, phone, role) and what you want to change…" data-i18n-placeholder="network.profile.claim.message_placeholder"></textarea>
+          </label>
+          <div class="form-actions">
+            <button class="cta-button" type="submit" id="profile-claim-submit" data-i18n="network.profile.claim.submit">Send request</button>
+          </div>
+          <div id="profile-claim-status" class="muted" aria-live="polite"></div>
+        </form>
       </div>
     ` : '';
 
@@ -301,6 +361,7 @@
                 ${renderActions(entity.contacts)}
               </div>
             </div>
+            ${claimCard}
             <div class="network-sidecard">
               <div class="network-sidecard__title" data-i18n="network.profile.quick_facts">Quick facts</div>
               <div class="network-kv">
@@ -311,7 +372,8 @@
                 <div class="network-kv__k" data-i18n="network.profile.languages">Languages</div>
                 <div class="network-kv__v" data-i18n-dynamic-ignore>${langs || esc(t('common.na', 'N/A'))}</div>
               </div>
-              ${sources}
+              ${refRow}
+              ${adminSourceRow}
             </div>
           </aside>
         </div>
@@ -375,5 +437,215 @@
         </section>
       </div>
     `;
+
+    const copyTextToClipboard = async (text) => {
+      const v = String(text == null ? '' : text);
+      if (!v.trim()) return false;
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(v);
+          return true;
+        }
+      } catch { /* ignore */ }
+      try {
+        window.prompt('Copy:', v);
+        return true;
+      } catch {
+        return false;
+      }
+    };
+
+    const sourceLabel = (source) => {
+      const s = String(source || '').trim().toLowerCase();
+      if (!s) return '';
+      if (s.includes('redsp')) return 'REDSP';
+      const up = s.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      if (!up) return '';
+      return up.length <= 8 ? up : up.slice(0, 8);
+    };
+
+    // Admin-only: fetch and reveal external/source references on demand.
+    const wireSourceRefUi = () => {
+      if (!isAdmin) return;
+      const btn = document.getElementById('network-source-ref-btn');
+      const out = document.getElementById('network-source-ref-out');
+      if (!btn || !out) return;
+      if (!profileRefRaw) {
+        btn.style.display = 'none';
+        return;
+      }
+
+      btn.addEventListener('click', async () => {
+        const cached = String(out.dataset.originalRef || '').trim();
+        if (cached) {
+          const prev = btn.textContent;
+          await copyTextToClipboard(cached);
+          btn.textContent = t('network.profile.source_ref_copied', 'Copied');
+          window.setTimeout(() => { btn.textContent = prev || t('network.profile.source_ref_copy', 'Copy'); }, 1100);
+          return;
+        }
+
+        if (!client) return;
+
+        const prevText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = t('network.profile.source_ref_loading', 'Loading…');
+        try {
+          const { data, error } = await withTimeout(
+            client.from('network_profile_ref_map')
+              .select('kind,source,original_ref,original_id')
+              .eq('scp_ref', profileRefRaw)
+              .maybeSingle(),
+            AUTH_TIMEOUT_MS,
+            'Load source ref'
+          );
+          if (error) throw error;
+
+          const originalRef = data && data.original_ref ? String(data.original_ref).trim() : '';
+          if (!originalRef) {
+            btn.textContent = t('network.profile.source_ref_not_found', 'Not found');
+            window.setTimeout(() => { btn.textContent = prevText || t('network.profile.source_ref_btn', 'Show'); }, 1400);
+            return;
+          }
+
+          const src = sourceLabel(data && data.source);
+          const label = src ? `${src}: ` : '';
+          const originalId = data && data.original_id ? String(data.original_id).trim() : '';
+          const suffix = originalId ? ` · ${originalId}` : '';
+          out.textContent = `${label}${originalRef}${suffix}`;
+          out.dataset.originalRef = originalRef;
+          out.dataset.originalId = originalId;
+          out.style.display = 'inline-flex';
+
+          await copyTextToClipboard(originalRef);
+          btn.textContent = t('network.profile.source_ref_copied', 'Copied');
+          window.setTimeout(() => { btn.textContent = t('network.profile.source_ref_copy', 'Copy'); }, 1100);
+        } catch (error) {
+          const msg = error && error.message ? String(error.message) : String(error || '');
+          const lower = msg.toLowerCase();
+          if (lower.includes('relation') && lower.includes('network_profile_ref_map')) {
+            btn.textContent = t(
+              'network.profile.source_ref_table_missing',
+              'Missing table'
+            );
+          } else if (lower.includes('permission') || lower.includes('rls')) {
+            btn.textContent = t('network.profile.source_ref_admin_only', 'Admin only');
+          } else {
+            btn.textContent = t('network.profile.source_ref_failed', 'Failed');
+          }
+          window.setTimeout(() => { btn.textContent = prevText || t('network.profile.source_ref_btn', 'Show'); }, 1600);
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    };
+
+    wireSourceRefUi();
+
+    // Claim request UI (optional, only for claimable imported profiles).
+    const wireClaimUi = () => {
+      if (!entity || !entity.claimable) return;
+      const openBtn = document.getElementById('profile-claim-open');
+      const form = document.getElementById('profile-claim-form');
+      const statusEl = document.getElementById('profile-claim-status');
+      const actionEl = document.getElementById('profile-claim-action');
+      const nameEl = document.getElementById('profile-claim-name');
+      const emailEl = document.getElementById('profile-claim-email');
+      const msgEl = document.getElementById('profile-claim-message');
+      const submitBtn = document.getElementById('profile-claim-submit');
+      if (!openBtn || !form || !statusEl || !emailEl || !submitBtn || !actionEl) return;
+
+      const loadUser = async () => {
+        if (!client || !client.auth) return null;
+        try {
+          const out = await withTimeout(client.auth.getSession(), AUTH_TIMEOUT_MS, 'Session check');
+          const session = out && out.data ? out.data.session : null;
+          const user = session && session.user ? session.user : null;
+          return user && user.id ? user : null;
+        } catch {
+          return null;
+        }
+      };
+
+      const prefill = async () => {
+        const user = await loadUser();
+        if (user && user.email && !String(emailEl.value || '').trim()) {
+          emailEl.value = String(user.email);
+        }
+        return user;
+      };
+
+      openBtn.addEventListener('click', async () => {
+        const isOpen = form.style.display !== 'none';
+        form.style.display = isOpen ? 'none' : 'grid';
+        if (!isOpen) {
+          statusEl.textContent = '';
+          await prefill();
+        }
+      });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!client) {
+          statusEl.textContent = t('network.profile.claim.no_client', 'Supabase client not available on this page.');
+          return;
+        }
+
+        const email = String(emailEl.value || '').trim().toLowerCase();
+        if (!email || !email.includes('@')) {
+          statusEl.textContent = t('network.profile.claim.invalid_email', 'Please enter a valid email.');
+          return;
+        }
+
+        const user = await prefill();
+        if (!user) {
+          statusEl.innerHTML = esc(t('network.profile.claim.sign_in_required', 'Sign in first on Account, then submit again.'));
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = t('network.profile.claim.sending', 'Sending…');
+        statusEl.textContent = t('network.profile.claim.sending', 'Sending…');
+
+        try {
+          const payload = {
+            kind,
+            slug,
+            requester_user_id: user.id,
+            requester_email: email,
+            requester_name: String(nameEl && nameEl.value ? nameEl.value : '').trim() || null,
+            requested_action: String(actionEl.value || 'edit'),
+            message: String(msgEl && msgEl.value ? msgEl.value : '').trim() || null,
+            status: 'new'
+          };
+
+          const { error } = await withTimeout(
+            client.from('network_profile_claims').insert(payload),
+            AUTH_TIMEOUT_MS,
+            'Submit claim'
+          );
+          if (error) throw error;
+
+          statusEl.textContent = t('network.profile.claim.sent', 'Request sent. Our team will reply by email.');
+          form.reset();
+          form.style.display = 'none';
+        } catch (error) {
+          const msg = error && error.message ? String(error.message) : String(error || '');
+          if (msg.toLowerCase().includes('relation') && msg.toLowerCase().includes('network_profile_claims')) {
+            statusEl.textContent = t(
+              'network.profile.claim.table_missing',
+              'Claim requests table is missing. Admin: run `supabase_network_claims.sql` in Supabase SQL editor.'
+            );
+          } else {
+            statusEl.textContent = t('network.profile.claim.failed', 'Failed to send: {error}', { error: msg });
+          }
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = t('network.profile.claim.submit', 'Send request');
+        }
+      });
+    };
+
+    wireClaimUi();
   })();
 })();

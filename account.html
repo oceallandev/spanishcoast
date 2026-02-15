@@ -11,9 +11,8 @@
     <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/account.html">
 
     <meta name="theme-color" content="#030712">
-    <link rel="manifest" href="manifest.webmanifest?v=20260211a">
     <link rel="stylesheet" href="style.css?v=20260212b">
-    <script defer src="i18n.js?v=20260213b"></script>
+    <script defer src="i18n.js?v=20260215c"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -340,6 +339,11 @@
                         <div class="account-tile-v" data-i18n="account.tiles.scout_title">Street Scout (€200–€500)</div>
                         <div class="muted" data-i18n="account.tiles.scout_desc">Snap a For Sale board and earn when it closes.</div>
                     </a>
+                    <a class="glass panel account-tile" href="affiliate.html" id="dash-affiliate-tile">
+                        <div class="account-tile-k" data-i18n="account.tiles.affiliate">Earn</div>
+                        <div class="account-tile-v" data-i18n="account.tiles.affiliate_title">Recommend (10%)</div>
+                        <div class="muted" data-i18n="account.tiles.affiliate_desc">Share links and earn 10% of SCP fees from referred clients.</div>
+                    </a>
                     <a class="glass panel account-tile" href="admin-favourites.html" id="dash-admin-tile" style="display:none">
                         <div class="account-tile-k" data-i18n="account.tiles.admin">Admin</div>
                         <div class="account-tile-v" data-i18n="account.tiles.admin_fav_title">Favourites inbox</div>
@@ -389,6 +393,7 @@
                                 <a class="cta-button cta-button--outline" href="admin-properties.html">Property Inbox</a>
                                 <a class="cta-button cta-button--outline" href="admin-crm.html" data-i18n="account.admin.btn.crm">CRM</a>
                                 <a class="cta-button cta-button--outline" href="admin-shop.html" data-i18n="account.admin.btn.shop">Shop Editor</a>
+                                <a class="cta-button cta-button--outline" href="admin-affiliates.html" data-i18n="account.admin.btn.affiliates">Affiliates</a>
                                 <a class="cta-button cta-button--outline" href="admin-ref-map.html">Original refs map</a>
                                 <a class="cta-button cta-button--outline" href="admin-scout.html" data-i18n="account.admin.btn.scout">Street Scout Inbox</a>
                             </div>
@@ -418,6 +423,19 @@
                         </div>
                         <div id="admin-network-status" class="muted" style="margin-top:0.5rem;"></div>
                         <div id="admin-network-list" class="account-admin-users-list"></div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <h3 style="margin:0;" data-i18n="account.admin.claims.title">Profile claims</h3>
+                    <div class="muted" style="margin-top:0.35rem;" data-i18n="account.admin.claims.subtitle">Requests from developers/agencies to edit or delete their public Network profile.</div>
+                    <div class="account-admin-users">
+                        <div class="account-admin-users-bar">
+                            <input id="admin-claims-q" class="admin-input" type="text" placeholder="Search claims (email, slug, status)" data-i18n-placeholder="account.admin.claims.search_placeholder">
+                            <button id="admin-claims-refresh" class="cta-button cta-button--outline" type="button" data-i18n="account.admin.search">Search</button>
+                        </div>
+                        <div id="admin-claims-status" class="muted" style="margin-top:0.5rem;"></div>
+                        <div id="admin-claims-list" class="account-admin-users-list"></div>
                     </div>
 
                     <div class="divider"></div>
@@ -511,9 +529,11 @@
     </footer>
 
     <script defer src="basket.js?v=20260211a"></script>
-    <script defer src="network-data.js?v=20260215c"></script>
-    <script defer src="account.js?v=20260215d"></script>
-    <script defer src="site.js?v=20260215a"></script>
+    <script defer src="network-data.js?v=20260215f"></script>
+    <script defer src="network-redsp.js?v=20260215f"></script>
+    <script defer src="network-merge.js?v=20260215f"></script>
+    <script defer src="account.js?v=20260215e"></script>
+    <script defer src="site.js?v=20260215c"></script>
 </body>
 
 </html>
