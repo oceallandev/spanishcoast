@@ -1,5 +1,5 @@
 /* Minimal same-origin service worker for instant repeat loads on mobile WebKit/Android. */
-const CACHE_NAME = 'scp-cache-20260215b';
+const CACHE_NAME = 'scp-cache-20260215c';
 
 const PRECACHE_PATHS = [
   './',
@@ -53,6 +53,8 @@ const PRECACHE_PATHS = [
   './services.html',
   './agents.html',
   './blog.html',
+  './network.html',
+  './network-profile.html',
   './style.css?v=20260212b',
   './site.js?v=20260215a',
   './catalog.js?v=20260211d',
@@ -75,6 +77,9 @@ const PRECACHE_PATHS = [
   './blog.js?v=20260211l',
   './blog-posts.js?v=20260211d',
   './blog-posts.json',
+  './network-data.js?v=20260215c',
+  './network.js?v=20260215c',
+  './network-profile.js?v=20260215c',
   './config.js?v=20260211d',
   './i18n.js?v=20260213b',
   './supabase-init.js?v=20260211d',
@@ -197,6 +202,7 @@ self.addEventListener('fetch', (event) => {
     || url.pathname.endsWith('/vehicles-data.js')
     || url.pathname.endsWith('/blog-posts.js')
     || url.pathname.endsWith('/blog-posts.json')
+    || url.pathname.endsWith('/network-data.js')
   ) {
     event.respondWith((async () => {
       const cache = await caches.open(CACHE_NAME);

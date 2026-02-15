@@ -27,6 +27,7 @@
     path.endsWith('/businesses.html') || path.endsWith('businesses.html') ? 'businesses' :
     path.endsWith('/vehicles.html') || path.endsWith('vehicles.html') ? 'vehicles' :
     path.includes('/services') || path.endsWith('services.html') ? 'services' :
+    path.endsWith('/network.html') || path.endsWith('network.html') || path.endsWith('/network-profile.html') || path.endsWith('network-profile.html') ? 'network' :
     path.endsWith('/blog.html') || path.endsWith('blog.html') ? 'blog' :
     path.endsWith('/account.html') || path.endsWith('account.html') ? 'account' :
     path.endsWith('/admin-favourites.html') || path.endsWith('admin-favourites.html') ? 'account' :
@@ -37,6 +38,7 @@
   // Exception: new-builds.html intentionally uses body[data-section="properties"] to reuse the app layout,
   // but we still want the New Builds nav link to be active.
   const section = inferredSection === 'newbuilds' ? 'newbuilds' : (bodySection || inferredSection);
+  const activeSection = section;
 
   document.body.dataset.section = bodySection || section;
 
@@ -44,7 +46,7 @@
     link.classList.toggle('active', link.dataset.section === section);
   });
 
-  const ensureNavLink = (containerSelector, { href, text, section, afterHref }) => {
+  const ensureNavLink = (containerSelector, { href, text, section: linkSection, afterHref }) => {
     document.querySelectorAll(containerSelector).forEach((nav) => {
       if (!nav) return;
       const existing = Array.from(nav.querySelectorAll('a')).find((a) => (a.getAttribute('href') || '').includes(href));
@@ -54,7 +56,9 @@
       a.textContent = text;
       if (nav.classList.contains('primary-nav')) {
         a.className = 'nav-link';
-        if (section) a.dataset.section = section;
+        if (linkSection) a.dataset.section = linkSection;
+        // Highlight newly-inserted links when they represent the current page section.
+        if (a.dataset.section) a.classList.toggle('active', a.dataset.section === activeSection);
       }
       if (afterHref) {
         const anchors = Array.from(nav.querySelectorAll('a'));
@@ -105,6 +109,7 @@
           <a href="vehicles.html">Vehicles</a>
           <a href="services.html">Services</a>
           <a href="blog.html">Blog</a>
+          <a href="network.html">Network</a>
           <a href="account.html">Account</a>
         </nav>
         <div class="mobile-menu-foot">
@@ -155,6 +160,11 @@
   // Make Blog discoverable without having to update every page header/footer manually.
   ensureNavLink('.primary-nav', { href: 'blog.html', text: t('nav.blog') || 'Blog', section: 'blog', afterHref: 'services.html' });
   ensureNavLink('.mobile-menu-links', { href: 'blog.html', text: t('nav.blog') || 'Blog', afterHref: 'services.html' });
+
+  // Make Network discoverable without having to update every page header/footer manually.
+  // Put it after Blog so consumer navigation stays familiar.
+  ensureNavLink('.primary-nav', { href: 'network.html', text: t('nav.network') || 'Network', section: 'network', afterHref: 'blog.html' });
+  ensureNavLink('.mobile-menu-links', { href: 'network.html', text: t('nav.network') || 'Network', afterHref: 'blog.html' });
 
   // Add "New Builds" to footer explore lists (only when a Properties link exists in that list).
   (() => {
@@ -248,6 +258,7 @@
     setLinkText('.primary-nav .nav-link[data-section=\"vehicles\"]', tr('nav.vehicles', 'Vehicles'));
     setLinkText('.primary-nav .nav-link[data-section=\"services\"]', tr('nav.services', 'Services'));
     setLinkText('.primary-nav .nav-link[data-section=\"blog\"]', tr('nav.blog', 'Blog'));
+    setLinkText('.primary-nav .nav-link[data-section=\"network\"]', tr('nav.network', 'Network'));
     setLinkText('.primary-nav .nav-link[data-section=\"account\"]', tr('nav.account', 'Account'));
 
     // Mobile menu uses plain <a> tags.
@@ -258,6 +269,7 @@
     setLinkText('.mobile-menu-links a[href=\"vehicles.html\"]', tr('nav.vehicles', 'Vehicles'));
     setLinkText('.mobile-menu-links a[href=\"services.html\"]', tr('nav.services', 'Services'));
     setLinkText('.mobile-menu-links a[href=\"blog.html\"]', tr('nav.blog', 'Blog'));
+    setLinkText('.mobile-menu-links a[href=\"network.html\"]', tr('nav.network', 'Network'));
     setLinkText('.mobile-menu-links a[href=\"account.html\"]', tr('nav.account', 'Account'));
 
     // Common CTA labels.
