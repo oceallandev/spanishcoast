@@ -249,26 +249,22 @@
       document.title = `${entity.name || label} | Spanish Coast Properties`;
     } catch { /* ignore */ }
 
+    // Show the internal SCP reference to everyone.
+    // Admin-only: allow revealing the source ref only on demand (button).
     const refRow = `
       <div class="network-kv">
         <div class="network-kv__k" data-i18n="network.profile.ref">Reference</div>
-        <div class="network-kv__v">
+        <div class="network-kv__v" style="display:flex; flex-wrap:wrap; gap:0.45rem; align-items:center;">
           ${profileRefRaw
     ? `<span class="network-pill" data-i18n-dynamic-ignore>${esc(profileRefRaw)}</span>`
     : `<span class="muted">${esc(t('common.na', 'N/A'))}</span>`}
+          ${isAdmin ? `
+            <button class="ref-chip ref-chip--small" type="button" id="network-source-ref-btn" title="${esc(t('network.profile.source_ref', 'Source ref'))}">${esc(t('network.profile.source_ref_btn', 'Show'))}</button>
+            <span class="network-pill" id="network-source-ref-out" style="display:none" data-i18n-dynamic-ignore></span>
+          ` : ''}
         </div>
       </div>
     `;
-
-    const adminSourceRow = isAdmin ? `
-      <div class="network-kv">
-        <div class="network-kv__k" data-i18n="network.profile.source_ref">Source ref</div>
-        <div class="network-kv__v" style="display:flex; flex-wrap:wrap; gap:0.45rem; align-items:center;">
-          <button class="ref-chip ref-chip--small" type="button" id="network-source-ref-btn">${esc(t('network.profile.source_ref_btn', 'Show'))}</button>
-          <span class="network-pill" id="network-source-ref-out" style="display:none" data-i18n-dynamic-ignore></span>
-        </div>
-      </div>
-    ` : '';
 
     const suspendedBanner = suspended && isAdmin ? `
       <div class="network-suspend-banner" role="status">
@@ -373,7 +369,6 @@
                 <div class="network-kv__v" data-i18n-dynamic-ignore>${langs || esc(t('common.na', 'N/A'))}</div>
               </div>
               ${refRow}
-              ${adminSourceRow}
             </div>
           </aside>
         </div>
