@@ -9,7 +9,7 @@
     <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/reel.html">
 
     <meta name="theme-color" content="#030712">
-    <link rel="stylesheet" href="style.css?v=20260212b">
+    <link rel="stylesheet" href="style.css?v=20260216c">
     <script src="scp-affiliate.js?v=20260215c"></script>
     <script defer src="i18n.js?v=20260215c"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,14 +18,16 @@
 </head>
 
 <body class="reel-body">
-    <div class="brochure-toolbar no-print" role="region" aria-label="Reel tools" data-i18n-aria-label="reel.tools_label">
+    <div class="brochure-toolbar no-print" role="region" aria-label="Reel tools"
+        data-i18n-aria-label="reel.tools_label">
         <div class="brochure-toolbar-left">
             <a class="brochure-pill" href="properties.html">← <span data-i18n="reel.back">Back</span></a>
             <span id="reel-ref" class="brochure-pill brochure-pill--muted" data-i18n="reel.loading">Loading…</span>
         </div>
         <div class="brochure-toolbar-right">
             <button id="reel-toggle-brand" class="brochure-pill" type="button">White-label: Off</button>
-            <button id="reel-play" class="brochure-pill brochure-pill--primary" type="button" data-i18n="reel.play_video">Play video</button>
+            <button id="reel-play" class="brochure-pill brochure-pill--primary" type="button"
+                data-i18n="reel.play_video">Play video</button>
             <a id="reel-download" class="brochure-pill" href="#" download data-i18n="reel.download" hidden>Download</a>
         </div>
     </div>
@@ -36,7 +38,8 @@
                 <canvas id="reel-canvas" width="720" height="1280" aria-label="Reel preview"></canvas>
                 <div class="reel-canvas-overlay" id="reel-canvas-overlay">
                     <div class="reel-canvas-overlay-title" data-i18n="reel.preview.title">Reel preview</div>
-                    <div class="reel-canvas-overlay-sub" id="reel-preview-sub" data-i18n="reel.preview.subtitle">Creating a short social video with logo + key details.</div>
+                    <div class="reel-canvas-overlay-sub" id="reel-preview-sub" data-i18n="reel.preview.subtitle">
+                        Creating a short social video with logo + key details.</div>
                 </div>
             </div>
 
@@ -48,7 +51,8 @@
                     <div class="reel-auto-note" data-i18n="reel.auto_mode_note">
                         We automatically build the best short reel from listing media and key details.
                     </div>
-                    <div class="reel-controls" id="reel-controls" aria-label="Reel controls" data-i18n-aria-label="reel.tools_label">
+                    <div class="reel-controls" id="reel-controls" aria-label="Reel controls"
+                        data-i18n-aria-label="reel.tools_label">
                         <div class="reel-control">
                             <div class="reel-control-label" data-i18n="reel.controls.duration">Duration</div>
                             <select id="reel-duration" class="reel-select" aria-label="Duration"></select>
@@ -67,11 +71,13 @@
                 <div class="reel-card" id="reel-caption-wrap" hidden>
                     <div class="reel-caption-head">
                         <div class="reel-caption-label" data-i18n="reel.caption.label">Caption</div>
-                        <div class="reel-caption-note" data-i18n="reel.caption.note">Paste into Instagram/TikTok if needed.</div>
+                        <div class="reel-caption-note" data-i18n="reel.caption.note">Paste into Instagram/TikTok if
+                            needed.</div>
                     </div>
                     <textarea id="reel-caption" class="reel-caption" rows="6" readonly></textarea>
                     <div class="reel-share-wrap">
-                        <button id="reel-share" class="view-toggle-btn reel-share-primary" type="button" data-i18n="reel.share_video" disabled>Share video</button>
+                        <button id="reel-share" class="view-toggle-btn reel-share-primary" type="button"
+                            data-i18n="reel.share_video" disabled>Share video</button>
                         <div class="reel-actions" id="reel-actions" hidden>
                             <button id="reel-share-instagram" class="view-toggle-btn" type="button">Instagram</button>
                             <button id="reel-share-tiktok" class="view-toggle-btn" type="button">TikTok</button>
@@ -79,8 +85,10 @@
                             <button id="reel-share-whatsapp" class="view-toggle-btn" type="button">WhatsApp</button>
                             <button id="reel-share-telegram" class="view-toggle-btn" type="button">Telegram</button>
                             <button id="reel-share-linkedin" class="view-toggle-btn" type="button">LinkedIn</button>
-                            <button id="reel-copy-caption" class="view-toggle-btn" type="button" data-i18n="reel.copy_caption">Copy caption</button>
-                            <a id="reel-captions-download" class="view-toggle-btn" href="#" download hidden data-i18n="reel.download_captions">Download captions</a>
+                            <button id="reel-copy-caption" class="view-toggle-btn" type="button"
+                                data-i18n="reel.copy_caption">Copy caption</button>
+                            <a id="reel-captions-download" class="view-toggle-btn" href="#" download hidden
+                                data-i18n="reel.download_captions">Download captions</a>
                         </div>
                     </div>
                 </div>
@@ -88,29 +96,33 @@
                 <div class="reel-card" id="reel-play-wrap" hidden>
                     <div class="reel-caption-head">
                         <div class="reel-caption-label" data-i18n="reel.playback.label">Playback</div>
-                        <div class="reel-caption-note" data-i18n="reel.playback.note">Use this player to preview before sharing.</div>
+                        <div class="reel-caption-note" data-i18n="reel.playback.note">Use this player to preview before
+                            sharing.</div>
                     </div>
-                    <video id="reel-preview-video" class="reel-preview-video" controls playsinline preload="metadata"></video>
+                    <video id="reel-preview-video" class="reel-preview-video" controls playsinline
+                        preload="metadata"></video>
                 </div>
 
                 <div class="reel-card reel-card--muted">
                     <div class="reel-small" data-i18n="reel.disclaimer">
-                        Video export runs in your browser. If sharing a file is not supported on your device, use Download then upload in your app.
+                        Video export runs in your browser. If sharing a file is not supported on your device, use
+                        Download then upload in your app.
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <script defer src="data.js?v=20260211a"></script>
-    <script defer src="custom-listings.js?v=20260211a"></script>
-    <script defer src="inmovilla-listings.js?v=20260211a"></script>
-    <script defer src="newbuilds-listings.js?v=20260213b"></script>
-    <script defer src="businesses-data.js?v=20260211a"></script>
+    <script defer src="data.js?v=20260216g"></script>
+    <script defer src="custom-listings.js?v=20260216g"></script>
+    <script defer src="inmovilla-listings.js?v=20260216g"></script>
+    <script defer src="newbuilds-listings.js?v=20260216g"></script>
+    <script defer src="summertime-listings.js?v=20260216g"></script>
+    <script defer src="businesses-data.js?v=20260216g"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script defer src="config.js?v=20260211a"></script>
-    <script defer src="supabase-init.js?v=20260211a"></script>
-    <script defer src="reel.js?v=20260214a"></script>
+    <script defer src="config.js?v=20260216g"></script>
+    <script defer src="supabase-init.js?v=20260216g"></script>
+    <script defer src="reel.js?v=20260216g"></script>
     <script src="utils-module.js?v=20260215c"></script>
     <script src="map-module.js?v=20260215c"></script>
     <script src="supabase-module.js?v=20260215c"></script>

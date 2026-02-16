@@ -8,7 +8,7 @@
     <meta name="robots" content="noindex,nofollow">
     <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/tour.html">
     <meta name="theme-color" content="#030712">
-    <link rel="stylesheet" href="style.css?v=20260212b">
+    <link rel="stylesheet" href="style.css?v=20260216c">
     <script src="scp-affiliate.js?v=20260215c"></script>
     <script defer src="i18n.js?v=20260215c"></script>
     <script type="importmap">
@@ -20,7 +20,8 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap"
+        rel="stylesheet">
 </head>
 
 <body class="tour-body">
@@ -30,9 +31,11 @@
             <span id="tour-ref" class="brochure-pill brochure-pill--muted" data-i18n="tour.loading">Loading…</span>
         </div>
         <div class="brochure-toolbar-right">
-            <button id="tour-open-brochure" class="brochure-pill" type="button" data-i18n="tour.open_brochure">Brochure</button>
+            <button id="tour-open-brochure" class="brochure-pill" type="button"
+                data-i18n="tour.open_brochure">Brochure</button>
             <button id="tour-share" class="brochure-pill" type="button" data-i18n="tour.share">Share</button>
-            <button id="tour-open-studio" class="brochure-pill brochure-pill--primary" type="button" data-i18n="tour.open_studio">Tour Studio</button>
+            <button id="tour-open-studio" class="brochure-pill brochure-pill--primary" type="button"
+                data-i18n="tour.open_studio">Tour Studio</button>
         </div>
     </div>
 
@@ -47,15 +50,20 @@
                 <div id="tour-viewer" class="tour-viewer" aria-label="3D property tour viewer">
                     <div id="tour-hotspots" class="tour-hotspots" aria-hidden="false"></div>
                     <div id="tour-viewer-overlay" class="tour-viewer-overlay">
-                        <strong id="tour-overlay-title" data-i18n="tour.overlay.title">Preparing 3D walkthrough…</strong>
-                        <span id="tour-overlay-sub" data-i18n="tour.overlay.subtitle">Loading panorama and interactive hotspots.</span>
+                        <strong id="tour-overlay-title" data-i18n="tour.overlay.title">Preparing 3D
+                            walkthrough…</strong>
+                        <span id="tour-overlay-sub" data-i18n="tour.overlay.subtitle">Loading panorama and interactive
+                            hotspots.</span>
                     </div>
                 </div>
 
                 <div class="tour-viewer-actions">
-                    <button id="tour-prev" class="view-toggle-btn" type="button" data-i18n="tour.prev_scene">Previous scene</button>
-                    <button id="tour-next" class="view-toggle-btn" type="button" data-i18n="tour.next_scene">Next scene</button>
-                    <button id="tour-autospin" class="view-toggle-btn" type="button" data-i18n="tour.auto_spin_on">Auto-spin on</button>
+                    <button id="tour-prev" class="view-toggle-btn" type="button" data-i18n="tour.prev_scene">Previous
+                        scene</button>
+                    <button id="tour-next" class="view-toggle-btn" type="button" data-i18n="tour.next_scene">Next
+                        scene</button>
+                    <button id="tour-autospin" class="view-toggle-btn" type="button"
+                        data-i18n="tour.auto_spin_on">Auto-spin on</button>
                 </div>
             </article>
 
@@ -81,41 +89,56 @@
                         <h3 data-i18n="tour.studio.title">Tour Studio (Insta360)</h3>
                         <span class="tour-mini-pill" data-i18n="tour.studio.badge">Admin tool</span>
                     </div>
-                    <p class="tour-small" data-i18n="tour.studio.copy">Paste Insta360 equirectangular photo URLs (one per line) and we auto-build a Matterport-style flow with hotspots and dollhouse nodes.</p>
+                    <p class="tour-small" data-i18n="tour.studio.copy">Paste Insta360 equirectangular photo URLs (one
+                        per line) and we auto-build a Matterport-style flow with hotspots and dollhouse nodes.</p>
 
-                    <label class="tour-label" for="tour-url-input" data-i18n="tour.studio.urls_label">Panorama URLs</label>
-                    <textarea id="tour-url-input" class="tour-textarea" rows="6" placeholder="https://.../scene-1.jpg\nhttps://.../scene-2.jpg"></textarea>
+                    <label class="tour-label" for="tour-url-input" data-i18n="tour.studio.urls_label">Panorama
+                        URLs</label>
+                    <textarea id="tour-url-input" class="tour-textarea" rows="6"
+                        placeholder="https://.../scene-1.jpg\nhttps://.../scene-2.jpg"></textarea>
 
                     <div class="tour-studio-actions">
-                        <button id="tour-generate-urls" class="view-toggle-btn" type="button" data-i18n="tour.studio.generate">Generate from URLs</button>
-                        <button id="tour-save-draft" class="view-toggle-btn" type="button" data-i18n="tour.studio.save_draft">Save draft</button>
-                        <button id="tour-load-draft" class="view-toggle-btn" type="button" data-i18n="tour.studio.load_draft">Load draft</button>
-                        <button id="tour-clear-draft" class="view-toggle-btn" type="button" data-i18n="tour.studio.clear_draft">Clear draft</button>
+                        <button id="tour-generate-urls" class="view-toggle-btn" type="button"
+                            data-i18n="tour.studio.generate">Generate from URLs</button>
+                        <button id="tour-save-draft" class="view-toggle-btn" type="button"
+                            data-i18n="tour.studio.save_draft">Save draft</button>
+                        <button id="tour-load-draft" class="view-toggle-btn" type="button"
+                            data-i18n="tour.studio.load_draft">Load draft</button>
+                        <button id="tour-clear-draft" class="view-toggle-btn" type="button"
+                            data-i18n="tour.studio.clear_draft">Clear draft</button>
                     </div>
 
-                    <label class="tour-label" for="tour-json-input" data-i18n="tour.studio.json_label">Tour JSON (optional)</label>
-                    <textarea id="tour-json-input" class="tour-textarea" rows="6" placeholder='{"title":"...","scenes":[...]}'></textarea>
+                    <label class="tour-label" for="tour-json-input" data-i18n="tour.studio.json_label">Tour JSON
+                        (optional)</label>
+                    <textarea id="tour-json-input" class="tour-textarea" rows="6"
+                        placeholder='{"title":"...","scenes":[...]}'></textarea>
                     <div class="tour-studio-actions">
-                        <button id="tour-import-json" class="view-toggle-btn" type="button" data-i18n="tour.studio.import_json">Import JSON</button>
-                        <button id="tour-export-json" class="view-toggle-btn" type="button" data-i18n="tour.studio.export_json">Export JSON</button>
+                        <button id="tour-import-json" class="view-toggle-btn" type="button"
+                            data-i18n="tour.studio.import_json">Import JSON</button>
+                        <button id="tour-export-json" class="view-toggle-btn" type="button"
+                            data-i18n="tour.studio.export_json">Export JSON</button>
                     </div>
 
-                    <label class="tour-label" for="tour-file-input" data-i18n="tour.studio.local_label">Local preview files (optional)</label>
+                    <label class="tour-label" for="tour-file-input" data-i18n="tour.studio.local_label">Local preview
+                        files (optional)</label>
                     <input id="tour-file-input" class="tour-file" type="file" accept="image/*" multiple>
                     <div class="tour-studio-actions">
-                        <button id="tour-preview-files" class="view-toggle-btn" type="button" data-i18n="tour.studio.preview_files">Preview local files</button>
+                        <button id="tour-preview-files" class="view-toggle-btn" type="button"
+                            data-i18n="tour.studio.preview_files">Preview local files</button>
                     </div>
-                    <p class="tour-small" data-i18n="tour.studio.note">Tip: for full 360 quality use 2:1 panorama JPG files from Insta360 export.</p>
+                    <p class="tour-small" data-i18n="tour.studio.note">Tip: for full 360 quality use 2:1 panorama JPG
+                        files from Insta360 export.</p>
                 </section>
             </aside>
         </section>
     </main>
 
-    <script defer src="data.js?v=20260211a"></script>
-    <script defer src="custom-listings.js?v=20260211a"></script>
-    <script defer src="inmovilla-listings.js?v=20260211a"></script>
-    <script defer src="newbuilds-listings.js?v=20260213b"></script>
-    <script defer src="businesses-data.js?v=20260211a"></script>
+    <script defer src="data.js?v=20260216g"></script>
+    <script defer src="custom-listings.js?v=20260216g"></script>
+    <script defer src="inmovilla-listings.js?v=20260216g"></script>
+    <script defer src="newbuilds-listings.js?v=20260216g"></script>
+    <script defer src="summertime-listings.js?v=20260216g"></script>
+    <script defer src="businesses-data.js?v=20260216g"></script>
     <script defer src="tour-data.js?v=20260212a"></script>
     <script src="utils-module.js?v=20260215c"></script>
     <script src="map-module.js?v=20260215c"></script>
