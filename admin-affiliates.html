@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Affiliates | Spanish Coast Properties</title>
+    <meta name="robots" content="noindex,nofollow">
+
+    <meta name="theme-color" content="#030712">
+    <link rel="stylesheet" href="style.css?v=20260212b">
+    <script src="scp-affiliate.js?v=20260215c"></script>
+    <script defer src="i18n.js?v=20260215c"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script defer src="config.js?v=20260211d"></script>
+    <script defer src="supabase-init.js?v=20260211d"></script>
+</head>
+
+<body data-section="account">
+    <div class="bg-mesh"></div>
+
+    <header class="main-header glass sticky">
+        <div class="header-inner">
+            <div class="header-left">
+                <div class="logo">
+                    <a href="index.html" aria-label="Spanish Coast Properties Home">
+                        <img src="assets/header-logo.png?v=2" alt="Spanish Coast Properties" class="main-logo"
+                            style="cursor: pointer;">
+                    </a>
+                </div>
+                <div class="brand-info">
+                    <span class="brand-name">Spanish Coast Properties</span>
+                </div>
+                <nav class="primary-nav" aria-label="Site sections">
+                    <a class="nav-link" data-section="services" href="services.html">Services</a>
+                    <a class="nav-link" href="affiliate.html">Affiliate</a>
+                    <a class="nav-link" href="account.html">Account</a>
+                </nav>
+            </div>
+
+            <div class="header-right">
+                <a class="header-cta" href="account.html">Back to Account</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="site-main">
+        <section class="page-section catalog-section active">
+            <div class="page-hero">
+                <h1>Affiliate Program (Admin)</h1>
+                <p>Create revenue events, manage payouts, and pause/ban affiliates (admin only).</p>
+            </div>
+
+            <div class="glass panel">
+                <div class="admin-toolbar" style="flex-wrap:wrap; gap:0.7rem; align-items:center;">
+                    <button id="aff-admin-refresh" class="cta-button" type="button">Refresh</button>
+                    <button id="aff-admin-export-events" class="cta-button cta-button--outline" type="button">Export events CSV</button>
+                    <button id="aff-admin-export-affiliates" class="cta-button cta-button--outline" type="button">Export affiliates CSV</button>
+                </div>
+                <div class="muted" id="aff-admin-status" aria-live="polite"></div>
+            </div>
+
+            <div class="glass panel" style="margin-top:1rem;">
+                <h2 style="margin-top:0;">Create revenue event</h2>
+                <form id="aff-admin-create" class="form-grid" autocomplete="off">
+                    <label>
+                        <span>Affiliate code</span>
+                        <input id="aff-admin-code" class="admin-input" type="text" placeholder="ABC123DEF4" required>
+                    </label>
+                    <label>
+                        <span>Customer email (optional)</span>
+                        <input id="aff-admin-email" class="admin-input" type="email" placeholder="client@example.com">
+                    </label>
+                    <label>
+                        <span>Amount (EUR)</span>
+                        <input id="aff-admin-amount" class="admin-input" type="number" step="0.01" min="0" placeholder="1000" required>
+                    </label>
+                    <label>
+                        <span>Type</span>
+                        <select id="aff-admin-type" class="admin-select">
+                            <option value="manual">Manual</option>
+                            <option value="property_sale">Property sale</option>
+                            <option value="service_fee">Service fee</option>
+                            <option value="shop_order">Shop order</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </label>
+                    <label style="grid-column: 1 / -1;">
+                        <span>Source ref (optional)</span>
+                        <input id="aff-admin-source-ref" class="admin-input" type="text" placeholder="e.g. CRM-123 / Order #... / SCP-1898">
+                    </label>
+                    <label style="grid-column: 1 / -1;">
+                        <span>Note (optional)</span>
+                        <input id="aff-admin-note" class="admin-input" type="text" placeholder="What was this revenue for?">
+                    </label>
+                    <div class="simple-cta" style="grid-column: 1 / -1; margin-top:0;">
+                        <button class="cta-button" id="aff-admin-create-btn" type="submit">Create</button>
+                    </div>
+                    <div class="muted" id="aff-admin-create-status" aria-live="polite" style="grid-column: 1 / -1;"></div>
+                </form>
+            </div>
+
+            <div class="glass panel" style="margin-top:1rem;">
+                <h2 style="margin-top:0;">Revenue events</h2>
+                <div class="admin-table-wrap">
+                    <table class="admin-table" id="aff-admin-events">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Code</th>
+                                <th>Customer</th>
+                                <th>Type</th>
+                                <th>Ref</th>
+                                <th>Amount</th>
+                                <th>Commission</th>
+                                <th>Status</th>
+                                <th>Payout</th>
+                                <th>Note</th>
+                                <th>Save</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="glass panel" style="margin-top:1rem;">
+                <h2 style="margin-top:0;">Affiliates</h2>
+                <div class="admin-table-wrap">
+                    <table class="admin-table" id="aff-admin-affiliates">
+                        <thead>
+                            <tr>
+                                <th>Created</th>
+                                <th>User</th>
+                                <th>Code</th>
+                                <th>Status</th>
+                                <th>Rate</th>
+                                <th>Terms</th>
+                                <th>Payout pref</th>
+                                <th>Payout note</th>
+                                <th>Save</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script defer src="admin-affiliates.js?v=20260215a"></script>
+    <script src="utils-module.js?v=20260215c"></script>
+    <script src="map-module.js?v=20260215c"></script>
+    <script src="supabase-module.js?v=20260215c"></script>
+    <script src="ui-module.js?v=20260215c"></script>
+    <script src="filter-module.js?v=20260215c"></script>
+    <script defer src="site.js?v=20260215c"></script>
+</body>
+
+</html>
+

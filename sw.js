@@ -1,5 +1,5 @@
 /* Minimal same-origin service worker for instant repeat loads on mobile WebKit/Android. */
-const CACHE_NAME = 'scp-cache-20260215h';
+const CACHE_NAME = 'scp-cache-20260215j';
 
 const PRECACHE_PATHS = [
   './',
@@ -30,6 +30,8 @@ const PRECACHE_PATHS = [
   './admin-ref-map.html',
   './admin-scout.html',
   './viewing-trip.html',
+  './viewing-privileges.html',
+  './viewing-privileges-terms.html',
   './businesses.html',
   './business-buy-sell.html',
   './business-management.html',
@@ -56,10 +58,11 @@ const PRECACHE_PATHS = [
   './services.html',
   './agents.html',
   './blog.html',
+  './events.html',
   './network.html',
   './network-profile.html',
   './style.css?v=20260212b',
-  './site.js?v=20260215a',
+  './site.js?v=20260215c',
   './catalog.js?v=20260211d',
   './catalog-page.js?v=20260212a',
   './vehicles.css?v=20260211d',
@@ -80,16 +83,19 @@ const PRECACHE_PATHS = [
   './blog.js?v=20260211l',
   './blog-posts.js?v=20260211d',
   './blog-posts.json',
+  './events.js?v=20260215a',
+  './local-intel.js?v=20260215a',
+  './local-intel.json',
   './network-data.js?v=20260215f',
   './network-redsp.js?v=20260215h',
   './network-merge.js?v=20260215f',
   './network.js?v=20260215e',
   './network-profile.js?v=20260215h',
   './config.js?v=20260211d',
-  './i18n.js?v=20260213b',
+  './i18n.js?v=20260215c',
   './supabase-init.js?v=20260211d',
   './account.js?v=20260215d',
-  './affiliate.js?v=20260215a',
+  './affiliate.js?v=20260215b',
   './guide.js?v=20260211d',
   './shop.js?v=20260212a',
   './basket.js?v=20260211d',
@@ -209,6 +215,8 @@ self.addEventListener('fetch', (event) => {
     || url.pathname.endsWith('/vehicles-data.js')
     || url.pathname.endsWith('/blog-posts.js')
     || url.pathname.endsWith('/blog-posts.json')
+    || url.pathname.endsWith('/local-intel.js')
+    || url.pathname.endsWith('/local-intel.json')
     || url.pathname.endsWith('/network-data.js')
     || url.pathname.endsWith('/network-redsp.js')
     || url.pathname.endsWith('/network-merge.js')

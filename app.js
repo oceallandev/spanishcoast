@@ -49,28 +49,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const EARTH_RADIUS_KM = 6371;
     const numberFormat = new Intl.NumberFormat('en-IE', { maximumFractionDigits: 0 });
     const PLACEHOLDER_IMAGE = 'assets/placeholder.png';
-	    const LISTING_OVERRIDES_BY_REF = {
-	        // Feed correction: this is a "traspaso" (business transfer) with monthly rent.
-	        'SCP-1424': { mode: 'traspaso', price: 50000, monthlyRent: 572 }
-	    };
-	    const FAVORITES_STORAGE_KEY = 'scp:favourites:v1';
-	    const SHARE_ICON_BASE = 'class="share-icon-svg" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"';
-	    const SHARE_ICON_SVG = {
-	        native: `<svg ${SHARE_ICON_BASE}><path d="M13.5 1a.5.5 0 0 1 .5.5V2h.5a1.5 1.5 0 0 1 1.5 1.5V4a.5.5 0 0 1-1 0v-.5a.5.5 0 0 0-.5-.5H14v.5a.5.5 0 0 1-1 0v-2a.5.5 0 0 1 .5-.5"/><path d="M11 2.5a.5.5 0 0 1 .5-.5h.5V1.5a.5.5 0 0 1 1 0V2h.5a.5.5 0 0 1 0 1H13v.5a.5.5 0 0 1-1 0V3h-.5a.5.5 0 0 1-.5-.5"/><path d="M4 5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H5v2.5H6a.5.5 0 0 1 0 1H5V12h2.5a.5.5 0 0 1 0 1H4.5A.5.5 0 0 1 4 12.5z"/><path d="M2 4a2 2 0 0 1 2-2h4.5a.5.5 0 0 1 0 1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V7.5a.5.5 0 0 1 1 0V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/></svg>`,
-	        copy: `<svg ${SHARE_ICON_BASE}><path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/><path fill-rule="evenodd" d="M2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"/></svg>`,
-	        instagram: `<svg ${SHARE_ICON_BASE}><path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942.038-.853.048-1.125.048-3.297 0-2.174-.01-2.446-.048-3.3-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.232s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.28-.11.704-.24 1.485-.275.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/></svg>`,
-	        tiktok: `<svg ${SHARE_ICON_BASE}><path d="M9.837 2.14a1.2 1.2 0 0 0-1.2 1.2v4.908a2.5 2.5 0 1 1-2-2.45V4.15a4 4 0 1 0 4.8 3.9V5.43a5.2 5.2 0 0 0 2.8.86V4.84a3.6 3.6 0 0 1-2.11-.67 3.6 3.6 0 0 1-1.09-2.03z"/></svg>`,
-	        x: `<svg ${SHARE_ICON_BASE}><path d="M12.6 0h2.4l-5.3 6.06L16 16h-4.7L7.8 10.61 3.1 16H.7l5.8-6.63L0 0h4.8l3.2 4.89L12.6 0z"/></svg>`,
-	        whatsapp: `<svg ${SHARE_ICON_BASE}><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.592 0 0 3.592 0 7.994c0 1.406.367 2.77 1.062 3.98L0 16l4.131-1.062a7.9 7.9 0 0 0 3.863 1.01h.003c4.402 0 7.994-3.592 7.994-7.994a7.9 7.9 0 0 0-2.39-5.628M7.994 14.521a6.56 6.56 0 0 1-3.347-.92l-.239-.144-2.452.63.654-2.386-.156-.244a6.6 6.6 0 0 1-1.007-3.46c0-3.667 2.984-6.654 6.647-6.654a6.62 6.62 0 0 1 4.708 1.953 6.6 6.6 0 0 1 1.947 4.703c0 3.667-2.984 6.654-6.655 6.654m3.546-4.854c-.193-.096-1.142-.564-1.32-.63-.178-.064-.307-.096-.435.096-.128.193-.5.63-.614.758-.114.128-.228.144-.421.048-.193-.096-.815-.3-1.553-.96-.574-.512-.96-1.142-1.073-1.335-.114-.193-.012-.297.085-.393.087-.086.193-.228.289-.342.096-.114.128-.193.193-.322.064-.128.032-.24-.016-.336-.048-.096-.435-1.044-.595-1.43-.156-.375-.315-.324-.435-.33l-.372-.007a.72.72 0 0 0-.521.24c-.178.193-.68.664-.68 1.62 0 .958.696 1.885.792 2.014.096.128 1.37 2.09 3.319 2.93.463.2.824.319 1.105.408.464.148.887.127 1.22.077.372-.056 1.142-.466 1.303-.916.16-.45.16-.837.112-.916-.048-.08-.176-.128-.37-.224"/></svg>`,
-	        telegram: `<svg ${SHARE_ICON_BASE}><path d="M16 0 0 7l4 2 8-5-6 6 1 4 3-3 3 5z"/></svg>`,
-	        facebook: `<svg ${SHARE_ICON_BASE}><path d="M16 8.049c0-4.446-3.582-8.05-8-8.05S0 3.603 0 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg>`,
-	        linkedin: `<svg ${SHARE_ICON_BASE}><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.252c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169H6.542c.03.678 0 7.225 0 7.225z"/></svg>`,
-	        report: `<svg ${SHARE_ICON_BASE}><path fill-rule="evenodd" d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14 8.737V14.5a.5.5 0 0 1-1 0V9.151l-5.314 2.19A.5.5 0 0 1 7 10.88V10H3v5.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0V9h4V1.12a.5.5 0 0 1 .686-.464l7 2.889a.5.5 0 0 1 .092.02zM8 2.9v6.958l6-2.477V5.377z"/></svg>`
-	    };
+    const LISTING_OVERRIDES_BY_REF = {
+        // Feed correction: this is a "traspaso" (business transfer) with monthly rent.
+        'SCP-1424': { mode: 'traspaso', price: 50000, monthlyRent: 572 }
+    };
+    const FAVORITES_STORAGE_KEY = 'scp:favourites:v1';
+    const SHARE_ICON_BASE = 'class="share-icon-svg" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"';
+    const SHARE_ICON_SVG = {
+        native: `<svg ${SHARE_ICON_BASE}><path d="M13.5 1a.5.5 0 0 1 .5.5V2h.5a1.5 1.5 0 0 1 1.5 1.5V4a.5.5 0 0 1-1 0v-.5a.5.5 0 0 0-.5-.5H14v.5a.5.5 0 0 1-1 0v-2a.5.5 0 0 1 .5-.5"/><path d="M11 2.5a.5.5 0 0 1 .5-.5h.5V1.5a.5.5 0 0 1 1 0V2h.5a.5.5 0 0 1 0 1H13v.5a.5.5 0 0 1-1 0V3h-.5a.5.5 0 0 1-.5-.5"/><path d="M4 5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H5v2.5H6a.5.5 0 0 1 0 1H5V12h2.5a.5.5 0 0 1 0 1H4.5A.5.5 0 0 1 4 12.5z"/><path d="M2 4a2 2 0 0 1 2-2h4.5a.5.5 0 0 1 0 1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V7.5a.5.5 0 0 1 1 0V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/></svg>`,
+        copy: `<svg ${SHARE_ICON_BASE}><path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/><path fill-rule="evenodd" d="M2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"/></svg>`,
+        instagram: `<svg ${SHARE_ICON_BASE}><path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942.038-.853.048-1.125.048-3.297 0-2.174-.01-2.446-.048-3.3-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.232s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.28-.11.704-.24 1.485-.275.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/></svg>`,
+        tiktok: `<svg ${SHARE_ICON_BASE}><path d="M9.837 2.14a1.2 1.2 0 0 0-1.2 1.2v4.908a2.5 2.5 0 1 1-2-2.45V4.15a4 4 0 1 0 4.8 3.9V5.43a5.2 5.2 0 0 0 2.8.86V4.84a3.6 3.6 0 0 1-2.11-.67 3.6 3.6 0 0 1-1.09-2.03z"/></svg>`,
+        x: `<svg ${SHARE_ICON_BASE}><path d="M12.6 0h2.4l-5.3 6.06L16 16h-4.7L7.8 10.61 3.1 16H.7l5.8-6.63L0 0h4.8l3.2 4.89L12.6 0z"/></svg>`,
+        whatsapp: `<svg ${SHARE_ICON_BASE}><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.592 0 0 3.592 0 7.994c0 1.406.367 2.77 1.062 3.98L0 16l4.131-1.062a7.9 7.9 0 0 0 3.863 1.01h.003c4.402 0 7.994-3.592 7.994-7.994a7.9 7.9 0 0 0-2.39-5.628M7.994 14.521a6.56 6.56 0 0 1-3.347-.92l-.239-.144-2.452.63.654-2.386-.156-.244a6.6 6.6 0 0 1-1.007-3.46c0-3.667 2.984-6.654 6.647-6.654a6.62 6.62 0 0 1 4.708 1.953 6.6 6.6 0 0 1 1.947 4.703c0 3.667-2.984 6.654-6.655 6.654m3.546-4.854c-.193-.096-1.142-.564-1.32-.63-.178-.064-.307-.096-.435.096-.128.193-.5.63-.614.758-.114.128-.228.144-.421.048-.193-.096-.815-.3-1.553-.96-.574-.512-.96-1.142-1.073-1.335-.114-.193-.012-.297.085-.393.087-.086.193-.228.289-.342.096-.114.128-.193.193-.322.064-.128.032-.24-.016-.336-.048-.096-.435-1.044-.595-1.43-.156-.375-.315-.324-.435-.33l-.372-.007a.72.72 0 0 0-.521.24c-.178.193-.68.664-.68 1.62 0 .958.696 1.885.792 2.014.096.128 1.37 2.09 3.319 2.93.463.2.824.319 1.105.408.464.148.887.127 1.22.077.372-.056 1.142-.466 1.303-.916.16-.45.16-.837.112-.916-.048-.08-.176-.128-.37-.224"/></svg>`,
+        telegram: `<svg ${SHARE_ICON_BASE}><path d="M16 0 0 7l4 2 8-5-6 6 1 4 3-3 3 5z"/></svg>`,
+        facebook: `<svg ${SHARE_ICON_BASE}><path d="M16 8.049c0-4.446-3.582-8.05-8-8.05S0 3.603 0 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg>`,
+        linkedin: `<svg ${SHARE_ICON_BASE}><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.252c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169H6.542c.03.678 0 7.225 0 7.225z"/></svg>`,
+        report: `<svg ${SHARE_ICON_BASE}><path fill-rule="evenodd" d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14 8.737V14.5a.5.5 0 0 1-1 0V9.151l-5.314 2.19A.5.5 0 0 1 7 10.88V10H3v5.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0V9h4V1.12a.5.5 0 0 1 .686-.464l7 2.889a.5.5 0 0 1 .092.02zM8 2.9v6.958l6-2.477V5.377z"/></svg>`
+    };
 
-	    function storageAvailable() {
-	        try {
-	            if (!window.localStorage) return false;
+    function storageAvailable() {
+        try {
+            if (!window.localStorage) return false;
             const testKey = '__scp_test__';
             window.localStorage.setItem(testKey, '1');
             window.localStorage.removeItem(testKey);
@@ -207,53 +207,53 @@ document.addEventListener('DOMContentLoaded', () => {
     const markerMap = new Map();
     let propertiesInitialized = false;
     let activeSection = 'home';
-	    let miniMap = null;
-	    let miniMapMarker = null;
-	    let activeModalPropertyId = '';
-	    let preModalScrollTarget = 'window'; // 'window' | 'ui'
-	    let preModalScrollY = 0;
-	    let lightboxIndex = 0;
+    let miniMap = null;
+    let miniMapMarker = null;
+    let activeModalPropertyId = '';
+    let preModalScrollTarget = 'window'; // 'window' | 'ui'
+    let preModalScrollY = 0;
+    let lightboxIndex = 0;
     let lightboxTouchStartX = null;
     let lightboxTouchStartY = null;
     let lightboxTouchStartTime = 0;
-	    let renderLimit = 60;
-	    const RENDER_BATCH = 60;
-	    let mapDirty = true;
-	    let mapHasUserInteracted = false;
-	    let mapLastFitSignature = '';
-	    // Spatial map filters (Idealista-style perimeter + "around me").
-	    // These are applied inside `filterProperties()` so they affect list + map markers consistently.
-	    let spatialFilterMode = 'none'; // none | polygon | around
-	    let spatialPolygon = null; // { vertices: [{lat, lng}], bounds: { minLat, maxLat, minLon, maxLon } }
-	    let spatialAround = null; // { lat, lon, radiusKm }
-	    const spatialUi = {
-	        drawBtn: null,
-	        aroundBtn: null,
-	        clearBtn: null,
-	        radiusRow: null,
-	        radiusSelect: null,
-	        statusEl: null
-	    };
-	    const AROUND_RADIUS_KM_OPTIONS = [1, 2, 5, 10, 20, 50];
-	    const DEFAULT_AROUND_RADIUS_KM = 10;
-	    let spatialLayers = null;
-	    let spatialPolygonLayer = null;
-	    let spatialAroundCircle = null;
-	    let spatialAroundMarker = null;
-	    let spatialDrawHandler = null;
-	    let spatialIsDrawing = false;
-	    let spatialFreehandSession = null;
-	    let filterTimer = null;
-	    let loadMoreObserver = null;
-	    let loadingMore = false;
-	    let renderSequence = 0;
-	    const renderedPropertyIds = new Set();
-	    let alertsSyncInFlight = false;
-	    let alertsSyncTimer = null;
-	    let alertsLastSyncAt = 0;
-	    let alertsLastSyncedUserId = '';
-	    let saveAlertResetTimer = null;
-	    let catalogBuilderStatusTimer = null;
+    let renderLimit = 60;
+    const RENDER_BATCH = 60;
+    let mapDirty = true;
+    let mapHasUserInteracted = false;
+    let mapLastFitSignature = '';
+    // Spatial map filters (Idealista-style perimeter + "around me").
+    // These are applied inside `filterProperties()` so they affect list + map markers consistently.
+    let spatialFilterMode = 'none'; // none | polygon | around
+    let spatialPolygon = null; // { vertices: [{lat, lng}], bounds: { minLat, maxLat, minLon, maxLon } }
+    let spatialAround = null; // { lat, lon, radiusKm }
+    const spatialUi = {
+        drawBtn: null,
+        aroundBtn: null,
+        clearBtn: null,
+        radiusRow: null,
+        radiusSelect: null,
+        statusEl: null
+    };
+    const AROUND_RADIUS_KM_OPTIONS = [1, 2, 5, 10, 20, 50];
+    const DEFAULT_AROUND_RADIUS_KM = 10;
+    let spatialLayers = null;
+    let spatialPolygonLayer = null;
+    let spatialAroundCircle = null;
+    let spatialAroundMarker = null;
+    let spatialDrawHandler = null;
+    let spatialIsDrawing = false;
+    let spatialFreehandSession = null;
+    let filterTimer = null;
+    let loadMoreObserver = null;
+    let loadingMore = false;
+    let renderSequence = 0;
+    const renderedPropertyIds = new Set();
+    let alertsSyncInFlight = false;
+    let alertsSyncTimer = null;
+    let alertsLastSyncAt = 0;
+    let alertsLastSyncedUserId = '';
+    let saveAlertResetTimer = null;
+    let catalogBuilderStatusTimer = null;
 
     // --- DOM Elements ---
     const homeSection = document.getElementById('home-section');
@@ -306,19 +306,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const openCatalogBuilderBtn = document.getElementById('open-catalog-builder-btn');
     const closeFiltersBtn = document.getElementById('close-filters-btn');
     const filtersBackdrop = document.getElementById('filters-backdrop');
-	    const favoritesToggleBtn = document.getElementById('favorites-toggle');
-	    const favoritesSendBtn = document.getElementById('favorites-send');
-	    const saveAlertBtn = document.getElementById('save-alert-btn');
-	    const catalogBuilderModal = document.getElementById('catalog-builder-modal');
-	    const catalogBuilderCloseBtn = document.getElementById('catalog-builder-close');
-	    const catalogBuilderSourceEl = document.getElementById('catalog-builder-source');
-	    const catalogBuilderLimitEl = document.getElementById('catalog-builder-limit');
-	    const catalogBuilderClientEl = document.getElementById('catalog-builder-client');
-	    const catalogBuilderWlEl = document.getElementById('catalog-builder-wl');
-	    const catalogBuilderStatusEl = document.getElementById('catalog-builder-status');
-	    const catalogBuilderOpenBtn = document.getElementById('catalog-builder-open');
-	    const catalogBuilderCopyBtn = document.getElementById('catalog-builder-copy');
-	    const footerYear = document.getElementById('footer-year');
+    const favoritesToggleBtn = document.getElementById('favorites-toggle');
+    const favoritesSendBtn = document.getElementById('favorites-send');
+    const saveAlertBtn = document.getElementById('save-alert-btn');
+    const catalogBuilderModal = document.getElementById('catalog-builder-modal');
+    const catalogBuilderCloseBtn = document.getElementById('catalog-builder-close');
+    const catalogBuilderSourceEl = document.getElementById('catalog-builder-source');
+    const catalogBuilderLimitEl = document.getElementById('catalog-builder-limit');
+    const catalogBuilderClientEl = document.getElementById('catalog-builder-client');
+    const catalogBuilderWlEl = document.getElementById('catalog-builder-wl');
+    const catalogBuilderStatusEl = document.getElementById('catalog-builder-status');
+    const catalogBuilderOpenBtn = document.getElementById('catalog-builder-open');
+    const catalogBuilderCopyBtn = document.getElementById('catalog-builder-copy');
+    const footerYear = document.getElementById('footer-year');
     let filtersBarResizeTimer = null;
     let uiCollapsed = false;
     let uiScrollEl = null;
@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }, { threshold: 0.08 })
-        : { observe: () => {}, unobserve: () => {} };
+        : { observe: () => { }, unobserve: () => { } };
 
     function normalizeFeedText(value) {
         const raw = value === null || value === undefined ? '' : String(value);
@@ -1808,87 +1808,87 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-	    async function supabaseDeleteFavorite(client, user, propertyId) {
-	        if (!propertyId) return;
-	        try {
-	            await client
+    async function supabaseDeleteFavorite(client, user, propertyId) {
+        if (!propertyId) return;
+        try {
+            await client
                 .from('favourites')
                 .delete()
                 .eq('user_id', user.id)
                 .eq('property_id', propertyId);
         } catch (error) {
             // ignore
-	        }
-	    }
+        }
+    }
 
-	    const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, Math.max(0, Number(ms) || 0)));
-	    const isAbortLikeError = (error) => {
-	        const msg = error && error.message ? String(error.message) : String(error || '');
-	        const lower = msg.toLowerCase();
-	        return lower.includes('abort') || lower.includes('aborted') || lower.includes('signal');
-	    };
+    const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, Math.max(0, Number(ms) || 0)));
+    const isAbortLikeError = (error) => {
+        const msg = error && error.message ? String(error.message) : String(error || '');
+        const lower = msg.toLowerCase();
+        return lower.includes('abort') || lower.includes('aborted') || lower.includes('signal');
+    };
 
-	    async function supabaseGetSessionSafe(client, { retries = 2 } = {}) {
-	        if (!client) return { data: { session: null } };
-	        let lastErr = null;
-	        for (let i = 0; i <= retries; i++) {
-	            try {
-	                return await client.auth.getSession();
-	            } catch (error) {
-	                lastErr = error;
-	                if (i < retries && isAbortLikeError(error)) {
-	                    await sleep(140 * (i + 1));
-	                    continue;
-	                }
-	                throw error;
-	            }
-	        }
-	        throw lastErr || new Error('Failed to read session');
-	    }
+    async function supabaseGetSessionSafe(client, { retries = 2 } = {}) {
+        if (!client) return { data: { session: null } };
+        let lastErr = null;
+        for (let i = 0; i <= retries; i++) {
+            try {
+                return await client.auth.getSession();
+            } catch (error) {
+                lastErr = error;
+                if (i < retries && isAbortLikeError(error)) {
+                    await sleep(140 * (i + 1));
+                    continue;
+                }
+                throw error;
+            }
+        }
+        throw lastErr || new Error('Failed to read session');
+    }
 
-	    function refreshOriginalRefButtonsUi() {
-	        const hasSession = Boolean(supabaseClient && supabaseUser);
-	        const allowed = hasSession && isPrivilegedRole(supabaseRole);
-	        const buttons = document.querySelectorAll('button[data-action="show-original-ref"]');
-	        buttons.forEach((btn) => {
-	            const ref = toText(btn.dataset.scpRef).trim();
-	            const ok = allowed && ref && !ref.toLowerCase().includes('unavailable');
-	            btn.style.display = ok ? 'inline-flex' : 'none';
-	        });
-	        if (!allowed) {
-	            document.querySelectorAll('[data-card-original-ref]').forEach((span) => {
-	                span.style.display = 'none';
-	                span.textContent = '';
-	                span.dataset.originalRef = '';
-	            });
-	        }
-	        if (hasSession && !supabaseRoleResolved && !supabaseRoleFetchPromise) {
-	            ensureSupabaseRole(supabaseClient, supabaseUser && supabaseUser.id)
-	                .then(() => refreshOriginalRefButtonsUi())
-	                .catch(() => {});
-	        }
-	    }
+    function refreshOriginalRefButtonsUi() {
+        const hasSession = Boolean(supabaseClient && supabaseUser);
+        const allowed = hasSession && isPrivilegedRole(supabaseRole);
+        const buttons = document.querySelectorAll('button[data-action="show-original-ref"]');
+        buttons.forEach((btn) => {
+            const ref = toText(btn.dataset.scpRef).trim();
+            const ok = allowed && ref && !ref.toLowerCase().includes('unavailable');
+            btn.style.display = ok ? 'inline-flex' : 'none';
+        });
+        if (!allowed) {
+            document.querySelectorAll('[data-card-original-ref]').forEach((span) => {
+                span.style.display = 'none';
+                span.textContent = '';
+                span.dataset.originalRef = '';
+            });
+        }
+        if (hasSession && !supabaseRoleResolved && !supabaseRoleFetchPromise) {
+            ensureSupabaseRole(supabaseClient, supabaseUser && supabaseUser.id)
+                .then(() => refreshOriginalRefButtonsUi())
+                .catch(() => { });
+        }
+    }
 
-		    async function initSupabaseFavoritesSync() {
-		        const client = getSupabase();
-		        supabaseClient = client;
-		        supabaseRoleResolved = false;
-		        supabaseRoleFetchPromise = null;
-		        updateSaveAlertButtonUi();
-		        if (!client) return;
+    async function initSupabaseFavoritesSync() {
+        const client = getSupabase();
+        supabaseClient = client;
+        supabaseRoleResolved = false;
+        supabaseRoleFetchPromise = null;
+        updateSaveAlertButtonUi();
+        if (!client) return;
 
-	        try {
-	            const { data } = await supabaseGetSessionSafe(client);
-		            supabaseUser = data && data.session ? data.session.user : null;
-		            supabaseRole = '';
-		            supabaseRoleResolved = false;
-		            supabaseRoleFetchPromise = null;
-		            supabaseRole = supabaseUser ? await ensureSupabaseRole(client, supabaseUser.id) : '';
-		            refreshOriginalRefButtonsUi();
-		            updateSaveAlertButtonUi();
+        try {
+            const { data } = await supabaseGetSessionSafe(client);
+            supabaseUser = data && data.session ? data.session.user : null;
+            supabaseRole = '';
+            supabaseRoleResolved = false;
+            supabaseRoleFetchPromise = null;
+            supabaseRole = supabaseUser ? await ensureSupabaseRole(client, supabaseUser.id) : '';
+            refreshOriginalRefButtonsUi();
+            updateSaveAlertButtonUi();
 
-		            if (supabaseUser) {
-	                const localBefore = new Set(Array.from(favoriteIds));
+            if (supabaseUser) {
+                const localBefore = new Set(Array.from(favoriteIds));
                 const backendIds = await supabaseFetchFavorites(client, supabaseUser.id);
                 const backendSet = new Set(backendIds);
                 const mergedAll = new Set([...backendSet, ...Array.from(localBefore)]);
@@ -1900,38 +1900,38 @@ document.addEventListener('DOMContentLoaded', () => {
                     const property = propertyById.get(pid);
                     if (property) supabaseUpsertFavorite(client, supabaseUser, property);
                 });
-	                // Refresh UI in case the user is currently in favourites-only mode.
-	                filterProperties();
-	                scheduleSavedAlertsSync({ delayMs: 1000, force: true });
-	            }
-	        } catch (error) {
-	            // ignore
+                // Refresh UI in case the user is currently in favourites-only mode.
+                filterProperties();
+                scheduleSavedAlertsSync({ delayMs: 1000, force: true });
+            }
+        } catch (error) {
+            // ignore
         }
 
         try {
             client.auth.onAuthStateChange(async (event, session) => {
                 supabaseUser = session && session.user ? session.user : null;
-	                supabaseRole = '';
-	                supabaseRoleResolved = false;
-	                supabaseRoleFetchPromise = null;
-	                supabaseRole = supabaseUser ? await ensureSupabaseRole(client, supabaseUser.id) : '';
-	                originalRefCache.clear();
-	                refreshOriginalRefButtonsUi();
-	                updateSaveAlertButtonUi();
-	                if (!supabaseUser) {
-	                    updateFavoritesControls();
-	                    alertsLastSyncedUserId = '';
-	                    return;
-	                }
-	                const backendIds = await supabaseFetchFavorites(client, supabaseUser.id);
-	                favoriteIds = new Set([...backendIds, ...Array.from(favoriteIds)]);
-	                persistFavoriteIds(favoriteIds);
-	                updateFavoritesControls();
-	                filterProperties();
-	                scheduleSavedAlertsSync({ delayMs: 1000, force: true });
-	            });
-	        } catch (error) {
-	            // ignore
+                supabaseRole = '';
+                supabaseRoleResolved = false;
+                supabaseRoleFetchPromise = null;
+                supabaseRole = supabaseUser ? await ensureSupabaseRole(client, supabaseUser.id) : '';
+                originalRefCache.clear();
+                refreshOriginalRefButtonsUi();
+                updateSaveAlertButtonUi();
+                if (!supabaseUser) {
+                    updateFavoritesControls();
+                    alertsLastSyncedUserId = '';
+                    return;
+                }
+                const backendIds = await supabaseFetchFavorites(client, supabaseUser.id);
+                favoriteIds = new Set([...backendIds, ...Array.from(favoriteIds)]);
+                persistFavoriteIds(favoriteIds);
+                updateFavoritesControls();
+                filterProperties();
+                scheduleSavedAlertsSync({ delayMs: 1000, force: true });
+            });
+        } catch (error) {
+            // ignore
         }
     }
 
@@ -2003,11 +2003,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 added += 1;
             });
 
-	            if (added > 0) {
-	                filterProperties();
-	                applyRefFromUrl(); // allow deep links to open approved listings
-	                scheduleSavedAlertsSync({ delayMs: 1200, force: true });
-	            }
+            if (added > 0) {
+                filterProperties();
+                applyRefFromUrl(); // allow deep links to open approved listings
+                scheduleSavedAlertsSync({ delayMs: 1200, force: true });
+            }
         } catch {
             // ignore
         }
@@ -2300,11 +2300,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return (ax - bx) * direction;
     }
 
-	    function sortProperties(list) {
-	        const mode = toText(sortMode, 'featured');
-	        if (mode === 'featured') {
-	            return list;
-	        }
+    function sortProperties(list) {
+        const mode = toText(sortMode, 'featured');
+        if (mode === 'featured') {
+            return list;
+        }
         const sorted = list.slice();
         sorted.sort((pa, pb) => {
             if (mode === 'date_desc') return sourceIndexFor(pb) - sourceIndexFor(pa);
@@ -2324,1051 +2324,1051 @@ document.addEventListener('DOMContentLoaded', () => {
                 return compareNullableNumbers(da, db, 1);
             }
             return 0;
-	        });
-	        return sorted;
-	    }
-
-	    function spatialVerticesFromLatLngs(latlngs) {
-	        const out = [];
-	        if (!latlngs) return out;
-	        // Leaflet polygons may return: [LatLng, LatLng...] or [[LatLng...]].
-	        const ring = Array.isArray(latlngs) && Array.isArray(latlngs[0]) ? latlngs[0] : latlngs;
-	        if (!Array.isArray(ring)) return out;
-	        ring.forEach((pt) => {
-	            const lat = Number(pt && pt.lat);
-	            const lng = Number(pt && (pt.lng ?? pt.lon));
-	            if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
-	            out.push({ lat, lng });
-	        });
-	        return out;
-	    }
-
-	    function spatialBoundsForVertices(vertices) {
-	        const b = { minLat: Infinity, maxLat: -Infinity, minLon: Infinity, maxLon: -Infinity };
-	        vertices.forEach((v) => {
-	            b.minLat = Math.min(b.minLat, v.lat);
-	            b.maxLat = Math.max(b.maxLat, v.lat);
-	            b.minLon = Math.min(b.minLon, v.lng);
-	            b.maxLon = Math.max(b.maxLon, v.lng);
-	        });
-	        if (!Number.isFinite(b.minLat)) {
-	            return { minLat: 0, maxLat: 0, minLon: 0, maxLon: 0 };
-	        }
-	        return b;
-	    }
-
-	    // Ray-casting point-in-polygon (treat lon/lat as planar; good enough for local searches).
-	    function pointInPolygon(lat, lon, vertices) {
-	        if (!Array.isArray(vertices) || vertices.length < 3) return false;
-	        let inside = false;
-	        for (let i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
-	            const yi = vertices[i].lat;
-	            const xi = vertices[i].lng;
-	            const yj = vertices[j].lat;
-	            const xj = vertices[j].lng;
-
-	            const intersect = ((yi > lat) !== (yj > lat))
-	                && (lon < ((xj - xi) * (lat - yi)) / (yj - yi) + xi);
-	            if (intersect) inside = !inside;
-	        }
-	        return inside;
-	    }
-
-	    function matchesSpatialFilter(property) {
-	        if (spatialFilterMode === 'polygon' && spatialPolygon && Array.isArray(spatialPolygon.vertices)) {
-	            const lat = Number(property && property.latitude);
-	            const lon = Number(property && property.longitude);
-	            if (!Number.isFinite(lat) || !Number.isFinite(lon)) return false;
-	            const b = spatialPolygon.bounds;
-	            if (b && (lat < b.minLat || lat > b.maxLat || lon < b.minLon || lon > b.maxLon)) {
-	                return false;
-	            }
-	            return pointInPolygon(lat, lon, spatialPolygon.vertices);
-	        }
-
-	        if (spatialFilterMode === 'around' && spatialAround) {
-	            const lat = Number(property && property.latitude);
-	            const lon = Number(property && property.longitude);
-	            if (!Number.isFinite(lat) || !Number.isFinite(lon)) return false;
-	            const centerLat = Number(spatialAround.lat);
-	            const centerLon = Number(spatialAround.lon);
-	            const radiusKm = Number(spatialAround.radiusKm);
-	            if (!Number.isFinite(centerLat) || !Number.isFinite(centerLon) || !Number.isFinite(radiusKm) || radiusKm <= 0) return true;
-	            return distanceKm(lat, lon, centerLat, centerLon) <= radiusKm;
-	        }
-
-	        return true;
-	    }
-
-	    function setSpatialStatus(text) {
-	        if (!spatialUi.statusEl) return;
-	        spatialUi.statusEl.textContent = toText(text).trim();
-	    }
-
-	    function syncSpatialUi() {
-	        const active = spatialFilterMode !== 'none' || spatialIsDrawing;
-	        if (spatialUi.clearBtn) spatialUi.clearBtn.disabled = !active;
-	        if (spatialUi.drawBtn) spatialUi.drawBtn.classList.toggle('scp-map-search__btn--active', spatialFilterMode === 'polygon' || spatialIsDrawing);
-	        if (spatialUi.aroundBtn) spatialUi.aroundBtn.classList.toggle('scp-map-search__btn--active', spatialFilterMode === 'around');
-	        if (spatialUi.radiusRow) {
-	            const showRadius = spatialFilterMode === 'around';
-	            spatialUi.radiusRow.hidden = !showRadius;
-	            if (showRadius && spatialUi.radiusSelect) {
-	                const km = spatialAround ? Number(spatialAround.radiusKm) : DEFAULT_AROUND_RADIUS_KM;
-	                const nextKm = Number.isFinite(km) && km > 0 ? km : DEFAULT_AROUND_RADIUS_KM;
-	                spatialUi.radiusSelect.value = String(nextKm);
-	            }
-	        }
-
-	        if (spatialIsDrawing) {
-	            setSpatialStatus(t('map.tools.status_drawing', 'Draw a circle around the area with your finger (or mouse). Lift to finish.'));
-	            return;
-	        }
-	        if (spatialFilterMode === 'polygon') {
-	            setSpatialStatus(t('map.tools.status_polygon', 'Perimeter filter is ON. Only listings inside the drawn area are shown.'));
-	            return;
-	        }
-	        if (spatialFilterMode === 'around' && spatialAround) {
-	            const km = Number(spatialAround.radiusKm) || DEFAULT_AROUND_RADIUS_KM;
-	            setSpatialStatus(t('map.tools.status_around', 'Around me filter is ON ({km} km).', { km: String(km) }));
-	            return;
-	        }
-	        setSpatialStatus(t('map.tools.status_none', 'Tip: Draw an area on the map, or search around you.'));
-	    }
-
-	    function ensureSpatialLayers() {
-	        if (!map || typeof L === 'undefined') return;
-	        if (spatialLayers) return;
-	        spatialLayers = L.featureGroup().addTo(map);
-	    }
-
-	    function prefersFreehandSpatialDraw() {
-	        try {
-	            if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) return true;
-	        } catch (error) {
-	            // ignore
-	        }
-	        try {
-	            if (navigator && Number(navigator.maxTouchPoints) > 0) return true;
-	        } catch (error) {
-	            // ignore
-	        }
-	        return false;
-	    }
-
-	    function captureMapInteractionState() {
-	        if (!map) return null;
-	        const get = (ctrl) => !!(ctrl && typeof ctrl.enabled === 'function' && ctrl.enabled());
-	        return {
-	            dragging: get(map.dragging),
-	            touchZoom: get(map.touchZoom),
-	            doubleClickZoom: get(map.doubleClickZoom),
-	            boxZoom: get(map.boxZoom),
-	            keyboard: get(map.keyboard)
-	        };
-	    }
-
-	    function setMapInteractionsFromState(state) {
-	        if (!map || !state) return;
-	        const apply = (ctrl, enabled) => {
-	            if (!ctrl) return;
-	            try {
-	                if (enabled) {
-	                    if (typeof ctrl.enable === 'function') ctrl.enable();
-	                } else if (typeof ctrl.disable === 'function') {
-	                    ctrl.disable();
-	                }
-	            } catch (error) {
-	                // ignore
-	            }
-	        };
-	        apply(map.dragging, !!state.dragging);
-	        apply(map.touchZoom, !!state.touchZoom);
-	        apply(map.doubleClickZoom, !!state.doubleClickZoom);
-	        apply(map.boxZoom, !!state.boxZoom);
-	        apply(map.keyboard, !!state.keyboard);
-	    }
-
-	    function normalizeFreehandVertices(points, { maxPoints = 140, minStepPx = 8 } = {}) {
-	        if (!Array.isArray(points) || points.length < 3) return [];
-	        const compact = [];
-	        let prev = null;
-	        for (let i = 0; i < points.length; i += 1) {
-	            const pt = points[i];
-	            const lat = Number(pt && pt.lat);
-	            const lng = Number(pt && pt.lng);
-	            const x = Number(pt && pt.x);
-	            const y = Number(pt && pt.y);
-	            if (!Number.isFinite(lat) || !Number.isFinite(lng) || !Number.isFinite(x) || !Number.isFinite(y)) continue;
-	            if (!prev) {
-	                compact.push({ lat, lng, x, y });
-	                prev = { x, y };
-	                continue;
-	            }
-	            const dx = x - prev.x;
-	            const dy = y - prev.y;
-	            if (Math.sqrt((dx * dx) + (dy * dy)) < minStepPx) continue;
-	            compact.push({ lat, lng, x, y });
-	            prev = { x, y };
-	        }
-
-	        if (compact.length >= 3) {
-	            const first = compact[0];
-	            const last = compact[compact.length - 1];
-	            const dx = last.x - first.x;
-	            const dy = last.y - first.y;
-	            if (Math.sqrt((dx * dx) + (dy * dy)) < (minStepPx * 2.2)) {
-	                compact.pop();
-	            }
-	        }
-
-	        if (compact.length > maxPoints) {
-	            const step = Math.ceil(compact.length / maxPoints);
-	            const reduced = [];
-	            for (let i = 0; i < compact.length; i += step) reduced.push(compact[i]);
-	            const tail = compact[compact.length - 1];
-	            if (reduced[reduced.length - 1] !== tail) reduced.push(tail);
-	            return reduced.map((v) => ({ lat: v.lat, lng: v.lng }));
-	        }
-
-	        return compact.map((v) => ({ lat: v.lat, lng: v.lng }));
-	    }
-
-	    function stopSpatialFreehandDraw({ keepStatus = false } = {}) {
-	        const session = spatialFreehandSession;
-	        if (!session) return;
-	        spatialFreehandSession = null;
-	        spatialIsDrawing = false;
-
-	        try {
-	            if (session.container && session.listeners) {
-	                Object.entries(session.listeners).forEach(([eventName, handler]) => {
-	                    if (!handler) return;
-	                    session.container.removeEventListener(eventName, handler);
-	                });
-	            }
-	        } catch (error) {
-	            // ignore
-	        }
-
-	        try {
-	            if (session.container && session.pointerId != null && typeof session.container.releasePointerCapture === 'function') {
-	                session.container.releasePointerCapture(session.pointerId);
-	            }
-	        } catch (error) {
-	            // ignore
-	        }
-
-	        try {
-	            if (session.previewLayer) {
-	                if (spatialLayers && typeof spatialLayers.removeLayer === 'function') spatialLayers.removeLayer(session.previewLayer);
-	                else if (map && typeof map.removeLayer === 'function') map.removeLayer(session.previewLayer);
-	            }
-	        } catch (error) {
-	            // ignore
-	        }
-
-	        try {
-	            if (session.mapElement) session.mapElement.classList.remove('scp-map--drawing');
-	        } catch (error) {
-	            // ignore
-	        }
-	        setMapInteractionsFromState(session.interactionState);
-	        if (!keepStatus) syncSpatialUi();
-	    }
-
-	    function startSpatialFreehandDraw() {
-	        if (!map || typeof L === 'undefined' || !window.PointerEvent) {
-	            setSpatialStatus(t('map.tools.draw_unavailable', 'Perimeter tool is not available right now.'));
-	            return;
-	        }
-
-	        // Toggle behavior: tap Draw again to cancel drawing mode.
-	        if (spatialFreehandSession) {
-	            stopSpatialFreehandDraw();
-	            return;
-	        }
-
-	        mapHasUserInteracted = true;
-	        spatialIsDrawing = true;
-	        syncSpatialUi();
-
-	        try {
-	            if (spatialDrawHandler && typeof spatialDrawHandler.disable === 'function') spatialDrawHandler.disable();
-	        } catch (error) {
-	            // ignore
-	        }
-	        spatialDrawHandler = null;
-
-	        ensureSpatialLayers();
-
-	        const mapElement = typeof map.getContainer === 'function' ? map.getContainer() : null;
-	        if (!mapElement) {
-	            spatialIsDrawing = false;
-	            syncSpatialUi();
-	            setSpatialStatus(t('map.tools.draw_unavailable', 'Perimeter tool is not available right now.'));
-	            return;
-	        }
-
-	        const interactionState = captureMapInteractionState();
-	        // Keep map still while user draws the perimeter.
-	        setMapInteractionsFromState({
-	            dragging: false,
-	            touchZoom: false,
-	            doubleClickZoom: false,
-	            boxZoom: false,
-	            keyboard: false
-	        });
-
-	        mapElement.classList.add('scp-map--drawing');
-
-	        const minStepPx = prefersFreehandSpatialDraw() ? 7 : 5;
-	        const session = {
-	            mapElement,
-	            container: mapElement,
-	            interactionState,
-	            pointerId: null,
-	            points: [],
-	            previewLayer: null,
-	            listeners: null
-	        };
-
-	        const addPointFromEvent = (evt, { force = false } = {}) => {
-	            if (!evt) return false;
-	            let latlng = null;
-	            let px = null;
-	            try {
-	                latlng = map.mouseEventToLatLng(evt);
-	                px = map.mouseEventToContainerPoint(evt);
-	            } catch (error) {
-	                return false;
-	            }
-	            if (!latlng || !px) return false;
-	            const next = {
-	                lat: Number(latlng.lat),
-	                lng: Number(latlng.lng),
-	                x: Number(px.x),
-	                y: Number(px.y)
-	            };
-	            if (!Number.isFinite(next.lat) || !Number.isFinite(next.lng) || !Number.isFinite(next.x) || !Number.isFinite(next.y)) return false;
-	            const prev = session.points.length ? session.points[session.points.length - 1] : null;
-	            if (!force && prev) {
-	                const dx = next.x - prev.x;
-	                const dy = next.y - prev.y;
-	                if (Math.sqrt((dx * dx) + (dy * dy)) < minStepPx) return false;
-	            }
-	            session.points.push(next);
-	            if (session.previewLayer && typeof session.previewLayer.setLatLngs === 'function') {
-	                session.previewLayer.setLatLngs(session.points.map((p) => [p.lat, p.lng]));
-	            }
-	            return true;
-	        };
-
-	        const finishStroke = () => {
-	            const points = session.points.slice();
-	            stopSpatialFreehandDraw({ keepStatus: true });
-	            const vertices = normalizeFreehandVertices(points, { maxPoints: 120, minStepPx });
-	            if (vertices.length < 3) {
-	                syncSpatialUi();
-	                setSpatialStatus(t('map.tools.status_drawing', 'Draw a circle around the area with your finger (or mouse). Lift to finish.'));
-	                return;
-	            }
-	            const layer = L.polygon(vertices.map((v) => [v.lat, v.lng]), {
-	                color: '#38bdf8',
-	                weight: 3,
-	                opacity: 0.95,
-	                fillOpacity: 0.12
-	            });
-	            setSpatialPolygonFromLayer(layer, { silent: false });
-	        };
-
-	        const onPointerDown = (evt) => {
-	            if (!evt) return;
-	            if (evt.pointerType === 'mouse' && Number(evt.button) !== 0) return;
-	            if (session.pointerId != null) return;
-	            const target = evt.target;
-	            if (target && typeof target.closest === 'function' && target.closest('.scp-map-search')) return;
-	            session.pointerId = evt.pointerId;
-	            session.points = [];
-
-	            try {
-	                if (session.container && typeof session.container.setPointerCapture === 'function') {
-	                    session.container.setPointerCapture(evt.pointerId);
-	                }
-	            } catch (error) {
-	                // ignore
-	            }
-
-	            try {
-	                if (session.previewLayer) {
-	                    if (spatialLayers && typeof spatialLayers.removeLayer === 'function') spatialLayers.removeLayer(session.previewLayer);
-	                    else if (map && typeof map.removeLayer === 'function') map.removeLayer(session.previewLayer);
-	                }
-	                session.previewLayer = L.polyline([], {
-	                    color: '#38bdf8',
-	                    weight: 3,
-	                    opacity: 0.95,
-	                    dashArray: '6 4'
-	                });
-	                if (spatialLayers && typeof spatialLayers.addLayer === 'function') spatialLayers.addLayer(session.previewLayer);
-	                else if (map && typeof session.previewLayer.addTo === 'function') session.previewLayer.addTo(map);
-	            } catch (error) {
-	                // ignore
-	            }
-
-	            addPointFromEvent(evt, { force: true });
-	            if (typeof evt.preventDefault === 'function') evt.preventDefault();
-	        };
-
-	        const onPointerMove = (evt) => {
-	            if (!evt) return;
-	            if (session.pointerId == null || evt.pointerId !== session.pointerId) return;
-	            addPointFromEvent(evt);
-	            if (typeof evt.preventDefault === 'function') evt.preventDefault();
-	        };
-
-	        const onPointerUp = (evt) => {
-	            if (!evt) return;
-	            if (session.pointerId == null || evt.pointerId !== session.pointerId) return;
-	            finishStroke();
-	            if (typeof evt.preventDefault === 'function') evt.preventDefault();
-	        };
-
-	        const onPointerCancel = (evt) => {
-	            if (!evt) return;
-	            if (session.pointerId == null || evt.pointerId !== session.pointerId) return;
-	            stopSpatialFreehandDraw();
-	            syncSpatialUi();
-	            if (typeof evt.preventDefault === 'function') evt.preventDefault();
-	        };
-
-	        session.listeners = {
-	            pointerdown: onPointerDown,
-	            pointermove: onPointerMove,
-	            pointerup: onPointerUp,
-	            pointercancel: onPointerCancel
-	        };
-
-	        Object.entries(session.listeners).forEach(([eventName, handler]) => {
-	            session.container.addEventListener(eventName, handler, { passive: false });
-	        });
-
-	        spatialFreehandSession = session;
-	    }
-
-	    function clearSpatialFilter({ silent = false } = {}) {
-	        stopSpatialFreehandDraw({ keepStatus: true });
-	        spatialFilterMode = 'none';
-	        spatialPolygon = null;
-	        spatialAround = null;
-	        spatialIsDrawing = false;
-
-	        try {
-	            if (spatialDrawHandler && typeof spatialDrawHandler.disable === 'function') spatialDrawHandler.disable();
-	        } catch (error) {
-	            // ignore
-	        }
-	        spatialDrawHandler = null;
-
-	        if (spatialLayers && typeof spatialLayers.clearLayers === 'function') {
-	            spatialLayers.clearLayers();
-	        } else if (map && typeof map.removeLayer === 'function') {
-	            // Fallback in case featureGroup wasn't initialised for some reason.
-	            [spatialPolygonLayer, spatialAroundCircle, spatialAroundMarker].forEach((layer) => {
-	                if (!layer) return;
-	                try { map.removeLayer(layer); } catch { /* ignore */ }
-	            });
-	        }
-
-	        spatialPolygonLayer = null;
-	        spatialAroundCircle = null;
-	        spatialAroundMarker = null;
-
-	        syncSpatialUi();
-	        if (!silent) {
-	            mapHasUserInteracted = true;
-	            filterProperties();
-	        }
-	    }
-
-	    function setSpatialPolygonFromLayer(layer, { silent = false } = {}) {
-	        stopSpatialFreehandDraw({ keepStatus: true });
-	        if (!layer) return;
-	        const latlngs = typeof layer.getLatLngs === 'function' ? layer.getLatLngs() : null;
-	        const vertices = spatialVerticesFromLatLngs(latlngs);
-	        if (vertices.length < 3) return;
-	        const bounds = spatialBoundsForVertices(vertices);
-
-	        spatialFilterMode = 'polygon';
-	        spatialPolygon = { vertices, bounds };
-	        spatialAround = null;
-	        spatialIsDrawing = false;
-
-	        ensureSpatialLayers();
-	        if (spatialLayers && spatialPolygonLayer && spatialPolygonLayer !== layer) {
-	            try { spatialLayers.removeLayer(spatialPolygonLayer); } catch { /* ignore */ }
-	        }
-	        if (spatialLayers) {
-	            try { spatialLayers.clearLayers(); } catch { /* ignore */ }
-	            try { spatialLayers.addLayer(layer); } catch { /* ignore */ }
-	        } else if (map && typeof layer.addTo === 'function') {
-	            layer.addTo(map);
-	        }
-
-	        spatialPolygonLayer = layer;
-	        spatialAroundCircle = null;
-	        spatialAroundMarker = null;
-
-	        try {
-	            if (typeof layer.setStyle === 'function') {
-	                layer.setStyle({ color: '#38bdf8', weight: 3, opacity: 0.95, fillOpacity: 0.12 });
-	            }
-	        } catch (error) {
-	            // ignore
-	        }
-
-	        syncSpatialUi();
-	        if (!silent) {
-	            mapHasUserInteracted = true;
-	            try {
-	                if (map && typeof map.fitBounds === 'function' && typeof layer.getBounds === 'function') {
-	                    map.fitBounds(layer.getBounds(), { padding: [30, 30], maxZoom: 13 });
-	                }
-	            } catch (error) {
-	                // ignore
-	            }
-	            filterProperties();
-	        }
-	    }
-
-	    function setSpatialAroundFilter({ lat, lon, radiusKm }, { silent = false } = {}) {
-	        stopSpatialFreehandDraw({ keepStatus: true });
-	        const centerLat = Number(lat);
-	        const centerLon = Number(lon);
-	        const km = Number(radiusKm);
-	        if (!Number.isFinite(centerLat) || !Number.isFinite(centerLon)) return;
-
-	        spatialFilterMode = 'around';
-	        spatialAround = { lat: centerLat, lon: centerLon, radiusKm: Number.isFinite(km) && km > 0 ? km : DEFAULT_AROUND_RADIUS_KM };
-	        spatialPolygon = null;
-	        spatialIsDrawing = false;
-
-	        ensureSpatialLayers();
-	        if (spatialLayers) {
-	            try { spatialLayers.clearLayers(); } catch { /* ignore */ }
-	        }
-	        spatialPolygonLayer = null;
-
-	        if (map && typeof L !== 'undefined') {
-	            const radiusMeters = Math.max(0, Number(spatialAround.radiusKm) || DEFAULT_AROUND_RADIUS_KM) * 1000;
-	            spatialAroundCircle = L.circle([centerLat, centerLon], {
-	                radius: radiusMeters,
-	                color: '#22c55e',
-	                weight: 2,
-	                opacity: 0.9,
-	                fillOpacity: 0.10,
-	                dashArray: '6 6'
-	            });
-	            spatialAroundMarker = L.circleMarker([centerLat, centerLon], {
-	                radius: 5,
-	                color: '#22c55e',
-	                weight: 2,
-	                opacity: 1,
-	                fillColor: '#22c55e',
-	                fillOpacity: 1
-	            });
-
-	            if (spatialLayers) {
-	                try { spatialLayers.addLayer(spatialAroundCircle); } catch { /* ignore */ }
-	                try { spatialLayers.addLayer(spatialAroundMarker); } catch { /* ignore */ }
-	            } else {
-	                spatialAroundCircle.addTo(map);
-	                spatialAroundMarker.addTo(map);
-	            }
-	        }
-
-	        syncSpatialUi();
-	        if (!silent) {
-	            mapHasUserInteracted = true;
-	            try {
-	                if (map && spatialAroundCircle && typeof map.fitBounds === 'function' && typeof spatialAroundCircle.getBounds === 'function') {
-	                    map.fitBounds(spatialAroundCircle.getBounds(), { padding: [30, 30], maxZoom: 13 });
-	                }
-	            } catch (error) {
-	                // ignore
-	            }
-	            filterProperties();
-	        }
-	    }
-
-	    function listingScopeFromPath(pathname) {
-	        const path = toText(pathname).toLowerCase();
-	        if (path.endsWith('new-builds.html')) return 'new_builds';
-	        if (path.endsWith('properties.html')) return 'resales';
-	        return 'all';
-	    }
-
-	    function buildCurrentSpatialCriteria() {
-	        if (spatialFilterMode === 'polygon' && spatialPolygon && Array.isArray(spatialPolygon.vertices) && spatialPolygon.vertices.length >= 3) {
-	            return {
-	                mode: 'polygon',
-	                polygon: spatialPolygon.vertices
-	                    .slice(0, 80)
-	                    .map((v) => ({ lat: Number(v.lat), lng: Number(v.lng) }))
-	                    .filter((v) => Number.isFinite(v.lat) && Number.isFinite(v.lng))
-	            };
-	        }
-	        if (spatialFilterMode === 'around' && spatialAround) {
-	            const lat = Number(spatialAround.lat);
-	            const lon = Number(spatialAround.lon);
-	            const radiusKm = Number(spatialAround.radiusKm);
-	            if (Number.isFinite(lat) && Number.isFinite(lon) && Number.isFinite(radiusKm) && radiusKm > 0) {
-	                return { mode: 'around', around: { lat, lon, radiusKm } };
-	            }
-	        }
-	        return { mode: 'none' };
-	    }
-
-	    function buildCurrentSavedAlertCriteria() {
-	        return {
-	            v: 1,
-	            scope: listingScopeFromPath(window.location && window.location.pathname),
-	            selectedCity: toText(selectedCity, 'all') || 'all',
-	            selectedType: toText(selectedType, 'all') || 'all',
-	            searchQuery: toText(searchQuery, '').trim(),
-	            refQuery: toText(refQuery, '').trim(),
-	            maxPrice: toText(maxPrice, 'any') || 'any',
-	            minBeds: Number(minBeds) || 0,
-	            minBaths: Number(minBaths) || 0,
-	            poolFilter: toText(poolFilter, 'any') || 'any',
-	            parkingFilter: toText(parkingFilter, 'any') || 'any',
-	            maxBeachDistanceMeters: toText(maxBeachDistanceMeters, 'any') || 'any',
-	            seaViewFilter: toText(seaViewFilter, 'any') || 'any',
-	            operationMode: toText(operationMode, 'any') || 'any',
-	            spatial: buildCurrentSpatialCriteria()
-	        };
-	    }
-
-	    function normalizeSavedAlertCriteria(raw) {
-	        const c = raw && typeof raw === 'object' ? raw : {};
-	        const scope = toText(c.scope, 'resales');
-	        const spatial = c.spatial && typeof c.spatial === 'object' ? c.spatial : { mode: 'none' };
-	        const normalizedSpatial = (() => {
-	            const mode = toText(spatial.mode, 'none');
-	            if (mode === 'polygon') {
-	                const points = Array.isArray(spatial.polygon) ? spatial.polygon : [];
-	                const polygon = points
-	                    .slice(0, 120)
-	                    .map((v) => ({ lat: Number(v && v.lat), lng: Number(v && (v.lng ?? v.lon)) }))
-	                    .filter((v) => Number.isFinite(v.lat) && Number.isFinite(v.lng));
-	                if (polygon.length >= 3) return { mode: 'polygon', polygon };
-	            }
-	            if (mode === 'around') {
-	                const a = spatial.around && typeof spatial.around === 'object' ? spatial.around : {};
-	                const lat = Number(a.lat);
-	                const lon = Number(a.lon);
-	                const radiusKm = Number(a.radiusKm);
-	                if (Number.isFinite(lat) && Number.isFinite(lon) && Number.isFinite(radiusKm) && radiusKm > 0) {
-	                    return { mode: 'around', around: { lat, lon, radiusKm } };
-	                }
-	            }
-	            return { mode: 'none' };
-	        })();
-
-	        return {
-	            v: Number(c.v) || 1,
-	            scope: ['resales', 'new_builds', 'all'].includes(scope) ? scope : 'resales',
-	            selectedCity: toText(c.selectedCity, 'all') || 'all',
-	            selectedType: toText(c.selectedType, 'all') || 'all',
-	            searchQuery: toText(c.searchQuery, '').trim(),
-	            refQuery: toText(c.refQuery, '').trim(),
-	            maxPrice: toText(c.maxPrice, 'any') || 'any',
-	            minBeds: Math.max(0, Number(c.minBeds) || 0),
-	            minBaths: Math.max(0, Number(c.minBaths) || 0),
-	            poolFilter: toText(c.poolFilter, 'any') || 'any',
-	            parkingFilter: toText(c.parkingFilter, 'any') || 'any',
-	            maxBeachDistanceMeters: toText(c.maxBeachDistanceMeters, 'any') || 'any',
-	            seaViewFilter: toText(c.seaViewFilter, 'any') || 'any',
-	            operationMode: toText(c.operationMode, 'any') || 'any',
-	            spatial: normalizedSpatial
-	        };
-	    }
-
-	    function savedAlertCriteriaHash(criteria) {
-	        const normalized = normalizeSavedAlertCriteria(criteria);
-	        return JSON.stringify(normalized);
-	    }
-
-	    function cityLabelForAlert(cityKey) {
-	        const key = toText(cityKey).trim().toLowerCase();
-	        if (!key || key === 'all') return t('city.all', 'All Destinations');
-	        const found = MAIN_DESTINATIONS.find((it) => toText(it && it.value).trim().toLowerCase() === key);
-	        if (found) return t(found.i18nKey || '', found.fallback || key);
-	        return key.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
-	    }
-
-	    function savedAlertNameForCriteria(criteria) {
-	        const c = normalizeSavedAlertCriteria(criteria);
-	        const parts = [];
-
-	        if (c.scope === 'new_builds') parts.push(t('alerts.scope.new_builds', 'New Builds'));
-	        else if (c.scope === 'resales') parts.push(t('alerts.scope.resales', 'Properties'));
-	        else parts.push(t('alerts.scope.all', 'All Listings'));
-
-	        if (c.selectedCity && c.selectedCity !== 'all') parts.push(cityLabelForAlert(c.selectedCity));
-	        if (c.maxPrice && c.maxPrice !== 'any') parts.push(`≤ €${numberFormat.format(Number(c.maxPrice) || 0)}`);
-	        if ((Number(c.minBeds) || 0) > 0) parts.push(`${Number(c.minBeds)}+ ${t('filters.beds', 'Beds')}`);
-
-	        if (!parts.length) return t('alerts.default_name', 'Saved alert');
-	        return parts.slice(0, 4).join(' · ');
-	    }
-
-	    function setSaveAlertButtonState(state, labelText) {
-	        if (!saveAlertBtn) return;
-	        if (saveAlertResetTimer) {
-	            window.clearTimeout(saveAlertResetTimer);
-	            saveAlertResetTimer = null;
-	        }
-	        saveAlertBtn.classList.remove('is-busy', 'is-ok', 'is-error');
-	        if (state === 'busy') saveAlertBtn.classList.add('is-busy');
-	        if (state === 'ok') saveAlertBtn.classList.add('is-ok');
-	        if (state === 'error') saveAlertBtn.classList.add('is-error');
-	        saveAlertBtn.textContent = toText(labelText, t('properties.save_alert', 'Save alert'));
-	    }
-
-	    function resetSaveAlertButtonText() {
-	        if (!saveAlertBtn) return;
-	        setSaveAlertButtonState('idle', t('properties.save_alert', 'Save alert'));
-	    }
-
-	    function flashSaveAlertButton(state, text, durationMs = 1800) {
-	        if (!saveAlertBtn) return;
-	        setSaveAlertButtonState(state, text);
-	        saveAlertResetTimer = window.setTimeout(() => {
-	            resetSaveAlertButtonText();
-	        }, Math.max(900, Number(durationMs) || 1800));
-	    }
-
-	    function updateSaveAlertButtonUi() {
-	        if (!saveAlertBtn) return;
-	        const signedIn = Boolean(supabaseClient && supabaseUser);
-	        saveAlertBtn.disabled = false;
-	        saveAlertBtn.title = signedIn
-	            ? t('properties.save_alert_hint', 'Save these requirements and get notified when new matches arrive.')
-	            : t('properties.save_alert_signin_hint', 'Sign in first to save requirements and receive match alerts.');
-	        if (!saveAlertBtn.classList.contains('is-busy') && !saveAlertBtn.classList.contains('is-ok') && !saveAlertBtn.classList.contains('is-error')) {
-	            saveAlertBtn.textContent = t('properties.save_alert', 'Save alert');
-	        }
-	    }
-
-	    async function supabaseUpsertSavedAlert(client, user, criteria) {
-	        const normalized = normalizeSavedAlertCriteria(criteria);
-	        const payload = {
-	            user_id: user.id,
-	            user_email: toText(user.email).trim() || null,
-	            name: savedAlertNameForCriteria(normalized),
-	            scope: normalized.scope,
-	            criteria: normalized,
-	            criteria_hash: savedAlertCriteriaHash(normalized),
-	            enabled: true,
-	            notify_in_app: true,
-	            notify_email: false
-	        };
-	        return await client
-	            .from('saved_search_alerts')
-	            .upsert(payload, { onConflict: 'user_id,criteria_hash' })
-	            .select('id,name,criteria_hash')
-	            .single();
-	    }
-
-	    async function supabaseFetchSavedAlerts(client, userId) {
-	        const { data, error } = await client
-	            .from('saved_search_alerts')
-	            .select('id,name,criteria,enabled')
-	            .eq('user_id', userId)
-	            .eq('enabled', true)
-	            .limit(30);
-	        if (error) throw error;
-	        return Array.isArray(data) ? data : [];
-	    }
-
-	    function matchesSpatialCriteriaForAlert(property, spatialCriteria) {
-	        const s = spatialCriteria && typeof spatialCriteria === 'object' ? spatialCriteria : { mode: 'none' };
-	        const mode = toText(s.mode, 'none');
-	        if (mode === 'none') return true;
-
-	        const lat = Number(property && property.latitude);
-	        const lon = Number(property && property.longitude);
-	        if (!Number.isFinite(lat) || !Number.isFinite(lon)) return false;
-
-	        if (mode === 'polygon') {
-	            const points = Array.isArray(s.polygon) ? s.polygon : [];
-	            if (points.length < 3) return true;
-	            const vertices = points
-	                .map((v) => ({ lat: Number(v && v.lat), lng: Number(v && (v.lng ?? v.lon)) }))
-	                .filter((v) => Number.isFinite(v.lat) && Number.isFinite(v.lng));
-	            if (vertices.length < 3) return true;
-	            const bounds = spatialBoundsForVertices(vertices);
-	            if (lat < bounds.minLat || lat > bounds.maxLat || lon < bounds.minLon || lon > bounds.maxLon) return false;
-	            return pointInPolygon(lat, lon, vertices);
-	        }
-
-	        if (mode === 'around') {
-	            const a = s.around && typeof s.around === 'object' ? s.around : {};
-	            const centerLat = Number(a.lat);
-	            const centerLon = Number(a.lon);
-	            const radiusKm = Number(a.radiusKm);
-	            if (!Number.isFinite(centerLat) || !Number.isFinite(centerLon) || !Number.isFinite(radiusKm) || radiusKm <= 0) return true;
-	            return distanceKm(lat, lon, centerLat, centerLon) <= radiusKm;
-	        }
-
-	        return true;
-	    }
-
-	    function savedAlertMatchesProperty(property, criteriaInput) {
-	        const criteria = normalizeSavedAlertCriteria(criteriaInput);
-	        const scope = criteria.scope;
-
-	        if (scope === 'new_builds' && !isExplicitNewBuild(property)) return false;
-	        if (scope === 'resales' && isExplicitNewBuild(property)) return false;
-
-	        const loweredSearch = normalize(criteria.searchQuery);
-	        const loweredRef = normalize(criteria.refQuery);
-	        const ref = normalize(property.ref);
-	        const town = normalize(property.town);
-	        const province = normalize(property.province);
-	        const type = normalize(property.type);
-	        const description = normalize(property.description);
-	        const features = featuresFor(property).join(' ').toLowerCase();
-
-	        const propertyPrice = listingPriceNumber(property);
-	        const propertyBeds = Number(property.beds) || 0;
-	        const propertyBaths = Number(property.baths) || 0;
-
-	        const matchesRef = loweredRef === '' || ref.includes(loweredRef);
-	        const matchesCity = matchesDestination(property, criteria.selectedCity);
-
-	        const typeNorm = normalize(property.type);
-	        let matchesType = true;
-	        if (criteria.selectedType !== 'all') {
-	            const selectedNorm = normalize(criteria.selectedType);
-	            if (selectedNorm === 'new build') {
-	                matchesType = scope === 'new_builds' ? isExplicitNewBuild(property) : isNewBuild(property);
-	            } else if (selectedNorm === 'investment') {
-	                matchesType = isInvestmentDeal(property);
-	            } else if (selectedNorm === 'apartment') {
-	                matchesType = typeNorm.includes('apartment') || typeNorm.includes('apartamento');
-	            } else if (selectedNorm === 'penthouse') {
-	                matchesType = typeNorm.includes('penthouse');
-	            } else if (selectedNorm === 'town house') {
-	                matchesType = typeNorm.includes('town house') || typeNorm.includes('casa');
-	            } else {
-	                matchesType = typeNorm === selectedNorm || typeNorm.includes(selectedNorm);
-	            }
-	        }
-
-	        const matchesSearch = loweredSearch === ''
-	            || town.includes(loweredSearch)
-	            || province.includes(loweredSearch)
-	            || type.includes(loweredSearch)
-	            || description.includes(loweredSearch);
-
-	        const matchesPrice = criteria.maxPrice === 'any'
-	            || (Number.isFinite(propertyPrice) && propertyPrice <= Number(criteria.maxPrice));
-	        const matchesBeds = propertyBeds >= (Number(criteria.minBeds) || 0);
-	        const matchesBaths = propertyBaths >= (Number(criteria.minBaths) || 0);
-
-	        let matchesPool = true;
-	        if (criteria.poolFilter !== 'any') {
-	            if (criteria.poolFilter === 'pool') {
-	                matchesPool = features.includes('pool') || features.includes('swimming');
-	            }
-	            if (criteria.poolFilter === 'private') {
-	                matchesPool = features.includes('private pool')
-	                    || (features.includes('pool') && features.includes('private'));
-	            }
-	            if (criteria.poolFilter === 'communal') {
-	                matchesPool = features.includes('communal pool')
-	                    || features.includes('community pool')
-	                    || features.includes('shared pool');
-	            }
-	        }
-
-	        const matchesParking = criteria.parkingFilter !== 'parking'
-	            || features.includes('parking')
-	            || features.includes('garage')
-	            || features.includes('carport');
-
-	        const maxBeach = criteria.maxBeachDistanceMeters === 'any' ? null : Number(criteria.maxBeachDistanceMeters);
-	        const distanceMeters = maxBeach ? beachDistanceMetersFor(property) : null;
-	        const matchesBeach = maxBeach === null
-	            || (Number.isFinite(distanceMeters) && distanceMeters <= maxBeach);
-
-	        const matchesSeaView = criteria.seaViewFilter === 'any'
-	            || (criteria.seaViewFilter === 'yes' && hasSeaView(property));
-
-	        const op = operationFor(property);
-	        const matchesOperation = criteria.operationMode === 'any' || op === criteria.operationMode;
-
-	        const passes = matchesRef
-	            && matchesCity
-	            && matchesType
-	            && matchesOperation
-	            && matchesSearch
-	            && matchesPrice
-	            && matchesBeds
-	            && matchesBaths
-	            && matchesPool
-	            && matchesParking
-	            && matchesBeach
-	            && matchesSeaView
-	            && matchesSpatialCriteriaForAlert(property, criteria.spatial);
-
-	        if (!passes) return false;
-
-	        const imageCandidates = imageUrlsFor(property);
-	        if (!imageCandidates.length) return false;
-	        const propertyId = propertyIdFor(property);
-	        const cached = propertyId ? imageOkCache.get(propertyId) : undefined;
-	        if (cached === false) return false;
-
-	        return true;
-	    }
-
-	    function matchingPropertiesForSavedAlert(criteria) {
-	        return allProperties.filter((property) => savedAlertMatchesProperty(property, criteria));
-	    }
-
-	    async function supabaseUpsertSavedAlertMatches(client, user, alertRow, matches) {
-	        const alertId = toText(alertRow && alertRow.id).trim();
-	        if (!alertId || !Array.isArray(matches) || !matches.length) return;
-	        const payload = matches.slice(0, 1200).map((property) => {
-	            const pid = propertyIdFor(property);
-	            const ref = toText(property && property.ref).trim();
-	            return {
-	                alert_id: alertId,
-	                user_id: user.id,
-	                property_id: pid,
-	                property_ref: ref || null,
-	                property_town: toText(property && property.town).trim() || null,
-	                property_type: toText(property && property.type).trim() || null,
-	                property_price: Number.isFinite(listingPriceNumber(property)) ? listingPriceNumber(property) : null,
-	                property_url: buildPropertyLink(ref || pid)
-	            };
-	        }).filter((row) => toText(row.property_id).trim());
-
-	        if (!payload.length) return;
-
-	        const chunkSize = 200;
-	        for (let i = 0; i < payload.length; i += chunkSize) {
-	            const chunk = payload.slice(i, i + chunkSize);
-	            // Do not override existing rows (e.g. seen=true). We only want truly new matches inserted.
-	            const { error } = await client
-	                .from('saved_search_matches')
-	                .upsert(chunk, { onConflict: 'alert_id,property_id', ignoreDuplicates: true });
-	            if (error) throw error;
-	        }
-	    }
-
-	    async function syncSavedAlertsForUser({ force = false } = {}) {
-	        if (alertsSyncInFlight) return;
-	        if (!supabaseClient || !supabaseUser) return;
-
-	        const uid = toText(supabaseUser.id).trim();
-	        if (!uid) return;
-
-	        const now = Date.now();
-	        if (!force && alertsLastSyncedUserId === uid && (now - alertsLastSyncAt) < 2 * 60 * 1000) {
-	            return;
-	        }
-
-	        alertsSyncInFlight = true;
-	        try {
-	            const alerts = await supabaseFetchSavedAlerts(supabaseClient, uid);
-	            if (!alerts.length) {
-	                alertsLastSyncedUserId = uid;
-	                alertsLastSyncAt = now;
-	                return;
-	            }
-	            for (const alertRow of alerts.slice(0, 30)) {
-	                const criteria = normalizeSavedAlertCriteria(alertRow && alertRow.criteria);
-	                const matches = matchingPropertiesForSavedAlert(criteria);
-	                if (!matches.length) continue;
-	                await supabaseUpsertSavedAlertMatches(supabaseClient, supabaseUser, alertRow, matches);
-	            }
-	            alertsLastSyncedUserId = uid;
-	            alertsLastSyncAt = Date.now();
-	        } catch (error) {
-	            // ignore
-	        } finally {
-	            alertsSyncInFlight = false;
-	        }
-	    }
-
-	    function scheduleSavedAlertsSync({ delayMs = 900, force = false } = {}) {
-	        if (alertsSyncTimer) {
-	            window.clearTimeout(alertsSyncTimer);
-	            alertsSyncTimer = null;
-	        }
-	        alertsSyncTimer = window.setTimeout(() => {
-	            alertsSyncTimer = null;
-	            syncSavedAlertsForUser({ force });
-	        }, Math.max(120, Number(delayMs) || 900));
-	    }
-
-	    async function onSaveAlertClicked() {
-	        if (!saveAlertBtn) return;
-	        const client = supabaseClient || getSupabase();
-	        if (!client || !supabaseUser) {
-	            flashSaveAlertButton('error', t('properties.save_alert_signin', 'Sign in first to save alerts'));
-	            return;
-	        }
-
-	        syncFiltersFromControls();
-	        filterProperties();
-
-	        setSaveAlertButtonState('busy', t('properties.save_alert_saving', 'Saving…'));
-	        try {
-	            const criteria = buildCurrentSavedAlertCriteria();
-	            const { error } = await supabaseUpsertSavedAlert(client, supabaseUser, criteria);
-	            if (error) {
-	                const msg = toText(error && error.message).toLowerCase();
-	                if (msg.includes('relation') && msg.includes('saved_search')) {
-	                    flashSaveAlertButton('error', t('properties.save_alert_setup', 'Run Supabase SQL update'));
-	                } else {
-	                    flashSaveAlertButton('error', t('properties.save_alert_error', 'Could not save alert'));
-	                }
-	                return;
-	            }
-	            flashSaveAlertButton('ok', t('properties.save_alert_saved', 'Alert saved'));
-	            scheduleSavedAlertsSync({ delayMs: 200, force: true });
-	        } catch (error) {
-	            flashSaveAlertButton('error', t('properties.save_alert_error', 'Could not save alert'));
-	        }
-	    }
-
-		    function filterProperties() {
-		        const loweredSearch = normalize(searchQuery);
-		        const loweredRef = normalize(refQuery);
-		        const path = toText(window.location && window.location.pathname).toLowerCase();
-		        const isNewBuildsPage = path.endsWith('new-builds.html');
-	        const isResalesPage = path.endsWith('properties.html');
-
-	        currentProperties = allProperties.filter((property) => {
-	            // Keep sections clearly separated:
-	            // - `new-builds.html` shows only explicit developer/new-build feed listings
-	            // - `properties.html` hides explicit new-build listings (resale-focused)
-	            if (isNewBuildsPage && !isExplicitNewBuild(property)) {
-	                return false;
-	            }
-	            if (isResalesPage && isExplicitNewBuild(property)) {
-	                return false;
-	            }
-
-	            const ref = normalize(property.ref);
-	            const town = normalize(property.town);
-	            const province = normalize(property.province);
-	            const type = normalize(property.type);
+        });
+        return sorted;
+    }
+
+    function spatialVerticesFromLatLngs(latlngs) {
+        const out = [];
+        if (!latlngs) return out;
+        // Leaflet polygons may return: [LatLng, LatLng...] or [[LatLng...]].
+        const ring = Array.isArray(latlngs) && Array.isArray(latlngs[0]) ? latlngs[0] : latlngs;
+        if (!Array.isArray(ring)) return out;
+        ring.forEach((pt) => {
+            const lat = Number(pt && pt.lat);
+            const lng = Number(pt && (pt.lng ?? pt.lon));
+            if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+            out.push({ lat, lng });
+        });
+        return out;
+    }
+
+    function spatialBoundsForVertices(vertices) {
+        const b = { minLat: Infinity, maxLat: -Infinity, minLon: Infinity, maxLon: -Infinity };
+        vertices.forEach((v) => {
+            b.minLat = Math.min(b.minLat, v.lat);
+            b.maxLat = Math.max(b.maxLat, v.lat);
+            b.minLon = Math.min(b.minLon, v.lng);
+            b.maxLon = Math.max(b.maxLon, v.lng);
+        });
+        if (!Number.isFinite(b.minLat)) {
+            return { minLat: 0, maxLat: 0, minLon: 0, maxLon: 0 };
+        }
+        return b;
+    }
+
+    // Ray-casting point-in-polygon (treat lon/lat as planar; good enough for local searches).
+    function pointInPolygon(lat, lon, vertices) {
+        if (!Array.isArray(vertices) || vertices.length < 3) return false;
+        let inside = false;
+        for (let i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
+            const yi = vertices[i].lat;
+            const xi = vertices[i].lng;
+            const yj = vertices[j].lat;
+            const xj = vertices[j].lng;
+
+            const intersect = ((yi > lat) !== (yj > lat))
+                && (lon < ((xj - xi) * (lat - yi)) / (yj - yi) + xi);
+            if (intersect) inside = !inside;
+        }
+        return inside;
+    }
+
+    function matchesSpatialFilter(property) {
+        if (spatialFilterMode === 'polygon' && spatialPolygon && Array.isArray(spatialPolygon.vertices)) {
+            const lat = Number(property && property.latitude);
+            const lon = Number(property && property.longitude);
+            if (!Number.isFinite(lat) || !Number.isFinite(lon)) return false;
+            const b = spatialPolygon.bounds;
+            if (b && (lat < b.minLat || lat > b.maxLat || lon < b.minLon || lon > b.maxLon)) {
+                return false;
+            }
+            return pointInPolygon(lat, lon, spatialPolygon.vertices);
+        }
+
+        if (spatialFilterMode === 'around' && spatialAround) {
+            const lat = Number(property && property.latitude);
+            const lon = Number(property && property.longitude);
+            if (!Number.isFinite(lat) || !Number.isFinite(lon)) return false;
+            const centerLat = Number(spatialAround.lat);
+            const centerLon = Number(spatialAround.lon);
+            const radiusKm = Number(spatialAround.radiusKm);
+            if (!Number.isFinite(centerLat) || !Number.isFinite(centerLon) || !Number.isFinite(radiusKm) || radiusKm <= 0) return true;
+            return distanceKm(lat, lon, centerLat, centerLon) <= radiusKm;
+        }
+
+        return true;
+    }
+
+    function setSpatialStatus(text) {
+        if (!spatialUi.statusEl) return;
+        spatialUi.statusEl.textContent = toText(text).trim();
+    }
+
+    function syncSpatialUi() {
+        const active = spatialFilterMode !== 'none' || spatialIsDrawing;
+        if (spatialUi.clearBtn) spatialUi.clearBtn.disabled = !active;
+        if (spatialUi.drawBtn) spatialUi.drawBtn.classList.toggle('scp-map-search__btn--active', spatialFilterMode === 'polygon' || spatialIsDrawing);
+        if (spatialUi.aroundBtn) spatialUi.aroundBtn.classList.toggle('scp-map-search__btn--active', spatialFilterMode === 'around');
+        if (spatialUi.radiusRow) {
+            const showRadius = spatialFilterMode === 'around';
+            spatialUi.radiusRow.hidden = !showRadius;
+            if (showRadius && spatialUi.radiusSelect) {
+                const km = spatialAround ? Number(spatialAround.radiusKm) : DEFAULT_AROUND_RADIUS_KM;
+                const nextKm = Number.isFinite(km) && km > 0 ? km : DEFAULT_AROUND_RADIUS_KM;
+                spatialUi.radiusSelect.value = String(nextKm);
+            }
+        }
+
+        if (spatialIsDrawing) {
+            setSpatialStatus(t('map.tools.status_drawing', 'Draw a circle around the area with your finger (or mouse). Lift to finish.'));
+            return;
+        }
+        if (spatialFilterMode === 'polygon') {
+            setSpatialStatus(t('map.tools.status_polygon', 'Perimeter filter is ON. Only listings inside the drawn area are shown.'));
+            return;
+        }
+        if (spatialFilterMode === 'around' && spatialAround) {
+            const km = Number(spatialAround.radiusKm) || DEFAULT_AROUND_RADIUS_KM;
+            setSpatialStatus(t('map.tools.status_around', 'Around me filter is ON ({km} km).', { km: String(km) }));
+            return;
+        }
+        setSpatialStatus(t('map.tools.status_none', 'Tip: Draw an area on the map, or search around you.'));
+    }
+
+    function ensureSpatialLayers() {
+        if (!map || typeof L === 'undefined') return;
+        if (spatialLayers) return;
+        spatialLayers = L.featureGroup().addTo(map);
+    }
+
+    function prefersFreehandSpatialDraw() {
+        try {
+            if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) return true;
+        } catch (error) {
+            // ignore
+        }
+        try {
+            if (navigator && Number(navigator.maxTouchPoints) > 0) return true;
+        } catch (error) {
+            // ignore
+        }
+        return false;
+    }
+
+    function captureMapInteractionState() {
+        if (!map) return null;
+        const get = (ctrl) => !!(ctrl && typeof ctrl.enabled === 'function' && ctrl.enabled());
+        return {
+            dragging: get(map.dragging),
+            touchZoom: get(map.touchZoom),
+            doubleClickZoom: get(map.doubleClickZoom),
+            boxZoom: get(map.boxZoom),
+            keyboard: get(map.keyboard)
+        };
+    }
+
+    function setMapInteractionsFromState(state) {
+        if (!map || !state) return;
+        const apply = (ctrl, enabled) => {
+            if (!ctrl) return;
+            try {
+                if (enabled) {
+                    if (typeof ctrl.enable === 'function') ctrl.enable();
+                } else if (typeof ctrl.disable === 'function') {
+                    ctrl.disable();
+                }
+            } catch (error) {
+                // ignore
+            }
+        };
+        apply(map.dragging, !!state.dragging);
+        apply(map.touchZoom, !!state.touchZoom);
+        apply(map.doubleClickZoom, !!state.doubleClickZoom);
+        apply(map.boxZoom, !!state.boxZoom);
+        apply(map.keyboard, !!state.keyboard);
+    }
+
+    function normalizeFreehandVertices(points, { maxPoints = 140, minStepPx = 8 } = {}) {
+        if (!Array.isArray(points) || points.length < 3) return [];
+        const compact = [];
+        let prev = null;
+        for (let i = 0; i < points.length; i += 1) {
+            const pt = points[i];
+            const lat = Number(pt && pt.lat);
+            const lng = Number(pt && pt.lng);
+            const x = Number(pt && pt.x);
+            const y = Number(pt && pt.y);
+            if (!Number.isFinite(lat) || !Number.isFinite(lng) || !Number.isFinite(x) || !Number.isFinite(y)) continue;
+            if (!prev) {
+                compact.push({ lat, lng, x, y });
+                prev = { x, y };
+                continue;
+            }
+            const dx = x - prev.x;
+            const dy = y - prev.y;
+            if (Math.sqrt((dx * dx) + (dy * dy)) < minStepPx) continue;
+            compact.push({ lat, lng, x, y });
+            prev = { x, y };
+        }
+
+        if (compact.length >= 3) {
+            const first = compact[0];
+            const last = compact[compact.length - 1];
+            const dx = last.x - first.x;
+            const dy = last.y - first.y;
+            if (Math.sqrt((dx * dx) + (dy * dy)) < (minStepPx * 2.2)) {
+                compact.pop();
+            }
+        }
+
+        if (compact.length > maxPoints) {
+            const step = Math.ceil(compact.length / maxPoints);
+            const reduced = [];
+            for (let i = 0; i < compact.length; i += step) reduced.push(compact[i]);
+            const tail = compact[compact.length - 1];
+            if (reduced[reduced.length - 1] !== tail) reduced.push(tail);
+            return reduced.map((v) => ({ lat: v.lat, lng: v.lng }));
+        }
+
+        return compact.map((v) => ({ lat: v.lat, lng: v.lng }));
+    }
+
+    function stopSpatialFreehandDraw({ keepStatus = false } = {}) {
+        const session = spatialFreehandSession;
+        if (!session) return;
+        spatialFreehandSession = null;
+        spatialIsDrawing = false;
+
+        try {
+            if (session.container && session.listeners) {
+                Object.entries(session.listeners).forEach(([eventName, handler]) => {
+                    if (!handler) return;
+                    session.container.removeEventListener(eventName, handler);
+                });
+            }
+        } catch (error) {
+            // ignore
+        }
+
+        try {
+            if (session.container && session.pointerId != null && typeof session.container.releasePointerCapture === 'function') {
+                session.container.releasePointerCapture(session.pointerId);
+            }
+        } catch (error) {
+            // ignore
+        }
+
+        try {
+            if (session.previewLayer) {
+                if (spatialLayers && typeof spatialLayers.removeLayer === 'function') spatialLayers.removeLayer(session.previewLayer);
+                else if (map && typeof map.removeLayer === 'function') map.removeLayer(session.previewLayer);
+            }
+        } catch (error) {
+            // ignore
+        }
+
+        try {
+            if (session.mapElement) session.mapElement.classList.remove('scp-map--drawing');
+        } catch (error) {
+            // ignore
+        }
+        setMapInteractionsFromState(session.interactionState);
+        if (!keepStatus) syncSpatialUi();
+    }
+
+    function startSpatialFreehandDraw() {
+        if (!map || typeof L === 'undefined' || !window.PointerEvent) {
+            setSpatialStatus(t('map.tools.draw_unavailable', 'Perimeter tool is not available right now.'));
+            return;
+        }
+
+        // Toggle behavior: tap Draw again to cancel drawing mode.
+        if (spatialFreehandSession) {
+            stopSpatialFreehandDraw();
+            return;
+        }
+
+        mapHasUserInteracted = true;
+        spatialIsDrawing = true;
+        syncSpatialUi();
+
+        try {
+            if (spatialDrawHandler && typeof spatialDrawHandler.disable === 'function') spatialDrawHandler.disable();
+        } catch (error) {
+            // ignore
+        }
+        spatialDrawHandler = null;
+
+        ensureSpatialLayers();
+
+        const mapElement = typeof map.getContainer === 'function' ? map.getContainer() : null;
+        if (!mapElement) {
+            spatialIsDrawing = false;
+            syncSpatialUi();
+            setSpatialStatus(t('map.tools.draw_unavailable', 'Perimeter tool is not available right now.'));
+            return;
+        }
+
+        const interactionState = captureMapInteractionState();
+        // Keep map still while user draws the perimeter.
+        setMapInteractionsFromState({
+            dragging: false,
+            touchZoom: false,
+            doubleClickZoom: false,
+            boxZoom: false,
+            keyboard: false
+        });
+
+        mapElement.classList.add('scp-map--drawing');
+
+        const minStepPx = prefersFreehandSpatialDraw() ? 7 : 5;
+        const session = {
+            mapElement,
+            container: mapElement,
+            interactionState,
+            pointerId: null,
+            points: [],
+            previewLayer: null,
+            listeners: null
+        };
+
+        const addPointFromEvent = (evt, { force = false } = {}) => {
+            if (!evt) return false;
+            let latlng = null;
+            let px = null;
+            try {
+                latlng = map.mouseEventToLatLng(evt);
+                px = map.mouseEventToContainerPoint(evt);
+            } catch (error) {
+                return false;
+            }
+            if (!latlng || !px) return false;
+            const next = {
+                lat: Number(latlng.lat),
+                lng: Number(latlng.lng),
+                x: Number(px.x),
+                y: Number(px.y)
+            };
+            if (!Number.isFinite(next.lat) || !Number.isFinite(next.lng) || !Number.isFinite(next.x) || !Number.isFinite(next.y)) return false;
+            const prev = session.points.length ? session.points[session.points.length - 1] : null;
+            if (!force && prev) {
+                const dx = next.x - prev.x;
+                const dy = next.y - prev.y;
+                if (Math.sqrt((dx * dx) + (dy * dy)) < minStepPx) return false;
+            }
+            session.points.push(next);
+            if (session.previewLayer && typeof session.previewLayer.setLatLngs === 'function') {
+                session.previewLayer.setLatLngs(session.points.map((p) => [p.lat, p.lng]));
+            }
+            return true;
+        };
+
+        const finishStroke = () => {
+            const points = session.points.slice();
+            stopSpatialFreehandDraw({ keepStatus: true });
+            const vertices = normalizeFreehandVertices(points, { maxPoints: 120, minStepPx });
+            if (vertices.length < 3) {
+                syncSpatialUi();
+                setSpatialStatus(t('map.tools.status_drawing', 'Draw a circle around the area with your finger (or mouse). Lift to finish.'));
+                return;
+            }
+            const layer = L.polygon(vertices.map((v) => [v.lat, v.lng]), {
+                color: '#38bdf8',
+                weight: 3,
+                opacity: 0.95,
+                fillOpacity: 0.12
+            });
+            setSpatialPolygonFromLayer(layer, { silent: false });
+        };
+
+        const onPointerDown = (evt) => {
+            if (!evt) return;
+            if (evt.pointerType === 'mouse' && Number(evt.button) !== 0) return;
+            if (session.pointerId != null) return;
+            const target = evt.target;
+            if (target && typeof target.closest === 'function' && target.closest('.scp-map-search')) return;
+            session.pointerId = evt.pointerId;
+            session.points = [];
+
+            try {
+                if (session.container && typeof session.container.setPointerCapture === 'function') {
+                    session.container.setPointerCapture(evt.pointerId);
+                }
+            } catch (error) {
+                // ignore
+            }
+
+            try {
+                if (session.previewLayer) {
+                    if (spatialLayers && typeof spatialLayers.removeLayer === 'function') spatialLayers.removeLayer(session.previewLayer);
+                    else if (map && typeof map.removeLayer === 'function') map.removeLayer(session.previewLayer);
+                }
+                session.previewLayer = L.polyline([], {
+                    color: '#38bdf8',
+                    weight: 3,
+                    opacity: 0.95,
+                    dashArray: '6 4'
+                });
+                if (spatialLayers && typeof spatialLayers.addLayer === 'function') spatialLayers.addLayer(session.previewLayer);
+                else if (map && typeof session.previewLayer.addTo === 'function') session.previewLayer.addTo(map);
+            } catch (error) {
+                // ignore
+            }
+
+            addPointFromEvent(evt, { force: true });
+            if (typeof evt.preventDefault === 'function') evt.preventDefault();
+        };
+
+        const onPointerMove = (evt) => {
+            if (!evt) return;
+            if (session.pointerId == null || evt.pointerId !== session.pointerId) return;
+            addPointFromEvent(evt);
+            if (typeof evt.preventDefault === 'function') evt.preventDefault();
+        };
+
+        const onPointerUp = (evt) => {
+            if (!evt) return;
+            if (session.pointerId == null || evt.pointerId !== session.pointerId) return;
+            finishStroke();
+            if (typeof evt.preventDefault === 'function') evt.preventDefault();
+        };
+
+        const onPointerCancel = (evt) => {
+            if (!evt) return;
+            if (session.pointerId == null || evt.pointerId !== session.pointerId) return;
+            stopSpatialFreehandDraw();
+            syncSpatialUi();
+            if (typeof evt.preventDefault === 'function') evt.preventDefault();
+        };
+
+        session.listeners = {
+            pointerdown: onPointerDown,
+            pointermove: onPointerMove,
+            pointerup: onPointerUp,
+            pointercancel: onPointerCancel
+        };
+
+        Object.entries(session.listeners).forEach(([eventName, handler]) => {
+            session.container.addEventListener(eventName, handler, { passive: false });
+        });
+
+        spatialFreehandSession = session;
+    }
+
+    function clearSpatialFilter({ silent = false } = {}) {
+        stopSpatialFreehandDraw({ keepStatus: true });
+        spatialFilterMode = 'none';
+        spatialPolygon = null;
+        spatialAround = null;
+        spatialIsDrawing = false;
+
+        try {
+            if (spatialDrawHandler && typeof spatialDrawHandler.disable === 'function') spatialDrawHandler.disable();
+        } catch (error) {
+            // ignore
+        }
+        spatialDrawHandler = null;
+
+        if (spatialLayers && typeof spatialLayers.clearLayers === 'function') {
+            spatialLayers.clearLayers();
+        } else if (map && typeof map.removeLayer === 'function') {
+            // Fallback in case featureGroup wasn't initialised for some reason.
+            [spatialPolygonLayer, spatialAroundCircle, spatialAroundMarker].forEach((layer) => {
+                if (!layer) return;
+                try { map.removeLayer(layer); } catch { /* ignore */ }
+            });
+        }
+
+        spatialPolygonLayer = null;
+        spatialAroundCircle = null;
+        spatialAroundMarker = null;
+
+        syncSpatialUi();
+        if (!silent) {
+            mapHasUserInteracted = true;
+            filterProperties();
+        }
+    }
+
+    function setSpatialPolygonFromLayer(layer, { silent = false } = {}) {
+        stopSpatialFreehandDraw({ keepStatus: true });
+        if (!layer) return;
+        const latlngs = typeof layer.getLatLngs === 'function' ? layer.getLatLngs() : null;
+        const vertices = spatialVerticesFromLatLngs(latlngs);
+        if (vertices.length < 3) return;
+        const bounds = spatialBoundsForVertices(vertices);
+
+        spatialFilterMode = 'polygon';
+        spatialPolygon = { vertices, bounds };
+        spatialAround = null;
+        spatialIsDrawing = false;
+
+        ensureSpatialLayers();
+        if (spatialLayers && spatialPolygonLayer && spatialPolygonLayer !== layer) {
+            try { spatialLayers.removeLayer(spatialPolygonLayer); } catch { /* ignore */ }
+        }
+        if (spatialLayers) {
+            try { spatialLayers.clearLayers(); } catch { /* ignore */ }
+            try { spatialLayers.addLayer(layer); } catch { /* ignore */ }
+        } else if (map && typeof layer.addTo === 'function') {
+            layer.addTo(map);
+        }
+
+        spatialPolygonLayer = layer;
+        spatialAroundCircle = null;
+        spatialAroundMarker = null;
+
+        try {
+            if (typeof layer.setStyle === 'function') {
+                layer.setStyle({ color: '#38bdf8', weight: 3, opacity: 0.95, fillOpacity: 0.12 });
+            }
+        } catch (error) {
+            // ignore
+        }
+
+        syncSpatialUi();
+        if (!silent) {
+            mapHasUserInteracted = true;
+            try {
+                if (map && typeof map.fitBounds === 'function' && typeof layer.getBounds === 'function') {
+                    map.fitBounds(layer.getBounds(), { padding: [30, 30], maxZoom: 13 });
+                }
+            } catch (error) {
+                // ignore
+            }
+            filterProperties();
+        }
+    }
+
+    function setSpatialAroundFilter({ lat, lon, radiusKm }, { silent = false } = {}) {
+        stopSpatialFreehandDraw({ keepStatus: true });
+        const centerLat = Number(lat);
+        const centerLon = Number(lon);
+        const km = Number(radiusKm);
+        if (!Number.isFinite(centerLat) || !Number.isFinite(centerLon)) return;
+
+        spatialFilterMode = 'around';
+        spatialAround = { lat: centerLat, lon: centerLon, radiusKm: Number.isFinite(km) && km > 0 ? km : DEFAULT_AROUND_RADIUS_KM };
+        spatialPolygon = null;
+        spatialIsDrawing = false;
+
+        ensureSpatialLayers();
+        if (spatialLayers) {
+            try { spatialLayers.clearLayers(); } catch { /* ignore */ }
+        }
+        spatialPolygonLayer = null;
+
+        if (map && typeof L !== 'undefined') {
+            const radiusMeters = Math.max(0, Number(spatialAround.radiusKm) || DEFAULT_AROUND_RADIUS_KM) * 1000;
+            spatialAroundCircle = L.circle([centerLat, centerLon], {
+                radius: radiusMeters,
+                color: '#22c55e',
+                weight: 2,
+                opacity: 0.9,
+                fillOpacity: 0.10,
+                dashArray: '6 6'
+            });
+            spatialAroundMarker = L.circleMarker([centerLat, centerLon], {
+                radius: 5,
+                color: '#22c55e',
+                weight: 2,
+                opacity: 1,
+                fillColor: '#22c55e',
+                fillOpacity: 1
+            });
+
+            if (spatialLayers) {
+                try { spatialLayers.addLayer(spatialAroundCircle); } catch { /* ignore */ }
+                try { spatialLayers.addLayer(spatialAroundMarker); } catch { /* ignore */ }
+            } else {
+                spatialAroundCircle.addTo(map);
+                spatialAroundMarker.addTo(map);
+            }
+        }
+
+        syncSpatialUi();
+        if (!silent) {
+            mapHasUserInteracted = true;
+            try {
+                if (map && spatialAroundCircle && typeof map.fitBounds === 'function' && typeof spatialAroundCircle.getBounds === 'function') {
+                    map.fitBounds(spatialAroundCircle.getBounds(), { padding: [30, 30], maxZoom: 13 });
+                }
+            } catch (error) {
+                // ignore
+            }
+            filterProperties();
+        }
+    }
+
+    function listingScopeFromPath(pathname) {
+        const path = toText(pathname).toLowerCase();
+        if (path.endsWith('new-builds.html')) return 'new_builds';
+        if (path.endsWith('properties.html')) return 'resales';
+        return 'all';
+    }
+
+    function buildCurrentSpatialCriteria() {
+        if (spatialFilterMode === 'polygon' && spatialPolygon && Array.isArray(spatialPolygon.vertices) && spatialPolygon.vertices.length >= 3) {
+            return {
+                mode: 'polygon',
+                polygon: spatialPolygon.vertices
+                    .slice(0, 80)
+                    .map((v) => ({ lat: Number(v.lat), lng: Number(v.lng) }))
+                    .filter((v) => Number.isFinite(v.lat) && Number.isFinite(v.lng))
+            };
+        }
+        if (spatialFilterMode === 'around' && spatialAround) {
+            const lat = Number(spatialAround.lat);
+            const lon = Number(spatialAround.lon);
+            const radiusKm = Number(spatialAround.radiusKm);
+            if (Number.isFinite(lat) && Number.isFinite(lon) && Number.isFinite(radiusKm) && radiusKm > 0) {
+                return { mode: 'around', around: { lat, lon, radiusKm } };
+            }
+        }
+        return { mode: 'none' };
+    }
+
+    function buildCurrentSavedAlertCriteria() {
+        return {
+            v: 1,
+            scope: listingScopeFromPath(window.location && window.location.pathname),
+            selectedCity: toText(selectedCity, 'all') || 'all',
+            selectedType: toText(selectedType, 'all') || 'all',
+            searchQuery: toText(searchQuery, '').trim(),
+            refQuery: toText(refQuery, '').trim(),
+            maxPrice: toText(maxPrice, 'any') || 'any',
+            minBeds: Number(minBeds) || 0,
+            minBaths: Number(minBaths) || 0,
+            poolFilter: toText(poolFilter, 'any') || 'any',
+            parkingFilter: toText(parkingFilter, 'any') || 'any',
+            maxBeachDistanceMeters: toText(maxBeachDistanceMeters, 'any') || 'any',
+            seaViewFilter: toText(seaViewFilter, 'any') || 'any',
+            operationMode: toText(operationMode, 'any') || 'any',
+            spatial: buildCurrentSpatialCriteria()
+        };
+    }
+
+    function normalizeSavedAlertCriteria(raw) {
+        const c = raw && typeof raw === 'object' ? raw : {};
+        const scope = toText(c.scope, 'resales');
+        const spatial = c.spatial && typeof c.spatial === 'object' ? c.spatial : { mode: 'none' };
+        const normalizedSpatial = (() => {
+            const mode = toText(spatial.mode, 'none');
+            if (mode === 'polygon') {
+                const points = Array.isArray(spatial.polygon) ? spatial.polygon : [];
+                const polygon = points
+                    .slice(0, 120)
+                    .map((v) => ({ lat: Number(v && v.lat), lng: Number(v && (v.lng ?? v.lon)) }))
+                    .filter((v) => Number.isFinite(v.lat) && Number.isFinite(v.lng));
+                if (polygon.length >= 3) return { mode: 'polygon', polygon };
+            }
+            if (mode === 'around') {
+                const a = spatial.around && typeof spatial.around === 'object' ? spatial.around : {};
+                const lat = Number(a.lat);
+                const lon = Number(a.lon);
+                const radiusKm = Number(a.radiusKm);
+                if (Number.isFinite(lat) && Number.isFinite(lon) && Number.isFinite(radiusKm) && radiusKm > 0) {
+                    return { mode: 'around', around: { lat, lon, radiusKm } };
+                }
+            }
+            return { mode: 'none' };
+        })();
+
+        return {
+            v: Number(c.v) || 1,
+            scope: ['resales', 'new_builds', 'all'].includes(scope) ? scope : 'resales',
+            selectedCity: toText(c.selectedCity, 'all') || 'all',
+            selectedType: toText(c.selectedType, 'all') || 'all',
+            searchQuery: toText(c.searchQuery, '').trim(),
+            refQuery: toText(c.refQuery, '').trim(),
+            maxPrice: toText(c.maxPrice, 'any') || 'any',
+            minBeds: Math.max(0, Number(c.minBeds) || 0),
+            minBaths: Math.max(0, Number(c.minBaths) || 0),
+            poolFilter: toText(c.poolFilter, 'any') || 'any',
+            parkingFilter: toText(c.parkingFilter, 'any') || 'any',
+            maxBeachDistanceMeters: toText(c.maxBeachDistanceMeters, 'any') || 'any',
+            seaViewFilter: toText(c.seaViewFilter, 'any') || 'any',
+            operationMode: toText(c.operationMode, 'any') || 'any',
+            spatial: normalizedSpatial
+        };
+    }
+
+    function savedAlertCriteriaHash(criteria) {
+        const normalized = normalizeSavedAlertCriteria(criteria);
+        return JSON.stringify(normalized);
+    }
+
+    function cityLabelForAlert(cityKey) {
+        const key = toText(cityKey).trim().toLowerCase();
+        if (!key || key === 'all') return t('city.all', 'All Destinations');
+        const found = MAIN_DESTINATIONS.find((it) => toText(it && it.value).trim().toLowerCase() === key);
+        if (found) return t(found.i18nKey || '', found.fallback || key);
+        return key.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
+    }
+
+    function savedAlertNameForCriteria(criteria) {
+        const c = normalizeSavedAlertCriteria(criteria);
+        const parts = [];
+
+        if (c.scope === 'new_builds') parts.push(t('alerts.scope.new_builds', 'New Builds'));
+        else if (c.scope === 'resales') parts.push(t('alerts.scope.resales', 'Properties'));
+        else parts.push(t('alerts.scope.all', 'All Listings'));
+
+        if (c.selectedCity && c.selectedCity !== 'all') parts.push(cityLabelForAlert(c.selectedCity));
+        if (c.maxPrice && c.maxPrice !== 'any') parts.push(`≤ €${numberFormat.format(Number(c.maxPrice) || 0)}`);
+        if ((Number(c.minBeds) || 0) > 0) parts.push(`${Number(c.minBeds)}+ ${t('filters.beds', 'Beds')}`);
+
+        if (!parts.length) return t('alerts.default_name', 'Saved alert');
+        return parts.slice(0, 4).join(' · ');
+    }
+
+    function setSaveAlertButtonState(state, labelText) {
+        if (!saveAlertBtn) return;
+        if (saveAlertResetTimer) {
+            window.clearTimeout(saveAlertResetTimer);
+            saveAlertResetTimer = null;
+        }
+        saveAlertBtn.classList.remove('is-busy', 'is-ok', 'is-error');
+        if (state === 'busy') saveAlertBtn.classList.add('is-busy');
+        if (state === 'ok') saveAlertBtn.classList.add('is-ok');
+        if (state === 'error') saveAlertBtn.classList.add('is-error');
+        saveAlertBtn.textContent = toText(labelText, t('properties.save_alert', 'Save alert'));
+    }
+
+    function resetSaveAlertButtonText() {
+        if (!saveAlertBtn) return;
+        setSaveAlertButtonState('idle', t('properties.save_alert', 'Save alert'));
+    }
+
+    function flashSaveAlertButton(state, text, durationMs = 1800) {
+        if (!saveAlertBtn) return;
+        setSaveAlertButtonState(state, text);
+        saveAlertResetTimer = window.setTimeout(() => {
+            resetSaveAlertButtonText();
+        }, Math.max(900, Number(durationMs) || 1800));
+    }
+
+    function updateSaveAlertButtonUi() {
+        if (!saveAlertBtn) return;
+        const signedIn = Boolean(supabaseClient && supabaseUser);
+        saveAlertBtn.disabled = false;
+        saveAlertBtn.title = signedIn
+            ? t('properties.save_alert_hint', 'Save these requirements and get notified when new matches arrive.')
+            : t('properties.save_alert_signin_hint', 'Sign in first to save requirements and receive match alerts.');
+        if (!saveAlertBtn.classList.contains('is-busy') && !saveAlertBtn.classList.contains('is-ok') && !saveAlertBtn.classList.contains('is-error')) {
+            saveAlertBtn.textContent = t('properties.save_alert', 'Save alert');
+        }
+    }
+
+    async function supabaseUpsertSavedAlert(client, user, criteria) {
+        const normalized = normalizeSavedAlertCriteria(criteria);
+        const payload = {
+            user_id: user.id,
+            user_email: toText(user.email).trim() || null,
+            name: savedAlertNameForCriteria(normalized),
+            scope: normalized.scope,
+            criteria: normalized,
+            criteria_hash: savedAlertCriteriaHash(normalized),
+            enabled: true,
+            notify_in_app: true,
+            notify_email: false
+        };
+        return await client
+            .from('saved_search_alerts')
+            .upsert(payload, { onConflict: 'user_id,criteria_hash' })
+            .select('id,name,criteria_hash')
+            .single();
+    }
+
+    async function supabaseFetchSavedAlerts(client, userId) {
+        const { data, error } = await client
+            .from('saved_search_alerts')
+            .select('id,name,criteria,enabled')
+            .eq('user_id', userId)
+            .eq('enabled', true)
+            .limit(30);
+        if (error) throw error;
+        return Array.isArray(data) ? data : [];
+    }
+
+    function matchesSpatialCriteriaForAlert(property, spatialCriteria) {
+        const s = spatialCriteria && typeof spatialCriteria === 'object' ? spatialCriteria : { mode: 'none' };
+        const mode = toText(s.mode, 'none');
+        if (mode === 'none') return true;
+
+        const lat = Number(property && property.latitude);
+        const lon = Number(property && property.longitude);
+        if (!Number.isFinite(lat) || !Number.isFinite(lon)) return false;
+
+        if (mode === 'polygon') {
+            const points = Array.isArray(s.polygon) ? s.polygon : [];
+            if (points.length < 3) return true;
+            const vertices = points
+                .map((v) => ({ lat: Number(v && v.lat), lng: Number(v && (v.lng ?? v.lon)) }))
+                .filter((v) => Number.isFinite(v.lat) && Number.isFinite(v.lng));
+            if (vertices.length < 3) return true;
+            const bounds = spatialBoundsForVertices(vertices);
+            if (lat < bounds.minLat || lat > bounds.maxLat || lon < bounds.minLon || lon > bounds.maxLon) return false;
+            return pointInPolygon(lat, lon, vertices);
+        }
+
+        if (mode === 'around') {
+            const a = s.around && typeof s.around === 'object' ? s.around : {};
+            const centerLat = Number(a.lat);
+            const centerLon = Number(a.lon);
+            const radiusKm = Number(a.radiusKm);
+            if (!Number.isFinite(centerLat) || !Number.isFinite(centerLon) || !Number.isFinite(radiusKm) || radiusKm <= 0) return true;
+            return distanceKm(lat, lon, centerLat, centerLon) <= radiusKm;
+        }
+
+        return true;
+    }
+
+    function savedAlertMatchesProperty(property, criteriaInput) {
+        const criteria = normalizeSavedAlertCriteria(criteriaInput);
+        const scope = criteria.scope;
+
+        if (scope === 'new_builds' && !isExplicitNewBuild(property)) return false;
+        if (scope === 'resales' && isExplicitNewBuild(property)) return false;
+
+        const loweredSearch = normalize(criteria.searchQuery);
+        const loweredRef = normalize(criteria.refQuery);
+        const ref = normalize(property.ref);
+        const town = normalize(property.town);
+        const province = normalize(property.province);
+        const type = normalize(property.type);
+        const description = normalize(property.description);
+        const features = featuresFor(property).join(' ').toLowerCase();
+
+        const propertyPrice = listingPriceNumber(property);
+        const propertyBeds = Number(property.beds) || 0;
+        const propertyBaths = Number(property.baths) || 0;
+
+        const matchesRef = loweredRef === '' || ref.includes(loweredRef);
+        const matchesCity = matchesDestination(property, criteria.selectedCity);
+
+        const typeNorm = normalize(property.type);
+        let matchesType = true;
+        if (criteria.selectedType !== 'all') {
+            const selectedNorm = normalize(criteria.selectedType);
+            if (selectedNorm === 'new build') {
+                matchesType = scope === 'new_builds' ? isExplicitNewBuild(property) : isNewBuild(property);
+            } else if (selectedNorm === 'investment') {
+                matchesType = isInvestmentDeal(property);
+            } else if (selectedNorm === 'apartment') {
+                matchesType = typeNorm.includes('apartment') || typeNorm.includes('apartamento');
+            } else if (selectedNorm === 'penthouse') {
+                matchesType = typeNorm.includes('penthouse');
+            } else if (selectedNorm === 'town house') {
+                matchesType = typeNorm.includes('town house') || typeNorm.includes('casa');
+            } else {
+                matchesType = typeNorm === selectedNorm || typeNorm.includes(selectedNorm);
+            }
+        }
+
+        const matchesSearch = loweredSearch === ''
+            || town.includes(loweredSearch)
+            || province.includes(loweredSearch)
+            || type.includes(loweredSearch)
+            || description.includes(loweredSearch);
+
+        const matchesPrice = criteria.maxPrice === 'any'
+            || (Number.isFinite(propertyPrice) && propertyPrice <= Number(criteria.maxPrice));
+        const matchesBeds = propertyBeds >= (Number(criteria.minBeds) || 0);
+        const matchesBaths = propertyBaths >= (Number(criteria.minBaths) || 0);
+
+        let matchesPool = true;
+        if (criteria.poolFilter !== 'any') {
+            if (criteria.poolFilter === 'pool') {
+                matchesPool = features.includes('pool') || features.includes('swimming');
+            }
+            if (criteria.poolFilter === 'private') {
+                matchesPool = features.includes('private pool')
+                    || (features.includes('pool') && features.includes('private'));
+            }
+            if (criteria.poolFilter === 'communal') {
+                matchesPool = features.includes('communal pool')
+                    || features.includes('community pool')
+                    || features.includes('shared pool');
+            }
+        }
+
+        const matchesParking = criteria.parkingFilter !== 'parking'
+            || features.includes('parking')
+            || features.includes('garage')
+            || features.includes('carport');
+
+        const maxBeach = criteria.maxBeachDistanceMeters === 'any' ? null : Number(criteria.maxBeachDistanceMeters);
+        const distanceMeters = maxBeach ? beachDistanceMetersFor(property) : null;
+        const matchesBeach = maxBeach === null
+            || (Number.isFinite(distanceMeters) && distanceMeters <= maxBeach);
+
+        const matchesSeaView = criteria.seaViewFilter === 'any'
+            || (criteria.seaViewFilter === 'yes' && hasSeaView(property));
+
+        const op = operationFor(property);
+        const matchesOperation = criteria.operationMode === 'any' || op === criteria.operationMode;
+
+        const passes = matchesRef
+            && matchesCity
+            && matchesType
+            && matchesOperation
+            && matchesSearch
+            && matchesPrice
+            && matchesBeds
+            && matchesBaths
+            && matchesPool
+            && matchesParking
+            && matchesBeach
+            && matchesSeaView
+            && matchesSpatialCriteriaForAlert(property, criteria.spatial);
+
+        if (!passes) return false;
+
+        const imageCandidates = imageUrlsFor(property);
+        if (!imageCandidates.length) return false;
+        const propertyId = propertyIdFor(property);
+        const cached = propertyId ? imageOkCache.get(propertyId) : undefined;
+        if (cached === false) return false;
+
+        return true;
+    }
+
+    function matchingPropertiesForSavedAlert(criteria) {
+        return allProperties.filter((property) => savedAlertMatchesProperty(property, criteria));
+    }
+
+    async function supabaseUpsertSavedAlertMatches(client, user, alertRow, matches) {
+        const alertId = toText(alertRow && alertRow.id).trim();
+        if (!alertId || !Array.isArray(matches) || !matches.length) return;
+        const payload = matches.slice(0, 1200).map((property) => {
+            const pid = propertyIdFor(property);
+            const ref = toText(property && property.ref).trim();
+            return {
+                alert_id: alertId,
+                user_id: user.id,
+                property_id: pid,
+                property_ref: ref || null,
+                property_town: toText(property && property.town).trim() || null,
+                property_type: toText(property && property.type).trim() || null,
+                property_price: Number.isFinite(listingPriceNumber(property)) ? listingPriceNumber(property) : null,
+                property_url: buildPropertyLink(ref || pid)
+            };
+        }).filter((row) => toText(row.property_id).trim());
+
+        if (!payload.length) return;
+
+        const chunkSize = 200;
+        for (let i = 0; i < payload.length; i += chunkSize) {
+            const chunk = payload.slice(i, i + chunkSize);
+            // Do not override existing rows (e.g. seen=true). We only want truly new matches inserted.
+            const { error } = await client
+                .from('saved_search_matches')
+                .upsert(chunk, { onConflict: 'alert_id,property_id', ignoreDuplicates: true });
+            if (error) throw error;
+        }
+    }
+
+    async function syncSavedAlertsForUser({ force = false } = {}) {
+        if (alertsSyncInFlight) return;
+        if (!supabaseClient || !supabaseUser) return;
+
+        const uid = toText(supabaseUser.id).trim();
+        if (!uid) return;
+
+        const now = Date.now();
+        if (!force && alertsLastSyncedUserId === uid && (now - alertsLastSyncAt) < 2 * 60 * 1000) {
+            return;
+        }
+
+        alertsSyncInFlight = true;
+        try {
+            const alerts = await supabaseFetchSavedAlerts(supabaseClient, uid);
+            if (!alerts.length) {
+                alertsLastSyncedUserId = uid;
+                alertsLastSyncAt = now;
+                return;
+            }
+            for (const alertRow of alerts.slice(0, 30)) {
+                const criteria = normalizeSavedAlertCriteria(alertRow && alertRow.criteria);
+                const matches = matchingPropertiesForSavedAlert(criteria);
+                if (!matches.length) continue;
+                await supabaseUpsertSavedAlertMatches(supabaseClient, supabaseUser, alertRow, matches);
+            }
+            alertsLastSyncedUserId = uid;
+            alertsLastSyncAt = Date.now();
+        } catch (error) {
+            // ignore
+        } finally {
+            alertsSyncInFlight = false;
+        }
+    }
+
+    function scheduleSavedAlertsSync({ delayMs = 900, force = false } = {}) {
+        if (alertsSyncTimer) {
+            window.clearTimeout(alertsSyncTimer);
+            alertsSyncTimer = null;
+        }
+        alertsSyncTimer = window.setTimeout(() => {
+            alertsSyncTimer = null;
+            syncSavedAlertsForUser({ force });
+        }, Math.max(120, Number(delayMs) || 900));
+    }
+
+    async function onSaveAlertClicked() {
+        if (!saveAlertBtn) return;
+        const client = supabaseClient || getSupabase();
+        if (!client || !supabaseUser) {
+            flashSaveAlertButton('error', t('properties.save_alert_signin', 'Sign in first to save alerts'));
+            return;
+        }
+
+        syncFiltersFromControls();
+        filterProperties();
+
+        setSaveAlertButtonState('busy', t('properties.save_alert_saving', 'Saving…'));
+        try {
+            const criteria = buildCurrentSavedAlertCriteria();
+            const { error } = await supabaseUpsertSavedAlert(client, supabaseUser, criteria);
+            if (error) {
+                const msg = toText(error && error.message).toLowerCase();
+                if (msg.includes('relation') && msg.includes('saved_search')) {
+                    flashSaveAlertButton('error', t('properties.save_alert_setup', 'Run Supabase SQL update'));
+                } else {
+                    flashSaveAlertButton('error', t('properties.save_alert_error', 'Could not save alert'));
+                }
+                return;
+            }
+            flashSaveAlertButton('ok', t('properties.save_alert_saved', 'Alert saved'));
+            scheduleSavedAlertsSync({ delayMs: 200, force: true });
+        } catch (error) {
+            flashSaveAlertButton('error', t('properties.save_alert_error', 'Could not save alert'));
+        }
+    }
+
+    function filterProperties() {
+        const loweredSearch = normalize(searchQuery);
+        const loweredRef = normalize(refQuery);
+        const path = toText(window.location && window.location.pathname).toLowerCase();
+        const isNewBuildsPage = path.endsWith('new-builds.html');
+        const isResalesPage = path.endsWith('properties.html');
+
+        currentProperties = allProperties.filter((property) => {
+            // Keep sections clearly separated:
+            // - `new-builds.html` shows only explicit developer/new-build feed listings
+            // - `properties.html` hides explicit new-build listings (resale-focused)
+            if (isNewBuildsPage && !isExplicitNewBuild(property)) {
+                return false;
+            }
+            if (isResalesPage && isExplicitNewBuild(property)) {
+                return false;
+            }
+
+            const ref = normalize(property.ref);
+            const town = normalize(property.town);
+            const province = normalize(property.province);
+            const type = normalize(property.type);
             const description = normalize(property.description);
             const features = featuresFor(property).join(' ').toLowerCase();
 
@@ -3455,19 +3455,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 && matchesBeach
                 && matchesSeaView;
 
-		            if (!passesCoreFilters) {
-		                return false;
-		            }
+            if (!passesCoreFilters) {
+                return false;
+            }
 
-		            if (!matchesSpatialFilter(property)) {
-		                return false;
-		            }
+            if (!matchesSpatialFilter(property)) {
+                return false;
+            }
 
-		            // Never show a listing with no image URLs at all.
-		            const imageCandidates = imageUrlsFor(property);
-		            if (!imageCandidates.length) {
-		                return false;
-		            }
+            // Never show a listing with no image URLs at all.
+            const imageCandidates = imageUrlsFor(property);
+            if (!imageCandidates.length) {
+                return false;
+            }
 
             // Hide only when we know images are broken. Otherwise show immediately and verify in background.
             const propertyId = propertyIdFor(property);
@@ -4209,14 +4209,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const reportBody = encodeURIComponent(
             `Hello Spanish Coast Properties,\n\nI found an issue with this listing and would like to flag it.\n\nReference: ${reference || t('common.na', 'N/A')}\nLocation: ${town}, ${province}\nApp link: ${propertyLink}${sourceUrl ? `\nOfficial page: ${sourceUrl}` : ''}\n\nWhat seems wrong:\n- \n\n(If possible, add a screenshot or describe the problem.)\n\nThank you.`
         );
-	        const reportMailto = `mailto:info@spanishcoastproperties.com?subject=${reportSubject}&body=${reportBody}`;
-	        const descriptionHtml = formatDescriptionHtml(description);
-            const langCode = currentLangCode();
-	        if (syncUrl) {
-	            // Use pushState so browser Back closes the modal. If modal is already open, replace instead.
-	            const shouldPush = Boolean(pushUrl) && !isModalOpen();
-	            setBrowserRef(reference, { push: shouldPush, state: { modalRef: reference } });
-	        }
+        const reportMailto = `mailto:info@spanishcoastproperties.com?subject=${reportSubject}&body=${reportBody}`;
+        const descriptionHtml = formatDescriptionHtml(description);
+        const langCode = currentLangCode();
+        if (syncUrl) {
+            // Use pushState so browser Back closes the modal. If modal is already open, replace instead.
+            const shouldPush = Boolean(pushUrl) && !isModalOpen();
+            setBrowserRef(reference, { push: shouldPush, state: { modalRef: reference } });
+        }
 
         const modalTitleHtml = [
             `<span data-i18n-dynamic>${escapeHtml(type)}</span>`,
@@ -4534,33 +4534,33 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-	        const shareNativeBtn = modalDetails.querySelector('[data-share="native"]');
-	        const shareCopyBtn = modalDetails.querySelector('[data-share="copy"]');
-	        const shareCopyCaptionBtn = modalDetails.querySelector('[data-share="copy-caption"]');
-	        const shareInstagramBtn = modalDetails.querySelector('[data-share="instagram"]');
-	        const shareTiktokBtn = modalDetails.querySelector('[data-share="tiktok"]');
+        const shareNativeBtn = modalDetails.querySelector('[data-share="native"]');
+        const shareCopyBtn = modalDetails.querySelector('[data-share="copy"]');
+        const shareCopyCaptionBtn = modalDetails.querySelector('[data-share="copy-caption"]');
+        const shareInstagramBtn = modalDetails.querySelector('[data-share="instagram"]');
+        const shareTiktokBtn = modalDetails.querySelector('[data-share="tiktok"]');
 
-            const nearbyAreaEl = modalDetails.querySelector('[data-nearby-area]');
-            const nearbyStatusEl = modalDetails.querySelector('[data-nearby-status]');
-            initNearbySnapshot(nearbyAreaEl, nearbyStatusEl, { pid: activeModalPropertyId, town, province, latitude, longitude });
+        const nearbyAreaEl = modalDetails.querySelector('[data-nearby-area]');
+        const nearbyStatusEl = modalDetails.querySelector('[data-nearby-status]');
+        initNearbySnapshot(nearbyAreaEl, nearbyStatusEl, { pid: activeModalPropertyId, town, province, latitude, longitude });
 
-		        const shareBtnLabel = (btn) => {
-		            if (!btn) return '';
-		            const label = btn.querySelector('.share-label');
-		            return label ? label.textContent : btn.textContent;
-	        };
+        const shareBtnLabel = (btn) => {
+            if (!btn) return '';
+            const label = btn.querySelector('.share-label');
+            return label ? label.textContent : btn.textContent;
+        };
 
-	        const setShareBtnLabel = (btn, text) => {
-	            if (!btn) return;
-	            const label = btn.querySelector('.share-label');
-	            if (label) label.textContent = text;
-	            else btn.textContent = text;
-	        };
+        const setShareBtnLabel = (btn, text) => {
+            if (!btn) return;
+            const label = btn.querySelector('.share-label');
+            if (label) label.textContent = text;
+            else btn.textContent = text;
+        };
 
-	        if (shareNativeBtn) {
-	            shareNativeBtn.addEventListener('click', async () => {
-	                if (navigator.share) {
-	                    try {
+        if (shareNativeBtn) {
+            shareNativeBtn.addEventListener('click', async () => {
+                if (navigator.share) {
+                    try {
                         await navigator.share({ title: shareTitle, text: shareCaptionNoUrl, url: shareCardLink });
                         return;
                     } catch (error) {
@@ -4573,84 +4573,84 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-		        const shareToSocialApp = (btn, appName) => {
-		            if (!btn) return;
-		            btn.addEventListener('click', async () => {
-		                // Social apps rarely accept a URL as a "post" on mobile. Instead, generate a short reel video
-		                // (in-browser) and let the user share the file from the reel page.
-		                try {
-		                    if (reference) {
-		                        const reelUrl = buildAppUrl('reel.html', {
-		                            ref: reference,
-		                            app: String(appName || '').toLowerCase(),
-		                            autoplay: '1',
-		                            share: '1'
-		                        });
-		                        window.open(reelUrl, '_blank', 'noopener,noreferrer');
-		                        return;
-		                    }
-		                } catch {
-		                    // fall back to link sharing below
-		                }
-		                if (navigator.share) {
-		                    try {
-		                        await navigator.share({ title: shareTitle, text: shareCaptionNoUrl, url: shareCardLink });
-		                        return;
-		                    } catch (error) {
+        const shareToSocialApp = (btn, appName) => {
+            if (!btn) return;
+            btn.addEventListener('click', async () => {
+                // Social apps rarely accept a URL as a "post" on mobile. Instead, generate a short reel video
+                // (in-browser) and let the user share the file from the reel page.
+                try {
+                    if (reference) {
+                        const reelUrl = buildAppUrl('reel.html', {
+                            ref: reference,
+                            app: String(appName || '').toLowerCase(),
+                            autoplay: '1',
+                            share: '1'
+                        });
+                        window.open(reelUrl, '_blank', 'noopener,noreferrer');
+                        return;
+                    }
+                } catch {
+                    // fall back to link sharing below
+                }
+                if (navigator.share) {
+                    try {
+                        await navigator.share({ title: shareTitle, text: shareCaptionNoUrl, url: shareCardLink });
+                        return;
+                    } catch (error) {
                         // Fall through to copy.
                     }
                 }
-	                if (shareCopyBtn) {
-	                    shareCopyBtn.click();
-	                }
-	                const original = shareBtnLabel(btn);
-	                setShareBtnLabel(btn, t('modal.share.copied_open_app', `Copied. Open ${appName}`, { app: appName }));
-	                window.setTimeout(() => {
-	                    setShareBtnLabel(btn, original);
-	                }, 1800);
-	            });
-	        };
+                if (shareCopyBtn) {
+                    shareCopyBtn.click();
+                }
+                const original = shareBtnLabel(btn);
+                setShareBtnLabel(btn, t('modal.share.copied_open_app', `Copied. Open ${appName}`, { app: appName }));
+                window.setTimeout(() => {
+                    setShareBtnLabel(btn, original);
+                }, 1800);
+            });
+        };
 
         shareToSocialApp(shareInstagramBtn, 'Instagram');
         shareToSocialApp(shareTiktokBtn, 'TikTok');
 
-	        if (shareCopyBtn) {
-	            shareCopyBtn.addEventListener('click', async () => {
-	                const original = shareBtnLabel(shareCopyBtn);
-	                try {
-	                    if (navigator.clipboard && navigator.clipboard.writeText) {
-	                        await navigator.clipboard.writeText(shareCardLink);
-	                    } else {
-	                        window.prompt(t('modal.share.copy_prompt', 'Copy link:'), shareCardLink);
-	                    }
-	                    setShareBtnLabel(shareCopyBtn, t('modal.copied', 'Copied'));
-	                    window.setTimeout(() => {
-	                        setShareBtnLabel(shareCopyBtn, original);
-	                    }, 1400);
-	                } catch (error) {
-	                    window.prompt(t('modal.share.copy_prompt', 'Copy link:'), shareCardLink);
-	                }
-	            });
-	        }
+        if (shareCopyBtn) {
+            shareCopyBtn.addEventListener('click', async () => {
+                const original = shareBtnLabel(shareCopyBtn);
+                try {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        await navigator.clipboard.writeText(shareCardLink);
+                    } else {
+                        window.prompt(t('modal.share.copy_prompt', 'Copy link:'), shareCardLink);
+                    }
+                    setShareBtnLabel(shareCopyBtn, t('modal.copied', 'Copied'));
+                    window.setTimeout(() => {
+                        setShareBtnLabel(shareCopyBtn, original);
+                    }, 1400);
+                } catch (error) {
+                    window.prompt(t('modal.share.copy_prompt', 'Copy link:'), shareCardLink);
+                }
+            });
+        }
 
-	        if (shareCopyCaptionBtn) {
-	            shareCopyCaptionBtn.addEventListener('click', async () => {
-	                const original = shareBtnLabel(shareCopyCaptionBtn);
-	                try {
-	                    if (navigator.clipboard && navigator.clipboard.writeText) {
-	                        await navigator.clipboard.writeText(shareCaptionWithUrl);
-	                    } else {
-	                        window.prompt(t('modal.share.copy_prompt', 'Copy link:'), shareCaptionWithUrl);
-	                    }
-	                    setShareBtnLabel(shareCopyCaptionBtn, t('modal.copied', 'Copied'));
-	                    window.setTimeout(() => {
-	                        setShareBtnLabel(shareCopyCaptionBtn, original);
-	                    }, 1400);
-	                } catch (error) {
-	                    window.prompt(t('modal.share.copy_prompt', 'Copy link:'), shareCaptionWithUrl);
-	                }
-	            });
-	        }
+        if (shareCopyCaptionBtn) {
+            shareCopyCaptionBtn.addEventListener('click', async () => {
+                const original = shareBtnLabel(shareCopyCaptionBtn);
+                try {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        await navigator.clipboard.writeText(shareCaptionWithUrl);
+                    } else {
+                        window.prompt(t('modal.share.copy_prompt', 'Copy link:'), shareCaptionWithUrl);
+                    }
+                    setShareBtnLabel(shareCopyCaptionBtn, t('modal.copied', 'Copied'));
+                    window.setTimeout(() => {
+                        setShareBtnLabel(shareCopyCaptionBtn, original);
+                    }, 1400);
+                } catch (error) {
+                    window.prompt(t('modal.share.copy_prompt', 'Copy link:'), shareCaptionWithUrl);
+                }
+            });
+        }
 
         const thumbs = document.querySelectorAll('.thumb');
         const mainImg = document.getElementById('main-gallery-img');
@@ -4932,10 +4932,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return MARKER_ICON_SVG[kind] || MARKER_ICON_SVG.property;
     }
 
-	    function createMarkerIcon(property) {
-	        if (typeof L === 'undefined' || typeof L.divIcon !== 'function') {
-	            return undefined;
-	        }
+    function createMarkerIcon(property) {
+        if (typeof L === 'undefined' || typeof L.divIcon !== 'function') {
+            return undefined;
+        }
 
         const kind = markerKindFor(property);
         const markerText = escapeHtml(formatListingMarkerText(property));
@@ -4954,239 +4954,239 @@ document.addEventListener('DOMContentLoaded', () => {
             iconSize: [160, 48],
             // Anchor at the bottom of the pin.
             iconAnchor: [24, 48]
-	        });
-	    }
+        });
+    }
 
-	    const MAP_TOOL_ICON_BASE = 'class="scp-map-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"';
-	    const MAP_TOOL_ICON_SVG = {
-	        draw: `<svg ${MAP_TOOL_ICON_BASE}><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`,
-	        around: `<svg ${MAP_TOOL_ICON_BASE}><circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/><circle cx="12" cy="12" r="8"/></svg>`,
-	        clear: `<svg ${MAP_TOOL_ICON_BASE}><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>`
-	    };
+    const MAP_TOOL_ICON_BASE = 'class="scp-map-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"';
+    const MAP_TOOL_ICON_SVG = {
+        draw: `<svg ${MAP_TOOL_ICON_BASE}><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`,
+        around: `<svg ${MAP_TOOL_ICON_BASE}><circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/><circle cx="12" cy="12" r="8"/></svg>`,
+        clear: `<svg ${MAP_TOOL_ICON_BASE}><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>`
+    };
 
-	    function aroundRadiusKmFromUi() {
-	        const raw = spatialUi.radiusSelect ? Number(spatialUi.radiusSelect.value) : DEFAULT_AROUND_RADIUS_KM;
-	        if (Number.isFinite(raw) && raw > 0) return raw;
-	        return DEFAULT_AROUND_RADIUS_KM;
-	    }
+    function aroundRadiusKmFromUi() {
+        const raw = spatialUi.radiusSelect ? Number(spatialUi.radiusSelect.value) : DEFAULT_AROUND_RADIUS_KM;
+        if (Number.isFinite(raw) && raw > 0) return raw;
+        return DEFAULT_AROUND_RADIUS_KM;
+    }
 
-	    function startSpatialDrawPolygon() {
-	        if (!map || typeof L === 'undefined') return;
-	        stopSpatialFreehandDraw({ keepStatus: true });
-	        if (prefersFreehandSpatialDraw()) {
-	            startSpatialFreehandDraw();
-	            return;
-	        }
-	        if (!L.Draw || !L.Draw.Polygon) {
-	            setSpatialStatus(t('map.tools.draw_unavailable', 'Perimeter tool is not available right now.'));
-	            return;
-	        }
+    function startSpatialDrawPolygon() {
+        if (!map || typeof L === 'undefined') return;
+        stopSpatialFreehandDraw({ keepStatus: true });
+        if (prefersFreehandSpatialDraw()) {
+            startSpatialFreehandDraw();
+            return;
+        }
+        if (!L.Draw || !L.Draw.Polygon) {
+            setSpatialStatus(t('map.tools.draw_unavailable', 'Perimeter tool is not available right now.'));
+            return;
+        }
 
-	        mapHasUserInteracted = true;
-	        spatialIsDrawing = true;
-	        syncSpatialUi();
+        mapHasUserInteracted = true;
+        spatialIsDrawing = true;
+        syncSpatialUi();
 
-	        try {
-	            if (spatialDrawHandler && typeof spatialDrawHandler.disable === 'function') spatialDrawHandler.disable();
-	        } catch (error) {
-	            // ignore
-	        }
+        try {
+            if (spatialDrawHandler && typeof spatialDrawHandler.disable === 'function') spatialDrawHandler.disable();
+        } catch (error) {
+            // ignore
+        }
 
-	        spatialDrawHandler = new L.Draw.Polygon(map, {
-	            allowIntersection: false,
-	            showArea: true,
-	            shapeOptions: {
-	                color: '#38bdf8',
-	                weight: 3,
-	                opacity: 0.95,
-	                fillOpacity: 0.12
-	            }
-	        });
+        spatialDrawHandler = new L.Draw.Polygon(map, {
+            allowIntersection: false,
+            showArea: true,
+            shapeOptions: {
+                color: '#38bdf8',
+                weight: 3,
+                opacity: 0.95,
+                fillOpacity: 0.12
+            }
+        });
 
-	        try {
-	            spatialDrawHandler.enable();
-	        } catch (error) {
-	            spatialIsDrawing = false;
-	            syncSpatialUi();
-	            setSpatialStatus(t('map.tools.draw_unavailable', 'Perimeter tool is not available right now.'));
-	        }
-	    }
+        try {
+            spatialDrawHandler.enable();
+        } catch (error) {
+            spatialIsDrawing = false;
+            syncSpatialUi();
+            setSpatialStatus(t('map.tools.draw_unavailable', 'Perimeter tool is not available right now.'));
+        }
+    }
 
-	    function startSpatialAroundMe() {
-	        if (!map) return;
-	        stopSpatialFreehandDraw({ keepStatus: true });
-	        spatialIsDrawing = false;
-	        if (!navigator || !navigator.geolocation) {
-	            setSpatialStatus(t('map.tools.geo_unavailable', 'Geolocation is not available on this device.'));
-	            return;
-	        }
+    function startSpatialAroundMe() {
+        if (!map) return;
+        stopSpatialFreehandDraw({ keepStatus: true });
+        spatialIsDrawing = false;
+        if (!navigator || !navigator.geolocation) {
+            setSpatialStatus(t('map.tools.geo_unavailable', 'Geolocation is not available on this device.'));
+            return;
+        }
 
-	        mapHasUserInteracted = true;
-	        setSpatialStatus(t('map.tools.geo_getting', 'Getting your location…'));
+        mapHasUserInteracted = true;
+        setSpatialStatus(t('map.tools.geo_getting', 'Getting your location…'));
 
-	        const radiusKm = aroundRadiusKmFromUi();
-	        const options = { enableHighAccuracy: false, timeout: 12000, maximumAge: 10 * 60 * 1000 };
+        const radiusKm = aroundRadiusKmFromUi();
+        const options = { enableHighAccuracy: false, timeout: 12000, maximumAge: 10 * 60 * 1000 };
 
-	        navigator.geolocation.getCurrentPosition(
-	            (pos) => {
-	                const lat = Number(pos && pos.coords && pos.coords.latitude);
-	                const lon = Number(pos && pos.coords && pos.coords.longitude);
-	                if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
-	                    setSpatialStatus(t('map.tools.geo_failed', 'Could not read your location.'));
-	                    return;
-	                }
-	                setSpatialAroundFilter({ lat, lon, radiusKm }, { silent: false });
-	            },
-	            (err) => {
-	                const code = Number(err && err.code);
-	                if (code === 1) {
-	                    setSpatialStatus(t('map.tools.geo_denied', 'Location permission denied.'));
-	                } else if (code === 3) {
-	                    setSpatialStatus(t('map.tools.geo_timeout', 'Location request timed out. Try again.'));
-	                } else {
-	                    setSpatialStatus(t('map.tools.geo_failed', 'Location request failed. Try again.'));
-	                }
-	            },
-	            options
-	        );
-	    }
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                const lat = Number(pos && pos.coords && pos.coords.latitude);
+                const lon = Number(pos && pos.coords && pos.coords.longitude);
+                if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+                    setSpatialStatus(t('map.tools.geo_failed', 'Could not read your location.'));
+                    return;
+                }
+                setSpatialAroundFilter({ lat, lon, radiusKm }, { silent: false });
+            },
+            (err) => {
+                const code = Number(err && err.code);
+                if (code === 1) {
+                    setSpatialStatus(t('map.tools.geo_denied', 'Location permission denied.'));
+                } else if (code === 3) {
+                    setSpatialStatus(t('map.tools.geo_timeout', 'Location request timed out. Try again.'));
+                } else {
+                    setSpatialStatus(t('map.tools.geo_failed', 'Location request failed. Try again.'));
+                }
+            },
+            options
+        );
+    }
 
-	    function initSpatialMapControls() {
-	        if (!map || typeof L === 'undefined') return;
-	        if (map._scpSpatialControlsReady) return;
-	        map._scpSpatialControlsReady = true;
+    function initSpatialMapControls() {
+        if (!map || typeof L === 'undefined') return;
+        if (map._scpSpatialControlsReady) return;
+        map._scpSpatialControlsReady = true;
 
-	        ensureSpatialLayers();
+        ensureSpatialLayers();
 
-	        const control = L.control({ position: 'topleft' });
-	        control.onAdd = () => {
-	            const wrap = L.DomUtil.create('div', 'scp-map-search');
-	            wrap.setAttribute('role', 'group');
-	            wrap.setAttribute('aria-label', t('map.tools.aria', 'Map search tools'));
+        const control = L.control({ position: 'topleft' });
+        control.onAdd = () => {
+            const wrap = L.DomUtil.create('div', 'scp-map-search');
+            wrap.setAttribute('role', 'group');
+            wrap.setAttribute('aria-label', t('map.tools.aria', 'Map search tools'));
 
-	            const row = document.createElement('div');
-	            row.className = 'scp-map-search__row';
+            const row = document.createElement('div');
+            row.className = 'scp-map-search__row';
 
-	            const mkBtn = ({ key, fallback, icon, className = '' } = {}) => {
-	                const btn = document.createElement('button');
-	                btn.type = 'button';
-	                btn.className = `scp-map-search__btn ${className}`.trim();
-	                btn.innerHTML = `${icon || ''}<span>${escapeHtml(t(key, fallback))}</span>`;
-	                return btn;
-	            };
+            const mkBtn = ({ key, fallback, icon, className = '' } = {}) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `scp-map-search__btn ${className}`.trim();
+                btn.innerHTML = `${icon || ''}<span>${escapeHtml(t(key, fallback))}</span>`;
+                return btn;
+            };
 
-	            const drawBtn = mkBtn({
-	                key: 'map.tools.draw',
-	                fallback: 'Draw area',
-	                icon: MAP_TOOL_ICON_SVG.draw
-	            });
-	            const aroundBtn = mkBtn({
-	                key: 'map.tools.around',
-	                fallback: 'Around me',
-	                icon: MAP_TOOL_ICON_SVG.around
-	            });
-	            const clearBtn = mkBtn({
-	                key: 'map.tools.clear',
-	                fallback: 'Clear',
-	                icon: MAP_TOOL_ICON_SVG.clear,
-	                className: 'scp-map-search__btn--danger'
-	            });
+            const drawBtn = mkBtn({
+                key: 'map.tools.draw',
+                fallback: 'Draw area',
+                icon: MAP_TOOL_ICON_SVG.draw
+            });
+            const aroundBtn = mkBtn({
+                key: 'map.tools.around',
+                fallback: 'Around me',
+                icon: MAP_TOOL_ICON_SVG.around
+            });
+            const clearBtn = mkBtn({
+                key: 'map.tools.clear',
+                fallback: 'Clear',
+                icon: MAP_TOOL_ICON_SVG.clear,
+                className: 'scp-map-search__btn--danger'
+            });
 
-	            clearBtn.disabled = true;
+            clearBtn.disabled = true;
 
-	            row.appendChild(drawBtn);
-	            row.appendChild(aroundBtn);
-	            row.appendChild(clearBtn);
+            row.appendChild(drawBtn);
+            row.appendChild(aroundBtn);
+            row.appendChild(clearBtn);
 
-	            const radiusRow = document.createElement('div');
-	            radiusRow.className = 'scp-map-search__row scp-map-search__radius';
-	            radiusRow.hidden = true;
+            const radiusRow = document.createElement('div');
+            radiusRow.className = 'scp-map-search__row scp-map-search__radius';
+            radiusRow.hidden = true;
 
-	            const radiusLabel = document.createElement('label');
-	            radiusLabel.textContent = t('map.tools.radius', 'Radius');
+            const radiusLabel = document.createElement('label');
+            radiusLabel.textContent = t('map.tools.radius', 'Radius');
 
-	            const radiusSelect = document.createElement('select');
-	            AROUND_RADIUS_KM_OPTIONS.forEach((km) => {
-	                const opt = document.createElement('option');
-	                opt.value = String(km);
-	                opt.textContent = `${km} km`;
-	                radiusSelect.appendChild(opt);
-	            });
-	            radiusSelect.value = String(DEFAULT_AROUND_RADIUS_KM);
+            const radiusSelect = document.createElement('select');
+            AROUND_RADIUS_KM_OPTIONS.forEach((km) => {
+                const opt = document.createElement('option');
+                opt.value = String(km);
+                opt.textContent = `${km} km`;
+                radiusSelect.appendChild(opt);
+            });
+            radiusSelect.value = String(DEFAULT_AROUND_RADIUS_KM);
 
-	            radiusRow.appendChild(radiusLabel);
-	            radiusRow.appendChild(radiusSelect);
+            radiusRow.appendChild(radiusLabel);
+            radiusRow.appendChild(radiusSelect);
 
-	            const statusEl = document.createElement('div');
-	            statusEl.className = 'scp-map-search__status';
-	            statusEl.setAttribute('aria-live', 'polite');
+            const statusEl = document.createElement('div');
+            statusEl.className = 'scp-map-search__status';
+            statusEl.setAttribute('aria-live', 'polite');
 
-	            wrap.appendChild(row);
-	            wrap.appendChild(radiusRow);
-	            wrap.appendChild(statusEl);
+            wrap.appendChild(row);
+            wrap.appendChild(radiusRow);
+            wrap.appendChild(statusEl);
 
-	            spatialUi.drawBtn = drawBtn;
-	            spatialUi.aroundBtn = aroundBtn;
-	            spatialUi.clearBtn = clearBtn;
-	            spatialUi.radiusRow = radiusRow;
-	            spatialUi.radiusSelect = radiusSelect;
-	            spatialUi.statusEl = statusEl;
+            spatialUi.drawBtn = drawBtn;
+            spatialUi.aroundBtn = aroundBtn;
+            spatialUi.clearBtn = clearBtn;
+            spatialUi.radiusRow = radiusRow;
+            spatialUi.radiusSelect = radiusSelect;
+            spatialUi.statusEl = statusEl;
 
-	            drawBtn.addEventListener('click', () => startSpatialDrawPolygon());
-	            aroundBtn.addEventListener('click', () => startSpatialAroundMe());
-	            clearBtn.addEventListener('click', () => clearSpatialFilter());
+            drawBtn.addEventListener('click', () => startSpatialDrawPolygon());
+            aroundBtn.addEventListener('click', () => startSpatialAroundMe());
+            clearBtn.addEventListener('click', () => clearSpatialFilter());
 
-	            radiusSelect.addEventListener('change', () => {
-	                const nextKm = aroundRadiusKmFromUi();
-	                if (spatialFilterMode === 'around' && spatialAround) {
-	                    setSpatialAroundFilter({ lat: spatialAround.lat, lon: spatialAround.lon, radiusKm: nextKm }, { silent: false });
-	                } else {
-	                    // Keep UI informative even before geolocation is granted.
-	                    if (spatialFilterMode === 'none') syncSpatialUi();
-	                }
-	            });
+            radiusSelect.addEventListener('change', () => {
+                const nextKm = aroundRadiusKmFromUi();
+                if (spatialFilterMode === 'around' && spatialAround) {
+                    setSpatialAroundFilter({ lat: spatialAround.lat, lon: spatialAround.lon, radiusKm: nextKm }, { silent: false });
+                } else {
+                    // Keep UI informative even before geolocation is granted.
+                    if (spatialFilterMode === 'none') syncSpatialUi();
+                }
+            });
 
-	            try {
-	                L.DomEvent.disableClickPropagation(wrap);
-	                L.DomEvent.disableScrollPropagation(wrap);
-	            } catch (error) {
-	                // ignore
-	            }
+            try {
+                L.DomEvent.disableClickPropagation(wrap);
+                L.DomEvent.disableScrollPropagation(wrap);
+            } catch (error) {
+                // ignore
+            }
 
-	            // Initial hint.
-	            syncSpatialUi();
+            // Initial hint.
+            syncSpatialUi();
 
-	            return wrap;
-	        };
+            return wrap;
+        };
 
-	        control.addTo(map);
+        control.addTo(map);
 
-	        // Hook Leaflet.Draw polygon creation events.
-	        const createdEvent = (L.Draw && L.Draw.Event && L.Draw.Event.CREATED) ? L.Draw.Event.CREATED : 'draw:created';
-	        map.on(createdEvent, (e) => {
-	            if (!e || !e.layer) return;
-	            spatialIsDrawing = false;
-	            try {
-	                if (spatialDrawHandler && typeof spatialDrawHandler.disable === 'function') spatialDrawHandler.disable();
-	            } catch (error) {
-	                // ignore
-	            }
-	            spatialDrawHandler = null;
-	            setSpatialPolygonFromLayer(e.layer, { silent: false });
-	        });
+        // Hook Leaflet.Draw polygon creation events.
+        const createdEvent = (L.Draw && L.Draw.Event && L.Draw.Event.CREATED) ? L.Draw.Event.CREATED : 'draw:created';
+        map.on(createdEvent, (e) => {
+            if (!e || !e.layer) return;
+            spatialIsDrawing = false;
+            try {
+                if (spatialDrawHandler && typeof spatialDrawHandler.disable === 'function') spatialDrawHandler.disable();
+            } catch (error) {
+                // ignore
+            }
+            spatialDrawHandler = null;
+            setSpatialPolygonFromLayer(e.layer, { silent: false });
+        });
 
-	        const drawStopEvent = (L.Draw && L.Draw.Event && L.Draw.Event.DRAWSTOP) ? L.Draw.Event.DRAWSTOP : 'draw:drawstop';
-	        map.on(drawStopEvent, () => {
-	            if (!spatialIsDrawing) return;
-	            spatialIsDrawing = false;
-	            syncSpatialUi();
-	        });
-	    }
+        const drawStopEvent = (L.Draw && L.Draw.Event && L.Draw.Event.DRAWSTOP) ? L.Draw.Event.DRAWSTOP : 'draw:drawstop';
+        map.on(drawStopEvent, () => {
+            if (!spatialIsDrawing) return;
+            spatialIsDrawing = false;
+            syncSpatialUi();
+        });
+    }
 
-	    function initMap() {
-	        if (typeof L === 'undefined') {
-	            return;
-	        }
+    function initMap() {
+        if (typeof L === 'undefined') {
+            return;
+        }
 
         const mapElement = document.getElementById('map');
         if (!mapElement) {
@@ -5207,14 +5207,14 @@ document.addEventListener('DOMContentLoaded', () => {
             ? L.markerClusterGroup()
             : L.layerGroup();
 
-	        markersGroup.addTo(map);
+        markersGroup.addTo(map);
 
-	        initSpatialMapControls();
+        initSpatialMapControls();
 
-	        // Preserve user zoom/position: once the user pans/zooms, avoid auto-fit snapping back.
-	        map.on('movestart', (e) => {
-	            if (e && e.originalEvent) mapHasUserInteracted = true;
-	        });
+        // Preserve user zoom/position: once the user pans/zooms, avoid auto-fit snapping back.
+        map.on('movestart', (e) => {
+            if (e && e.originalEvent) mapHasUserInteracted = true;
+        });
         map.on('zoomstart', (e) => {
             if (e && e.originalEvent) mapHasUserInteracted = true;
         });
@@ -5418,19 +5418,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     window.addEventListener('popstate', () => {
-	        const url = new URL(window.location.href);
-	        const ref = toText(url.searchParams.get('ref')).trim();
-	        const section = toText(url.searchParams.get('section')).trim();
-	        const path = toText(window.location.pathname).toLowerCase();
-	        const inferredSection = (path.endsWith('properties.html') || path.endsWith('new-builds.html'))
-	            ? 'properties'
-	            : path.endsWith('businesses.html')
-	                ? 'businesses'
-	                : path.endsWith('vehicles.html')
-	                    ? 'vehicles'
-	                    : path.endsWith('services.html')
-	                        ? 'services'
-	                        : 'home';
+        const url = new URL(window.location.href);
+        const ref = toText(url.searchParams.get('ref')).trim();
+        const section = toText(url.searchParams.get('section')).trim();
+        const path = toText(window.location.pathname).toLowerCase();
+        const inferredSection = (path.endsWith('properties.html') || path.endsWith('new-builds.html'))
+            ? 'properties'
+            : path.endsWith('businesses.html')
+                ? 'businesses'
+                : path.endsWith('vehicles.html')
+                    ? 'vehicles'
+                    : path.endsWith('services.html')
+                        ? 'services'
+                        : 'home';
         const next = ref ? 'properties' : (section || inferredSection || 'home');
         setActiveSection(next, { pushUrl: false });
 
@@ -5486,10 +5486,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-	    updateFavoritesControls();
-	    updateSaveAlertButtonUi();
-	    initSupabaseFavoritesSync();
-	    initSupabaseApprovedPropertyListings();
+    updateFavoritesControls();
+    updateSaveAlertButtonUi();
+    initSupabaseFavoritesSync();
+    initSupabaseApprovedPropertyListings();
 
     if (favoritesToggleBtn) {
         favoritesToggleBtn.addEventListener('click', () => {
@@ -5502,60 +5502,60 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-	    if (favoritesSendBtn) {
-	        favoritesSendBtn.addEventListener('click', () => {
-	            openCatalogBuilder();
-	        });
-	    }
+    if (favoritesSendBtn) {
+        favoritesSendBtn.addEventListener('click', () => {
+            openCatalogBuilder();
+        });
+    }
 
-	    if (openCatalogBuilderBtn) {
-	        openCatalogBuilderBtn.addEventListener('click', () => {
-	            openCatalogBuilder();
-	        });
-	    }
+    if (openCatalogBuilderBtn) {
+        openCatalogBuilderBtn.addEventListener('click', () => {
+            openCatalogBuilder();
+        });
+    }
 
-	    if (catalogBuilderCloseBtn) {
-	        catalogBuilderCloseBtn.addEventListener('click', () => {
-	            closeCatalogBuilder();
-	        });
-	    }
+    if (catalogBuilderCloseBtn) {
+        catalogBuilderCloseBtn.addEventListener('click', () => {
+            closeCatalogBuilder();
+        });
+    }
 
-	    if (catalogBuilderModal) {
-	        catalogBuilderModal.addEventListener('click', (event) => {
-	            if (event.target === catalogBuilderModal) {
-	                closeCatalogBuilder();
-	            }
-	        });
-	    }
+    if (catalogBuilderModal) {
+        catalogBuilderModal.addEventListener('click', (event) => {
+            if (event.target === catalogBuilderModal) {
+                closeCatalogBuilder();
+            }
+        });
+    }
 
-	    [catalogBuilderSourceEl, catalogBuilderLimitEl, catalogBuilderClientEl, catalogBuilderWlEl].forEach((el) => {
-	        if (!el) return;
-	        const eventName = el.tagName === 'SELECT' ? 'change' : 'input';
-	        el.addEventListener(eventName, () => {
-	            updateCatalogBuilderUi();
-	        });
-	        if (eventName !== 'change') {
-	            el.addEventListener('change', () => updateCatalogBuilderUi());
-	        }
-	    });
+    [catalogBuilderSourceEl, catalogBuilderLimitEl, catalogBuilderClientEl, catalogBuilderWlEl].forEach((el) => {
+        if (!el) return;
+        const eventName = el.tagName === 'SELECT' ? 'change' : 'input';
+        el.addEventListener(eventName, () => {
+            updateCatalogBuilderUi();
+        });
+        if (eventName !== 'change') {
+            el.addEventListener('change', () => updateCatalogBuilderUi());
+        }
+    });
 
-	    if (catalogBuilderOpenBtn) {
-	        catalogBuilderOpenBtn.addEventListener('click', () => {
-	            onCatalogBuilderAction('open');
-	        });
-	    }
+    if (catalogBuilderOpenBtn) {
+        catalogBuilderOpenBtn.addEventListener('click', () => {
+            onCatalogBuilderAction('open');
+        });
+    }
 
-	    if (catalogBuilderCopyBtn) {
-	        catalogBuilderCopyBtn.addEventListener('click', () => {
-	            onCatalogBuilderAction('copy');
-	        });
-	    }
+    if (catalogBuilderCopyBtn) {
+        catalogBuilderCopyBtn.addEventListener('click', () => {
+            onCatalogBuilderAction('copy');
+        });
+    }
 
-	    if (saveAlertBtn) {
-	        saveAlertBtn.addEventListener('click', () => {
-	            onSaveAlertClicked();
-	        });
-	    }
+    if (saveAlertBtn) {
+        saveAlertBtn.addEventListener('click', () => {
+            onSaveAlertClicked();
+        });
+    }
 
     function syncFiltersFromControls() {
         selectedType = typeFilter ? typeFilter.value : 'all';
@@ -5574,11 +5574,11 @@ document.addEventListener('DOMContentLoaded', () => {
         seaViewFilter = seaViewFilterEl ? seaViewFilterEl.value : 'any';
     }
 
-	    function resetAllFilters() {
-	        selectedCity = 'all';
-	        selectedType = 'all';
-	        searchQuery = '';
-	        refQuery = '';
+    function resetAllFilters() {
+        selectedCity = 'all';
+        selectedType = 'all';
+        searchQuery = '';
+        refQuery = '';
         maxPrice = 'any';
         minBeds = 0;
         minBaths = 0;
@@ -5587,14 +5587,14 @@ document.addEventListener('DOMContentLoaded', () => {
         maxBeachDistanceMeters = 'any';
         seaViewFilter = 'any';
         operationMode = 'any';
-	        sortMode = 'date_desc';
-	        favoritesOnly = false;
-	        autoRefFromUrl = '';
-	        clearSpatialFilter({ silent: true });
+        sortMode = 'date_desc';
+        favoritesOnly = false;
+        autoRefFromUrl = '';
+        clearSpatialFilter({ silent: true });
 
-	        if (refSearchInput) refSearchInput.value = '';
-	        if (searchInput) searchInput.value = '';
-	        if (typeFilter) typeFilter.value = 'all';
+        if (refSearchInput) refSearchInput.value = '';
+        if (searchInput) searchInput.value = '';
+        if (typeFilter) typeFilter.value = 'all';
         if (dealFilterEl) dealFilterEl.value = 'any';
         if (priceFilter) priceFilter.value = '';
         if (bedsFilter) bedsFilter.value = '0';
@@ -5788,11 +5788,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Initialization ---
     renderCatalogs();
 
-	    window.addEventListener('scp:i18n-updated', () => {
-	        try {
-	            generateCityButtons();
-	            renderCatalogs();
-	            renderProperties({ reset: true });
+    window.addEventListener('scp:i18n-updated', () => {
+        try {
+            generateCityButtons();
+            renderCatalogs();
+            renderProperties({ reset: true });
             if (propertyGrid) queueDynamicTranslate(propertyGrid);
             if (modalDetails && modal && modal.style.display === 'block') queueDynamicTranslate(modalDetails);
         } catch (error) {
@@ -5906,3 +5906,9 @@ document.addEventListener('DOMContentLoaded', () => {
         })();
     }
 });
+// Failsafe: if the DOM was already loaded when this script ran, the
+// DOMContentLoaded event has already fired and the handler above missed it.
+// Re-dispatch the event so the handler executes.
+if (document.readyState !== 'loading') {
+    document.dispatchEvent(new Event('DOMContentLoaded'));
+}

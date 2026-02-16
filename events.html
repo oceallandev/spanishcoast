@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events &amp; Fiestas | Spanish Coast Properties</title>
+    <meta name="description"
+        content="Local events, Spanish fiestas, holidays, and useful local updates for clients and tourists in Costa Blanca South.">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/events.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Events &amp; Fiestas | Spanish Coast Properties">
+    <meta property="og:description"
+        content="Local events, Spanish fiestas, holidays, and useful local updates for Costa Blanca South.">
+    <meta property="og:url" content="https://oceallandev.github.io/spanishcoast/events.html">
+    <meta property="og:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Events &amp; Fiestas | Spanish Coast Properties">
+    <meta name="twitter:description"
+        content="Local events, Spanish fiestas, holidays, and useful local updates for Costa Blanca South.">
+    <meta name="twitter:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
+
+    <meta name="theme-color" content="#030712">
+
+    <link rel="stylesheet" href="style.css?v=20260212b">
+    <script src="scp-affiliate.js?v=20260215c"></script>
+    <script defer src="i18n.js?v=20260215c"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body data-section="blog">
+    <div class="bg-mesh"></div>
+
+    <header class="main-header glass sticky">
+        <div class="header-inner">
+            <div class="header-left">
+                <div class="logo">
+                    <a href="index.html" aria-label="Spanish Coast Properties Home">
+                        <img src="assets/header-logo.png?v=2" alt="Spanish Coast Properties" class="main-logo"
+                            id="main-logo-img" style="cursor: pointer;">
+                    </a>
+                </div>
+                <div class="brand-info">
+                    <span class="brand-name">Spanish Coast Properties</span>
+                </div>
+                <nav class="primary-nav" id="primary-nav" aria-label="Site sections">
+                    <a class="nav-link" data-section="home" href="index.html" data-i18n="nav.home">Home</a>
+                    <a class="nav-link" data-section="properties" href="properties.html" data-i18n="nav.properties">Properties</a>
+                    <a class="nav-link" data-section="businesses" href="businesses.html" data-i18n="nav.businesses">Businesses</a>
+                    <a class="nav-link" data-section="vehicles" href="vehicles.html" data-i18n="nav.vehicles">Vehicles</a>
+                    <a class="nav-link" data-section="services" href="services.html" data-i18n="nav.services">Services</a>
+                    <a class="nav-link" data-section="blog" href="blog.html" data-i18n="nav.blog">Blog</a>
+                </nav>
+            </div>
+
+            <div class="header-right">
+                <button id="mobile-menu-btn" class="mobile-menu-btn" type="button" aria-expanded="false"
+                    aria-label="Menu">☰</button>
+                <a class="header-cta" href="account.html" data-i18n="nav.account">Account</a>
+            </div>
+        </div>
+    </header>
+
+    <div id="mobile-menu-backdrop" class="mobile-menu-backdrop" aria-hidden="true"></div>
+    <aside id="mobile-menu" class="mobile-menu" aria-hidden="true">
+        <div class="mobile-menu-head">
+            <div class="mobile-menu-title">Spanish Coast Properties</div>
+            <button id="mobile-menu-close" class="mobile-menu-close" type="button">✕</button>
+        </div>
+        <nav class="mobile-menu-links" aria-label="Mobile menu">
+            <a href="index.html" data-i18n="nav.home">Home</a>
+            <a href="properties.html" data-i18n="nav.properties">Properties</a>
+            <a href="businesses.html" data-i18n="nav.businesses">Businesses</a>
+            <a href="vehicles.html" data-i18n="nav.vehicles">Vehicles</a>
+            <a href="services.html" data-i18n="nav.services">Services</a>
+            <a href="blog.html" data-i18n="nav.blog">Blog</a>
+        </nav>
+        <div class="mobile-menu-foot">
+            <a class="cta-button" href="account.html" data-i18n="nav.account">Account</a>
+            <a class="cta-button" href="tel:+34624867866" data-i18n="nav.call">Call</a>
+        </div>
+    </aside>
+
+    <main class="site-main" id="site-main">
+        <section class="page-section catalog-section active" aria-label="Local events">
+            <div class="catalog-hero">
+                <h2 data-i18n="events.hero.title">Local Events &amp; Fiestas</h2>
+                <p data-i18n="events.hero.subtitle">
+                    What's on in Costa Blanca South: fiestas, holidays, and useful local updates.
+                </p>
+                <p class="muted" data-i18n="events.hero.disclaimer">
+                    Always verify times and locations using the source links.
+                </p>
+                <div class="service-tags" aria-label="Local tags">
+                    <span class="tag" data-i18n="events.tag.updated_daily">Updated daily</span>
+                    <a class="tag" href="blog.html" data-i18n="events.tag.blog">Blog</a>
+                </div>
+            </div>
+
+            <div class="catalog-controls glass" aria-label="Event filters">
+                <div class="catalog-controls-left">
+                    <div class="results-sort">
+                        <label for="events-query" data-i18n="events.filters.search">Search</label>
+                        <input id="events-query" class="blog-input" type="search" placeholder="Search events…"
+                            data-i18n-placeholder="events.filters.search_placeholder" />
+                    </div>
+                    <div class="results-sort">
+                        <label for="events-range" data-i18n="events.filters.range">Range</label>
+                        <select id="events-range">
+                            <option value="upcoming" data-i18n="events.range.upcoming">Upcoming</option>
+                            <option value="last15" data-i18n="events.range.last15">Last 15 days</option>
+                            <option value="year" data-i18n="events.range.year">Next 12 months</option>
+                            <option value="all" data-i18n="events.range.all">All</option>
+                        </select>
+                    </div>
+                    <div class="results-sort">
+                        <label for="events-kind" data-i18n="events.filters.type">Type</label>
+                        <select id="events-kind">
+                            <option value="all" data-i18n="events.kind.all">All</option>
+                            <option value="event" data-i18n="events.kind.event">Events</option>
+                            <option value="fiesta" data-i18n="events.kind.fiesta">Fiestas</option>
+                            <option value="holiday" data-i18n="events.kind.holiday">Holidays</option>
+                            <option value="update" data-i18n="events.kind.update">Local updates</option>
+                        </select>
+                    </div>
+                    <div class="results-sort">
+                        <label for="events-lang" data-i18n="blog.filters.language">Language</label>
+                        <select id="events-lang">
+                            <option value="auto" data-i18n="blog.lang.auto">My language</option>
+                            <option value="all" data-i18n="blog.lang.all">All languages</option>
+                            <option value="en">EN</option>
+                            <option value="es">ES</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="catalog-controls-right">
+                    <button id="events-reload" class="view-toggle-btn" type="button" data-i18n="events.actions.reload">Reload</button>
+                    <div class="catalog-count" id="events-count" aria-label="Item count"></div>
+                </div>
+            </div>
+
+            <div class="catalog-grid blog-grid" id="events-grid" aria-label="Local items"></div>
+
+            <div class="catalog-hero" id="events-updated-wrap" hidden>
+                <div class="blog-updated-row">
+                    <div class="blog-updated-label" data-i18n="events.updated.label">Last updated</div>
+                    <div class="blog-updated-value" id="events-updated">…</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h3>Spanish Coast Properties</h3>
+                <p data-i18n="blog.footer.p">
+                    Daily updates for Costa Blanca South: property, business, vehicles, and practical advice.
+                </p>
+            </div>
+            <div class="footer-col">
+                <h4 data-i18n="blog.footer.explore">Explore</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+                    <li><a href="properties.html" data-i18n="nav.properties">Properties</a></li>
+                    <li><a href="new-builds.html" data-i18n="nav.new_builds">New Builds</a></li>
+                    <li><a href="services.html" data-i18n="nav.services">Services</a></li>
+                    <li><a href="account.html" data-i18n="nav.account">Account</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 data-i18n="blog.footer.contact">Contact</h4>
+                <ul class="footer-links">
+                    <li><a href="tel:+34624867866">+34 624 867 866</a></li>
+                    <li><a href="mailto:info@spanishcoastproperties.com">info@spanishcoastproperties.com</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
+    </footer>
+
+    <div id="events-modal" class="modal" aria-hidden="true">
+        <div class="modal-content blog-modal" role="dialog" aria-modal="true" aria-label="Local item">
+            <button class="close-modal" id="events-modal-close" type="button" aria-label="Close">✕</button>
+            <div class="blog-modal-body" id="events-modal-body"></div>
+        </div>
+    </div>
+
+    <script defer src="local-intel.js?v=20260215a"></script>
+    <script defer src="events.js?v=20260215a"></script>
+    <script src="utils-module.js?v=20260215c"></script>
+    <script src="map-module.js?v=20260215c"></script>
+    <script src="supabase-module.js?v=20260215c"></script>
+    <script src="ui-module.js?v=20260215c"></script>
+    <script src="filter-module.js?v=20260215c"></script>
+    <script defer src="site.js?v=20260215c"></script>
+</body>
+
+</html>
+

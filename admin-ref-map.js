@@ -87,6 +87,20 @@
     .replace(/\s+/g, '_')
     .replace(/[^a-z0-9_]/g, '');
 
+  const normalizeScpRef = (raw) => {
+    // Normalize common copy/paste issues (unicode dashes, missing dash, stray whitespace).
+    let s = String(raw || '').trim();
+    if (!s) return '';
+    s = s.replace(/[‐‑‒–—−]/g, '-'); // normalize unicode dashes
+    s = s.replace(/\s+/g, '');
+    s = s.toUpperCase();
+    // Allow "SCP2932" -> "SCP-2932"
+    if (/^SCP\d+$/.test(s)) s = s.replace(/^SCP(\d+)$/, 'SCP-$1');
+    // Allow "SCP_2932" / "SCP 2932" -> "SCP-2932"
+    if (/^SCP[-_]\d+$/.test(s)) s = s.replace(/^SCP[-_](\d+)$/, 'SCP-$1');
+    return s;
+  };
+
   const parseCsvLine = (line) => {
     const out = [];
     let cur = '';
@@ -168,7 +182,7 @@
       const scpRaw = idxScp >= 0 ? (cols[idxScp] || '') : (cols[0] || '');
       const origRaw = idxOrig >= 0 ? (cols[idxOrig] || '') : (cols[2] || '');
       if (!scpRaw || !origRaw) continue;
-      const scp = String(scpRaw).trim().toUpperCase();
+      const scp = normalizeScpRef(scpRaw);
       const original_ref = String(origRaw).trim();
       if (!scp || !original_ref) continue;
 
@@ -314,7 +328,7 @@
   const lookup = async () => {
     const client = window.scpSupabase || null;
     if (!client) return;
-    const ref = lookupRefEl ? String(lookupRefEl.value || '').trim().toUpperCase() : '';
+    const ref = lookupRefEl ? normalizeScpRef(lookupRefEl.value || '') : '';
     if (!ref) return;
     if (lookupOut) lookupOut.textContent = t('refmap.lookup.loading', 'Looking up…');
     try {

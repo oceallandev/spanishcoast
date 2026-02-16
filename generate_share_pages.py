@@ -466,7 +466,7 @@ def _blog_body_html(
 ) -> str:
     safe_title = html.escape(title)
     safe_date = html.escape(date_text)
-    pill = "Trends" if kind == "trend" else "News"
+    pill = "Trends" if kind == "trend" else ("Local" if kind == "local" else "News")
 
     def render_sections() -> str:
         out: List[str] = []

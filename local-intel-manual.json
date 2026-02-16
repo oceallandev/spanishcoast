@@ -1,0 +1,39 @@
+[
+  {
+    "title": "Carnival (varies by town)",
+    "start": "2026-02-14",
+    "end": "2026-02-17",
+    "allDay": true,
+    "location": "Costa Blanca South",
+    "summary": "Typical mid-February carnival period. Check your town hall/tourism agenda for exact parade dates and times.",
+    "tags": ["Carnival", "Tourism"]
+  },
+  {
+    "title": "Semana Santa (Holy Week)",
+    "start": "2026-03-29",
+    "end": "2026-04-05",
+    "allDay": true,
+    "location": "Spain",
+    "summary": "Major travel week in Spain. Expect processions in many towns, and potential road closures and parking pressure near old towns.",
+    "tags": ["Semana Santa", "Travel"]
+  },
+  {
+    "title": "Fallas (Valencia, peak days)",
+    "start": "2026-03-15",
+    "end": "2026-03-19",
+    "allDay": true,
+    "location": "Valencia",
+    "summary": "Peak days of Fallas celebrations in Valencia (province/region-level event). Verify the official program if you plan a day trip.",
+    "tags": ["Fallas", "Valencia"]
+  },
+  {
+    "title": "Hogueras de San Juan (Alicante, peak days)",
+    "start": "2026-06-20",
+    "end": "2026-06-24",
+    "allDay": true,
+    "location": "Alicante",
+    "summary": "Alicante's main fiesta around San Juan. Expect fireworks, street events, and traffic restrictions. Confirm the official schedule locally.",
+    "tags": ["San Juan", "Alicante", "Fiesta"]
+  }
+]
+

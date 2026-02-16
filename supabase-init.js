@@ -45,6 +45,9 @@
     }
   }
 
+  // Affiliate/referral tracking: delegate to the shared scp-affiliate.js module.
+  const affiliate = window.SCP_AFFILIATE || null;
+
   const ready = (enabled, error) => {
     try {
       const status = {
@@ -112,7 +115,7 @@
       if (typeof fn !== 'function') return null;
       const run = async () => await fn();
       const p = lockChain.then(run, run);
-      lockChain = p.catch(() => {});
+      lockChain = p.catch(() => { });
       return p;
     };
 

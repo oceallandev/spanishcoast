@@ -24,9 +24,9 @@
     <meta name="twitter:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
 
     <meta name="theme-color" content="#030712">
-    <link rel="manifest" href="manifest.webmanifest?v=20260211d">
-    <link rel="stylesheet" href="style.css?v=20260212b">
-    <script defer src="i18n.js?v=20260213b"></script>
+    <link rel="stylesheet" href="style.css?v=20260216c">
+    <script src="scp-affiliate.js?v=20260216g"></script>
+    <script defer src="i18n.js?v=20260216g"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -72,12 +72,14 @@
             </div>
 
             <div class="header-right">
-                <button id="mobile-menu-btn" class="mobile-menu-btn" type="button" aria-expanded="false" aria-label="Menu">☰</button>
+                <button id="mobile-menu-btn" class="mobile-menu-btn" type="button" aria-expanded="false"
+                    aria-label="Menu">☰</button>
                 <button id="open-filters-btn" class="open-filters-btn" type="button" aria-label="Open filters">
                     <span aria-hidden="true">🔎</span>
                     <span data-i18n="ui.open_filters">Open filters</span>
                 </button>
-                <button id="open-catalog-builder-btn" class="open-catalog-btn" type="button" aria-label="Create catalog">
+                <button id="open-catalog-builder-btn" class="open-catalog-btn" type="button"
+                    aria-label="Create catalog">
                     <span aria-hidden="true">📁</span>
                     <span data-i18n="properties.send_saved">Create catalog</span>
                 </button>
@@ -109,128 +111,130 @@
     <div class="search-pill-container" id="filters-bar" aria-label="Property filters">
         <div class="search-pill glass">
             <div class="pill-scroll" id="pill-scroll">
-		                <div class="pill-advanced" id="pill-advanced">
-		                    <div class="pill-section reference">
-		                        <label data-i18n="filters.ref">Ref</label>
-		                        <input type="text" id="ref-search" placeholder="SCP-XXXX">
-		                    </div>
-		                    <div class="pill-divider"></div>
-		                    <div class="pill-section location">
-		                        <label data-i18n="filters.location">Location</label>
-		                        <input type="text" id="search" placeholder="Search locations" data-i18n-placeholder="filters.location_placeholder">
-		                    </div>
-		                    <div class="pill-divider"></div>
-		                    <div class="pill-section beach">
-		                        <label data-i18n="filters.beach">Beach</label>
-		                        <select id="beach-filter">
-		                            <option value="any" data-i18n="filters.any">Any</option>
-		                            <option value="500">≤ 500m</option>
-		                            <option value="1000">≤ 1km</option>
-		                            <option value="2000">≤ 2km</option>
-		                            <option value="5000">≤ 5km</option>
-	                            <option value="10000">≤ 10km</option>
-	                        </select>
-		                    </div>
-		                    <div class="pill-divider"></div>
-		                    <div class="pill-section seaview">
-		                        <label data-i18n="filters.sea_view">Sea View</label>
-		                        <select id="sea-view-filter">
-		                            <option value="any" data-i18n="filters.any">Any</option>
-		                            <option value="yes" data-i18n="filters.sea_view_yes">Sea view</option>
-		                        </select>
-		                    </div>
-	                    <div class="pill-divider"></div>
-		                </div>
+                <div class="pill-advanced" id="pill-advanced">
+                    <div class="pill-section reference">
+                        <label data-i18n="filters.ref">Ref</label>
+                        <input type="text" id="ref-search" placeholder="SCP-XXXX">
+                    </div>
+                    <div class="pill-divider"></div>
+                    <div class="pill-section location">
+                        <label data-i18n="filters.location">Location</label>
+                        <input type="text" id="search" placeholder="Search locations"
+                            data-i18n-placeholder="filters.location_placeholder">
+                    </div>
+                    <div class="pill-divider"></div>
+                    <div class="pill-section beach">
+                        <label data-i18n="filters.beach">Beach</label>
+                        <select id="beach-filter">
+                            <option value="any" data-i18n="filters.any">Any</option>
+                            <option value="500">≤ 500m</option>
+                            <option value="1000">≤ 1km</option>
+                            <option value="2000">≤ 2km</option>
+                            <option value="5000">≤ 5km</option>
+                            <option value="10000">≤ 10km</option>
+                        </select>
+                    </div>
+                    <div class="pill-divider"></div>
+                    <div class="pill-section seaview">
+                        <label data-i18n="filters.sea_view">Sea View</label>
+                        <select id="sea-view-filter">
+                            <option value="any" data-i18n="filters.any">Any</option>
+                            <option value="yes" data-i18n="filters.sea_view_yes">Sea view</option>
+                        </select>
+                    </div>
+                    <div class="pill-divider"></div>
+                </div>
 
-		                <div class="pill-section type">
-		                    <label data-i18n="filters.type">Type</label>
-		                    <select id="type-filter" disabled>
-		                        <option value="all" data-i18n="filters.any_type">Any Type</option>
-		                        <option value="Apartment">Apartment</option>
-		                        <option value="Villa">Villa</option>
-		                        <option value="Town House">Town House</option>
-	                        <option value="Commercial">Commercial</option>
-	                        <option value="Land">Land</option>
-	                        <option value="Penthouse">Penthouse</option>
-	                        <option value="New Build" selected>New build</option>
-	                        <option value="Investment">Investment</option>
-	                    </select>
-		                </div>
-		                <div class="pill-divider"></div>
-		                <div class="pill-section deal">
-		                    <label data-i18n="filters.operation">Operation</label>
-		                    <select id="deal-filter">
-		                        <option value="any" data-i18n="filters.any">Any</option>
-		                        <option value="sale" data-i18n="filters.sale">Sale</option>
-		                        <option value="rent_longterm" data-i18n="filters.rent_long">Rent (long-term)</option>
-		                        <option value="rent_vacation" data-i18n="filters.rent_vacation">Rent (vacation)</option>
-		                    </select>
-		                </div>
-	                <div class="pill-divider"></div>
-		                <div class="pill-section price">
-		                    <label data-i18n="filters.max_price">Max Price</label>
-		                    <input id="price-filter" type="number" inputmode="numeric" step="10000" min="0"
-		                        placeholder="Any (e.g. 50000)" data-i18n-placeholder="filters.max_price_placeholder" list="price-suggestions" />
-	                    <datalist id="price-suggestions"></datalist>
-	                </div>
-	                <div class="pill-divider"></div>
-	                <div class="pill-section specs">
-	                    <label data-i18n="filters.beds">Beds</label>
-	                    <select id="beds-filter">
-	                        <option value="0" data-i18n="filters.any">Any</option>
-	                        <option value="1">1+</option>
-	                        <option value="2">2+</option>
-	                        <option value="3">3+</option>
+                <div class="pill-section type">
+                    <label data-i18n="filters.type">Type</label>
+                    <select id="type-filter" disabled>
+                        <option value="all" data-i18n="filters.any_type">Any Type</option>
+                        <option value="Apartment">Apartment</option>
+                        <option value="Villa">Villa</option>
+                        <option value="Town House">Town House</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Land">Land</option>
+                        <option value="Penthouse">Penthouse</option>
+                        <option value="New Build" selected>New build</option>
+                        <option value="Investment">Investment</option>
+                    </select>
+                </div>
+                <div class="pill-divider"></div>
+                <div class="pill-section deal">
+                    <label data-i18n="filters.operation">Operation</label>
+                    <select id="deal-filter">
+                        <option value="any" data-i18n="filters.any">Any</option>
+                        <option value="sale" data-i18n="filters.sale">Sale</option>
+                        <option value="rent_longterm" data-i18n="filters.rent_long">Rent (long-term)</option>
+                        <option value="rent_vacation" data-i18n="filters.rent_vacation">Rent (vacation)</option>
+                    </select>
+                </div>
+                <div class="pill-divider"></div>
+                <div class="pill-section price">
+                    <label data-i18n="filters.max_price">Max Price</label>
+                    <input id="price-filter" type="number" inputmode="numeric" step="10000" min="0"
+                        placeholder="Any (e.g. 50000)" data-i18n-placeholder="filters.max_price_placeholder"
+                        list="price-suggestions" />
+                    <datalist id="price-suggestions"></datalist>
+                </div>
+                <div class="pill-divider"></div>
+                <div class="pill-section specs">
+                    <label data-i18n="filters.beds">Beds</label>
+                    <select id="beds-filter">
+                        <option value="0" data-i18n="filters.any">Any</option>
+                        <option value="1">1+</option>
+                        <option value="2">2+</option>
+                        <option value="3">3+</option>
                         <option value="4">4+</option>
                     </select>
-	                </div>
-	                <div class="pill-divider"></div>
-	                <div class="pill-section specs">
-	                    <label data-i18n="filters.baths">Baths</label>
-	                    <select id="baths-filter">
-	                        <option value="0" data-i18n="filters.any">Any</option>
-	                        <option value="1">1+</option>
-	                        <option value="2">2+</option>
-	                        <option value="3">3+</option>
+                </div>
+                <div class="pill-divider"></div>
+                <div class="pill-section specs">
+                    <label data-i18n="filters.baths">Baths</label>
+                    <select id="baths-filter">
+                        <option value="0" data-i18n="filters.any">Any</option>
+                        <option value="1">1+</option>
+                        <option value="2">2+</option>
+                        <option value="3">3+</option>
                     </select>
-	                </div>
-	                <div class="pill-divider"></div>
-	                <div class="pill-section amenity">
-	                    <label data-i18n="filters.pool">Pool</label>
-	                    <select id="pool-filter">
-	                        <option value="any" data-i18n="filters.any">Any</option>
-	                        <option value="pool" data-i18n="filters.with_pool">With Pool</option>
-	                        <option value="private" data-i18n="filters.private_pool">Private Pool</option>
-	                        <option value="communal" data-i18n="filters.communal_pool">Communal Pool</option>
-	                    </select>
-	                </div>
-	                <div class="pill-divider"></div>
-	                <div class="pill-section amenity">
-	                    <label data-i18n="filters.parking">Parking</label>
-	                    <select id="parking-filter">
-	                        <option value="any" data-i18n="filters.any">Any</option>
-	                        <option value="parking" data-i18n="filters.with_parking">With Parking</option>
-	                    </select>
-	                </div>
-	            </div>
+                </div>
+                <div class="pill-divider"></div>
+                <div class="pill-section amenity">
+                    <label data-i18n="filters.pool">Pool</label>
+                    <select id="pool-filter">
+                        <option value="any" data-i18n="filters.any">Any</option>
+                        <option value="pool" data-i18n="filters.with_pool">With Pool</option>
+                        <option value="private" data-i18n="filters.private_pool">Private Pool</option>
+                        <option value="communal" data-i18n="filters.communal_pool">Communal Pool</option>
+                    </select>
+                </div>
+                <div class="pill-divider"></div>
+                <div class="pill-section amenity">
+                    <label data-i18n="filters.parking">Parking</label>
+                    <select id="parking-filter">
+                        <option value="any" data-i18n="filters.any">Any</option>
+                        <option value="parking" data-i18n="filters.with_parking">With Parking</option>
+                    </select>
+                </div>
+            </div>
 
-		            <div class="pill-actions">
-			                <button id="toggle-advanced-btn" class="more-trigger" type="button" aria-expanded="false">
-			                    <span data-i18n="filters.more">More</span>
-			                </button>
-		                <button id="clear-filters-btn" class="clear-trigger" type="button" aria-label="Clear all filters">
-		                    <span data-i18n="filters.clear">Clear</span>
-		                </button>
-		                <button id="apply-filters" class="search-trigger" aria-label="Apply filters">
-	                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"
-	                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-	                        <circle cx="11" cy="11" r="8"></circle>
+            <div class="pill-actions">
+                <button id="toggle-advanced-btn" class="more-trigger" type="button" aria-expanded="false">
+                    <span data-i18n="filters.more">More</span>
+                </button>
+                <button id="clear-filters-btn" class="clear-trigger" type="button" aria-label="Clear all filters">
+                    <span data-i18n="filters.clear">Clear</span>
+                </button>
+                <button id="apply-filters" class="search-trigger" aria-label="Apply filters">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
-	                    <span class="search-trigger-text" data-i18n="filters.search">Search</span>
-	                </button>
-	                <button id="close-filters-btn" class="close-filters-btn" type="button" aria-label="Close filters">
-	                    ✕
+                    <span class="search-trigger-text" data-i18n="filters.search">Search</span>
+                </button>
+                <button id="close-filters-btn" class="close-filters-btn" type="button" aria-label="Close filters">
+                    ✕
                 </button>
             </div>
         </div>
@@ -248,52 +252,68 @@
 
             <div class="app-layout">
                 <div class="content-section">
-	                    <div class="results-header">
-	                        <div class="results-top">
-	                            <div class="results-copy">
-	                                <h2>
-                                        <span data-i18n="newbuilds.results.found_prefix">Found</span>
-                                        <span id="results-count">0</span>
-                                        <span data-i18n="newbuilds.results.found_suffix">new build listings in Costa Blanca South</span>
-                                    </h2>
-	                                <p class="results-subtitle" data-i18n="newbuilds.results.subtitle">
-	                                    Filter new build listings and switch to map view to see only the exact results.
-	                                </p>
-	                            </div>
-	                        <div class="results-sort">
-	                            <label for="sort-filter" data-i18n="properties.sort.label">Sort</label>
-	                            <select id="sort-filter">
-	                                <option value="featured" data-i18n="properties.sort.featured">Featured</option>
-	                                <option value="date_desc" selected data-i18n="properties.sort.date_desc">Date added (newest)</option>
-	                                <option value="date_asc" data-i18n="properties.sort.date_asc">Date added (oldest)</option>
-	                                <option value="price_asc" data-i18n="properties.sort.price_asc">Price (low to high)</option>
-	                                <option value="price_desc" data-i18n="properties.sort.price_desc">Price (high to low)</option>
-	                                <option value="beds_desc" data-i18n="properties.sort.beds_desc">Beds (high to low)</option>
-	                                <option value="area_desc" data-i18n="properties.sort.area_desc">Area (high to low)</option>
-	                                <option value="eur_sqm_asc" data-i18n="properties.sort.eur_sqm_asc">€/m2 (low to high)</option>
-	                                <option value="beach_asc" data-i18n="properties.sort.beach_asc">Beach distance (near to far)</option>
-	                            </select>
-	                        </div>
-		                        <div class="results-actions">
-		                            <button id="favorites-toggle" class="favorites-toggle" type="button" aria-pressed="false">
-		                                Saved (0)
-		                            </button>
-		                            <button id="save-alert-btn" class="save-alert-btn" type="button" data-i18n="properties.save_alert">
-		                                Save alert
-		                            </button>
-		                            <button id="favorites-send" class="favorites-send" type="button" disabled>
-		                                <span data-i18n="properties.send_saved">Send saved</span>
-		                            </button>
-		                        </div>
-	                    </div>
-	                    <div class="results-cta">
-	                        <a class="cta-button" href="property-new-builds.html" data-i18n="newbuilds.cta.how_it_works">How New Builds Work</a>
-	                        <a class="cta-button" href="properties.html" data-i18n="newbuilds.cta.all_properties">All Properties</a>
-	                        <a class="cta-button" href="viewing-trip.html" data-i18n="properties.cta.viewing_trip">Plan a viewing trip (2-7 days)</a>
-	                        <a class="cta-button" href="tel:+34624867866" data-i18n="nav.call">Call</a>
-	                        <a class="cta-button" href="mailto:info@spanishcoastproperties.com?subject=Viewing%20Trip%20Package%20-%20Inquiry" data-i18n="nav.email">Email</a>
-	                        </div>
-	                    </div>
+                    <div class="results-header">
+                        <div class="results-top">
+                            <div class="results-copy">
+                                <h2>
+                                    <span data-i18n="newbuilds.results.found_prefix">Found</span>
+                                    <span id="results-count">0</span>
+                                    <span data-i18n="newbuilds.results.found_suffix">new build listings in Costa Blanca
+                                        South</span>
+                                </h2>
+                                <p class="results-subtitle" data-i18n="newbuilds.results.subtitle">
+                                    Filter new build listings and switch to map view to see only the exact results.
+                                </p>
+                            </div>
+                            <div class="results-sort">
+                                <label for="sort-filter" data-i18n="properties.sort.label">Sort</label>
+                                <select id="sort-filter">
+                                    <option value="featured" data-i18n="properties.sort.featured">Featured</option>
+                                    <option value="date_desc" selected data-i18n="properties.sort.date_desc">Date added
+                                        (newest)</option>
+                                    <option value="date_asc" data-i18n="properties.sort.date_asc">Date added (oldest)
+                                    </option>
+                                    <option value="price_asc" data-i18n="properties.sort.price_asc">Price (low to high)
+                                    </option>
+                                    <option value="price_desc" data-i18n="properties.sort.price_desc">Price (high to
+                                        low)</option>
+                                    <option value="beds_desc" data-i18n="properties.sort.beds_desc">Beds (high to low)
+                                    </option>
+                                    <option value="area_desc" data-i18n="properties.sort.area_desc">Area (high to low)
+                                    </option>
+                                    <option value="eur_sqm_asc" data-i18n="properties.sort.eur_sqm_asc">€/m2 (low to
+                                        high)</option>
+                                    <option value="beach_asc" data-i18n="properties.sort.beach_asc">Beach distance (near
+                                        to far)</option>
+                                </select>
+                            </div>
+                            <div class="results-actions">
+                                <button id="favorites-toggle" class="favorites-toggle" type="button"
+                                    aria-pressed="false">
+                                    Saved (0)
+                                </button>
+                                <button id="save-alert-btn" class="save-alert-btn" type="button"
+                                    data-i18n="properties.save_alert">
+                                    Save alert
+                                </button>
+                                <button id="favorites-send" class="favorites-send" type="button" disabled>
+                                    <span data-i18n="properties.send_saved">Send saved</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="results-cta">
+                            <a class="cta-button" href="property-new-builds.html"
+                                data-i18n="newbuilds.cta.how_it_works">How New Builds Work</a>
+                            <a class="cta-button" href="properties.html" data-i18n="newbuilds.cta.all_properties">All
+                                Properties</a>
+                            <a class="cta-button" href="viewing-trip.html" data-i18n="properties.cta.viewing_trip">Plan
+                                a viewing trip (2-7 days)</a>
+                            <a class="cta-button" href="tel:+34624867866" data-i18n="nav.call">Call</a>
+                            <a class="cta-button"
+                                href="mailto:info@spanishcoastproperties.com?subject=Viewing%20Trip%20Package%20-%20Inquiry"
+                                data-i18n="nav.email">Email</a>
+                        </div>
+                    </div>
                     <div id="property-grid" class="property-grid"></div>
                 </div>
                 <div id="map-section" class="map-section">
@@ -345,13 +365,19 @@
         <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
     </footer>
 
-    <script defer src="data.js?v=20260211d"></script>
-    <script defer src="catalog.js?v=20260211d"></script>
-    <script defer src="custom-listings.js?v=20260211d"></script>
-    <script defer src="inmovilla-listings.js?v=20260211d"></script>
-    <script defer src="newbuilds-listings.js?v=20260213b"></script>
-    <script defer src="app.js?v=20260215b"></script>
-    <script defer src="site.js?v=20260215a"></script>
+    <script defer src="data.js?v=20260216g"></script>
+    <script defer src="catalog.js?v=20260216g"></script>
+    <script defer src="custom-listings.js?v=20260216g"></script>
+    <script defer src="inmovilla-listings.js?v=20260216g"></script>
+    <script defer src="newbuilds-listings.js?v=20260216g"></script>
+    <script defer src="summertime-listings.js?v=20260216g"></script>
+    <script defer src="app.js?v=20260216g"></script>
+    <script src="utils-module.js?v=20260216g"></script>
+    <script src="map-module.js?v=20260216g"></script>
+    <script src="supabase-module.js?v=20260216g"></script>
+    <script src="ui-module.js?v=20260216g"></script>
+    <script src="filter-module.js?v=20260216g"></script>
+    <script defer src="site.js?v=20260216g"></script>
 </body>
 
 </html>

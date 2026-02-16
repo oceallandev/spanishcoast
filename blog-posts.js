@@ -1,7 +1,116 @@
 /* Auto-generated content. Do not edit by hand. */
 globalThis.SCP_BLOG = {
-  "updatedAt": "2026-02-15T16:28:36Z",
+  "updatedAt": "2026-02-15T20:13:12Z",
   "posts": [
+    {
+      "id": "2026-02-15-hercules-de-alicante-antequera-0583df97",
+      "kind": "trend",
+      "lang": "es",
+      "publishedAt": "2026-02-15T20:00:00Z",
+      "title": "hércules de alicante - antequera",
+      "excerpt": "Tendencia (aprox.): 500+ búsquedas.",
+      "tags": [
+        "Tendencias",
+        "Mercado",
+        "Costa Blanca"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Tendencia del día: hércules de alicante - antequera. Tendencia (aprox.): 500+ búsquedas."
+        },
+        {
+          "type": "h",
+          "text": "Por qué importa"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "Las noticias del mercado suelen reflejar cambios en demanda, oferta y negociación.",
+            "Lo que pasa en España impacta distinto según zona: Costa Blanca Sur es muy local."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Qué hacer ahora"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "Si compras: compara por precio, m2, distancia a playa y gastos de comunidad.",
+            "Si vendes: prepara fotos y documentación para acelerar visitas y ofertas."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Trends",
+          "url": "https://trends.google.com/trending/rss?geo=ES"
+        },
+        {
+          "name": "Destiny no perdona a un Hércules fallón",
+          "url": "https://as.com/futbol/destiny-no-perdona-a-un-hercules-fallon-f202602-n/"
+        },
+        {
+          "name": "Hércules CF - Antequera CF",
+          "url": "https://www.informacion.es/hercules-cf/2026/02/13/hercules-cf-antequera-cf-126792196.html"
+        },
+        {
+          "name": "Beto Company cree que su equipo debe ser \"más fluido con balón\" y \"no conceder tantas ocasiones claras\"",
+          "url": "https://cadenaser.com/comunitat-valenciana/2026/02/13/beto-company-cree-que-su-equipo-debe-ser-mas-fluido-con-balon-y-no-conceder-tantas-ocasiones-claras-radio-alicante/"
+        }
+      ],
+      "cta": "Si esta tendencia se relaciona con tu plan (comprar, invertir o abrir un negocio), Spanish Coast Properties puede ayudarte con una estrategia clara y una lista corta."
+    },
+    {
+      "id": "2026-02-15-banks-predict-more-expensive-mortgages-and-rule-out-a-bubble-07951beb",
+      "kind": "news",
+      "lang": "en",
+      "publishedAt": "2026-02-15T17:12:15Z",
+      "title": "Banks predict more expensive mortgages and rule out a bubble.",
+      "excerpt": "Banks predict more expensive mortgages and rule out a bubble.    Diari ARA",
+      "tags": [
+        "Spain",
+        "Mortgage",
+        "Market",
+        "Costa Blanca"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "A short, practical take based on a public headline, focused on Costa Blanca South."
+        },
+        {
+          "type": "h",
+          "text": "Why it matters"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "Market headlines often hint at demand, supply, or negotiation shifts.",
+            "What happens nationally plays out differently locally: Costa Blanca South is very micro-market driven."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "What to do next"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "If buying: compare by price, sqm, beach distance, and community fees.",
+            "If selling: clean photos and paperwork usually beat small price tweaks for speed."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Diari ARA",
+          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNRE9tdC1yMnBSbmljdGpaclFsLU1ZZUR6bm5NNWhFQWg2dDNhVlRpcVRoeVZnZ0J0Vm03aUYtb2VNQVRWdl9yOHZPZXlreXhDZldFODRjOXdoUXMtQ2ZDYl9OLUZvOHp1U3pBWnl6OE9nY0RaSDB1aHZPVmh4U2F5M3REbGtIZkduYlJkbEI1MWU0S1pHQnZtM0hreVlQOC1mcUhJdUtkMNIBpwFBVV95cUxNRE9tdC1yMnBSbmljdGpaclFsLU1ZZUR6bm5NNWhFQWg2dDNhVlRpcVRoeVZnZ0J0Vm03aUYtb2VNQVRWdl9yOHZPZXlreXhDZldFODRjOXdoUXMtQ2ZDYl9OLUZvOHp1U3pBWnl6OE9nY0RaSDB1aHZPVmh4U2F5M3REbGtIZkduYlJkbEI1MWU0S1pHQnZtM0hreVlQOC1mcUhJdUtkMA?oc=5"
+        }
+      ],
+      "cta": "Want a shortlist? Spanish Coast Properties can filter options and send a clean catalog based on your budget and area."
+    },
     {
       "id": "2026-02-15-oportunidad-unica-en-el-casco-antiguo-de-alicante-piso-a-la--09fd0522",
       "kind": "news",
@@ -99,12 +208,218 @@ globalThis.SCP_BLOG = {
       "cta": "Want a shortlist? Spanish Coast Properties can filter options and send a clean catalog based on your budget and area."
     },
     {
+      "id": "2026-02-15-local-digest-en",
+      "kind": "local",
+      "lang": "en",
+      "publishedAt": "2026-02-15T06:00:00Z",
+      "title": "Costa Blanca South: events & fiestas (2026-02-15)",
+      "excerpt": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source.",
+      "tags": [
+        "Local",
+        "Events",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source."
+        },
+        {
+          "type": "h",
+          "text": "Next 14 days"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "16 Feb: Carnival Monday",
+            "17 Feb: Carnival Tuesday",
+            "18 Feb: Ash Wednesday"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Recent local updates"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "15 Feb: Edition 1115 of The Costa Blanca and Costa Calida Leader Newspaper 16 – 22 February 2026 - theleader.info",
+            "14 Feb: Earthquake felt across malaga province: What Costa del sol residents should know after the 3.8 tremor - Euro Weekly News",
+            "14 Feb: Torrevieja Carnival 2026 Programme Amended Due to Orange Weather Alert - theleader.info",
+            "13 Feb: Valencia region on red alert: Carnival parades and football matches suspended - Euro Weekly News",
+            "13 Feb: Santa Pola seeks to attract more Dutch tourists at the Fiets en Wandelbeurs fair in Utrecht - Diario de Alicante",
+            "13 Feb: The Costa Blanca attracts Dutch cyclists and hikers with its year-round routes and climate. - Diario de Alicante",
+            "13 Feb: Orihuela Halts all Outdoor Activities as High Winds Loom - theleader.info",
+            "12 Feb: Fuengirola to host Harley Davidson’s global 2026 launch on the Costa del Sol - Euro Weekly News"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quick tips"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "On public holidays, banks and offices often run reduced hours or close.",
+            "Big fiestas can mean road closures, extra traffic, and limited parking.",
+            "If you are visiting to view properties, ask for a short itinerary by area and realistic travel times."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Spain Holidays",
+          "url": "https://calendar.google.com/calendar/ical/en.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNbnhaQ1hFbG9FMGtBWkVyNHU2TG5fdEI5M2Y4OG02TTBZYmFPR1NhUXp3cjZQa2dwdV9mYTNobmRIWXRQOWZEalMzcmdiLWdSeHMyQ281ZGs5WS1ES0FyR2ZmT01ld0VXei1aVWVGNU01QTQyMzVRbFdRek5aZVVocFlxUmp1VkV1c0Z4Yi1nQVQ2c1RRRVUyRnRNX0N6Yml0amhtTVN2Wml1TkFGUWRydHBYUk15SV85ZkxlQnN3?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxOQlh3RkJKR2hXakVveE1fb0R2VHZiWXpMY0g4dVRTTUlaM0xKajY3S2pwUzN6MmNLeVJiU05SaDg3VG5kNEdoR1loc1EzcE5aQUdYYWx6X2gwNHJWUFhBcEV4aEpvRGxDa3hYZXRSdml3cTlZTnRCOGVzR0lzcDc0QTlNVEFnRndleHVsZWRTT1RpcjhTTFZmSkppaUIzd0xaV21yc3ZYd1NCRVdaVTFVV2dqanh0TUFhck1DRV8zVng2RjZOM1ZoUEtWSGlPaU83cWNpbnVn?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOVUpySUJSelZtb3pMRlN2WUNvcVRjYlZsZnNmYmltc2t6ZG9abGZaMjhJYmV5SmRJYjRMWkFjOEhzN012ZFVkVHJGRHB3VldRZVZyOE9tRTBxUkh3OHA0OXVhUHRzZTZJNTdlT0pnR3c1eVpwc3dfNWIwZUltVm9Rdng3SjhqTEYtUTR3LTJrbEVJN3RJalZXV2JtN3JzTWduS2tnQ3ZfZ3g?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPRFFhN0RqUW5LRUZYcE5JWExJVW5HWWZaaWZsYWlwMWhvU0RLcDJtME01ZkZPdm5xNWVBWXZ5Undoc1YzSG9hR0lBNnpId1pWUDlGVUhuVU14YjZxZHB4MU1CX1lzVmRuN2RFNWx5VTJhTUVpM1pjLUpkRE5IcFhkLXd3MW91dlFJZU03TkFwMmN4WF8tNkZZUFo1ZTdEM2swTGVVQUFRVzVnMm9wQlZneDdUQWNGdw?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQdXR3Ti1vUmp3b0lCRG9tUmpxLW91Z2RpSlFpRnBmT0J1dkZPeUFDa3Yxc1NsLVk2WHZzZ2paVmJVb0RDeWdWYTk5RTZiTFg0TzhoQVJzOURETnFIUEZwNTlIc2xPcDFiQmFCNFF3c0tpVDNiMjNDUlRsR3AteXNCc3R3?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE1UczliMW1nX3prU2NBa0JZcVhWWlFfaUprV3h3RDhtVjF2SVJid3dtallsdVNZWkFWa2RiWlV1OHd3LWRPYThnMHhxWVYzQXp4OV9KdjhmMTlmZTR2ajhJX0J2cXFaRlp5bWIzeGZuOUcxb1FZaEIzbHRMZFg?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPdldoWTFLODhRRWFtSklQWEtFVU40UlQzYVpCLVN2RE1JZE9JdWtQdUsxTWsxa1FQNjdOOUREV2ZzeThBQi1MSjBQZExwemNaa3V2OGVBNXhVN281SlR6VlNtdzVqdHpXT0VRYW05MHpvZGpmMklwaVF6YXhBbXBYTFQxNUl3eDFaZS1heG41OExDbVZRa2c?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOQ2hTNV9PMWRMVkw4ZmhBcElSby0za2dyU1NTZTVPbjMxUy1pd3BwbS1aQVJrZUR4V191MUNTMWlub0RkMVJsVU1yOHF4UkJJelRWNHNuclRSOXVHSUVHMUxRRElyUV83X1dRdzZKb3BMems1bWhkMlpiWE9XRFN3UGY1WWJWX3hudjNiYmY4MGdDQk0yc09JNFR3?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOWk5LRTBMUHF2dVlrV0NGNEQ4NnliLXdhNmhaVnFoeFM1WmZXWGhpMUF4OWM2RWFmOGxaa0ZVTjJXcHlfNTl3WWlGVVRqTGpIN2dpOU15b004ZkZVaXB6OVd3b2hZOVAwODE4N1ViLXBpRUxHZ0pzeW1mZy1PcVBCd0RPeGJ5VDhxeWhXNndBRHVJRkx4TzJLSnA2UFdzQTNSX2wzR2Y1ZTQ?oc=5"
+        }
+      ],
+      "cta": "If you are visiting or planning a purchase, Spanish Coast Properties can help with a clear plan, areas, and a shortlist."
+    },
+    {
+      "id": "2026-02-15-local-digest-es",
+      "kind": "local",
+      "lang": "es",
+      "publishedAt": "2026-02-15T06:00:00Z",
+      "title": "Costa Blanca South: eventos y fiestas (2026-02-15)",
+      "excerpt": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente.",
+      "tags": [
+        "Local",
+        "Eventos",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente."
+        },
+        {
+          "type": "h",
+          "text": "Proximos 14 dias"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "16 Feb: Lunes de Carnaval",
+            "17 Feb: Martes de Carnaval",
+            "18 Feb: Miércoles de Ceniza"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Avisos recientes"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "15 Feb: Torrevieja, evento: Actividad astronómica para todos los públicos 'Bajo las estrellas. Rumbo al eclipse solar' - Todo Cultura Vega Baja",
+            "15 Feb: Suspensión de eventos en Alicante por Oriana: aplazada la mascletà y actos al aire libre - Diario de Alicante",
+            "15 Feb: La mujer barbuda más 'bárbara' está en el Carnaval de Torrevieja - Todo Alicante",
+            "14 Feb: Torrevieja, evento cultural: APLAZADO al VIERNES 6 de MARZO Representación de una obra por el ‘Teatrico del Carnaval’, dentro de la programación cultural para el primer cuatrimestre de 2026 organizada por la Concejalía de Cultura - Todo Cultura Vega Baja",
+            "14 Feb: Alicante cancela el Sábado Ramblero y el Carnaval infantil - Todo Alicante",
+            "13 Feb: Más menús y más caros para la atención protocolaria del Ayuntamiento de Alicante durante las Hogueras - Información",
+            "13 Feb: Pilar de la Horadada, evento: Desfile y concurso de comparsas locales y foráneas - Todo Cultura Vega Baja",
+            "13 Feb: Pilar de la Horadada, evento: CANCELADO Aperitivo con la chirigota 'Los fundeplomos' y fiesta infantil con pintacaras - Todo Cultura Vega Baja"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Consejos rapidos"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "En festivos es comun que bancos y oficinas tengan horario reducido o cierren.",
+            "En fiestas grandes puede haber cortes de calles, mas trafico y parking limitado.",
+            "Para planes de visita, pide un itinerario corto por zona y tiempos reales."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Festivos en Espana",
+          "url": "https://calendar.google.com/calendar/ical/es.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi8AJBVV95cUxON1hUY0t3ZjlnLVYyRGo4ajJzX1VwNU1rNzlMV1N2VXdqRzBvdV9ZUVdIMTdRZGYwNTNULXhSblpqVkEwOG1lTExSWGpnZ3cyMUFjX0RKWk5tbDlWY0h2WFhQdkkwVDF1T0lkZDduQTV5VTdtSktnOVpnaElaZ0NnelVLUlRuTXFGWHFkN3ZTMmtiOEltS080b29IWWhUcDJWNjJ6dVg0d2piaTA5YVFDcmh3c1cyZ1pkdGhSWF9ONlNrQkk0SldlcEd5UmRWRjlnVUQxS0FKM1l2U0R5LWxCMndPSmZkdkZDUlplSnJlekNucC1SQ0RuNHhjdnE0dEhUV2RhRUlQM3NXY1M0QW9FeWRSd1dEdlFUQk9FTjJiSHlubEdUR1RUM2VRMTB5TG1UWGVacktibzZmZTdMX25KMURvLThITTE3SmJEbHJIekowcFR1UWQ3SUVSVlJrRTlMUHhtT2RaOUtFaTRULTFlNQ?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPUDlSZzIzVVRBc1pCU2pxOTRYd1NZT3JSRW1IaWRMckpBNGl4NVJQUGxTVlY5Nk9NNk4yM3dXOWRrSmZVeTdVNXJCN2kyeFdwVFNHcUpxZi1iNkNmSGhoRlZnOWRHYlhmVU9zbmVqRXFxWEhKWVJ3bllVdlNaYnlLOWpVN19ubHZzWHBFMEgwNjhETE55TXUxcDM0R1BNUW9MbGtJODlRZF83RzRfa0N5dlRERUZjNS1M?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPT0p6RnptcDVtRm9kSElTbnRNTS1WSjV0S2EzTGtLalptUGVONzQ3am5LdFRxUDN5N2liNzh5R05mMTNtbjVsckRlSlpJWnJhdzVnemR2cTIyTFFYR3BKTWw0TXA3bF83UUdNZ3VnWDBLLXBNTjNTYTh6cW5pcnlqdG41N3dQcU9NQjYwbUVJUmNHZzZaVHZqcE9pZkdlV2J4cDBBT3N6MXJOMmE3R2xrUNIBtgFBVV95cUxNWC12MG56dDlrMGpvUzZiNDJ6em9ia0hxMmFNQXNUMWFDUFAybVZ4Tm5oZHIyVlc2SlpldnctRWg3bXRaUWJoQmtNQllJekxmRlQzVUwwZ1VESkdxVlFMel91NWFOeHhiclVLQ3BndC1iSWRsUjFINDZwcjFWWUM0aEV0OE9jcjBqWC1aM0FManFHaUtUekJ2Tlk4VWNJbDhNVW1IV3ZKbWkxLXU3Qi0xQmdoNXI1dw?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMizAJBVV95cUxNYWdmaDl6ZWdrWmREMFd4bU92WVgzNUpHS0lCUERJMXZZS3F6Snh1VEVCNU85WHB1aDV6eThaRWtWbkE1a0xmay0xb2U3VjR5cERZVktHVHJ1Sy03c041Sl9LeUVMUTA0ekZ6NENtWUtqTnZzWmtPX1lyU0k4TElUVjlGSzF1b09lSi1lQmZacTNuODNIZ2piM3YwaUdRbVgyc0tCS0djcWEtak1mNGZOSDNGNVhrM2RjWnB1RXM4bE1EZEx0dUpLTTB4MXBUNkJyaG9Dd3NuMmlaNEp6d3o2QWgwVTRqTnBvRlBNTHFDc1Rud0hhazlib0xTeXktODZKb0lON3NNTVBQNWdCbWRhenJkbkRTUmFSaXE5X1dqQkREUFVBejAzbXRyZGVNZ0k3dDJKLUxYVGhrbW13RndUd1JSUngtX0cyVm4yNg?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQcFBkRng2U2IwNUduNktqLV9Cd1pQSjBzeHdFc0dpX0RpaU0wY1dSRjdtTFVNaU5QckRNbFJFZ2tfNUJlX2lZQ01SVmg4VUNhaVloUjNpT3labnBwU2dFWmhFNkhOUUZMUzdkdGVvR3BhYVY2VnhzRzRTNzVVQWEwNl9TS05wZEJWbUJ0WFhoUkZ3R2N6WXFOVDZJallrSGQ0RTg2YXdhUmdpcE5Dd1dxczBoUXdUZXlHdEJFUNIBwgFBVV95cUxNTzBqS25WQzE3SFU3X2tmWW1iVzRyMU9McEY5M29nUEpVcXFpdmZLQTdXbDQtRkc1T2dZOGNnZnhBdk56NDgyaXI4NTBfdVFtU2MyUFl6c21kWTVWTjJfLWhSQkVZbHJKMXFZQ3RRR3N3RGRrM1NtS0txRjVwZ2xSbHFuelVJS2NieUpDNnVwSTVDZmlLWXc5aGRqaFBYd2Q5Nk90eEctd2RiRnZZalZFSUxKQURpYXRFbHEzbG5Hc1RDZw?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNNG5udjhxWlBjOHdUYWR2UFUyZ3Z0NkZ4eWNqM3M0bkd0SEw4Vk44Ny1DcWswMWR4WDl0cHExaXZvN19KTjV1MjQxMDJkNV9jTEZBZlh0a29RNHZDamtqTUJxdWNrb1E5ZWtqdGRiN0xfVkRCaFVJQTcwODBLNW9BZi1kQmV0ZVdwRjFQc2xhaHJVS2hid2lQOGhJbzlnb2pZSEJDVC1JbXp4RDjSAbABQVVfeXFMTzNGY3lCWWdUc0lkVGhEQ2piRTFHY3lFenZMUlF6ZkEyaHBLdEtubVpGWUtxQ1F1ZGlIX3RoWGtVWEtfNWl0MVpqX21fQ1ZFWHJlWTRXa1R3MHhnME9wMjZmNFprS2NrUEc5d0pFR09JYTVSUHowR09GU3hidjAzQ0Y4R3B0Vzl2MUtQbmkzRFZia1k5Tl9XODFCZC1aQ21VamdEQ2RZYjAxSnlqX2hFM1o?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMijwJBVV95cUxOMFl5VV9xbDhPSGxHZFAzaHU0ZTg2eEhPRjBTWGtRbUY2aTZqOGNObTV0amI1OGZRdTFXOWE4V3FCYkFBaG9Ia3pBbkFkNDZJemtwNDBoXzQzLVdnM3p3Mk1ocTdNbGxrOUJadU5tYVlueFpidzN3MURWV2U2Q0t3U1h4Mks4U3c0a1o3LXJ2LUE1R3Z5QzVQMEdBZ2hPcVJHNFF1Vi0wM3F1OGQzdmNKZjJRTEY0cTlGX1h6MFRxbUptbl9kYXVOcDRlZ2RDaUROb3dkOVJJVXFub3hhc3lIZlY0a2Rhcno5amg1X0U4R0JCQnVLQ01USURKMnpBdGtVeUUycFlXWnBLc2V0N29z?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMivgJBVV95cUxQYk9yVDg4MGQxX1JKNnNwRVEzOHhmYktSbzF4ejJyQTZ1RlhOdDh1dFBNelhOaVk1RldwSGlveFdmWjh6T1ZqQ2NXVklZc3VxczNvUFpNMXBGekFoa1pzU3ZkVW04cU16cDFJaGllMnpxQXVDUm1yaGR2bG16emV6eG9jR1lweVA2WFRmVGp2MF9USC1tZVh2OWVDY3o0VWVEcWpaTkdkMTdnQmRfbTV2S2dKdVQtNFQ2cnlQOTdUUGZoYWN3WWdXQnc3c1ZCNUlqWmg0OERwQnU1dWYwRldFUjlfUjhtVmtUdXFPbzc3RElkQ1dSRmliYjdyUllHeWxjZVlDbUtLcEthUkZFRktmYmFKVTJ6WGNzQXVudGVZVkd3SUttM2J4QlIxLTQ2eGc5WGYtQXNORzFHSlppRkE?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPYVByYnI2OGJMcjhCWDRBR01SOFpTWWw2UHFQUUxUZUhaZmUtZFE0ZUtkbzdRcGlPWHFZRkdxZktTZ1BqRHJkLW80Z1R5MndRUHQxUWtKb2hIYmY5ZG1uaUFsZWhXX2IwMGFMRmJkSGQzSnpEY3ZJVlNreXc5NkFXM3VGZWFvd3hOVXFMLU5TZUp5dXdNTEQ2a0thT1h4dw?oc=5"
+        }
+      ],
+      "cta": "Si vienes de visita o estas planificando una compra, Spanish Coast Properties puede ayudarte con un plan claro, zonas y opciones."
+    },
+    {
       "id": "2026-02-14-brit-couple-in-benidorm-share-peacock-island-insight-and-if--3ef1e8e7",
       "kind": "news",
       "lang": "en",
       "publishedAt": "2026-02-14T13:49:00Z",
       "title": "Brit couple in Benidorm share Peacock Island insight and if it's worth visiting",
-      "excerpt": "Brit couple in Benidorm share Peacock Island insight and if it's worth visiting    Manchester Evening News",
+      "excerpt": "Brit couple in Benidorm share Peacock Island insight and if it's worth visiting    manchestereveningnews.co.uk",
       "tags": [
         "Costa Blanca",
         "Property",
@@ -140,11 +455,220 @@ globalThis.SCP_BLOG = {
       ],
       "sources": [
         {
-          "name": "Manchester Evening News",
+          "name": "manchestereveningnews.co.uk",
           "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQUllLby1fdk5rdVZCQTFzV0NLamh5aWktZGhfTlpzeFVMTXBHNXRET18yOFdzZ2Z2MXB1WkhoNjBjQ0NHV0NrdXdBLUttWWFySDdOSndldzVZTW9vaE5HTnpsUDY1dzlaUXlKSlJZcndKcXRPNGcyUnlCS0NCTGt1aWRTVGw4Z24xbXRNNHhzd2tvWWcwV3NadkpCR1hzMzhrcjRvLUdvWdIBpwFBVV95cUxQUllLby1fdk5rdVZCQTFzV0NLamh5aWktZGhfTlpzeFVMTXBHNXRET18yOFdzZ2Z2MXB1WkhoNjBjQ0NHV0NrdXdBLUttWWFySDdOSndldzVZTW9vaE5HTnpsUDY1dzlaUXlKSlJZcndKcXRPNGcyUnlCS0NCTGt1aWRTVGw4Z24xbXRNNHhzd2tvWWcwV3NadkpCR1hzMzhrcjRvLUdvWQ?oc=5"
         }
       ],
       "cta": "Want a shortlist? Spanish Coast Properties can filter options and send a clean catalog based on your budget and area."
+    },
+    {
+      "id": "2026-02-14-local-digest-en",
+      "kind": "local",
+      "lang": "en",
+      "publishedAt": "2026-02-14T06:00:00Z",
+      "title": "Costa Blanca South: events & fiestas (2026-02-14)",
+      "excerpt": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source.",
+      "tags": [
+        "Local",
+        "Events",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source."
+        },
+        {
+          "type": "h",
+          "text": "Next 14 days"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Valentine's Day",
+            "14 Feb: Carnival (varies by town) · Costa Blanca South",
+            "16 Feb: Carnival Monday",
+            "17 Feb: Carnival Tuesday",
+            "18 Feb: Ash Wednesday"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Recent local updates"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Earthquake felt across malaga province: What Costa del sol residents should know after the 3.8 tremor - Euro Weekly News",
+            "14 Feb: Torrevieja Carnival 2026 Programme Amended Due to Orange Weather Alert - theleader.info",
+            "13 Feb: Valencia region on red alert: Carnival parades and football matches suspended - Euro Weekly News",
+            "13 Feb: Santa Pola seeks to attract more Dutch tourists at the Fiets en Wandelbeurs fair in Utrecht - Diario de Alicante",
+            "13 Feb: The Costa Blanca attracts Dutch cyclists and hikers with its year-round routes and climate. - Diario de Alicante",
+            "13 Feb: Orihuela Halts all Outdoor Activities as High Winds Loom - theleader.info",
+            "12 Feb: Fuengirola to host Harley Davidson’s global 2026 launch on the Costa del Sol - Euro Weekly News",
+            "12 Feb: NMBS confirms return of its All-Industry Conference in 2026 - Builders' Merchants News"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quick tips"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "On public holidays, banks and offices often run reduced hours or close.",
+            "Big fiestas can mean road closures, extra traffic, and limited parking.",
+            "If you are visiting to view properties, ask for a short itinerary by area and realistic travel times."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Spain Holidays",
+          "url": "https://calendar.google.com/calendar/ical/en.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxOQlh3RkJKR2hXakVveE1fb0R2VHZiWXpMY0g4dVRTTUlaM0xKajY3S2pwUzN6MmNLeVJiU05SaDg3VG5kNEdoR1loc1EzcE5aQUdYYWx6X2gwNHJWUFhBcEV4aEpvRGxDa3hYZXRSdml3cTlZTnRCOGVzR0lzcDc0QTlNVEFnRndleHVsZWRTT1RpcjhTTFZmSkppaUIzd0xaV21yc3ZYd1NCRVdaVTFVV2dqanh0TUFhck1DRV8zVng2RjZOM1ZoUEtWSGlPaU83cWNpbnVn?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOVUpySUJSelZtb3pMRlN2WUNvcVRjYlZsZnNmYmltc2t6ZG9abGZaMjhJYmV5SmRJYjRMWkFjOEhzN012ZFVkVHJGRHB3VldRZVZyOE9tRTBxUkh3OHA0OXVhUHRzZTZJNTdlT0pnR3c1eVpwc3dfNWIwZUltVm9Rdng3SjhqTEYtUTR3LTJrbEVJN3RJalZXV2JtN3JzTWduS2tnQ3ZfZ3g?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPRFFhN0RqUW5LRUZYcE5JWExJVW5HWWZaaWZsYWlwMWhvU0RLcDJtME01ZkZPdm5xNWVBWXZ5Undoc1YzSG9hR0lBNnpId1pWUDlGVUhuVU14YjZxZHB4MU1CX1lzVmRuN2RFNWx5VTJhTUVpM1pjLUpkRE5IcFhkLXd3MW91dlFJZU03TkFwMmN4WF8tNkZZUFo1ZTdEM2swTGVVQUFRVzVnMm9wQlZneDdUQWNGdw?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQdXR3Ti1vUmp3b0lCRG9tUmpxLW91Z2RpSlFpRnBmT0J1dkZPeUFDa3Yxc1NsLVk2WHZzZ2paVmJVb0RDeWdWYTk5RTZiTFg0TzhoQVJzOURETnFIUEZwNTlIc2xPcDFiQmFCNFF3c0tpVDNiMjNDUlRsR3AteXNCc3R3?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE1UczliMW1nX3prU2NBa0JZcVhWWlFfaUprV3h3RDhtVjF2SVJid3dtallsdVNZWkFWa2RiWlV1OHd3LWRPYThnMHhxWVYzQXp4OV9KdjhmMTlmZTR2ajhJX0J2cXFaRlp5bWIzeGZuOUcxb1FZaEIzbHRMZFg?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPdldoWTFLODhRRWFtSklQWEtFVU40UlQzYVpCLVN2RE1JZE9JdWtQdUsxTWsxa1FQNjdOOUREV2ZzeThBQi1MSjBQZExwemNaa3V2OGVBNXhVN281SlR6VlNtdzVqdHpXT0VRYW05MHpvZGpmMklwaVF6YXhBbXBYTFQxNUl3eDFaZS1heG41OExDbVZRa2c?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOQ2hTNV9PMWRMVkw4ZmhBcElSby0za2dyU1NTZTVPbjMxUy1pd3BwbS1aQVJrZUR4V191MUNTMWlub0RkMVJsVU1yOHF4UkJJelRWNHNuclRSOXVHSUVHMUxRRElyUV83X1dRdzZKb3BMems1bWhkMlpiWE9XRFN3UGY1WWJWX3hudjNiYmY4MGdDQk0yc09JNFR3?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOWk5LRTBMUHF2dVlrV0NGNEQ4NnliLXdhNmhaVnFoeFM1WmZXWGhpMUF4OWM2RWFmOGxaa0ZVTjJXcHlfNTl3WWlGVVRqTGpIN2dpOU15b004ZkZVaXB6OVd3b2hZOVAwODE4N1ViLXBpRUxHZ0pzeW1mZy1PcVBCd0RPeGJ5VDhxeWhXNndBRHVJRkx4TzJLSnA2UFdzQTNSX2wzR2Y1ZTQ?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOcE8wZFFDc1RDeDlERGlVZ2tLajl0Z3pUdTBVWlV3VE5MbkRTaVZraFZKZDlZUlRYQzJRWEhldUlDRC1zdDdzN2ZaQWlhUVNHcXhPNzI0czVPY184V1JkOUFKMkJGdURFSGxENUV0TklmOXVLcWZvdDN3OWdUOUxqbmJ2ZmhzYlRZa0p4WURHNGI5MEtCcFhadmlFQldJbU1ERUthTjF6SmZrQQ?oc=5"
+        }
+      ],
+      "cta": "If you are visiting or planning a purchase, Spanish Coast Properties can help with a clear plan, areas, and a shortlist."
+    },
+    {
+      "id": "2026-02-14-local-digest-es",
+      "kind": "local",
+      "lang": "es",
+      "publishedAt": "2026-02-14T06:00:00Z",
+      "title": "Costa Blanca South: eventos y fiestas (2026-02-14)",
+      "excerpt": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente.",
+      "tags": [
+        "Local",
+        "Eventos",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente."
+        },
+        {
+          "type": "h",
+          "text": "Proximos 14 dias"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Día de San Valentín",
+            "16 Feb: Lunes de Carnaval",
+            "17 Feb: Martes de Carnaval",
+            "18 Feb: Miércoles de Ceniza"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Avisos recientes"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Torrevieja, evento cultural: APLAZADO al VIERNES 6 de MARZO Representación de una obra por el ‘Teatrico del Carnaval’, dentro de la programación cultural para el primer cuatrimestre de 2026 organizada por la Concejalía de Cultura - Todo Cultura Vega Baja",
+            "14 Feb: Alicante cancela el Sábado Ramblero y el Carnaval infantil - Todo Alicante",
+            "13 Feb: Más menús y más caros para la atención protocolaria del Ayuntamiento de Alicante durante las Hogueras - Información",
+            "13 Feb: Pilar de la Horadada, evento: Desfile y concurso de comparsas locales y foráneas - Todo Cultura Vega Baja",
+            "13 Feb: Pilar de la Horadada, evento: CANCELADO Aperitivo con la chirigota 'Los fundeplomos' y fiesta infantil con pintacaras - Todo Cultura Vega Baja",
+            "13 Feb: Un pueblo de Alicante entra en guerra con la SGAE por poner música en sus fiestas - elperiodic.com",
+            "13 Feb: Torrevieja, evento: Fiesta con la entrega de premios - Todo Cultura Vega Baja",
+            "13 Feb: Torrevieja, evento: CAMBIO de HORA a las 18 HORAS VII Desfile Infantil 'El carnaval de los coles' - Todo Cultura Vega Baja"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Consejos rapidos"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "En festivos es comun que bancos y oficinas tengan horario reducido o cierren.",
+            "En fiestas grandes puede haber cortes de calles, mas trafico y parking limitado.",
+            "Para planes de visita, pide un itinerario corto por zona y tiempos reales."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Festivos en Espana",
+          "url": "https://calendar.google.com/calendar/ical/es.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMizAJBVV95cUxNYWdmaDl6ZWdrWmREMFd4bU92WVgzNUpHS0lCUERJMXZZS3F6Snh1VEVCNU85WHB1aDV6eThaRWtWbkE1a0xmay0xb2U3VjR5cERZVktHVHJ1Sy03c041Sl9LeUVMUTA0ekZ6NENtWUtqTnZzWmtPX1lyU0k4TElUVjlGSzF1b09lSi1lQmZacTNuODNIZ2piM3YwaUdRbVgyc0tCS0djcWEtak1mNGZOSDNGNVhrM2RjWnB1RXM4bE1EZEx0dUpLTTB4MXBUNkJyaG9Dd3NuMmlaNEp6d3o2QWgwVTRqTnBvRlBNTHFDc1Rud0hhazlib0xTeXktODZKb0lON3NNTVBQNWdCbWRhenJkbkRTUmFSaXE5X1dqQkREUFVBejAzbXRyZGVNZ0k3dDJKLUxYVGhrbW13RndUd1JSUngtX0cyVm4yNg?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQcFBkRng2U2IwNUduNktqLV9Cd1pQSjBzeHdFc0dpX0RpaU0wY1dSRjdtTFVNaU5QckRNbFJFZ2tfNUJlX2lZQ01SVmg4VUNhaVloUjNpT3labnBwU2dFWmhFNkhOUUZMUzdkdGVvR3BhYVY2VnhzRzRTNzVVQWEwNl9TS05wZEJWbUJ0WFhoUkZ3R2N6WXFOVDZJallrSGQ0RTg2YXdhUmdpcE5Dd1dxczBoUXdUZXlHdEJFUNIBwgFBVV95cUxNTzBqS25WQzE3SFU3X2tmWW1iVzRyMU9McEY5M29nUEpVcXFpdmZLQTdXbDQtRkc1T2dZOGNnZnhBdk56NDgyaXI4NTBfdVFtU2MyUFl6c21kWTVWTjJfLWhSQkVZbHJKMXFZQ3RRR3N3RGRrM1NtS0txRjVwZ2xSbHFuelVJS2NieUpDNnVwSTVDZmlLWXc5aGRqaFBYd2Q5Nk90eEctd2RiRnZZalZFSUxKQURpYXRFbHEzbG5Hc1RDZw?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNNG5udjhxWlBjOHdUYWR2UFUyZ3Z0NkZ4eWNqM3M0bkd0SEw4Vk44Ny1DcWswMWR4WDl0cHExaXZvN19KTjV1MjQxMDJkNV9jTEZBZlh0a29RNHZDamtqTUJxdWNrb1E5ZWtqdGRiN0xfVkRCaFVJQTcwODBLNW9BZi1kQmV0ZVdwRjFQc2xhaHJVS2hid2lQOGhJbzlnb2pZSEJDVC1JbXp4RDjSAbABQVVfeXFMTzNGY3lCWWdUc0lkVGhEQ2piRTFHY3lFenZMUlF6ZkEyaHBLdEtubVpGWUtxQ1F1ZGlIX3RoWGtVWEtfNWl0MVpqX21fQ1ZFWHJlWTRXa1R3MHhnME9wMjZmNFprS2NrUEc5d0pFR09JYTVSUHowR09GU3hidjAzQ0Y4R3B0Vzl2MUtQbmkzRFZia1k5Tl9XODFCZC1aQ21VamdEQ2RZYjAxSnlqX2hFM1o?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMijwJBVV95cUxOMFl5VV9xbDhPSGxHZFAzaHU0ZTg2eEhPRjBTWGtRbUY2aTZqOGNObTV0amI1OGZRdTFXOWE4V3FCYkFBaG9Ia3pBbkFkNDZJemtwNDBoXzQzLVdnM3p3Mk1ocTdNbGxrOUJadU5tYVlueFpidzN3MURWV2U2Q0t3U1h4Mks4U3c0a1o3LXJ2LUE1R3Z5QzVQMEdBZ2hPcVJHNFF1Vi0wM3F1OGQzdmNKZjJRTEY0cTlGX1h6MFRxbUptbl9kYXVOcDRlZ2RDaUROb3dkOVJJVXFub3hhc3lIZlY0a2Rhcno5amg1X0U4R0JCQnVLQ01USURKMnpBdGtVeUUycFlXWnBLc2V0N29z?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMivgJBVV95cUxQYk9yVDg4MGQxX1JKNnNwRVEzOHhmYktSbzF4ejJyQTZ1RlhOdDh1dFBNelhOaVk1RldwSGlveFdmWjh6T1ZqQ2NXVklZc3VxczNvUFpNMXBGekFoa1pzU3ZkVW04cU16cDFJaGllMnpxQXVDUm1yaGR2bG16emV6eG9jR1lweVA2WFRmVGp2MF9USC1tZVh2OWVDY3o0VWVEcWpaTkdkMTdnQmRfbTV2S2dKdVQtNFQ2cnlQOTdUUGZoYWN3WWdXQnc3c1ZCNUlqWmg0OERwQnU1dWYwRldFUjlfUjhtVmtUdXFPbzc3RElkQ1dSRmliYjdyUllHeWxjZVlDbUtLcEthUkZFRktmYmFKVTJ6WGNzQXVudGVZVkd3SUttM2J4QlIxLTQ2eGc5WGYtQXNORzFHSlppRkE?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPYVByYnI2OGJMcjhCWDRBR01SOFpTWWw2UHFQUUxUZUhaZmUtZFE0ZUtkbzdRcGlPWHFZRkdxZktTZ1BqRHJkLW80Z1R5MndRUHQxUWtKb2hIYmY5ZG1uaUFsZWhXX2IwMGFMRmJkSGQzSnpEY3ZJVlNreXc5NkFXM3VGZWFvd3hOVXFMLU5TZUp5dXdNTEQ2a0thT1h4dw?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMizwJBVV95cUxPVG9ZS2xvRy00dlNpRHNVeWhtbVE2b1N0bzl5WEVCeUt3OGhLUTg3Y3Z4TmRLdmtJaER4ZkF4OGl4LWd3SGRGMkdfUEJqcmE5c0FHSEh2bzBCRGFCTFlxNzhNVEt3STJFVldXS1lCS2ItSlNLWWFYQkRCU09rZWpmenhadzEyczJCNlJGdm9NcEZRUDlIelNnaGJzZWlPY2dCLXNSejUxdXVEMTlSUGl2X2hkcHA4Z0FWOVpxZGZleGoxTElfNFk2OWN6WXhCZVpGMkM5OWZWWFprUkcweVg3SWRrRXk2VzY5WWJtTU5RczdtdW4yd0l5MDFkUHNTVHRFWG9qVHVJdHRQRmlQbDdNeXdaNGdiSHR4V25YaVRUVk9tS2xCLVZEd2RHX1BSYkdySExReU9KOGlqMkhSaUc1UnljNnZZUlp2aGYwQ0trWQ?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixwJBVV95cUxOdlQzNHAxYllOa2NWQ1A2NDhNT3AxNm11cldYMjM5VUtzVE5pTnRLWXZudzlaRUxXZkZkSk9OdVhnSHhta0thNFhhUllURGQyZmhnZ3RqQnJrZGpNNHFqWG5NZk94RnhxMGVmYl9OX0VSZjdZQ3JGNzJFSTVtdkJQV1NMNGZoTlEyeUlwcGtTdmpOZHZ2RGc3dW9odFBseUExVnNqM2dtUDI1X0Vkd0U4MVZHVW9SNVJsM0RhbGFGejA1eS1ab2xzYk1weHZBOGhtdjF2ZmlfM243T0FKQnd5N1NfeDBZNHBrZy1USkVsN2taUHR2aXpnaHV4ZEFKZmlMTjdIRDBLaHdWVWJUcW9Bd1V0TDZyZEoyU0QySEE4bVJNZkgtV1M4OHo2UVJKNi1xcTZIX2lYbDQxbWVBSUlYSEhqQkJMMlU?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPSXF5RndUU0doejFVYmhCaDdxOU02NkJuNDBlZHlOR1hrOVVtQkgyZmFJaFE4VllZYjFQdHgwa3V1YUNoWHA2b2hycWZuc0d0aWVoNEJQcGFUM0ZpOFItUzZFVk9DSExDLXpfb2VyMzFxVTd1amFLNlNLb29zWGRYc1phU0k4MVI4RzNITk1WVjB4YzAxaS1J?oc=5"
+        }
+      ],
+      "cta": "Si vienes de visita o estas planificando una compra, Spanish Coast Properties puede ayudarte con un plan claro, zonas y opciones."
     },
     {
       "id": "2026-02-14-la-provincia-de-alicante-sigue-siendo-la-que-mas-vende-vivie-1d3572f5",
@@ -200,7 +724,7 @@ globalThis.SCP_BLOG = {
       "lang": "es",
       "publishedAt": "2026-02-14T05:00:00Z",
       "title": "Más de 20.000 viviendas en venta en Alicante: así es la oferta de obra nueva en la provincia",
-      "excerpt": "Más de 20.000 viviendas en venta en Alicante: así es la oferta de obra nueva en la provincia    INFORMACION",
+      "excerpt": "Más de 20.000 viviendas en venta en Alicante: así es la oferta de obra nueva en la provincia    Información",
       "tags": [
         "Alicante",
         "Obra nueva",
@@ -236,7 +760,7 @@ globalThis.SCP_BLOG = {
       ],
       "sources": [
         {
-          "name": "INFORMACION",
+          "name": "Información",
           "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQQkNiNmZhZzFPMks3a1lkUTM5U0U3ZFJzYXpmbFJtcTl2TEVwYlkwSFo1MWJXcUdkLTRIYnQyMklLaVl5dWRna1Y3YkNSdHJibXNyR2V2US16emxqN2tCM0xtTl9yWmVOZXlJZnFrQ0tfYzlXN2hBU1VRU2xETVR5cV9qbVZHeWg3TzU5bEZlNDJwaTZnZ3UzRVI1cUZCQmlzVjJCT1Q3b9IBrAFBVV95cUxQZDZhbDlwdGZXei0xMWpocURZUlZkcUN5T2dQNXFmRG0weFV5WWkzVmZtcXVmUC1hU0ZjYWlhMzhER0dYTUZYaFdGdzBzZUZraGt3MllzTEk3djQ1ZnE3eTl1LXpPaTEtZmh5VjB2dXA5ZVcyVUFrZWE1blBMYjU3YWtDNk9kN0trcUpzTzBPTExzUDNmc3pWdmVXS1lQcE5IR0VUX1I0QXZkeVEw?oc=5"
         }
       ],
@@ -437,6 +961,54 @@ globalThis.SCP_BLOG = {
       "cta": "¿Quieres una lista corta? Spanish Coast Properties puede filtrar opciones y enviarte un catálogo limpio según tu presupuesto y zona."
     },
     {
+      "id": "2026-02-13-spain-is-selling-six-houses-a-minute-one-in-three-in-cash-de-2df17661",
+      "kind": "news",
+      "lang": "en",
+      "publishedAt": "2026-02-13T12:00:00Z",
+      "title": "Spain is selling six houses a minute – one in three in cash – despite prices soaring by double digits",
+      "excerpt": "Spain is selling six houses a minute – one in three in cash – despite prices soaring by double digits    Olive Press News Spain",
+      "tags": [
+        "Spain",
+        "Market",
+        "Costa Blanca"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "A short, practical take based on a public headline, focused on Costa Blanca South."
+        },
+        {
+          "type": "h",
+          "text": "Why it matters"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "Market headlines often hint at demand, supply, or negotiation shifts.",
+            "What happens nationally plays out differently locally: Costa Blanca South is very micro-market driven."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "What to do next"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "If buying: compare by price, sqm, beach distance, and community fees.",
+            "If selling: clean photos and paperwork usually beat small price tweaks for speed."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Olive Press News Spain",
+          "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxPUzNLYU83em5LNHRkWFZCYVc5ek4xUnZKN0ZJRXhpZS1zU3hHYmN4M1ZkZjBPVzJWRkdLZzZfRXRDWE9pUnVQUGZrckI1eU4zVUhNOHRfQzRrR1V5YmsxY3R3dkh6N2ExNjF6dUN4dFlpSG9mMHpETWtaRzkxVksxOWh2NUFCRGlnLThGdlk3cEVXeEtOamJWR3dTeUQ5bUdMZnhjWFRHU1cxLTBnNXplRlNNamJ4cGhzdVhJSG9jU1JYX0ZHYTV4M3ZycXY2dXY5cU5IRTd3UTdWcVg5?oc=5"
+        }
+      ],
+      "cta": "Want a shortlist? Spanish Coast Properties can filter options and send a clean catalog based on your budget and area."
+    },
+    {
       "id": "2026-02-13-dos-villas-en-la-costa-blanca-con-vistas-al-mar-que-no-pasan-1172efbd",
       "kind": "news",
       "lang": "es",
@@ -483,6 +1055,264 @@ globalThis.SCP_BLOG = {
         }
       ],
       "cta": "¿Quieres una lista corta? Spanish Coast Properties puede filtrar opciones y enviarte un catálogo limpio según tu presupuesto y zona."
+    },
+    {
+      "id": "2026-02-13-alicante-retoma-las-obras-para-la-conclusion-del-parque-de-l-b2e67ffb",
+      "kind": "news",
+      "lang": "es",
+      "publishedAt": "2026-02-13T08:00:00Z",
+      "title": "Alicante retoma las obras para la conclusión del parque de La Torreta por 3,3 millones",
+      "excerpt": "Alicante retoma las obras para la conclusión del parque de La Torreta por 3,3 millones    Ayuntamiento de Alicante",
+      "tags": [
+        "Alicante",
+        "Obra nueva",
+        "Mercado",
+        "Costa Blanca"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Resumen breve basado en un titular público. Aquí tienes lo más útil para Costa Blanca Sur."
+        },
+        {
+          "type": "h",
+          "text": "Por qué importa"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "Las noticias del mercado suelen reflejar cambios en demanda, oferta y negociación.",
+            "Lo que pasa en España impacta distinto según zona: Costa Blanca Sur es muy local."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Qué hacer ahora"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "Si compras: compara por precio, m2, distancia a playa y gastos de comunidad.",
+            "Si vendes: prepara fotos y documentación para acelerar visitas y ofertas."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Ayuntamiento de Alicante",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxQdDEtRTR6ODVhQzRYQ0Y2Y085aUdyUDk3aHZMdjVPeHRtM3lsUUtvMzlSdzlWWU1UZGxJWEVtSzBFTkZSMFhDR0VMcjhmckU4ZzBKVUYxeWh3VFJ6OW40NVR1dlg5NU0zNjVxT3JWaHBuYnJOYUpZZUpxWlYxZnA3ZFJWYVlfNUgzcjRUOFN0UzVhOUQ5Qm9SdlBNN0IxTGtY?oc=5"
+        }
+      ],
+      "cta": "¿Quieres una lista corta? Spanish Coast Properties puede filtrar opciones y enviarte un catálogo limpio según tu presupuesto y zona."
+    },
+    {
+      "id": "2026-02-13-local-digest-en",
+      "kind": "local",
+      "lang": "en",
+      "publishedAt": "2026-02-13T06:00:00Z",
+      "title": "Costa Blanca South: events & fiestas (2026-02-13)",
+      "excerpt": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source.",
+      "tags": [
+        "Local",
+        "Events",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source."
+        },
+        {
+          "type": "h",
+          "text": "Next 14 days"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Valentine's Day",
+            "14 Feb: Carnival (varies by town) · Costa Blanca South",
+            "16 Feb: Carnival Monday",
+            "17 Feb: Carnival Tuesday",
+            "18 Feb: Ash Wednesday"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Recent local updates"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "13 Feb: Valencia region on red alert: Carnival parades and football matches suspended - Euro Weekly News",
+            "13 Feb: Santa Pola seeks to attract more Dutch tourists at the Fiets en Wandelbeurs fair in Utrecht - Diario de Alicante",
+            "13 Feb: The Costa Blanca attracts Dutch cyclists and hikers with its year-round routes and climate. - Diario de Alicante",
+            "13 Feb: Orihuela Halts all Outdoor Activities as High Winds Loom - theleader.info",
+            "12 Feb: Fuengirola to host Harley Davidson’s global 2026 launch on the Costa del Sol - Euro Weekly News",
+            "12 Feb: NMBS confirms return of its All-Industry Conference in 2026 - Builders' Merchants News",
+            "12 Feb: Orihuela orchestra to perform at international ceremony in Alicante - Euro Weekly News",
+            "12 Feb: Enter Storm Nils: Spain braces for fiercest winds in two decades - Euro Weekly News"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quick tips"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "On public holidays, banks and offices often run reduced hours or close.",
+            "Big fiestas can mean road closures, extra traffic, and limited parking.",
+            "If you are visiting to view properties, ask for a short itinerary by area and realistic travel times."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Spain Holidays",
+          "url": "https://calendar.google.com/calendar/ical/en.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPRFFhN0RqUW5LRUZYcE5JWExJVW5HWWZaaWZsYWlwMWhvU0RLcDJtME01ZkZPdm5xNWVBWXZ5Undoc1YzSG9hR0lBNnpId1pWUDlGVUhuVU14YjZxZHB4MU1CX1lzVmRuN2RFNWx5VTJhTUVpM1pjLUpkRE5IcFhkLXd3MW91dlFJZU03TkFwMmN4WF8tNkZZUFo1ZTdEM2swTGVVQUFRVzVnMm9wQlZneDdUQWNGdw?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQdXR3Ti1vUmp3b0lCRG9tUmpxLW91Z2RpSlFpRnBmT0J1dkZPeUFDa3Yxc1NsLVk2WHZzZ2paVmJVb0RDeWdWYTk5RTZiTFg0TzhoQVJzOURETnFIUEZwNTlIc2xPcDFiQmFCNFF3c0tpVDNiMjNDUlRsR3AteXNCc3R3?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE1UczliMW1nX3prU2NBa0JZcVhWWlFfaUprV3h3RDhtVjF2SVJid3dtallsdVNZWkFWa2RiWlV1OHd3LWRPYThnMHhxWVYzQXp4OV9KdjhmMTlmZTR2ajhJX0J2cXFaRlp5bWIzeGZuOUcxb1FZaEIzbHRMZFg?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPdldoWTFLODhRRWFtSklQWEtFVU40UlQzYVpCLVN2RE1JZE9JdWtQdUsxTWsxa1FQNjdOOUREV2ZzeThBQi1MSjBQZExwemNaa3V2OGVBNXhVN281SlR6VlNtdzVqdHpXT0VRYW05MHpvZGpmMklwaVF6YXhBbXBYTFQxNUl3eDFaZS1heG41OExDbVZRa2c?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOQ2hTNV9PMWRMVkw4ZmhBcElSby0za2dyU1NTZTVPbjMxUy1pd3BwbS1aQVJrZUR4V191MUNTMWlub0RkMVJsVU1yOHF4UkJJelRWNHNuclRSOXVHSUVHMUxRRElyUV83X1dRdzZKb3BMems1bWhkMlpiWE9XRFN3UGY1WWJWX3hudjNiYmY4MGdDQk0yc09JNFR3?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOWk5LRTBMUHF2dVlrV0NGNEQ4NnliLXdhNmhaVnFoeFM1WmZXWGhpMUF4OWM2RWFmOGxaa0ZVTjJXcHlfNTl3WWlGVVRqTGpIN2dpOU15b004ZkZVaXB6OVd3b2hZOVAwODE4N1ViLXBpRUxHZ0pzeW1mZy1PcVBCd0RPeGJ5VDhxeWhXNndBRHVJRkx4TzJLSnA2UFdzQTNSX2wzR2Y1ZTQ?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOcE8wZFFDc1RDeDlERGlVZ2tLajl0Z3pUdTBVWlV3VE5MbkRTaVZraFZKZDlZUlRYQzJRWEhldUlDRC1zdDdzN2ZaQWlhUVNHcXhPNzI0czVPY184V1JkOUFKMkJGdURFSGxENUV0TklmOXVLcWZvdDN3OWdUOUxqbmJ2ZmhzYlRZa0p4WURHNGI5MEtCcFhadmlFQldJbU1ERUthTjF6SmZrQQ?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQQkRfTFFZV3ZWS29sUEpwSVFZYXo4cHRuOTNSTVlYNmxzRGkyUDc1eFlyckE1ME5XTlhYVlpLR0hHU1BIYUwxeTg1c0NQb2dZU3lKMFlHYjAtQ09hdWNiTEoyc3R5cGNZUmtTNkEwZGQyX2pyZTdLZ3VhdHFDX0pnWFBzWTNVWnJMUnM4ZjRRalVSTGFib3REOWF1Y0JEVFZRUjJYZQ?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxQbjZPX3dtX1ZqUWhmRFg1Rmx2SUNtT0NScnVYLXV5UTFIeUZSM0RyYllrOVFJV3dTZ3JobHVTOWdWcHhiTXZjN3VwVnRVN0lLVllOMmhxQjJmYWFvWXpqVV9EUG01N0lEaWxXSjJYelVUN3VqTE9IdEJYUzJQT2tWajFJbmNTVTkzX0stUkR0LXJCTkpDb2Y2Y1ZoU1Z0cTBGcTFCSGdjNjlxcDNHNUlOYV9IeHFycVF5WVZSTTBjM25VSHdfTnV3SmRNbHBESS1Gc3hicnVoSjducFVHODc0?oc=5"
+        }
+      ],
+      "cta": "If you are visiting or planning a purchase, Spanish Coast Properties can help with a clear plan, areas, and a shortlist."
+    },
+    {
+      "id": "2026-02-13-local-digest-es",
+      "kind": "local",
+      "lang": "es",
+      "publishedAt": "2026-02-13T06:00:00Z",
+      "title": "Costa Blanca South: eventos y fiestas (2026-02-13)",
+      "excerpt": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente.",
+      "tags": [
+        "Local",
+        "Eventos",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente."
+        },
+        {
+          "type": "h",
+          "text": "Proximos 14 dias"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Día de San Valentín",
+            "16 Feb: Lunes de Carnaval",
+            "17 Feb: Martes de Carnaval",
+            "18 Feb: Miércoles de Ceniza"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Avisos recientes"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "13 Feb: Más menús y más caros para la atención protocolaria del Ayuntamiento de Alicante durante las Hogueras - Información",
+            "13 Feb: Pilar de la Horadada, evento: Desfile y concurso de comparsas locales y foráneas - Todo Cultura Vega Baja",
+            "13 Feb: Pilar de la Horadada, evento: CANCELADO Aperitivo con la chirigota 'Los fundeplomos' y fiesta infantil con pintacaras - Todo Cultura Vega Baja",
+            "13 Feb: Un pueblo de Alicante entra en guerra con la SGAE por poner música en sus fiestas - elperiodic.com",
+            "13 Feb: Torrevieja, evento: Fiesta con la entrega de premios - Todo Cultura Vega Baja",
+            "13 Feb: Torrevieja, evento: CAMBIO de HORA a las 18 HORAS VII Desfile Infantil 'El carnaval de los coles' - Todo Cultura Vega Baja",
+            "13 Feb: Alicante suspende el Sábado Ramblero ante la alerta naranja por vientos - Ayuntamiento de Alicante",
+            "13 Feb: Alicante suspende el Sábado Ramblero por el viento y aplaza el Carnaval al viernes 20 - Ayuntamiento de Alicante"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Consejos rapidos"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "En festivos es comun que bancos y oficinas tengan horario reducido o cierren.",
+            "En fiestas grandes puede haber cortes de calles, mas trafico y parking limitado.",
+            "Para planes de visita, pide un itinerario corto por zona y tiempos reales."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Festivos en Espana",
+          "url": "https://calendar.google.com/calendar/ical/es.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNNG5udjhxWlBjOHdUYWR2UFUyZ3Z0NkZ4eWNqM3M0bkd0SEw4Vk44Ny1DcWswMWR4WDl0cHExaXZvN19KTjV1MjQxMDJkNV9jTEZBZlh0a29RNHZDamtqTUJxdWNrb1E5ZWtqdGRiN0xfVkRCaFVJQTcwODBLNW9BZi1kQmV0ZVdwRjFQc2xhaHJVS2hid2lQOGhJbzlnb2pZSEJDVC1JbXp4RDjSAbABQVVfeXFMTzNGY3lCWWdUc0lkVGhEQ2piRTFHY3lFenZMUlF6ZkEyaHBLdEtubVpGWUtxQ1F1ZGlIX3RoWGtVWEtfNWl0MVpqX21fQ1ZFWHJlWTRXa1R3MHhnME9wMjZmNFprS2NrUEc5d0pFR09JYTVSUHowR09GU3hidjAzQ0Y4R3B0Vzl2MUtQbmkzRFZia1k5Tl9XODFCZC1aQ21VamdEQ2RZYjAxSnlqX2hFM1o?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMijwJBVV95cUxOMFl5VV9xbDhPSGxHZFAzaHU0ZTg2eEhPRjBTWGtRbUY2aTZqOGNObTV0amI1OGZRdTFXOWE4V3FCYkFBaG9Ia3pBbkFkNDZJemtwNDBoXzQzLVdnM3p3Mk1ocTdNbGxrOUJadU5tYVlueFpidzN3MURWV2U2Q0t3U1h4Mks4U3c0a1o3LXJ2LUE1R3Z5QzVQMEdBZ2hPcVJHNFF1Vi0wM3F1OGQzdmNKZjJRTEY0cTlGX1h6MFRxbUptbl9kYXVOcDRlZ2RDaUROb3dkOVJJVXFub3hhc3lIZlY0a2Rhcno5amg1X0U4R0JCQnVLQ01USURKMnpBdGtVeUUycFlXWnBLc2V0N29z?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMivgJBVV95cUxQYk9yVDg4MGQxX1JKNnNwRVEzOHhmYktSbzF4ejJyQTZ1RlhOdDh1dFBNelhOaVk1RldwSGlveFdmWjh6T1ZqQ2NXVklZc3VxczNvUFpNMXBGekFoa1pzU3ZkVW04cU16cDFJaGllMnpxQXVDUm1yaGR2bG16emV6eG9jR1lweVA2WFRmVGp2MF9USC1tZVh2OWVDY3o0VWVEcWpaTkdkMTdnQmRfbTV2S2dKdVQtNFQ2cnlQOTdUUGZoYWN3WWdXQnc3c1ZCNUlqWmg0OERwQnU1dWYwRldFUjlfUjhtVmtUdXFPbzc3RElkQ1dSRmliYjdyUllHeWxjZVlDbUtLcEthUkZFRktmYmFKVTJ6WGNzQXVudGVZVkd3SUttM2J4QlIxLTQ2eGc5WGYtQXNORzFHSlppRkE?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPYVByYnI2OGJMcjhCWDRBR01SOFpTWWw2UHFQUUxUZUhaZmUtZFE0ZUtkbzdRcGlPWHFZRkdxZktTZ1BqRHJkLW80Z1R5MndRUHQxUWtKb2hIYmY5ZG1uaUFsZWhXX2IwMGFMRmJkSGQzSnpEY3ZJVlNreXc5NkFXM3VGZWFvd3hOVXFMLU5TZUp5dXdNTEQ2a0thT1h4dw?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMizwJBVV95cUxPVG9ZS2xvRy00dlNpRHNVeWhtbVE2b1N0bzl5WEVCeUt3OGhLUTg3Y3Z4TmRLdmtJaER4ZkF4OGl4LWd3SGRGMkdfUEJqcmE5c0FHSEh2bzBCRGFCTFlxNzhNVEt3STJFVldXS1lCS2ItSlNLWWFYQkRCU09rZWpmenhadzEyczJCNlJGdm9NcEZRUDlIelNnaGJzZWlPY2dCLXNSejUxdXVEMTlSUGl2X2hkcHA4Z0FWOVpxZGZleGoxTElfNFk2OWN6WXhCZVpGMkM5OWZWWFprUkcweVg3SWRrRXk2VzY5WWJtTU5RczdtdW4yd0l5MDFkUHNTVHRFWG9qVHVJdHRQRmlQbDdNeXdaNGdiSHR4V25YaVRUVk9tS2xCLVZEd2RHX1BSYkdySExReU9KOGlqMkhSaUc1UnljNnZZUlp2aGYwQ0trWQ?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixwJBVV95cUxOdlQzNHAxYllOa2NWQ1A2NDhNT3AxNm11cldYMjM5VUtzVE5pTnRLWXZudzlaRUxXZkZkSk9OdVhnSHhta0thNFhhUllURGQyZmhnZ3RqQnJrZGpNNHFqWG5NZk94RnhxMGVmYl9OX0VSZjdZQ3JGNzJFSTVtdkJQV1NMNGZoTlEyeUlwcGtTdmpOZHZ2RGc3dW9odFBseUExVnNqM2dtUDI1X0Vkd0U4MVZHVW9SNVJsM0RhbGFGejA1eS1ab2xzYk1weHZBOGhtdjF2ZmlfM243T0FKQnd5N1NfeDBZNHBrZy1USkVsN2taUHR2aXpnaHV4ZEFKZmlMTjdIRDBLaHdWVWJUcW9Bd1V0TDZyZEoyU0QySEE4bVJNZkgtV1M4OHo2UVJKNi1xcTZIX2lYbDQxbWVBSUlYSEhqQkJMMlU?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPSXF5RndUU0doejFVYmhCaDdxOU02NkJuNDBlZHlOR1hrOVVtQkgyZmFJaFE4VllZYjFQdHgwa3V1YUNoWHA2b2hycWZuc0d0aWVoNEJQcGFUM0ZpOFItUzZFVk9DSExDLXpfb2VyMzFxVTd1amFLNlNLb29zWGRYc1phU0k4MVI4RzNITk1WVjB4YzAxaS1J?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNR2FTR1VNM3pkQWQxNVNMbk1OaTc5TF9xVWRuMEw3bXRmbnNUNGtSZTlmZU9aQ25yck5KbWF4cUVCaE1yVzlncU9VemNVVFZPc3Rqay1fMV9xV3lNT085aEpPMWJFUHpNU2RGcFY4Yzg5bXl0QnNkNFFVUmlWbmNkci0xNGhKZlB2Z3BQNzFaYnpBTnhuZzVVNmxQMzN6LTh3Qy10RDlqX2Uyd1h2?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxNSkNFSXVJUmhpN1Q2a19XOFE2eTNxaHZtd05QY0NoQmhHNWhjT2lyd0Z6TzhaaGk0blRmbEhaZmFWQkZXamttN1lHTjlXM2lGS25RN2MzY1NEZ2ZVTEJlOF9zYlNSc0czQVNvaml5YjNDMmwtRnR2dGVKQ0o1TUNJcjMtWDA4N2xJc0xEZG9RYUExRDI2U25KZllyYnFuZTFlc1A5VFQ2UFlKaHJEWmJUQ2VrVGNDcUtNVDJ0OGFCaHQtT3JqbGJzVzB1dElzWGVlekxTbFluMVVGaW8zVVRBdkVwZTA?oc=5"
+        }
+      ],
+      "cta": "Si vienes de visita o estas planificando una compra, Spanish Coast Properties puede ayudarte con un plan claro, zonas y opciones."
     },
     {
       "id": "2026-02-13-alicante-vive-un-boom-de-turistas-e-inversores-inmobiliarios-864f9fa8",
@@ -868,6 +1698,263 @@ globalThis.SCP_BLOG = {
         }
       ],
       "cta": "¿Quieres una lista corta? Spanish Coast Properties puede filtrar opciones y enviarte un catálogo limpio según tu presupuesto y zona."
+    },
+    {
+      "id": "2026-02-12-property-management-market-set-for-steady-growth-to-us-40-7-38e1356b",
+      "kind": "news",
+      "lang": "en",
+      "publishedAt": "2026-02-12T10:50:40Z",
+      "title": "Property Management Market Set for Steady Growth to US$ 40.7",
+      "excerpt": "Property Management Market Set for Steady Growth to US$ 40.7    openPR.com",
+      "tags": [
+        "Costa Blanca",
+        "Property",
+        "Market"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "A short, practical take based on a public headline, focused on Costa Blanca South."
+        },
+        {
+          "type": "h",
+          "text": "Why it matters"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "Market headlines often hint at demand, supply, or negotiation shifts.",
+            "What happens nationally plays out differently locally: Costa Blanca South is very micro-market driven."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "What to do next"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "If buying: compare by price, sqm, beach distance, and community fees.",
+            "If selling: clean photos and paperwork usually beat small price tweaks for speed."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "openPR.com",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNWDhHSjJ4RVRHbHBPYWpVUWktVkhIN1c0cVFMdmlhVWN6QVFfdzhyenc3WHdhb3d4WjhUMUlBUVN5emlQY3FjVjRDV1VuWXBHQlBLUFdKTGdBck9jMlgwRG1zWjVlQm5rQXJxaXFicDZKbkk2R0haMVJBNGRJclhnUmx6SzRTUS1PQ3UyNWltQmhPak1KNjNrREJsYw?oc=5"
+        }
+      ],
+      "cta": "Want a shortlist? Spanish Coast Properties can filter options and send a clean catalog based on your budget and area."
+    },
+    {
+      "id": "2026-02-12-local-digest-en",
+      "kind": "local",
+      "lang": "en",
+      "publishedAt": "2026-02-12T06:00:00Z",
+      "title": "Costa Blanca South: events & fiestas (2026-02-12)",
+      "excerpt": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source.",
+      "tags": [
+        "Local",
+        "Events",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source."
+        },
+        {
+          "type": "h",
+          "text": "Next 14 days"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Valentine's Day",
+            "14 Feb: Carnival (varies by town) · Costa Blanca South",
+            "16 Feb: Carnival Monday",
+            "17 Feb: Carnival Tuesday",
+            "18 Feb: Ash Wednesday"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Recent local updates"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "12 Feb: Fuengirola to host Harley Davidson’s global 2026 launch on the Costa del Sol - Euro Weekly News",
+            "12 Feb: NMBS confirms return of its All-Industry Conference in 2026 - Builders' Merchants News",
+            "12 Feb: Orihuela orchestra to perform at international ceremony in Alicante - Euro Weekly News",
+            "12 Feb: Enter Storm Nils: Spain braces for fiercest winds in two decades - Euro Weekly News",
+            "10 Feb: Torremolinos gets romantic for Valentine’s Day - Euro Weekly News",
+            "10 Feb: Asteroid set to smash into the Moon in biggest impact humanity has ever witnessed - Murcia Today - News",
+            "09 Feb: Carnaval celebrations kick off in Cartagena as 2026 Queens crowned - Euro Weekly News",
+            "09 Feb: Women in business conference returns to Mijas this March - InSpain.news"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quick tips"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "On public holidays, banks and offices often run reduced hours or close.",
+            "Big fiestas can mean road closures, extra traffic, and limited parking.",
+            "If you are visiting to view properties, ask for a short itinerary by area and realistic travel times."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Spain Holidays",
+          "url": "https://calendar.google.com/calendar/ical/en.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOQ2hTNV9PMWRMVkw4ZmhBcElSby0za2dyU1NTZTVPbjMxUy1pd3BwbS1aQVJrZUR4V191MUNTMWlub0RkMVJsVU1yOHF4UkJJelRWNHNuclRSOXVHSUVHMUxRRElyUV83X1dRdzZKb3BMems1bWhkMlpiWE9XRFN3UGY1WWJWX3hudjNiYmY4MGdDQk0yc09JNFR3?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOWk5LRTBMUHF2dVlrV0NGNEQ4NnliLXdhNmhaVnFoeFM1WmZXWGhpMUF4OWM2RWFmOGxaa0ZVTjJXcHlfNTl3WWlGVVRqTGpIN2dpOU15b004ZkZVaXB6OVd3b2hZOVAwODE4N1ViLXBpRUxHZ0pzeW1mZy1PcVBCd0RPeGJ5VDhxeWhXNndBRHVJRkx4TzJLSnA2UFdzQTNSX2wzR2Y1ZTQ?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOcE8wZFFDc1RDeDlERGlVZ2tLajl0Z3pUdTBVWlV3VE5MbkRTaVZraFZKZDlZUlRYQzJRWEhldUlDRC1zdDdzN2ZaQWlhUVNHcXhPNzI0czVPY184V1JkOUFKMkJGdURFSGxENUV0TklmOXVLcWZvdDN3OWdUOUxqbmJ2ZmhzYlRZa0p4WURHNGI5MEtCcFhadmlFQldJbU1ERUthTjF6SmZrQQ?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQQkRfTFFZV3ZWS29sUEpwSVFZYXo4cHRuOTNSTVlYNmxzRGkyUDc1eFlyckE1ME5XTlhYVlpLR0hHU1BIYUwxeTg1c0NQb2dZU3lKMFlHYjAtQ09hdWNiTEoyc3R5cGNZUmtTNkEwZGQyX2pyZTdLZ3VhdHFDX0pnWFBzWTNVWnJMUnM4ZjRRalVSTGFib3REOWF1Y0JEVFZRUjJYZQ?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxQbjZPX3dtX1ZqUWhmRFg1Rmx2SUNtT0NScnVYLXV5UTFIeUZSM0RyYllrOVFJV3dTZ3JobHVTOWdWcHhiTXZjN3VwVnRVN0lLVllOMmhxQjJmYWFvWXpqVV9EUG01N0lEaWxXSjJYelVUN3VqTE9IdEJYUzJQT2tWajFJbmNTVTkzX0stUkR0LXJCTkpDb2Y2Y1ZoU1Z0cTBGcTFCSGdjNjlxcDNHNUlOYV9IeHFycVF5WVZSTTBjM25VSHdfTnV3SmRNbHBESS1Gc3hicnVoSjducFVHODc0?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNemd3dmlvMFhXVzFsenRsMkpGOEp6VGdqa3VZNS1kLUt2RDhSaGVpRG1DU3ViYXd6cmJnRE03amE5RWo3allGSllMenNkNmJNMjQzQkY4enA0SU9qZ3lqZUNjTTBETS1aNUhYRzROX1M4YUF2SGFYNnhPRHVRZlBybF95V2lpN01aWVFUMGdTSGdsTkxuY1F1UVQ4b09SZnNmbjlXVXdhM2EwTUlVZzFWajY5d1c4cElnU05ENy1Jb2E?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNRjdhcTRjQTlKakFoRlZIYjdWMnlLU2ZQM0EyOXgxcUs1TjdWSGVRaTdyOGFjTWhBVGNhdzYyZ080OVhDSmRBcVJ2V0JmeFVHV05HcHJOZld6V2ZIdjk4NGVhcll6T1dJME1SdjNlcElzbTZ6ZnVRWVlZYmdXX0Y0QjNiT0llQm9PUnR0RWZQa3pPclNzaXVLMTNKWWV6TWNLYThwaDVMQVM?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQTW8xNFNRdmVGRFBSYmU4bEdXZlVsbmRvX18yVnk0WlJDMmtUdFlpQ1lHLXZ2eE5RREhTS3d0NHVER2I3S1cwTmM1dWNiZ2drSHQ2TXl2dXAxNWFNemF0eWNVTzJTbVI2ZFF2RWlzWW8tMDYyR1VaV0FGaEZXVndBUmdFTmk?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNMlhPU0kyTXMzUTRweEFxdUhtZ2hsYWZpTTQ2RTZEekwzaHJSTlltU01LTVZIWHd0dlFSN2hQLUtsZE1sVTRqOVNjZk05am1yOXpPcUVYWVJQTllPMmlNWVhwbFlmd3FXWTZwVF85OHV4YWduZ05rR3BFck1KZzJocUM0X2hrd25qQ0llYXZ4RE9oblprOHFZLVBrRG9pMlpycXc?oc=5"
+        }
+      ],
+      "cta": "If you are visiting or planning a purchase, Spanish Coast Properties can help with a clear plan, areas, and a shortlist."
+    },
+    {
+      "id": "2026-02-12-local-digest-es",
+      "kind": "local",
+      "lang": "es",
+      "publishedAt": "2026-02-12T06:00:00Z",
+      "title": "Costa Blanca South: eventos y fiestas (2026-02-12)",
+      "excerpt": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente.",
+      "tags": [
+        "Local",
+        "Eventos",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente."
+        },
+        {
+          "type": "h",
+          "text": "Proximos 14 dias"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Día de San Valentín",
+            "16 Feb: Lunes de Carnaval",
+            "17 Feb: Martes de Carnaval",
+            "18 Feb: Miércoles de Ceniza"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Avisos recientes"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "12 Feb: La Policía Nacional libera a 16 mujeres y detiene a 11 personas por trata y explotación sexual en Alicante - alicantecultura.org",
+            "12 Feb: Alicante: detenido un hombre por intento de robo con arma blanca en la estación de Renfe - alicantecultura.org",
+            "12 Feb: Los hoteleros no ven con buenos ojos \"el experimento\" del Ayuntamiento con la nueva ubicación del concurso de fuegos artificiales - Cadena SER",
+            "12 Feb: Primeras cancelaciones del Carnaval en la provincia de Alicante por el viento - Todo Alicante",
+            "12 Feb: El Palau Altea refuerza su programación escénica con teatro, música y danza en la nueva temporada cultural - alicantecultura.org",
+            "12 Feb: Programa de Carnaval de Alicante 2026 - Ayuntamiento de Alicante",
+            "12 Feb: El curioso pueblo que rinde homenaje al algarrobo: está en Alicante y se transforma durante el mes de febrero - El Debate",
+            "11 Feb: Confirmado por la Ordenanza del Ruido: \"Ni fiestas ni juegos en domicilios particulares desde las 22 h entre semana\" - El Español"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Consejos rapidos"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "En festivos es comun que bancos y oficinas tengan horario reducido o cierren.",
+            "En fiestas grandes puede haber cortes de calles, mas trafico y parking limitado.",
+            "Para planes de visita, pide un itinerario corto por zona y tiempos reales."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Festivos en Espana",
+          "url": "https://calendar.google.com/calendar/ical/es.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxQYXNPUk1oWW93M01EWU5nb28tVk1RTGJIeFN4Q1F5NThCZmxnWFZhSlJ1TWc0U0xzYnRDTlRPMUZvd2tmZUZTWU1ZUXlIV2lSMmtTWktaVWh4Q1gxTktoR2V0b1pwY2htRHRxV3BiTG5YMGpqYTZpOHFVUnl6OWN3UnBGTkhlQzNRY0pBMlBpNlIzbl9hR2FoRGdRa2hSWUp6R0FkR2c2T3VTVDNfeG9GYmFXa3pDOEJ5Wm91ZHVRZmd6b05hUzVFaDJVLWIwT0VFeV82S2lB?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQVjhVMmVJZ3BLMGZoUDJmeFg2SmFyWDhLLWtXZ21UQkVPa1ZWQzJZMVVEY09NRE42eGdVVWEteXktdUJjdmhFM0ZnTnpHeFMwUmJMazRoM2VnYVhxRVFxUlZWVEhhT2pwOHFpOERvaG1FR2Y0dnFsNGxYRnV2d0VWUkUwN1J1czkwbzNVajMtUnVfcDRjaWkzd25BVzBVczYwQ1FNS0xKcTZQc1c5MmxiY0JMbUwyenF4dGRNUQ?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiowJBVV95cUxOdTRtcV9EMnB6SktEZjlWUng3dU4yWkVPVVdhczVicXp6bGRLVnFJOXcxV1lnVDZVN2trUUhYZFJiRFhSY0VvMlQzdUVSTS1CWV85TE1TUUNvcGVhbWo1cjdHNVVnRXNERUE3V3FVc1lKQWVPQ0wtRzAtM0QtRmtSUmpIOTJVclJ1ZWw2UFMzdm4wMUZ1aF8tTmtOZ0VZSy1qaE1wSHhqVzdRSmNrVDZIT0R6dHY0clNteXlEaWxzUWdXRndYY2FSeXJGbUdJZ3JxNlA5cXZNTTk5NEQ3WEwwQWdJZlJhSTFkOVhIcFlldDRnMmU1elpUa21BNWUyLVpRLW8wZHlxVWNBeGlyd1ZCT2t4TlFXSlFQQ3l6MXFIOTcxSkXSAbcCQVVfeXFMT1g3NW93cVFJQms2NExEclJTb19yMF9UcG1xcjRpOWtKVnlwQjNiOXRvTzEzZ2dRZ3FqN1RHejUzMWFOdHF1ekpHR29WZk1LdDRZUGxIRWhKQ0JTb3ZHbF9NaHNMTlpTZzhwM0J6N3l3bS1wRGdhal9FdUlybHVCQWRteVpSNVFVNGEtaWpWb1BHU0ZNZUlHVFRadWZUdHJ3cFh5eFRqazFoLUp1SC1FZlpnWjhXOFdiaWhyc3g0Wmp1Ym1yQS1HY0dsNldNQ0IyUERCQTJzY0tZRWZsbUFSeWh1OFNnMG1VTUVnUmhXS1NseGVieDI4MlRLOTA3SGRXTGRzUTBwRi1obVk0VGlEOGZ4WEFLVGVMbE9LTE1GM0RzWGJMRTN2WTVLTkc4UlZ2bVo5MW1zTjQ?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQLXpUUXluZFFUUGtIbTFYTl9RQmg3VTNWZThqZ1NydXY2TkxVcVdvZDZGcFZiV01jT2FsRldHbmZHbnFxcS1BRTRHME0xTGl4OTRKNUloV3VwUVZtTlBEcGd2NFlVaGVzQ2puejE1c0laQmIzYlA2eE5FbWQzMURFanJ6ajNNdHAzcE1FZHk4ZmlpenRhYlFpY1RvNXdhaWVwdE00b0dDX1ktY3BucHYyMG5VMmhYZERTZmY3QmpfU253SHFFRWfSAcsBQVVfeXFMTzBDdGI0ZUkybWxsRWZQYmJQRzM4aDV0MkFCTXA0NG84MS1PN1F1UzZ1OVMxc1dZRUk3Ry1uVGhUV1h1cHVwYktpQ3AzVTBrYUVDcm1oWGhhOUFCdkN0dGJSTmNoUWhOMU9QVnY2Y2gzN0FrWlZEMjVPeHNLVFBoa0xfNkloWnZOeHBCSC1uTnhNS0s4MDRoZHlMSVQ1d1EySnd0NHJXQmdVTjBzd24tRGlab0pfRFlPZG41ank1ZlNvT2NKdl85WDNOX1U?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxNS0tFbS02V3NfMldKR1c0NzQ1bFlZMjFoY3lMT1l5NlR3azQzQzF1TE5rcVM2TWFkREJnNWNQSG5uQ25yU1BadGdJOVZGR0p4UUFCS1hXZS1WZ29WNTJxYWttLWdNVlhVN2ZCcENOT3pqaXIyakhhaDBIb2ZQZl95cF9mNGt4b25IZWQyREU0OVp0OW1Vb3o2UHZmVkxNM09Wb1hrVjFSUnN2SU1Fb1ZLaXRyaTFEa0xXUnJGSmhzNVAzeVdzc0NDRXZvejdtZ3B4ZzZ6bw?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE5iYUtkRnV1SFcyWTg5NVdKdmNySVk4ZG82T0JBYzFDOWZ4M1F0S0x6bDkxS1hMQnNtSlE0aVZ5S0YxRzJ1cmoxdGZTZERXbXF4WWpDNERoRWQwRXdham5YdlB4Qy1MZUdzUVNuUVhmbEt4cmx5VGc?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQajNlcjhTMTd3cVNqRTBYYzdfbnRPLTYxWVdkUjVZSnhCN2U5ZGJQUEZHZVJTaXhIZVRRcFFrdkFiWjMyQTNvWkNQdDJZRExCd3FXVVEtclo0UWF0SVk1TldZZFFLNGN4bkJ2RHNSSGNhOUZ6aVdFWERsUldzSjFuRWtfSVFvT0Z5X1dZTGp4M0VjS0tNeV9PUEMzZXZOem5Mb0hUMlNlVGJfLWZnQkx3c291SlkwcFN5dGZMT3dsdVBJSmpyYTVaaXJsUUV2Z2RSTVNtejlhbUc3UVJrN2haX2ZtXzc3cUxabU15a1JEWdIB9AFBVV95cUxQNk93dVVDb3MzcHlCOXNCS2tnbGF0NnBmNFQ4UFdJVWYxeGlISzNqU0g4XzRaTXpqZWtLRFFPOEluY1NkMWw0ejZKNFZCUFV0cll6ek43NW1GMm1hYlRSSFRfZWtIZC1idk5nUG8zMk0za2YtWjJyZTlvLWJjM2ViVFVITjd2Q2ZySVBTTVY1Z1BFTUJCdkpvU3dveFZuTjhwVUhqeHMwLWdYYThqSmcyZFBTS1d2amh4eHBrQVFDdzZjUE5YSHR2U1o2QlJEMUFpeVA0NkRiTnZQNUNYZ1ZSeno5X3lqQmVILXF6U25NY2Q3TXhF?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxOdWlFYXNoTGctWmR2cVgxSkVEWmxyNi02cFdnSWQ2eFBlWE94RmlGU3ZYcU1jVE5lVVJNbnJablVkc2JSUzktWTllclg5QU93VW90TFZKMFhlZWRrZWJWQkc1dm9MS3RxZlRvcjlYbWpiZzJHMXBGYnlJWXpnR1ZsQWZHZnNmSklWTzl4VmFPRS1GZV9RbzRJa214V0dJV2FOckNQcXRZcHhwR3IxN24zQm1jUUEwU0QyLURtNnR3c3BsLU9CZFNVM1dmeW1hQ240b2hyMzNRUWRCWV9sZnhCNNIB5gFBVV95cUxNb0tOYTlSUlJVc3VpRkRNc1NkRWZmYUY0TUpsSFZ4T3dCSjhUaVhDSmlYeWFSQlVBUXF2LWpRMm1td1ppbDNZZWlBWTNXdy02WW1UMURhdVc2dXg3dWhpVGxqWTFoMjVPWnhXUzhBcVRtX3E1ZWs0ZUE2ZUR5T1Z3Q2VUZE96aGhnQkFxSUdmbDRLQmVvN2VKSE55a2phTlExcDFMdHFOMF9xZEJ5VFhiT3VSaFkzNGg5NzRzNTB2S0RoUXAxT3ZPWGh1UFQyeUFMSjViT2hsU2g1cFFvOFNiU0xycFJLZw?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiyAJBVV95cUxQMzJ5M3NZNmdxZnZ3Vmc0eGQ4WWdEemxGb1ppRVVaODBzY3pzeUxKNzRWc3NQUWtaUERDQjd2NE5yWVk0VTdGRU9lN19qc2NpVExHZ05UNXZRVVB1U3ZSRGE1SjV3cV9SaWRDM2pnXzBSY3VianA5UnhRdUhUODdIOEwtd1N3MEl1cHQzS3Z0bmFJYzI3bU5MSFdjUjVCWDl5MGxxM2RjVUNNX0hSXzJLSWU2eTZfVXZmeHpaWmtmVWEyZnZZQ1hvSEFQaGliUlJ3dXZPd2w5eGoxbXE5bGotOHNEN2wtX2R6TGowT3pfYTFuUU4telpaSDRTbkhlcFdva0NWVkkyX2NkWFhCY0xwQ3RWRVFjTmZaV3BLVW9HWU4xNHZVZG9MNlAyb29WZXhtWlNaelNpUzc2em9zckMxMzV5ZEFxUFNw?oc=5"
+        }
+      ],
+      "cta": "Si vienes de visita o estas planificando una compra, Spanish Coast Properties puede ayudarte con un plan claro, zonas y opciones."
     },
     {
       "id": "2026-02-12-samu-devastated-to-miss-out-on-world-cup-with-spain-because--13aad105",
@@ -1304,6 +2391,102 @@ globalThis.SCP_BLOG = {
       "cta": "¿Quieres una lista corta? Spanish Coast Properties puede filtrar opciones y enviarte un catálogo limpio según tu presupuesto y zona."
     },
     {
+      "id": "2026-02-11-la-provincia-de-alicante-concentra-13-de-los-20-barrios-mas--034900e5",
+      "kind": "news",
+      "lang": "es",
+      "publishedAt": "2026-02-11T11:22:34Z",
+      "title": "La provincia de Alicante concentra 13 de los 20 barrios más caros de la Comunidad Valenciana: esta es la lista",
+      "excerpt": "La provincia de Alicante concentra 13 de los 20 barrios más caros de la Comunidad Valenciana: esta es la lista    Información",
+      "tags": [
+        "Costa Blanca",
+        "Vivienda",
+        "Mercado"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Resumen breve basado en un titular público. Aquí tienes lo más útil para Costa Blanca Sur."
+        },
+        {
+          "type": "h",
+          "text": "Por qué importa"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "Las noticias del mercado suelen reflejar cambios en demanda, oferta y negociación.",
+            "Lo que pasa en España impacta distinto según zona: Costa Blanca Sur es muy local."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Qué hacer ahora"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "Si compras: compara por precio, m2, distancia a playa y gastos de comunidad.",
+            "Si vendes: prepara fotos y documentación para acelerar visitas y ofertas."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Información",
+          "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxObmJwWDJpMHBMTDFadS1kRjZGNGVfVWJ4c1pjVksxaTZWNWhtTU02U1B5OFBqb3hmZFBma0FMb1ZuemFrMGRERkpIRHRuU0JndE5vTjNHTXIwSk9lbFcwby1wOHZramF2eFNEcnJVZ3NtdXhfRDBwV3E2aFBqNmRWQzM3ZUZSekVGbTMtUVhRX0loV3ZGNWRhZDNtWFlvZ1BEeE1vSGVmc21wbThCWXVhYTgza2_SAboBQVVfeXFMT3pGd1lNMEN3anRGQVQxZ295NlhrLXlSNHZIYVRUU2s3QUZZOGhXWFZkU004NFpXNEh0X2F3dWotWUdnTGJ0MDZUZmZDczE0UUpuSk5wc2JPWjB6cGs2NFNUZkRDTnRuRU91UWVkZVB1cUx4OEFGcUZGX3Zia0t6Y2xtSHRaTS1rXzlEY3hUQVo3R2hTRHZyWFQzeHMwQzFyd015OVR6Z2Q4ZlRmYldlUVZ3Ukd4VE9tWThn?oc=5"
+        }
+      ],
+      "cta": "¿Quieres una lista corta? Spanish Coast Properties puede filtrar opciones y enviarte un catálogo limpio según tu presupuesto y zona."
+    },
+    {
+      "id": "2026-02-11-mortgage-rates-dip-below-seven-percent-as-fed-eases-e9a35f11",
+      "kind": "news",
+      "lang": "en",
+      "publishedAt": "2026-02-11T10:56:27Z",
+      "title": "Mortgage Rates Dip Below Seven Percent As Fed Eases",
+      "excerpt": "Mortgage Rates Dip Below Seven Percent As Fed Eases    Evrim Ağacı",
+      "tags": [
+        "Spain",
+        "Mortgage",
+        "Finance"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "A short, practical take based on a public headline, focused on Costa Blanca South."
+        },
+        {
+          "type": "h",
+          "text": "Why it matters"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "Financing conditions change affordability and how quickly buyers can move.",
+            "Pre-approval reduces risk and helps you act fast when the right listing appears."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "What to do next"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "If you are buying: confirm your real budget (deposit + costs) and financing options before reserving.",
+            "If you are selling: prepare paperwork and presentation so qualified buyers can commit quickly."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Evrim Ağacı",
+          "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPdlJBa1dfOWRmLWlocE4tYmhEMVpoZU1UQUFSOG5sMDJpYldqU0N0bGRTVkY0U1dmNjZpdEt4OHl0dTY1a29KS0w2WFJVa1NDU0RZdVA0RnItRE9jVkcwMjRoekpDQnZ6NTJxa1Fxa3I0YlBuSXljYTl2MG9ILWFIeS1PYUZJclFwMFpOc0NR?oc=5"
+        }
+      ],
+      "cta": "Want a shortlist? Spanish Coast Properties can filter options and send a clean catalog based on your budget and area."
+    },
+    {
       "id": "2026-02-11-spanish-home-with-its-own-mountain-and-690-acres-goes-on-sal-e0bfb5ec",
       "kind": "news",
       "lang": "en",
@@ -1497,6 +2680,54 @@ globalThis.SCP_BLOG = {
       "cta": "Want a shortlist? Spanish Coast Properties can filter options and send a clean catalog based on your budget and area."
     },
     {
+      "id": "2026-02-11-european-living-market-dynamics-q4-2025-7188be42",
+      "kind": "news",
+      "lang": "en",
+      "publishedAt": "2026-02-11T08:00:00Z",
+      "title": "European Living Market Dynamics Q4 2025",
+      "excerpt": "European Living Market Dynamics Q4 2025    JLL",
+      "tags": [
+        "Spain",
+        "Market",
+        "Costa Blanca"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "A short, practical take based on a public headline, focused on Costa Blanca South."
+        },
+        {
+          "type": "h",
+          "text": "Why it matters"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "Market headlines often hint at demand, supply, or negotiation shifts.",
+            "What happens nationally plays out differently locally: Costa Blanca South is very micro-market driven."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "What to do next"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "If buying: compare by price, sqm, beach distance, and community fees.",
+            "If selling: clean photos and paperwork usually beat small price tweaks for speed."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "JLL",
+          "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQRVRCRUdSdHdJTXlNN1pFWGFwYVJOTjBjWHVwaHhWbnhJRHRHU1Z1QnBFQVR2UHlXTXpzRXNlRDdGQlBtQ0tWRGNmY2ZyQWxUNE5pNWZXYnp2NVNleThoSVRzLUxHSFRVTHY3SUVmTnZTaGlSUmU2T1lzTFlBS0YydE9SUnY?oc=5"
+        }
+      ],
+      "cta": "Want a shortlist? Spanish Coast Properties can filter options and send a clean catalog based on your budget and area."
+    },
+    {
       "id": "2026-02-11-la-provincia-de-alicante-concentra-dos-de-cada-tres-vivienda-897a24a4",
       "kind": "news",
       "lang": "es",
@@ -1543,6 +2774,211 @@ globalThis.SCP_BLOG = {
         }
       ],
       "cta": "¿Quieres una lista corta? Spanish Coast Properties puede filtrar opciones y enviarte un catálogo limpio según tu presupuesto y zona."
+    },
+    {
+      "id": "2026-02-11-local-digest-en",
+      "kind": "local",
+      "lang": "en",
+      "publishedAt": "2026-02-11T06:00:00Z",
+      "title": "Costa Blanca South: events & fiestas (2026-02-11)",
+      "excerpt": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source.",
+      "tags": [
+        "Local",
+        "Events",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source."
+        },
+        {
+          "type": "h",
+          "text": "Next 14 days"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Valentine's Day",
+            "14 Feb: Carnival (varies by town) · Costa Blanca South",
+            "16 Feb: Carnival Monday",
+            "17 Feb: Carnival Tuesday",
+            "18 Feb: Ash Wednesday"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Recent local updates"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "10 Feb: Torremolinos gets romantic for Valentine’s Day - Euro Weekly News",
+            "10 Feb: Asteroid set to smash into the Moon in biggest impact humanity has ever witnessed - Murcia Today - News",
+            "09 Feb: Carnaval celebrations kick off in Cartagena as 2026 Queens crowned - Euro Weekly News",
+            "09 Feb: Women in business conference returns to Mijas this March - InSpain.news",
+            "09 Feb: Torrevieja dazzles with grand Carnaval parade and competition - Euro Weekly News",
+            "09 Feb: Las Colinas Golf & Country Club celebrates its 15th anniversary with a year of major sporting and gastronomic events - Euro Weekly News",
+            "08 Feb: Edition 1114 of The Costa Blanca and Costa Calida Leader Newspaper 9 – 15 February 2026 - theleader.info",
+            "08 Feb: This week’s events on Lanzarote - Gazette Life"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quick tips"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "On public holidays, banks and offices often run reduced hours or close.",
+            "Big fiestas can mean road closures, extra traffic, and limited parking.",
+            "If you are visiting to view properties, ask for a short itinerary by area and realistic travel times."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Spain Holidays",
+          "url": "https://calendar.google.com/calendar/ical/en.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxQbjZPX3dtX1ZqUWhmRFg1Rmx2SUNtT0NScnVYLXV5UTFIeUZSM0RyYllrOVFJV3dTZ3JobHVTOWdWcHhiTXZjN3VwVnRVN0lLVllOMmhxQjJmYWFvWXpqVV9EUG01N0lEaWxXSjJYelVUN3VqTE9IdEJYUzJQT2tWajFJbmNTVTkzX0stUkR0LXJCTkpDb2Y2Y1ZoU1Z0cTBGcTFCSGdjNjlxcDNHNUlOYV9IeHFycVF5WVZSTTBjM25VSHdfTnV3SmRNbHBESS1Gc3hicnVoSjducFVHODc0?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNemd3dmlvMFhXVzFsenRsMkpGOEp6VGdqa3VZNS1kLUt2RDhSaGVpRG1DU3ViYXd6cmJnRE03amE5RWo3allGSllMenNkNmJNMjQzQkY4enA0SU9qZ3lqZUNjTTBETS1aNUhYRzROX1M4YUF2SGFYNnhPRHVRZlBybF95V2lpN01aWVFUMGdTSGdsTkxuY1F1UVQ4b09SZnNmbjlXVXdhM2EwTUlVZzFWajY5d1c4cElnU05ENy1Jb2E?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNRjdhcTRjQTlKakFoRlZIYjdWMnlLU2ZQM0EyOXgxcUs1TjdWSGVRaTdyOGFjTWhBVGNhdzYyZ080OVhDSmRBcVJ2V0JmeFVHV05HcHJOZld6V2ZIdjk4NGVhcll6T1dJME1SdjNlcElzbTZ6ZnVRWVlZYmdXX0Y0QjNiT0llQm9PUnR0RWZQa3pPclNzaXVLMTNKWWV6TWNLYThwaDVMQVM?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQTW8xNFNRdmVGRFBSYmU4bEdXZlVsbmRvX18yVnk0WlJDMmtUdFlpQ1lHLXZ2eE5RREhTS3d0NHVER2I3S1cwTmM1dWNiZ2drSHQ2TXl2dXAxNWFNemF0eWNVTzJTbVI2ZFF2RWlzWW8tMDYyR1VaV0FGaEZXVndBUmdFTmk?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNMlhPU0kyTXMzUTRweEFxdUhtZ2hsYWZpTTQ2RTZEekwzaHJSTlltU01LTVZIWHd0dlFSN2hQLUtsZE1sVTRqOVNjZk05am1yOXpPcUVYWVJQTllPMmlNWVhwbFlmd3FXWTZwVF85OHV4YWduZ05rR3BFck1KZzJocUM0X2hrd25qQ0llYXZ4RE9oblprOHFZLVBrRG9pMlpycXc?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxOdFg2bTE2WFlXSlZ3ZGtpbFVSTXl3dlBhc3IxY05JOThsWjBqUDB2aElnVWx5ZmpSV2VtVHNIMG0wdE5Ec0s4RklZNU93TzRFb3lRSnpMb25paVQzcjFueURGRWJKN3Y2dHFXckYzSEVHUHhyS3ppdVlvMklIUVVVbnFHSGt0RFlEWkotblZUdkp0UC05Wm9yYk1xYTZpdzJYcXUxTDJEWW96QjVaTTlERUZzbUFUSVpaTXVrUlNpQUpjR0xkR0FyRTRWMWRFU3FBMTltVVhfMHNXbGttWTJNY0NkQXNZaWVV?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxORmZRZGhrdWJCWFREYktyRHY3WllTbXdNbWxDRG5oTmU0WnZKU1VtZThWM1ZfNFNsb3hsU3g2NkdUNmtPOGVPWEZMSkg2OVBQa1puaDNZM0U1ai0xMC1mMHZxUDd0NEtCeHVFV2FNaE9pRlFlUVl2cTVfdmEyZFlPbEU2NHpHWUduc0p4c1ZvelAwRXBXYlNSUW1FMWVkRkhoRTVGX2VCYTVzN21oQ05YZzR3d09ZbElwUEJobA?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9ZRmwyVGd6N1hmUldMcUJRbGFfX2lwVlBJc1lXNTVkaGczOTZBUkQ4UjFBV1ptU3dKNUVKb3gyUXB3LUZ2Tm5udUpzdDNJWVlmSUtTM3JhTzVyYzdSRTJQcG5SbEY0UjBsSDVwRGpVNG8?oc=5"
+        }
+      ],
+      "cta": "If you are visiting or planning a purchase, Spanish Coast Properties can help with a clear plan, areas, and a shortlist."
+    },
+    {
+      "id": "2026-02-11-local-digest-es",
+      "kind": "local",
+      "lang": "es",
+      "publishedAt": "2026-02-11T06:00:00Z",
+      "title": "Costa Blanca South: eventos y fiestas (2026-02-11)",
+      "excerpt": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente.",
+      "tags": [
+        "Local",
+        "Eventos",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente."
+        },
+        {
+          "type": "h",
+          "text": "Proximos 14 dias"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Día de San Valentín",
+            "16 Feb: Lunes de Carnaval",
+            "17 Feb: Martes de Carnaval",
+            "18 Feb: Miércoles de Ceniza"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Avisos recientes"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "11 Feb: Confirmado por la Ordenanza del Ruido: \"Ni fiestas ni juegos en domicilios particulares desde las 22 h entre semana\" - El Español",
+            "11 Feb: Almoradí, evento cultural: Concierto de aniversario ‘Sueños’, por la banda sinfónica de la Sociedad Unión Musical de Almoradí, en el ciclo bajo el tema ‘Amor & odio’ de la temporada 2025/26, dentro de la programación cultural de febrero de 2026 organizada - Todo Cultura Vega Baja",
+            "10 Feb: Dónde celebrar el Carnaval 2026 en la provincia de Alicante - AlicanteOut",
+            "10 Feb: El secreto del mar que partió la playa del cura en Torrevieja - Confidencial Digital",
+            "10 Feb: Alicante refuerza los servicios nocturnos de autobús y Tram el Sábado Ramblero de Carnaval - Ayuntamiento de Alicante",
+            "10 Feb: Torrevieja coronó a los nuevos líderes del taekwondo español en el 50.º Campeonato de España - Onda Cero",
+            "10 Feb: El carnaval brasileño llenará de ritmo y color el centro de Alicante el sábado 14 - Onda Cero",
+            "10 Feb: Torrevieja, evento: Exposición itinerante de fotografía 'Punto y seguido. La vida puede más' - Todo Cultura Vega Baja"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Consejos rapidos"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "En festivos es comun que bancos y oficinas tengan horario reducido o cierren.",
+            "En fiestas grandes puede haber cortes de calles, mas trafico y parking limitado.",
+            "Para planes de visita, pide un itinerario corto por zona y tiempos reales."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Festivos en Espana",
+          "url": "https://calendar.google.com/calendar/ical/es.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxOdWlFYXNoTGctWmR2cVgxSkVEWmxyNi02cFdnSWQ2eFBlWE94RmlGU3ZYcU1jVE5lVVJNbnJablVkc2JSUzktWTllclg5QU93VW90TFZKMFhlZWRrZWJWQkc1dm9MS3RxZlRvcjlYbWpiZzJHMXBGYnlJWXpnR1ZsQWZHZnNmSklWTzl4VmFPRS1GZV9RbzRJa214V0dJV2FOckNQcXRZcHhwR3IxN24zQm1jUUEwU0QyLURtNnR3c3BsLU9CZFNVM1dmeW1hQ240b2hyMzNRUWRCWV9sZnhCNNIB5gFBVV95cUxNb0tOYTlSUlJVc3VpRkRNc1NkRWZmYUY0TUpsSFZ4T3dCSjhUaVhDSmlYeWFSQlVBUXF2LWpRMm1td1ppbDNZZWlBWTNXdy02WW1UMURhdVc2dXg3dWhpVGxqWTFoMjVPWnhXUzhBcVRtX3E1ZWs0ZUE2ZUR5T1Z3Q2VUZE96aGhnQkFxSUdmbDRLQmVvN2VKSE55a2phTlExcDFMdHFOMF9xZEJ5VFhiT3VSaFkzNGg5NzRzNTB2S0RoUXAxT3ZPWGh1UFQyeUFMSjViT2hsU2g1cFFvOFNiU0xycFJLZw?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiyAJBVV95cUxQMzJ5M3NZNmdxZnZ3Vmc0eGQ4WWdEemxGb1ppRVVaODBzY3pzeUxKNzRWc3NQUWtaUERDQjd2NE5yWVk0VTdGRU9lN19qc2NpVExHZ05UNXZRVVB1U3ZSRGE1SjV3cV9SaWRDM2pnXzBSY3VianA5UnhRdUhUODdIOEwtd1N3MEl1cHQzS3Z0bmFJYzI3bU5MSFdjUjVCWDl5MGxxM2RjVUNNX0hSXzJLSWU2eTZfVXZmeHpaWmtmVWEyZnZZQ1hvSEFQaGliUlJ3dXZPd2w5eGoxbXE5bGotOHNEN2wtX2R6TGowT3pfYTFuUU4telpaSDRTbkhlcFdva0NWVkkyX2NkWFhCY0xwQ3RWRVFjTmZaV3BLVW9HWU4xNHZVZG9MNlAyb29WZXhtWlNaelNpUzc2em9zckMxMzV5ZEFxUFNw?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOTWZ6MkY1ODRWY1VJSmtNc2kyVFZWRmcxMXAyOXBXYXRYdk1pXzJMRWd3YXNFSmhIU2VQemM5bWNlWUNpNUhKVmh6N2FLa3RNb0x1V0w4NjJHNFhMWVE3TTVDVFpnMmc5aFNVN0pjcXlDbjVOYXFTZDhHS2ZCRjZjWtIBgAFBVV95cUxOTWZ6MkY1ODRWY1VJSmtNc2kyVFZWRmcxMXAyOXBXYXRYdk1pXzJMRWd3YXNFSmhIU2VQemM5bWNlWUNpNUhKVmh6N2FLa3RNb0x1V0w4NjJHNFhMWVE3TTVDVFpnMmc5aFNVN0pjcXlDbjVOYXFTZDhHS2ZCRjZjWg?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQTUI2S09wTktySmVRVmMtTnAtcHNTTFRyU1FOTUNxeU40V3p2dlhhclp1d0x5LWJ2ZWt3SEFwR1R3RDh3VExyNVFHUDRhaVBkY0tiOFRJd3B0bnhhVGlmSlk1dUM2Mzd4UktnbUQtRXRtYVliQklaS2pwOGRiWDJkWDJtWllnN1VhbHBMdVNXc05MX2JUZ0NEZ1JuVzVfQ19iVTJTNFlXYTd5a083bGtrZGN2UGxFSGRzdGRXWEQza0hkcGtUbDVJaXhGUdIB0AFBVV95cUxQMGVmTjhMbkljNzhBc1daZjNUQ2huUjR0TjQ5a1ZVMDViVG5HbnNTQkJ2enU1YmlFZmljaUVXV2JMa0ppVVVONGtxQjlvUHB4WVQ5MGdVLXpSNnZfYU5ldEtTdndEcW1QV0Z3eWRiRnRTa3FlZWlLUlltUG9SWkdSS3JKY3ZWbzRqWlNMTjMxeHl0OEdGN19QOHFfeWlOdDB6RndIcm5sUjlLQkxUeGYyVWQzaTNWRkFnUXRzaDBHMThpOXFuVVZNbE9rXzRGQ1pB?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQNEp4N0l6a0ctc3o5TW03Tkd2eHZ0MVp4S2xxaWkzN3Vhbi1reWU3VnFtWUJPOTBMUlVTQTZ3QlRiYlZFTVhUS1BoOGc3OGJfMHlTRGVxeDJZQVdMNi1qeXlTLU9FOEZmZlU0ZG12TnNnMFJYQnZYcTdWaFlJRk93Q3UzTFRkRXZ0aGdOS3hGejhqSXBZSWtPVFVJVXV6VE5EbDJYSUtkcjN4TXpvdWRYSEZKVQ?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMilAJBVV95cUxOVXZrRlJ1Qnk4aFBUaGpjSlc0NGxQUzNfUFl1YzB5b0Y2WElNaXNLdGo4S1ZhRm9VNDJMVDUtbjVRMnRIT0k2YWhFVVpNbTVNbnI4QTNicHNLRlVvdXdEbGYtRU5sSC1WMmNSU25Ub2RQT2NrdE1iMEoxTDdtYWlUVU1teUFFYlVwREFrWWpXNk9YWFR0M2lWZTZlU21CTWRlNmpUZnlaNGpCN1ZESWctTzVQWVM2SFdYYkk4ai0waWdFaWxVNFNUMTBjMlpBZ1gxYW9jQzNLX0NZTmpQUUZWUURobHNCTVhPY0xBdHZsZ1NFSS1kZWFGcTdBdFVoa2xYejl2dFJ0TVpCYjJwejN0b1huSknSAZQCQVVfeXFMTndab25sVUNHSUFMQjRfUGFmc2F6RXQ2bjFFQ3UzbWlKakVTYUwtb3N4aE1aSWZEdVh0RWdtXzQybUFRUnMtLTBYQmR2YVlTb0tVb2dYTG9VWTRCWG1KRENaT1pEbzh4dEtLb3B0RVJtTkI1cUJSUHdxV2drRW9NbDRSaDVzNlhDQ0pFQ1FpSHFVcG1QVUg3STd2d3BHZzNxTUFWYUpFbFVEWUhDSml4aDlzaDhKRHdvQ3FBYXRYQ1dLVkp0N1dUWTM1cXpURWxnS1BwOUM2TWQ3RkNnZlVncll5NWZfQjJReUZWZzc3eTd0dUR5cE91d0VyeW1CMVZaTFVNRFlaWVFpa2VuSVY4MU5VeFR6?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMimwJBVV95cUxQbGZQdUcwWkZ0Uk5iS0xiUWRkYU1RNWRZV25JOHhfenJtRDd2VWN3bTRkeGZyMlR3M1lpNmc4SHBwdVBmRFN3eFdONG1RanZ1OURQMkd4b0dfNFhkZlFQMlRIVk9aOFB2d2FyVHI2MDlOeU1WaG5mTTJEZkQ3V1lFZW1UR2VQRXRJT2x3N1FMRXc3NVpzUktpTXl0QmlJbDZpOU9PZXBYQ3hQejA0aFgzd3ZtOE0tb1R0RjgwNzJUX1JsVEVtYUxQdnRRckV6LXV3Q1plQmE4RHZkRnFHSENLN3FCYWJNQzVaRjRDRnFfbVNZcFppcEhmZGlhZWVOZ1RaZjczR1dHUmpnTDdRRUt2VndLSXhlb3JDSjRv0gGbAkFVX3lxTFB5YW5abVBHblZqMkJQYVNLeE1ZeWNXemZxWXh5ZXlZUWJ0ZThheDN6X1ZFdktkYXB4S1BpS2k5VENpRW9JVUtRZ3h5UDAyZHVRLTdjaGJJX09TMlEyWFc5QnZQM0Z2cEZ3aGR3eXlFOU5uS0ZPM2h6bEdfVnNWbExsRThlc3cxTFp3b0lnV0t3NGI0aWZQTnBlb2R3UFhOQi00MjRJVFBZdE5SbzAxdVpXa2VudVpMUURLRnZXMERTZ1NoVlY0M2ExazRxOVZZbVNqUkZ6TmpRMWFaUVlFVVlRS095T1ItTUNpVEFwdzFoTHpOYnJmUjZMMnp1ZDQtSFNHcERvbjNTSXpvVjVUYk1XT0wwcm8wQjFpcE0?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi_AFBVV95cUxOSlpOVTJwUUNsalpFRXhfcnVIb2RFb1kyZUV5djJhUldLcmFiZjBIaS1Ed2c2OG4yWF84TXYwaTNGZHZleHUzdEx0MklxYktIcGFHc2gxVHlPWUhWMUJmWlRYdVVRNDJxMUhpNHE5OG9ac3BtZjZDRk9WOEVwYjFWNjExb083a3JyYVhiYUY5NHFXTDZDNVNaVkdUcm1NY1N6X3dleGx6MDZaVHZkd3NRdmYyUU9CNzNWb19jSk9ja2thQkhMWTJ5T0tsOTZlMmJoNV9KZlBweEZJMHRSMzlaR2FUYXB5eUJWWTFWQTRycjlid2ZGZXQweTBFb2w?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNMkJQbDZ6Smk2djJqVUlGOVVFUGxCVTJYd3RYUzZ5R0VBSm1nS19Nd2NOeVMyR3lQN3ZacEgxMzdCU1JmaHhfUFoyUDRHRHJDNl9nZm1tUWtPV0VrMUFBWU1mRWZ2MU9iU1ZRaUM2bXBsVkpESDJacDRxaE8wTEZreHBReVRhMGdUcDFidGNvTGhfdw?oc=5"
+        }
+      ],
+      "cta": "Si vienes de visita o estas planificando una compra, Spanish Coast Properties puede ayudarte con un plan claro, zonas y opciones."
     },
     {
       "id": "2026-02-10-report-bayern-munich-will-reject-interest-from-england-and-s-834d54de",
@@ -2028,6 +3464,211 @@ globalThis.SCP_BLOG = {
       "cta": "Want a shortlist? Spanish Coast Properties can filter options and send a clean catalog based on your budget and area."
     },
     {
+      "id": "2026-02-10-local-digest-en",
+      "kind": "local",
+      "lang": "en",
+      "publishedAt": "2026-02-10T06:00:00Z",
+      "title": "Costa Blanca South: events & fiestas (2026-02-10)",
+      "excerpt": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source.",
+      "tags": [
+        "Local",
+        "Events",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source."
+        },
+        {
+          "type": "h",
+          "text": "Next 14 days"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Valentine's Day",
+            "14 Feb: Carnival (varies by town) · Costa Blanca South",
+            "16 Feb: Carnival Monday",
+            "17 Feb: Carnival Tuesday",
+            "18 Feb: Ash Wednesday"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Recent local updates"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "10 Feb: Torremolinos gets romantic for Valentine’s Day - Euro Weekly News",
+            "10 Feb: Asteroid set to smash into the Moon in biggest impact humanity has ever witnessed - Murcia Today - News",
+            "09 Feb: Carnaval celebrations kick off in Cartagena as 2026 Queens crowned - Euro Weekly News",
+            "09 Feb: Women in business conference returns to Mijas this March - InSpain.news",
+            "09 Feb: Torrevieja dazzles with grand Carnaval parade and competition - Euro Weekly News",
+            "09 Feb: Las Colinas Golf & Country Club celebrates its 15th anniversary with a year of major sporting and gastronomic events - Euro Weekly News",
+            "08 Feb: Edition 1114 of The Costa Blanca and Costa Calida Leader Newspaper 9 – 15 February 2026 - theleader.info",
+            "08 Feb: This week’s events on Lanzarote - Gazette Life"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quick tips"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "On public holidays, banks and offices often run reduced hours or close.",
+            "Big fiestas can mean road closures, extra traffic, and limited parking.",
+            "If you are visiting to view properties, ask for a short itinerary by area and realistic travel times."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Spain Holidays",
+          "url": "https://calendar.google.com/calendar/ical/en.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxQbjZPX3dtX1ZqUWhmRFg1Rmx2SUNtT0NScnVYLXV5UTFIeUZSM0RyYllrOVFJV3dTZ3JobHVTOWdWcHhiTXZjN3VwVnRVN0lLVllOMmhxQjJmYWFvWXpqVV9EUG01N0lEaWxXSjJYelVUN3VqTE9IdEJYUzJQT2tWajFJbmNTVTkzX0stUkR0LXJCTkpDb2Y2Y1ZoU1Z0cTBGcTFCSGdjNjlxcDNHNUlOYV9IeHFycVF5WVZSTTBjM25VSHdfTnV3SmRNbHBESS1Gc3hicnVoSjducFVHODc0?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNemd3dmlvMFhXVzFsenRsMkpGOEp6VGdqa3VZNS1kLUt2RDhSaGVpRG1DU3ViYXd6cmJnRE03amE5RWo3allGSllMenNkNmJNMjQzQkY4enA0SU9qZ3lqZUNjTTBETS1aNUhYRzROX1M4YUF2SGFYNnhPRHVRZlBybF95V2lpN01aWVFUMGdTSGdsTkxuY1F1UVQ4b09SZnNmbjlXVXdhM2EwTUlVZzFWajY5d1c4cElnU05ENy1Jb2E?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNRjdhcTRjQTlKakFoRlZIYjdWMnlLU2ZQM0EyOXgxcUs1TjdWSGVRaTdyOGFjTWhBVGNhdzYyZ080OVhDSmRBcVJ2V0JmeFVHV05HcHJOZld6V2ZIdjk4NGVhcll6T1dJME1SdjNlcElzbTZ6ZnVRWVlZYmdXX0Y0QjNiT0llQm9PUnR0RWZQa3pPclNzaXVLMTNKWWV6TWNLYThwaDVMQVM?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQTW8xNFNRdmVGRFBSYmU4bEdXZlVsbmRvX18yVnk0WlJDMmtUdFlpQ1lHLXZ2eE5RREhTS3d0NHVER2I3S1cwTmM1dWNiZ2drSHQ2TXl2dXAxNWFNemF0eWNVTzJTbVI2ZFF2RWlzWW8tMDYyR1VaV0FGaEZXVndBUmdFTmk?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNMlhPU0kyTXMzUTRweEFxdUhtZ2hsYWZpTTQ2RTZEekwzaHJSTlltU01LTVZIWHd0dlFSN2hQLUtsZE1sVTRqOVNjZk05am1yOXpPcUVYWVJQTllPMmlNWVhwbFlmd3FXWTZwVF85OHV4YWduZ05rR3BFck1KZzJocUM0X2hrd25qQ0llYXZ4RE9oblprOHFZLVBrRG9pMlpycXc?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxOdFg2bTE2WFlXSlZ3ZGtpbFVSTXl3dlBhc3IxY05JOThsWjBqUDB2aElnVWx5ZmpSV2VtVHNIMG0wdE5Ec0s4RklZNU93TzRFb3lRSnpMb25paVQzcjFueURGRWJKN3Y2dHFXckYzSEVHUHhyS3ppdVlvMklIUVVVbnFHSGt0RFlEWkotblZUdkp0UC05Wm9yYk1xYTZpdzJYcXUxTDJEWW96QjVaTTlERUZzbUFUSVpaTXVrUlNpQUpjR0xkR0FyRTRWMWRFU3FBMTltVVhfMHNXbGttWTJNY0NkQXNZaWVV?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxORmZRZGhrdWJCWFREYktyRHY3WllTbXdNbWxDRG5oTmU0WnZKU1VtZThWM1ZfNFNsb3hsU3g2NkdUNmtPOGVPWEZMSkg2OVBQa1puaDNZM0U1ai0xMC1mMHZxUDd0NEtCeHVFV2FNaE9pRlFlUVl2cTVfdmEyZFlPbEU2NHpHWUduc0p4c1ZvelAwRXBXYlNSUW1FMWVkRkhoRTVGX2VCYTVzN21oQ05YZzR3d09ZbElwUEJobA?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9ZRmwyVGd6N1hmUldMcUJRbGFfX2lwVlBJc1lXNTVkaGczOTZBUkQ4UjFBV1ptU3dKNUVKb3gyUXB3LUZ2Tm5udUpzdDNJWVlmSUtTM3JhTzVyYzdSRTJQcG5SbEY0UjBsSDVwRGpVNG8?oc=5"
+        }
+      ],
+      "cta": "If you are visiting or planning a purchase, Spanish Coast Properties can help with a clear plan, areas, and a shortlist."
+    },
+    {
+      "id": "2026-02-10-local-digest-es",
+      "kind": "local",
+      "lang": "es",
+      "publishedAt": "2026-02-10T06:00:00Z",
+      "title": "Costa Blanca South: eventos y fiestas (2026-02-10)",
+      "excerpt": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente.",
+      "tags": [
+        "Local",
+        "Eventos",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente."
+        },
+        {
+          "type": "h",
+          "text": "Proximos 14 dias"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Día de San Valentín",
+            "16 Feb: Lunes de Carnaval",
+            "17 Feb: Martes de Carnaval",
+            "18 Feb: Miércoles de Ceniza"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Avisos recientes"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "10 Feb: Dónde celebrar el Carnaval 2026 en la provincia de Alicante - AlicanteOut",
+            "10 Feb: El secreto del mar que partió la playa del cura en Torrevieja - Confidencial Digital",
+            "10 Feb: Alicante refuerza los servicios nocturnos de autobús y Tram el Sábado Ramblero de Carnaval - Ayuntamiento de Alicante",
+            "10 Feb: Torrevieja coronó a los nuevos líderes del taekwondo español en el 50.º Campeonato de España - Onda Cero",
+            "10 Feb: El carnaval brasileño llenará de ritmo y color el centro de Alicante el sábado 14 - Onda Cero",
+            "10 Feb: Torrevieja, evento: Exposición itinerante de fotografía 'Punto y seguido. La vida puede más' - Todo Cultura Vega Baja",
+            "10 Feb: Convocatoria para programadores para el Festival Máquina para el año 2026 - Ayuntamiento de Alicante",
+            "10 Feb: El Carnaval de Torrevieja 2026 llena las calles de música y color - Diario de la Vega"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Consejos rapidos"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "En festivos es comun que bancos y oficinas tengan horario reducido o cierren.",
+            "En fiestas grandes puede haber cortes de calles, mas trafico y parking limitado.",
+            "Para planes de visita, pide un itinerario corto por zona y tiempos reales."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Festivos en Espana",
+          "url": "https://calendar.google.com/calendar/ical/es.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOTWZ6MkY1ODRWY1VJSmtNc2kyVFZWRmcxMXAyOXBXYXRYdk1pXzJMRWd3YXNFSmhIU2VQemM5bWNlWUNpNUhKVmh6N2FLa3RNb0x1V0w4NjJHNFhMWVE3TTVDVFpnMmc5aFNVN0pjcXlDbjVOYXFTZDhHS2ZCRjZjWtIBgAFBVV95cUxOTWZ6MkY1ODRWY1VJSmtNc2kyVFZWRmcxMXAyOXBXYXRYdk1pXzJMRWd3YXNFSmhIU2VQemM5bWNlWUNpNUhKVmh6N2FLa3RNb0x1V0w4NjJHNFhMWVE3TTVDVFpnMmc5aFNVN0pjcXlDbjVOYXFTZDhHS2ZCRjZjWg?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQTUI2S09wTktySmVRVmMtTnAtcHNTTFRyU1FOTUNxeU40V3p2dlhhclp1d0x5LWJ2ZWt3SEFwR1R3RDh3VExyNVFHUDRhaVBkY0tiOFRJd3B0bnhhVGlmSlk1dUM2Mzd4UktnbUQtRXRtYVliQklaS2pwOGRiWDJkWDJtWllnN1VhbHBMdVNXc05MX2JUZ0NEZ1JuVzVfQ19iVTJTNFlXYTd5a083bGtrZGN2UGxFSGRzdGRXWEQza0hkcGtUbDVJaXhGUdIB0AFBVV95cUxQMGVmTjhMbkljNzhBc1daZjNUQ2huUjR0TjQ5a1ZVMDViVG5HbnNTQkJ2enU1YmlFZmljaUVXV2JMa0ppVVVONGtxQjlvUHB4WVQ5MGdVLXpSNnZfYU5ldEtTdndEcW1QV0Z3eWRiRnRTa3FlZWlLUlltUG9SWkdSS3JKY3ZWbzRqWlNMTjMxeHl0OEdGN19QOHFfeWlOdDB6RndIcm5sUjlLQkxUeGYyVWQzaTNWRkFnUXRzaDBHMThpOXFuVVZNbE9rXzRGQ1pB?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQNEp4N0l6a0ctc3o5TW03Tkd2eHZ0MVp4S2xxaWkzN3Vhbi1reWU3VnFtWUJPOTBMUlVTQTZ3QlRiYlZFTVhUS1BoOGc3OGJfMHlTRGVxeDJZQVdMNi1qeXlTLU9FOEZmZlU0ZG12TnNnMFJYQnZYcTdWaFlJRk93Q3UzTFRkRXZ0aGdOS3hGejhqSXBZSWtPVFVJVXV6VE5EbDJYSUtkcjN4TXpvdWRYSEZKVQ?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMilAJBVV95cUxOVXZrRlJ1Qnk4aFBUaGpjSlc0NGxQUzNfUFl1YzB5b0Y2WElNaXNLdGo4S1ZhRm9VNDJMVDUtbjVRMnRIT0k2YWhFVVpNbTVNbnI4QTNicHNLRlVvdXdEbGYtRU5sSC1WMmNSU25Ub2RQT2NrdE1iMEoxTDdtYWlUVU1teUFFYlVwREFrWWpXNk9YWFR0M2lWZTZlU21CTWRlNmpUZnlaNGpCN1ZESWctTzVQWVM2SFdYYkk4ai0waWdFaWxVNFNUMTBjMlpBZ1gxYW9jQzNLX0NZTmpQUUZWUURobHNCTVhPY0xBdHZsZ1NFSS1kZWFGcTdBdFVoa2xYejl2dFJ0TVpCYjJwejN0b1huSknSAZQCQVVfeXFMTndab25sVUNHSUFMQjRfUGFmc2F6RXQ2bjFFQ3UzbWlKakVTYUwtb3N4aE1aSWZEdVh0RWdtXzQybUFRUnMtLTBYQmR2YVlTb0tVb2dYTG9VWTRCWG1KRENaT1pEbzh4dEtLb3B0RVJtTkI1cUJSUHdxV2drRW9NbDRSaDVzNlhDQ0pFQ1FpSHFVcG1QVUg3STd2d3BHZzNxTUFWYUpFbFVEWUhDSml4aDlzaDhKRHdvQ3FBYXRYQ1dLVkp0N1dUWTM1cXpURWxnS1BwOUM2TWQ3RkNnZlVncll5NWZfQjJReUZWZzc3eTd0dUR5cE91d0VyeW1CMVZaTFVNRFlaWVFpa2VuSVY4MU5VeFR6?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMimwJBVV95cUxQbGZQdUcwWkZ0Uk5iS0xiUWRkYU1RNWRZV25JOHhfenJtRDd2VWN3bTRkeGZyMlR3M1lpNmc4SHBwdVBmRFN3eFdONG1RanZ1OURQMkd4b0dfNFhkZlFQMlRIVk9aOFB2d2FyVHI2MDlOeU1WaG5mTTJEZkQ3V1lFZW1UR2VQRXRJT2x3N1FMRXc3NVpzUktpTXl0QmlJbDZpOU9PZXBYQ3hQejA0aFgzd3ZtOE0tb1R0RjgwNzJUX1JsVEVtYUxQdnRRckV6LXV3Q1plQmE4RHZkRnFHSENLN3FCYWJNQzVaRjRDRnFfbVNZcFppcEhmZGlhZWVOZ1RaZjczR1dHUmpnTDdRRUt2VndLSXhlb3JDSjRv0gGbAkFVX3lxTFB5YW5abVBHblZqMkJQYVNLeE1ZeWNXemZxWXh5ZXlZUWJ0ZThheDN6X1ZFdktkYXB4S1BpS2k5VENpRW9JVUtRZ3h5UDAyZHVRLTdjaGJJX09TMlEyWFc5QnZQM0Z2cEZ3aGR3eXlFOU5uS0ZPM2h6bEdfVnNWbExsRThlc3cxTFp3b0lnV0t3NGI0aWZQTnBlb2R3UFhOQi00MjRJVFBZdE5SbzAxdVpXa2VudVpMUURLRnZXMERTZ1NoVlY0M2ExazRxOVZZbVNqUkZ6TmpRMWFaUVlFVVlRS095T1ItTUNpVEFwdzFoTHpOYnJmUjZMMnp1ZDQtSFNHcERvbjNTSXpvVjVUYk1XT0wwcm8wQjFpcE0?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi_AFBVV95cUxOSlpOVTJwUUNsalpFRXhfcnVIb2RFb1kyZUV5djJhUldLcmFiZjBIaS1Ed2c2OG4yWF84TXYwaTNGZHZleHUzdEx0MklxYktIcGFHc2gxVHlPWUhWMUJmWlRYdVVRNDJxMUhpNHE5OG9ac3BtZjZDRk9WOEVwYjFWNjExb083a3JyYVhiYUY5NHFXTDZDNVNaVkdUcm1NY1N6X3dleGx6MDZaVHZkd3NRdmYyUU9CNzNWb19jSk9ja2thQkhMWTJ5T0tsOTZlMmJoNV9KZlBweEZJMHRSMzlaR2FUYXB5eUJWWTFWQTRycjlid2ZGZXQweTBFb2w?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNMkJQbDZ6Smk2djJqVUlGOVVFUGxCVTJYd3RYUzZ5R0VBSm1nS19Nd2NOeVMyR3lQN3ZacEgxMzdCU1JmaHhfUFoyUDRHRHJDNl9nZm1tUWtPV0VrMUFBWU1mRWZ2MU9iU1ZRaUM2bXBsVkpESDJacDRxaE8wTEZreHBReVRhMGdUcDFidGNvTGhfdw?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOYmhKd2J6Sk8tSmc3bmVONS1vZE01MDNqSUpKdGQ2MkNEYmhiYlhfc3RMVm5LRnhXN0VTUlNkYkRhQXNqZkVJNkxPejlENFdBc2ZBMlNCVHA5LXFDSWN5b2IwU0pDV0xBRXFON0x6ZFBlOWREdWdIUG9VdTZZVE16S21OUzdpT0w1UGdPcHZqVG4xMmd6RTRwT3RwLTRkQQ?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxQYUhLVjNLdEwtMDBRcmJLRmY5Rm1ZaWNGU1pUTEJhVjYxbENfNndGT1JuYVYzcjNHR2pudlI5U1QxbGstSTNKT2RCbXNWNzhhUUQtOHF6TUxnUnRUZTJVU3pWVGxEVVVtVUlURFNDQUpMQXgzTnZXdXdQdjN4ejBMX0NDWXVUSTlEdjJzeFlJbV9mQVB4cW1xRk5UTmZVM3JVWlZqckpIa0dUT1hqWnpoT0o1MjdFejRGNVpwb2RYNFJ3SXhMQjJRYVdsT1J6TWtIY1N6QkR6TmhUR213eXlV?oc=5"
+        }
+      ],
+      "cta": "Si vienes de visita o estas planificando una compra, Spanish Coast Properties puede ayudarte con un plan claro, zonas y opciones."
+    },
+    {
       "id": "2026-02-09-la-obra-nueva-se-dispara-en-el-pau-2-la-torreta-de-alicante--2910ddb7",
       "kind": "news",
       "lang": "es",
@@ -2269,6 +3910,54 @@ globalThis.SCP_BLOG = {
       "cta": "Want a shortlist? Spanish Coast Properties can filter options and send a clean catalog based on your budget and area."
     },
     {
+      "id": "2026-02-09-2026-mortgage-rates-today-30-year-fixed-at-5-95-key-inflatio-d9fb277d",
+      "kind": "news",
+      "lang": "en",
+      "publishedAt": "2026-02-09T11:46:00Z",
+      "title": "2026 Mortgage Rates Today: 30-Year Fixed at 5.95%, Key Inflation Report Looms - News and Statistics",
+      "excerpt": "2026 Mortgage Rates Today: 30-Year Fixed at 5.95%, Key Inflation Report Looms - News and Statistics    IndexBox",
+      "tags": [
+        "Spain",
+        "Mortgage",
+        "Finance"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "A short, practical take based on a public headline, focused on Costa Blanca South."
+        },
+        {
+          "type": "h",
+          "text": "Why it matters"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "Financing conditions change affordability and how quickly buyers can move.",
+            "Pre-approval reduces risk and helps you act fast when the right listing appears."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "What to do next"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "If you are buying: confirm your real budget (deposit + costs) and financing options before reserving.",
+            "If you are selling: prepare paperwork and presentation so qualified buyers can commit quickly."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "IndexBox",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNdThLRjZJbmExTGxUeVhQQTUzbDIzeWcyQVRsNEtaUFN0dUt4eFhueDhFcUpvVmlfZmN5azJtbkROWU52M3l5QzBPZzBrX2tfczBmbWR1SlRxNkFVRGZSNkZvOWJ2QU5GSlQwR20xTUJuaGVxN1lBdW1JYXVxeGR6NUJEdlB3bU8wa05reU5JdUtKbTdNMmpLNw?oc=5"
+        }
+      ],
+      "cta": "Want a shortlist? Spanish Coast Properties can filter options and send a clean catalog based on your budget and area."
+    },
+    {
       "id": "2026-02-09-international-buyers-and-cash-purchases-shape-a-historic-yea-aabcfbcb",
       "kind": "news",
       "lang": "en",
@@ -2463,6 +4152,182 @@ globalThis.SCP_BLOG = {
       "cta": "Want a shortlist? Spanish Coast Properties can filter options and send a clean catalog based on your budget and area."
     },
     {
+      "id": "2026-02-09-local-digest-en",
+      "kind": "local",
+      "lang": "en",
+      "publishedAt": "2026-02-09T06:00:00Z",
+      "title": "Costa Blanca South: events & fiestas (2026-02-09)",
+      "excerpt": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source.",
+      "tags": [
+        "Local",
+        "Events",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source."
+        },
+        {
+          "type": "h",
+          "text": "Next 14 days"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Valentine's Day",
+            "14 Feb: Carnival (varies by town) · Costa Blanca South",
+            "16 Feb: Carnival Monday",
+            "17 Feb: Carnival Tuesday",
+            "18 Feb: Ash Wednesday"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Recent local updates"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "09 Feb: Carnaval celebrations kick off in Cartagena as 2026 Queens crowned - Euro Weekly News",
+            "09 Feb: Women in business conference returns to Mijas this March - InSpain.news",
+            "09 Feb: Torrevieja dazzles with grand Carnaval parade and competition - Euro Weekly News",
+            "09 Feb: Las Colinas Golf & Country Club celebrates its 15th anniversary with a year of major sporting and gastronomic events - Euro Weekly News",
+            "08 Feb: Edition 1114 of The Costa Blanca and Costa Calida Leader Newspaper 9 – 15 February 2026 - theleader.info",
+            "08 Feb: This week’s events on Lanzarote - Gazette Life"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quick tips"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "On public holidays, banks and offices often run reduced hours or close.",
+            "Big fiestas can mean road closures, extra traffic, and limited parking.",
+            "If you are visiting to view properties, ask for a short itinerary by area and realistic travel times."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Spain Holidays",
+          "url": "https://calendar.google.com/calendar/ical/en.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNRjdhcTRjQTlKakFoRlZIYjdWMnlLU2ZQM0EyOXgxcUs1TjdWSGVRaTdyOGFjTWhBVGNhdzYyZ080OVhDSmRBcVJ2V0JmeFVHV05HcHJOZld6V2ZIdjk4NGVhcll6T1dJME1SdjNlcElzbTZ6ZnVRWVlZYmdXX0Y0QjNiT0llQm9PUnR0RWZQa3pPclNzaXVLMTNKWWV6TWNLYThwaDVMQVM?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQTW8xNFNRdmVGRFBSYmU4bEdXZlVsbmRvX18yVnk0WlJDMmtUdFlpQ1lHLXZ2eE5RREhTS3d0NHVER2I3S1cwTmM1dWNiZ2drSHQ2TXl2dXAxNWFNemF0eWNVTzJTbVI2ZFF2RWlzWW8tMDYyR1VaV0FGaEZXVndBUmdFTmk?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNMlhPU0kyTXMzUTRweEFxdUhtZ2hsYWZpTTQ2RTZEekwzaHJSTlltU01LTVZIWHd0dlFSN2hQLUtsZE1sVTRqOVNjZk05am1yOXpPcUVYWVJQTllPMmlNWVhwbFlmd3FXWTZwVF85OHV4YWduZ05rR3BFck1KZzJocUM0X2hrd25qQ0llYXZ4RE9oblprOHFZLVBrRG9pMlpycXc?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxOdFg2bTE2WFlXSlZ3ZGtpbFVSTXl3dlBhc3IxY05JOThsWjBqUDB2aElnVWx5ZmpSV2VtVHNIMG0wdE5Ec0s4RklZNU93TzRFb3lRSnpMb25paVQzcjFueURGRWJKN3Y2dHFXckYzSEVHUHhyS3ppdVlvMklIUVVVbnFHSGt0RFlEWkotblZUdkp0UC05Wm9yYk1xYTZpdzJYcXUxTDJEWW96QjVaTTlERUZzbUFUSVpaTXVrUlNpQUpjR0xkR0FyRTRWMWRFU3FBMTltVVhfMHNXbGttWTJNY0NkQXNZaWVV?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxORmZRZGhrdWJCWFREYktyRHY3WllTbXdNbWxDRG5oTmU0WnZKU1VtZThWM1ZfNFNsb3hsU3g2NkdUNmtPOGVPWEZMSkg2OVBQa1puaDNZM0U1ai0xMC1mMHZxUDd0NEtCeHVFV2FNaE9pRlFlUVl2cTVfdmEyZFlPbEU2NHpHWUduc0p4c1ZvelAwRXBXYlNSUW1FMWVkRkhoRTVGX2VCYTVzN21oQ05YZzR3d09ZbElwUEJobA?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9ZRmwyVGd6N1hmUldMcUJRbGFfX2lwVlBJc1lXNTVkaGczOTZBUkQ4UjFBV1ptU3dKNUVKb3gyUXB3LUZ2Tm5udUpzdDNJWVlmSUtTM3JhTzVyYzdSRTJQcG5SbEY0UjBsSDVwRGpVNG8?oc=5"
+        }
+      ],
+      "cta": "If you are visiting or planning a purchase, Spanish Coast Properties can help with a clear plan, areas, and a shortlist."
+    },
+    {
+      "id": "2026-02-09-local-digest-es",
+      "kind": "local",
+      "lang": "es",
+      "publishedAt": "2026-02-09T06:00:00Z",
+      "title": "Costa Blanca South: eventos y fiestas (2026-02-09)",
+      "excerpt": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente.",
+      "tags": [
+        "Local",
+        "Eventos",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente."
+        },
+        {
+          "type": "h",
+          "text": "Proximos 14 dias"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Día de San Valentín",
+            "16 Feb: Lunes de Carnaval",
+            "17 Feb: Martes de Carnaval",
+            "18 Feb: Miércoles de Ceniza"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Avisos recientes"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "09 Feb: Alicante propone a Costas que los fuegos artificiales de Fogueres se disparen desde El Postiguet - Alicante Plaza",
+            "09 Feb: Alicante plantea que el concurso de fuegos artificiales se dispare desde El Postiguet - Ayuntamiento de Alicante",
+            "09 Feb: El taekwondista Mikel Fernández revalida el oro en el Campeonato de España - El Correo",
+            "08 Feb: LES NOSTRES BANDES | La Sociedad Musical Ciudad de Torrevieja ameniza el Valencia CF – Real Madrid - Valencia CF",
+            "07 Feb: Un incendio en un garaje de Torrevieja deja un herido y 21 coches dañados - Ultima Hora"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Consejos rapidos"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "En festivos es comun que bancos y oficinas tengan horario reducido o cierren.",
+            "En fiestas grandes puede haber cortes de calles, mas trafico y parking limitado.",
+            "Para planes de visita, pide un itinerario corto por zona y tiempos reales."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Festivos en Espana",
+          "url": "https://calendar.google.com/calendar/ical/es.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxOS0NYWkNHcVU3NEMybGNxS2dIbk5aQVZXaTBJcXpkMDcxTHFyemw3NG5XdnNvRE5URVdFa05sZmRvR1VxbEdBTFpla1JmNGZpOVJ1SDhoNEdaYUlQUUR4a1BHckNFOWwtODREQ0xKZkNQY0hXYnl6NTBNVTdfajdwZmd6VUZDaDhXdUY1dnZxTWEwY2QxWkZvVkVBNWRIUlpUTmNCaUNPTEFHVDMtek0zZlUzZHBpNF9HUmxUN1A2LTBZRHNfZVlEUmNCQWx6UjNUQWhBc2tFQmdQVEl0?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNZzhoWmdvY25MZjV6Tkp1eXlnN3ZpTHNsa1JLdW9USFVPRlpvV2xuQzJZaVp1Q1RMSEFpME9WeXl6eEJZaWlFUURjQ05scW90LXRSUVdFd3I3aURic2VKbE9tZDBBTVYxNnU4TDFKSG8yMlVoWE91d3RhZldxTmx2TzNvM0JjZzFHRlNvTEd0NnFSTkxfeVdxQzVKUVMzZHpCN19XMGNGbUowdw?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPMllBdjZhY0c0QXpXQm1YTVpMMklSU1FCcXg4eTd3aHBHR0JnZ3U2SEtlc2FQclRIbGJLWmExbTZhVVVFcHZnVjdha0Njd3V2MzBUSm9ZUEZ1SVJXcl9tdjRuQi1xSTM3bzhKNXhOQlZfaUgwSnUxRDFsYU80Wk1KaTlQTVZjbzMwWTc0TWYxbzJqR2hkRnc3LVc3N1lFSmN1dDRfYzVtZnc4VDRITm5vWjdJeXlYME5jbkJveGU3MDVEZ9IBxwFBVV95cUxNcGxhRnpBZUR6bjc2ZkJWajlDN29ubXo4T3FzY0J6aEJRUzdJNzYtdjh5ekx4VXk2T0hNUXRERWF2UENOcWx6NlZ2TnpLbmJkakw2NklDWHBXR2J1ZmFkWUV3Y0huNFZoMWx2V01vQTNjcUFpV0tsR0NGV3NpQjI2N3l1NE0wdkt6WG9RYnV5ZVZ1bW5wQjJkX2didTFsX3JsVVpPUm5VU0xOakNPbFdFVGk3Ry1xWlktWGJROTVpZ20zWlVkUmlB?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOZjRNNmtjb2lvWkZqeFY1ZnNYRElWWjBneUYwSDdHREk0QnMyOXVsUEtRc29fdkM0c1RVakVmZ0FPbzExaHFXVkx6WmpwR1V2U2dDb3VHQ1FFQTFuRS12Zm9MWlpVdUFXdDU0QUp2ZjdyS2VxTEd4bHd4cjdPMDA4c0lRam4yYTl6akV0Y1F5UVd6MDFEM255UXM1SGlmUGdfV0VCbXZYQnBleHVWb3Zkc3EwN2tndE9oMGNFZjF3?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNeDRBSjd2U1ZmZFlveXpxUXFNMjJPVUlBQ00zUlU0THNRcmhxdzVIY25jb3kySXc3TEo4dmY5NkRud1NuMmZPMVBJbERFeVdQUUhLeEVoNGk2NUc4cUpSRjFDc2F2dDNGTUl5OF85b2FmZGI5clFEcU1lS0VrVXBBQTR2NFhZejZoTW43NEFnandmcEdfbG43WG90TnhOTmJLdUlIRHJoSWhOTXllM3Y4Wmo3cGtrbmpZMmlhWVl5Q2dUZw?oc=5"
+        }
+      ],
+      "cta": "Si vienes de visita o estas planificando una compra, Spanish Coast Properties puede ayudarte con un plan claro, zonas y opciones."
+    },
+    {
       "id": "2026-02-08-gran-oportunidad-para-vivir-en-torrevieja-descubre-este-piso-510f49e8",
       "kind": "news",
       "lang": "es",
@@ -2557,6 +4422,147 @@ globalThis.SCP_BLOG = {
         }
       ],
       "cta": "¿Quieres una lista corta? Spanish Coast Properties puede filtrar opciones y enviarte un catálogo limpio según tu presupuesto y zona."
+    },
+    {
+      "id": "2026-02-08-local-digest-en",
+      "kind": "local",
+      "lang": "en",
+      "publishedAt": "2026-02-08T06:00:00Z",
+      "title": "Costa Blanca South: events & fiestas (2026-02-08)",
+      "excerpt": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source.",
+      "tags": [
+        "Local",
+        "Events",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source."
+        },
+        {
+          "type": "h",
+          "text": "Next 14 days"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Valentine's Day",
+            "14 Feb: Carnival (varies by town) · Costa Blanca South",
+            "16 Feb: Carnival Monday",
+            "17 Feb: Carnival Tuesday",
+            "18 Feb: Ash Wednesday"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Recent local updates"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "08 Feb: Edition 1114 of The Costa Blanca and Costa Calida Leader Newspaper 9 – 15 February 2026 - theleader.info",
+            "08 Feb: This week’s events on Lanzarote - Gazette Life"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quick tips"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "On public holidays, banks and offices often run reduced hours or close.",
+            "Big fiestas can mean road closures, extra traffic, and limited parking.",
+            "If you are visiting to view properties, ask for a short itinerary by area and realistic travel times."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Spain Holidays",
+          "url": "https://calendar.google.com/calendar/ical/en.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxORmZRZGhrdWJCWFREYktyRHY3WllTbXdNbWxDRG5oTmU0WnZKU1VtZThWM1ZfNFNsb3hsU3g2NkdUNmtPOGVPWEZMSkg2OVBQa1puaDNZM0U1ai0xMC1mMHZxUDd0NEtCeHVFV2FNaE9pRlFlUVl2cTVfdmEyZFlPbEU2NHpHWUduc0p4c1ZvelAwRXBXYlNSUW1FMWVkRkhoRTVGX2VCYTVzN21oQ05YZzR3d09ZbElwUEJobA?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9ZRmwyVGd6N1hmUldMcUJRbGFfX2lwVlBJc1lXNTVkaGczOTZBUkQ4UjFBV1ptU3dKNUVKb3gyUXB3LUZ2Tm5udUpzdDNJWVlmSUtTM3JhTzVyYzdSRTJQcG5SbEY0UjBsSDVwRGpVNG8?oc=5"
+        }
+      ],
+      "cta": "If you are visiting or planning a purchase, Spanish Coast Properties can help with a clear plan, areas, and a shortlist."
+    },
+    {
+      "id": "2026-02-08-local-digest-es",
+      "kind": "local",
+      "lang": "es",
+      "publishedAt": "2026-02-08T06:00:00Z",
+      "title": "Costa Blanca South: eventos y fiestas (2026-02-08)",
+      "excerpt": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente.",
+      "tags": [
+        "Local",
+        "Eventos",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente."
+        },
+        {
+          "type": "h",
+          "text": "Proximos 14 dias"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Día de San Valentín",
+            "16 Feb: Lunes de Carnaval",
+            "17 Feb: Martes de Carnaval",
+            "18 Feb: Miércoles de Ceniza"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Avisos recientes"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "08 Feb: LES NOSTRES BANDES | La Sociedad Musical Ciudad de Torrevieja ameniza el Valencia CF – Real Madrid - Valencia CF",
+            "07 Feb: Un incendio en un garaje de Torrevieja deja un herido y 21 coches dañados - Ultima Hora"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Consejos rapidos"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "En festivos es comun que bancos y oficinas tengan horario reducido o cierren.",
+            "En fiestas grandes puede haber cortes de calles, mas trafico y parking limitado.",
+            "Para planes de visita, pide un itinerario corto por zona y tiempos reales."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Festivos en Espana",
+          "url": "https://calendar.google.com/calendar/ical/es.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOZjRNNmtjb2lvWkZqeFY1ZnNYRElWWjBneUYwSDdHREk0QnMyOXVsUEtRc29fdkM0c1RVakVmZ0FPbzExaHFXVkx6WmpwR1V2U2dDb3VHQ1FFQTFuRS12Zm9MWlpVdUFXdDU0QUp2ZjdyS2VxTEd4bHd4cjdPMDA4c0lRam4yYTl6akV0Y1F5UVd6MDFEM255UXM1SGlmUGdfV0VCbXZYQnBleHVWb3Zkc3EwN2tndE9oMGNFZjF3?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNeDRBSjd2U1ZmZFlveXpxUXFNMjJPVUlBQ00zUlU0THNRcmhxdzVIY25jb3kySXc3TEo4dmY5NkRud1NuMmZPMVBJbERFeVdQUUhLeEVoNGk2NUc4cUpSRjFDc2F2dDNGTUl5OF85b2FmZGI5clFEcU1lS0VrVXBBQTR2NFhZejZoTW43NEFnandmcEdfbG43WG90TnhOTmJLdUlIRHJoSWhOTXllM3Y4Wmo3cGtrbmpZMmlhWVl5Q2dUZw?oc=5"
+        }
+      ],
+      "cta": "Si vienes de visita o estas planificando una compra, Spanish Coast Properties puede ayudarte con un plan claro, zonas y opciones."
     },
     {
       "id": "2026-02-07-poles-become-8th-largest-foreign-home-buyers-in-spain-54d23771",
@@ -2702,6 +4708,177 @@ globalThis.SCP_BLOG = {
         }
       ],
       "cta": "Want a shortlist? Spanish Coast Properties can filter options and send a clean catalog based on your budget and area."
+    },
+    {
+      "id": "2026-02-07-local-digest-en",
+      "kind": "local",
+      "lang": "en",
+      "publishedAt": "2026-02-07T06:00:00Z",
+      "title": "Costa Blanca South: events & fiestas (2026-02-07)",
+      "excerpt": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source.",
+      "tags": [
+        "Local",
+        "Events",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source."
+        },
+        {
+          "type": "h",
+          "text": "Next 14 days"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Valentine's Day",
+            "14 Feb: Carnival (varies by town) · Costa Blanca South",
+            "16 Feb: Carnival Monday",
+            "17 Feb: Carnival Tuesday",
+            "18 Feb: Ash Wednesday"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Recent local updates"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "07 Feb: Un incendio en un garaje de Torrevieja deja un herido y 21 coches dañados - Ultima Hora",
+            "04 Feb: Cuatro grandes citas culturales este fin de semana en Torrevieja: teatro, drag queen y espectáculos familiares - todo torrevieja",
+            "04 Feb: Dénia acoge la presentación de una Comunitat Valenciana Olympic Week renovada y con citas de máximo nivel - Dénia.com",
+            "04 Feb: La gala nacional de Drag Queen de Torrevieja contará con las actuaciones de Drag Sethlas y Drag Liak - Información",
+            "04 Feb: Año Nuevo Chino: programa de actividades y fiestas en Valencia - El Debate"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quick tips"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "On public holidays, banks and offices often run reduced hours or close.",
+            "Big fiestas can mean road closures, extra traffic, and limited parking.",
+            "If you are visiting to view properties, ask for a short itinerary by area and realistic travel times."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Spain Holidays",
+          "url": "https://calendar.google.com/calendar/ical/en.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNeDRBSjd2U1ZmZFlveXpxUXFNMjJPVUlBQ00zUlU0THNRcmhxdzVIY25jb3kySXc3TEo4dmY5NkRud1NuMmZPMVBJbERFeVdQUUhLeEVoNGk2NUc4cUpSRjFDc2F2dDNGTUl5OF85b2FmZGI5clFEcU1lS0VrVXBBQTR2NFhZejZoTW43NEFnandmcEdfbG43WG90TnhOTmJLdUlIRHJoSWhOTXllM3Y4Wmo3cGtrbmpZMmlhWVl5Q2dUZw?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNcWU4RTczNlVVZVg2T0pfU2JmdFZLUFd3b1EtTVpJTDljeDA2eGRMTVVDWWNldldnbGlEQ1Z4c0htRzY0MlQ3UG1UUkdXaUFTTjhZMHlCOF9obDFGOHlKaVdoenRnMTZ4RzdPd1Q2dkpoZFNvVzQxQ1dvbDhJVHNwNk9LLThvM1czbWoxTHRrc1ZMOHFkN0RLSjRCZ1NhSWg1YjJLZDN3dElQLWd2WXVzUEJJbDBJYlBLNFJ3RVBXdzBqbDNKQkRNRzlmcFNYM2tISkYyQXFR?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQbUhweXAwT3BQUE1naFVMY0pEUHE2cGxMZk1tYjdfWV91QjRNcHJIVllKUVJJM09VaGNBaFhXRFJ6OGF3ODA1QjEya2xtUW1aa2pWeDlzREZoaWJ2RWZpeENmdGJ1S2FkMnlpS2hiUVlyRmt3YVNOR1pGS2U5WnBxWGpWZDF6cGNETkpmUTRQaFpXMXU3ZEdFREZaU2lSeTA1U201bDRhcTBhS3NZUUpqRExZUmhLa2syTFAxeF94cEc3Z0ZuNFNB?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQeE9oWWpjUVFoMVNmMC1TMUlFUlBHakhhVFR6R2xTX2tEY1o5VjhqSndtTnRfSU1Td25heHJVYlFjSGFSZFMwdElTVkRpaUNvdFVpeEJ5NXoyNExpeTFyTWQ1WnpONmNiaG02MU5ZVXFPRUR5cTRBTE5ucDBYRWdDNFZuWElVZTh3b2FoR3RJNjc4TEMyY0RmQk55SUwtSmNKZ2xyaGdoSW7SAa4BQVVfeXFMTmtEOER3XzhwX2dxc3Q5VzctUGtaS3otczBHeHVmdUMzTzQ3RkFseG1SVFIwSG5jVzRuTm9OSDItYXdmT2Qzc1JNd3V4aldaN09pQmpWeXhpT1JmakVwQndMd0pEeURPX0NCemEzUVR5VUN6WkV0MVhlNkF0N2x1SDNRNHh5QW1kLVZ3el9rNjZaZk5QanJ5ZUdib2ZTdlhZQzQtVEtSLWpCUWl2UlV3?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOT2tRSC1TdXFPWVFHcHllRnkxaEdOMVFKUjUyUDBTd3R0c1NOVkRaUHJDSlJaaFVTUXl1SEtHR1NYM3ZiOG9ybVJCMVFrdGJJMzlRdXlTMVBiWFlKc1dCOFgzaTdRMXFnYThpTXZIa2JGaVduY0p2NWhjeHR4ZHFFR21xMzUtRk1NQ2RfN1FWTUptTENmVWdqWGo3XzQwcmt1a2RjMWo0Qno0dTJ1SzRCNEp6OGgxSUx2NTRFZ09PVzRNNTBaV1HSAcsBQVVfeXFMT2s5ZUQtMWxHenJZRlAxUXdKZDJDV1NJaWJqX3Q5WDB5cFZUdTVKQWV1a2Nkdm16QUJBc1BDb21IclpBYXNEWUprTmtSZVp0M29xc2FIZXF5Q3VRSWd6TFc2UXE1U2pvaUdjOFdwY0NOTU1NTmx5cGdmTE5MMXJpQ3BpTDZZNkRaajEtZ0k0cldiREdBTlY5bHVrenB0aWg2QWV0VmFCTWRMTzAxSWhnYmRmV2hlM1ZnX0xOLWlRNVRGWWJDMTNTLTBxSVk?oc=5"
+        }
+      ],
+      "cta": "If you are visiting or planning a purchase, Spanish Coast Properties can help with a clear plan, areas, and a shortlist."
+    },
+    {
+      "id": "2026-02-07-local-digest-es",
+      "kind": "local",
+      "lang": "es",
+      "publishedAt": "2026-02-07T06:00:00Z",
+      "title": "Costa Blanca South: eventos y fiestas (2026-02-07)",
+      "excerpt": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente.",
+      "tags": [
+        "Local",
+        "Eventos",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente."
+        },
+        {
+          "type": "h",
+          "text": "Proximos 14 dias"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Día de San Valentín",
+            "16 Feb: Lunes de Carnaval",
+            "17 Feb: Martes de Carnaval",
+            "18 Feb: Miércoles de Ceniza"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Avisos recientes"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "07 Feb: Un incendio en un garaje de Torrevieja deja un herido y 21 coches dañados - Ultima Hora",
+            "04 Feb: Cuatro grandes citas culturales este fin de semana en Torrevieja: teatro, drag queen y espectáculos familiares - todo torrevieja",
+            "04 Feb: Dénia acoge la presentación de una Comunitat Valenciana Olympic Week renovada y con citas de máximo nivel - Dénia.com",
+            "04 Feb: La gala nacional de Drag Queen de Torrevieja contará con las actuaciones de Drag Sethlas y Drag Liak - Información",
+            "04 Feb: Año Nuevo Chino: programa de actividades y fiestas en Valencia - El Debate"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Consejos rapidos"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "En festivos es comun que bancos y oficinas tengan horario reducido o cierren.",
+            "En fiestas grandes puede haber cortes de calles, mas trafico y parking limitado.",
+            "Para planes de visita, pide un itinerario corto por zona y tiempos reales."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Festivos en Espana",
+          "url": "https://calendar.google.com/calendar/ical/es.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNeDRBSjd2U1ZmZFlveXpxUXFNMjJPVUlBQ00zUlU0THNRcmhxdzVIY25jb3kySXc3TEo4dmY5NkRud1NuMmZPMVBJbERFeVdQUUhLeEVoNGk2NUc4cUpSRjFDc2F2dDNGTUl5OF85b2FmZGI5clFEcU1lS0VrVXBBQTR2NFhZejZoTW43NEFnandmcEdfbG43WG90TnhOTmJLdUlIRHJoSWhOTXllM3Y4Wmo3cGtrbmpZMmlhWVl5Q2dUZw?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNcWU4RTczNlVVZVg2T0pfU2JmdFZLUFd3b1EtTVpJTDljeDA2eGRMTVVDWWNldldnbGlEQ1Z4c0htRzY0MlQ3UG1UUkdXaUFTTjhZMHlCOF9obDFGOHlKaVdoenRnMTZ4RzdPd1Q2dkpoZFNvVzQxQ1dvbDhJVHNwNk9LLThvM1czbWoxTHRrc1ZMOHFkN0RLSjRCZ1NhSWg1YjJLZDN3dElQLWd2WXVzUEJJbDBJYlBLNFJ3RVBXdzBqbDNKQkRNRzlmcFNYM2tISkYyQXFR?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQbUhweXAwT3BQUE1naFVMY0pEUHE2cGxMZk1tYjdfWV91QjRNcHJIVllKUVJJM09VaGNBaFhXRFJ6OGF3ODA1QjEya2xtUW1aa2pWeDlzREZoaWJ2RWZpeENmdGJ1S2FkMnlpS2hiUVlyRmt3YVNOR1pGS2U5WnBxWGpWZDF6cGNETkpmUTRQaFpXMXU3ZEdFREZaU2lSeTA1U201bDRhcTBhS3NZUUpqRExZUmhLa2syTFAxeF94cEc3Z0ZuNFNB?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQeE9oWWpjUVFoMVNmMC1TMUlFUlBHakhhVFR6R2xTX2tEY1o5VjhqSndtTnRfSU1Td25heHJVYlFjSGFSZFMwdElTVkRpaUNvdFVpeEJ5NXoyNExpeTFyTWQ1WnpONmNiaG02MU5ZVXFPRUR5cTRBTE5ucDBYRWdDNFZuWElVZTh3b2FoR3RJNjc4TEMyY0RmQk55SUwtSmNKZ2xyaGdoSW7SAa4BQVVfeXFMTmtEOER3XzhwX2dxc3Q5VzctUGtaS3otczBHeHVmdUMzTzQ3RkFseG1SVFIwSG5jVzRuTm9OSDItYXdmT2Qzc1JNd3V4aldaN09pQmpWeXhpT1JmakVwQndMd0pEeURPX0NCemEzUVR5VUN6WkV0MVhlNkF0N2x1SDNRNHh5QW1kLVZ3el9rNjZaZk5QanJ5ZUdib2ZTdlhZQzQtVEtSLWpCUWl2UlV3?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOT2tRSC1TdXFPWVFHcHllRnkxaEdOMVFKUjUyUDBTd3R0c1NOVkRaUHJDSlJaaFVTUXl1SEtHR1NYM3ZiOG9ybVJCMVFrdGJJMzlRdXlTMVBiWFlKc1dCOFgzaTdRMXFnYThpTXZIa2JGaVduY0p2NWhjeHR4ZHFFR21xMzUtRk1NQ2RfN1FWTUptTENmVWdqWGo3XzQwcmt1a2RjMWo0Qno0dTJ1SzRCNEp6OGgxSUx2NTRFZ09PVzRNNTBaV1HSAcsBQVVfeXFMT2s5ZUQtMWxHenJZRlAxUXdKZDJDV1NJaWJqX3Q5WDB5cFZUdTVKQWV1a2Nkdm16QUJBc1BDb21IclpBYXNEWUprTmtSZVp0M29xc2FIZXF5Q3VRSWd6TFc2UXE1U2pvaUdjOFdwY0NOTU1NTmx5cGdmTE5MMXJpQ3BpTDZZNkRaajEtZ0k0cldiREdBTlY5bHVrenB0aWg2QWV0VmFCTWRMTzAxSWhnYmRmV2hlM1ZnX0xOLWlRNVRGWWJDMTNTLTBxSVk?oc=5"
+        }
+      ],
+      "cta": "Si vienes de visita o estas planificando una compra, Spanish Coast Properties puede ayudarte con un plan claro, zonas y opciones."
     },
     {
       "id": "2026-02-07-resumen-semanal-inmobiliario-cuales-son-las-novedades-del-re-3748c0cf",
@@ -2946,6 +5123,167 @@ globalThis.SCP_BLOG = {
       "cta": "Want a shortlist? Spanish Coast Properties can filter options and send a clean catalog based on your budget and area."
     },
     {
+      "id": "2026-02-06-local-digest-en",
+      "kind": "local",
+      "lang": "en",
+      "publishedAt": "2026-02-06T06:00:00Z",
+      "title": "Costa Blanca South: events & fiestas (2026-02-06)",
+      "excerpt": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source.",
+      "tags": [
+        "Local",
+        "Events",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source."
+        },
+        {
+          "type": "h",
+          "text": "Next 14 days"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Valentine's Day",
+            "14 Feb: Carnival (varies by town) · Costa Blanca South",
+            "16 Feb: Carnival Monday",
+            "17 Feb: Carnival Tuesday",
+            "18 Feb: Ash Wednesday"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Recent local updates"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "04 Feb: Cuatro grandes citas culturales este fin de semana en Torrevieja: teatro, drag queen y espectáculos familiares - todo torrevieja",
+            "04 Feb: Dénia acoge la presentación de una Comunitat Valenciana Olympic Week renovada y con citas de máximo nivel - Dénia.com",
+            "04 Feb: La gala nacional de Drag Queen de Torrevieja contará con las actuaciones de Drag Sethlas y Drag Liak - Información",
+            "04 Feb: Año Nuevo Chino: programa de actividades y fiestas en Valencia - El Debate"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quick tips"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "On public holidays, banks and offices often run reduced hours or close.",
+            "Big fiestas can mean road closures, extra traffic, and limited parking.",
+            "If you are visiting to view properties, ask for a short itinerary by area and realistic travel times."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Spain Holidays",
+          "url": "https://calendar.google.com/calendar/ical/en.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNcWU4RTczNlVVZVg2T0pfU2JmdFZLUFd3b1EtTVpJTDljeDA2eGRMTVVDWWNldldnbGlEQ1Z4c0htRzY0MlQ3UG1UUkdXaUFTTjhZMHlCOF9obDFGOHlKaVdoenRnMTZ4RzdPd1Q2dkpoZFNvVzQxQ1dvbDhJVHNwNk9LLThvM1czbWoxTHRrc1ZMOHFkN0RLSjRCZ1NhSWg1YjJLZDN3dElQLWd2WXVzUEJJbDBJYlBLNFJ3RVBXdzBqbDNKQkRNRzlmcFNYM2tISkYyQXFR?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQbUhweXAwT3BQUE1naFVMY0pEUHE2cGxMZk1tYjdfWV91QjRNcHJIVllKUVJJM09VaGNBaFhXRFJ6OGF3ODA1QjEya2xtUW1aa2pWeDlzREZoaWJ2RWZpeENmdGJ1S2FkMnlpS2hiUVlyRmt3YVNOR1pGS2U5WnBxWGpWZDF6cGNETkpmUTRQaFpXMXU3ZEdFREZaU2lSeTA1U201bDRhcTBhS3NZUUpqRExZUmhLa2syTFAxeF94cEc3Z0ZuNFNB?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQeE9oWWpjUVFoMVNmMC1TMUlFUlBHakhhVFR6R2xTX2tEY1o5VjhqSndtTnRfSU1Td25heHJVYlFjSGFSZFMwdElTVkRpaUNvdFVpeEJ5NXoyNExpeTFyTWQ1WnpONmNiaG02MU5ZVXFPRUR5cTRBTE5ucDBYRWdDNFZuWElVZTh3b2FoR3RJNjc4TEMyY0RmQk55SUwtSmNKZ2xyaGdoSW7SAa4BQVVfeXFMTmtEOER3XzhwX2dxc3Q5VzctUGtaS3otczBHeHVmdUMzTzQ3RkFseG1SVFIwSG5jVzRuTm9OSDItYXdmT2Qzc1JNd3V4aldaN09pQmpWeXhpT1JmakVwQndMd0pEeURPX0NCemEzUVR5VUN6WkV0MVhlNkF0N2x1SDNRNHh5QW1kLVZ3el9rNjZaZk5QanJ5ZUdib2ZTdlhZQzQtVEtSLWpCUWl2UlV3?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOT2tRSC1TdXFPWVFHcHllRnkxaEdOMVFKUjUyUDBTd3R0c1NOVkRaUHJDSlJaaFVTUXl1SEtHR1NYM3ZiOG9ybVJCMVFrdGJJMzlRdXlTMVBiWFlKc1dCOFgzaTdRMXFnYThpTXZIa2JGaVduY0p2NWhjeHR4ZHFFR21xMzUtRk1NQ2RfN1FWTUptTENmVWdqWGo3XzQwcmt1a2RjMWo0Qno0dTJ1SzRCNEp6OGgxSUx2NTRFZ09PVzRNNTBaV1HSAcsBQVVfeXFMT2s5ZUQtMWxHenJZRlAxUXdKZDJDV1NJaWJqX3Q5WDB5cFZUdTVKQWV1a2Nkdm16QUJBc1BDb21IclpBYXNEWUprTmtSZVp0M29xc2FIZXF5Q3VRSWd6TFc2UXE1U2pvaUdjOFdwY0NOTU1NTmx5cGdmTE5MMXJpQ3BpTDZZNkRaajEtZ0k0cldiREdBTlY5bHVrenB0aWg2QWV0VmFCTWRMTzAxSWhnYmRmV2hlM1ZnX0xOLWlRNVRGWWJDMTNTLTBxSVk?oc=5"
+        }
+      ],
+      "cta": "If you are visiting or planning a purchase, Spanish Coast Properties can help with a clear plan, areas, and a shortlist."
+    },
+    {
+      "id": "2026-02-06-local-digest-es",
+      "kind": "local",
+      "lang": "es",
+      "publishedAt": "2026-02-06T06:00:00Z",
+      "title": "Costa Blanca South: eventos y fiestas (2026-02-06)",
+      "excerpt": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente.",
+      "tags": [
+        "Local",
+        "Eventos",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente."
+        },
+        {
+          "type": "h",
+          "text": "Proximos 14 dias"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Día de San Valentín",
+            "16 Feb: Lunes de Carnaval",
+            "17 Feb: Martes de Carnaval",
+            "18 Feb: Miércoles de Ceniza"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Avisos recientes"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "04 Feb: Cuatro grandes citas culturales este fin de semana en Torrevieja: teatro, drag queen y espectáculos familiares - todo torrevieja",
+            "04 Feb: Dénia acoge la presentación de una Comunitat Valenciana Olympic Week renovada y con citas de máximo nivel - Dénia.com",
+            "04 Feb: La gala nacional de Drag Queen de Torrevieja contará con las actuaciones de Drag Sethlas y Drag Liak - Información",
+            "04 Feb: Año Nuevo Chino: programa de actividades y fiestas en Valencia - El Debate"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Consejos rapidos"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "En festivos es comun que bancos y oficinas tengan horario reducido o cierren.",
+            "En fiestas grandes puede haber cortes de calles, mas trafico y parking limitado.",
+            "Para planes de visita, pide un itinerario corto por zona y tiempos reales."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Festivos en Espana",
+          "url": "https://calendar.google.com/calendar/ical/es.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNcWU4RTczNlVVZVg2T0pfU2JmdFZLUFd3b1EtTVpJTDljeDA2eGRMTVVDWWNldldnbGlEQ1Z4c0htRzY0MlQ3UG1UUkdXaUFTTjhZMHlCOF9obDFGOHlKaVdoenRnMTZ4RzdPd1Q2dkpoZFNvVzQxQ1dvbDhJVHNwNk9LLThvM1czbWoxTHRrc1ZMOHFkN0RLSjRCZ1NhSWg1YjJLZDN3dElQLWd2WXVzUEJJbDBJYlBLNFJ3RVBXdzBqbDNKQkRNRzlmcFNYM2tISkYyQXFR?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQbUhweXAwT3BQUE1naFVMY0pEUHE2cGxMZk1tYjdfWV91QjRNcHJIVllKUVJJM09VaGNBaFhXRFJ6OGF3ODA1QjEya2xtUW1aa2pWeDlzREZoaWJ2RWZpeENmdGJ1S2FkMnlpS2hiUVlyRmt3YVNOR1pGS2U5WnBxWGpWZDF6cGNETkpmUTRQaFpXMXU3ZEdFREZaU2lSeTA1U201bDRhcTBhS3NZUUpqRExZUmhLa2syTFAxeF94cEc3Z0ZuNFNB?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQeE9oWWpjUVFoMVNmMC1TMUlFUlBHakhhVFR6R2xTX2tEY1o5VjhqSndtTnRfSU1Td25heHJVYlFjSGFSZFMwdElTVkRpaUNvdFVpeEJ5NXoyNExpeTFyTWQ1WnpONmNiaG02MU5ZVXFPRUR5cTRBTE5ucDBYRWdDNFZuWElVZTh3b2FoR3RJNjc4TEMyY0RmQk55SUwtSmNKZ2xyaGdoSW7SAa4BQVVfeXFMTmtEOER3XzhwX2dxc3Q5VzctUGtaS3otczBHeHVmdUMzTzQ3RkFseG1SVFIwSG5jVzRuTm9OSDItYXdmT2Qzc1JNd3V4aldaN09pQmpWeXhpT1JmakVwQndMd0pEeURPX0NCemEzUVR5VUN6WkV0MVhlNkF0N2x1SDNRNHh5QW1kLVZ3el9rNjZaZk5QanJ5ZUdib2ZTdlhZQzQtVEtSLWpCUWl2UlV3?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOT2tRSC1TdXFPWVFHcHllRnkxaEdOMVFKUjUyUDBTd3R0c1NOVkRaUHJDSlJaaFVTUXl1SEtHR1NYM3ZiOG9ybVJCMVFrdGJJMzlRdXlTMVBiWFlKc1dCOFgzaTdRMXFnYThpTXZIa2JGaVduY0p2NWhjeHR4ZHFFR21xMzUtRk1NQ2RfN1FWTUptTENmVWdqWGo3XzQwcmt1a2RjMWo0Qno0dTJ1SzRCNEp6OGgxSUx2NTRFZ09PVzRNNTBaV1HSAcsBQVVfeXFMT2s5ZUQtMWxHenJZRlAxUXdKZDJDV1NJaWJqX3Q5WDB5cFZUdTVKQWV1a2Nkdm16QUJBc1BDb21IclpBYXNEWUprTmtSZVp0M29xc2FIZXF5Q3VRSWd6TFc2UXE1U2pvaUdjOFdwY0NOTU1NTmx5cGdmTE5MMXJpQ3BpTDZZNkRaajEtZ0k0cldiREdBTlY5bHVrenB0aWg2QWV0VmFCTWRMTzAxSWhnYmRmV2hlM1ZnX0xOLWlRNVRGWWJDMTNTLTBxSVk?oc=5"
+        }
+      ],
+      "cta": "Si vienes de visita o estas planificando una compra, Spanish Coast Properties puede ayudarte con un plan claro, zonas y opciones."
+    },
+    {
       "id": "2026-02-05-reclaim-mortgage-overpayments-after-spain-s-floor-clause-ban-754dea53",
       "kind": "news",
       "lang": "en",
@@ -3187,6 +5525,207 @@ globalThis.SCP_BLOG = {
       "cta": "Want a shortlist? Spanish Coast Properties can filter options and send a clean catalog based on your budget and area."
     },
     {
+      "id": "2026-02-05-local-digest-en",
+      "kind": "local",
+      "lang": "en",
+      "publishedAt": "2026-02-05T06:00:00Z",
+      "title": "Costa Blanca South: events & fiestas (2026-02-05)",
+      "excerpt": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source.",
+      "tags": [
+        "Local",
+        "Events",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source."
+        },
+        {
+          "type": "h",
+          "text": "Next 14 days"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Valentine's Day",
+            "14 Feb: Carnival (varies by town) · Costa Blanca South",
+            "16 Feb: Carnival Monday",
+            "17 Feb: Carnival Tuesday",
+            "18 Feb: Ash Wednesday"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Recent local updates"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "04 Feb: Cuatro grandes citas culturales este fin de semana en Torrevieja: teatro, drag queen y espectáculos familiares - todo torrevieja",
+            "04 Feb: Dénia acoge la presentación de una Comunitat Valenciana Olympic Week renovada y con citas de máximo nivel - Dénia.com",
+            "04 Feb: La gala nacional de Drag Queen de Torrevieja contará con las actuaciones de Drag Sethlas y Drag Liak - Información",
+            "04 Feb: Año Nuevo Chino: programa de actividades y fiestas en Valencia - El Debate",
+            "02 Feb: Cuándo son los Carnavales 2026 de Torrevieja: fechas, programa completo y actividades - torreviejahoy.com",
+            "02 Feb: La Federación de Moros y Cristianos de Alicante proclama a Melissa Fernández como Abanderada - Alicante Plaza",
+            "02 Feb: Melissa Fernández, Abanderada Mayor 2026 de la Federación de Moros y Cristianos de Alicante - Información",
+            "02 Feb: La estación de buses de Alicante se consolida como eje de la conectividad del litoral mediterráneo - ESdiario"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quick tips"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "On public holidays, banks and offices often run reduced hours or close.",
+            "Big fiestas can mean road closures, extra traffic, and limited parking.",
+            "If you are visiting to view properties, ask for a short itinerary by area and realistic travel times."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Spain Holidays",
+          "url": "https://calendar.google.com/calendar/ical/en.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNcWU4RTczNlVVZVg2T0pfU2JmdFZLUFd3b1EtTVpJTDljeDA2eGRMTVVDWWNldldnbGlEQ1Z4c0htRzY0MlQ3UG1UUkdXaUFTTjhZMHlCOF9obDFGOHlKaVdoenRnMTZ4RzdPd1Q2dkpoZFNvVzQxQ1dvbDhJVHNwNk9LLThvM1czbWoxTHRrc1ZMOHFkN0RLSjRCZ1NhSWg1YjJLZDN3dElQLWd2WXVzUEJJbDBJYlBLNFJ3RVBXdzBqbDNKQkRNRzlmcFNYM2tISkYyQXFR?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQbUhweXAwT3BQUE1naFVMY0pEUHE2cGxMZk1tYjdfWV91QjRNcHJIVllKUVJJM09VaGNBaFhXRFJ6OGF3ODA1QjEya2xtUW1aa2pWeDlzREZoaWJ2RWZpeENmdGJ1S2FkMnlpS2hiUVlyRmt3YVNOR1pGS2U5WnBxWGpWZDF6cGNETkpmUTRQaFpXMXU3ZEdFREZaU2lSeTA1U201bDRhcTBhS3NZUUpqRExZUmhLa2syTFAxeF94cEc3Z0ZuNFNB?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQeE9oWWpjUVFoMVNmMC1TMUlFUlBHakhhVFR6R2xTX2tEY1o5VjhqSndtTnRfSU1Td25heHJVYlFjSGFSZFMwdElTVkRpaUNvdFVpeEJ5NXoyNExpeTFyTWQ1WnpONmNiaG02MU5ZVXFPRUR5cTRBTE5ucDBYRWdDNFZuWElVZTh3b2FoR3RJNjc4TEMyY0RmQk55SUwtSmNKZ2xyaGdoSW7SAa4BQVVfeXFMTmtEOER3XzhwX2dxc3Q5VzctUGtaS3otczBHeHVmdUMzTzQ3RkFseG1SVFIwSG5jVzRuTm9OSDItYXdmT2Qzc1JNd3V4aldaN09pQmpWeXhpT1JmakVwQndMd0pEeURPX0NCemEzUVR5VUN6WkV0MVhlNkF0N2x1SDNRNHh5QW1kLVZ3el9rNjZaZk5QanJ5ZUdib2ZTdlhZQzQtVEtSLWpCUWl2UlV3?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOT2tRSC1TdXFPWVFHcHllRnkxaEdOMVFKUjUyUDBTd3R0c1NOVkRaUHJDSlJaaFVTUXl1SEtHR1NYM3ZiOG9ybVJCMVFrdGJJMzlRdXlTMVBiWFlKc1dCOFgzaTdRMXFnYThpTXZIa2JGaVduY0p2NWhjeHR4ZHFFR21xMzUtRk1NQ2RfN1FWTUptTENmVWdqWGo3XzQwcmt1a2RjMWo0Qno0dTJ1SzRCNEp6OGgxSUx2NTRFZ09PVzRNNTBaV1HSAcsBQVVfeXFMT2s5ZUQtMWxHenJZRlAxUXdKZDJDV1NJaWJqX3Q5WDB5cFZUdTVKQWV1a2Nkdm16QUJBc1BDb21IclpBYXNEWUprTmtSZVp0M29xc2FIZXF5Q3VRSWd6TFc2UXE1U2pvaUdjOFdwY0NOTU1NTmx5cGdmTE5MMXJpQ3BpTDZZNkRaajEtZ0k0cldiREdBTlY5bHVrenB0aWg2QWV0VmFCTWRMTzAxSWhnYmRmV2hlM1ZnX0xOLWlRNVRGWWJDMTNTLTBxSVk?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQUXFWbFE0M2JPVmhQclhCTjZjM1VCaTRPZmIxQjNtOWFyUUg4b1lwSXIyTXo4NXVoYVRlbUEzT0NRZXZmQzE5aW5mVHdFYm12TmlpWEhmems5aGUxWW04d3FHeXZBZVhkM2lDX0ZiWnF6cGpsYmdHa2g4b0pJV2xiYUp3WWI3ejhCeUZERUMtZy10Z0p0TGRpS2xvRThyT0tpYnhLZ2pycDNudDh0U0EtMnQ1QkwyVnZRTTRvVG9rdHA3WFnSAcgBQVVfeXFMT2pCVzFHVjEzMnpFYVRUQzVHYko5Q3VMdk13Q25kUGppVjE2dTJrWW1GbFNzbzBxSGFEU3NYZ2pfM0IwelI5TmdWNkdOOEZ6d3FsUUUwS2hvaFhtY3o5Rk1LbFlUSVFkQlQwLUlhaU9heDlmQ085b1Zpa1Y0X3JCWDVQaVFMcEh6RHYtMEc5aHcwblBkZEpGdms1RjVDY3pjc2R2ek1PM2YtT1VXcG1RMjNxSU15UlpzcE1KQzdFc1paeTR4RTdLNHA?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxNbnpyb01ZVDN4NG5mN09kOTdMX29vcnZTdUpTUDdyd2lLLXlrdVBJOFRMSzVQYThQbG1oOGVlSkxXaWhPdjZJaGFiWHR2bW5QelJ5RExFbUR2ci1OQnJsa3k3SzZnRE9jYXlyM0hzWnhDZ1dqUzRKaFplRXEyYm5nbDJPd21wdnpTRGJHYU5MU3g3R2hvMDNIU2lPa1dVZ1hxenJmeHNKVlZFYUhFaUdTTTZtY2xoeVEwOWlNMThfOXc3LVZEbDBXbDZibGM0VVJkTWpnRTE1QVVxQnJKR2h1MUhRaGFaNW5sYUE?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNN0s1Q2x0dFI5N295UUo3SzZqWktSM3NRNEhqTEdOQ3dSbm52WTBTaFNWRHBibXZVcGFqaF93ZENTWVRHdDRHWHp5amhoWXpqdTREN3dmTFA5VWh1djY1Y3JaT052SzlXNHFoUjR2QmxQRklQZGRNVGhaLVdjamxwZ0tCR2RVMWZaMnVNWF9LWndoX3E2TlU0MW9IZ2VXR25lbzRHeEVsREYwZy1ERmlvenc3ZW8yWU9tV1ZkRmRqaTlycXZqM2fSAcsBQVVfeXFMUG1oM0ZodHNLMkRLZUhfNE5vMVJJLWpmVGR0ZTk1SDJieGJhaXhheGEzVHlaQThLWGRheFc0bGlHQ0lmcm52UUlWay1iSDRUM3BIcFJRc245RzV4Q0lUZG9Ed3lUc0x2TlhQcW51eDA1ZkZha1ByN2JvVk56X2RpN2NWUlkxNkZmS0N2TExLLVozTmhHTERCWFNFa01ENUhhWW5RR1FxOThrMXZxekZKNlFJZFgxc3hZeUlLV2JWc0pzU3JqN0JKQmpBTXc?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOU2syZkxqNVpHWXVRNXhCRHpIVEk1TXFaOTVOamFZd2R0Sm80aUlNZ01sYm85U3FEWjBPQ05Pc3dXempBZEpBVGRMV0wzVTVnSExDVV9BcF91YkFXNjU1MFVhaGE1cVZlOHV4YThxSC1MUEEyVG1MZDNrNnRPZ2R1RnFyZGRJSGRqelo4a3V4TGpEQTBETEtWNTF1ME43QzU3RXBZR05GQzN1Q2stY2JwMjNTbF9hOEQxZ2VYVkhVMGhnR1dZZXdrdGtHT2laZHhPWll6SGVVQUZ6ZDVyT2fSAeMBQVVfeXFMTzRJakFlM0REd2d1RHZma3FCYk5TYUlJUHgtRTRub3UtemNmSlRFNFg1TFBjc0tudmVBaGVvZmNEOFNqNnV2SURnSG0xUHRhZ2RMMFV0TTl6bXBMdWlIUW5reEw3UTNLa0NPaEUtZGNVLTV5Sm1qYzFVLTFmTFdtLUJJSjFGcl9xcGpoTDQyWUF3cG1NWXBBaDFOSzBHOXR6R3JlbGstd1JXTjJxZTZoMG04RmF6TTFCOGxzUGtYQVhEYmc1Z29Ic0tEcHZjVWpOMUZlN0k5d3pQU243MEpVdkViRTg?oc=5"
+        }
+      ],
+      "cta": "If you are visiting or planning a purchase, Spanish Coast Properties can help with a clear plan, areas, and a shortlist."
+    },
+    {
+      "id": "2026-02-05-local-digest-es",
+      "kind": "local",
+      "lang": "es",
+      "publishedAt": "2026-02-05T06:00:00Z",
+      "title": "Costa Blanca South: eventos y fiestas (2026-02-05)",
+      "excerpt": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente.",
+      "tags": [
+        "Local",
+        "Eventos",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente."
+        },
+        {
+          "type": "h",
+          "text": "Proximos 14 dias"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Día de San Valentín",
+            "16 Feb: Lunes de Carnaval",
+            "17 Feb: Martes de Carnaval",
+            "18 Feb: Miércoles de Ceniza"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Avisos recientes"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "04 Feb: Cuatro grandes citas culturales este fin de semana en Torrevieja: teatro, drag queen y espectáculos familiares - todo torrevieja",
+            "04 Feb: Dénia acoge la presentación de una Comunitat Valenciana Olympic Week renovada y con citas de máximo nivel - Dénia.com",
+            "04 Feb: La gala nacional de Drag Queen de Torrevieja contará con las actuaciones de Drag Sethlas y Drag Liak - Información",
+            "04 Feb: Año Nuevo Chino: programa de actividades y fiestas en Valencia - El Debate",
+            "02 Feb: Cuándo son los Carnavales 2026 de Torrevieja: fechas, programa completo y actividades - torreviejahoy.com",
+            "02 Feb: La Federación de Moros y Cristianos de Alicante proclama a Melissa Fernández como Abanderada - Alicante Plaza",
+            "02 Feb: Melissa Fernández, Abanderada Mayor 2026 de la Federación de Moros y Cristianos de Alicante - Información",
+            "02 Feb: La estación de buses de Alicante se consolida como eje de la conectividad del litoral mediterráneo - ESdiario"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Consejos rapidos"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "En festivos es comun que bancos y oficinas tengan horario reducido o cierren.",
+            "En fiestas grandes puede haber cortes de calles, mas trafico y parking limitado.",
+            "Para planes de visita, pide un itinerario corto por zona y tiempos reales."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Festivos en Espana",
+          "url": "https://calendar.google.com/calendar/ical/es.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNcWU4RTczNlVVZVg2T0pfU2JmdFZLUFd3b1EtTVpJTDljeDA2eGRMTVVDWWNldldnbGlEQ1Z4c0htRzY0MlQ3UG1UUkdXaUFTTjhZMHlCOF9obDFGOHlKaVdoenRnMTZ4RzdPd1Q2dkpoZFNvVzQxQ1dvbDhJVHNwNk9LLThvM1czbWoxTHRrc1ZMOHFkN0RLSjRCZ1NhSWg1YjJLZDN3dElQLWd2WXVzUEJJbDBJYlBLNFJ3RVBXdzBqbDNKQkRNRzlmcFNYM2tISkYyQXFR?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQbUhweXAwT3BQUE1naFVMY0pEUHE2cGxMZk1tYjdfWV91QjRNcHJIVllKUVJJM09VaGNBaFhXRFJ6OGF3ODA1QjEya2xtUW1aa2pWeDlzREZoaWJ2RWZpeENmdGJ1S2FkMnlpS2hiUVlyRmt3YVNOR1pGS2U5WnBxWGpWZDF6cGNETkpmUTRQaFpXMXU3ZEdFREZaU2lSeTA1U201bDRhcTBhS3NZUUpqRExZUmhLa2syTFAxeF94cEc3Z0ZuNFNB?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQeE9oWWpjUVFoMVNmMC1TMUlFUlBHakhhVFR6R2xTX2tEY1o5VjhqSndtTnRfSU1Td25heHJVYlFjSGFSZFMwdElTVkRpaUNvdFVpeEJ5NXoyNExpeTFyTWQ1WnpONmNiaG02MU5ZVXFPRUR5cTRBTE5ucDBYRWdDNFZuWElVZTh3b2FoR3RJNjc4TEMyY0RmQk55SUwtSmNKZ2xyaGdoSW7SAa4BQVVfeXFMTmtEOER3XzhwX2dxc3Q5VzctUGtaS3otczBHeHVmdUMzTzQ3RkFseG1SVFIwSG5jVzRuTm9OSDItYXdmT2Qzc1JNd3V4aldaN09pQmpWeXhpT1JmakVwQndMd0pEeURPX0NCemEzUVR5VUN6WkV0MVhlNkF0N2x1SDNRNHh5QW1kLVZ3el9rNjZaZk5QanJ5ZUdib2ZTdlhZQzQtVEtSLWpCUWl2UlV3?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOT2tRSC1TdXFPWVFHcHllRnkxaEdOMVFKUjUyUDBTd3R0c1NOVkRaUHJDSlJaaFVTUXl1SEtHR1NYM3ZiOG9ybVJCMVFrdGJJMzlRdXlTMVBiWFlKc1dCOFgzaTdRMXFnYThpTXZIa2JGaVduY0p2NWhjeHR4ZHFFR21xMzUtRk1NQ2RfN1FWTUptTENmVWdqWGo3XzQwcmt1a2RjMWo0Qno0dTJ1SzRCNEp6OGgxSUx2NTRFZ09PVzRNNTBaV1HSAcsBQVVfeXFMT2s5ZUQtMWxHenJZRlAxUXdKZDJDV1NJaWJqX3Q5WDB5cFZUdTVKQWV1a2Nkdm16QUJBc1BDb21IclpBYXNEWUprTmtSZVp0M29xc2FIZXF5Q3VRSWd6TFc2UXE1U2pvaUdjOFdwY0NOTU1NTmx5cGdmTE5MMXJpQ3BpTDZZNkRaajEtZ0k0cldiREdBTlY5bHVrenB0aWg2QWV0VmFCTWRMTzAxSWhnYmRmV2hlM1ZnX0xOLWlRNVRGWWJDMTNTLTBxSVk?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQUXFWbFE0M2JPVmhQclhCTjZjM1VCaTRPZmIxQjNtOWFyUUg4b1lwSXIyTXo4NXVoYVRlbUEzT0NRZXZmQzE5aW5mVHdFYm12TmlpWEhmems5aGUxWW04d3FHeXZBZVhkM2lDX0ZiWnF6cGpsYmdHa2g4b0pJV2xiYUp3WWI3ejhCeUZERUMtZy10Z0p0TGRpS2xvRThyT0tpYnhLZ2pycDNudDh0U0EtMnQ1QkwyVnZRTTRvVG9rdHA3WFnSAcgBQVVfeXFMT2pCVzFHVjEzMnpFYVRUQzVHYko5Q3VMdk13Q25kUGppVjE2dTJrWW1GbFNzbzBxSGFEU3NYZ2pfM0IwelI5TmdWNkdOOEZ6d3FsUUUwS2hvaFhtY3o5Rk1LbFlUSVFkQlQwLUlhaU9heDlmQ085b1Zpa1Y0X3JCWDVQaVFMcEh6RHYtMEc5aHcwblBkZEpGdms1RjVDY3pjc2R2ek1PM2YtT1VXcG1RMjNxSU15UlpzcE1KQzdFc1paeTR4RTdLNHA?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxNbnpyb01ZVDN4NG5mN09kOTdMX29vcnZTdUpTUDdyd2lLLXlrdVBJOFRMSzVQYThQbG1oOGVlSkxXaWhPdjZJaGFiWHR2bW5QelJ5RExFbUR2ci1OQnJsa3k3SzZnRE9jYXlyM0hzWnhDZ1dqUzRKaFplRXEyYm5nbDJPd21wdnpTRGJHYU5MU3g3R2hvMDNIU2lPa1dVZ1hxenJmeHNKVlZFYUhFaUdTTTZtY2xoeVEwOWlNMThfOXc3LVZEbDBXbDZibGM0VVJkTWpnRTE1QVVxQnJKR2h1MUhRaGFaNW5sYUE?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNN0s1Q2x0dFI5N295UUo3SzZqWktSM3NRNEhqTEdOQ3dSbm52WTBTaFNWRHBibXZVcGFqaF93ZENTWVRHdDRHWHp5amhoWXpqdTREN3dmTFA5VWh1djY1Y3JaT052SzlXNHFoUjR2QmxQRklQZGRNVGhaLVdjamxwZ0tCR2RVMWZaMnVNWF9LWndoX3E2TlU0MW9IZ2VXR25lbzRHeEVsREYwZy1ERmlvenc3ZW8yWU9tV1ZkRmRqaTlycXZqM2fSAcsBQVVfeXFMUG1oM0ZodHNLMkRLZUhfNE5vMVJJLWpmVGR0ZTk1SDJieGJhaXhheGEzVHlaQThLWGRheFc0bGlHQ0lmcm52UUlWay1iSDRUM3BIcFJRc245RzV4Q0lUZG9Ed3lUc0x2TlhQcW51eDA1ZkZha1ByN2JvVk56X2RpN2NWUlkxNkZmS0N2TExLLVozTmhHTERCWFNFa01ENUhhWW5RR1FxOThrMXZxekZKNlFJZFgxc3hZeUlLV2JWc0pzU3JqN0JKQmpBTXc?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOU2syZkxqNVpHWXVRNXhCRHpIVEk1TXFaOTVOamFZd2R0Sm80aUlNZ01sYm85U3FEWjBPQ05Pc3dXempBZEpBVGRMV0wzVTVnSExDVV9BcF91YkFXNjU1MFVhaGE1cVZlOHV4YThxSC1MUEEyVG1MZDNrNnRPZ2R1RnFyZGRJSGRqelo4a3V4TGpEQTBETEtWNTF1ME43QzU3RXBZR05GQzN1Q2stY2JwMjNTbF9hOEQxZ2VYVkhVMGhnR1dZZXdrdGtHT2laZHhPWll6SGVVQUZ6ZDVyT2fSAeMBQVVfeXFMTzRJakFlM0REd2d1RHZma3FCYk5TYUlJUHgtRTRub3UtemNmSlRFNFg1TFBjc0tudmVBaGVvZmNEOFNqNnV2SURnSG0xUHRhZ2RMMFV0TTl6bXBMdWlIUW5reEw3UTNLa0NPaEUtZGNVLTV5Sm1qYzFVLTFmTFdtLUJJSjFGcl9xcGpoTDQyWUF3cG1NWXBBaDFOSzBHOXR6R3JlbGstd1JXTjJxZTZoMG04RmF6TTFCOGxzUGtYQVhEYmc1Z29Ic0tEcHZjVWpOMUZlN0k5d3pQU243MEpVdkViRTg?oc=5"
+        }
+      ],
+      "cta": "Si vienes de visita o estas planificando una compra, Spanish Coast Properties puede ayudarte con un plan claro, zonas y opciones."
+    },
+    {
       "id": "2026-02-04-retail-market-data-figures-fourth-quarter-2025-spain-da40db6f",
       "kind": "news",
       "lang": "en",
@@ -3284,6 +5823,205 @@ globalThis.SCP_BLOG = {
       "cta": "Want a shortlist? Spanish Coast Properties can filter options and send a clean catalog based on your budget and area."
     },
     {
+      "id": "2026-02-04-local-digest-en",
+      "kind": "local",
+      "lang": "en",
+      "publishedAt": "2026-02-04T06:00:00Z",
+      "title": "Costa Blanca South: events & fiestas (2026-02-04)",
+      "excerpt": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source.",
+      "tags": [
+        "Local",
+        "Events",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source."
+        },
+        {
+          "type": "h",
+          "text": "Next 14 days"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Valentine's Day",
+            "14 Feb: Carnival (varies by town) · Costa Blanca South",
+            "16 Feb: Carnival Monday",
+            "17 Feb: Carnival Tuesday"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Recent local updates"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "04 Feb: Cuatro grandes citas culturales este fin de semana en Torrevieja: teatro, drag queen y espectáculos familiares - todo torrevieja",
+            "04 Feb: Dénia acoge la presentación de una Comunitat Valenciana Olympic Week renovada y con citas de máximo nivel - Dénia.com",
+            "04 Feb: La gala nacional de Drag Queen de Torrevieja contará con las actuaciones de Drag Sethlas y Drag Liak - Información",
+            "04 Feb: Año Nuevo Chino: programa de actividades y fiestas en Valencia - El Debate",
+            "02 Feb: Cuándo son los Carnavales 2026 de Torrevieja: fechas, programa completo y actividades - torreviejahoy.com",
+            "02 Feb: La Federación de Moros y Cristianos de Alicante proclama a Melissa Fernández como Abanderada - Alicante Plaza",
+            "02 Feb: Melissa Fernández, Abanderada Mayor 2026 de la Federación de Moros y Cristianos de Alicante - Información",
+            "02 Feb: La estación de buses de Alicante se consolida como eje de la conectividad del litoral mediterráneo - ESdiario"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quick tips"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "On public holidays, banks and offices often run reduced hours or close.",
+            "Big fiestas can mean road closures, extra traffic, and limited parking.",
+            "If you are visiting to view properties, ask for a short itinerary by area and realistic travel times."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Spain Holidays",
+          "url": "https://calendar.google.com/calendar/ical/en.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNcWU4RTczNlVVZVg2T0pfU2JmdFZLUFd3b1EtTVpJTDljeDA2eGRMTVVDWWNldldnbGlEQ1Z4c0htRzY0MlQ3UG1UUkdXaUFTTjhZMHlCOF9obDFGOHlKaVdoenRnMTZ4RzdPd1Q2dkpoZFNvVzQxQ1dvbDhJVHNwNk9LLThvM1czbWoxTHRrc1ZMOHFkN0RLSjRCZ1NhSWg1YjJLZDN3dElQLWd2WXVzUEJJbDBJYlBLNFJ3RVBXdzBqbDNKQkRNRzlmcFNYM2tISkYyQXFR?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQbUhweXAwT3BQUE1naFVMY0pEUHE2cGxMZk1tYjdfWV91QjRNcHJIVllKUVJJM09VaGNBaFhXRFJ6OGF3ODA1QjEya2xtUW1aa2pWeDlzREZoaWJ2RWZpeENmdGJ1S2FkMnlpS2hiUVlyRmt3YVNOR1pGS2U5WnBxWGpWZDF6cGNETkpmUTRQaFpXMXU3ZEdFREZaU2lSeTA1U201bDRhcTBhS3NZUUpqRExZUmhLa2syTFAxeF94cEc3Z0ZuNFNB?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQeE9oWWpjUVFoMVNmMC1TMUlFUlBHakhhVFR6R2xTX2tEY1o5VjhqSndtTnRfSU1Td25heHJVYlFjSGFSZFMwdElTVkRpaUNvdFVpeEJ5NXoyNExpeTFyTWQ1WnpONmNiaG02MU5ZVXFPRUR5cTRBTE5ucDBYRWdDNFZuWElVZTh3b2FoR3RJNjc4TEMyY0RmQk55SUwtSmNKZ2xyaGdoSW7SAa4BQVVfeXFMTmtEOER3XzhwX2dxc3Q5VzctUGtaS3otczBHeHVmdUMzTzQ3RkFseG1SVFIwSG5jVzRuTm9OSDItYXdmT2Qzc1JNd3V4aldaN09pQmpWeXhpT1JmakVwQndMd0pEeURPX0NCemEzUVR5VUN6WkV0MVhlNkF0N2x1SDNRNHh5QW1kLVZ3el9rNjZaZk5QanJ5ZUdib2ZTdlhZQzQtVEtSLWpCUWl2UlV3?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOT2tRSC1TdXFPWVFHcHllRnkxaEdOMVFKUjUyUDBTd3R0c1NOVkRaUHJDSlJaaFVTUXl1SEtHR1NYM3ZiOG9ybVJCMVFrdGJJMzlRdXlTMVBiWFlKc1dCOFgzaTdRMXFnYThpTXZIa2JGaVduY0p2NWhjeHR4ZHFFR21xMzUtRk1NQ2RfN1FWTUptTENmVWdqWGo3XzQwcmt1a2RjMWo0Qno0dTJ1SzRCNEp6OGgxSUx2NTRFZ09PVzRNNTBaV1HSAcsBQVVfeXFMT2s5ZUQtMWxHenJZRlAxUXdKZDJDV1NJaWJqX3Q5WDB5cFZUdTVKQWV1a2Nkdm16QUJBc1BDb21IclpBYXNEWUprTmtSZVp0M29xc2FIZXF5Q3VRSWd6TFc2UXE1U2pvaUdjOFdwY0NOTU1NTmx5cGdmTE5MMXJpQ3BpTDZZNkRaajEtZ0k0cldiREdBTlY5bHVrenB0aWg2QWV0VmFCTWRMTzAxSWhnYmRmV2hlM1ZnX0xOLWlRNVRGWWJDMTNTLTBxSVk?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQUXFWbFE0M2JPVmhQclhCTjZjM1VCaTRPZmIxQjNtOWFyUUg4b1lwSXIyTXo4NXVoYVRlbUEzT0NRZXZmQzE5aW5mVHdFYm12TmlpWEhmems5aGUxWW04d3FHeXZBZVhkM2lDX0ZiWnF6cGpsYmdHa2g4b0pJV2xiYUp3WWI3ejhCeUZERUMtZy10Z0p0TGRpS2xvRThyT0tpYnhLZ2pycDNudDh0U0EtMnQ1QkwyVnZRTTRvVG9rdHA3WFnSAcgBQVVfeXFMT2pCVzFHVjEzMnpFYVRUQzVHYko5Q3VMdk13Q25kUGppVjE2dTJrWW1GbFNzbzBxSGFEU3NYZ2pfM0IwelI5TmdWNkdOOEZ6d3FsUUUwS2hvaFhtY3o5Rk1LbFlUSVFkQlQwLUlhaU9heDlmQ085b1Zpa1Y0X3JCWDVQaVFMcEh6RHYtMEc5aHcwblBkZEpGdms1RjVDY3pjc2R2ek1PM2YtT1VXcG1RMjNxSU15UlpzcE1KQzdFc1paeTR4RTdLNHA?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxNbnpyb01ZVDN4NG5mN09kOTdMX29vcnZTdUpTUDdyd2lLLXlrdVBJOFRMSzVQYThQbG1oOGVlSkxXaWhPdjZJaGFiWHR2bW5QelJ5RExFbUR2ci1OQnJsa3k3SzZnRE9jYXlyM0hzWnhDZ1dqUzRKaFplRXEyYm5nbDJPd21wdnpTRGJHYU5MU3g3R2hvMDNIU2lPa1dVZ1hxenJmeHNKVlZFYUhFaUdTTTZtY2xoeVEwOWlNMThfOXc3LVZEbDBXbDZibGM0VVJkTWpnRTE1QVVxQnJKR2h1MUhRaGFaNW5sYUE?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNN0s1Q2x0dFI5N295UUo3SzZqWktSM3NRNEhqTEdOQ3dSbm52WTBTaFNWRHBibXZVcGFqaF93ZENTWVRHdDRHWHp5amhoWXpqdTREN3dmTFA5VWh1djY1Y3JaT052SzlXNHFoUjR2QmxQRklQZGRNVGhaLVdjamxwZ0tCR2RVMWZaMnVNWF9LWndoX3E2TlU0MW9IZ2VXR25lbzRHeEVsREYwZy1ERmlvenc3ZW8yWU9tV1ZkRmRqaTlycXZqM2fSAcsBQVVfeXFMUG1oM0ZodHNLMkRLZUhfNE5vMVJJLWpmVGR0ZTk1SDJieGJhaXhheGEzVHlaQThLWGRheFc0bGlHQ0lmcm52UUlWay1iSDRUM3BIcFJRc245RzV4Q0lUZG9Ed3lUc0x2TlhQcW51eDA1ZkZha1ByN2JvVk56X2RpN2NWUlkxNkZmS0N2TExLLVozTmhHTERCWFNFa01ENUhhWW5RR1FxOThrMXZxekZKNlFJZFgxc3hZeUlLV2JWc0pzU3JqN0JKQmpBTXc?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOU2syZkxqNVpHWXVRNXhCRHpIVEk1TXFaOTVOamFZd2R0Sm80aUlNZ01sYm85U3FEWjBPQ05Pc3dXempBZEpBVGRMV0wzVTVnSExDVV9BcF91YkFXNjU1MFVhaGE1cVZlOHV4YThxSC1MUEEyVG1MZDNrNnRPZ2R1RnFyZGRJSGRqelo4a3V4TGpEQTBETEtWNTF1ME43QzU3RXBZR05GQzN1Q2stY2JwMjNTbF9hOEQxZ2VYVkhVMGhnR1dZZXdrdGtHT2laZHhPWll6SGVVQUZ6ZDVyT2fSAeMBQVVfeXFMTzRJakFlM0REd2d1RHZma3FCYk5TYUlJUHgtRTRub3UtemNmSlRFNFg1TFBjc0tudmVBaGVvZmNEOFNqNnV2SURnSG0xUHRhZ2RMMFV0TTl6bXBMdWlIUW5reEw3UTNLa0NPaEUtZGNVLTV5Sm1qYzFVLTFmTFdtLUJJSjFGcl9xcGpoTDQyWUF3cG1NWXBBaDFOSzBHOXR6R3JlbGstd1JXTjJxZTZoMG04RmF6TTFCOGxzUGtYQVhEYmc1Z29Ic0tEcHZjVWpOMUZlN0k5d3pQU243MEpVdkViRTg?oc=5"
+        }
+      ],
+      "cta": "If you are visiting or planning a purchase, Spanish Coast Properties can help with a clear plan, areas, and a shortlist."
+    },
+    {
+      "id": "2026-02-04-local-digest-es",
+      "kind": "local",
+      "lang": "es",
+      "publishedAt": "2026-02-04T06:00:00Z",
+      "title": "Costa Blanca South: eventos y fiestas (2026-02-04)",
+      "excerpt": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente.",
+      "tags": [
+        "Local",
+        "Eventos",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente."
+        },
+        {
+          "type": "h",
+          "text": "Proximos 14 dias"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Día de San Valentín",
+            "16 Feb: Lunes de Carnaval",
+            "17 Feb: Martes de Carnaval"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Avisos recientes"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "04 Feb: Cuatro grandes citas culturales este fin de semana en Torrevieja: teatro, drag queen y espectáculos familiares - todo torrevieja",
+            "04 Feb: Dénia acoge la presentación de una Comunitat Valenciana Olympic Week renovada y con citas de máximo nivel - Dénia.com",
+            "04 Feb: La gala nacional de Drag Queen de Torrevieja contará con las actuaciones de Drag Sethlas y Drag Liak - Información",
+            "04 Feb: Año Nuevo Chino: programa de actividades y fiestas en Valencia - El Debate",
+            "02 Feb: Cuándo son los Carnavales 2026 de Torrevieja: fechas, programa completo y actividades - torreviejahoy.com",
+            "02 Feb: La Federación de Moros y Cristianos de Alicante proclama a Melissa Fernández como Abanderada - Alicante Plaza",
+            "02 Feb: Melissa Fernández, Abanderada Mayor 2026 de la Federación de Moros y Cristianos de Alicante - Información",
+            "02 Feb: La estación de buses de Alicante se consolida como eje de la conectividad del litoral mediterráneo - ESdiario"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Consejos rapidos"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "En festivos es comun que bancos y oficinas tengan horario reducido o cierren.",
+            "En fiestas grandes puede haber cortes de calles, mas trafico y parking limitado.",
+            "Para planes de visita, pide un itinerario corto por zona y tiempos reales."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Festivos en Espana",
+          "url": "https://calendar.google.com/calendar/ical/es.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNcWU4RTczNlVVZVg2T0pfU2JmdFZLUFd3b1EtTVpJTDljeDA2eGRMTVVDWWNldldnbGlEQ1Z4c0htRzY0MlQ3UG1UUkdXaUFTTjhZMHlCOF9obDFGOHlKaVdoenRnMTZ4RzdPd1Q2dkpoZFNvVzQxQ1dvbDhJVHNwNk9LLThvM1czbWoxTHRrc1ZMOHFkN0RLSjRCZ1NhSWg1YjJLZDN3dElQLWd2WXVzUEJJbDBJYlBLNFJ3RVBXdzBqbDNKQkRNRzlmcFNYM2tISkYyQXFR?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQbUhweXAwT3BQUE1naFVMY0pEUHE2cGxMZk1tYjdfWV91QjRNcHJIVllKUVJJM09VaGNBaFhXRFJ6OGF3ODA1QjEya2xtUW1aa2pWeDlzREZoaWJ2RWZpeENmdGJ1S2FkMnlpS2hiUVlyRmt3YVNOR1pGS2U5WnBxWGpWZDF6cGNETkpmUTRQaFpXMXU3ZEdFREZaU2lSeTA1U201bDRhcTBhS3NZUUpqRExZUmhLa2syTFAxeF94cEc3Z0ZuNFNB?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQeE9oWWpjUVFoMVNmMC1TMUlFUlBHakhhVFR6R2xTX2tEY1o5VjhqSndtTnRfSU1Td25heHJVYlFjSGFSZFMwdElTVkRpaUNvdFVpeEJ5NXoyNExpeTFyTWQ1WnpONmNiaG02MU5ZVXFPRUR5cTRBTE5ucDBYRWdDNFZuWElVZTh3b2FoR3RJNjc4TEMyY0RmQk55SUwtSmNKZ2xyaGdoSW7SAa4BQVVfeXFMTmtEOER3XzhwX2dxc3Q5VzctUGtaS3otczBHeHVmdUMzTzQ3RkFseG1SVFIwSG5jVzRuTm9OSDItYXdmT2Qzc1JNd3V4aldaN09pQmpWeXhpT1JmakVwQndMd0pEeURPX0NCemEzUVR5VUN6WkV0MVhlNkF0N2x1SDNRNHh5QW1kLVZ3el9rNjZaZk5QanJ5ZUdib2ZTdlhZQzQtVEtSLWpCUWl2UlV3?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOT2tRSC1TdXFPWVFHcHllRnkxaEdOMVFKUjUyUDBTd3R0c1NOVkRaUHJDSlJaaFVTUXl1SEtHR1NYM3ZiOG9ybVJCMVFrdGJJMzlRdXlTMVBiWFlKc1dCOFgzaTdRMXFnYThpTXZIa2JGaVduY0p2NWhjeHR4ZHFFR21xMzUtRk1NQ2RfN1FWTUptTENmVWdqWGo3XzQwcmt1a2RjMWo0Qno0dTJ1SzRCNEp6OGgxSUx2NTRFZ09PVzRNNTBaV1HSAcsBQVVfeXFMT2s5ZUQtMWxHenJZRlAxUXdKZDJDV1NJaWJqX3Q5WDB5cFZUdTVKQWV1a2Nkdm16QUJBc1BDb21IclpBYXNEWUprTmtSZVp0M29xc2FIZXF5Q3VRSWd6TFc2UXE1U2pvaUdjOFdwY0NOTU1NTmx5cGdmTE5MMXJpQ3BpTDZZNkRaajEtZ0k0cldiREdBTlY5bHVrenB0aWg2QWV0VmFCTWRMTzAxSWhnYmRmV2hlM1ZnX0xOLWlRNVRGWWJDMTNTLTBxSVk?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQUXFWbFE0M2JPVmhQclhCTjZjM1VCaTRPZmIxQjNtOWFyUUg4b1lwSXIyTXo4NXVoYVRlbUEzT0NRZXZmQzE5aW5mVHdFYm12TmlpWEhmems5aGUxWW04d3FHeXZBZVhkM2lDX0ZiWnF6cGpsYmdHa2g4b0pJV2xiYUp3WWI3ejhCeUZERUMtZy10Z0p0TGRpS2xvRThyT0tpYnhLZ2pycDNudDh0U0EtMnQ1QkwyVnZRTTRvVG9rdHA3WFnSAcgBQVVfeXFMT2pCVzFHVjEzMnpFYVRUQzVHYko5Q3VMdk13Q25kUGppVjE2dTJrWW1GbFNzbzBxSGFEU3NYZ2pfM0IwelI5TmdWNkdOOEZ6d3FsUUUwS2hvaFhtY3o5Rk1LbFlUSVFkQlQwLUlhaU9heDlmQ085b1Zpa1Y0X3JCWDVQaVFMcEh6RHYtMEc5aHcwblBkZEpGdms1RjVDY3pjc2R2ek1PM2YtT1VXcG1RMjNxSU15UlpzcE1KQzdFc1paeTR4RTdLNHA?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxNbnpyb01ZVDN4NG5mN09kOTdMX29vcnZTdUpTUDdyd2lLLXlrdVBJOFRMSzVQYThQbG1oOGVlSkxXaWhPdjZJaGFiWHR2bW5QelJ5RExFbUR2ci1OQnJsa3k3SzZnRE9jYXlyM0hzWnhDZ1dqUzRKaFplRXEyYm5nbDJPd21wdnpTRGJHYU5MU3g3R2hvMDNIU2lPa1dVZ1hxenJmeHNKVlZFYUhFaUdTTTZtY2xoeVEwOWlNMThfOXc3LVZEbDBXbDZibGM0VVJkTWpnRTE1QVVxQnJKR2h1MUhRaGFaNW5sYUE?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNN0s1Q2x0dFI5N295UUo3SzZqWktSM3NRNEhqTEdOQ3dSbm52WTBTaFNWRHBibXZVcGFqaF93ZENTWVRHdDRHWHp5amhoWXpqdTREN3dmTFA5VWh1djY1Y3JaT052SzlXNHFoUjR2QmxQRklQZGRNVGhaLVdjamxwZ0tCR2RVMWZaMnVNWF9LWndoX3E2TlU0MW9IZ2VXR25lbzRHeEVsREYwZy1ERmlvenc3ZW8yWU9tV1ZkRmRqaTlycXZqM2fSAcsBQVVfeXFMUG1oM0ZodHNLMkRLZUhfNE5vMVJJLWpmVGR0ZTk1SDJieGJhaXhheGEzVHlaQThLWGRheFc0bGlHQ0lmcm52UUlWay1iSDRUM3BIcFJRc245RzV4Q0lUZG9Ed3lUc0x2TlhQcW51eDA1ZkZha1ByN2JvVk56X2RpN2NWUlkxNkZmS0N2TExLLVozTmhHTERCWFNFa01ENUhhWW5RR1FxOThrMXZxekZKNlFJZFgxc3hZeUlLV2JWc0pzU3JqN0JKQmpBTXc?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOU2syZkxqNVpHWXVRNXhCRHpIVEk1TXFaOTVOamFZd2R0Sm80aUlNZ01sYm85U3FEWjBPQ05Pc3dXempBZEpBVGRMV0wzVTVnSExDVV9BcF91YkFXNjU1MFVhaGE1cVZlOHV4YThxSC1MUEEyVG1MZDNrNnRPZ2R1RnFyZGRJSGRqelo4a3V4TGpEQTBETEtWNTF1ME43QzU3RXBZR05GQzN1Q2stY2JwMjNTbF9hOEQxZ2VYVkhVMGhnR1dZZXdrdGtHT2laZHhPWll6SGVVQUZ6ZDVyT2fSAeMBQVVfeXFMTzRJakFlM0REd2d1RHZma3FCYk5TYUlJUHgtRTRub3UtemNmSlRFNFg1TFBjc0tudmVBaGVvZmNEOFNqNnV2SURnSG0xUHRhZ2RMMFV0TTl6bXBMdWlIUW5reEw3UTNLa0NPaEUtZGNVLTV5Sm1qYzFVLTFmTFdtLUJJSjFGcl9xcGpoTDQyWUF3cG1NWXBBaDFOSzBHOXR6R3JlbGstd1JXTjJxZTZoMG04RmF6TTFCOGxzUGtYQVhEYmc1Z29Ic0tEcHZjVWpOMUZlN0k5d3pQU243MEpVdkViRTg?oc=5"
+        }
+      ],
+      "cta": "Si vienes de visita o estas planificando una compra, Spanish Coast Properties puede ayudarte con un plan claro, zonas y opciones."
+    },
+    {
       "id": "2026-02-04-brits-living-on-costa-brava-coast-accuse-council-of-misleadi-10aa49b9",
       "kind": "news",
       "lang": "en",
@@ -3330,6 +6068,163 @@ globalThis.SCP_BLOG = {
         }
       ],
       "cta": "Want a shortlist? Spanish Coast Properties can filter options and send a clean catalog based on your budget and area."
+    },
+    {
+      "id": "2026-02-03-local-digest-en",
+      "kind": "local",
+      "lang": "en",
+      "publishedAt": "2026-02-03T06:00:00Z",
+      "title": "Costa Blanca South: events & fiestas (2026-02-03)",
+      "excerpt": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source.",
+      "tags": [
+        "Local",
+        "Events",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source."
+        },
+        {
+          "type": "h",
+          "text": "Next 14 days"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Valentine's Day",
+            "14 Feb: Carnival (varies by town) · Costa Blanca South",
+            "16 Feb: Carnival Monday"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Recent local updates"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "02 Feb: Cuándo son los Carnavales 2026 de Torrevieja: fechas, programa completo y actividades - torreviejahoy.com",
+            "02 Feb: La Federación de Moros y Cristianos de Alicante proclama a Melissa Fernández como Abanderada - Alicante Plaza",
+            "02 Feb: Melissa Fernández, Abanderada Mayor 2026 de la Federación de Moros y Cristianos de Alicante - Información",
+            "02 Feb: La estación de buses de Alicante se consolida como eje de la conectividad del litoral mediterráneo - ESdiario"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quick tips"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "On public holidays, banks and offices often run reduced hours or close.",
+            "Big fiestas can mean road closures, extra traffic, and limited parking.",
+            "If you are visiting to view properties, ask for a short itinerary by area and realistic travel times."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Spain Holidays",
+          "url": "https://calendar.google.com/calendar/ical/en.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQUXFWbFE0M2JPVmhQclhCTjZjM1VCaTRPZmIxQjNtOWFyUUg4b1lwSXIyTXo4NXVoYVRlbUEzT0NRZXZmQzE5aW5mVHdFYm12TmlpWEhmems5aGUxWW04d3FHeXZBZVhkM2lDX0ZiWnF6cGpsYmdHa2g4b0pJV2xiYUp3WWI3ejhCeUZERUMtZy10Z0p0TGRpS2xvRThyT0tpYnhLZ2pycDNudDh0U0EtMnQ1QkwyVnZRTTRvVG9rdHA3WFnSAcgBQVVfeXFMT2pCVzFHVjEzMnpFYVRUQzVHYko5Q3VMdk13Q25kUGppVjE2dTJrWW1GbFNzbzBxSGFEU3NYZ2pfM0IwelI5TmdWNkdOOEZ6d3FsUUUwS2hvaFhtY3o5Rk1LbFlUSVFkQlQwLUlhaU9heDlmQ085b1Zpa1Y0X3JCWDVQaVFMcEh6RHYtMEc5aHcwblBkZEpGdms1RjVDY3pjc2R2ek1PM2YtT1VXcG1RMjNxSU15UlpzcE1KQzdFc1paeTR4RTdLNHA?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxNbnpyb01ZVDN4NG5mN09kOTdMX29vcnZTdUpTUDdyd2lLLXlrdVBJOFRMSzVQYThQbG1oOGVlSkxXaWhPdjZJaGFiWHR2bW5QelJ5RExFbUR2ci1OQnJsa3k3SzZnRE9jYXlyM0hzWnhDZ1dqUzRKaFplRXEyYm5nbDJPd21wdnpTRGJHYU5MU3g3R2hvMDNIU2lPa1dVZ1hxenJmeHNKVlZFYUhFaUdTTTZtY2xoeVEwOWlNMThfOXc3LVZEbDBXbDZibGM0VVJkTWpnRTE1QVVxQnJKR2h1MUhRaGFaNW5sYUE?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNN0s1Q2x0dFI5N295UUo3SzZqWktSM3NRNEhqTEdOQ3dSbm52WTBTaFNWRHBibXZVcGFqaF93ZENTWVRHdDRHWHp5amhoWXpqdTREN3dmTFA5VWh1djY1Y3JaT052SzlXNHFoUjR2QmxQRklQZGRNVGhaLVdjamxwZ0tCR2RVMWZaMnVNWF9LWndoX3E2TlU0MW9IZ2VXR25lbzRHeEVsREYwZy1ERmlvenc3ZW8yWU9tV1ZkRmRqaTlycXZqM2fSAcsBQVVfeXFMUG1oM0ZodHNLMkRLZUhfNE5vMVJJLWpmVGR0ZTk1SDJieGJhaXhheGEzVHlaQThLWGRheFc0bGlHQ0lmcm52UUlWay1iSDRUM3BIcFJRc245RzV4Q0lUZG9Ed3lUc0x2TlhQcW51eDA1ZkZha1ByN2JvVk56X2RpN2NWUlkxNkZmS0N2TExLLVozTmhHTERCWFNFa01ENUhhWW5RR1FxOThrMXZxekZKNlFJZFgxc3hZeUlLV2JWc0pzU3JqN0JKQmpBTXc?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOU2syZkxqNVpHWXVRNXhCRHpIVEk1TXFaOTVOamFZd2R0Sm80aUlNZ01sYm85U3FEWjBPQ05Pc3dXempBZEpBVGRMV0wzVTVnSExDVV9BcF91YkFXNjU1MFVhaGE1cVZlOHV4YThxSC1MUEEyVG1MZDNrNnRPZ2R1RnFyZGRJSGRqelo4a3V4TGpEQTBETEtWNTF1ME43QzU3RXBZR05GQzN1Q2stY2JwMjNTbF9hOEQxZ2VYVkhVMGhnR1dZZXdrdGtHT2laZHhPWll6SGVVQUZ6ZDVyT2fSAeMBQVVfeXFMTzRJakFlM0REd2d1RHZma3FCYk5TYUlJUHgtRTRub3UtemNmSlRFNFg1TFBjc0tudmVBaGVvZmNEOFNqNnV2SURnSG0xUHRhZ2RMMFV0TTl6bXBMdWlIUW5reEw3UTNLa0NPaEUtZGNVLTV5Sm1qYzFVLTFmTFdtLUJJSjFGcl9xcGpoTDQyWUF3cG1NWXBBaDFOSzBHOXR6R3JlbGstd1JXTjJxZTZoMG04RmF6TTFCOGxzUGtYQVhEYmc1Z29Ic0tEcHZjVWpOMUZlN0k5d3pQU243MEpVdkViRTg?oc=5"
+        }
+      ],
+      "cta": "If you are visiting or planning a purchase, Spanish Coast Properties can help with a clear plan, areas, and a shortlist."
+    },
+    {
+      "id": "2026-02-03-local-digest-es",
+      "kind": "local",
+      "lang": "es",
+      "publishedAt": "2026-02-03T06:00:00Z",
+      "title": "Costa Blanca South: eventos y fiestas (2026-02-03)",
+      "excerpt": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente.",
+      "tags": [
+        "Local",
+        "Eventos",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente."
+        },
+        {
+          "type": "h",
+          "text": "Proximos 14 dias"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Día de San Valentín",
+            "16 Feb: Lunes de Carnaval"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Avisos recientes"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "02 Feb: Cuándo son los Carnavales 2026 de Torrevieja: fechas, programa completo y actividades - torreviejahoy.com",
+            "02 Feb: La Federación de Moros y Cristianos de Alicante proclama a Melissa Fernández como Abanderada - Alicante Plaza",
+            "02 Feb: Melissa Fernández, Abanderada Mayor 2026 de la Federación de Moros y Cristianos de Alicante - Información",
+            "02 Feb: La estación de buses de Alicante se consolida como eje de la conectividad del litoral mediterráneo - ESdiario"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Consejos rapidos"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "En festivos es comun que bancos y oficinas tengan horario reducido o cierren.",
+            "En fiestas grandes puede haber cortes de calles, mas trafico y parking limitado.",
+            "Para planes de visita, pide un itinerario corto por zona y tiempos reales."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Festivos en Espana",
+          "url": "https://calendar.google.com/calendar/ical/es.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQUXFWbFE0M2JPVmhQclhCTjZjM1VCaTRPZmIxQjNtOWFyUUg4b1lwSXIyTXo4NXVoYVRlbUEzT0NRZXZmQzE5aW5mVHdFYm12TmlpWEhmems5aGUxWW04d3FHeXZBZVhkM2lDX0ZiWnF6cGpsYmdHa2g4b0pJV2xiYUp3WWI3ejhCeUZERUMtZy10Z0p0TGRpS2xvRThyT0tpYnhLZ2pycDNudDh0U0EtMnQ1QkwyVnZRTTRvVG9rdHA3WFnSAcgBQVVfeXFMT2pCVzFHVjEzMnpFYVRUQzVHYko5Q3VMdk13Q25kUGppVjE2dTJrWW1GbFNzbzBxSGFEU3NYZ2pfM0IwelI5TmdWNkdOOEZ6d3FsUUUwS2hvaFhtY3o5Rk1LbFlUSVFkQlQwLUlhaU9heDlmQ085b1Zpa1Y0X3JCWDVQaVFMcEh6RHYtMEc5aHcwblBkZEpGdms1RjVDY3pjc2R2ek1PM2YtT1VXcG1RMjNxSU15UlpzcE1KQzdFc1paeTR4RTdLNHA?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxNbnpyb01ZVDN4NG5mN09kOTdMX29vcnZTdUpTUDdyd2lLLXlrdVBJOFRMSzVQYThQbG1oOGVlSkxXaWhPdjZJaGFiWHR2bW5QelJ5RExFbUR2ci1OQnJsa3k3SzZnRE9jYXlyM0hzWnhDZ1dqUzRKaFplRXEyYm5nbDJPd21wdnpTRGJHYU5MU3g3R2hvMDNIU2lPa1dVZ1hxenJmeHNKVlZFYUhFaUdTTTZtY2xoeVEwOWlNMThfOXc3LVZEbDBXbDZibGM0VVJkTWpnRTE1QVVxQnJKR2h1MUhRaGFaNW5sYUE?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNN0s1Q2x0dFI5N295UUo3SzZqWktSM3NRNEhqTEdOQ3dSbm52WTBTaFNWRHBibXZVcGFqaF93ZENTWVRHdDRHWHp5amhoWXpqdTREN3dmTFA5VWh1djY1Y3JaT052SzlXNHFoUjR2QmxQRklQZGRNVGhaLVdjamxwZ0tCR2RVMWZaMnVNWF9LWndoX3E2TlU0MW9IZ2VXR25lbzRHeEVsREYwZy1ERmlvenc3ZW8yWU9tV1ZkRmRqaTlycXZqM2fSAcsBQVVfeXFMUG1oM0ZodHNLMkRLZUhfNE5vMVJJLWpmVGR0ZTk1SDJieGJhaXhheGEzVHlaQThLWGRheFc0bGlHQ0lmcm52UUlWay1iSDRUM3BIcFJRc245RzV4Q0lUZG9Ed3lUc0x2TlhQcW51eDA1ZkZha1ByN2JvVk56X2RpN2NWUlkxNkZmS0N2TExLLVozTmhHTERCWFNFa01ENUhhWW5RR1FxOThrMXZxekZKNlFJZFgxc3hZeUlLV2JWc0pzU3JqN0JKQmpBTXc?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOU2syZkxqNVpHWXVRNXhCRHpIVEk1TXFaOTVOamFZd2R0Sm80aUlNZ01sYm85U3FEWjBPQ05Pc3dXempBZEpBVGRMV0wzVTVnSExDVV9BcF91YkFXNjU1MFVhaGE1cVZlOHV4YThxSC1MUEEyVG1MZDNrNnRPZ2R1RnFyZGRJSGRqelo4a3V4TGpEQTBETEtWNTF1ME43QzU3RXBZR05GQzN1Q2stY2JwMjNTbF9hOEQxZ2VYVkhVMGhnR1dZZXdrdGtHT2laZHhPWll6SGVVQUZ6ZDVyT2fSAeMBQVVfeXFMTzRJakFlM0REd2d1RHZma3FCYk5TYUlJUHgtRTRub3UtemNmSlRFNFg1TFBjc0tudmVBaGVvZmNEOFNqNnV2SURnSG0xUHRhZ2RMMFV0TTl6bXBMdWlIUW5reEw3UTNLa0NPaEUtZGNVLTV5Sm1qYzFVLTFmTFdtLUJJSjFGcl9xcGpoTDQyWUF3cG1NWXBBaDFOSzBHOXR6R3JlbGstd1JXTjJxZTZoMG04RmF6TTFCOGxzUGtYQVhEYmc1Z29Ic0tEcHZjVWpOMUZlN0k5d3pQU243MEpVdkViRTg?oc=5"
+        }
+      ],
+      "cta": "Si vienes de visita o estas planificando una compra, Spanish Coast Properties puede ayudarte con un plan claro, zonas y opciones."
     },
     {
       "id": "2026-02-02-los-8-mejores-brokers-en-espana-2026-para-invertir-en-bolsa-a70bfc98",
@@ -3426,6 +6321,258 @@ globalThis.SCP_BLOG = {
         }
       ],
       "cta": "¿Quieres una lista corta? Spanish Coast Properties puede filtrar opciones y enviarte un catálogo limpio según tu presupuesto y zona."
+    },
+    {
+      "id": "2026-02-02-local-digest-en",
+      "kind": "local",
+      "lang": "en",
+      "publishedAt": "2026-02-02T06:00:00Z",
+      "title": "Costa Blanca South: events & fiestas (2026-02-02)",
+      "excerpt": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source.",
+      "tags": [
+        "Local",
+        "Events",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source."
+        },
+        {
+          "type": "h",
+          "text": "Next 14 days"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Valentine's Day",
+            "14 Feb: Carnival (varies by town) · Costa Blanca South"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Recent local updates"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "02 Feb: Cuándo son los Carnavales 2026 de Torrevieja: fechas, programa completo y actividades - torreviejahoy.com",
+            "02 Feb: La Federación de Moros y Cristianos de Alicante proclama a Melissa Fernández como Abanderada - Alicante Plaza",
+            "02 Feb: Melissa Fernández, Abanderada Mayor 2026 de la Federación de Moros y Cristianos de Alicante - Información",
+            "02 Feb: La estación de buses de Alicante se consolida como eje de la conectividad del litoral mediterráneo - ESdiario"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quick tips"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "On public holidays, banks and offices often run reduced hours or close.",
+            "Big fiestas can mean road closures, extra traffic, and limited parking.",
+            "If you are visiting to view properties, ask for a short itinerary by area and realistic travel times."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Spain Holidays",
+          "url": "https://calendar.google.com/calendar/ical/en.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQUXFWbFE0M2JPVmhQclhCTjZjM1VCaTRPZmIxQjNtOWFyUUg4b1lwSXIyTXo4NXVoYVRlbUEzT0NRZXZmQzE5aW5mVHdFYm12TmlpWEhmems5aGUxWW04d3FHeXZBZVhkM2lDX0ZiWnF6cGpsYmdHa2g4b0pJV2xiYUp3WWI3ejhCeUZERUMtZy10Z0p0TGRpS2xvRThyT0tpYnhLZ2pycDNudDh0U0EtMnQ1QkwyVnZRTTRvVG9rdHA3WFnSAcgBQVVfeXFMT2pCVzFHVjEzMnpFYVRUQzVHYko5Q3VMdk13Q25kUGppVjE2dTJrWW1GbFNzbzBxSGFEU3NYZ2pfM0IwelI5TmdWNkdOOEZ6d3FsUUUwS2hvaFhtY3o5Rk1LbFlUSVFkQlQwLUlhaU9heDlmQ085b1Zpa1Y0X3JCWDVQaVFMcEh6RHYtMEc5aHcwblBkZEpGdms1RjVDY3pjc2R2ek1PM2YtT1VXcG1RMjNxSU15UlpzcE1KQzdFc1paeTR4RTdLNHA?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxNbnpyb01ZVDN4NG5mN09kOTdMX29vcnZTdUpTUDdyd2lLLXlrdVBJOFRMSzVQYThQbG1oOGVlSkxXaWhPdjZJaGFiWHR2bW5QelJ5RExFbUR2ci1OQnJsa3k3SzZnRE9jYXlyM0hzWnhDZ1dqUzRKaFplRXEyYm5nbDJPd21wdnpTRGJHYU5MU3g3R2hvMDNIU2lPa1dVZ1hxenJmeHNKVlZFYUhFaUdTTTZtY2xoeVEwOWlNMThfOXc3LVZEbDBXbDZibGM0VVJkTWpnRTE1QVVxQnJKR2h1MUhRaGFaNW5sYUE?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNN0s1Q2x0dFI5N295UUo3SzZqWktSM3NRNEhqTEdOQ3dSbm52WTBTaFNWRHBibXZVcGFqaF93ZENTWVRHdDRHWHp5amhoWXpqdTREN3dmTFA5VWh1djY1Y3JaT052SzlXNHFoUjR2QmxQRklQZGRNVGhaLVdjamxwZ0tCR2RVMWZaMnVNWF9LWndoX3E2TlU0MW9IZ2VXR25lbzRHeEVsREYwZy1ERmlvenc3ZW8yWU9tV1ZkRmRqaTlycXZqM2fSAcsBQVVfeXFMUG1oM0ZodHNLMkRLZUhfNE5vMVJJLWpmVGR0ZTk1SDJieGJhaXhheGEzVHlaQThLWGRheFc0bGlHQ0lmcm52UUlWay1iSDRUM3BIcFJRc245RzV4Q0lUZG9Ed3lUc0x2TlhQcW51eDA1ZkZha1ByN2JvVk56X2RpN2NWUlkxNkZmS0N2TExLLVozTmhHTERCWFNFa01ENUhhWW5RR1FxOThrMXZxekZKNlFJZFgxc3hZeUlLV2JWc0pzU3JqN0JKQmpBTXc?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOU2syZkxqNVpHWXVRNXhCRHpIVEk1TXFaOTVOamFZd2R0Sm80aUlNZ01sYm85U3FEWjBPQ05Pc3dXempBZEpBVGRMV0wzVTVnSExDVV9BcF91YkFXNjU1MFVhaGE1cVZlOHV4YThxSC1MUEEyVG1MZDNrNnRPZ2R1RnFyZGRJSGRqelo4a3V4TGpEQTBETEtWNTF1ME43QzU3RXBZR05GQzN1Q2stY2JwMjNTbF9hOEQxZ2VYVkhVMGhnR1dZZXdrdGtHT2laZHhPWll6SGVVQUZ6ZDVyT2fSAeMBQVVfeXFMTzRJakFlM0REd2d1RHZma3FCYk5TYUlJUHgtRTRub3UtemNmSlRFNFg1TFBjc0tudmVBaGVvZmNEOFNqNnV2SURnSG0xUHRhZ2RMMFV0TTl6bXBMdWlIUW5reEw3UTNLa0NPaEUtZGNVLTV5Sm1qYzFVLTFmTFdtLUJJSjFGcl9xcGpoTDQyWUF3cG1NWXBBaDFOSzBHOXR6R3JlbGstd1JXTjJxZTZoMG04RmF6TTFCOGxzUGtYQVhEYmc1Z29Ic0tEcHZjVWpOMUZlN0k5d3pQU243MEpVdkViRTg?oc=5"
+        }
+      ],
+      "cta": "If you are visiting or planning a purchase, Spanish Coast Properties can help with a clear plan, areas, and a shortlist."
+    },
+    {
+      "id": "2026-02-02-local-digest-es",
+      "kind": "local",
+      "lang": "es",
+      "publishedAt": "2026-02-02T06:00:00Z",
+      "title": "Costa Blanca South: eventos y fiestas (2026-02-02)",
+      "excerpt": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente.",
+      "tags": [
+        "Local",
+        "Eventos",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente."
+        },
+        {
+          "type": "h",
+          "text": "Proximos 14 dias"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Día de San Valentín"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Avisos recientes"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "02 Feb: Cuándo son los Carnavales 2026 de Torrevieja: fechas, programa completo y actividades - torreviejahoy.com",
+            "02 Feb: La Federación de Moros y Cristianos de Alicante proclama a Melissa Fernández como Abanderada - Alicante Plaza",
+            "02 Feb: Melissa Fernández, Abanderada Mayor 2026 de la Federación de Moros y Cristianos de Alicante - Información",
+            "02 Feb: La estación de buses de Alicante se consolida como eje de la conectividad del litoral mediterráneo - ESdiario"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Consejos rapidos"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "En festivos es comun que bancos y oficinas tengan horario reducido o cierren.",
+            "En fiestas grandes puede haber cortes de calles, mas trafico y parking limitado.",
+            "Para planes de visita, pide un itinerario corto por zona y tiempos reales."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Festivos en Espana",
+          "url": "https://calendar.google.com/calendar/ical/es.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQUXFWbFE0M2JPVmhQclhCTjZjM1VCaTRPZmIxQjNtOWFyUUg4b1lwSXIyTXo4NXVoYVRlbUEzT0NRZXZmQzE5aW5mVHdFYm12TmlpWEhmems5aGUxWW04d3FHeXZBZVhkM2lDX0ZiWnF6cGpsYmdHa2g4b0pJV2xiYUp3WWI3ejhCeUZERUMtZy10Z0p0TGRpS2xvRThyT0tpYnhLZ2pycDNudDh0U0EtMnQ1QkwyVnZRTTRvVG9rdHA3WFnSAcgBQVVfeXFMT2pCVzFHVjEzMnpFYVRUQzVHYko5Q3VMdk13Q25kUGppVjE2dTJrWW1GbFNzbzBxSGFEU3NYZ2pfM0IwelI5TmdWNkdOOEZ6d3FsUUUwS2hvaFhtY3o5Rk1LbFlUSVFkQlQwLUlhaU9heDlmQ085b1Zpa1Y0X3JCWDVQaVFMcEh6RHYtMEc5aHcwblBkZEpGdms1RjVDY3pjc2R2ek1PM2YtT1VXcG1RMjNxSU15UlpzcE1KQzdFc1paeTR4RTdLNHA?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxNbnpyb01ZVDN4NG5mN09kOTdMX29vcnZTdUpTUDdyd2lLLXlrdVBJOFRMSzVQYThQbG1oOGVlSkxXaWhPdjZJaGFiWHR2bW5QelJ5RExFbUR2ci1OQnJsa3k3SzZnRE9jYXlyM0hzWnhDZ1dqUzRKaFplRXEyYm5nbDJPd21wdnpTRGJHYU5MU3g3R2hvMDNIU2lPa1dVZ1hxenJmeHNKVlZFYUhFaUdTTTZtY2xoeVEwOWlNMThfOXc3LVZEbDBXbDZibGM0VVJkTWpnRTE1QVVxQnJKR2h1MUhRaGFaNW5sYUE?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNN0s1Q2x0dFI5N295UUo3SzZqWktSM3NRNEhqTEdOQ3dSbm52WTBTaFNWRHBibXZVcGFqaF93ZENTWVRHdDRHWHp5amhoWXpqdTREN3dmTFA5VWh1djY1Y3JaT052SzlXNHFoUjR2QmxQRklQZGRNVGhaLVdjamxwZ0tCR2RVMWZaMnVNWF9LWndoX3E2TlU0MW9IZ2VXR25lbzRHeEVsREYwZy1ERmlvenc3ZW8yWU9tV1ZkRmRqaTlycXZqM2fSAcsBQVVfeXFMUG1oM0ZodHNLMkRLZUhfNE5vMVJJLWpmVGR0ZTk1SDJieGJhaXhheGEzVHlaQThLWGRheFc0bGlHQ0lmcm52UUlWay1iSDRUM3BIcFJRc245RzV4Q0lUZG9Ed3lUc0x2TlhQcW51eDA1ZkZha1ByN2JvVk56X2RpN2NWUlkxNkZmS0N2TExLLVozTmhHTERCWFNFa01ENUhhWW5RR1FxOThrMXZxekZKNlFJZFgxc3hZeUlLV2JWc0pzU3JqN0JKQmpBTXc?oc=5"
+        },
+        {
+          "name": "Google News",
+          "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOU2syZkxqNVpHWXVRNXhCRHpIVEk1TXFaOTVOamFZd2R0Sm80aUlNZ01sYm85U3FEWjBPQ05Pc3dXempBZEpBVGRMV0wzVTVnSExDVV9BcF91YkFXNjU1MFVhaGE1cVZlOHV4YThxSC1MUEEyVG1MZDNrNnRPZ2R1RnFyZGRJSGRqelo4a3V4TGpEQTBETEtWNTF1ME43QzU3RXBZR05GQzN1Q2stY2JwMjNTbF9hOEQxZ2VYVkhVMGhnR1dZZXdrdGtHT2laZHhPWll6SGVVQUZ6ZDVyT2fSAeMBQVVfeXFMTzRJakFlM0REd2d1RHZma3FCYk5TYUlJUHgtRTRub3UtemNmSlRFNFg1TFBjc0tudmVBaGVvZmNEOFNqNnV2SURnSG0xUHRhZ2RMMFV0TTl6bXBMdWlIUW5reEw3UTNLa0NPaEUtZGNVLTV5Sm1qYzFVLTFmTFdtLUJJSjFGcl9xcGpoTDQyWUF3cG1NWXBBaDFOSzBHOXR6R3JlbGstd1JXTjJxZTZoMG04RmF6TTFCOGxzUGtYQVhEYmc1Z29Ic0tEcHZjVWpOMUZlN0k5d3pQU243MEpVdkViRTg?oc=5"
+        }
+      ],
+      "cta": "Si vienes de visita o estas planificando una compra, Spanish Coast Properties puede ayudarte con un plan claro, zonas y opciones."
+    },
+    {
+      "id": "2026-02-01-local-digest-en",
+      "kind": "local",
+      "lang": "en",
+      "publishedAt": "2026-02-01T06:00:00Z",
+      "title": "Costa Blanca South: events & fiestas (2026-02-01)",
+      "excerpt": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source.",
+      "tags": [
+        "Local",
+        "Events",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Daily local digest based on public calendars and linked sources. Always confirm times and locations via the source."
+        },
+        {
+          "type": "h",
+          "text": "Next 14 days"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Valentine's Day",
+            "14 Feb: Carnival (varies by town) · Costa Blanca South"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quick tips"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "On public holidays, banks and offices often run reduced hours or close.",
+            "Big fiestas can mean road closures, extra traffic, and limited parking.",
+            "If you are visiting to view properties, ask for a short itinerary by area and realistic travel times."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Spain Holidays",
+          "url": "https://calendar.google.com/calendar/ical/en.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        }
+      ],
+      "cta": "If you are visiting or planning a purchase, Spanish Coast Properties can help with a clear plan, areas, and a shortlist."
+    },
+    {
+      "id": "2026-02-01-local-digest-es",
+      "kind": "local",
+      "lang": "es",
+      "publishedAt": "2026-02-01T06:00:00Z",
+      "title": "Costa Blanca South: eventos y fiestas (2026-02-01)",
+      "excerpt": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente.",
+      "tags": [
+        "Local",
+        "Eventos",
+        "Fiestas"
+      ],
+      "sections": [
+        {
+          "type": "p",
+          "text": "Resumen local diario basado en calendarios publicos y fuentes enlazadas. Confirma horarios y ubicaciones en la fuente."
+        },
+        {
+          "type": "h",
+          "text": "Proximos 14 dias"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "14 Feb: Día de San Valentín"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Consejos rapidos"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "En festivos es comun que bancos y oficinas tengan horario reducido o cierren.",
+            "En fiestas grandes puede haber cortes de calles, mas trafico y parking limitado.",
+            "Para planes de visita, pide un itinerario corto por zona y tiempos reales."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "name": "Google Calendar: Festivos en Espana",
+          "url": "https://calendar.google.com/calendar/ical/es.spain%23holiday%40group.v.calendar.google.com/public/basic.ics"
+        }
+      ],
+      "cta": "Si vienes de visita o estas planificando una compra, Spanish Coast Properties puede ayudarte con un plan claro, zonas y opciones."
     },
     {
       "id": "2026-01-31-en-2025-hubo-183-denuncias-a-bares-35-por-incumplir-horarios-3b1c58b5",

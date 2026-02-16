@@ -144,7 +144,7 @@ body[data-section="properties"] {
         font-weight: 900;
     }
 
-    .open-filters-btn > span[aria-hidden="true"] {
+    .open-filters-btn>span[aria-hidden="true"] {
         font-size: 0.95rem;
         line-height: 1;
     }
@@ -181,7 +181,7 @@ body[data-section="properties"] {
         gap: 0;
     }
 
-    .open-filters-btn > span[data-i18n] {
+    .open-filters-btn>span[data-i18n] {
         display: none;
     }
 
@@ -220,7 +220,7 @@ body[data-section="properties"] {
     justify-content: flex-end;
 }
 
-.header-right > * {
+.header-right>* {
     flex: 0 0 auto;
 }
 
@@ -396,15 +396,11 @@ body[data-section="properties"] {
         margin-left: auto;
     }
 
-    /* Listing pages carry language + menu + filters + map in the header.
-       Collapse filter label to icon so Map/List always remains visible. */
+    /* Listing pages: keep all header controls visible including mobile-menu-btn.
+       Removed overflow:hidden and display:none that previously hid the menu button
+       on properties/new-builds pages, leaving mobile users unable to navigate. */
     body[data-section="properties"] .header-right {
-        max-width: calc(100% - 56px);
-        overflow: hidden;
-    }
-
-    body[data-section="properties"] .mobile-menu-btn {
-        display: none !important;
+        overflow: visible;
     }
 
     body[data-section="properties"] .open-filters-btn {
@@ -413,7 +409,7 @@ body[data-section="properties"] {
         gap: 0;
     }
 
-    body[data-section="properties"] .open-filters-btn > span[data-i18n] {
+    body[data-section="properties"] .open-filters-btn>span[data-i18n] {
         display: none;
     }
 
@@ -454,6 +450,7 @@ body[data-section="properties"] .open-catalog-btn {
     body[data-section="properties"] .search-pill-container {
         display: none;
     }
+
     body[data-section="properties"].filters-open .search-pill-container {
         display: flex;
     }
@@ -461,6 +458,7 @@ body[data-section="properties"] .open-catalog-btn {
 
 /* Prevent iOS Safari from auto-zooming the page when focusing inputs (keeps layout full-width). */
 @media (max-width: 1024px) {
+
     body[data-section="properties"] .search-pill input,
     body[data-section="properties"] .search-pill select,
     body[data-section="properties"] .search-pill textarea {
@@ -1425,6 +1423,7 @@ body.menu-open .mobile-menu {
     .primary-nav {
         display: none;
     }
+
     .mobile-menu-btn {
         display: inline-flex;
         align-items: center;
@@ -1827,15 +1826,19 @@ body.filters-open .filters-backdrop {
     body[data-section="properties"] .search-pill-container {
         display: none;
         position: fixed;
-        top: calc(var(--header-height) + 0.4rem);
+        top: 0;
         left: 0;
         right: 0;
-        padding: 0 1rem;
-        height: auto;
+        bottom: 0;
+        padding: calc(var(--header-height) + 1rem) 1rem 1rem;
+        height: 100%;
         align-items: flex-start;
-        max-height: calc(100vh - var(--header-height) - 0.8rem);
-        overflow: auto;
+        justify-content: center;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
         z-index: 2500;
+        background: rgba(0, 0, 0, 0.4);
+        /* Extra dimming for the overlay area */
     }
 
     body[data-section="properties"].filters-open .search-pill-container {
@@ -1846,13 +1849,53 @@ body.filters-open .filters-backdrop {
         width: 100%;
         flex-direction: column;
         align-items: stretch;
-        border-radius: 22px;
-        padding: 1rem;
+        border-radius: 24px;
+        padding: 1.25rem;
         overflow: visible;
-        max-width: 720px;
-        background: rgba(3, 7, 18, 0.96);
-        border-color: rgba(255, 255, 255, 0.1);
-        box-shadow: 0 30px 120px rgba(0, 0, 0, 0.7);
+        max-width: 500px;
+        /* Slimmer for portrait mobile */
+        background: rgba(10, 10, 10, 0.98);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 30px 120px rgba(0, 0, 0, 0.8);
+        margin-bottom: 2rem;
+        /* Buffer for scrolling */
+    }
+
+    @media (orientation: landscape) {
+        body[data-section="properties"] .search-pill-container {
+            align-items: flex-start;
+            padding-top: 1rem;
+        }
+
+        body[data-section="properties"] .search-pill {
+            max-width: 90%;
+            /* Full-ish width as requested */
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            padding: 1.5rem;
+        }
+
+        body[data-section="properties"] .pill-scroll {
+            display: contents;
+            /* Allow sections to place in grid */
+        }
+
+        body[data-section="properties"] .pill-advanced {
+            display: contents;
+        }
+
+        body[data-section="properties"] .pill-actions {
+            grid-column: 1 / -1;
+            margin-top: 0.5rem;
+        }
+
+        body[data-section="properties"] .close-filters-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            margin: 0;
+        }
     }
 
     body[data-section="properties"] .pill-actions {
@@ -1911,8 +1954,14 @@ body.filters-open .filters-backdrop {
     }
 
     body[data-section="properties"] .pill-actions {
-        flex-wrap: wrap;
-        gap: 0.5rem;
+        flex-wrap: nowrap;
+        gap: 0.75rem;
+        align-items: center;
+    }
+
+    body[data-section="properties"] .clear-trigger {
+        flex: 0 0 auto;
+        padding: 0.6rem 1rem;
     }
 }
 
@@ -1926,7 +1975,7 @@ body.filters-open .filters-backdrop {
         gap: 0;
     }
 
-    .open-catalog-btn > span[data-i18n] {
+    .open-catalog-btn>span[data-i18n] {
         display: none;
     }
 }
@@ -2687,7 +2736,7 @@ body[data-section="properties"].map-open .map-section {
     justify-content: space-between;
 }
 
-.scp-map-search__row + .scp-map-search__row {
+.scp-map-search__row+.scp-map-search__row {
     margin-top: 10px;
 }
 
@@ -3203,6 +3252,7 @@ body[data-section="properties"].map-open .map-section {
         transition: none !important;
         animation: none !important;
     }
+
     .bg-mesh {
         display: none;
     }
@@ -3215,6 +3265,7 @@ body[data-section="properties"].map-open .map-section {
 
 /* Responsive */
 @media (max-width: 1024px) {
+
     .brand-name,
     .phone-number {
         display: none;
@@ -3763,11 +3814,25 @@ body[data-section="properties"].map-open .map-section {
     line-height: 1.2;
 }
 
-.share-icon--whatsapp { color: #25D366; }
-.share-icon--facebook { color: #1877F2; }
-.share-icon--linkedin { color: #0A66C2; }
-.share-icon--instagram { color: #E4405F; }
-.share-icon--telegram { color: #2AABEE; }
+.share-icon--whatsapp {
+    color: #25D366;
+}
+
+.share-icon--facebook {
+    color: #1877F2;
+}
+
+.share-icon--linkedin {
+    color: #0A66C2;
+}
+
+.share-icon--instagram {
+    color: #E4405F;
+}
+
+.share-icon--telegram {
+    color: #2AABEE;
+}
 
 .share-btn:hover {
     transform: translateY(-2px);
@@ -5278,6 +5343,7 @@ body.crm-open .crm-drawer {
 }
 
 @media (max-width: 720px) {
+
     .crm-col-email,
     .crm-col-area,
     .crm-col-zones,
@@ -5678,18 +5744,23 @@ body.crm-open .crm-drawer {
     .brochure-hero {
         grid-template-columns: 1fr;
     }
+
     .brochure-meta {
         justify-items: start;
     }
+
     .brochure-highlights {
         grid-template-columns: 1fr;
     }
+
     .brochure-area-list {
         grid-template-columns: 1fr;
     }
+
     .brochure-features {
         grid-template-columns: 1fr;
     }
+
     .brochure-gallery {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -5954,9 +6025,11 @@ body.crm-open .crm-drawer {
     .reel-stage {
         grid-template-columns: 1fr;
     }
+
     .reel-page {
         padding: 1rem;
     }
+
     .reel-controls {
         grid-template-columns: 1fr;
     }
@@ -6464,6 +6537,7 @@ body.crm-open .crm-drawer {
 }
 
 @media print {
+
     .client-catalog-toolbar,
     .main-header,
     .site-footer {
@@ -7156,7 +7230,7 @@ body.crm-open .crm-drawer {
     margin: 0;
 }
 
-.network-bio p + p {
+.network-bio p+p {
     margin-top: 0.85rem;
 }
 

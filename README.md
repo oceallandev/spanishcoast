@@ -10,6 +10,16 @@ python3 -m http.server 8000
 
 Open `http://localhost:8000`.
 
+## Local Intel (Events, Fiestas, Holidays)
+
+This repo includes a daily local-intel pipeline that pulls from iCal/RSS/manual sources and publishes:
+
+- `events.html` (browse local events/fiestas/holidays)
+- a "Local" blog type (15-day rolling daily digest posts)
+
+Docs:
+- `docs/local-intel.md`
+
 ## Publish on GitHub Pages
 
 1. Push this repo to GitHub (public).

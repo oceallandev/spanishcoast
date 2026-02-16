@@ -1306,3 +1306,521 @@ drop trigger if exists property_listings_set_updated_at on public.property_listi
 create trigger property_listings_set_updated_at
 before update on public.property_listings
 for each row execute procedure public.set_updated_at();
+
+-- 9) Affiliate referrals (public recommend & earn program)
+-- Anyone can join and share links. If a referred client pays SCP for services,
+-- admin records the revenue and the system calculates a 10% commission.
+--
+-- Design goals:
+-- - Low friction: one-click enable (generates a short code)
+-- - Privacy: affiliates see earnings, not client PII
+-- - Integrity: referral claims are server-side via RPC, one per user, no self-referrals
+
+-- 9.1) Affiliate accounts (one per user)
+create table if not exists public.affiliate_accounts (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  code text not null unique,
+  status text not null default 'active' check (status in ('active', 'paused', 'banned')),
+  commission_rate numeric not null default 0.10 check (commission_rate >= 0 and commission_rate <= 1),
+  terms_accepted_at timestamptz,
+  terms_accepted_version text,
+  payout_preference text not null default 'cash' check (payout_preference in ('cash', 'goods_services')),
+  payout_note text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.affiliate_accounts enable row level security;
+
+create index if not exists affiliate_accounts_code_idx on public.affiliate_accounts(code);
+create index if not exists affiliate_accounts_status_idx on public.affiliate_accounts(status);
+
+drop policy if exists "affiliate_accounts: read own" on public.affiliate_accounts;
+create policy "affiliate_accounts: read own"
+on public.affiliate_accounts for select
+using (auth.uid() = user_id);
+
+drop policy if exists "affiliate_accounts: admin read all" on public.affiliate_accounts;
+create policy "affiliate_accounts: admin read all"
+on public.affiliate_accounts for select
+using (public.is_admin());
+
+drop policy if exists "affiliate_accounts: admin insert" on public.affiliate_accounts;
+create policy "affiliate_accounts: admin insert"
+on public.affiliate_accounts for insert
+with check (public.is_admin());
+
+drop policy if exists "affiliate_accounts: admin update" on public.affiliate_accounts;
+create policy "affiliate_accounts: admin update"
+on public.affiliate_accounts for update
+using (public.is_admin())
+with check (public.is_admin());
+
+drop policy if exists "affiliate_accounts: admin delete" on public.affiliate_accounts;
+create policy "affiliate_accounts: admin delete"
+on public.affiliate_accounts for delete
+using (public.is_admin());
+
+drop trigger if exists affiliate_accounts_set_updated_at on public.affiliate_accounts;
+create trigger affiliate_accounts_set_updated_at
+before update on public.affiliate_accounts
+for each row execute procedure public.set_updated_at();
+
+-- 9.1.1) Short code generator (uppercase hex; safe + readable).
+create or replace function public.generate_affiliate_code()
+returns text
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  code text;
+  tries int := 0;
+begin
+  loop
+    tries := tries + 1;
+    code := upper(substr(encode(gen_random_bytes(8), 'hex'), 1, 10));
+    exit when not exists (select 1 from public.affiliate_accounts a where a.code = code);
+    if tries >= 12 then
+      raise exception 'affiliate_code_generation_failed';
+    end if;
+  end loop;
+  return code;
+end;
+$$;
+
+revoke all on function public.generate_affiliate_code() from public;
+grant execute on function public.generate_affiliate_code() to authenticated;
+
+-- 9.1.2) Enable / fetch affiliate account (creates row if needed).
+create or replace function public.affiliate_get_or_create()
+returns table (
+  code text,
+  status text,
+  commission_rate numeric,
+  terms_accepted_at timestamptz,
+  terms_accepted_version text,
+  payout_preference text,
+  payout_note text
+)
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  uid uuid;
+begin
+  uid := auth.uid();
+  if uid is null then
+    raise exception 'not_authenticated';
+  end if;
+
+  insert into public.affiliate_accounts (user_id, code)
+  values (uid, public.generate_affiliate_code())
+  on conflict (user_id) do nothing;
+
+  return query
+  select a.code, a.status, a.commission_rate, a.terms_accepted_at, a.terms_accepted_version, a.payout_preference, a.payout_note
+  from public.affiliate_accounts a
+  where a.user_id = uid;
+end;
+$$;
+
+revoke all on function public.affiliate_get_or_create() from public;
+grant execute on function public.affiliate_get_or_create() to authenticated;
+
+-- 9.1.3) Accept affiliate terms (stores timestamp + version; required for referral tracking).
+create or replace function public.affiliate_accept_terms(version text default '2026-02-15')
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  uid uuid;
+  v text;
+begin
+  uid := auth.uid();
+  if uid is null then
+    raise exception 'not_authenticated';
+  end if;
+
+  v := nullif(trim(version), '');
+  if v is null then v := '2026-02-15'; end if;
+
+  insert into public.affiliate_accounts (user_id, code)
+  values (uid, public.generate_affiliate_code())
+  on conflict (user_id) do nothing;
+
+  update public.affiliate_accounts
+  set terms_accepted_at = coalesce(terms_accepted_at, now()),
+      terms_accepted_version = coalesce(nullif(terms_accepted_version, ''), v)
+  where user_id = uid;
+
+  return true;
+end;
+$$;
+
+revoke all on function public.affiliate_accept_terms(text) from public;
+grant execute on function public.affiliate_accept_terms(text) to authenticated;
+
+-- 9.1.4) Update payout preference (limited surface; safe for self-service).
+create or replace function public.affiliate_set_payout(preference text, note text default null)
+returns table (
+  payout_preference text,
+  payout_note text
+)
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  uid uuid;
+  pref text;
+  n text;
+begin
+  uid := auth.uid();
+  if uid is null then
+    raise exception 'not_authenticated';
+  end if;
+
+  pref := lower(trim(coalesce(preference, '')));
+  if pref not in ('cash', 'goods_services') then
+    raise exception 'invalid_payout_preference';
+  end if;
+
+  n := nullif(trim(coalesce(note, '')), '');
+  if n is not null and length(n) > 500 then
+    n := left(n, 500);
+  end if;
+
+  insert into public.affiliate_accounts (user_id, code)
+  values (uid, public.generate_affiliate_code())
+  on conflict (user_id) do nothing;
+
+  update public.affiliate_accounts
+  set payout_preference = pref,
+      payout_note = n
+  where user_id = uid;
+
+  return query
+  select a.payout_preference, a.payout_note
+  from public.affiliate_accounts a
+  where a.user_id = uid;
+end;
+$$;
+
+revoke all on function public.affiliate_set_payout(text, text) from public;
+grant execute on function public.affiliate_set_payout(text, text) to authenticated;
+
+-- 9.2) Referral claims (1 referrer per user; used to attribute spend)
+create table if not exists public.affiliate_referrals (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  affiliate_user_id uuid not null references auth.users(id) on delete restrict,
+  affiliate_code text not null,
+  created_at timestamptz not null default now()
+);
+
+alter table public.affiliate_referrals enable row level security;
+
+create index if not exists affiliate_referrals_affiliate_idx on public.affiliate_referrals(affiliate_user_id);
+create index if not exists affiliate_referrals_code_idx on public.affiliate_referrals(affiliate_code);
+
+drop policy if exists "affiliate_referrals: read own" on public.affiliate_referrals;
+create policy "affiliate_referrals: read own"
+on public.affiliate_referrals for select
+using (auth.uid() = user_id);
+
+drop policy if exists "affiliate_referrals: admin read all" on public.affiliate_referrals;
+create policy "affiliate_referrals: admin read all"
+on public.affiliate_referrals for select
+using (public.is_admin());
+
+-- No direct insert/update/delete policies: referral claims go through RPC.
+
+create or replace function public.affiliate_claim_referral(code text)
+returns text
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  uid uuid;
+  clean text;
+  affiliate_uid uuid;
+begin
+  uid := auth.uid();
+  if uid is null then
+    raise exception 'not_authenticated';
+  end if;
+
+  clean := upper(regexp_replace(coalesce(code, ''), '[^A-Z0-9]', '', 'g'));
+  if length(clean) < 6 or length(clean) > 16 then
+    raise exception 'invalid_code';
+  end if;
+
+  select a.user_id into affiliate_uid
+  from public.affiliate_accounts a
+  where a.code = clean
+    and a.status = 'active'
+  limit 1;
+
+  if affiliate_uid is null then
+    raise exception 'unknown_code';
+  end if;
+  if affiliate_uid = uid then
+    raise exception 'self_referral';
+  end if;
+
+  insert into public.affiliate_referrals (user_id, affiliate_user_id, affiliate_code)
+  values (uid, affiliate_uid, clean)
+  on conflict (user_id) do nothing;
+
+  return clean;
+end;
+$$;
+
+revoke all on function public.affiliate_claim_referral(text) from public;
+grant execute on function public.affiliate_claim_referral(text) to authenticated;
+
+-- 9.3) Revenue events (admin-only insert/update; affiliates can read their own earnings)
+create table if not exists public.affiliate_revenue_events (
+  id uuid primary key default gen_random_uuid(),
+  affiliate_user_id uuid not null references auth.users(id) on delete restrict,
+  affiliate_code text not null,
+
+  customer_user_id uuid references auth.users(id) on delete set null,
+  customer_email text,
+
+  source_type text not null default 'manual' check (source_type in ('manual', 'shop_order', 'property_sale', 'service_fee', 'other')),
+  source_ref text,
+
+  amount_eur numeric not null default 0 check (amount_eur >= 0),
+  commission_rate numeric not null default 0.10 check (commission_rate >= 0 and commission_rate <= 1),
+  commission_eur numeric not null default 0,
+
+  status text not null default 'approved' check (status in ('pending', 'approved', 'paid', 'rejected')),
+  payout_method text check (payout_method in ('cash', 'goods_services')),
+  payout_ref text,
+  paid_at timestamptz,
+
+  note text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.affiliate_revenue_events enable row level security;
+
+create index if not exists affiliate_events_affiliate_idx on public.affiliate_revenue_events(affiliate_user_id, created_at desc);
+create index if not exists affiliate_events_status_idx on public.affiliate_revenue_events(status);
+create index if not exists affiliate_events_code_idx on public.affiliate_revenue_events(affiliate_code);
+
+drop policy if exists "affiliate_revenue_events: read own" on public.affiliate_revenue_events;
+create policy "affiliate_revenue_events: read own"
+on public.affiliate_revenue_events for select
+using (auth.uid() = affiliate_user_id or public.is_admin());
+
+drop policy if exists "affiliate_revenue_events: admin insert" on public.affiliate_revenue_events;
+create policy "affiliate_revenue_events: admin insert"
+on public.affiliate_revenue_events for insert
+with check (public.is_admin());
+
+drop policy if exists "affiliate_revenue_events: admin update" on public.affiliate_revenue_events;
+create policy "affiliate_revenue_events: admin update"
+on public.affiliate_revenue_events for update
+using (public.is_admin())
+with check (public.is_admin());
+
+drop policy if exists "affiliate_revenue_events: admin delete" on public.affiliate_revenue_events;
+create policy "affiliate_revenue_events: admin delete"
+on public.affiliate_revenue_events for delete
+using (public.is_admin());
+
+create or replace function public.affiliate_events_set_commission()
+returns trigger
+language plpgsql
+as $$
+declare
+  amt numeric;
+  rate numeric;
+begin
+  amt := coalesce(new.amount_eur, 0);
+  rate := coalesce(new.commission_rate, 0.10);
+  new.commission_eur := round(amt * rate, 2);
+
+  if new.status = 'paid' and new.paid_at is null then
+    new.paid_at := now();
+  end if;
+  if new.status <> 'paid' then
+    new.paid_at := null;
+    new.payout_method := null;
+    new.payout_ref := null;
+  end if;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists affiliate_events_set_commission on public.affiliate_revenue_events;
+create trigger affiliate_events_set_commission
+before insert or update on public.affiliate_revenue_events
+for each row execute procedure public.affiliate_events_set_commission();
+
+drop trigger if exists affiliate_revenue_events_set_updated_at on public.affiliate_revenue_events;
+create trigger affiliate_revenue_events_set_updated_at
+before update on public.affiliate_revenue_events
+for each row execute procedure public.set_updated_at();
+
+-- 9.3.1) Admin helper: create revenue event by affiliate code (optionally attach a customer by email).
+create or replace function public.admin_affiliate_create_event(
+  affiliate_code text,
+  amount_eur numeric,
+  source_type text default 'manual',
+  source_ref text default null,
+  note text default null,
+  customer_email text default null
+)
+returns uuid
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  clean text;
+  affiliate_uid uuid;
+  rate numeric;
+  customer_uid uuid;
+  inserted_id uuid;
+  st text;
+begin
+  if not public.is_admin() then
+    raise exception 'admin_only';
+  end if;
+
+  clean := upper(regexp_replace(coalesce(affiliate_code, ''), '[^A-Z0-9]', '', 'g'));
+  if length(clean) < 6 or length(clean) > 16 then
+    raise exception 'invalid_code';
+  end if;
+
+  select a.user_id, a.commission_rate into affiliate_uid, rate
+  from public.affiliate_accounts a
+  where a.code = clean
+  limit 1;
+  if affiliate_uid is null then
+    raise exception 'unknown_code';
+  end if;
+  if rate is null then rate := 0.10; end if;
+
+  if customer_email is not null and trim(customer_email) <> '' then
+    select p.user_id into customer_uid
+    from public.profiles p
+    where lower(p.email) = lower(trim(customer_email))
+    limit 1;
+  end if;
+
+  st := lower(trim(coalesce(source_type, 'manual')));
+  if st not in ('manual', 'shop_order', 'property_sale', 'service_fee', 'other') then
+    st := 'manual';
+  end if;
+
+  insert into public.affiliate_revenue_events (
+    affiliate_user_id,
+    affiliate_code,
+    customer_user_id,
+    customer_email,
+    source_type,
+    source_ref,
+    amount_eur,
+    commission_rate,
+    status,
+    note
+  )
+  values (
+    affiliate_uid,
+    clean,
+    customer_uid,
+    nullif(trim(coalesce(customer_email, '')), ''),
+    st,
+    nullif(trim(coalesce(source_ref, '')), ''),
+    greatest(0, coalesce(amount_eur, 0)),
+    rate,
+    'approved',
+    nullif(trim(coalesce(note, '')), '')
+  )
+  returning id into inserted_id;
+
+  return inserted_id;
+end;
+$$;
+
+revoke all on function public.admin_affiliate_create_event(text, numeric, text, text, text, text) from public;
+grant execute on function public.admin_affiliate_create_event(text, numeric, text, text, text, text) to authenticated;
+
+-- 9.4) Attach referral metadata to existing user submissions/orders (best-effort).
+-- This helps admins see where a submission/order came from when reviewing.
+
+-- 9.4.1) Shop orders
+alter table public.shop_orders add column if not exists affiliate_user_id uuid;
+alter table public.shop_orders add column if not exists affiliate_code text;
+create index if not exists shop_orders_affiliate_code_idx on public.shop_orders(affiliate_code);
+
+-- 9.4.2) Vehicle submissions
+alter table public.vehicle_submissions add column if not exists affiliate_user_id uuid;
+alter table public.vehicle_submissions add column if not exists affiliate_code text;
+create index if not exists vehicle_submissions_affiliate_code_idx on public.vehicle_submissions(affiliate_code);
+
+-- 9.4.3) Property submissions
+alter table public.property_submissions add column if not exists affiliate_user_id uuid;
+alter table public.property_submissions add column if not exists affiliate_code text;
+create index if not exists property_submissions_affiliate_code_idx on public.property_submissions(affiliate_code);
+
+-- 9.4.4) Trigger helper: on insert, copy referral mapping into row.
+create or replace function public.attach_affiliate_from_referral()
+returns trigger
+language plpgsql
+as $$
+declare
+  ref_row record;
+begin
+  -- Allow admins to set values manually.
+  if public.is_admin() and (new.affiliate_user_id is not null or new.affiliate_code is not null) then
+    return new;
+  end if;
+
+  if new.user_id is null then
+    new.affiliate_user_id := null;
+    new.affiliate_code := null;
+    return new;
+  end if;
+
+  select r.affiliate_user_id, r.affiliate_code into ref_row
+  from public.affiliate_referrals r
+  where r.user_id = new.user_id
+  limit 1;
+
+  if ref_row.affiliate_user_id is not null then
+    new.affiliate_user_id := ref_row.affiliate_user_id;
+    new.affiliate_code := ref_row.affiliate_code;
+  else
+    new.affiliate_user_id := null;
+    new.affiliate_code := null;
+  end if;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists shop_orders_attach_affiliate on public.shop_orders;
+create trigger shop_orders_attach_affiliate
+before insert on public.shop_orders
+for each row execute procedure public.attach_affiliate_from_referral();
+
+drop trigger if exists vehicle_submissions_attach_affiliate on public.vehicle_submissions;
+create trigger vehicle_submissions_attach_affiliate
+before insert on public.vehicle_submissions
+for each row execute procedure public.attach_affiliate_from_referral();
+
+drop trigger if exists property_submissions_attach_affiliate on public.property_submissions;
+create trigger property_submissions_attach_affiliate
+before insert on public.property_submissions
+for each row execute procedure public.attach_affiliate_from_referral();

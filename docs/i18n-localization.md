@@ -3,6 +3,9 @@
 This app now supports:
 - `en` (English)
 - `es` (Spanish)
+- `de` (German)
+- `nl` (Dutch)
+- `fr` (French)
 - `ro` (Romanian)
 - `sv` (Swedish)
 

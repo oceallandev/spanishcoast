@@ -31,11 +31,23 @@
 
   const buildMessage = (fields) => {
     const lines = [];
+    const attributionCode = (() => {
+      try {
+        const api = window.SCP_AFFILIATE || null;
+        if (api && typeof api.getAttributionCode === 'function') {
+          return String(api.getAttributionCode() || '').trim();
+        }
+      } catch {
+        // ignore
+      }
+      return '';
+    })();
     lines.push('Vehicle listing submission');
     lines.push('');
     lines.push(`Category: ${fields.category === 'boat' ? 'Boat' : 'Car'}`);
     lines.push(`Deal: ${fields.deal === 'rent' ? 'For rent' : 'For sale'}`);
     lines.push(`Title: ${fields.title}`);
+    if (attributionCode) lines.push(`Referral code: ${attributionCode}`);
     if (fields.brand) lines.push(`Brand: ${fields.brand}`);
     if (fields.model) lines.push(`Model: ${fields.model}`);
     if (fields.year) lines.push(`Year: ${fields.year}`);

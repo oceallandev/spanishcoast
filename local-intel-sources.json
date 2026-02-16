@@ -1,0 +1,64 @@
+{
+  "timezone": "Europe/Madrid",
+  "areaLabel": "Costa Blanca South",
+  "sources": [
+    {
+      "id": "spain_holidays_en",
+      "label": "Google Calendar: Spain Holidays",
+      "type": "ical",
+      "kind": "holiday",
+      "lang": "en",
+      "url": "https://calendar.google.com/calendar/ical/en.spain%23holiday%40group.v.calendar.google.com/public/basic.ics",
+      "tags": ["Spain", "Holiday"]
+    },
+    {
+      "id": "spain_holidays_es",
+      "label": "Google Calendar: Festivos en Espana",
+      "type": "ical",
+      "kind": "holiday",
+      "lang": "es",
+      "url": "https://calendar.google.com/calendar/ical/es.spain%23holiday%40group.v.calendar.google.com/public/basic.ics",
+      "tags": ["Espana", "Festivo"]
+    },
+    {
+      "id": "manual_fiestas",
+      "label": "Manual: Fiestas (seed)",
+      "type": "manual",
+      "kind": "fiesta",
+      "lang": "en",
+      "path": "local-intel-manual.json",
+      "tags": ["Costa Blanca", "Fiestas"]
+    },
+    {
+      "id": "gn_es_alicante_fiestas",
+      "label": "Google News",
+      "type": "rss",
+      "kind": "update",
+      "lang": "es",
+      "url": "https://news.google.com/rss/search?q=Alicante%20fiestas%20when%3A14d&hl=es&gl=ES&ceid=ES:es",
+      "tags": ["Alicante", "Fiestas"],
+      "maxItems": 25
+    },
+    {
+      "id": "gn_es_torrevieja_eventos",
+      "label": "Google News",
+      "type": "rss",
+      "kind": "update",
+      "lang": "es",
+      "url": "https://news.google.com/rss/search?q=Torrevieja%20eventos%20when%3A14d&hl=es&gl=ES&ceid=ES:es",
+      "tags": ["Torrevieja", "Eventos"],
+      "maxItems": 25
+    },
+    {
+      "id": "gn_en_costa_blanca_events",
+      "label": "Google News",
+      "type": "rss",
+      "kind": "update",
+      "lang": "en",
+      "url": "https://news.google.com/rss/search?q=Costa%20Blanca%20events%20when%3A14d&hl=en-GB&gl=GB&ceid=GB:en",
+      "tags": ["Costa Blanca", "Events"],
+      "maxItems": 25
+    }
+  ]
+}
+

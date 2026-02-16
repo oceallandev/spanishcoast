@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Source Ref Map | Spanish Coast Properties</title>
+  <meta name="robots" content="noindex,nofollow">
+
+  <meta name="theme-color" content="#030712">
+  <link rel="stylesheet" href="style.css?v=20260212b">
+  <script src="scp-affiliate.js?v=20260215c"></script>
+    <script defer src="i18n.js?v=20260215c"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="config.js?v=20260211d"></script>
+  <script defer src="supabase-init.js?v=20260211d"></script>
+</head>
+
+<body data-section="account">
+  <div class="bg-mesh"></div>
+
+  <header class="main-header glass sticky">
+    <div class="header-inner">
+      <div class="header-left">
+        <div class="logo">
+          <a href="index.html" aria-label="Spanish Coast Properties Home">
+            <img src="assets/header-logo.png?v=2" alt="Spanish Coast Properties" class="main-logo"
+              style="cursor: pointer;">
+          </a>
+        </div>
+        <div class="brand-info">
+          <span class="brand-name">Spanish Coast Properties</span>
+        </div>
+        <nav class="primary-nav" aria-label="Site sections">
+          <a class="nav-link" href="account.html" data-i18n="nav.account">Account</a>
+          <a class="nav-link" href="network.html" data-i18n="nav.network">Network</a>
+          <a class="nav-link" href="properties.html" data-i18n="nav.properties">Properties</a>
+        </nav>
+      </div>
+
+      <div class="header-right">
+        <a class="header-cta" href="account.html" data-i18n="common.back_to_account">Back to Account</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main">
+    <section class="page-section catalog-section active" aria-label="Network source ref map">
+      <div class="page-hero">
+        <h1 data-i18n="netrefmap.title">Network Source Reference Map</h1>
+        <p data-i18n-html="netrefmap.subtitle">
+          Admin-only tool to populate Supabase <code>public.network_profile_ref_map</code>.
+          This powers the <b>Source ref</b> button on Network profile pages, so admins can copy the original
+          developer/development references (e.g. REDSP <code>P01939</code> or office id).
+        </p>
+      </div>
+
+      <div class="glass panel">
+        <div class="admin-toolbar">
+          <div class="admin-toolbar-left">
+            <div class="muted" id="netrefmap-auth" aria-live="polite">Checking session…</div>
+          </div>
+          <div class="admin-toolbar-right">
+            <a class="cta-button cta-button--outline" href="account.html?qa=1" data-i18n="account.diagnostics.title">Diagnostics</a>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3 style="margin:0;" data-i18n="netrefmap.upload_title">Upload a CSV</h3>
+        <p class="muted" style="margin-top:0.35rem;" data-i18n-html="netrefmap.upload_help">
+          CSV columns: <code>scp_ref</code>, <code>kind</code>, <code>source</code>, <code>original_ref</code>, <code>original_id</code>.
+          Header row is optional.
+        </p>
+
+        <div class="form-grid" style="grid-template-columns: 1fr;">
+          <label>
+            <span data-i18n="netrefmap.csv_file">CSV file</span>
+            <input id="netrefmap-file" class="admin-input" type="file" accept=".csv,text/csv">
+          </label>
+
+          <label>
+            <span data-i18n="netrefmap.csv_paste">Or paste CSV</span>
+            <textarea id="netrefmap-paste" class="admin-input" rows="6"
+              placeholder="SCP-Dev-0005,development,redsp1,P01939,office:115"></textarea>
+          </label>
+        </div>
+
+        <div class="admin-toolbar" style="margin-top:0.8rem;">
+          <div class="admin-toolbar-left">
+            <button id="netrefmap-parse" class="cta-button cta-button--outline" type="button" data-i18n="netrefmap.parse">Parse</button>
+            <button id="netrefmap-import" class="cta-button" type="button" disabled data-i18n="netrefmap.import">Import to Supabase</button>
+          </div>
+          <div class="admin-toolbar-right muted">
+            <span data-i18n="netrefmap.parsed">Parsed:</span> <span id="netrefmap-count">0</span>
+          </div>
+        </div>
+
+        <div class="muted" id="netrefmap-status" style="margin-top:0.7rem;" aria-live="polite"></div>
+
+        <div class="divider"></div>
+
+        <h3 style="margin:0;" data-i18n="netrefmap.preview_title">Preview</h3>
+        <p class="muted" style="margin-top:0.35rem;" data-i18n="netrefmap.preview_help">Shows the first 20 rows that will be imported.</p>
+        <div class="admin-table-wrap">
+          <table class="admin-table" aria-label="Preview">
+            <thead>
+              <tr>
+                <th data-i18n="netrefmap.col.scp_ref">SCP ref</th>
+                <th data-i18n="netrefmap.col.kind">Kind</th>
+                <th data-i18n="netrefmap.col.source">Source</th>
+                <th data-i18n="netrefmap.col.original_ref">Original ref</th>
+                <th data-i18n="netrefmap.col.original_id">Original ID</th>
+              </tr>
+            </thead>
+            <tbody id="netrefmap-preview-body"></tbody>
+          </table>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3 style="margin:0;" data-i18n="netrefmap.lookup_title">Lookup</h3>
+        <p class="muted" style="margin-top:0.35rem;" data-i18n-html="netrefmap.lookup_help">
+          Quick check to verify that a ref was imported and is readable through RLS.
+        </p>
+        <div class="admin-toolbar" style="margin-top:0.5rem;">
+          <div class="admin-toolbar-left">
+            <input id="netrefmap-lookup-ref" class="admin-input" type="text" placeholder="SCP-Dev-0005" style="max-width: 240px;">
+            <button id="netrefmap-lookup-btn" class="cta-button cta-button--outline" type="button" data-i18n="netrefmap.lookup">Lookup</button>
+          </div>
+        </div>
+        <pre class="muted" id="netrefmap-lookup-out"
+          style="margin-top:0.6rem; white-space:pre-wrap; background:rgba(0,0,0,0.25); padding:0.8rem; border-radius:12px; min-height:3.2rem;"></pre>
+      </div>
+    </section>
+  </main>
+
+  <script defer src="admin-network-ref-map.js?v=20260215a"></script>
+  <script src="utils-module.js?v=20260215c"></script>
+    <script src="map-module.js?v=20260215c"></script>
+    <script src="supabase-module.js?v=20260215c"></script>
+    <script src="ui-module.js?v=20260215c"></script>
+    <script src="filter-module.js?v=20260215c"></script>
+    <script defer src="site.js?v=20260215c"></script>
+</body>
+
+</html>

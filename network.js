@@ -1,6 +1,6 @@
 // Network directory page: Agencies, Agents, Developers, Developments, Collaborators.
 (() => {
-  const data = window.scpNetworkData || null;
+  const data = window.scpNetworkDataMerged || window.scpNetworkData || null;
   const grid = document.getElementById('network-grid');
   const queryEl = document.getElementById('network-query');
   const kindEl = document.getElementById('network-kind');

@@ -417,8 +417,13 @@
     top.className = 'blog-post-top';
 
     const pill = document.createElement('span');
-    pill.className = `blog-pill ${post.kind === 'trend' ? 'trend' : 'news'}`;
-    pill.textContent = post.kind === 'trend' ? (t('blog.kind.trend') || 'Trends') : (t('blog.kind.news') || 'News');
+    const kindKey = safeText(post.kind).toLowerCase();
+    const pillKind = kindKey === 'trend' ? 'trend' : (kindKey === 'local' ? 'local' : 'news');
+    pill.className = `blog-pill ${pillKind}`;
+    pill.textContent =
+      kindKey === 'trend'
+        ? (t('blog.kind.trend') || 'Trends')
+        : (kindKey === 'local' ? (t('blog.kind.local') || 'Local') : (t('blog.kind.news') || 'News'));
 
     const date = document.createElement('div');
     date.className = 'blog-post-date';
@@ -642,8 +647,13 @@
       top.className = 'blog-card-top';
 
       const pill = document.createElement('span');
-      pill.className = `blog-pill ${post.kind === 'trend' ? 'trend' : 'news'}`;
-      pill.textContent = post.kind === 'trend' ? (t('blog.kind.trend') || 'Trends') : (t('blog.kind.news') || 'News');
+      const kindKey = safeText(post.kind).toLowerCase();
+      const pillKind = kindKey === 'trend' ? 'trend' : (kindKey === 'local' ? 'local' : 'news');
+      pill.className = `blog-pill ${pillKind}`;
+      pill.textContent =
+        kindKey === 'trend'
+          ? (t('blog.kind.trend') || 'Trends')
+          : (kindKey === 'local' ? (t('blog.kind.local') || 'Local') : (t('blog.kind.news') || 'News'));
 
       const date = document.createElement('span');
       date.className = 'blog-date';

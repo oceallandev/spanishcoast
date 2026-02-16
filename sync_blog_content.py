@@ -662,6 +662,31 @@ def load_existing(path: str):
         return {"updatedAt": "", "posts": []}
 
 
+def load_extra_posts(path: str) -> list:
+    """
+    Load additional post objects from a JSON file.
+
+    Accepted shapes:
+    - [{"id": "...", ...}, ...]
+    - {"posts": [{"id": "...", ...}, ...]}
+    """
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            raw = json.load(f)
+    except Exception:
+        return []
+
+    posts = None
+    if isinstance(raw, dict):
+        posts = raw.get("posts")
+    elif isinstance(raw, list):
+        posts = raw
+
+    if not isinstance(posts, list):
+        return []
+    return [p for p in posts if isinstance(p, dict)]
+
+
 def write_outputs(out_js: str, out_json: str, data: dict):
     json_text = json.dumps(data, ensure_ascii=False, indent=2, sort_keys=False)
     with open(out_json, "w", encoding="utf-8") as f:
@@ -771,6 +796,12 @@ def main():
     ap.add_argument("--out-json", default="blog-posts.json", help="Output JSON file")
     ap.add_argument("--max-posts", type=int, default=80, help="Max posts to keep (across all languages)")
     ap.add_argument("--max-per-feed", type=int, default=10, help="Max items to pull per feed")
+    ap.add_argument(
+        "--extra-posts",
+        action="append",
+        default=[],
+        help="Path to JSON file containing extra post objects (array or {posts:[...]}). Can be passed multiple times.",
+    )
     args = ap.parse_args()
 
     try:
@@ -789,6 +820,12 @@ def main():
     for p in existing_posts:
         if isinstance(p, dict) and p.get("id"):
             by_id[str(p["id"])] = p
+
+    # Merge in extra posts first (they can still be overwritten later by feed sync).
+    for extra_path in (args.extra_posts or []):
+        for p in load_extra_posts(str(extra_path)):
+            if isinstance(p, dict) and p.get("id"):
+                by_id[str(p["id"])] = p
 
     new_posts = []
 

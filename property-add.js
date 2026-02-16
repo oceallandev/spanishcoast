@@ -137,11 +137,23 @@
 
   const buildMessage = (fields) => {
     const lines = [];
+    const attributionCode = (() => {
+      try {
+        const api = window.SCP_AFFILIATE || null;
+        if (api && typeof api.getAttributionCode === 'function') {
+          return String(api.getAttributionCode() || '').trim();
+        }
+      } catch {
+        // ignore
+      }
+      return '';
+    })();
     lines.push('Property for sale submission');
     lines.push('');
     lines.push(`Type: ${fields.type}`);
     lines.push(`Town/Area: ${fields.town}`);
     lines.push(`Province: ${fields.province}`);
+    if (attributionCode) lines.push(`Referral code: ${attributionCode}`);
 
     if (fields.price != null && fields.price > 0) lines.push(`Expected price: €${fields.price}`);
     if (fields.beds != null) lines.push(`Beds: ${fields.beds}`);

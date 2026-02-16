@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommend & Earn | Spanish Coast Properties</title>
+    <meta name="description"
+        content="Recommend Spanish Coast Properties and earn 10% of the fees your referred clients pay to us. Share listings or services, track earnings, and choose cash or goods/services.">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="https://oceallandev.github.io/spanishcoast/affiliate.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Recommend & Earn | Spanish Coast Properties">
+    <meta property="og:description"
+        content="Share listings and services. If your referral becomes a client and pays SCP fees, you earn 10%.">
+    <meta property="og:url" content="https://oceallandev.github.io/spanishcoast/affiliate.html">
+    <meta property="og:image" content="https://oceallandev.github.io/spanishcoast/assets/header-logo.png">
+
+    <meta name="theme-color" content="#030712">
+    <link rel="stylesheet" href="style.css?v=20260212b">
+    <script src="scp-affiliate.js?v=20260215c"></script>
+    <script defer src="i18n.js?v=20260215c"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script defer src="config.js?v=20260211d"></script>
+    <script defer src="supabase-init.js?v=20260211d"></script>
+</head>
+
+<body data-section="account">
+    <div class="bg-mesh"></div>
+
+    <header class="main-header glass sticky">
+        <div class="header-inner">
+            <div class="header-left">
+                <div class="logo">
+                    <a href="index.html" aria-label="Spanish Coast Properties Home">
+                        <img src="assets/header-logo.png?v=2" alt="Spanish Coast Properties" class="main-logo"
+                            id="main-logo-img" style="cursor: pointer;">
+                    </a>
+                </div>
+                <div class="brand-info">
+                    <span class="brand-name">Spanish Coast Properties</span>
+                </div>
+                <nav class="primary-nav" id="primary-nav" aria-label="Site sections">
+                    <a class="nav-link" data-section="home" href="index.html" data-i18n="nav.home">Home</a>
+                    <a class="nav-link" data-section="properties" href="properties.html" data-i18n="nav.properties">Properties</a>
+                    <a class="nav-link" data-section="services" href="services.html" data-i18n="nav.services">Services</a>
+                </nav>
+            </div>
+
+            <div class="header-right">
+                <button id="mobile-menu-btn" class="mobile-menu-btn" type="button" aria-expanded="false" aria-label="Menu">☰</button>
+                <a class="header-cta" href="account.html" data-i18n="nav.account">Account</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="simple-page">
+        <section class="simple-hero">
+            <h1 data-i18n="affiliate.hero.title">Recommend & Earn (10%)</h1>
+            <p data-i18n="affiliate.hero.subtitle">
+                Share a listing (or our services) with your friends. If your referral becomes a client and pays fees to Spanish Coast
+                Properties, you earn 10% of the revenue.
+            </p>
+            <div class="service-tags" aria-label="Affiliate benefits">
+                <span class="tag" data-i18n="affiliate.tag.share">Share</span>
+                <span class="tag" data-i18n="affiliate.tag.track">Tracking</span>
+                <span class="tag" data-i18n="affiliate.tag.earn">Earn 10%</span>
+                <span class="tag" data-i18n="affiliate.tag.payout">Cash or services</span>
+            </div>
+            <div class="simple-cta">
+                <a class="cta-button" href="#dashboard" data-i18n="affiliate.cta.open_dashboard">Open dashboard</a>
+                <a class="cta-button cta-button--outline" href="affiliate-terms.html" data-i18n="affiliate.cta.terms">Program terms</a>
+            </div>
+        </section>
+
+        <section class="simple-section">
+            <h2 data-i18n="affiliate.how.title">How It Works</h2>
+            <div class="service-grid">
+                <div class="service-card" role="note">
+                    <h3 data-i18n="affiliate.how.1.title">1) Enable your link</h3>
+                    <p data-i18n="affiliate.how.1.p">Create your affiliate code (free). Choose cash or goods/services.</p>
+                </div>
+                <div class="service-card" role="note">
+                    <h3 data-i18n="affiliate.how.2.title">2) Share</h3>
+                    <p data-i18n="affiliate.how.2.p">Share any listing, or share your “Buy” / “Sell” links.</p>
+                </div>
+                <div class="service-card" role="note">
+                    <h3 data-i18n="affiliate.how.3.title">3) We attribute</h3>
+                    <p data-i18n="affiliate.how.3.p">When the referred client becomes a customer, we attribute their spend to your code.</p>
+                </div>
+                <div class="service-card" role="note">
+                    <h3 data-i18n="affiliate.how.4.title">4) You get 10%</h3>
+                    <p data-i18n="affiliate.how.4.p">We return 10% of SCP fees as cash or credit for goods/services.</p>
+                </div>
+            </div>
+            <p class="muted" style="margin-top:0.9rem" data-i18n="affiliate.how.note">
+                Note: commission is calculated on SCP revenue (fees), not on the property price. Payouts are subject to verification.
+            </p>
+        </section>
+
+        <section class="simple-section" id="dashboard">
+            <h2 data-i18n="affiliate.dashboard.title">Affiliate Dashboard</h2>
+
+            <div class="glass panel" id="aff-status" aria-live="polite" style="display:none"></div>
+
+            <div class="glass panel" id="aff-auth-gate" style="display:none">
+                <h3 style="margin:0" data-i18n="affiliate.auth.title">Sign in first</h3>
+                <p class="muted" style="margin-top:0.45rem" data-i18n="affiliate.auth.p">
+                    To generate your affiliate code, track earnings, and set payout preferences, sign in (or create a free account).
+                </p>
+                <div class="simple-cta">
+                    <a class="cta-button" href="account.html" data-i18n="affiliate.auth.cta">Open Account</a>
+                </div>
+            </div>
+
+            <div id="aff-dashboard" style="display:none">
+                <div class="glass panel" style="margin-bottom:1rem;">
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:0.8rem; flex-wrap:wrap;">
+                        <div>
+                            <h3 style="margin:0" data-i18n="affiliate.code.title">Your affiliate code</h3>
+                            <div class="muted" style="margin-top:0.35rem" data-i18n="affiliate.code.subtitle">Use it in shared links: <span class="muted" style="font-weight:900;">?aff=CODE</span></div>
+                        </div>
+                        <div class="simple-cta" style="margin-top:0;">
+                            <button class="cta-button" type="button" id="aff-copy-code" data-i18n="affiliate.code.copy">Copy code</button>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <div style="display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap;">
+                        <span class="tag" style="font-weight:900;" id="aff-code">—</span>
+                        <span class="muted" id="aff-code-meta"></span>
+                    </div>
+                </div>
+
+                <div class="glass panel" style="margin-bottom:1rem;">
+                    <h3 style="margin-top:0;" data-i18n="affiliate.links.title">Share links</h3>
+                    <div class="muted" data-i18n="affiliate.links.subtitle">Copy these links and post them on social media, WhatsApp, email, or anywhere.</div>
+                    <div class="divider"></div>
+
+                    <div class="form-grid">
+                        <label style="grid-column: 1 / -1;">
+                            <span data-i18n="affiliate.links.buy">Buy link (browse listings)</span>
+                            <div style="display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center;">
+                                <input id="aff-link-buy" class="admin-input" type="text" readonly>
+                                <button class="cta-button cta-button--outline" type="button" data-copy-target="aff-link-buy" data-i18n="common.copy">Copy</button>
+                            </div>
+                        </label>
+                        <label style="grid-column: 1 / -1;">
+                            <span data-i18n="affiliate.links.sell">Sell link (submit a property)</span>
+                            <div style="display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center;">
+                                <input id="aff-link-sell" class="admin-input" type="text" readonly>
+                                <button class="cta-button cta-button--outline" type="button" data-copy-target="aff-link-sell" data-i18n="common.copy">Copy</button>
+                            </div>
+                        </label>
+                        <label style="grid-column: 1 / -1;">
+                            <span data-i18n="affiliate.links.services">Services link</span>
+                            <div style="display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center;">
+                                <input id="aff-link-services" class="admin-input" type="text" readonly>
+                                <button class="cta-button cta-button--outline" type="button" data-copy-target="aff-link-services" data-i18n="common.copy">Copy</button>
+                            </div>
+                        </label>
+                        <label style="grid-column: 1 / -1;">
+                            <span data-i18n="affiliate.links.viewing_privileges">Viewing Privileges (campaign)</span>
+                            <div style="display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center;">
+                                <input id="aff-link-viewing-privileges" class="admin-input" type="text" readonly>
+                                <button class="cta-button cta-button--outline" type="button" data-copy-target="aff-link-viewing-privileges" data-i18n="common.copy">Copy</button>
+                                <a class="cta-button" id="aff-open-viewing-privileges" href="viewing-privileges.html" target="_blank" rel="noopener" data-i18n="common.open">Open</a>
+                            </div>
+                            <div class="muted" style="margin-top:0.35rem" data-i18n-html="affiliate.links.viewing_privileges_note">Tip: affiliates can add a language for the buyer, e.g. <span class="muted" style="font-weight:900;">?lang=de</span>, <span class="muted" style="font-weight:900;">?lang=nl</span>, or <span class="muted" style="font-weight:900;">?lang=fr</span>.</div>
+                        </label>
+
+                        <div class="divider" style="grid-column: 1 / -1;"></div>
+
+                        <label style="grid-column: 1 / -1;">
+                            <span data-i18n="affiliate.links.listing_ref">Listing reference (optional)</span>
+                            <input id="aff-ref" class="admin-input" type="text" placeholder="SCP-1898" inputmode="text" autocapitalize="characters" spellcheck="false">
+                        </label>
+
+                        <label style="grid-column: 1 / -1;">
+                            <span data-i18n="affiliate.links.listing_share">Listing share page (best for social previews)</span>
+                            <div style="display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center;">
+                                <input id="aff-link-listing" class="admin-input" type="text" readonly>
+                                <button class="cta-button cta-button--outline" type="button" data-copy-target="aff-link-listing" data-i18n="common.copy">Copy</button>
+                                <a class="cta-button" id="aff-open-listing" href="properties.html" target="_blank" rel="noopener" data-i18n="common.open">Open</a>
+                            </div>
+                        </label>
+                        <label style="grid-column: 1 / -1;">
+                            <span data-i18n="affiliate.links.brochure">Brochure (PDF)</span>
+                            <div style="display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center;">
+                                <input id="aff-link-brochure" class="admin-input" type="text" readonly>
+                                <button class="cta-button cta-button--outline" type="button" data-copy-target="aff-link-brochure" data-i18n="common.copy">Copy</button>
+                            </div>
+                        </label>
+                        <label style="grid-column: 1 / -1;">
+                            <span data-i18n="affiliate.links.reel">Reel (Video)</span>
+                            <div style="display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center;">
+                                <input id="aff-link-reel" class="admin-input" type="text" readonly>
+                                <button class="cta-button cta-button--outline" type="button" data-copy-target="aff-link-reel" data-i18n="common.copy">Copy</button>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="glass panel" style="margin-bottom:1rem;">
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:0.8rem; flex-wrap:wrap;">
+                        <div>
+                            <h3 style="margin:0" data-i18n="affiliate.earnings.title">Earnings</h3>
+                            <div class="muted" style="margin-top:0.35rem" data-i18n="affiliate.earnings.subtitle">We show commissions recorded by admin after revenue is confirmed.</div>
+                        </div>
+                        <div class="simple-cta" style="margin-top:0;">
+                            <button class="cta-button cta-button--outline" type="button" id="aff-refresh" data-i18n="common.refresh">Refresh</button>
+                            <button class="cta-button" type="button" id="aff-export" data-i18n="common.export_csv">Export CSV</button>
+                        </div>
+                    </div>
+                    <div class="muted" id="aff-summary" style="margin-top:0.6rem" aria-live="polite"></div>
+                    <div class="admin-table-wrap" style="margin-top:0.7rem">
+                        <table class="admin-table" id="aff-events-table">
+                            <thead>
+                                <tr>
+                                    <th data-i18n="affiliate.earnings.th.time">Time</th>
+                                    <th data-i18n="affiliate.earnings.th.type">Type</th>
+                                    <th data-i18n="affiliate.earnings.th.ref">Ref</th>
+                                    <th data-i18n="affiliate.earnings.th.amount">Amount</th>
+                                    <th data-i18n="affiliate.earnings.th.commission">Commission</th>
+                                    <th data-i18n="affiliate.earnings.th.status">Status</th>
+                                    <th data-i18n="affiliate.earnings.th.paid">Paid</th>
+                                    <th data-i18n="affiliate.earnings.th.note">Note</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="glass panel">
+                    <h3 style="margin-top:0;" data-i18n="affiliate.settings.title">Settings</h3>
+                    <div class="form-grid">
+                        <label>
+                            <span data-i18n="affiliate.settings.payout">Payout preference</span>
+                            <select id="aff-payout-pref" class="admin-select">
+                                <option value="cash" data-i18n="affiliate.settings.payout.cash">Cash</option>
+                                <option value="goods_services" data-i18n="affiliate.settings.payout.goods">Goods / Services</option>
+                            </select>
+                        </label>
+                        <label style="grid-column: 1 / -1;">
+                            <span data-i18n="affiliate.settings.note">Payout note (optional)</span>
+                            <input id="aff-payout-note" class="admin-input" type="text" placeholder="e.g. prefer services credit / bank transfer details via email">
+                        </label>
+                        <div class="simple-cta" style="grid-column: 1 / -1; margin-top:0;">
+                            <button class="cta-button" type="button" id="aff-payout-save" data-i18n="common.save">Save settings</button>
+                            <a class="cta-button cta-button--outline" href="affiliate-terms.html" data-i18n="affiliate.settings.read_terms">Read terms</a>
+                            <button class="cta-button cta-button--outline" type="button" id="aff-accept-terms" data-i18n="affiliate.settings.accept">Accept terms</button>
+                        </div>
+                        <div class="muted" id="aff-settings-status" aria-live="polite" style="grid-column: 1 / -1;"></div>
+                    </div>
+                </div>
+
+                <div class="muted" style="margin-top:0.9rem">
+                    <a class="admin-link" href="affiliate-terms.html" data-i18n="affiliate.footer.terms">Affiliate program terms</a>
+                    <span class="muted"> · </span>
+                    <a class="admin-link" href="services.html" data-i18n="affiliate.footer.services">Services</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h3>Spanish Coast Properties</h3>
+                <p data-i18n="affiliate.footer.p">Recommend us and earn 10% of confirmed fees.</p>
+            </div>
+            <div class="footer-col">
+                <h4 data-i18n="footer.explore">Explore</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+                    <li><a href="properties.html" data-i18n="nav.properties">Properties</a></li>
+                    <li><a href="services.html" data-i18n="nav.services">Services</a></li>
+                    <li><a href="account.html" data-i18n="nav.account">Account</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 data-i18n="footer.contact">Contact</h4>
+                <ul class="footer-links">
+                    <li><a href="tel:+34624867866">+34 624 867 866</a></li>
+                    <li><a href="mailto:info@spanishcoastproperties.com">info@spanishcoastproperties.com</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">© <span id="footer-year">2026</span> Spanish Coast Properties.</div>
+    </footer>
+
+    <script defer src="affiliate.js?v=20260215b"></script>
+    <script src="utils-module.js?v=20260215c"></script>
+    <script src="map-module.js?v=20260215c"></script>
+    <script src="supabase-module.js?v=20260215c"></script>
+    <script src="ui-module.js?v=20260215c"></script>
+    <script src="filter-module.js?v=20260215c"></script>
+    <script defer src="site.js?v=20260215c"></script>
+</body>
+
+</html>
