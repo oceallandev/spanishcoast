@@ -4202,12 +4202,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const xText = `${shareCaptionNoUrl}\n#CostaBlancaSouth #SpainRealEstate`;
         const xShare = `https://twitter.com/intent/tweet?text=${encodeURIComponent(xText)}&url=${shareUrl}`;
         const dossierBody = encodeURIComponent(
-            `Hello Spanish Coast Properties,\n\nI would like to request a visit for this property.\n\nReference: ${reference || t('common.na', 'N/A')}\nType: ${type}\nLocation: ${town}, ${province}\nPrice: ${formatListingPrice(property)}\nApp link: ${propertyLink}${sourceUrl ? `\nOfficial page: ${sourceUrl}` : ''}\n\nPreferred dates/times:\n1) \n2) \n\nThank you.`
+            `Hello Spanish Coast Properties,\n\nI would like to request a visit for this property.\n\nReference: ${reference || t('common.na', 'N/A')}\nType: ${type}\nLocation: ${town}, ${province}\nPrice: ${formatListingPrice(property)}\nApp link: ${propertyLink}\n\nPreferred dates/times:\n1) \n2) \n\nThank you.`
         );
         const dossierMailto = `mailto:info@spanishcoastproperties.com?subject=${dossierSubject}&body=${dossierBody}`;
         const reportSubject = encodeURIComponent(`Listing issue report - ${reference || `${town} ${type}`}`);
         const reportBody = encodeURIComponent(
-            `Hello Spanish Coast Properties,\n\nI found an issue with this listing and would like to flag it.\n\nReference: ${reference || t('common.na', 'N/A')}\nLocation: ${town}, ${province}\nApp link: ${propertyLink}${sourceUrl ? `\nOfficial page: ${sourceUrl}` : ''}\n\nWhat seems wrong:\n- \n\n(If possible, add a screenshot or describe the problem.)\n\nThank you.`
+            `Hello Spanish Coast Properties,\n\nI found an issue with this listing and would like to flag it.\n\nReference: ${reference || t('common.na', 'N/A')}\nLocation: ${town}, ${province}\nApp link: ${propertyLink}\n\nWhat seems wrong:\n- \n\n(If possible, add a screenshot or describe the problem.)\n\nThank you.`
         );
         const reportMailto = `mailto:info@spanishcoastproperties.com?subject=${reportSubject}&body=${reportBody}`;
         const descriptionHtml = formatDescriptionHtml(description);
@@ -4300,7 +4300,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		                        <a href="tour.html?ref=${encodeURIComponent(reference || '')}" class="cta-button cta-button--outline" target="_blank" rel="noopener">${escapeHtml(t('modal.tour_3d', '3D Tour'))}</a>
 		                        <a href="tel:+34624867866" class="cta-button">${escapeHtml(t('modal.call_now', 'Call Now'))}</a>
 		                        <a href="${dossierMailto}" class="cta-button">${escapeHtml(t('modal.request_visit', 'Request to visit'))}</a>
-		                        ${sourceUrl ? `<a href="${escapeHtml(sourceUrl)}" class="cta-button" target="_blank" rel="noopener">${escapeHtml(t('modal.official_page', 'Official page'))}</a>` : ''}
+		                        ${(sourceUrl && isPrivilegedRole(supabaseRole)) ? `<a href="${escapeHtml(sourceUrl)}" class="cta-button" target="_blank" rel="noopener">${escapeHtml(t('modal.official_page', 'Official page'))}</a>` : ''}
 		                    </div>
 	                    <div class="share-row" data-i18n-dynamic-ignore aria-label="${escapeHtml(t('modal.share', 'Share'))}">
 	                        <button type="button" class="share-btn" data-share="native">
