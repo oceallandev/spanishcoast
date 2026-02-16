@@ -708,6 +708,15 @@
     });
   };
 
+  /** Resume an AudioContext with a timeout to avoid hanging indefinitely. */
+  const resumeCtxWithTimeout = (ctx, ms = 1500) => {
+    if (!ctx || ctx.state === 'running') return Promise.resolve(ctx);
+    return Promise.race([
+      ctx.resume().then(() => ctx),
+      new Promise((resolve) => setTimeout(() => resolve(ctx), ms))
+    ]);
+  };
+
   const primeMusicContext = async () => {
     const Ctx = window.AudioContext || window.webkitAudioContext;
     if (!Ctx) return null;
@@ -718,7 +727,7 @@
       return null;
     }
     try {
-      if (ctx.state === 'suspended') await ctx.resume();
+      if (ctx.state === 'suspended') await resumeCtxWithTimeout(ctx, 1500);
     } catch {
       // ignore
     }
@@ -758,7 +767,7 @@
     }
 
     try {
-      if (ctx.state === 'suspended') await ctx.resume();
+      if (ctx.state === 'suspended') await resumeCtxWithTimeout(ctx, 1500);
     } catch {
       // ignore
     }
