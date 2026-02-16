@@ -735,6 +735,14 @@
 
   const startMusicBed = async ({ mode, durationSec, audioContext = null }) => {
     if (mode === 'none') return null;
+
+    // Use the premium engine from reel-music.js if available
+    const engine = window.__reelMusicEngine;
+    if (!engine || typeof engine.render !== 'function') {
+      // Engine not loaded — fall back to silence
+      return null;
+    }
+
     const Ctx = window.AudioContext || window.webkitAudioContext;
     if (!Ctx) return null;
 
@@ -763,765 +771,63 @@
       return null;
     }
 
+    // Pre-render the full audio buffer offline
+    let renderedBuffer;
+    try {
+      renderedBuffer = await engine.render(mode, durationSec);
+    } catch {
+      renderedBuffer = null;
+    }
+    if (!renderedBuffer) {
+      try {
+        await ctx.close();
+      } catch {
+        // ignore
+      }
+      return null;
+    }
+
+    // Convert the OfflineAudioContext buffer into the live context
+    let liveBuf;
+    try {
+      const chCount = renderedBuffer.numberOfChannels;
+      const len = renderedBuffer.length;
+      const sr = renderedBuffer.sampleRate;
+      liveBuf = ctx.createBuffer(chCount, len, sr);
+      for (let ch = 0; ch < chCount; ch++) {
+        liveBuf.getChannelData(ch).set(renderedBuffer.getChannelData(ch));
+      }
+    } catch {
+      try {
+        await ctx.close();
+      } catch {
+        // ignore
+      }
+      return null;
+    }
+
     const output = ctx.createMediaStreamDestination();
+    const source = ctx.createBufferSource();
+    source.buffer = liveBuf;
 
-    // Master bus + light mastering chain so the synth doesn't sound harsh/cheap.
+    // Master gain for consistency
     const master = ctx.createGain();
-    const compressor = ctx.createDynamicsCompressor();
-    const hp = ctx.createBiquadFilter();
-    const lp = ctx.createBiquadFilter();
-    const masterGainByMode = {
-      ambient: 0.78,
-      upbeat: 0.82,
-      chill: 0.74,
-      cinematic: 0.84,
-      tropical: 0.8,
-      house: 0.85,
-      lofi: 0.72,
-      piano: 0.78,
-      sunset: 0.8,
-      corporate: 0.8
-    };
-    master.gain.value = masterGainByMode[mode] || 0.78;
+    master.gain.value = 0.92;
+    source.connect(master);
+    master.connect(output);
 
-    try {
-      compressor.threshold.value = -24;
-      compressor.knee.value = 22;
-      compressor.ratio.value = 10;
-      compressor.attack.value = 0.004;
-      compressor.release.value = 0.22;
-    } catch {
-      // ignore
-    }
-
-    hp.type = 'highpass';
-    hp.frequency.value = 28;
-    hp.Q.value = 0.7;
-
-    lp.type = 'lowpass';
-    lp.frequency.value = (mode === 'house' || mode === 'upbeat') ? 15000 : 12000;
-    lp.Q.value = 0.75;
-
-    master.connect(compressor);
-    compressor.connect(hp);
-    hp.connect(lp);
-    lp.connect(output);
-
-    // Subtle delay for depth (kept conservative to avoid muddy exports).
-    const noiseBuffer = createNoiseBuffer(ctx, 1.1);
-    let monitorTap = lp;
-    try {
-      const delay = ctx.createDelay(0.5);
-      delay.delayTime.value = mode === 'cinematic' ? 0.26 : 0.18;
-      const feedback = ctx.createGain();
-      feedback.gain.value = mode === 'house' ? 0.18 : 0.22;
-      const delayLP = ctx.createBiquadFilter();
-      delayLP.type = 'lowpass';
-      delayLP.frequency.value = 5200;
-      delayLP.Q.value = 0.7;
-      const wet = ctx.createGain();
-      wet.gain.value = mode === 'cinematic' ? 0.16 : 0.11;
-      const send = ctx.createGain();
-      send.gain.value = mode === 'house' ? 0.06 : 0.08;
-
-      delay.connect(feedback);
-      feedback.connect(delay);
-      delay.connect(delayLP);
-      delayLP.connect(wet);
-      wet.connect(compressor);
-
-      master.connect(send);
-      send.connect(delay);
-    } catch {
-      // ignore (delay nodes not available)
-    }
-
-    // Keep the graph "alive" on mobile Safari while keeping playback silent for the user.
+    // Keep graph alive on mobile Safari
     let monitor = null;
     try {
       monitor = ctx.createGain();
       monitor.gain.value = 0.00001;
-      monitorTap.connect(monitor);
+      master.connect(monitor);
       monitor.connect(ctx.destination);
     } catch {
       // ignore
     }
 
-    const start = ctx.currentTime + 0.02;
-    const end = start + Math.max(2, Number(durationSec) || 9);
-    const MAJ = [1, semiRatio(4), semiRatio(7), 2];
-    const MIN = [1, semiRatio(3), semiRatio(7), 2];
-    const FIFTH = semiRatio(7);
-    switch (mode) {
-      case 'ambient': {
-        const chords = [
-          { root: 130.81, intervals: MAJ }, // C
-          { root: 110.0, intervals: MIN }, // Am
-          { root: 87.31, intervals: MAJ }, // F
-          { root: 98.0, intervals: MAJ } // G
-        ];
-        let tSec = start;
-        let idx = 0;
-        while (tSec < end - 0.35) {
-          const chord = chords[idx % chords.length];
-          scheduleChord(ctx, master, {
-            time: tSec,
-            duration: 2.15,
-            root: chord.root,
-            intervals: chord.intervals,
-            type: 'sawtooth',
-            gain: 0.016,
-            attack: 0.22,
-            release: 0.85
-          });
-          scheduleChord(ctx, master, {
-            time: tSec + 0.02,
-            duration: 2.1,
-            root: chord.root * 2,
-            intervals: chord.intervals,
-            type: 'triangle',
-            gain: 0.0085,
-            attack: 0.12,
-            release: 0.75
-          });
-          scheduleTone(ctx, master, {
-            time: tSec,
-            duration: 2.2,
-            frequency: chord.root / 2,
-            type: 'sine',
-            gain: 0.011,
-            attack: 0.3,
-            release: 0.95
-          });
-          if (idx % 2 === 0) {
-            scheduleTone(ctx, master, {
-              time: tSec + 1.0,
-              duration: 0.26,
-              frequency: chord.root * 4,
-              type: 'triangle',
-              gain: 0.004,
-              attack: 0.01,
-              release: 0.18
-            });
-          }
-          idx += 1;
-          tSec += 2.25;
-        }
-        break;
-      }
-      case 'sunset': {
-        const bpm = 92;
-        const beat = 60 / bpm;
-        const bar = beat * 4;
-        const chords = [
-          { root: 130.81, intervals: MAJ }, // C
-          { root: 110.0, intervals: MIN }, // Am
-          { root: 87.31, intervals: MAJ }, // F
-          { root: 98.0, intervals: MAJ } // G
-        ];
-        const lead = [329.63, 392, 440, 392, 349.23, 392, 329.63, 293.66];
-        let tSec = start;
-        let barIdx = 0;
-        while (tSec < end - 0.25) {
-          const chord = chords[barIdx % chords.length];
-
-          scheduleChord(ctx, master, {
-            time: tSec,
-            duration: bar * 1.15,
-            root: chord.root,
-            intervals: chord.intervals,
-            type: 'triangle',
-            gain: 0.017,
-            attack: 0.08,
-            release: 0.55
-          });
-
-          scheduleTone(ctx, master, {
-            time: tSec,
-            duration: beat * 0.95,
-            frequency: chord.root,
-            type: 'sine',
-            gain: 0.028,
-            attack: 0.01,
-            release: 0.18
-          });
-          scheduleTone(ctx, master, {
-            time: tSec + beat * 2,
-            duration: beat * 0.95,
-            frequency: chord.root * FIFTH,
-            type: 'sine',
-            gain: 0.024,
-            attack: 0.01,
-            release: 0.18
-          });
-
-          for (let step = 0; step < 8; step += 1) {
-            const tt = tSec + step * (beat / 2);
-            scheduleNoiseHit(ctx, master, noiseBuffer, {
-              time: tt,
-              duration: 0.05,
-              gain: step % 2 === 0 ? 0.018 : 0.012,
-              filterType: 'highpass',
-              filterFreq: 7000,
-              filterQ: 0.6,
-              attack: 0.001,
-              release: 0.03
-            });
-
-            if (step === 0 || step === 4) {
-              scheduleKick(ctx, master, { time: tt, gain: 0.145, pitch: 135, pitchEnd: 52, duration: 0.22 });
-            }
-            if (step === 2 || step === 6) {
-              scheduleClap(ctx, master, noiseBuffer, tt, 0.08);
-            }
-            if (step % 2 === 1) {
-              const note = lead[(barIdx * 4 + step) % lead.length];
-              scheduleTone(ctx, master, {
-                time: tt + 0.01,
-                duration: 0.18,
-                frequency: note,
-                type: 'triangle',
-                gain: 0.018,
-                attack: 0.01,
-                release: 0.12
-              });
-              scheduleTone(ctx, master, {
-                time: tt + 0.012,
-                duration: 0.16,
-                frequency: note * 2,
-                type: 'sine',
-                gain: 0.004,
-                attack: 0.008,
-                release: 0.1
-              });
-            }
-          }
-
-          barIdx += 1;
-          tSec += bar;
-        }
-        break;
-      }
-      case 'chill': {
-        const bpm = 80;
-        const beat = 60 / bpm;
-        const bar = beat * 4;
-        const chords = [
-          { root: 130.81, intervals: MAJ },
-          { root: 110.0, intervals: MIN },
-          { root: 87.31, intervals: MAJ },
-          { root: 98.0, intervals: MAJ }
-        ];
-        let tSec = start;
-        let barIdx = 0;
-        while (tSec < end - 0.25) {
-          const chord = chords[barIdx % chords.length];
-          scheduleChord(ctx, master, {
-            time: tSec,
-            duration: bar * 1.2,
-            root: chord.root,
-            intervals: chord.intervals,
-            type: 'triangle',
-            gain: 0.018,
-            attack: 0.12,
-            release: 0.7
-          });
-          for (let step = 0; step < 8; step += 1) {
-            const tt = tSec + step * (beat / 2);
-            if (step % 2 === 0) {
-              scheduleNoiseHit(ctx, master, noiseBuffer, {
-                time: tt,
-                duration: 0.06,
-                gain: 0.012,
-                filterType: 'highpass',
-                filterFreq: 6800,
-                filterQ: 0.6,
-                attack: 0.001,
-                release: 0.04
-              });
-            }
-            if (step === 0 || step === 4) scheduleKick(ctx, master, { time: tt, gain: 0.11, pitch: 125, pitchEnd: 52, duration: 0.22 });
-            if (step === 2 || step === 6) scheduleClap(ctx, master, noiseBuffer, tt, 0.06);
-          }
-          scheduleTone(ctx, master, {
-            time: tSec,
-            duration: bar * 0.95,
-            frequency: chord.root / 2,
-            type: 'sine',
-            gain: 0.016,
-            attack: 0.03,
-            release: 0.32
-          });
-          barIdx += 1;
-          tSec += bar;
-        }
-        break;
-      }
-      case 'upbeat': {
-        const bpm = 112;
-        const beat = 60 / bpm;
-        const bar = beat * 4;
-        const chords = [
-          { root: 130.81, intervals: MAJ },
-          { root: 110.0, intervals: MIN },
-          { root: 87.31, intervals: MAJ },
-          { root: 98.0, intervals: MAJ }
-        ];
-        const lead = [392, 440, 523.25, 440, 392, 349.23, 392, 329.63];
-        let tSec = start;
-        let barIdx = 0;
-        while (tSec < end - 0.25) {
-          const chord = chords[barIdx % chords.length];
-          scheduleChord(ctx, master, {
-            time: tSec,
-            duration: bar * 1.05,
-            root: chord.root,
-            intervals: chord.intervals,
-            type: 'sawtooth',
-            gain: 0.013,
-            attack: 0.05,
-            release: 0.35
-          });
-          for (let step = 0; step < 8; step += 1) {
-            const tt = tSec + step * (beat / 2);
-            scheduleNoiseHit(ctx, master, noiseBuffer, {
-              time: tt,
-              duration: 0.045,
-              gain: 0.02,
-              filterType: 'highpass',
-              filterFreq: 7600,
-              filterQ: 0.55,
-              attack: 0.001,
-              release: 0.028
-            });
-            if (step === 0 || step === 2 || step === 4 || step === 6) {
-              scheduleKick(ctx, master, { time: tt, gain: 0.15, pitch: 150, pitchEnd: 55, duration: 0.2 });
-            }
-            if (step === 2 || step === 6) {
-              scheduleClap(ctx, master, noiseBuffer, tt, 0.085);
-            }
-            if (step % 2 === 1) {
-              const note = lead[(barIdx * 4 + step) % lead.length];
-              scheduleTone(ctx, master, {
-                time: tt + 0.005,
-                duration: 0.16,
-                frequency: note,
-                type: 'triangle',
-                gain: 0.02,
-                attack: 0.01,
-                release: 0.1
-              });
-              scheduleTone(ctx, master, {
-                time: tt + 0.007,
-                duration: 0.16,
-                frequency: note * 2,
-                type: 'sine',
-                gain: 0.0045,
-                attack: 0.01,
-                release: 0.1
-              });
-            }
-          }
-          scheduleTone(ctx, master, {
-            time: tSec,
-            duration: beat * 1.0,
-            frequency: chord.root,
-            type: 'sine',
-            gain: 0.03,
-            attack: 0.01,
-            release: 0.18
-          });
-          scheduleTone(ctx, master, {
-            time: tSec + beat * 2,
-            duration: beat * 1.0,
-            frequency: chord.root * FIFTH,
-            type: 'sine',
-            gain: 0.026,
-            attack: 0.01,
-            release: 0.18
-          });
-          barIdx += 1;
-          tSec += bar;
-        }
-        break;
-      }
-      case 'house': {
-        const bpm = 124;
-        const beat = 60 / bpm;
-        const bassline = [110, 110, 123.47, 98, 110, 123.47, 130.81, 123.47];
-        let tSec = start;
-        let stepIdx = 0;
-        while (tSec < end - 0.12) {
-          scheduleKick(ctx, master, { time: tSec, gain: 0.165, pitch: 150, pitchEnd: 52, duration: 0.2 });
-          scheduleNoiseHit(ctx, master, noiseBuffer, {
-            time: tSec + beat * 0.5,
-            duration: 0.05,
-            gain: 0.022,
-            filterType: 'highpass',
-            filterFreq: 8200,
-            filterQ: 0.5,
-            attack: 0.001,
-            release: 0.03
-          });
-          scheduleTone(ctx, master, {
-            time: tSec + beat * 0.02,
-            duration: beat * 0.95,
-            frequency: bassline[stepIdx % bassline.length],
-            type: 'triangle',
-            gain: 0.02,
-            attack: 0.01,
-            release: 0.14
-          });
-          if (stepIdx % 4 === 2) {
-            scheduleClap(ctx, master, noiseBuffer, tSec + beat, 0.065);
-          }
-          stepIdx += 1;
-          tSec += beat;
-        }
-        scheduleChord(ctx, master, {
-          time: start + 0.06,
-          duration: Math.max(1.6, end - start - 0.3),
-          root: 98,
-          intervals: MAJ,
-          type: 'sawtooth',
-          gain: 0.008,
-          attack: 0.28,
-          release: 0.55
-        });
-        break;
-      }
-      case 'lofi': {
-        const bpm = 78;
-        const beat = 60 / bpm;
-        const bar = beat * 4;
-        const chords = [
-          { root: 110.0, intervals: MIN },
-          { root: 98.0, intervals: MAJ },
-          { root: 87.31, intervals: MAJ },
-          { root: 130.81, intervals: MAJ }
-        ];
-        try {
-          if (noiseBuffer) {
-            const vinyl = ctx.createBufferSource();
-            vinyl.buffer = noiseBuffer;
-            vinyl.loop = true;
-            const filt = ctx.createBiquadFilter();
-            filt.type = 'highpass';
-            filt.frequency.value = 2800;
-            filt.Q.value = 0.7;
-            const amp = ctx.createGain();
-            amp.gain.value = 0.0035;
-            vinyl.connect(filt);
-            filt.connect(amp);
-            amp.connect(master);
-            vinyl.start(start);
-            vinyl.stop(end + 0.1);
-          }
-        } catch {
-          // ignore
-        }
-        let tSec = start;
-        let barIdx = 0;
-        while (tSec < end - 0.25) {
-          const chord = chords[barIdx % chords.length];
-          scheduleChord(ctx, master, {
-            time: tSec,
-            duration: bar * 1.3,
-            root: chord.root,
-            intervals: chord.intervals,
-            type: 'triangle',
-            gain: 0.016,
-            attack: 0.14,
-            release: 0.8
-          });
-          scheduleKick(ctx, master, { time: tSec, gain: 0.12, pitch: 130, pitchEnd: 52, duration: 0.22 });
-          scheduleKick(ctx, master, { time: tSec + beat * 2, gain: 0.1, pitch: 120, pitchEnd: 52, duration: 0.22 });
-          scheduleClap(ctx, master, noiseBuffer, tSec + beat, 0.058);
-          scheduleClap(ctx, master, noiseBuffer, tSec + beat * 3, 0.058);
-          for (let step = 0; step < 8; step += 1) {
-            if (step % 2 === 0) {
-              scheduleNoiseHit(ctx, master, noiseBuffer, {
-                time: tSec + step * (beat / 2),
-                duration: 0.06,
-                gain: 0.01,
-                filterType: 'highpass',
-                filterFreq: 6500,
-                filterQ: 0.7,
-                attack: 0.001,
-                release: 0.04
-              });
-            }
-          }
-          scheduleTone(ctx, master, {
-            time: tSec,
-            duration: bar * 0.95,
-            frequency: chord.root / 2,
-            type: 'sine',
-            gain: 0.014,
-            attack: 0.04,
-            release: 0.3
-          });
-          barIdx += 1;
-          tSec += bar;
-        }
-        break;
-      }
-      case 'piano': {
-        const bpm = 96;
-        const beat = 60 / bpm;
-        const bar = beat * 4;
-        const chords = [
-          { root: 130.81, intervals: MAJ },
-          { root: 110.0, intervals: MIN },
-          { root: 87.31, intervals: MAJ },
-          { root: 98.0, intervals: MAJ }
-        ];
-        let tSec = start;
-        let idx = 0;
-        while (tSec < end - 0.2) {
-          const chord = chords[idx % chords.length];
-          scheduleChord(ctx, master, {
-            time: tSec,
-            duration: bar * 0.75,
-            root: chord.root * 2,
-            intervals: chord.intervals,
-            type: 'triangle',
-            gain: 0.014,
-            attack: 0.005,
-            release: 0.28
-          });
-          scheduleTone(ctx, master, {
-            time: tSec,
-            duration: bar * 0.65,
-            frequency: chord.root,
-            type: 'sine',
-            gain: 0.012,
-            attack: 0.008,
-            release: 0.32
-          });
-          const arpNotes = [chord.root * 2, chord.root * 2 * semiRatio(4), chord.root * 2 * semiRatio(7), chord.root * 4];
-          for (let s = 0; s < 4; s += 1) {
-            const tt = tSec + beat * (0.5 + s * 0.5);
-            scheduleTone(ctx, master, {
-              time: tt,
-              duration: 0.22,
-              frequency: arpNotes[s % arpNotes.length],
-              type: 'sine',
-              gain: 0.01,
-              attack: 0.004,
-              release: 0.16
-            });
-          }
-          idx += 1;
-          tSec += bar;
-        }
-        break;
-      }
-      case 'tropical': {
-        const bpm = 100;
-        const beat = 60 / bpm;
-        const bar = beat * 4;
-        const chords = [
-          { root: 98.0, intervals: MAJ },
-          { root: 110.0, intervals: MIN },
-          { root: 130.81, intervals: MAJ },
-          { root: 87.31, intervals: MAJ }
-        ];
-        const marimba = [523.25, 659.25, 783.99, 659.25, 587.33, 659.25, 523.25, 493.88];
-        let tSec = start;
-        let barIdx = 0;
-        while (tSec < end - 0.22) {
-          const chord = chords[barIdx % chords.length];
-          scheduleChord(ctx, master, {
-            time: tSec,
-            duration: bar * 1.1,
-            root: chord.root,
-            intervals: chord.intervals,
-            type: 'triangle',
-            gain: 0.012,
-            attack: 0.02,
-            release: 0.35
-          });
-          for (let step = 0; step < 8; step += 1) {
-            const tt = tSec + step * (beat / 2);
-            scheduleNoiseHit(ctx, master, noiseBuffer, {
-              time: tt,
-              duration: 0.045,
-              gain: 0.016,
-              filterType: 'highpass',
-              filterFreq: 7600,
-              filterQ: 0.6,
-              attack: 0.001,
-              release: 0.03
-            });
-            if (step === 0 || step === 4) scheduleKick(ctx, master, { time: tt, gain: 0.12, pitch: 135, pitchEnd: 55, duration: 0.2 });
-            if (step % 2 === 1) {
-              const note = marimba[(barIdx * 4 + step) % marimba.length];
-              scheduleTone(ctx, master, {
-                time: tt,
-                duration: 0.14,
-                frequency: note,
-                type: 'sine',
-                gain: 0.016,
-                attack: 0.003,
-                release: 0.09
-              });
-              scheduleTone(ctx, master, {
-                time: tt + 0.01,
-                duration: 0.12,
-                frequency: note * 2,
-                type: 'triangle',
-                gain: 0.004,
-                attack: 0.003,
-                release: 0.08
-              });
-            }
-          }
-          scheduleTone(ctx, master, {
-            time: tSec,
-            duration: bar * 0.9,
-            frequency: chord.root / 2,
-            type: 'sine',
-            gain: 0.013,
-            attack: 0.03,
-            release: 0.28
-          });
-          barIdx += 1;
-          tSec += bar;
-        }
-        break;
-      }
-      case 'cinematic': {
-        const chords = [
-          { root: 98.0, intervals: MIN },
-          { root: 110.0, intervals: MIN },
-          { root: 87.31, intervals: MAJ },
-          { root: 82.41, intervals: MIN }
-        ];
-        let tSec = start;
-        let idx = 0;
-        while (tSec < end - 0.4) {
-          const chord = chords[idx % chords.length];
-          scheduleChord(ctx, master, {
-            time: tSec,
-            duration: 2.6,
-            root: chord.root,
-            intervals: chord.intervals,
-            type: 'sawtooth',
-            gain: 0.016,
-            attack: 0.35,
-            release: 1.1
-          });
-          scheduleTone(ctx, master, {
-            time: tSec,
-            duration: 2.8,
-            frequency: chord.root / 2,
-            type: 'sine',
-            gain: 0.016,
-            attack: 0.4,
-            release: 1.2
-          });
-          if (idx % 2 === 0) {
-            scheduleTone(ctx, master, {
-              time: tSec + 1.2,
-              duration: 0.55,
-              frequency: chord.root * 4,
-              type: 'triangle',
-              gain: 0.006,
-              attack: 0.12,
-              release: 0.42
-            });
-          }
-          idx += 1;
-          tSec += 2.35;
-        }
-        break;
-      }
-      case 'corporate': {
-        const bpm = 108;
-        const beat = 60 / bpm;
-        const bar = beat * 4;
-        const motif = [261.63, 293.66, 329.63, 392, 349.23, 329.63];
-        let tSec = start;
-        let step = 0;
-        while (tSec < end - 0.18) {
-          scheduleKick(ctx, master, { time: tSec, gain: 0.12, pitch: 135, pitchEnd: 55, duration: 0.18 });
-          scheduleClap(ctx, master, noiseBuffer, tSec + beat, 0.055);
-          scheduleClap(ctx, master, noiseBuffer, tSec + beat * 3, 0.055);
-          for (let i = 0; i < 6; i += 1) {
-            const tt = tSec + i * (beat * 0.5);
-            const note = motif[(step + i) % motif.length];
-            scheduleTone(ctx, master, {
-              time: tt,
-              duration: 0.18,
-              frequency: note,
-              type: 'triangle',
-              gain: 0.016,
-              attack: 0.01,
-              release: 0.1
-            });
-            scheduleTone(ctx, master, {
-              time: tt,
-              duration: 0.22,
-              frequency: note / 2,
-              type: 'sine',
-              gain: 0.009,
-              attack: 0.01,
-              release: 0.14
-            });
-            if (i % 2 === 0) {
-              scheduleNoiseHit(ctx, master, noiseBuffer, {
-                time: tt,
-                duration: 0.045,
-                gain: 0.012,
-                filterType: 'highpass',
-                filterFreq: 7600,
-                filterQ: 0.55,
-                attack: 0.001,
-                release: 0.03
-              });
-            }
-          }
-          step += 1;
-          tSec += bar;
-        }
-        break;
-      }
-      default: {
-        const chords = [
-          { root: 130.81, intervals: MAJ },
-          { root: 110.0, intervals: MIN },
-          { root: 87.31, intervals: MAJ },
-          { root: 98.0, intervals: MAJ }
-        ];
-        let tSec = start;
-        let idx = 0;
-        while (tSec < end - 0.35) {
-          const chord = chords[idx % chords.length];
-          scheduleChord(ctx, master, {
-            time: tSec,
-            duration: 2.15,
-            root: chord.root,
-            intervals: chord.intervals,
-            type: 'triangle',
-            gain: 0.016,
-            attack: 0.18,
-            release: 0.8
-          });
-          scheduleTone(ctx, master, {
-            time: tSec,
-            duration: 2.2,
-            frequency: chord.root / 2,
-            type: 'sine',
-            gain: 0.011,
-            attack: 0.3,
-            release: 0.95
-          });
-          idx += 1;
-          tSec += 2.25;
-        }
-      }
-    }
+    source.start(0);
 
     const tracks = output.stream.getAudioTracks();
     const track = tracks.length ? tracks[0] : null;
@@ -1536,7 +842,12 @@
       track,
       async stop() {
         try {
-          tracks.forEach((track) => track.stop());
+          source.stop();
+        } catch {
+          // ignore
+        }
+        try {
+          tracks.forEach((t) => t.stop());
         } catch {
           // ignore
         }
