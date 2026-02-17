@@ -2710,7 +2710,29 @@ body[data-section="properties"].map-open .map-section {
     box-shadow: 0 40px 140px rgba(0, 0, 0, 0.65);
 }
 
-#map {
+/* --- Businesses: same fullscreen map behaviour as properties --- */
+body[data-section="businesses"].map-open .content-section {
+    display: none;
+}
+
+body[data-section="businesses"].map-open .catalog-controls {
+    display: none;
+}
+
+body[data-section="businesses"].map-open .map-section {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: calc(var(--app-vh, 100vh) - var(--header-height));
+    z-index: 2600;
+    border-left: 0;
+    box-shadow: 0 40px 140px rgba(0, 0, 0, 0.65);
+}
+
+#map,
+#business-map {
     width: 100%;
     height: 100%;
 }

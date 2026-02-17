@@ -72,13 +72,12 @@
   const businessKindFilter = document.getElementById('business-kind-filter');
   const businessTypeFilter = document.getElementById('business-type-filter');
   const businessCountEl = document.getElementById('business-count');
-  const businessMapToggleBtn = document.getElementById('business-map-toggle');
   const businessHeaderMapToggleBtn = document.getElementById('toggle-map-btn');
-  const businessMapWrap = document.getElementById('business-map-wrap');
-  const businessMapCountEl = document.getElementById('business-map-count');
+  const businessMapSection = document.getElementById('business-map-section');
   const businessMapEl = document.getElementById('business-map');
   let businessMap = null;
   let businessMarkersLayer = null;
+  let businessMapOpen = false;
 
   const normalizeFeedText = (value) => {
     const raw = value == null ? '' : String(value);
@@ -194,7 +193,7 @@
 
     businessMap = window.L.map(businessMapEl, {
       zoomControl: true,
-      scrollWheelZoom: false,
+      scrollWheelZoom: true,
       tap: true
     });
 
@@ -203,24 +202,26 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(businessMap);
 
-    businessMarkersLayer = window.L.layerGroup().addTo(businessMap);
+    businessMarkersLayer = typeof window.L.markerClusterGroup === 'function'
+      ? window.L.markerClusterGroup()
+      : window.L.layerGroup();
+    businessMarkersLayer.addTo(businessMap);
     businessMap.setView([37.978, -0.683], 12);
   };
 
+  let lastBusinessItems = [];
+
   const updateBusinessMap = (items) => {
-    // Avoid loading map tiles until the user asks for the map.
-    const wantsMap = !!businessMapWrap && !businessMapWrap.hidden;
-    if (!wantsMap && !businessMap) {
-      if (businessMapCountEl) {
-        businessMapCountEl.textContent = '';
-      }
-      return;
-    }
+    lastBusinessItems = items;
+    // Only init the map when the user has toggled it open.
+    if (!businessMapOpen && !businessMap) return;
 
     ensureBusinessMap();
     if (!businessMap || !businessMarkersLayer) return;
 
-    businessMarkersLayer.clearLayers();
+    if (typeof businessMarkersLayer.clearLayers === 'function') {
+      businessMarkersLayer.clearLayers();
+    }
     const bounds = [];
 
     items.forEach((b) => {
@@ -233,17 +234,17 @@
       const priceCompact = formatPriceCompact(b.price, b.currency);
       const tag = `${label}${priceCompact ? ` · ${priceCompact}` : ''}`;
 
-	      const icon = window.L.divIcon({
-	        className: 'biz-marker-icon',
-	        html: `
-	          <div class="biz-marker">
-	            <div class="biz-marker-pin">
-	              <img class="biz-marker-logo" src="assets/scp-isotipo.png" alt="">
-	            </div>
-	            <div class="biz-marker-tag">${esc(tag)}</div>
-	          </div>
-	        `,
-	        iconSize: [44, 44],
+      const icon = window.L.divIcon({
+        className: 'biz-marker-icon',
+        html: `
+          <div class="biz-marker">
+            <div class="biz-marker-pin">
+              <img class="biz-marker-logo" src="assets/scp-isotipo.png" alt="">
+            </div>
+            <div class="biz-marker-tag">${esc(tag)}</div>
+          </div>
+        `,
+        iconSize: [44, 44],
         iconAnchor: [22, 44],
         popupAnchor: [0, -44]
       });
@@ -253,29 +254,37 @@
       marker.on('click', () => {
         if (ref) window.location.href = `properties.html?ref=${encodeURIComponent(ref)}`;
       });
-      marker.addTo(businessMarkersLayer);
+      businessMarkersLayer.addLayer(marker);
       bounds.push([lat, lon]);
     });
 
-    if (businessMapCountEl) {
-      businessMapCountEl.textContent = t('catalog.count.results', `${items.length} results`, { count: items.length });
-    }
-
     if (bounds.length > 0) {
-      businessMap.fitBounds(bounds, { padding: [24, 24], maxZoom: 14 });
+      businessMap.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
     }
   };
 
   const setBusinessMapMode = (next) => {
-    if (!businessMapWrap) return;
-    businessMapWrap.hidden = !next;
-    if (businessMapToggleBtn) businessMapToggleBtn.textContent = next ? t('ui.list', 'List') : t('ui.map', 'Map');
-    if (businessHeaderMapToggleBtn) businessHeaderMapToggleBtn.textContent = next ? t('ui.list', 'List') : t('ui.map', 'Map');
+    if (!businessMapSection) return;
+    businessMapOpen = next;
     if (next) {
-      // Leaflet needs a layout pass when a hidden container becomes visible.
+      businessMapSection.classList.add('active');
+      document.body.classList.add('map-open');
+    } else {
+      businessMapSection.classList.remove('active');
+      document.body.classList.remove('map-open');
+    }
+    if (businessHeaderMapToggleBtn) {
+      businessHeaderMapToggleBtn.textContent = next ? t('ui.list', 'List') : t('ui.map', 'Map');
+    }
+    if (next) {
+      // Leaflet needs a layout pass when coming from hidden.
       setTimeout(() => {
-        if (businessMap) businessMap.invalidateSize();
-      }, 50);
+        ensureBusinessMap();
+        if (businessMap) {
+          businessMap.invalidateSize();
+          updateBusinessMap(lastBusinessItems);
+        }
+      }, 120);
     }
   };
 
@@ -399,33 +408,16 @@
       hydrateBusinessTypeOptions();
       businessTypeFilter.addEventListener('change', renderBusinesses);
     }
-	    if (businessMapToggleBtn) {
-	      businessMapToggleBtn.addEventListener('click', () => {
-	        const next = !!businessMapWrap && businessMapWrap.hidden;
-	        setBusinessMapMode(next);
-	        if (next) {
-	          // Ensure the map is rendered with current results.
-	          renderBusinesses();
-	        }
-	      });
-	    }
-	    if (businessHeaderMapToggleBtn) {
-	      businessHeaderMapToggleBtn.addEventListener('click', () => {
-	        const next = !!businessMapWrap && businessMapWrap.hidden;
-	        setBusinessMapMode(next);
-	        if (next) {
-	          renderBusinesses();
-	        }
-	      });
-	    }
+    if (businessHeaderMapToggleBtn && businessMapSection) {
+      businessHeaderMapToggleBtn.addEventListener('click', () => {
+        const next = !businessMapOpen;
+        setBusinessMapMode(next);
+      });
+    }
 
-	    // Desktop: show the map by default so users immediately see it exists.
-	    // Mobile: keep list-first (map is available via the header toggle).
-	    const openByDefault = window.matchMedia && window.matchMedia('(min-width: 1024px)').matches;
-	    setBusinessMapMode(!!openByDefault);
-      wireBusinessCardClicks();
-	    renderBusinesses();
-	  }
+    wireBusinessCardClicks();
+    renderBusinesses();
+  }
 
   if (vehicleGrid) {
     if (vehicleItems.length === 0) {
