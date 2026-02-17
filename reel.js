@@ -474,7 +474,7 @@
       `${type} • ${town}`,
       `${price} • ${province}`,
       specs || '',
-      ref ? `Ref: ${ref}` : '',
+      (ref && !whiteLabel) ? `Ref: ${ref}` : '',
       whiteLabel ? t('reel.caption.more_info', 'Ask for more details') : t('reel.caption.contact', 'Message us on WhatsApp')
     ].filter(Boolean);
     const maxLines = totalDur <= 8 ? 3 : totalDur <= 12 ? 4 : 5;
@@ -1151,7 +1151,7 @@
     }
 
     // Right ref chip.
-    if (ref) {
+    if (ref && !whiteLabel) {
       const chipY = 30;
       const chipH = 54;
       ctx.save();
@@ -1343,7 +1343,7 @@
     const lines = [
       `${type} • ${town}, ${province}`,
       price ? `${t('reel.caption.price_label', 'Price')}: ${price}` : '',
-      ref ? `${t('reel.caption.ref_label', 'Ref')}: ${ref}` : '',
+      (ref && !whiteLabel) ? `${t('reel.caption.ref_label', 'Ref')}: ${ref}` : '',
       '',
       url
     ].filter(Boolean);
