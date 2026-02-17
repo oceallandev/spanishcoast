@@ -25,7 +25,7 @@
 
     <meta name="theme-color" content="#030712">
 
-    <link rel="stylesheet" href="style.css?v=20260216c">
+    <link rel="stylesheet" href="style.css?v=20260217a">
     <script src="scp-affiliate.js?v=20260215c"></script>
     <script defer src="i18n.js?v=20260215c"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,6 +36,9 @@
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 </head>
 
 <body data-section="businesses">
@@ -227,7 +230,7 @@
     <!-- Detect businesses from feeds (runs after all data + businesses-data.js) -->
     <script defer src="business-detect.js?v=20260216g"></script>
     <!-- Catalog rendering (last — reads the final merged businessListings) -->
-    <script defer src="catalog-page.js?v=20260216g"></script>
+    <script defer src="catalog-page.js?v=20260217a"></script>
     <script src="utils-module.js?v=20260215c"></script>
     <script src="map-module.js?v=20260215c"></script>
     <script src="supabase-module.js?v=20260215c"></script>
