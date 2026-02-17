@@ -404,6 +404,9 @@
     if (els.toggleBrand) {
       els.toggleBrand.textContent = `${t('reel.white_label', 'White-label')}: ${wl ? t('reel.on', 'On') : t('reel.off', 'Off')}`;
     }
+    if (els.refChip) {
+      els.refChip.style.display = wl ? 'none' : '';
+    }
   };
 
   const updateUrlWl = (wl) => {
