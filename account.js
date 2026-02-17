@@ -15,6 +15,7 @@
   const dashCrmTile = document.getElementById('dash-crm-tile');
   const dashShopTile = document.getElementById('dash-shop-tile');
   const dashRefMapTile = document.getElementById('dash-refmap-tile');
+  const dashCampaignsTile = document.getElementById('dash-campaigns-tile');
   const partnerTile = document.getElementById('dash-partner-tile');
   const partnerK = document.getElementById('dash-partner-k');
   const partnerV = document.getElementById('dash-partner-v');
@@ -1509,8 +1510,8 @@
           <div class="admin-user-actions">
             <select class="admin-select" data-claim-status>
               ${['new', 'reviewing', 'approved', 'rejected', 'closed'].map((s) => (
-                `<option value="${escapeHtml(s)}"${s === status ? ' selected' : ''}>${escapeHtml(claimStatusLabel(s))}</option>`
-              )).join('')}
+        `<option value="${escapeHtml(s)}"${s === status ? ' selected' : ''}>${escapeHtml(claimStatusLabel(s))}</option>`
+      )).join('')}
             </select>
             <input class="admin-input admin-input--compact" type="text" data-claim-notes value="${escapeHtml(notes)}"
               placeholder="${escapeHtml(t('account.admin.claims.notes_placeholder', 'Admin notes (optional)'))}">
@@ -1839,12 +1840,12 @@
 
     // Lazy-load network state list on first admin open.
     if (adminNetworkStatus && !lastNetworkItems.length) {
-      loadNetworkAdmin().catch(() => {});
+      loadNetworkAdmin().catch(() => { });
     }
 
     // Lazy-load claims on first admin open.
     if (adminClaimsStatus && !lastClaims.length) {
-      loadClaimsAdmin().catch(() => {});
+      loadClaimsAdmin().catch(() => { });
     }
   };
 
@@ -2206,12 +2207,12 @@
         ? `
           <div class="account-alert-match-list">
             ${latest.map((m) => {
-              const ref = m && m.property_ref ? String(m.property_ref) : (m && m.property_id ? String(m.property_id) : '');
-              const town = m && m.property_town ? String(m.property_town) : '';
-              const url = m && m.property_url ? String(m.property_url) : 'properties.html';
-              const txt = [ref, town].filter(Boolean).join(' · ');
-              return `<a class="account-alert-match" href="${escapeHtml(url)}">${escapeHtml(txt || t('listing.item', 'Listing'))}</a>`;
-            }).join('')}
+          const ref = m && m.property_ref ? String(m.property_ref) : (m && m.property_id ? String(m.property_id) : '');
+          const town = m && m.property_town ? String(m.property_town) : '';
+          const url = m && m.property_url ? String(m.property_url) : 'properties.html';
+          const txt = [ref, town].filter(Boolean).join(' · ');
+          return `<a class="account-alert-match" href="${escapeHtml(url)}">${escapeHtml(txt || t('listing.item', 'Listing'))}</a>`;
+        }).join('')}
           </div>
         `
         : `<div class="muted">${escapeHtml(t('account.alerts.no_matches', 'No matches yet for this alert.'))}</div>`;
@@ -2539,18 +2540,18 @@
           ? `
             <div class="account-order-lines">
               ${lines.map((it) => {
-                const wcId = it && it.wc_id != null ? String(it.wc_id) : '';
-                const img = it && it.image ? String(it.image) : 'assets/placeholder.png';
-                const name = it && it.name ? String(it.name) : (wcId ? `WC-${wcId}` : 'Item');
-                const qty = Number(it && it.qty) || 1;
-                return `
+            const wcId = it && it.wc_id != null ? String(it.wc_id) : '';
+            const img = it && it.image ? String(it.image) : 'assets/placeholder.png';
+            const name = it && it.name ? String(it.name) : (wcId ? `WC-${wcId}` : 'Item');
+            const qty = Number(it && it.qty) || 1;
+            return `
                   <div class="account-order-line">
                     <img class="account-order-thumb" src="${escapeHtml(img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/placeholder.png'">
                     <div class="account-order-line-name">${escapeHtml(name)} <span class="muted" style="font-weight:900;">x${escapeHtml(String(qty))}</span></div>
                     ${wcId ? `<button class="account-shop-mini" type="button" data-docs-wc="${escapeHtml(wcId)}" data-docs-status="${escapeHtml(status)}">${escapeHtml(t('account.shop.docs', 'Docs'))}</button>` : ''}
                   </div>
                 `;
-              }).join('')}
+          }).join('')}
             </div>
           `
           : `<div class="muted">${escapeHtml(t('account.shop.order_no_items', 'No items recorded.'))}</div>`;
@@ -3035,6 +3036,7 @@
     setVisible(dashCrmTile, role === 'admin', 'block');
     setVisible(dashShopTile, role === 'admin', 'block');
     setVisible(dashRefMapTile, role === 'admin', 'block');
+    setVisible(dashCampaignsTile, role === 'admin', 'block');
 
     const meta = ROLE_META[role] || ROLE_META.client;
 

@@ -7387,3 +7387,257 @@ body.reel-wl #reel-ref {
         grid-template-columns: 1fr;
     }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   SOCIAL MEDIA CAMPAIGNS (admin-campaigns)
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Toolbar ──────────────────────────────────────────────────────── */
+.campaign-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.campaign-toolbar-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    flex: 1;
+}
+
+.campaign-toolbar-filters .admin-select,
+.campaign-toolbar-filters .admin-input {
+    min-width: 160px;
+    flex: 1;
+    max-width: 240px;
+}
+
+.campaign-toolbar-meta {
+    flex-shrink: 0;
+}
+
+.campaign-count {
+    font-size: 0.85rem;
+    color: var(--text-muted, rgba(255, 255, 255, 0.5));
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+/* ── Grid ─────────────────────────────────────────────────────────── */
+.campaign-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
+    gap: 1.3rem;
+    margin-top: 1.3rem;
+    padding-bottom: 2rem;
+}
+
+/* ── Card ─────────────────────────────────────────────────────────── */
+.campaign-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    transition: transform 0.25s cubic-bezier(.4, 0, .2, 1),
+        box-shadow 0.25s cubic-bezier(.4, 0, .2, 1),
+        border-color 0.25s;
+    position: relative;
+    overflow: hidden;
+}
+
+.campaign-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    background: radial-gradient(ellipse at top left, rgba(255, 255, 255, 0.06), transparent 60%);
+    pointer-events: none;
+}
+
+.campaign-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 44px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.14);
+}
+
+/* ── Card header ──────────────────────────────────────────────────── */
+.campaign-card-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.campaign-platform-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    background: var(--badge-color, #555);
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Instagram gets gradient */
+.campaign-card[data-platform="instagram"] .campaign-platform-badge {
+    background: linear-gradient(135deg, #833AB4, #E1306C, #F77737);
+}
+
+.campaign-category-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.07);
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ── Title ────────────────────────────────────────────────────────── */
+.campaign-card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #fff;
+}
+
+/* ── Caption preview ──────────────────────────────────────────────── */
+.campaign-caption {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.72);
+    background: rgba(0, 0, 0, 0.22);
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 220px;
+    overflow-y: auto;
+    margin: 0;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+.campaign-caption::-webkit-scrollbar {
+    width: 5px;
+}
+
+.campaign-caption::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+}
+
+/* ── Meta ─────────────────────────────────────────────────────────── */
+.campaign-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.campaign-time {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.45);
+    font-weight: 500;
+}
+
+/* ── Actions ──────────────────────────────────────────────────────── */
+.campaign-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: 0.4rem;
+}
+
+.campaign-actions .cta-button {
+    font-size: 0.78rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 10px;
+    flex: 1;
+    min-width: 100px;
+    text-align: center;
+}
+
+.campaign-copied {
+    animation: campaign-pulse 0.5s ease;
+}
+
+@keyframes campaign-pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.06);
+        box-shadow: 0 0 18px rgba(56, 189, 130, 0.4);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* ── Toast ─────────────────────────────────────────────────────────── */
+.campaign-toast {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: rgba(20, 20, 30, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    color: #fff;
+    padding: 0.7rem 1.4rem;
+    border-radius: 14px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    z-index: 9999;
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(.4, 0, .2, 1), opacity 0.35s;
+    pointer-events: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.campaign-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ── Mobile ───────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .campaign-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .campaign-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .campaign-toolbar-filters .admin-select,
+    .campaign-toolbar-filters .admin-input {
+        max-width: 100%;
+    }
+
+    .campaign-toolbar-meta {
+        text-align: center;
+    }
+}

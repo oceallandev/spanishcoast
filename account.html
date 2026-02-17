@@ -49,7 +49,8 @@
             </div>
 
             <div class="header-right">
-                <button id="mobile-menu-btn" class="mobile-menu-btn" type="button" aria-expanded="false" aria-label="Menu">☰</button>
+                <button id="mobile-menu-btn" class="mobile-menu-btn" type="button" aria-expanded="false"
+                    aria-label="Menu">☰</button>
             </div>
         </div>
     </header>
@@ -75,105 +76,129 @@
         </div>
     </aside>
 
-	    <main class="site-main">
-	        <section class="page-section catalog-section active">
-	            <div class="page-hero">
-	                <h1 data-i18n="account.hero.title">Your Account</h1>
-	                <p data-i18n="account.hero.subtitle">Sign in to sync favourites across devices and unlock partner tools.</p>
-	            </div>
+    <main class="site-main">
+        <section class="page-section catalog-section active">
+            <div class="page-hero">
+                <h1 data-i18n="account.hero.title">Your Account</h1>
+                <p data-i18n="account.hero.subtitle">Sign in to sync favourites across devices and unlock partner tools.
+                </p>
+            </div>
 
-	            <div class="glass panel auth-status" id="auth-status" aria-live="polite" style="display:none"></div>
-	            <div class="auth-actions" id="auth-actions">
-	                <button id="clear-offline-cache-auth" class="cta-button cta-button--outline" type="button" data-i18n="account.actions.clear_offline_cache">Clear offline cache</button>
-	                <button id="reset-auth-storage" class="cta-button cta-button--outline" type="button" data-i18n="account.actions.reset_login">Reset login</button>
-	            </div>
+            <div class="glass panel auth-status" id="auth-status" aria-live="polite" style="display:none"></div>
+            <div class="auth-actions" id="auth-actions">
+                <button id="clear-offline-cache-auth" class="cta-button cta-button--outline" type="button"
+                    data-i18n="account.actions.clear_offline_cache">Clear offline cache</button>
+                <button id="reset-auth-storage" class="cta-button cta-button--outline" type="button"
+                    data-i18n="account.actions.reset_login">Reset login</button>
+            </div>
 
-	            <div class="page-grid" id="auth-panels">
-	                <div class="glass panel">
-	                    <h2 data-i18n="account.signin.title">Sign in</h2>
-	                    <form id="sign-in-form" class="form-grid">
-	                        <label>
+            <div class="page-grid" id="auth-panels">
+                <div class="glass panel">
+                    <h2 data-i18n="account.signin.title">Sign in</h2>
+                    <form id="sign-in-form" class="form-grid">
+                        <label>
                             <span data-i18n="account.field.email">Email</span>
-                            <input id="sign-in-email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required placeholder="you@email.com" data-i18n-placeholder="account.placeholder.email">
+                            <input id="sign-in-email" name="email" type="email" autocomplete="username"
+                                inputmode="email" autocapitalize="none" spellcheck="false" required
+                                placeholder="you@email.com" data-i18n-placeholder="account.placeholder.email">
                         </label>
                         <label>
                             <span data-i18n="account.field.password">Password</span>
-                            <input id="sign-in-password" name="password" type="password" autocomplete="current-password" required placeholder="Your password" data-i18n-placeholder="account.field.password_current">
-	                        </label>
-	                        <button class="cta-button" type="submit" data-i18n="account.signin.button">Sign in</button>
-	                    </form>
-
-	                    <div class="divider"></div>
-
-	                    <h3 data-i18n="account.reset.title">Reset your password</h3>
-	                    <form id="reset-password-form" class="form-grid">
-	                        <label>
-	                            <span data-i18n="account.field.email">Email</span>
-	                            <input id="reset-email" name="email" type="email" autocomplete="username" inputmode="email"
-	                                autocapitalize="none" spellcheck="false" required placeholder="you@email.com" data-i18n-placeholder="account.placeholder.email">
-	                        </label>
-	                        <button class="cta-button cta-button--outline" type="submit" data-i18n="account.reset.button">Send reset link</button>
-	                    </form>
-	                    <p class="muted" data-i18n="account.reset.note">We will email you a secure link to choose a new password.</p>
-
-	                    <div class="divider"></div>
-
-	                    <h3 data-i18n="account.magic.title">Or sign in with a magic link</h3>
-	                    <form id="magic-link-form" class="form-grid">
-	                        <label>
-	                            <span data-i18n="account.field.email">Email</span>
-                            <input id="magic-email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required placeholder="you@email.com" data-i18n-placeholder="account.placeholder.email">
+                            <input id="sign-in-password" name="password" type="password" autocomplete="current-password"
+                                required placeholder="Your password"
+                                data-i18n-placeholder="account.field.password_current">
                         </label>
-                        <button class="cta-button" type="submit" data-i18n="account.magic.button">Send magic link</button>
+                        <button class="cta-button" type="submit" data-i18n="account.signin.button">Sign in</button>
                     </form>
-	                    <p class="muted" data-i18n="account.magic.note">Check your inbox and click the link to sign in.</p>
-	                </div>
 
-	                <div class="glass panel">
+                    <div class="divider"></div>
+
+                    <h3 data-i18n="account.reset.title">Reset your password</h3>
+                    <form id="reset-password-form" class="form-grid">
+                        <label>
+                            <span data-i18n="account.field.email">Email</span>
+                            <input id="reset-email" name="email" type="email" autocomplete="username" inputmode="email"
+                                autocapitalize="none" spellcheck="false" required placeholder="you@email.com"
+                                data-i18n-placeholder="account.placeholder.email">
+                        </label>
+                        <button class="cta-button cta-button--outline" type="submit"
+                            data-i18n="account.reset.button">Send reset link</button>
+                    </form>
+                    <p class="muted" data-i18n="account.reset.note">We will email you a secure link to choose a new
+                        password.</p>
+
+                    <div class="divider"></div>
+
+                    <h3 data-i18n="account.magic.title">Or sign in with a magic link</h3>
+                    <form id="magic-link-form" class="form-grid">
+                        <label>
+                            <span data-i18n="account.field.email">Email</span>
+                            <input id="magic-email" name="email" type="email" autocomplete="username" inputmode="email"
+                                autocapitalize="none" spellcheck="false" required placeholder="you@email.com"
+                                data-i18n-placeholder="account.placeholder.email">
+                        </label>
+                        <button class="cta-button" type="submit" data-i18n="account.magic.button">Send magic
+                            link</button>
+                    </form>
+                    <p class="muted" data-i18n="account.magic.note">Check your inbox and click the link to sign in.</p>
+                </div>
+
+                <div class="glass panel">
                     <h2 data-i18n="account.signup.title">Create account</h2>
                     <form id="sign-up-form" class="form-grid">
                         <label>
                             <span data-i18n="account.field.email">Email</span>
-                            <input id="sign-up-email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required placeholder="you@email.com" data-i18n-placeholder="account.placeholder.email">
+                            <input id="sign-up-email" name="email" type="email" autocomplete="username"
+                                inputmode="email" autocapitalize="none" spellcheck="false" required
+                                placeholder="you@email.com" data-i18n-placeholder="account.placeholder.email">
                         </label>
                         <label>
                             <span data-i18n="account.field.password">Password</span>
-                            <input id="sign-up-password" name="password" type="password" autocomplete="new-password" required minlength="8"
-                                placeholder="Minimum 8 characters" data-i18n-placeholder="account.field.password_min">
+                            <input id="sign-up-password" name="password" type="password" autocomplete="new-password"
+                                required minlength="8" placeholder="Minimum 8 characters"
+                                data-i18n-placeholder="account.field.password_min">
                         </label>
-                        <button class="cta-button" type="submit" data-i18n="account.signup.button">Create account</button>
+                        <button class="cta-button" type="submit" data-i18n="account.signup.button">Create
+                            account</button>
                     </form>
-	                    <p class="muted" data-i18n="account.signup.note">We use your email only for login and service updates you request.</p>
-	                </div>
-	            </div>
+                    <p class="muted" data-i18n="account.signup.note">We use your email only for login and service
+                        updates you request.</p>
+                </div>
+            </div>
 
-	            <div class="glass panel auth-recovery" id="password-recovery-panel" style="display:none">
-	                <h2 data-i18n="account.recovery.title">Set a new password</h2>
-	                <p class="muted" data-i18n="account.recovery.subtitle">Choose a strong password (minimum 8 characters). You will stay signed in after updating.</p>
-	                <form id="password-recovery-form" class="form-grid">
-	                    <label>
-	                        <span data-i18n="account.recovery.new_password">New password</span>
-	                        <input id="recovery-password" name="password" type="password" autocomplete="new-password" required minlength="8"
-	                            placeholder="Minimum 8 characters" data-i18n-placeholder="account.field.password_min">
-	                    </label>
-	                    <label>
-	                        <span data-i18n="account.recovery.confirm_password">Confirm new password</span>
-	                        <input id="recovery-password2" name="password2" type="password" autocomplete="new-password" required minlength="8"
-	                            placeholder="Repeat the password" data-i18n-placeholder="account.field.password_repeat">
-	                    </label>
-	                    <div class="form-actions">
-	                        <button class="cta-button" type="submit" data-i18n="account.recovery.update">Update password</button>
-	                        <button class="cta-button cta-button--outline" id="recovery-cancel" type="button" data-i18n="account.recovery.cancel">Cancel</button>
-	                    </div>
-	                </form>
-	            </div>
+            <div class="glass panel auth-recovery" id="password-recovery-panel" style="display:none">
+                <h2 data-i18n="account.recovery.title">Set a new password</h2>
+                <p class="muted" data-i18n="account.recovery.subtitle">Choose a strong password (minimum 8 characters).
+                    You will stay signed in after updating.</p>
+                <form id="password-recovery-form" class="form-grid">
+                    <label>
+                        <span data-i18n="account.recovery.new_password">New password</span>
+                        <input id="recovery-password" name="password" type="password" autocomplete="new-password"
+                            required minlength="8" placeholder="Minimum 8 characters"
+                            data-i18n-placeholder="account.field.password_min">
+                    </label>
+                    <label>
+                        <span data-i18n="account.recovery.confirm_password">Confirm new password</span>
+                        <input id="recovery-password2" name="password2" type="password" autocomplete="new-password"
+                            required minlength="8" placeholder="Repeat the password"
+                            data-i18n-placeholder="account.field.password_repeat">
+                    </label>
+                    <div class="form-actions">
+                        <button class="cta-button" type="submit" data-i18n="account.recovery.update">Update
+                            password</button>
+                        <button class="cta-button cta-button--outline" id="recovery-cancel" type="button"
+                            data-i18n="account.recovery.cancel">Cancel</button>
+                    </div>
+                </form>
+            </div>
 
             <div class="account-dashboard" id="dashboard-panels" style="display:none">
                 <div class="glass panel account-welcome" id="account-status" aria-live="polite">
                     <div class="account-welcome-top">
                         <div>
                             <div class="status-title" data-i18n="account.dashboard.title">Dashboard</div>
-                            <div class="status-text" id="status-text" data-i18n="account.dashboard.connecting">Connecting…</div>
+                            <div class="status-text" id="status-text" data-i18n="account.dashboard.connecting">
+                                Connecting…</div>
                             <div class="muted" id="status-hint"></div>
                         </div>
                         <div class="account-welcome-actions">
@@ -181,15 +206,21 @@
                                 <span class="role-badge" id="dash-role">Client</span>
                             </div>
                             <div class="status-actions">
-                                <a class="cta-button cta-button--outline" href="properties.html" data-i18n="account.dashboard.browse">Browse</a>
-                                <a class="cta-button cta-button--outline" href="properties.html?saved=1" data-i18n="account.dashboard.saved">Saved</a>
-                                <a class="cta-button cta-button--outline" href="assets/scp-user-manual.pdf?v=20260211c" target="_blank" rel="noopener" download data-i18n="account.dashboard.manual_pdf">Manual PDF</a>
-                                <button id="sign-out-btn" class="cta-button cta-button--outline" type="button" disabled data-i18n="account.dashboard.sign_out">Sign out</button>
+                                <a class="cta-button cta-button--outline" href="properties.html"
+                                    data-i18n="account.dashboard.browse">Browse</a>
+                                <a class="cta-button cta-button--outline" href="properties.html?saved=1"
+                                    data-i18n="account.dashboard.saved">Saved</a>
+                                <a class="cta-button cta-button--outline" href="assets/scp-user-manual.pdf?v=20260211c"
+                                    target="_blank" rel="noopener" download
+                                    data-i18n="account.dashboard.manual_pdf">Manual PDF</a>
+                                <button id="sign-out-btn" class="cta-button cta-button--outline" type="button" disabled
+                                    data-i18n="account.dashboard.sign_out">Sign out</button>
                             </div>
                         </div>
                     </div>
                     <div style="margin-top:0.8rem; display:flex; gap:0.6rem; flex-wrap:wrap;">
-                        <button id="clear-offline-cache" class="cta-button cta-button--outline" type="button" data-i18n="account.actions.clear_offline_cache">Clear offline cache</button>
+                        <button id="clear-offline-cache" class="cta-button cta-button--outline" type="button"
+                            data-i18n="account.actions.clear_offline_cache">Clear offline cache</button>
                     </div>
                 </div>
 
@@ -207,30 +238,42 @@
                             <div class="account-profile-note muted" id="profile-note"></div>
 
                             <div class="account-profile-actions">
-                                <button id="profile-edit-toggle" class="cta-button cta-button--outline" type="button" data-i18n="account.profile.edit">Edit profile</button>
+                                <button id="profile-edit-toggle" class="cta-button cta-button--outline" type="button"
+                                    data-i18n="account.profile.edit">Edit profile</button>
                             </div>
 
-	                            <form id="profile-edit-form" class="form-grid account-profile-form" style="display:none; margin-top:1rem;">
-	                                <label>
-	                                    <span data-i18n="account.profile.display_name">Display name</span>
-	                                    <input id="profile-edit-name" type="text" placeholder="Your name" data-i18n-placeholder="account.profile.display_name_placeholder">
-	                                </label>
-	                                <label>
-	                                    <span data-i18n="account.profile.avatar_upload">Upload profile image</span>
-	                                    <input id="profile-edit-avatar-file" type="file" accept="image/*">
-	                                    <div class="muted profile-avatar-hint" data-i18n="account.profile.avatar_upload_note">Optional. If upload is not enabled yet, paste an image URL below.</div>
-	                                </label>
-	                                <label class="profile-span-2">
-	                                    <span data-i18n="account.profile.avatar_url">Profile image URL</span>
-	                                    <input id="profile-edit-avatar-url" type="url" inputmode="url" autocapitalize="none" spellcheck="false" placeholder="https://…" data-i18n-placeholder="account.profile.avatar_url_placeholder">
-	                                </label>
+                            <form id="profile-edit-form" class="form-grid account-profile-form"
+                                style="display:none; margin-top:1rem;">
+                                <label>
+                                    <span data-i18n="account.profile.display_name">Display name</span>
+                                    <input id="profile-edit-name" type="text" placeholder="Your name"
+                                        data-i18n-placeholder="account.profile.display_name_placeholder">
+                                </label>
+                                <label>
+                                    <span data-i18n="account.profile.avatar_upload">Upload profile image</span>
+                                    <input id="profile-edit-avatar-file" type="file" accept="image/*">
+                                    <div class="muted profile-avatar-hint"
+                                        data-i18n="account.profile.avatar_upload_note">Optional. If upload is not
+                                        enabled yet, paste an image URL below.</div>
+                                </label>
+                                <label class="profile-span-2">
+                                    <span data-i18n="account.profile.avatar_url">Profile image URL</span>
+                                    <input id="profile-edit-avatar-url" type="url" inputmode="url" autocapitalize="none"
+                                        spellcheck="false" placeholder="https://…"
+                                        data-i18n-placeholder="account.profile.avatar_url_placeholder">
+                                </label>
                                 <div class="profile-lang-block">
-                                    <div class="profile-lang-label" data-i18n="account.profile.languages">Spoken languages</div>
-                                    <div class="profile-lang-grid" id="profile-edit-langs" aria-label="Spoken languages"></div>
-                                    <div class="muted" style="margin-top:0.35rem;" data-i18n="account.profile.languages_note">Choose the languages you can communicate in.</div>
+                                    <div class="profile-lang-label" data-i18n="account.profile.languages">Spoken
+                                        languages</div>
+                                    <div class="profile-lang-grid" id="profile-edit-langs"
+                                        aria-label="Spoken languages"></div>
+                                    <div class="muted" style="margin-top:0.35rem;"
+                                        data-i18n="account.profile.languages_note">Choose the languages you can
+                                        communicate in.</div>
                                 </div>
                                 <div class="form-actions">
-                                    <button id="profile-edit-save" class="cta-button" type="submit" data-i18n="account.profile.save">Save</button>
+                                    <button id="profile-edit-save" class="cta-button" type="submit"
+                                        data-i18n="account.profile.save">Save</button>
                                 </div>
                                 <div class="muted" id="profile-edit-status" aria-live="polite"></div>
                             </form>
@@ -252,8 +295,10 @@
                         <div class="glass panel account-quickshare" id="quickshare-panel" style="display:none">
                             <div class="account-role-head">
                                 <div>
-                                    <div class="account-role-k" data-i18n="account.quickshare.kicker">Partner tools</div>
-                                    <div class="account-role-v" data-i18n="account.quickshare.title">Quick share studio</div>
+                                    <div class="account-role-k" data-i18n="account.quickshare.kicker">Partner tools
+                                    </div>
+                                    <div class="account-role-v" data-i18n="account.quickshare.title">Quick share studio
+                                    </div>
                                 </div>
                                 <div class="account-role-actions">
                                     <label class="account-toggle">
@@ -266,76 +311,100 @@
                             <div class="quickshare-form">
                                 <label class="quickshare-field">
                                     <span data-i18n="account.quickshare.ref_label">Reference</span>
-                                    <input id="quickshare-ref" type="text" placeholder="SCP-1898" inputmode="text" autocapitalize="characters" spellcheck="false">
+                                    <input id="quickshare-ref" type="text" placeholder="SCP-1898" inputmode="text"
+                                        autocapitalize="characters" spellcheck="false">
                                 </label>
                                 <div class="quickshare-actions">
-                                    <a id="quickshare-open" class="cta-button cta-button--outline" href="properties.html" target="_blank" rel="noopener" data-i18n="account.quickshare.open_listing">Open listing</a>
-                                    <a id="quickshare-brochure" class="cta-button cta-button--outline" href="brochure.html" target="_blank" rel="noopener" data-i18n="account.quickshare.open_brochure">Brochure (PDF)</a>
-                                    <a id="quickshare-reel" class="cta-button cta-button--outline" href="reel.html" target="_blank" rel="noopener" data-i18n="account.quickshare.open_reel">Reel (Video)</a>
-                                    <button id="quickshare-copy-link" class="cta-button" type="button" data-i18n="account.quickshare.copy_link">Copy link</button>
-                                    <button id="quickshare-copy-brochure" class="cta-button" type="button" data-i18n="account.quickshare.copy_brochure">Copy brochure</button>
-                                    <button id="quickshare-copy-reel" class="cta-button" type="button" data-i18n="account.quickshare.copy_reel">Copy reel</button>
+                                    <a id="quickshare-open" class="cta-button cta-button--outline"
+                                        href="properties.html" target="_blank" rel="noopener"
+                                        data-i18n="account.quickshare.open_listing">Open listing</a>
+                                    <a id="quickshare-brochure" class="cta-button cta-button--outline"
+                                        href="brochure.html" target="_blank" rel="noopener"
+                                        data-i18n="account.quickshare.open_brochure">Brochure (PDF)</a>
+                                    <a id="quickshare-reel" class="cta-button cta-button--outline" href="reel.html"
+                                        target="_blank" rel="noopener" data-i18n="account.quickshare.open_reel">Reel
+                                        (Video)</a>
+                                    <button id="quickshare-copy-link" class="cta-button" type="button"
+                                        data-i18n="account.quickshare.copy_link">Copy link</button>
+                                    <button id="quickshare-copy-brochure" class="cta-button" type="button"
+                                        data-i18n="account.quickshare.copy_brochure">Copy brochure</button>
+                                    <button id="quickshare-copy-reel" class="cta-button" type="button"
+                                        data-i18n="account.quickshare.copy_reel">Copy reel</button>
                                 </div>
-                                <div class="muted" id="quickshare-hint" data-i18n="account.quickshare.hint">Tip: open a listing modal and click Instagram/TikTok to generate a reel video for sharing.</div>
+                                <div class="muted" id="quickshare-hint" data-i18n="account.quickshare.hint">Tip: open a
+                                    listing modal and click Instagram/TikTok to generate a reel video for sharing.</div>
                             </div>
                         </div>
 
-	                        <div class="glass panel account-activity" id="activity-panel">
-	                            <div class="account-role-head">
-	                                <div>
-	                                    <div class="account-role-k" data-i18n="account.activity.kicker">Your activity</div>
-	                                    <div class="account-role-v" data-i18n="account.activity.title">Sync & submissions</div>
-	                                </div>
-	                                <div class="account-role-actions">
-	                                    <button id="activity-refresh" class="cta-button cta-button--outline" type="button" data-i18n="account.activity.refresh">Refresh</button>
-	                                </div>
-	                            </div>
-	                            <div class="activity-grid" id="activity-grid"></div>
-	                        </div>
+                        <div class="glass panel account-activity" id="activity-panel">
+                            <div class="account-role-head">
+                                <div>
+                                    <div class="account-role-k" data-i18n="account.activity.kicker">Your activity</div>
+                                    <div class="account-role-v" data-i18n="account.activity.title">Sync & submissions
+                                    </div>
+                                </div>
+                                <div class="account-role-actions">
+                                    <button id="activity-refresh" class="cta-button cta-button--outline" type="button"
+                                        data-i18n="account.activity.refresh">Refresh</button>
+                                </div>
+                            </div>
+                            <div class="activity-grid" id="activity-grid"></div>
+                        </div>
 
-	                        <div class="glass panel account-alerts" id="alerts-panel">
-	                            <div class="account-role-head">
-	                                <div>
-	                                    <div class="account-role-k" data-i18n="account.alerts.kicker">Property alerts</div>
-	                                    <div class="account-role-v" data-i18n="account.alerts.title">Saved requirements & new matches</div>
-	                                </div>
-	                                <div class="account-role-actions">
-	                                    <button id="alerts-refresh" class="cta-button cta-button--outline" type="button" data-i18n="account.alerts.refresh">Refresh</button>
-	                                    <button id="alerts-mark-seen" class="cta-button cta-button--outline" type="button" data-i18n="account.alerts.mark_seen">Mark all seen</button>
-	                                </div>
-	                            </div>
-	                            <div class="muted" id="alerts-summary">Loading alerts…</div>
-	                            <div class="muted account-alerts-status" id="alerts-status" aria-live="polite"></div>
-	                            <div class="account-alerts-list" id="alerts-list"></div>
-	                        </div>
+                        <div class="glass panel account-alerts" id="alerts-panel">
+                            <div class="account-role-head">
+                                <div>
+                                    <div class="account-role-k" data-i18n="account.alerts.kicker">Property alerts</div>
+                                    <div class="account-role-v" data-i18n="account.alerts.title">Saved requirements &
+                                        new matches</div>
+                                </div>
+                                <div class="account-role-actions">
+                                    <button id="alerts-refresh" class="cta-button cta-button--outline" type="button"
+                                        data-i18n="account.alerts.refresh">Refresh</button>
+                                    <button id="alerts-mark-seen" class="cta-button cta-button--outline" type="button"
+                                        data-i18n="account.alerts.mark_seen">Mark all seen</button>
+                                </div>
+                            </div>
+                            <div class="muted" id="alerts-summary">Loading alerts…</div>
+                            <div class="muted account-alerts-status" id="alerts-status" aria-live="polite"></div>
+                            <div class="account-alerts-list" id="alerts-list"></div>
+                        </div>
 
-	                        <div class="glass panel account-shop" id="shop-panel">
-	                            <div class="account-role-head">
-	                                <div>
-	                                    <div class="account-role-k" data-i18n="account.shop.kicker">Smart Devices</div>
+                        <div class="glass panel account-shop" id="shop-panel">
+                            <div class="account-role-head">
+                                <div>
+                                    <div class="account-role-k" data-i18n="account.shop.kicker">Smart Devices</div>
                                     <div class="account-role-v" data-i18n="account.shop.title">Basket & Purchases</div>
                                 </div>
                                 <div class="account-role-actions">
-                                    <a class="cta-button cta-button--outline" href="shop.html" data-i18n="account.shop.open_shop">Open shop</a>
-                                    <button id="shop-refresh" class="cta-button cta-button--outline" type="button" data-i18n="account.shop.refresh">Refresh</button>
+                                    <a class="cta-button cta-button--outline" href="shop.html"
+                                        data-i18n="account.shop.open_shop">Open shop</a>
+                                    <button id="shop-refresh" class="cta-button cta-button--outline" type="button"
+                                        data-i18n="account.shop.refresh">Refresh</button>
                                 </div>
                             </div>
 
                             <div class="account-shop-grid">
                                 <div class="account-shop-section">
-                                    <div class="account-shop-title" data-i18n="account.shop.basket_title">Your basket</div>
-                                    <div class="muted" id="shop-basket-hint" data-i18n="account.shop.basket_hint">Add devices from the shop and request installation help.</div>
+                                    <div class="account-shop-title" data-i18n="account.shop.basket_title">Your basket
+                                    </div>
+                                    <div class="muted" id="shop-basket-hint" data-i18n="account.shop.basket_hint">Add
+                                        devices from the shop and request installation help.</div>
                                     <div class="account-shop-list" id="shop-basket-list"></div>
                                     <div class="account-shop-actions">
-                                        <button id="shop-checkout" class="cta-button" type="button" data-i18n="account.shop.checkout">Request checkout</button>
-                                        <button id="shop-clear-basket" class="cta-button cta-button--outline" type="button" data-i18n="account.shop.clear_basket">Clear basket</button>
+                                        <button id="shop-checkout" class="cta-button" type="button"
+                                            data-i18n="account.shop.checkout">Request checkout</button>
+                                        <button id="shop-clear-basket" class="cta-button cta-button--outline"
+                                            type="button" data-i18n="account.shop.clear_basket">Clear basket</button>
                                     </div>
                                     <div class="muted" id="shop-checkout-status" aria-live="polite"></div>
                                 </div>
 
                                 <div class="account-shop-section">
-                                    <div class="account-shop-title" data-i18n="account.shop.history_title">Purchase history</div>
-                                    <div class="muted" data-i18n="account.shop.history_hint">After payment/approval, installation instructions will appear here.</div>
+                                    <div class="account-shop-title" data-i18n="account.shop.history_title">Purchase
+                                        history</div>
+                                    <div class="muted" data-i18n="account.shop.history_hint">After payment/approval,
+                                        installation instructions will appear here.</div>
                                     <div class="account-shop-list" id="shop-history-list"></div>
                                 </div>
                             </div>
@@ -346,45 +415,58 @@
                 <div class="account-tiles" aria-label="Account shortcuts">
                     <a class="glass panel account-tile" href="properties.html?saved=1">
                         <div class="account-tile-k" data-i18n="account.tiles.saved_listings">Saved listings</div>
-                        <div class="account-tile-v"><span id="dash-saved-count">0</span> <span data-i18n="account.tiles.saved_word">saved</span></div>
-                        <div class="muted" data-i18n="account.tiles.saved_desc">Open your shortlist and share it instantly.</div>
-	                    </a>
-	                    <a class="glass panel account-tile" href="properties.html">
-	                        <div class="account-tile-k" data-i18n="account.tiles.browse">Browse</div>
-	                        <div class="account-tile-v" data-i18n="account.tiles.browse_desc_title">Find your next place</div>
-	                        <div class="muted" data-i18n="account.tiles.browse_desc">Fast filters, accurate map, and shareable refs.</div>
-	                    </a>
+                        <div class="account-tile-v"><span id="dash-saved-count">0</span> <span
+                                data-i18n="account.tiles.saved_word">saved</span></div>
+                        <div class="muted" data-i18n="account.tiles.saved_desc">Open your shortlist and share it
+                            instantly.</div>
+                    </a>
+                    <a class="glass panel account-tile" href="properties.html">
+                        <div class="account-tile-k" data-i18n="account.tiles.browse">Browse</div>
+                        <div class="account-tile-v" data-i18n="account.tiles.browse_desc_title">Find your next place
+                        </div>
+                        <div class="muted" data-i18n="account.tiles.browse_desc">Fast filters, accurate map, and
+                            shareable refs.</div>
+                    </a>
                     <a class="glass panel account-tile" href="property-add.html" id="dash-sell-property-tile">
                         <div class="account-tile-k" data-i18n="account.tiles.sell_property">Sell</div>
-                        <div class="account-tile-v" data-i18n="account.tiles.sell_property_title">List your property</div>
-                        <div class="muted" data-i18n="account.tiles.sell_property_desc">Upload photos and submit for admin review. We publish verified listings.</div>
+                        <div class="account-tile-v" data-i18n="account.tiles.sell_property_title">List your property
+                        </div>
+                        <div class="muted" data-i18n="account.tiles.sell_property_desc">Upload photos and submit for
+                            admin review. We publish verified listings.</div>
                     </a>
                     <a class="glass panel account-tile" href="guide.html">
                         <div class="account-tile-k" data-i18n="account.tiles.guide">Guide</div>
                         <div class="account-tile-v" data-i18n="account.tiles.guide_title">How to use the app</div>
-                        <div class="muted" data-i18n="account.tiles.guide_desc">All features, benefits, and quick tips in one place.</div>
+                        <div class="muted" data-i18n="account.tiles.guide_desc">All features, benefits, and quick tips
+                            in one place.</div>
                     </a>
                     <a class="glass panel account-tile" href="street-scout.html" id="dash-scout-tile">
                         <div class="account-tile-k" data-i18n="account.tiles.scout">Earn</div>
                         <div class="account-tile-v" data-i18n="account.tiles.scout_title">Street Scout (€200–€500)</div>
-                        <div class="muted" data-i18n="account.tiles.scout_desc">Snap a For Sale board and earn when it closes.</div>
+                        <div class="muted" data-i18n="account.tiles.scout_desc">Snap a For Sale board and earn when it
+                            closes.</div>
                     </a>
                     <a class="glass panel account-tile" href="affiliate.html" id="dash-affiliate-tile">
                         <div class="account-tile-k" data-i18n="account.tiles.affiliate">Earn</div>
                         <div class="account-tile-v" data-i18n="account.tiles.affiliate_title">Recommend (10%)</div>
-                        <div class="muted" data-i18n="account.tiles.affiliate_desc">Share links and earn 10% of SCP fees from referred clients.</div>
+                        <div class="muted" data-i18n="account.tiles.affiliate_desc">Share links and earn 10% of SCP fees
+                            from referred clients.</div>
                     </a>
-                    <a class="glass panel account-tile" href="admin-favourites.html" id="dash-admin-tile" style="display:none">
+                    <a class="glass panel account-tile" href="admin-favourites.html" id="dash-admin-tile"
+                        style="display:none">
                         <div class="account-tile-k" data-i18n="account.tiles.admin">Admin</div>
                         <div class="account-tile-v" data-i18n="account.tiles.admin_fav_title">Favourites inbox</div>
-                        <div class="muted" data-i18n="account.tiles.admin_fav_desc">See saved listings from all users (admin only).</div>
-	                    </a>
-                    <a class="glass panel account-tile" href="admin-vehicles.html" id="dash-vehicles-tile" style="display:none">
+                        <div class="muted" data-i18n="account.tiles.admin_fav_desc">See saved listings from all users
+                            (admin only).</div>
+                    </a>
+                    <a class="glass panel account-tile" href="admin-vehicles.html" id="dash-vehicles-tile"
+                        style="display:none">
                         <div class="account-tile-k" data-i18n="account.tiles.admin">Admin</div>
                         <div class="account-tile-v">Vehicle submissions</div>
                         <div class="muted">Approve owner and dealer listings before publishing.</div>
                     </a>
-                    <a class="glass panel account-tile" href="admin-properties.html" id="dash-properties-tile" style="display:none">
+                    <a class="glass panel account-tile" href="admin-properties.html" id="dash-properties-tile"
+                        style="display:none">
                         <div class="account-tile-k" data-i18n="account.tiles.admin">Admin</div>
                         <div class="account-tile-v">Property submissions</div>
                         <div class="muted">Approve owner listings before publishing.</div>
@@ -397,17 +479,29 @@
                     <a class="glass panel account-tile" href="admin-shop.html" id="dash-shop-tile" style="display:none">
                         <div class="account-tile-k" data-i18n="account.tiles.admin">Admin</div>
                         <div class="account-tile-v" data-i18n="account.tiles.admin_shop_title">Shop editor</div>
-                        <div class="muted" data-i18n="account.tiles.admin_shop_desc">Curate smart device products shown in the app.</div>
+                        <div class="muted" data-i18n="account.tiles.admin_shop_desc">Curate smart device products shown
+                            in the app.</div>
                     </a>
-                    <a class="glass panel account-tile" href="admin-ref-map.html" id="dash-refmap-tile" style="display:none">
+                    <a class="glass panel account-tile" href="admin-ref-map.html" id="dash-refmap-tile"
+                        style="display:none">
                         <div class="account-tile-k" data-i18n="account.tiles.admin">Admin</div>
                         <div class="account-tile-v">Original refs map</div>
                         <div class="muted">Import mapping so the Orig button shows the correct source reference.</div>
                     </a>
+                    <a class="glass panel account-tile" href="admin-campaigns.html" id="dash-campaigns-tile"
+                        style="display:none">
+                        <div class="account-tile-k" data-i18n="account.tiles.admin">Admin</div>
+                        <div class="account-tile-v">📱 Social Media Campaigns</div>
+                        <div class="muted">Ready-made captions & hashtags for Instagram, Facebook, TikTok, LinkedIn and
+                            X.</div>
+                    </a>
                     <a class="glass panel account-tile" href="collaborate.html" id="dash-partner-tile">
-                        <div class="account-tile-k" id="dash-partner-k" data-i18n="account.tiles.partner_tools">Partner tools</div>
-                        <div class="account-tile-v" id="dash-partner-v" data-i18n="account.tiles.partner_tools_title">White-label & collaboration</div>
-                        <div class="muted" id="dash-partner-desc" data-i18n="account.tiles.partner_tools_desc">For agencies, agents, developers and partners.</div>
+                        <div class="account-tile-k" id="dash-partner-k" data-i18n="account.tiles.partner_tools">Partner
+                            tools</div>
+                        <div class="account-tile-v" id="dash-partner-v" data-i18n="account.tiles.partner_tools_title">
+                            White-label & collaboration</div>
+                        <div class="muted" id="dash-partner-desc" data-i18n="account.tiles.partner_tools_desc">For
+                            agencies, agents, developers and partners.</div>
                     </a>
                 </div>
 
@@ -415,28 +509,39 @@
                     <div class="account-admin-head">
                         <div>
                             <h2 style="margin:0;" data-i18n="account.admin.title">Admin Dashboard</h2>
-                            <div class="muted" data-i18n="account.admin.subtitle">Manage favourites inbox, roles, and collaborators.</div>
+                            <div class="muted" data-i18n="account.admin.subtitle">Manage favourites inbox, roles, and
+                                collaborators.</div>
                         </div>
-                            <div class="account-admin-actions">
-                                <a class="cta-button" href="admin-favourites.html" data-i18n="account.admin.btn.fav_inbox">Favourites Inbox</a>
-                                <a class="cta-button cta-button--outline" href="admin-vehicles.html">Vehicle Inbox</a>
-                                <a class="cta-button cta-button--outline" href="admin-properties.html">Property Inbox</a>
-                                <a class="cta-button cta-button--outline" href="admin-crm.html" data-i18n="account.admin.btn.crm">CRM</a>
-                                <a class="cta-button cta-button--outline" href="admin-shop.html" data-i18n="account.admin.btn.shop">Shop Editor</a>
-                                <a class="cta-button cta-button--outline" href="admin-affiliates.html" data-i18n="account.admin.btn.affiliates">Affiliates</a>
-                                <a class="cta-button cta-button--outline" href="admin-ref-map.html">Original refs map</a>
-                                <a class="cta-button cta-button--outline" href="admin-scout.html" data-i18n="account.admin.btn.scout">Street Scout Inbox</a>
-                            </div>
+                        <div class="account-admin-actions">
+                            <a class="cta-button" href="admin-favourites.html"
+                                data-i18n="account.admin.btn.fav_inbox">Favourites Inbox</a>
+                            <a class="cta-button cta-button--outline" href="admin-vehicles.html">Vehicle Inbox</a>
+                            <a class="cta-button cta-button--outline" href="admin-properties.html">Property Inbox</a>
+                            <a class="cta-button cta-button--outline" href="admin-crm.html"
+                                data-i18n="account.admin.btn.crm">CRM</a>
+                            <a class="cta-button cta-button--outline" href="admin-shop.html"
+                                data-i18n="account.admin.btn.shop">Shop Editor</a>
+                            <a class="cta-button cta-button--outline" href="admin-affiliates.html"
+                                data-i18n="account.admin.btn.affiliates">Affiliates</a>
+                            <a class="cta-button cta-button--outline" href="admin-ref-map.html">Original refs map</a>
+                            <a class="cta-button cta-button--outline" href="admin-scout.html"
+                                data-i18n="account.admin.btn.scout">Street Scout Inbox</a>
+                            <a class="cta-button cta-button--outline" href="admin-campaigns.html">📱 Campaigns</a>
                         </div>
+                    </div>
 
                     <div class="divider"></div>
 
                     <h3 style="margin:0;" data-i18n="account.admin.user_roles">User roles</h3>
-                    <div class="muted" style="margin-top:0.35rem;" data-i18n="account.admin.user_roles_help">Users create their own account first. Then assign a role here.</div>
+                    <div class="muted" style="margin-top:0.35rem;" data-i18n="account.admin.user_roles_help">Users
+                        create their own account first. Then assign a role here.</div>
                     <div class="account-admin-users">
                         <div class="account-admin-users-bar">
-                            <input id="admin-user-q" class="admin-input" type="text" placeholder="Search by email or display name (e.g. john@agency.com)" data-i18n-placeholder="account.admin.search_placeholder">
-                            <button id="admin-user-refresh" class="cta-button cta-button--outline" type="button" data-i18n="account.admin.search">Search</button>
+                            <input id="admin-user-q" class="admin-input" type="text"
+                                placeholder="Search by email or display name (e.g. john@agency.com)"
+                                data-i18n-placeholder="account.admin.search_placeholder">
+                            <button id="admin-user-refresh" class="cta-button cta-button--outline" type="button"
+                                data-i18n="account.admin.search">Search</button>
                         </div>
                         <div id="admin-user-status" class="muted" style="margin-top:0.5rem;"></div>
                         <div id="admin-user-list" class="account-admin-users-list"></div>
@@ -445,11 +550,15 @@
                     <div class="divider"></div>
 
                     <h3 style="margin:0;" data-i18n="account.admin.network.title">Network profiles</h3>
-                    <div class="muted" style="margin-top:0.35rem;" data-i18n="account.admin.network.subtitle">Suspend a public Network profile (agency/agent/developer/development/collaborator).</div>
+                    <div class="muted" style="margin-top:0.35rem;" data-i18n="account.admin.network.subtitle">Suspend a
+                        public Network profile (agency/agent/developer/development/collaborator).</div>
                     <div class="account-admin-users">
                         <div class="account-admin-users-bar">
-                            <input id="admin-network-q" class="admin-input" type="text" placeholder="Search network profiles (e.g. adrian, costa-blanca-developments)" data-i18n-placeholder="account.admin.network.search_placeholder">
-                            <button id="admin-network-refresh" class="cta-button cta-button--outline" type="button" data-i18n="account.admin.search">Search</button>
+                            <input id="admin-network-q" class="admin-input" type="text"
+                                placeholder="Search network profiles (e.g. adrian, costa-blanca-developments)"
+                                data-i18n-placeholder="account.admin.network.search_placeholder">
+                            <button id="admin-network-refresh" class="cta-button cta-button--outline" type="button"
+                                data-i18n="account.admin.search">Search</button>
                         </div>
                         <div id="admin-network-status" class="muted" style="margin-top:0.5rem;"></div>
                         <div id="admin-network-list" class="account-admin-users-list"></div>
@@ -458,11 +567,15 @@
                     <div class="divider"></div>
 
                     <h3 style="margin:0;" data-i18n="account.admin.claims.title">Profile claims</h3>
-                    <div class="muted" style="margin-top:0.35rem;" data-i18n="account.admin.claims.subtitle">Requests from developers/agencies to edit or delete their public Network profile.</div>
+                    <div class="muted" style="margin-top:0.35rem;" data-i18n="account.admin.claims.subtitle">Requests
+                        from developers/agencies to edit or delete their public Network profile.</div>
                     <div class="account-admin-users">
                         <div class="account-admin-users-bar">
-                            <input id="admin-claims-q" class="admin-input" type="text" placeholder="Search claims (email, slug, status)" data-i18n-placeholder="account.admin.claims.search_placeholder">
-                            <button id="admin-claims-refresh" class="cta-button cta-button--outline" type="button" data-i18n="account.admin.search">Search</button>
+                            <input id="admin-claims-q" class="admin-input" type="text"
+                                placeholder="Search claims (email, slug, status)"
+                                data-i18n-placeholder="account.admin.claims.search_placeholder">
+                            <button id="admin-claims-refresh" class="cta-button cta-button--outline" type="button"
+                                data-i18n="account.admin.search">Search</button>
                         </div>
                         <div id="admin-claims-status" class="muted" style="margin-top:0.5rem;"></div>
                         <div id="admin-claims-list" class="account-admin-users-list"></div>
@@ -471,7 +584,8 @@
                     <div class="divider"></div>
 
                     <h3 style="margin:0;" data-i18n="account.admin.newsletter.title">Newsletter</h3>
-                    <div class="muted" style="margin-top:0.35rem;" data-i18n="account.admin.newsletter.subtitle">Send an email update to all users, a role group, or specific emails.</div>
+                    <div class="muted" style="margin-top:0.35rem;" data-i18n="account.admin.newsletter.subtitle">Send an
+                        email update to all users, a role group, or specific emails.</div>
 
                     <form id="admin-newsletter-form" class="form-grid">
                         <label>
@@ -479,7 +593,8 @@
                             <select id="admin-newsletter-audience" class="admin-select">
                                 <option value="all" data-i18n="account.admin.newsletter.audience_all">All users</option>
                                 <option value="role" data-i18n="account.admin.newsletter.audience_role">By role</option>
-                                <option value="emails" data-i18n="account.admin.newsletter.audience_emails">Specific emails</option>
+                                <option value="emails" data-i18n="account.admin.newsletter.audience_emails">Specific
+                                    emails</option>
                             </select>
                         </label>
                         <label id="admin-newsletter-role-row" style="display:none">
@@ -496,19 +611,24 @@
                         </label>
                         <label id="admin-newsletter-emails-row" style="display:none">
                             <span data-i18n="account.admin.newsletter.emails">Emails</span>
-                            <textarea id="admin-newsletter-emails" placeholder="one@example.com, two@example.com" data-i18n-placeholder="account.admin.newsletter.emails_placeholder"></textarea>
+                            <textarea id="admin-newsletter-emails" placeholder="one@example.com, two@example.com"
+                                data-i18n-placeholder="account.admin.newsletter.emails_placeholder"></textarea>
                         </label>
                         <label>
                             <span data-i18n="account.admin.newsletter.subject">Subject</span>
-                            <input id="admin-newsletter-subject" type="text" placeholder="Monthly update" required data-i18n-placeholder="account.admin.newsletter.subject_placeholder">
+                            <input id="admin-newsletter-subject" type="text" placeholder="Monthly update" required
+                                data-i18n-placeholder="account.admin.newsletter.subject_placeholder">
                         </label>
                         <label>
                             <span data-i18n="account.admin.newsletter.body">Message</span>
-                            <textarea id="admin-newsletter-body" placeholder="Write a short, useful update..." required data-i18n-placeholder="account.admin.newsletter.body_placeholder"></textarea>
+                            <textarea id="admin-newsletter-body" placeholder="Write a short, useful update..." required
+                                data-i18n-placeholder="account.admin.newsletter.body_placeholder"></textarea>
                         </label>
                         <div class="account-admin-actions">
-                            <button id="admin-newsletter-test" class="cta-button cta-button--outline" type="button" data-i18n="account.admin.newsletter.send_test">Send test to me</button>
-                            <button id="admin-newsletter-send" class="cta-button" type="submit" data-i18n="account.admin.newsletter.send">Send newsletter</button>
+                            <button id="admin-newsletter-test" class="cta-button cta-button--outline" type="button"
+                                data-i18n="account.admin.newsletter.send_test">Send test to me</button>
+                            <button id="admin-newsletter-send" class="cta-button" type="submit"
+                                data-i18n="account.admin.newsletter.send">Send newsletter</button>
                         </div>
                         <div id="admin-newsletter-status" class="muted" aria-live="polite"></div>
                     </form>
@@ -517,7 +637,8 @@
 
             <div class="glass panel" id="diagnostics" style="display:none">
                 <h2 data-i18n="account.diagnostics.title">Diagnostics</h2>
-                <p class="muted" data-i18n-html="account.diagnostics.subtitle">Open this page with <code>?qa=1</code> to see setup checks.</p>
+                <p class="muted" data-i18n-html="account.diagnostics.subtitle">Open this page with <code>?qa=1</code> to
+                    see setup checks.</p>
                 <div id="diag-lines" class="diag-lines"></div>
             </div>
 
