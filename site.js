@@ -425,7 +425,7 @@
     // Use short labels so the switcher never pushes important header buttons (Filters/Map) off-screen.
     const supported = (i18n && Array.isArray(i18n.SUPPORTED) && i18n.SUPPORTED.length)
       ? i18n.SUPPORTED
-      : ['en', 'es', 'ro', 'sv'];
+      : ['en', 'es', 'ro', 'sv', 'no', 'da'];
     supported.forEach((code) => {
       const safeCode = String(code || '').trim().toLowerCase();
       if (!safeCode) return;
