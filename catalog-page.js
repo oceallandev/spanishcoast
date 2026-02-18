@@ -409,6 +409,7 @@
       businessTypeFilter.addEventListener('change', renderBusinesses);
     }
     if (businessHeaderMapToggleBtn && businessMapSection) {
+      businessHeaderMapToggleBtn.dataset.mapBound = '1';
       businessHeaderMapToggleBtn.addEventListener('click', () => {
         const next = !businessMapOpen;
         setBusinessMapMode(next);

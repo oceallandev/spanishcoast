@@ -5652,6 +5652,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (toggleMapBtn && mapSection) {
+        toggleMapBtn.dataset.mapBound = '1';
         toggleMapBtn.addEventListener('click', () => {
             setUiCollapsed(false);
             // Ensure map reflects the current filter controls (even if user didn't press Apply).

@@ -1,5 +1,5 @@
 /* Minimal same-origin service worker for instant repeat loads on mobile WebKit/Android. */
-const CACHE_NAME = 'scp-cache-20260218a';
+const CACHE_NAME = 'scp-cache-20260218b';
 
 const PRECACHE_PATHS = [
   './',
@@ -63,16 +63,16 @@ const PRECACHE_PATHS = [
   './network.html',
   './network-profile.html',
   './style.css?v=20260218a',
-  './site.js?v=20260216g',
-  './catalog.js?v=20260216g',
-  './catalog-page.js?v=20260217a',
+  './site.js?v=20260218b',
+  './catalog.js?v=20260218b',
+  './catalog-page.js?v=20260218b',
   './vehicles.css?v=20260211d',
   './vehicles-data.js?v=20260211d',
   './vehicles.js?v=20260211h',
   './vehicle-add.js?v=20260211d',
   './property-add.js?v=20260212a',
   './vehicle-import-xml.js?v=20260211d',
-  './app.js?v=20260216g',
+  './app.js?v=20260218b',
   './client-catalog.js?v=20260212a',
   './custom-listings.js?v=20260216g',
   './inmovilla-listings.js?v=20260216g',
