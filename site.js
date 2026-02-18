@@ -483,36 +483,6 @@
     if (event.key === 'Escape') closeMenu();
   });
 
-  // ── Safety-net: bind the Map/List toggle if the primary handler (app.js or
-  //    catalog-page.js) failed to bind it due to a silent crash. ──────────────
-  window.addEventListener('load', () => {
-    window.setTimeout(() => {
-      const btn = document.getElementById('toggle-map-btn');
-      if (!btn || btn.dataset.mapBound === '1') return;         // already bound
-      const section = document.getElementById('map-section')
-        || document.getElementById('business-map-section');
-      if (!section) return;                                     // no map on page
-
-      btn.dataset.mapBound = '1';
-      btn.addEventListener('click', () => {
-        section.classList.toggle('active');
-        const open = section.classList.contains('active');
-        document.body.classList.toggle('map-open', open);
-        btn.textContent = open ? 'List' : 'Map';
-
-        // Resize Leaflet if present.
-        if (window.L) {
-          window.setTimeout(() => {
-            document.querySelectorAll('.leaflet-container').forEach((el) => {
-              const m = el._leaflet_map || (el._leaflet && el._leaflet.map);
-              if (m && typeof m.invalidateSize === 'function') m.invalidateSize();
-            });
-          }, 250);
-        }
-      });
-    }, 800);   // run after app.js / catalog-page.js had their chance
-  });
-
   // PWA: cache static assets for instant repeat loads on mobile WebKit/Android.
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {

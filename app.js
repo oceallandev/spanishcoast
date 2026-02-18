@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Guard against double-execution. With `defer` and the failsafe below,
+    // the handler could fire twice—once from the manual dispatch and again
+    // from the browser's real DOMContentLoaded event. The duplicate bindings
+    // caused every click listener to fire twice (e.g. map toggle on→off).
+    if (window.__SCP_APP_INIT_DONE) return;
+    window.__SCP_APP_INIT_DONE = true;
+
     const formatTemplate = (value, vars) => {
         const text = value == null ? '' : String(value);
         if (!vars || typeof vars !== 'object') return text;
