@@ -166,18 +166,18 @@ body[data-section="properties"] {
 
 @media (max-width: 420px) {
     .header-right {
-        gap: 0.35rem;
+        gap: 0.3rem;
     }
 
     .lang-switch {
-        min-width: 44px;
-        padding: 0 0.52rem;
-        font-size: 0.74rem;
+        min-width: 40px;
+        padding: 0 0.45rem;
+        font-size: 0.72rem;
     }
 
     .open-filters-btn {
-        min-width: 40px;
-        padding: 0 0.65rem;
+        min-width: 36px;
+        padding: 0 0.55rem;
         gap: 0;
     }
 
@@ -186,9 +186,43 @@ body[data-section="properties"] {
     }
 
     .toggle-map-btn {
-        min-width: 56px;
-        padding: 0 0.62rem;
-        font-size: 0.8rem;
+        min-width: 50px;
+        padding: 0 0.5rem;
+        font-size: 0.78rem;
+    }
+}
+
+/* Extra-narrow phones (iPhone SE, etc.) — shave every pixel */
+@media (max-width: 375px) {
+    .main-header {
+        padding-left: 0.65rem;
+        padding-right: 0.65rem;
+    }
+
+    .header-inner {
+        gap: 0.35rem;
+    }
+
+    .header-right {
+        gap: 0.25rem;
+    }
+
+    .lang-switch {
+        min-width: 36px;
+        padding: 0 0.35rem;
+        font-size: 0.7rem;
+    }
+
+    .toggle-map-btn {
+        min-width: 46px;
+        padding: 0 0.4rem;
+        font-size: 0.75rem;
+    }
+
+    .mobile-menu-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 0.95rem;
     }
 }
 
