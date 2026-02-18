@@ -1,0 +1,81 @@
+name: Sync All Feeds (Unified)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 8,20 * * *"
+
+jobs:
+  sync-all:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Cache the reference maps to preserve SCP-xxxx IDs across runs
+      - name: Restore Ref Map Cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            private/inmovilla/ref_map.json
+            private/redsp1/ref_map.json
+            private/summertime/ref_map.json
+            reference_map.csv
+            ref_map.json
+          key: refmaps-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            refmaps-${{ runner.os }}-
+
+      - name: Run Master Sync
+        env:
+          SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          FEED_URL_SUMMERTIME: ${{ vars.FEED_URL_SUMMERTIME }}
+          # Defaults are in the script, OR override here with vars
+          # FEED_URL_INMOVILLA: ${{ vars.FEED_URL_INMOVILLA }}
+          # FEED_URL_REDSP: ${{ vars.FEED_URL_REDSP }}
+          # FEED_URL_PROPMLS: ${{ vars.FEED_URL_PROPMLS }}
+        run: |
+          # Ensure private dirs exist before run (for cache/script safety)
+          mkdir -p private/inmovilla private/redsp1 private/summertime
+          
+          echo "Running sync_feeds.py..."
+          python3 sync_feeds.py
+
+      - name: Save Ref Map Cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            private/inmovilla/ref_map.json
+            private/redsp1/ref_map.json
+            private/summertime/ref_map.json
+            reference_map.csv
+            ref_map.json
+          key: refmaps-${{ runner.os }}-${{ github.run_id }}
+
+      - name: Commit & Push Changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # Add the generated public JS files
+          git add inmovilla-listings.js newbuilds-listings.js summertime-listings.js data.js
+          
+          # Optional: Commit share pages if generated? 
+          # The script currently doesn't generate share pages, keeping it simple.
+          
+          if git diff --quiet --staged; then
+            echo "No changes to commit."
+          else
+            git commit -m "Auto-sync feeds [skip ci]"
+            git push
+          fi
