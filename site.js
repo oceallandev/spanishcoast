@@ -187,6 +187,7 @@
           <a href="account.html" data-i18n="nav.account">Account</a>
         </nav>
         <div class="mobile-menu-foot">
+          <a class="cta-button update-app-btn" href="#" data-i18n="nav.update_app" style="background:var(--scp-red);color:white;border-color:var(--scp-red);">Update App</a>
           <a class="cta-button" href="mailto:info@spanishcoastproperties.com" data-i18n="nav.email">Email</a>
           <a class="cta-button" href="tel:+34624867866" data-i18n="nav.call">Call</a>
         </div>
@@ -240,6 +241,29 @@
   // Put it after Blog so consumer navigation stays familiar.
   ensureNavLink('.primary-nav', { href: 'network.html', text: 'Network', i18nKey: 'nav.network', section: 'network', afterHref: 'blog.html' });
   ensureNavLink('.mobile-menu-links', { href: 'network.html', text: 'Network', i18nKey: 'nav.network', afterHref: 'blog.html' });
+
+  // Inject Update App button into Desktop Header if space permits
+  (() => {
+    const headerBtns = document.querySelector('.site-header .header-btns, .main-header .header-btns') || document.querySelector('.site-header .header-right, .main-header .header-right');
+    if (!headerBtns) return;
+    const existingUpdate = headerBtns.querySelector('.update-app-btn');
+    if (existingUpdate) return;
+
+    const btn = document.createElement('a');
+    btn.className = 'cta-button update-app-btn desktop-only';
+    btn.href = '#';
+    btn.setAttribute('data-i18n', 'nav.update_app');
+    btn.textContent = tr('nav.update_app', 'Update App');
+    btn.style.opacity = '0.8';
+
+    // Insert before standard header CTAs so it's not the primary call to action
+    const firstCta = headerBtns.querySelector('.cta-button');
+    if (firstCta) {
+      headerBtns.insertBefore(btn, firstCta);
+    } else {
+      headerBtns.appendChild(btn);
+    }
+  })();
 
   // Add "New Builds" to footer explore lists (only when a Properties link exists in that list).
   (() => {
@@ -356,6 +380,7 @@
     // Common CTA labels.
     setI18nText('.mobile-menu-foot a[href^=\"mailto:\"]', 'nav.email', 'Email');
     setI18nText('.contact-label', 'nav.contact_us', 'Contact Us');
+    setI18nText('.update-app-btn', 'nav.update_app', 'Update App');
 
     // Common button labels and aria-labels across pages.
     setI18nAriaLabel('#mobile-menu-btn', 'ui.menu', 'Menu');
@@ -481,6 +506,40 @@
 
   window.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeMenu();
+  });
+
+  // App Update / Clear Cache Logic
+  const handleAppUpdate = (e) => {
+    e.preventDefault();
+    const btn = e.currentTarget;
+    const originalText = btn.textContent;
+    btn.textContent = tr('nav.updating', 'Updating...');
+    btn.style.opacity = '0.5';
+    btn.style.pointerEvents = 'none';
+
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_CACHE' });
+
+      // Fallback reload if SW doesn't respond instantly
+      window.setTimeout(() => {
+        window.location.reload(true);
+      }, 1000);
+    } else {
+      // SW isn't controlling the page, brute-force clear standard caches and reload
+      if (window.caches) {
+        window.caches.keys().then((names) => {
+          Promise.all(names.map(name => window.caches.delete(name))).then(() => {
+            window.location.reload(true);
+          });
+        });
+      } else {
+        window.location.reload(true);
+      }
+    }
+  };
+
+  document.querySelectorAll('.update-app-btn').forEach(btn => {
+    btn.addEventListener('click', handleAppUpdate);
   });
 
   // PWA: cache static assets for instant repeat loads on mobile WebKit/Android.
