@@ -161,26 +161,32 @@
         <div class="card-img-wrapper">
           <img src="${esc(img)}" alt="${esc(title)}" loading="lazy" referrerpolicy="no-referrer"
             onerror="this.onerror=null;this.src='assets/placeholder.png'">
-          <div class="card-badge">${esc(bizType)}</div>
+          <div class="card-badge" data-i18n-dynamic>${esc(bizType)}</div>
           <div class="card-status ${esc(kind)}">${esc(kindLabel)}</div>
         </div>
         <div class="card-content">
-          <div class="card-ref">${esc(ref || kindLabel)}</div>
+          <div class="card-ref-row">
+            <div class="card-ref">
+              ${esc(ref || kindLabel)}
+            </div>
+          </div>
           <h3>${esc(title)}</h3>
           <div class="location">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-            ${esc(town)}, ${esc(province)}
+            <span data-i18n-dynamic>${esc(town)}, ${esc(province)}</span>
           </div>
           <div class="price">${esc(price)}</div>
           <div class="specs">
             <div class="spec-item">🏷️ ${esc(kindLabel)}</div>
-          <div class="spec-item">🏪 ${esc(bizType)}</div>
+            <div class="spec-item">🏪 ${esc(bizType)}</div>
           </div>
           ${desc ? `<div class="catalog-meta" style="margin-top:0.65rem">${esc(desc)}</div>` : ''}
-          <div class="card-actions">
-            <a class="card-action" href="${escAttr(href)}">${esc(t('catalog.details', 'Details'))}</a>
-            ${ref ? `<a class="card-action" href="${escAttr(brochureHref)}" target="_blank" rel="noopener">${esc(t('modal.brochure_pdf', 'Brochure (PDF)'))}</a>` : `<span class="card-action card-action--disabled">${esc(t('modal.brochure_pdf', 'Brochure (PDF)'))}</span>`}
-            ${whatsappHref ? `<a class="card-action card-action--whatsapp" href="${escAttr(whatsappHref)}" target="_blank" rel="noopener">WhatsApp</a>` : `<span class="card-action card-action--disabled">WhatsApp</span>`}
+          
+          <div class="card-actions" style="margin-top: 1rem;">
+             <a class="card-action" href="${escAttr(href)}">${esc(t('catalog.details', 'Details'))}</a>
+             ${ref ? `<a class="card-action" href="${escAttr(brochureHref)}" target="_blank" rel="noopener">${esc(t('modal.brochure_pdf', 'Brochure (PDF)'))}</a>` : `<span class="card-action card-action--disabled">${esc(t('modal.brochure_pdf', 'Brochure (PDF)'))}</span>`}
+             ${whatsappHref ? `<a class="card-action card-action--whatsapp" href="${escAttr(whatsappHref)}" target="_blank" rel="noopener">WhatsApp</a>` : `<span class="card-action card-action--disabled">WhatsApp</span>`}
+             ${shareHref ? `<a class="card-action" href="${escAttr(shareHref)}" target="_blank" rel="noopener">Share</a>` : ''}
           </div>
         </div>
       </article>
@@ -213,9 +219,6 @@
 
   const updateBusinessMap = (items) => {
     lastBusinessItems = items;
-    // Only init the map when the user has toggled it open.
-    if (!businessMapOpen && !businessMap) return;
-
     ensureBusinessMap();
     if (!businessMap || !businessMarkersLayer) return;
 
@@ -266,24 +269,16 @@
   const setBusinessMapMode = (next) => {
     if (!businessMapSection) return;
     businessMapOpen = next;
-    if (next) {
-      businessMapSection.classList.add('active');
-      document.body.classList.add('map-open');
-    } else {
-      businessMapSection.classList.remove('active');
-      document.body.classList.remove('map-open');
-    }
+    // Toggle fullscreen map mode (same as properties page).
+    document.body.classList.toggle('map-open', next);
     if (businessHeaderMapToggleBtn) {
       businessHeaderMapToggleBtn.textContent = next ? t('ui.list', 'List') : t('ui.map', 'Map');
     }
-    if (next) {
-      // Leaflet needs a layout pass when coming from hidden.
+    // Leaflet needs a layout pass after size changes.
+    if (businessMap) {
       setTimeout(() => {
-        ensureBusinessMap();
-        if (businessMap) {
-          businessMap.invalidateSize();
-          updateBusinessMap(lastBusinessItems);
-        }
+        businessMap.invalidateSize();
+        updateBusinessMap(lastBusinessItems);
       }, 120);
     }
   };
@@ -418,6 +413,12 @@
 
     wireBusinessCardClicks();
     renderBusinesses();
+
+    // Initialize the map immediately so it shows in the side-panel (like Properties).
+    ensureBusinessMap();
+    if (businessMap) {
+      setTimeout(() => businessMap.invalidateSize(), 200);
+    }
   }
 
   if (vehicleGrid) {

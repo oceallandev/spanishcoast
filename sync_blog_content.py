@@ -11,9 +11,10 @@ from urllib.error import URLError, HTTPError
 from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
 import xml.etree.ElementTree as ET
+import time
 
 
-USER_AGENT = "SpanishCoastPropertiesBlogSync/1.0 (+https://oceallandev.github.io/spanishcoast/)"
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
 
 
 def _now_utc_iso():
@@ -833,6 +834,7 @@ def main():
         url = feed.get("url") or ""
         if not url:
             return
+        time.sleep(2)
         try:
             xml = _fetch(url)
             items = _parse_rss_or_atom(xml)

@@ -55,6 +55,7 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 import xml.etree.ElementTree as ET
+import time
 
 try:
     from zoneinfo import ZoneInfo  # py3.9+
@@ -62,7 +63,7 @@ except Exception:  # pragma: no cover
     ZoneInfo = None  # type: ignore
 
 
-USER_AGENT = "SpanishCoastPropertiesLocalIntel/1.0 (+https://oceallandev.github.io/spanishcoast/)"
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
 
 
 def _now_utc_iso() -> str:
@@ -739,6 +740,7 @@ def main() -> int:
             continue
 
         if src_type == "ical":
+            time.sleep(2)
             try:
                 raw = _fetch(url, timeout=int(args.timeout))
                 text = raw.decode("utf-8", errors="replace")
@@ -792,6 +794,7 @@ def main() -> int:
             continue
 
         if src_type == "rss":
+            time.sleep(2)
             try:
                 xml = _fetch(url, timeout=int(args.timeout))
                 items = _parse_rss_or_atom(xml)

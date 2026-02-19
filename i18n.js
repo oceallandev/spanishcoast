@@ -581,6 +581,7 @@
       'modal.spec.beds': 'Beds',
       'modal.spec.baths': 'Baths',
       'modal.spec.area': 'Area',
+      'modal.spec.plot': 'Plot',
 
       'properties.fav.save_title': 'Save listing',
       'properties.fav.remove_title': 'Remove from saved',
@@ -2174,6 +2175,7 @@
       'modal.spec.beds': 'Dorms',
       'modal.spec.baths': 'Baños',
       'modal.spec.area': 'Superficie',
+      'modal.spec.plot': 'Parcela',
 
       'properties.fav.save_title': 'Guardar anuncio',
       'properties.fav.remove_title': 'Quitar de guardadas',
@@ -4035,6 +4037,7 @@
       'modal.spec.beds': 'Soverom',
       'modal.spec.baths': 'Bad',
       'modal.spec.area': 'Areal',
+      'modal.spec.plot': 'Tomt',
 
       'catalog.builder.title': 'Opprett kundekatalog',
       'catalog.builder.subtitle': 'Bruk dine filtrerte søkeresultater eller lagrede annonser for å generere en delbar kataloglenke.',
@@ -4391,6 +4394,7 @@
       'modal.spec.beds': 'Soveværelser',
       'modal.spec.baths': 'Badeværelser',
       'modal.spec.area': 'Areal',
+      'modal.spec.plot': 'Grund',
 
       'catalog.builder.title': 'Opret kundekatalog',
       'catalog.builder.subtitle': 'Brug dine filtrerede søgeresultater eller gemte annoncer til at generere et delevenligt kataloglink.',
@@ -6722,7 +6726,13 @@
 
   const scheduleMutationFlush = () => {
     if (mutationFlushTimer || mutationFlushBusy) return;
-    mutationFlushTimer = setTimeout(() => { flushMutationTranslations(); }, 60);
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(() => {
+        mutationFlushTimer = setTimeout(() => { flushMutationTranslations(); }, 60);
+      }, { timeout: 1000 });
+    } else {
+      mutationFlushTimer = setTimeout(() => { flushMutationTranslations(); }, 60);
+    }
   };
 
   const startDomObserver = () => {

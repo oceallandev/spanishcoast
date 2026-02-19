@@ -536,7 +536,13 @@ document.addEventListener('DOMContentLoaded', () => {
         } finally {
             dynamicTranslateBusy = false;
             if (dynamicTranslateRoots.size) {
-                dynamicTranslateTimer = window.setTimeout(flushDynamicTranslateQueue, 50);
+                if (typeof window.requestIdleCallback === 'function') {
+                    window.requestIdleCallback(() => {
+                        dynamicTranslateTimer = window.setTimeout(flushDynamicTranslateQueue, 50);
+                    }, { timeout: 1000 });
+                } else {
+                    dynamicTranslateTimer = window.setTimeout(flushDynamicTranslateQueue, 50);
+                }
             }
         }
     }
@@ -545,7 +551,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const target = root && root.querySelectorAll ? root : document;
         dynamicTranslateRoots.add(target);
         if (dynamicTranslateTimer || dynamicTranslateBusy) return;
-        dynamicTranslateTimer = window.setTimeout(flushDynamicTranslateQueue, 50);
+        if (typeof window.requestIdleCallback === 'function') {
+            window.requestIdleCallback(() => {
+                dynamicTranslateTimer = window.setTimeout(flushDynamicTranslateQueue, 50);
+            }, { timeout: 1000 });
+        } else {
+            dynamicTranslateTimer = window.setTimeout(flushDynamicTranslateQueue, 50);
+        }
     }
 
     // When owner-submitted listings are approved, some may not include GPS coordinates.
@@ -653,38 +665,68 @@ document.addEventListener('DOMContentLoaded', () => {
         return unique;
     }
 
-    function attachImageFallback(imgEl, urls, { onAllFailed, delayMs = 120, maxAttempts = null } = {}) {
+    function attachImageFallback(imgEl, urls, { delayMs = 120, maxAttempts = null } = {}) {
         if (!imgEl) return;
         let candidates = Array.isArray(urls) ? urls.filter(Boolean) : [];
         if (Number.isFinite(maxAttempts) && maxAttempts > 0) {
             candidates = candidates.slice(0, Math.floor(maxAttempts));
         }
+
+        // Fast path: if only one or no candidates, just set it natively.
+        if (candidates.length <= 1) {
+            imgEl.setAttribute('referrerpolicy', 'no-referrer');
+            imgEl.setAttribute('decoding', 'async');
+            imgEl.src = candidates[0] || PLACEHOLDER_IMAGE;
+            return;
+        }
+
+        // Instead of thrashing the visible DOM element when images fail (which blocks rendering), 
+        // we test the candidates in the background using an off-DOM Image object.
         let idx = 0;
         let scheduled = null;
+        const checker = new Image();
+        checker.referrerPolicy = 'no-referrer';
+        checker.decoding = 'async';
 
+        // Wait for the visible image to actually be near the viewport before we start spinning
+        // CPU cycles fetching the fallback candidates.
         imgEl.setAttribute('referrerpolicy', 'no-referrer');
         imgEl.setAttribute('decoding', 'async');
+        // Set the first candidate optimistically onto the visible DOM element.
+        imgEl.src = candidates[0];
 
-        const tryNext = () => {
+        const tryNextFallback = () => {
             scheduled = null;
             idx += 1;
             if (idx < candidates.length) {
-                imgEl.src = candidates[idx];
+                checker.src = candidates[idx];
                 return;
             }
+            // All candidates failed. Update the visible element to the placeholder.
+            checker.onload = null;
+            checker.onerror = null;
             imgEl.src = PLACEHOLDER_IMAGE;
-            imgEl.removeEventListener('error', onError);
-            if (typeof onAllFailed === 'function') {
-                onAllFailed();
-            }
         };
 
-        const onError = () => {
-            // Avoid tight error loops which cause visible flicker on mobile.
-            if (scheduled) return;
-            scheduled = window.setTimeout(tryNext, delayMs);
+        checker.onload = () => {
+            // Found a valid image! Update the visible element.
+            imgEl.src = checker.src;
+            checker.onload = null;
+            checker.onerror = null;
         };
-        imgEl.addEventListener('error', onError);
+
+        checker.onerror = () => {
+            if (scheduled) return;
+            // Delay slightly to prevent tight CPU looping on immediate failures
+            scheduled = window.setTimeout(tryNextFallback, delayMs);
+        };
+
+        imgEl.addEventListener('error', () => {
+            // First optimistic image failed. Start the background fallback chain.
+            if (idx === 0) {
+                tryNextFallback();
+            }
+        }, { once: true });
     }
 
     const imageOkCache = new Map(); // propertyId -> boolean (only set to false on definitive failure)
@@ -1623,6 +1665,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return ['admin', 'partner', 'agency_admin', 'agent', 'developer', 'collaborator'].includes(r);
     }
 
+    function isAdminRole(role) {
+        const r = toText(role).trim().toLowerCase();
+        return r === 'admin';
+    }
+
     function originalRefSourceLabel(source) {
         const s = toText(source).trim().toLowerCase();
         if (!s) return '';
@@ -1705,11 +1752,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function resolveOriginalRefForProperty(client, userId, property) {
         const role = await ensureSupabaseRole(client, userId);
-        if (!isPrivilegedRole(role)) return null;
+        if (!isAdminRole(role)) return null;
+
         const scpRef = toText(property && property.ref).trim().toUpperCase();
         const mapped = await supabaseMaybeGetOriginalRef(client, userId, scpRef);
+
         if (mapped && toText(mapped.original_ref).trim()) return mapped;
-        return getInlineOriginalRefMapping(property);
+
+        const inline = getInlineOriginalRefMapping(property);
+        return inline;
     }
 
     async function copyTextToClipboard(text) {
@@ -1738,15 +1789,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cached) return cached;
 
         const role = await ensureSupabaseRole(client, userId);
-        if (!isPrivilegedRole(role)) return null;
+        if (!isAdminRole(role)) return null;
 
         try {
+            console.log('[OrigRef] Querying listing_ref_map for:', ref);
             const { data, error } = await client
                 .from('listing_ref_map')
                 .select('original_ref,original_id,source')
                 .eq('scp_ref', ref)
                 .maybeSingle();
-            if (error || !data) return null;
+
+            if (error) {
+                console.error('[OrigRef] Supabase error:', error);
+                return null;
+            }
+            console.log('[OrigRef] Supabase data:', data);
+
+            if (!data) return null;
             const original_ref = toText(data.original_ref).trim();
             if (!original_ref) return null;
             const mapped = { original_ref, original_id: toText(data.original_id).trim(), source: toText(data.source).trim() };
@@ -1855,7 +1914,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function refreshOriginalRefButtonsUi() {
         const hasSession = Boolean(supabaseClient && supabaseUser);
-        const allowed = hasSession && isPrivilegedRole(supabaseRole);
+        const allowed = hasSession && isAdminRole(supabaseRole);
         const buttons = document.querySelectorAll('button[data-action="show-original-ref"]');
         buttons.forEach((btn) => {
             const ref = toText(btn.dataset.scpRef).trim();
@@ -3656,9 +3715,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="price">${formatListingPrice(property)}</div>
                     <div class="specs">
-                        <div class="spec-item">🛏️ ${escapeHtml(t('modal.spec.beds', 'Beds'))} ${beds}</div>
-                        <div class="spec-item">🛁 ${escapeHtml(t('modal.spec.baths', 'Baths'))} ${baths}</div>
-                        <div class="spec-item">📐 ${escapeHtml(t('modal.spec.area', 'Area'))} ${builtArea} m2</div>
+                        ${!isLand ? `<div class="spec-item">🛏️ ${escapeHtml(t('modal.spec.beds', 'Beds'))} ${beds}</div>` : ''}
+                        ${!isLand ? `<div class="spec-item">🛁 ${escapeHtml(t('modal.spec.baths', 'Baths'))} ${baths}</div>` : ''}
+                        ${builtArea > 0 ? `<div class="spec-item">📐 ${escapeHtml(t('modal.spec.area', 'Area'))} ${builtArea} m2</div>` : ''}
+                        ${plotArea > 0 ? `<div class="spec-item">🪴 ${escapeHtml(t('modal.spec.plot', 'Plot'))} ${plotArea} m2</div>` : ''}
                         ${eurPerSqm ? `<div class="spec-item">📊 ${eurPerSqm}</div>` : ''}
                     </div>
                 </div>
@@ -3709,7 +3769,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const hasInlineRef = Boolean(getInlineOriginalRefMapping(property));
                 const allowed = Boolean(reference)
                     && Boolean(supabaseClient && supabaseUser)
-                    && (isPrivilegedRole(supabaseRole) || (!supabaseRoleResolved && hasInlineRef));
+                    && (isAdminRole(supabaseRole) || (!supabaseRoleResolved && hasInlineRef));
                 origBtn.style.display = allowed ? 'inline-flex' : 'none';
             };
             updateOrigBtnVisibility();
@@ -3733,7 +3793,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     if (!user) return;
                     const role = await ensureSupabaseRole(client, user.id);
-                    if (!isPrivilegedRole(role)) return;
+                    if (!isAdminRole(role)) return;
                     if (!reference) return;
 
                     const already = (origSpan.dataset.originalRef || '').trim();
@@ -3778,9 +3838,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             card.addEventListener('click', () => {
-                if (pid && imageOkCache.get(pid) === false) {
-                    return;
-                }
                 openPropertyModal(property);
             });
 
@@ -3792,16 +3849,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const cardImg = card.querySelector('.card-img-wrapper img');
             attachImageFallback(cardImg, imageCandidates, {
-                maxAttempts: 3,
-                onAllFailed: () => {
-                    markListingImagesBroken(property);
-                    card.classList.add('listing-removed');
-                    window.setTimeout(() => {
-                        if (card && card.parentNode) {
-                            card.parentNode.removeChild(card);
-                        }
-                    }, 260);
-                }
+                maxAttempts: 3
             });
 
             card.addEventListener('mouseenter', () => {
@@ -4173,7 +4221,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const descriptionLocalized = descInfo.localized;
         const beds = Number(property.beds) || 0;
         const baths = Number(property.baths) || 0;
-        const builtArea = builtAreaFor(property);
+
+        let builtArea = property.built ? parseInt(property.built, 10) : 0;
+        if (isNaN(builtArea)) builtArea = 0;
+
+        let plotArea = property.plot ? parseInt(property.plot, 10) : 0;
+        if (isNaN(plotArea)) plotArea = 0;
+
+        const isLand = /^land|terreno|parcela/i.test(String(type || ''));
+
         const eurPerSqm = eurPerSqmFor(property);
         const latitude = Number(property.latitude);
         const longitude = Number(property.longitude);
@@ -4189,9 +4245,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const priceText = formatListingPrice(property);
         const shareTitle = `${priceText ? `${priceText} · ` : ''}${type} in ${town}, ${province}`;
         const specParts = [];
-        if (beds) specParts.push(`${beds} bed${beds === 1 ? '' : 's'}`);
-        if (baths) specParts.push(`${baths} bath${baths === 1 ? '' : 's'}`);
-        if (builtArea) specParts.push(`${builtArea} m2`);
+        if (!isLand && beds) specParts.push(`${beds} bed${beds === 1 ? '' : 's'}`);
+        if (!isLand && baths) specParts.push(`${baths} bath${baths === 1 ? '' : 's'}`);
+        if (builtArea > 0) specParts.push(`${builtArea} m2`);
+        if (plotArea > 0) specParts.push(`Plot: ${plotArea} m2`);
         const shareCaptionNoUrl = [
             'Spanish Coast Properties',
             `${type} in ${town}, ${province}`,
@@ -4248,9 +4305,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="price">${formatListingPrice(property)}</div>
                     <div class="modal-specs">
-                        <div class="modal-spec-item">🛏️ ${escapeHtml(t('modal.spec.beds', 'Beds'))} ${beds}</div>
-                        <div class="modal-spec-item">🛁 ${escapeHtml(t('modal.spec.baths', 'Baths'))} ${baths}</div>
-                        <div class="modal-spec-item">📐 ${escapeHtml(t('modal.spec.area', 'Area'))} ${builtArea} m2</div>
+                        ${!isLand ? `<div class="modal-spec-item">🛏️ ${escapeHtml(t('modal.spec.beds', 'Beds'))} ${beds}</div>` : ''}
+                        ${!isLand ? `<div class="modal-spec-item">🛁 ${escapeHtml(t('modal.spec.baths', 'Baths'))} ${baths}</div>` : ''}
+                        ${builtArea > 0 ? `<div class="modal-spec-item">📐 ${escapeHtml(t('modal.spec.area', 'Area'))} ${builtArea} m2</div>` : ''}
+                        ${plotArea > 0 ? `<div class="modal-spec-item">🪴 ${escapeHtml(t('modal.spec.plot', 'Plot'))} ${plotArea} m2</div>` : ''}
                         ${eurPerSqm ? `<div class="modal-spec-item">📊 ${eurPerSqm}</div>` : ''}
                     </div>
                 </div>
@@ -4689,9 +4747,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                 }
-                markListingImagesBroken(property);
-                modal.style.display = 'none';
-                setBodyOverflow('auto');
+                mainImg.src = PLACEHOLDER_IMAGE;
             });
         }
 
