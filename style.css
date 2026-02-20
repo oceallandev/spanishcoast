@@ -80,6 +80,22 @@ body[data-section="properties"] {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
+@media (max-width: 1024px) {
+    .primary-nav {
+        display: none !important;
+    }
+
+    .mobile-menu-btn {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .brand-info {
+        display: none;
+    }
+}
+
 @media (max-width: 520px) {
     .primary-nav {
         display: none !important;
@@ -2019,7 +2035,7 @@ body.filters-open .filters-backdrop {
     }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 768px) {
     .open-catalog-btn {
         height: 40px;
         min-width: 40px;
@@ -2203,9 +2219,17 @@ body[data-section="properties"] .content-section {
 .results-cta {
     display: flex;
     gap: 0.7rem;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
     margin-top: 0.9rem;
     align-items: center;
+    padding-bottom: 0.3rem;
+    /* Small padding for touch trailing edge */
+}
+
+.results-cta::-webkit-scrollbar {
+    display: none;
 }
 
 .results-cta .cta-button {
@@ -3847,7 +3871,7 @@ body[data-section="businesses"].map-open .map-section {
     color: #fff !important;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 1024px) {
     .update-app-btn.desktop-only {
         display: none !important;
     }
