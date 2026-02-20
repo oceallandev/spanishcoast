@@ -400,18 +400,10 @@
     const code = String(nextCode || 'en').trim().toLowerCase() || 'en';
     try {
       window.localStorage.setItem('scp:lang', code);
+      document.documentElement.lang = code;
     } catch {
       // ignore
     }
-    try {
-      const url = new URL(window.location.href);
-      url.searchParams.set('lang', code);
-      window.location.href = url.toString();
-      return;
-    } catch {
-      // ignore
-    }
-    window.location.reload();
   };
 
   const injectLangSwitcher = () => {
@@ -429,7 +421,7 @@
     if (!select.dataset.bound) {
       select.addEventListener('change', () => {
         if (i18n && typeof i18n.setLang === 'function') {
-          i18n.setLang(select.value, { persist: true, reload: true });
+          i18n.setLang(select.value, { persist: true, reload: false });
           return;
         }
         fallbackSetLang(select.value);

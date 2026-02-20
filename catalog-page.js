@@ -125,7 +125,8 @@
   const businessCard = (b) => {
     const ref = toText(b.ref).trim();
     const kind = toText(b.kind, 'business');
-    const kindLabel = kind === 'traspaso' ? t('listing.traspaso', 'Traspaso') : t('listing.business', 'Business');
+    const kindLabelKey = kind === 'traspaso' ? 'listing.traspaso' : 'listing.business';
+    const kindLabelFallback = kind === 'traspaso' ? 'Traspaso' : 'Business';
     const bizType = toText(b.businessType || b.title, t('listing.business', 'Business'));
     const title = bizType;
     const town = toText(b.town, 'Costa Blanca South');
@@ -162,12 +163,12 @@
           <img src="${esc(img)}" alt="${esc(title)}" loading="lazy" referrerpolicy="no-referrer"
             onerror="this.onerror=null;this.src='assets/placeholder.png'">
           <div class="card-badge" data-i18n-dynamic>${esc(bizType)}</div>
-          <div class="card-status ${esc(kind)}">${esc(kindLabel)}</div>
+          <div class="card-status ${esc(kind)}" data-i18n="${kindLabelKey}">${esc(kindLabelFallback)}</div>
         </div>
         <div class="card-content">
           <div class="card-ref-row">
             <div class="card-ref">
-              ${esc(ref || kindLabel)}
+              ${ref ? esc(ref) : `<span data-i18n="${kindLabelKey}">${esc(kindLabelFallback)}</span>`}
             </div>
           </div>
           <h3>${esc(title)}</h3>
@@ -177,14 +178,14 @@
           </div>
           <div class="price">${esc(price)}</div>
           <div class="specs">
-            <div class="spec-item">🏷️ ${esc(kindLabel)}</div>
-            <div class="spec-item">🏪 ${esc(bizType)}</div>
+            <div class="spec-item">🏷️ <span data-i18n="${kindLabelKey}">${esc(kindLabelFallback)}</span></div>
+            <div class="spec-item">🏪 <span data-i18n-dynamic>${esc(bizType)}</span></div>
           </div>
           ${desc ? `<div class="catalog-meta" style="margin-top:0.65rem">${esc(desc)}</div>` : ''}
           
           <div class="card-actions" style="margin-top: 1rem;">
-             <a class="card-action" href="${escAttr(href)}">${esc(t('catalog.details', 'Details'))}</a>
-             ${ref ? `<a class="card-action" href="${escAttr(brochureHref)}" target="_blank" rel="noopener">${esc(t('modal.brochure_pdf', 'Brochure (PDF)'))}</a>` : `<span class="card-action card-action--disabled">${esc(t('modal.brochure_pdf', 'Brochure (PDF)'))}</span>`}
+             <a class="card-action" href="${escAttr(href)}" data-i18n="catalog.details">Details</a>
+             ${ref ? `<a class="card-action" href="${escAttr(brochureHref)}" target="_blank" rel="noopener" data-i18n="modal.brochure_pdf">Brochure (PDF)</a>` : `<span class="card-action card-action--disabled" data-i18n="modal.brochure_pdf">Brochure (PDF)</span>`}
              ${whatsappHref ? `<a class="card-action card-action--whatsapp" href="${escAttr(whatsappHref)}" target="_blank" rel="noopener">WhatsApp</a>` : `<span class="card-action card-action--disabled">WhatsApp</span>`}
              ${shareHref ? `<a class="card-action" href="${escAttr(shareHref)}" target="_blank" rel="noopener">Share</a>` : ''}
           </div>
@@ -451,9 +452,4 @@
       queueDynamicTranslate(vehicleGrid);
     };
   }
-
-  window.addEventListener('scp:i18n-updated', () => {
-    if (typeof rerenderBusinesses === 'function') rerenderBusinesses();
-    if (typeof rerenderVehicles === 'function') rerenderVehicles();
-  });
 })();

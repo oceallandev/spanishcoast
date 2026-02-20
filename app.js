@@ -3681,32 +3681,39 @@ document.addEventListener('DOMContentLoaded', () => {
             const builtArea = builtAreaFor(property);
             const eurPerSqm = eurPerSqmFor(property);
             const listingMode = listingModeFor(property);
-            const listingLabel = listingMode === 'rent'
-                ? t('listing.for_rent', 'For Rent')
+
+            const listingLabelKey = listingMode === 'rent'
+                ? 'listing.for_rent'
                 : listingMode === 'traspaso'
-                    ? t('listing.traspaso', 'Traspaso')
-                    : t('listing.for_sale', 'For Sale');
+                    ? 'listing.traspaso'
+                    : 'listing.for_sale';
+            const listingLabelFallback = listingMode === 'rent'
+                ? 'For Rent'
+                : listingMode === 'traspaso'
+                    ? 'Traspaso'
+                    : 'For Sale';
+
             const isFav = favoriteIds.has(pid);
 
             card.innerHTML = `
                 <div class="card-img-wrapper">
                     <img src="${imageUrl}" alt="${escapeHtml(type)}" loading="lazy">
                     <div class="card-badge" data-i18n-dynamic>${escapeHtml(type)}</div>
-                    <div class="card-status ${listingMode}">${listingLabel}</div>
-                    <button type="button" class="card-reel-btn" data-action="open-card-reel" aria-label="${escapeHtml(t('listing.play_reel', 'Play reel'))}">▶</button>
-                    <button type="button" class="fav-btn ${isFav ? 'is-fav' : ''}" aria-label="${escapeHtml(t('listing.save_aria', 'Save listing'))}" aria-pressed="${isFav ? 'true' : 'false'}">${isFav ? '♥' : '♡'}</button>
+                    <div class="card-status ${listingMode}" data-i18n="${listingLabelKey}">${listingLabelFallback}</div>
+                    <button type="button" class="card-reel-btn" data-action="open-card-reel" data-i18n-aria-label="listing.play_reel" aria-label="Play reel">▶</button>
+                    <button type="button" class="fav-btn ${isFav ? 'is-fav' : ''}" data-i18n-aria-label="listing.save_aria" aria-label="Save listing" aria-pressed="${isFav ? 'true' : 'false'}">${isFav ? '♥' : '♡'}</button>
                 </div>
                 <div class="card-content">
                     <div class="card-ref-row">
                         <div class="card-ref">
-                            ${reference ? escapeHtml(reference) : escapeHtml(t('listing.reference_unavailable', 'Reference unavailable'))}
+                            ${reference ? escapeHtml(reference) : `<span data-i18n="listing.reference_unavailable">Reference unavailable</span>`}
                             <span class="card-orig-ref muted" data-card-original-ref style="display:none"></span>
                         </div>
-                        <button type="button" class="ref-chip ref-chip--small" data-action="show-original-ref" style="display:none" aria-label="${escapeHtml(t('listing.original_ref_show', 'Show original reference'))}" title="${escapeHtml(t('listing.original_ref_show', 'Show original reference'))}">Orig</button>
+                        <button type="button" class="ref-chip ref-chip--small" data-action="show-original-ref" style="display:none" data-i18n-aria-label="listing.original_ref_show" data-i18n-title="listing.original_ref_show" aria-label="Show original reference" title="Show original reference">Orig</button>
                     </div>
                     <h3>
                         <span data-i18n-dynamic>${escapeHtml(type)}</span>
-                        <span data-i18n="common.in">${escapeHtml(t('common.in', 'in'))}</span>
+                        <span data-i18n="common.in">in</span>
                         <span data-i18n-dynamic>${escapeHtml(town)}</span>
                     </h3>
                     <div class="location">
@@ -3715,10 +3722,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="price">${formatListingPrice(property)}</div>
                     <div class="specs">
-                        ${!isLand ? `<div class="spec-item">🛏️ ${escapeHtml(t('modal.spec.beds', 'Beds'))} ${beds}</div>` : ''}
-                        ${!isLand ? `<div class="spec-item">🛁 ${escapeHtml(t('modal.spec.baths', 'Baths'))} ${baths}</div>` : ''}
-                        ${builtArea > 0 ? `<div class="spec-item">📐 ${escapeHtml(t('modal.spec.area', 'Area'))} ${builtArea} m2</div>` : ''}
-                        ${plotArea > 0 ? `<div class="spec-item">🪴 ${escapeHtml(t('modal.spec.plot', 'Plot'))} ${plotArea} m2</div>` : ''}
+                        ${!isLand ? `<div class="spec-item">🛏️ <span data-i18n="modal.spec.beds">Beds</span> ${beds}</div>` : ''}
+                        ${!isLand ? `<div class="spec-item">🛁 <span data-i18n="modal.spec.baths">Baths</span> ${baths}</div>` : ''}
+                        ${builtArea > 0 ? `<div class="spec-item">📐 <span data-i18n="modal.spec.area">Area</span> ${builtArea} m2</div>` : ''}
+                        ${plotArea > 0 ? `<div class="spec-item">🪴 <span data-i18n="modal.spec.plot">Plot</span> ${plotArea} m2</div>` : ''}
                         ${eurPerSqm ? `<div class="spec-item">📊 ${eurPerSqm}</div>` : ''}
                     </div>
                 </div>
@@ -5854,9 +5861,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('scp:i18n-updated', () => {
         try {
+            // Retain scroll position since some translation steps might force layout recalculations
+            let scrollY = 0;
+            if (uiScrollEl && typeof uiScrollEl.scrollTop === 'number') {
+                scrollY = uiScrollEl.scrollTop;
+            }
+
             generateCityButtons();
             renderCatalogs();
-            renderProperties({ reset: true });
+
+            if (uiScrollEl && typeof uiScrollEl.scrollTop === 'number' && scrollY > 0) {
+                // Restore scroll position gracefully
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        if (uiScrollEl) uiScrollEl.scrollTop = scrollY;
+                    });
+                });
+            }
+
             if (propertyGrid) queueDynamicTranslate(propertyGrid);
             if (modalDetails && modal && modal.style.display === 'block') queueDynamicTranslate(modalDetails);
         } catch (error) {

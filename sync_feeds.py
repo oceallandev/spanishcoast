@@ -38,7 +38,7 @@ logger = logging.getLogger("feed_sync")
 
 # Secrets / Config
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://sxgxbswxajtoxcsbxchk.supabase.co")
-SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_KEY") # MUST be Service Role Key for upserts
+SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4Z3hic3d4YWp0b3hjc2J4Y2hrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MDU4MTI3NywiZXhwIjoyMDg2MTU3Mjc3fQ.BezpCCDlcmc-L5txJjD8waZe9pJIuvnxWhO_tDPU5E4") # MUST be Service Role Key for upserts
 
 # Defaults from existing workflows/history
 DEFAULT_INMOVILLA = "https://procesos.apinmo.com/xml/v2/xUYPBBMw/10183-web.xml"
@@ -128,32 +128,58 @@ def process_inmovilla():
 
 def process_redsp_variant(source: str, url: str, out_js: str):
     logger.info(f"--- Syncing {source} ---")
-    if not url:
-        logger.warning(f"Skipping {source}: URL not set.")
-        return
-
-    try:
-        xml_path = sync_inmovilla_feed.fetch_feed(url)
-    except Exception as e:
-        logger.error(f"Failed to fetch {source}: {e}")
-        return
-
+    
+    # Determine local path for feed
+    local_filename = f"{source}-feed.xml"
+    if source == "redsp1": local_filename = "redsp-feed.xml" # Consistency check, although url fetch usually temp
+    
     priv_dir = os.path.join(REPO_ROOT, "private", source)
     os.makedirs(priv_dir, exist_ok=True)
-    map_path = os.path.join(priv_dir, "ref_map.json")
+    local_xml_path = os.path.join(priv_dir, local_filename)
+
+    xml_path_to_parse = None
+
+    # Try Fetch
+    if url:
+        try:
+            downloaded = sync_inmovilla_feed.fetch_feed(url)
+            # Move/Copy to private dir for persistence/debugging? 
+            # fetch_feed saves to temp or specific location? 
+            # sync_inmovilla_feed.fetch_feed returns a path.
+            xml_path_to_parse = downloaded
+        except Exception as e:
+            logger.error(f"Failed to fetch {source}: {e}")
     
+    # Fallback to local file if fetch failed or no URL
+    if not xml_path_to_parse:
+        if os.path.exists(local_xml_path):
+            logger.info(f"Using local file: {local_xml_path}")
+            xml_path_to_parse = local_xml_path
+        else:
+             # Check if there's *any* xml in the dir?
+             # For now, require specific name or url
+             pass
+
+
+
+    if not xml_path_to_parse:
+        logger.warning(f"Skipping {source}: No URL provided and no local file '{local_filename}' found.")
+        return
+
+    map_path = os.path.join(priv_dir, "ref_map.json")
     allocator = ScpRefAllocator(map_path, repo_root=REPO_ROOT)
     
     try:
-        spec = import_redsp_kyero_v3.detect_feed_spec(xml_path)
+        spec = import_redsp_kyero_v3.detect_feed_spec(xml_path_to_parse)
+        
         if spec == "redsp_v4":
             items = import_redsp_kyero_v3.parse_redsp_v4_properties(
-                xml_path, allocator=allocator, source=source
+                xml_path_to_parse, allocator=allocator, source=source
             )
             label = f"{source} (RedSp v4)"
         else:
             items = import_redsp_kyero_v3.parse_kyero_v3_properties(
-                xml_path, allocator=allocator, source=source
+                xml_path_to_parse, allocator=allocator, source=source
             )
             label = f"{source} (Kyero v3)"
 
@@ -167,7 +193,9 @@ def process_redsp_variant(source: str, url: str, out_js: str):
     except Exception as e:
         logger.error(f"Error processing {source}: {e}")
     finally:
-        if os.path.exists(xml_path): os.remove(xml_path)
+        # Cleanup temp file if it was downloaded (starts with /tmp or similar, not local_xml_path)
+        if xml_path_to_parse and xml_path_to_parse != local_xml_path and os.path.exists(xml_path_to_parse):
+             os.remove(xml_path_to_parse)
 
 def process_propmls():
     logger.info("--- Syncing PropMLS ---")
