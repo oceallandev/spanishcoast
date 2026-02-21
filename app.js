@@ -3777,10 +3777,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const updateOrigBtnVisibility = () => {
                 if (!origBtn) return;
                 origBtn.dataset.scpRef = reference || '';
-                const hasInlineRef = Boolean(getInlineOriginalRefMapping(property));
+                const hasSession = Boolean(supabaseClient && supabaseUser);
                 const allowed = Boolean(reference)
-                    && Boolean(supabaseClient && supabaseUser)
-                    && (isAdminRole(supabaseRole) || (!supabaseRoleResolved && hasInlineRef));
+                    && hasSession
+                    && (isAdminRole(supabaseRole) || !supabaseRoleResolved);
                 origBtn.style.display = allowed ? 'inline-flex' : 'none';
             };
             updateOrigBtnVisibility();
