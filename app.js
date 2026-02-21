@@ -3693,6 +3693,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     ? 'Traspaso'
                     : 'For Sale';
 
+            const isLand = /^land|terreno|parcela/i.test(String(type || ''));
+            let plotArea = property.plot ? parseInt(property.plot, 10) : 0;
+            if (isNaN(plotArea)) plotArea = 0;
+
             const isFav = favoriteIds.has(pid);
 
             card.innerHTML = `
